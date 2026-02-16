@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\admin\EventAdminController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
@@ -83,12 +84,18 @@ Route::prefix('v1')->group(function () {
 
     // Events 
     Route::prefix('events')->middleware(['throttle:45,1'])->group(function () {
+        // Home Events
         Route::get('/', [EventController::class, 'all']);
         Route::get('/count', [EventController::class, 'count']);
         Route::get('/memories', [EventController::class, 'memories']);
         Route::get('/{city_id}/{sub_category_id}', [EventController::class,  'index']);
         Route::get('/{city}/marker/search', [EventController::class,  'MarkerSearch']);
         Route::get('/{slug}/single/get', [EventController::class,  'single']);
+
+        // Events CRUD
+        Route::post('/create', [EventAdminController::class,  'create'])->middleware(AdminMiddleware::class,'auth:sanctum');
+        Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class,'auth:sanctum');
+        Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class,'auth:sanctum');
     });
 
     Route::prefix('users')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {

@@ -24,10 +24,20 @@ class EventController extends Controller
         $cacheKey = "events_page_{$page}_per_{$perPage}";
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Events::with(['city:id,name', 'sub_categorey:id,name'])
+            $events = Events::with(['city:id,name', 'sub_categorey:id,name'])
                 ->select('id', 'slug', 'title', 'image', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
+
+            $events->getCollection()->transform(function ($event) {
+                if (! $event->image) {
+                    $event->image = 'https://via.placeholder.com/300x200?text=Event+Image';
+                }
+
+                return $event;
+            });
+
+            return $events;
         });
 
         return $this->success($events, 'All events');
@@ -106,7 +116,7 @@ class EventController extends Controller
         });
 
         if (! $event) {
-            return $this->error('No More events', 404);
+            return $this->error('Event not found', 404);
         }
 
         return $this->success($event, 'Event data');
@@ -131,5 +141,10 @@ class EventController extends Controller
 
         return $this->success($memories, 'Memories');
 
+    }
+
+    public function getImageAttribute($value)
+    {
+        return $value ?: 'https://via.placeholder.com/300x200?text=Event+Image';
     }
 }
