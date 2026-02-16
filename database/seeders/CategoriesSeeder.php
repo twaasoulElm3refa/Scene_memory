@@ -1,0 +1,43 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Categories;
+use Illuminate\Database\Seeder;
+
+class CategoriesSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $categgories = [
+            [
+                'name' => 'رياضي',
+                'slug' => 'رياضي',
+            ],
+            [
+                'name' => 'فني',
+                'slug' => 'فني',
+            ],
+
+            [
+                'name' => 'سياحي',
+                'slug' => 'سياحي',
+            ],
+
+            [
+                'name' => 'ثقافي',
+                'slug' => 'ثقافي',
+            ],
+            [
+                'name' => 'تعليمي',
+                'slug' => 'تعليمي',
+            ],
+        ];
+        foreach ($categgories as $category) {
+            Categories::create($category);
+        }
+    }
+}

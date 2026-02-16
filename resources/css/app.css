@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+/* resources/css/app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+/* Light Theme */
+/* ===== THEMES ===== */
+
+:root[data-theme="dark"] {
+  --bg-main: linear-gradient(185deg, #0e151d, #091122, #1f2933);
+  --nav-bg: linear-gradient(150deg, #0f172a, #1e293b, #111827);
+  --text-main: #ffffff;
+  --btn-bg: #1e293b;
+  --gold: #fbbf24;
+}
+
+:root[data-theme="light"] {
+  --bg-main: linear-gradient(185deg, #ffffff, #f8fafc, #e5e7eb);
+  --nav-bg: linear-gradient(150deg, #ffffff, #f1f5f9);
+  --text-main: #0f172a;
+  --btn-bg: #e5e7eb;
+  --gold: #d4af37;
+}
+
+.app-body {
+  background: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+}
