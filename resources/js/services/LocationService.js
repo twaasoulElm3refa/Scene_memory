@@ -15,6 +15,7 @@ export const LocationService = {
     if (!countryId) return [];
     try {
       const res = await api.get(`/countries/${countryId}`);
+      console.log(res.data);
       return res.data.data?.cities || [];
     } catch (err) {
       console.error("Error fetching cities:", err);

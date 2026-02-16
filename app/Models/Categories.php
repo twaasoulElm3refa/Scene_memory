@@ -13,7 +13,7 @@ class Categories extends Model
     protected $table = "categories";
     protected $guarded = [];
 
-    public function subCategoreyes()
+    public function subCategories()
     {
         return $this->hasMany(subCategorey::class,'category_id');
     }

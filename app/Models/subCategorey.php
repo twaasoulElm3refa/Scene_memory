@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class subCategorey extends Model
 {
+    protected $table = "sub_categoreys";
+    protected $guarded = [];
     public function events()
     {
         return $this->hasMany(Events::class,'sub_categorey_id');

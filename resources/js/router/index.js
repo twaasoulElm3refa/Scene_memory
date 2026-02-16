@@ -15,6 +15,21 @@ import all_users from "../views/admin/users/all_users.vue";
 import add_user from "../views/admin/users/add_user.vue";
 import all_categories from "../views/admin/categories/all_categories.vue";
 import add_categorey from "../views/admin/categories/add_categorey.vue";
+import show_categorey from "../views/admin/categories/show_categorey.vue";
+import add_sub_categorey from "../views/admin/categories/add_sub_categorey.vue";
+import add_country from "../views/admin/countries/add_country.vue";
+import all_countries from "../views/admin/countries/all_countries.vue";
+import show_country from "../views/admin/countries/show_country.vue";
+import add_city from "../views/admin/cities/add_city.vue";
+import all_cities from "../views/admin/cities/all_cities.vue";
+import show_city from "../views/admin/cities/show_city.vue";
+import all_events_admin from "../views/admin/events/all_events_admin.vue";
+import add_event from "../views/admin/events/add_event.vue";
+import show_event from "../views/admin/events/show_event.vue";
+import contacts_admin from "../views/admin/settings/contacts_admin.vue";
+import footer from "../views/admin/settings/footer.vue";
+import newsletter from "../views/admin/settings/newsletter.vue";
+
 const routes = [
     {
         path: "/",
@@ -76,9 +91,26 @@ const routes = [
         component: GoggleCallback,
     },
 
+
+    // Admin dashboard
     {
         path: "/admin",
         component: admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/contacts",
+        component: contacts_admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/footer",
+        component: footer,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/newsletters",
+        component: newsletter,
         meta: { hideNavbar: true, hideFooter: true },
     },
 
@@ -99,12 +131,80 @@ const routes = [
         component: all_categories,
         meta: { hideNavbar: true, hideFooter: true },
     },
+    {
+        path: "/admin/categories/:id",
+        component: show_categorey,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/categories/:id/add",
+        component: add_sub_categorey,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
 
     {
         path: "/admin/categories/create",
         component: add_categorey,
         meta: { hideNavbar: true, hideFooter: true },
     },
+
+    {
+        path: "/admin/countries",
+        component: all_countries,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/countries/create",
+        component: add_country,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/countries/:id",
+        component: show_country,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/countries/:id/create",
+        component: add_country,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/cities",
+        component: all_cities,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/cities/create",
+        component: add_city,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/cities/:id",
+        component: show_city,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/events",
+        component: all_events_admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/events/create",
+        component: add_event,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/events/:id",
+        component: show_event,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
 
 ];
 
@@ -118,13 +218,13 @@ router.beforeEach((to, from, next) => {
     const role = localStorage.getItem("user_role");
 
     if (to.path.startsWith("/admin")) {
-        if (!token) return next("/auth"); 
+        if (!token) return next("/auth");
         if (role !== "admin") return next("/");
-        return next(); 
+        return next();
     }
 
     if (to.path === "/auth") {
-        if (!token) return next(); 
+        if (!token) return next();
         return role === "admin" ? next("/admin") : next("/");
     }
 

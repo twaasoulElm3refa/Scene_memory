@@ -14,7 +14,7 @@ class EventController extends Controller
 {
     use ApiResponse;
 
-    protected $cacheTime = 3600; 
+    protected $cacheTime = 3600;
 
     public function all()
     {
@@ -24,24 +24,25 @@ class EventController extends Controller
         $cacheKey = "events_page_{$page}_per_{$perPage}";
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Events::with(['city:id,name', 'categorey:id,name'])
-                ->select('id', 'slug', 'title', 'image', 'start_date', 'city_id', 'category_id')
+            return Events::with(['city:id,name', 'sub_categorey:id,name'])
+                ->select('id', 'slug', 'title', 'image', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
         });
+
         return $this->success($events, 'All events');
     }
 
     public function index(Request $request)
     {
         $cityId = $request->city_id;
-        $categoryId = $request->category_id;
+        $categoryId = $request->sub_category_id;
         $from = $request->query('from');
         $to = $request->query('to');
 
         $cacheKey = 'events_'.md5(json_encode([
             'city' => $cityId,
-            'category' => $categoryId,
+            'sub_categorey_id   ' => $categoryId,
             'from' => $from,
             'to' => $to,
         ]));
@@ -49,7 +50,7 @@ class EventController extends Controller
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
             return Events::with('city')
                 ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
-                ->when($categoryId, fn ($q) => $q->where('category_id', $categoryId))
+                ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
                 ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
                 ->when($to, fn ($q) => $q->whereDate('end_date', '<=', $to))
                 ->orderBy('start_date')
@@ -101,7 +102,7 @@ class EventController extends Controller
         $cacheTime = now()->addHours(6);
 
         $event = Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
-            return Events::with(['city:id,name', 'categorey:id,name', 'user:id,name', 'images'])->where('slug', $slug)->first();
+            return Events::with(['city:id,name', 'sub_categorey:id,name', 'user:id,name', 'images'])->where('slug', $slug)->first();
         });
 
         if (! $event) {
@@ -117,8 +118,9 @@ class EventController extends Controller
         $count = Cache::remember($cacheKey, $this->cacheTime, function () {
             return Events::count();
         });
+
         return $this->success($count, 'Events count');
-    } 
+    }
 
     public function memories()
     {
@@ -126,6 +128,7 @@ class EventController extends Controller
         $memories = Cache::remember($cacheKey, $this->cacheTime, function () {
             return eventsImges::count();
         });
+
         return $this->success($memories, 'Memories');
 
     }

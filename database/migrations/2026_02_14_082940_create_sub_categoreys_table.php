@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Categories::class,'category_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->string('image')->unique();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

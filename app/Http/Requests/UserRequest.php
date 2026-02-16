@@ -26,6 +26,10 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|string|max:255',
+            'role' => 'nullable|string|in:admin,user,owner',
             'password' => [
                 'required',
                 'confirmed',

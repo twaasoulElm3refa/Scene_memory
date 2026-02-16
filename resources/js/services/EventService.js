@@ -1,21 +1,38 @@
-import api from "./ApiClient";
+import api from "@/services/ApiClient";
 
 export const EventService = {
-  async searchEvents(cityId = null, categoryId = null, fromDate = null, toDate = null) {
+  /**
+   * البحث عن الفعاليات باستخدام city و subCategory في الـ URL
+   * @param {Object} filters
+   * @returns {Promise<Array>}
+   */
+  async searchEvents(filters = {}) {
     try {
+      const cityId = filters.cityId || "all"; 
+      const subCategoryId = filters.subCategoryId || "all"; 
+      console.log(cityId, subCategoryId);
       const params = {};
+      if (filters.fromDate) params.from = filters.fromDate;
+      if (filters.toDate) params.to = filters.toDate;
+      if (filters.searchQuery?.trim()) params.search = filters.searchQuery.trim();
 
-      if (cityId) params.city_id = cityId;
-      if (categoryId) params.category_id = categoryId;
-      if (fromDate) params.from = fromDate;
-      if (toDate) params.to = toDate;
+      const url = `/events/${cityId}/${subCategoryId}`;
 
-      const res = await api.get("/events", { params });
+      const res = await api.get(url, { params });
+      
+      console.log(res.data);
 
-      return res.data.data || [];
+      return res.data?.data || res.data || [];
     } catch (err) {
       console.error("Error searching events:", err);
-      throw err;
+      throw new Error(
+        err.response?.data?.message || 
+        "حدث خطأ أثناء جلب الفعاليات"
+      );
     }
+  },
+
+  async searchEventsLegacy(cityId = null, subCategoryId = null, fromDate = null, toDate = null) {
+    return this.searchEvents({ cityId, subCategoryId, fromDate, toDate });
   },
 };

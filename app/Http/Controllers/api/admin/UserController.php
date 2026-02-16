@@ -26,17 +26,10 @@ class UserController extends Controller
     {
         $cacheKey = 'users_all_page_'.request('page', 1);
         $all = Cache::remember($cacheKey, 1200, function () {
-            return User::latest()->paginate(20);
+            return User::latest()->paginate(10);
         });
 
         return $this->success($all, 'All User');
-    }
-
-    public function count()
-    {
-        $all = User::count();
-
-        return $this->success($all, 'User Count');
     }
 
     public function show()
@@ -50,24 +43,20 @@ class UserController extends Controller
 
     }
 
-    public function products()
-    {
-        return $this->success([], 'Products');
-    }
-
     public function create(UserRequest $request)
     {
-        $request->validated();
+        $data=$request->validated();
+        try {
+            $data['password'] = bcrypt($data['password']);
+            $data['is_active'] = 1;
+            $data['last_login_at'] = now();
+            $user = User::create($data);
+            Cache::forget('users_all_page_'.request('page', 1));
 
-        $user = User::create([
-            'name' => $request['name'] ?? '',
-            'phone' => $request['phone'] ?? '',
-            'email' => $request['email'] ?? '',
-            'password' => $request['password'] ?? '',
-            'slug' => $request['name'].'-'.time(),
-        ]);
-
-        return $this->success($user, 'user Created Successfully');
+            return $this->success($user, 'user Created Successfully');
+        } catch (\Throwable $th) {
+            return $this->error($th->getMessage());
+        }
 
     }
 

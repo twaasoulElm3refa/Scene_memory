@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class categoreyRequest extends FormRequest
+class CountriesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,20 +22,8 @@ class categoreyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|unique:countries,name',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'nullable',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'Category name is required',
-            'image.required' => 'Image is required',
-            'image.image' => 'The image must be an image',
-            'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif',
-            'image.max' => 'The image may not be greater than 2MB',
         ];
     }
 }

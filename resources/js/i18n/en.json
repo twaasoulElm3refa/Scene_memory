@@ -5,10 +5,16 @@
   "filters": {
     "allCategories": "All Categories",
     "country": "Country",
-    "city": "City"
+    "city": "City",
+    "category": "Category",
+    "subCategory": "Subcategory",
+    "from": "From",
+    "to": "To",
+    "allSubCategories": "All Subcategories"
   },
   "common": {
     "search": "Search",
+    "placeholder": "Search for events...",
     "searching": "Searching...",
     "details": "Details →",
     "notSpecified": "Not specified",

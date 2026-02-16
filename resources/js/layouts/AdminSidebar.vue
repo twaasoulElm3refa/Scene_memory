@@ -121,16 +121,16 @@
       <Transition name="dropdown">
         <div v-if="open.products" class="dropdown">
           <RouterLink
-            to="/admin/products"
+            to="/admin/countries"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/products' }"
+            :class="{ active: route.path === '/admin/countries' }"
           >
             All Countries
           </RouterLink>
           <RouterLink
-            to="/admin/products/create"
+            to="/admin/countries/create"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/products/create' }"
+            :class="{ active: route.path === '/admin/countries/create' }"
           >
             Add Country
           </RouterLink>
@@ -158,18 +158,55 @@
       <Transition name="dropdown">
         <div v-if="open.brands" class="dropdown">
           <RouterLink
-            to="/admin/brands"
+            to="/admin/cities"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/brands' }"
+            :class="{ active: route.path === '/admin/cities' }"
           >
             All Cities
           </RouterLink>
           <RouterLink
-            to="/admin/brands/create"
+            to="/admin/cities/create"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/brands/create' }"
+            :class="{ active: route.path === '/admin/cities/create' }"
           >
             Add City
+          </RouterLink>
+        </div>
+      </Transition>
+    </div>
+
+    <!-- Events -->
+    <div class="sidebar-group">
+      <button
+        class="sidebar-btn dropdown-toggle group"
+        :class="{ 'active-parent': eventsActive }"
+        @click="toggle('events')"
+      >
+        <span class="flex items-center gap-3">
+          <CalendarIcon class="w-5 h-5" />
+          Events
+        </span>
+        <ChevronIcon
+          class="w-5 h-5 transition-transform duration-300"
+          :class="{ 'rotate-180': open.events }"
+        />
+      </button>
+
+      <Transition name="dropdown">
+        <div v-if="open.events" class="dropdown">
+          <RouterLink
+            to="/admin/events"
+            class="sidebar-btn dropdown-item"
+            :class="{ active: route.path === '/admin/events' }"
+          >
+            All Events
+          </RouterLink>
+          <RouterLink
+            to="/admin/events/create"
+            class="sidebar-btn dropdown-item"
+            :class="{ active: route.path === '/admin/events/create' }"
+          >
+            Add Event
           </RouterLink>
         </div>
       </Transition>
@@ -185,7 +222,7 @@
         @click="toggle('settings')"
       >
         <span class="flex items-center gap-3">
-          <CogIcon class="w-5 h-5" />
+          <AdjustmentsHorizontalIcon class="w-5 h-5" />
           Settings
         </span>
         <ChevronIcon
@@ -197,23 +234,23 @@
       <Transition name="dropdown">
         <div v-if="open.settings" class="dropdown">
           <RouterLink
-            to="/admin/settings/contacts"
+            to="/admin/contacts"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/settings/contacts' }"
+            :class="{ active: route.path === '/admin/contacts' }"
           >
             Contacts
           </RouterLink>
           <RouterLink
-            to="/admin/settings/newsletters"
+            to="/admin/newsletters"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/settings/newsletters' }"
+            :class="{ active: route.path === '/admin/newsletters' }"
           >
             Newsletters
           </RouterLink>
           <RouterLink
-            to="/admin/settings/footer"
+            to="/admin/footer"
             class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/settings/footer' }"
+            :class="{ active: route.path === '/admin/footer' }"
           >
             Footer
           </RouterLink>
@@ -236,6 +273,8 @@ import {
   BuildingOfficeIcon,
   Cog6ToothIcon as CogIcon,
   Squares2X2Icon as CategoriesIcon,
+  CalendarIcon,
+  AdjustmentsHorizontalIcon,
 } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
@@ -243,8 +282,9 @@ const route = useRoute();
 const open = reactive({
   users: route.path.startsWith("/admin/users"),
   categories: route.path.startsWith("/admin/categories"),
-  brands: route.path.startsWith("/admin/brands"),
-  products: route.path.startsWith("/admin/products"),
+  products: route.path.startsWith("/admin/countries"),
+  brands: route.path.startsWith("/admin/cities"),
+  events: route.path.startsWith("/admin/events"), // 👈 الجديد
   settings: route.path.startsWith("/admin/settings"),
 });
 
@@ -252,11 +292,11 @@ const toggle = (key) => {
   open[key] = !open[key];
 };
 
-// Active parent states
 const usersActive = computed(() => route.path.startsWith("/admin/users"));
 const categoriesActive = computed(() => route.path.startsWith("/admin/categories"));
-const brandsActive = computed(() => route.path.startsWith("/admin/brands"));
-const productsActive = computed(() => route.path.startsWith("/admin/products"));
+const productsActive = computed(() => route.path.startsWith("/admin/countries"));
+const brandsActive = computed(() => route.path.startsWith("/admin/cities"));
+const eventsActive = computed(() => route.path.startsWith("/admin/events")); // 👈 الجديد
 const settingsActive = computed(() => route.path.startsWith("/admin/settings"));
 </script>
 

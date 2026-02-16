@@ -5,10 +5,16 @@
   "filters": {
     "allCategories": "جميع الفئات",
     "country": "الدولة",
-    "city": "المدينة"
+    "category": "الفئة",
+    "subCategory": "الفئة الفرعية",
+    "from": "من",
+    "to": "إلى",
+    "city": "المدينة",
+    "allSubCategories": "جميع الفئات الفرعية"
   },
   "common": {
     "search": "بحث",
+    "placeholder": "ابحث عن الفعاليات...",
     "searching": "جاري البحث...",
     "details": "التفاصيل",
     "notSpecified": "غير محدد",

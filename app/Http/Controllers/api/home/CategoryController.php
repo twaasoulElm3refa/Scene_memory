@@ -2,68 +2,89 @@
 
 namespace App\Http\Controllers\api\home;
 
-use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Requests\categoreyRequest;
 use App\Models\Categories;
+use App\Models\subCategorey;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
     use ApiResponse;
 
-    protected $cacheTime = 3600;
+    protected $cacheTime = 600; 
 
-    public function index()
+    public function index(): JsonResponse
     {
-        $cacheKey = 'categories_index';
+        $cacheKey = 'categories:index:all';
+
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () {
             return Categories::get(['id', 'name']);
         });
+
         if ($categories->isEmpty()) {
-            return $this->error('No More categories', 404);
+            return $this->error('No categories found', 404);
         }
 
         return $this->success($categories, 'All categories');
     }
 
-    public function paginated()
+    public function paginated(): JsonResponse
     {
-        $page = request()->get('page', 1);
-        $perPage = 4;
+        $page    = request()->input('page', 1);
+        $perPage = 4; 
+        $version = Cache::get('categories:version', 1);
 
-        $version = Cache::get('categories_cache_version', 1);
-
-        $cacheKey = "categories_v{$version}_page_{$page}_per_{$perPage}";
+        $cacheKey = "categories:paginated:v{$version}:p{$page}:pp{$perPage}";
 
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Categories::select('id', 'name', 'image')
-                ->withCount('events')
+            return Categories::query()
+                ->select('id', 'name', 'image', 'created_at')
+                ->withCount('subCategories')
                 ->paginate($perPage);
         });
 
         if ($categories->isEmpty()) {
-            return $this->error('No More categories', 404);
+            return $this->error('No categories found on this page', 404);
         }
 
-        return $this->success($categories, 'All categories paginated');
+        return $this->success($categories, 'Paginated categories');
     }
 
-    public function single()
+    public function single($id): JsonResponse
     {
-        $categoreyId = request('id');
-        $cacheKey = "categorey_single_{$categoreyId}";
-        $categorey = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Categories::with('events')->find(request('id'));
+        $cacheKey = "categories:single:{$id}";
+
+        $category = Cache::remember($cacheKey, $this->cacheTime, function () use ($id) {
+            return Categories::with('subCategories')->find($id);
         });
-        if (! $categorey) {
-            return $this->error('No More categories', 404);
+
+        if (! $category) {
+            return $this->error('Category not found', 404);
         }
 
-        return $this->success($categorey, 'category');
+        return $this->success($category, 'Category details');
     }
 
-    public function create(categoreyRequest $request)
+    public function sub_categories($id): JsonResponse
+    {
+        $cacheKey = "categories:sub:{$id}";
+
+        $subCategories = Cache::remember($cacheKey, $this->cacheTime, function () use ($id) {
+            return subCategorey::where('category_id', $id)
+                ->get(['id', 'name']);
+        });
+
+        if ($subCategories->isEmpty()) {
+            return $this->error('No sub-categories found', 404);
+        }
+
+        return $this->success($subCategories, 'Sub categories');
+    }
+
+    public function create(categoreyRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -71,12 +92,55 @@ class CategoryController extends Controller
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
 
-        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
+        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])) . '-' . time();
 
-        $categorey = Categories::create($data);
+        $category = Categories::create($data);
 
-        Cache::increment('categories_cache_version'); // 👈 clear cache smart way
+        $this->clearAllCategoriesCache();
 
-        return $this->success($categorey, 'category Created Successfully');
+        return $this->success($category, 'Category created successfully', 201);
+    }
+
+    public function update(categoreyRequest $request, $id): JsonResponse
+    {
+        $category = Categories::find($id);
+
+        if (! $category) {
+            return $this->error('Category not found', 404);
+        }
+
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        }
+
+        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])) . '-' . time();
+
+        $category->update($data);
+
+        $this->clearAllCategoriesCache();
+
+        return $this->success($category, 'Category updated successfully');
+    }
+
+    public function delete($id): JsonResponse
+    {
+        $category = Categories::find($id);
+        if (! $category) {
+            return $this->error('Category not found', 404);
+        }
+        $category->delete();
+        $this->clearAllCategoriesCache();
+        return $this->success(null, 'Category deleted successfully');
+    }
+
+    /**
+     * بيتم استدعاؤه بعد كل عملية تغيير (create/update/delete)
+     */
+    protected function clearAllCategoriesCache(): void
+    {
+        Cache::increment('categories:version', 1);
+        Cache::forget('categories:index:all');
     }
 }

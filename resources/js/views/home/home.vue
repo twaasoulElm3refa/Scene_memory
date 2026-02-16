@@ -12,79 +12,92 @@
     </div>
 
     <!-- شريط الفلاتر -->
-    <div class="bg-white border-b shadow-sm top-0 z-10">
+    <div class="bg-white border-b ml-10 shadow-sm top-0 z-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          <!-- مربع البحث -->
-          <div class="flex-1">
-            <input
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('search.placeholder')"
-              class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
-          </div>
-
-          <!-- الفلاتر الأخرى -->
-          <div class="flex flex-wrap gap-3 justify-start md:justify-end">
-            <!-- الفئة -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-2 items-end"
+        >
+          <!-- Category -->
+          <div class="space-y-1">
             <select
               v-model="selectedCategory"
-              class="px-4 py-3 border rounded-lg min-w-[140px] bg-white transition"
+              @change="onMainCategoryChange"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             >
-              <option value="">
-                {{ $t("filters.allCategories") }}
-              </option>
+              <option value="">{{ $t("filters.allCategories") }}</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">
                 {{ cat.name }}
               </option>
             </select>
+          </div>
 
-            <!-- الدولة -->
+          <!-- SubCategory -->
+          <div v-if="subCategories.length > 0 || selectedCategory">
+            <select
+              v-model="selectedSubCategory"
+              :disabled="loadingSubCategories"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+            >
+              <option value="">{{ $t("filters.allSubCategories") }}</option>
+              <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
+                {{ sub.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Country -->
+          <div>
             <select
               v-model="selectedCountry"
               @change="loadCities"
-              class="px-4 py-3 border rounded-lg min-w-[140px] bg-white transition"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             >
-              <option value="">
-                {{ $t("filters.country") }}
-              </option>
+              <option value="">{{ $t("filters.country") }}</option>
               <option v-for="country in countries" :key="country.id" :value="country.id">
                 {{ country.name }}
               </option>
             </select>
+          </div>
 
-            <!-- المدينة -->
+          <!-- City -->
+          <div>
             <select
               v-model="selectedCity"
-              class="px-4 py-3 border rounded-lg min-w-[140px] bg-white transition"
               :disabled="!selectedCountry"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
             >
-              <option value="">
-                {{ $t("filters.city") }}
-              </option>
+              <option value="">{{ $t("filters.city") }}</option>
               <option v-for="city in cities" :key="city.id" :value="city.id">
                 {{ city.name }}
               </option>
             </select>
+          </div>
 
-            <!-- التاريخ -->
-            <div class="flex gap-2">
-              <input
-                v-model="fromDate"
-                type="date"
-                class="px-4 py-3 border rounded-lg transition"
-              />
-              <input
-                v-model="toDate"
-                type="date"
-                class="px-4 py-3 border rounded-lg transition"
-              />
-            </div>
+          <!-- From Date -->
+          <div>
+            <input
+              v-model="fromDate"
+              type="date"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+            />
+          </div>
 
-            <!-- زر البحث -->
-            <button class="btn-small transition" @click="search" :disabled="loading">
-              {{ loading ? $t("common.searching") : $t("common.search") }}
+          <!-- To Date -->
+          <div>
+            <input
+              v-model="toDate"
+              type="date"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+            />
+          </div>
+
+          <!-- زر البحث -->
+          <div class="flex items-end">
+            <button
+              @click="search(true)"
+              class="w-full sm:w-auto px-4 py-2 text-sm rounded-full bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 transition shadow-sm hover:shadow-md active:scale-95"
+            >
+              {{ $t("common.search") }}
             </button>
           </div>
         </div>
@@ -462,11 +475,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, computed, watch } from "vue";
 import MapService from "@/services/MapService.js";
 import { CategoryService } from "@/services/CategoryService";
 import { LocationService } from "@/services/LocationService";
 import { EventService } from "@/services/EventService";
+import { debounce } from "lodash";
+import api from "@/services/ApiClient";
 
 const marker = ref({ lat: 30.0444, lng: 31.2357 });
 const fullscreen = ref(false);
@@ -482,7 +497,9 @@ const selectedCountry = ref("");
 const selectedCity = ref("");
 const fromDate = ref("");
 const toDate = ref("");
-
+const selectedSubCategory = ref("");
+const subCategories = ref([]);
+const loadingSubCategories = ref(false);
 const loading = ref(false);
 const searched = ref(false);
 const currentPage = ref(1);
@@ -492,8 +509,10 @@ let mapService = null;
 // ====================== Computed ======================
 const totalPages = computed(() => Math.ceil(displayedEvents.value.length / itemsPerPage));
 const maxVisible = 5;
+const debouncedSearch = debounce(() => {
+  search();
+}, 500);
 
-// الصفحات الديناميكية حسب currentPage
 const visiblePages = computed(() => {
   const total = totalPages.value;
   let start = Math.max(currentPage.value - Math.floor(maxVisible / 2), 1);
@@ -548,6 +567,28 @@ onUnmounted(() => {
   document.removeEventListener("marker-events-loaded", handleMarkerEvents);
 });
 
+const onMainCategoryChange = async () => {
+  selectedSubCategory.value = "";
+  subCategories.value = [];
+
+  if (!selectedCategory.value) {
+    return;
+  }
+
+  loadingSubCategories.value = true;
+
+  try {
+    const res = await api.get(`/categories/${selectedCategory.value}/sub_categories/get`);
+    console.log(res.data);
+    subCategories.value = res.data.data || [];
+  } catch (err) {
+    console.error("Error loading sub-categories:", err);
+    subCategories.value = [];
+  } finally {
+    loadingSubCategories.value = false;
+    search();
+  }
+};
 // ====================== Methods ======================
 const loadCities = async () => {
   if (!selectedCountry.value) {
@@ -562,24 +603,24 @@ const loadCities = async () => {
   }
 };
 
-const search = async () => {
+const search = async (isInitial = false) => {
+  if (!searched.value && !isInitial) return;
+
   loading.value = true;
-  searched.value = true;
-  currentPage.value = 1;
 
   try {
-    const result = await EventService.searchEvents(
-      selectedCity.value || null,
-      selectedCategory.value || null,
-      fromDate.value || null,
-      toDate.value || null
-    );
+    const result = await EventService.searchEvents({
+      cityId: selectedCity.value || null,
+      subCategoryId: selectedSubCategory.value || null,
+      fromDate: fromDate.value || null,
+      toDate: toDate.value || null,
+      searchQuery: searchQuery.value?.trim() || null,
+    });
 
     displayedEvents.value = (Array.isArray(result) ? result : []).map((ev) => ({
       id: ev.id,
       slug: ev.slug,
       title: ev.title || "فعالية بدون عنوان",
-      description: ev.description || "—",
       start_date: ev.start_date,
       city: ev.city?.name || "غير محدد",
       category_name: ev.category?.name || ev.category_name || "فعالية",
@@ -587,10 +628,10 @@ const search = async () => {
     }));
   } catch (err) {
     console.error("Search error:", err);
-    alert(err.message || "حدث خطأ أثناء جلب الفعاليات");
     displayedEvents.value = [];
   } finally {
     loading.value = false;
+    searched.value = true;
   }
 };
 
@@ -613,6 +654,21 @@ const handleMarkerEvents = (e) => {
   loading.value = false;
 };
 
+watch(
+  [
+    selectedCategory,
+    selectedSubCategory,
+    selectedCountry,
+    selectedCity,
+    fromDate,
+    toDate,
+    searchQuery,
+  ],
+  () => {
+    debouncedSearch();
+  },
+  { deep: true }
+);
 const openFullscreen = async () => {
   fullscreen.value = true;
   await nextTick();

@@ -39,7 +39,12 @@
         @click="viewEvent(event)"
       >
         <div class="event-image">
-          <img :src="event.image || getPlaceholderImage(event)" :alt="event.title" />
+          <img
+            :src="
+              event.images?.length > 0 ? event.images[0].url : getPlaceholderImage(event)
+            "
+            :alt="event.title"
+          />
           <span class="event-date">{{ formatDate(event.start_date) }}</span>
         </div>
         <div class="event-content">
@@ -49,10 +54,10 @@
                 d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
               />
             </svg>
-            <span>{{ event.city.name }}</span>
+            <span>{{ event.city?.name || "-" }}</span>
           </div>
           <h3 class="event-title">{{ event.title }}</h3>
-          <p class="event-category">{{ event.categorey.name }}</p>
+          <p class="event-category">{{ event.sub_categorey?.name || "-" }}</p>
         </div>
       </div>
     </div>
@@ -120,7 +125,7 @@ export default {
   name: "AllEventsPage",
   data() {
     return {
-      events: [],
+      events: [], // دايمًا array
       loading: true,
       error: null,
       currentPage: 1,
@@ -139,33 +144,19 @@ export default {
       const maxVisible = 5;
 
       if (this.lastPage <= maxVisible) {
-        for (let i = 1; i <= this.lastPage; i++) {
-          pages.push(i);
-        }
+        for (let i = 1; i <= this.lastPage; i++) pages.push(i);
       } else {
         pages.push(1);
-
-        if (this.currentPage > 3) {
-          pages.push("...");
-        }
-
+        if (this.currentPage > 3) pages.push("...");
         for (
           let i = Math.max(2, this.currentPage - 1);
           i <= Math.min(this.lastPage - 1, this.currentPage + 1);
           i++
         ) {
-          if (!pages.includes(i)) {
-            pages.push(i);
-          }
+          if (!pages.includes(i)) pages.push(i);
         }
-
-        if (this.currentPage < this.lastPage - 2) {
-          pages.push("...");
-        }
-
-        if (!pages.includes(this.lastPage)) {
-          pages.push(this.lastPage);
-        }
+        if (this.currentPage < this.lastPage - 2) pages.push("...");
+        if (!pages.includes(this.lastPage)) pages.push(this.lastPage);
       }
 
       return pages;
@@ -180,7 +171,7 @@ export default {
       this.error = null;
 
       try {
-        const token = localStorage.getItem("auth_token"); // أو من Vuex/Pinia
+        const token = localStorage.getItem("auth_token");
 
         const response = await fetch(`${this.apiBaseUrl}/events?page=${page}`, {
           method: "GET",
@@ -191,18 +182,22 @@ export default {
           },
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         const result = await response.json();
 
         if (result.status === "success") {
-          this.events = result.data.data;
-          this.currentPage = result.data.current_page;
-          this.lastPage = result.data.last_page;
-          this.totalEvents = result.data.total;
-          this.perPage = result.data.per_page;
+          // تأكد إن events دايمًا array
+          this.events = Array.isArray(result.data.data)
+            ? result.data.data
+            : result.data.data
+            ? [result.data.data]
+            : [];
+
+          this.currentPage = result.data.current_page || 1;
+          this.lastPage = result.data.last_page || 1;
+          this.totalEvents = result.data.total || this.events.length;
+          this.perPage = result.data.per_page || 8;
 
           this.calculateStats();
         } else {
@@ -210,6 +205,7 @@ export default {
         }
       } catch (err) {
         console.error("Error fetching events:", err);
+        this.events = []; // دايمًا array حتى لو في خطأ
         this.error = "فشل في تحميل الفعاليات. الرجاء المحاولة مرة أخرى.";
       } finally {
         this.loading = false;
@@ -217,8 +213,13 @@ export default {
     },
 
     calculateStats() {
-      const cities = new Set(this.events.map((e) => e.city.id));
-      const categories = new Set(this.events.map((e) => e.categorey.id));
+      const cities = new Set();
+      const categories = new Set();
+
+      this.events.forEach((e) => {
+        if (e?.city?.id) cities.add(e.city.id);
+        if (e?.sub_categorey?.id) categories.add(e.sub_categorey.id);
+      });
 
       this.uniqueCities = cities.size;
       this.uniqueCategories = categories.size;
@@ -250,6 +251,7 @@ export default {
     },
 
     formatDate(dateString) {
+      if (!dateString) return "-";
       const date = new Date(dateString);
       const months = [
         "يناير",
@@ -265,33 +267,28 @@ export default {
         "نوفمبر",
         "ديسمبر",
       ];
-
       return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
     },
 
     formatNumber(num) {
-      if (num >= 1000) {
-        return (num / 1000).toFixed(0) + "k";
-      }
-      return num;
+      return num >= 1000 ? (num / 1000).toFixed(0) + "k" : num;
     },
 
     getPlaceholderImage(event) {
       const colors = ["#1e3a5f", "#2d5a3d", "#5a3d2d", "#3d2d5a", "#2d4d5a"];
-      const color = colors[event.id % colors.length];
+      const color = colors[event?.id % colors.length] || "#1e3a5f";
+      const subName = event?.sub_categorey?.name || "حدث";
 
       return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='${encodeURIComponent(
         color
       )}' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-size='20'%3E${encodeURIComponent(
-        event.categorey.name
+        subName
       )}%3C/text%3E%3C/svg%3E`;
     },
 
     viewEvent(event) {
-      // Navigate to event details
+      if (!event?.slug) return;
       this.$router.push({ name: "event-details", params: { slug: event.slug } });
-      // or
-      // window.location.href = `/events/${event.slug}`;
     },
   },
 };

@@ -17,7 +17,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 1,
                 'city_id' => 2, // القاهرة
-                'category_id' => 3, // سياحي
+                'sub_categorey_id' => 3, // سياحي
                 'title' => 'رحلة نيلية ممتعة',
                 'description' => 'جولة سياحية على النيل وزيارة أهم المعالم.',
                 'start_date' => '2026-03-01',
@@ -28,8 +28,8 @@ class EventsSeeder extends Seeder
             ],
             [
                 'user_id' => 2,
-                'city_id' => 1, // الرياض
-                'category_id' => 2, // فني
+                'city_id' => 1,
+                'sub_categorey_id' => 2,
                 'title' => 'معرض الفن الحديث',
                 'description' => 'أحدث اللوحات الفنية من فنانين محليين ودوليين.',
                 'start_date' => '2026-04-10',
@@ -41,7 +41,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 3,
                 'city_id' => 2, // القاهرة
-                'category_id' => 1, // رياضي
+                'sub_categorey_id' => 1, // رياضي
                 'title' => 'بطولة كرة قدم محلية',
                 'description' => 'بطولة بين الأندية المحلية للشباب.',
                 'start_date' => '2026-05-05',
@@ -53,7 +53,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 4,
                 'city_id' => 1, // الرياض
-                'category_id' => 5, // تعليمي
+                'sub_categorey_id' => 5, // تعليمي
                 'title' => 'ورشة تعليمية لتعلم البرمجة',
                 'description' => 'تعلم أساسيات البرمجة للأطفال والشباب.',
                 'start_date' => '2026-06-12',
@@ -65,7 +65,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 4,
                 'city_id' => 2, // القاهرة
-                'category_id' => 3, // سياحي
+                'sub_categorey_id' => 3, // سياحي
                 'title' => 'زيارة أهرامات الجيزة مع الغروب',
                 'description' => 'جولة خاصة عند غروب الشمس مع مرشد سياحي ووجبة خفيفة.',
                 'start_date' => '2026-11-05',
@@ -77,7 +77,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 5,
                 'city_id' => 1, // الرياض
-                'category_id' => 5, // تعليمي
+                'sub_categorey_id' => 5, // تعليمي
                 'title' => 'دورة تدريبية في الذكاء الاصطناعي',
                 'description' => 'تعرف على أساسيات الـ AI والـ Machine Learning بطريقة عملية.',
                 'start_date' => '2026-11-15',
@@ -89,7 +89,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 1,
                 'city_id' => 2, // القاهرة
-                'category_id' => 4, // ثقافي
+                'sub_categorey_id' => 4, // ثقافي
                 'title' => 'معرض الكتاب الدولي بالقاهرة',
                 'description' => 'أكبر تجمع لدور النشر العربية والعالمية مع فعاليات ثقافية.',
                 'start_date' => '2026-12-01',
@@ -101,7 +101,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 2,
                 'city_id' => 1, // الرياض
-                'category_id' => 1, // رياضي
+                'sub_categorey_id' => 1, // رياضي
                 'title' => 'تحدي اللياقة الشتوي',
                 'description' => 'فعالية رياضية جماعية تشمل تمارين ومسابقات ممتعة.',
                 'start_date' => '2026-12-20',
@@ -113,7 +113,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 3,
                 'city_id' => 2, // القاهرة
-                'category_id' => 2, // فني
+                'sub_categorey_id' => 2, // فني
                 'title' => 'عرض مسرحي: "الليلة الكبيرة"',
                 'description' => 'عرض مسرحي كوميدي موسيقي من إنتاج فرقة محلية مميزة.',
                 'start_date' => '2027-01-08',
@@ -125,7 +125,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 4,
                 'city_id' => 1, // الرياض
-                'category_id' => 3, // سياحي
+                'sub_categorey_id' => 3, // سياحي
                 'title' => 'رحلة إلى حافة العالم',
                 'description' => 'زيارة الموقع السياحي الشهير مع نزهة وتصوير.',
                 'start_date' => '2027-02-10',
@@ -137,7 +137,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 5,
                 'city_id' => 2, // القاهرة
-                'category_id' => 4, // ثقافي
+                'sub_categorey_id' => 4, // ثقافي
                 'title' => 'ليلة التراث المصري',
                 'description' => 'أمسيات فنية تجمع بين الرقص الشرقي والموسيقى التقليدية.',
                 'start_date' => '2027-03-05',
@@ -149,7 +149,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 1,
                 'city_id' => 1, // الرياض
-                'category_id' => 5, // تعليمي
+                'sub_categorey_id' => 5, // تعليمي
                 'title' => 'هاكاثون الابتكار التقني',
                 'description' => 'مسابقة برمجة جماعية لتطوير حلول تقنية مبتكرة خلال 48 ساعة.',
                 'start_date' => '2027-04-01',
@@ -161,7 +161,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 2,
                 'city_id' => 2, // القاهرة
-                'category_id' => 1, // رياضي
+                'sub_categorey_id' => 1, // رياضي
                 'title' => 'بطولة التنس المفتوحة',
                 'description' => 'منافسات تنس للمحترفين والهاويين على ملاعب النيل.',
                 'start_date' => '2027-05-12',
@@ -173,7 +173,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 3,
                 'city_id' => 1, // الرياض
-                'category_id' => 2, // فني
+                'sub_categorey_id' => 2, // فني
                 'title' => 'مهرجان الضوء والفنون',
                 'description' => 'عروض ضوئية ثلاثية الأبعاد ومعارض فنية تفاعلية.',
                 'start_date' => '2027-06-01',
@@ -185,7 +185,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 5,
                 'city_id' => 2, // القاهرة
-                'category_id' => 4, // ثقافي
+                'sub_categorey_id' => 4, // ثقافي
                 'title' => 'أمسية شعرية',
                 'description' => 'قراءة ومناقشة الشعر العربي المعاصر.',
                 'start_date' => '2026-07-20',
@@ -197,7 +197,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 1,
                 'city_id' => 1, // الرياض
-                'category_id' => 3, // سياحي
+                'sub_categorey_id' => 3, // سياحي
                 'title' => 'جولة في الدرعية التاريخية',
                 'description' => 'زيارة المواقع التاريخية واستكشاف التراث السعودي.',
                 'start_date' => '2026-08-01',
@@ -209,7 +209,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 2,
                 'city_id' => 2, // القاهرة
-                'category_id' => 2, // فني
+                'sub_categorey_id' => 2, // فني
                 'title' => 'مهرجان الموسيقى الكلاسيكية',
                 'description' => 'حفلات موسيقية لأشهر الفرق المحلية والعالمية.',
                 'start_date' => '2026-09-05',
@@ -221,7 +221,7 @@ class EventsSeeder extends Seeder
             [
                 'user_id' => 3,
                 'city_id' => 1, // الرياض
-                'category_id' => 1, // رياضي
+                'sub_categorey_id' => 1, // رياضي
                 'title' => 'سباق الماراثون السنوي',
                 'description' => 'ماراثون مفتوح لجميع الأعمار حول مدينة الرياض.',
                 'start_date' => '2026-10-10',
