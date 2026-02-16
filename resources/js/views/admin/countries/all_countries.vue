@@ -215,13 +215,12 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { countryService } from "@/services/admin/countries/countryService";
 
 const router = useRouter();
 const theme = localStorage.getItem("theme") || "light";
 
-// State
 const countriesList = ref([]);
 const paginationData = ref({});
 const loading = ref(false);
@@ -229,7 +228,6 @@ const error = ref("");
 const searchQuery = ref("");
 const currentPage = ref(1);
 
-// Edit Modal State
 const showEditModal = ref(false);
 const modalLoading = ref(false);
 const modalError = ref("");
@@ -237,151 +235,14 @@ const editingCountryId = ref(null);
 const form = ref({
   name: "",
   code: "",
-  image: "",
+  image: null,
 });
 
 const totalPages = computed(() => paginationData.value.last_page || 1);
-
 const getImageUrl = (path) => {
-  if (!path) return null; // لو مفيش صورة
-  return `${
-    import.meta.env.VITE_APP_BASE_URL || "http://127.0.0.1:8000"
-  }/storage/${path}`;
-};
-
-// Methods
-const fetchCountries = async (page = 1, search = "") => {
-  loading.value = true;
-  error.value = "";
-
-  try {
-    let url = `/v1/countries/paginated/get?page=${page}`;
-    if (search.trim()) {
-      url += `&search=${encodeURIComponent(search.trim())}`;
-    }
-
-    const response = await axios.get(url);
-
-    if (response.data.status === "success") {
-      countriesList.value = response.data.data.data;
-      paginationData.value = response.data.data;
-      currentPage.value = response.data.data.current_page;
-    } else {
-      error.value = "Failed to load countries";
-    }
-  } catch (err) {
-    console.error("Error fetching countries:", err);
-    error.value = err.response?.data?.message || "Failed to load countries";
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleSearch = () => {
-  currentPage.value = 1;
-  fetchCountries(currentPage.value, searchQuery.value);
-};
-
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    fetchCountries(page, searchQuery.value);
-  }
-};
-
-const goToCreate = () => {
-  router.push("/admin/countries/create");
-};
-
-const openEditModal = async (country) => {
-  editingCountryId.value = country.id;
-  modalError.value = "";
-  form.value = {
-    name: country.name || "",
-    code: country.code || "",
-  };
-
-  showEditModal.value = true;
-  try {
-    const res = await axios.get(`/v1/countries/${country.id}`);
-    if (res.data.status === "success") {
-      form.value = { ...res.data.data };
-    }
-  } catch (e) {
-    console.error("Failed to fetch full country data", e);
-  }
-};
-
-const closeEditModal = () => {
-  showEditModal.value = false;
-  editingCountryId.value = null;
-  modalError.value = "";
-  modalLoading.value = false;
-  form.value = { name: "", code: "", image: "" };
-};
-const handleImageUpload = (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-  form.value.image = file;
-};
-const updateCountry = async () => {
-  if (!editingCountryId.value) return;
-
-  modalLoading.value = true;
-  modalError.value = "";
-
-  try {
-    const formData = new FormData();
-    formData.append("name", form.value.name);
-    formData.append("code", form.value.code || "");
-
-    // لو المستخدم رفع صورة جديدة
-    if (form.value.image instanceof File) {
-      formData.append("image", form.value.image);
-    }
-
-    const response = await axios.post(
-      `/v1/countries/${editingCountryId.value}/update`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
-
-    if (response.data.status === "success") {
-      // تحديث السطر في الجدول
-      const index = countriesList.value.findIndex((c) => c.id === editingCountryId.value);
-      if (index !== -1) {
-        countriesList.value[index] = {
-          ...countriesList.value[index],
-          ...response.data.data, // استبدل بالقيم الجديدة من السيرفر
-        };
-      }
-      closeEditModal();
-    } else {
-      modalError.value = response.data.message || "Failed to update country";
-    }
-  } catch (err) {
-    console.error("Update error:", err);
-    modalError.value = err.response?.data?.message || "Failed to update country";
-  } finally {
-    modalLoading.value = false;
-  }
-};
-
-const deleteCountry = async (id) => {
-  if (!confirm("Are you sure you want to delete this country?")) return;
-
-  try {
-    await axios.delete(`/v1/countries/${id}/delete`);
-    countriesList.value = countriesList.value.filter((c) => c.id !== id);
-
-    if (countriesList.value.length === 0 && currentPage.value > 1) {
-      fetchCountries(currentPage.value - 1, searchQuery.value);
-    }
-  } catch (err) {
-    console.error("Error deleting country:", err);
-    alert("Failed to delete country");
-  }
+  if (!path) return null;
+  const base = import.meta.env.VITE_APP_BASE_URL || "http://127.0.0.1:8000";
+  return `${base}/storage/${path}`;
 };
 
 const getCountryEmoji = (name) => {
@@ -399,17 +260,144 @@ const getCountryEmoji = (name) => {
 };
 
 const getStatusClass = () => (Math.random() > 0.2 ? "status-active" : "status-review");
-const getStatusText = (country) =>
+const getStatusText = () =>
   getStatusClass() === "status-active" ? "Active" : "Review Needed";
 
-// Lifecycle
+const fetchCountries = async (page = 1, search = "") => {
+  loading.value = true;
+  error.value = "";
+
+  try {
+    const response = await countryService.getPaginatedCountries(page, search);
+
+    if (response.data?.status === "success") {
+      countriesList.value = response.data.data.data || [];
+      paginationData.value = response.data.data;
+      currentPage.value = response.data.data.current_page;
+    } else {
+      error.value = "فشل تحميل الدول";
+    }
+  } catch (err) {
+    console.error("Error fetching countries:", err);
+    error.value = err.response?.data?.message || "حدث خطأ أثناء تحميل الدول";
+  } finally {
+    loading.value = false;
+  }
+};
+
+const openEditModal = async (country) => {
+  editingCountryId.value = country.id;
+  modalError.value = "";
+  modalLoading.value = false;
+
+  form.value = {
+    name: country.name || "",
+    code: country.code || "",
+    image: country.image || null,
+  };
+
+  showEditModal.value = true;
+  try {
+    const res = await countryService.getCountryById(country.id);
+    if (res.data?.status === "success") {
+      form.value = { ...res.data.data };
+    }
+  } catch (e) {
+    console.warn("Could not fetch full country details", e);
+  }
+};
+
+const handleImageUpload = (event) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    form.value.image = file;
+  }
+};
+
+const updateCountry = async () => {
+  if (!editingCountryId.value) return;
+
+  modalLoading.value = true;
+  modalError.value = "";
+
+  try {
+    const payload = {
+      name: form.value.name,
+      code: form.value.code || "",
+    };
+
+    const imageFile = form.value.image instanceof File ? form.value.image : null;
+
+    const response = await countryService.updateCountry(
+      editingCountryId.value,
+      payload,
+      imageFile
+    );
+
+    if (response.data?.status === "success") {
+      const index = countriesList.value.findIndex((c) => c.id === editingCountryId.value);
+      if (index !== -1) {
+        countriesList.value[index] = {
+          ...countriesList.value[index],
+          ...response.data.data,
+        };
+      }
+      closeEditModal();
+    } else {
+      modalError.value = response.data?.message || "فشل التحديث";
+    }
+  } catch (err) {
+    console.error("Update error:", err);
+    modalError.value = err.response?.data?.message || "حدث خطأ أثناء التحديث";
+  } finally {
+    modalLoading.value = false;
+  }
+};
+
+const deleteCountry = async (id) => {
+  if (!confirm("هل أنت متأكد من حذف هذه الدولة؟")) return;
+
+  try {
+    await countryService.deleteCountry(id);
+    countriesList.value = countriesList.value.filter((c) => c.id !== id);
+
+    if (countriesList.value.length === 0 && currentPage.value > 1) {
+      fetchCountries(currentPage.value - 1, searchQuery.value);
+    }
+  } catch (err) {
+    console.error("Delete error:", err);
+    alert(err.response?.data?.message || "فشل حذف الدولة");
+  }
+};
+
+const handleSearch = () => {
+  currentPage.value = 1;
+  fetchCountries(1, searchQuery.value);
+};
+
+const goToPage = (page) => {
+  if (page < 1 || page > totalPages.value) return;
+  fetchCountries(page, searchQuery.value);
+};
+
+const goToCreate = () => {
+  router.push("/admin/countries/create");
+};
+
+const closeEditModal = () => {
+  showEditModal.value = false;
+  editingCountryId.value = null;
+  modalError.value = "";
+  modalLoading.value = false;
+  form.value = { name: "", code: "", image: null };
+};
+
 onMounted(() => {
   fetchCountries(currentPage.value);
 });
 </script>
 
 <style scoped>
-/* ===== WRAPPER ===== */
 .wrapper {
   min-height: 100vh;
   padding: 40px;

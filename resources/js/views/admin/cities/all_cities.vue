@@ -400,7 +400,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import axios from "axios";
+import { cityService } from "@/services/admin/cities/cityService";
 
 interface Country {
   id: number;
@@ -431,7 +431,6 @@ interface PaginationData {
   total: number;
 }
 
-// State
 const cities = ref<City[]>([]);
 const countries = ref<Country[]>([]);
 const loading = ref(false);
@@ -443,12 +442,12 @@ const perPage = ref(10);
 const total = ref(0);
 
 const statistics = ref({
-  totalCities: 124,
-  totalCountries: 42,
-  avgEvents: 18.4,
+  totalCities: 0,
+  totalCountries: 0,
+  avgEvents: 0,
 });
 
-// Edit Modal State
+// Edit Modal
 const showEditModal = ref(false);
 const updating = ref(false);
 const editForm = ref({
@@ -457,12 +456,11 @@ const editForm = ref({
   country_id: "",
 });
 
-// Delete Modal State
+// Delete Modal
 const showDeleteModal = ref(false);
 const deleting = ref(false);
 const cityToDelete = ref<City | null>(null);
 
-// Computed
 const visiblePages = computed(() => {
   const pages: number[] = [];
   const maxVisible = 5;
@@ -481,39 +479,41 @@ const visiblePages = computed(() => {
   return pages;
 });
 
-// Methods
 const fetchCities = async (page = 1) => {
   loading.value = true;
 
   try {
-    const params: any = {
+    const params: Record<string, any> = {
       page,
       per_page: perPage.value,
     };
 
-    if (searchQuery.value) params.search = searchQuery.value;
-    if (selectedCountry.value) params.country_id = selectedCountry.value;
+    if (searchQuery.value.trim()) {
+      params.search = searchQuery.value.trim();
+    }
+    if (selectedCountry.value) {
+      params.country_id = selectedCountry.value;
+    }
 
-    const response = await axios.get("/v1/cities/paginated/get", { params });
+    const response = await cityService.getPaginatedCities(params);
 
-    if (response.data.status === "success") {
-      const paginationData: PaginationData = response.data.data.cities;
+    if (response.data?.status === "success") {
+      const pagData: PaginationData = response.data.data.cities;
 
-      // cities table
-      cities.value = paginationData.data;
-      currentPage.value = paginationData.current_page;
-      lastPage.value = paginationData.last_page;
-      total.value = paginationData.total;
+      cities.value = pagData.data;
+      currentPage.value = pagData.current_page;
+      lastPage.value = pagData.last_page;
+      total.value = pagData.total;
 
-      // statistics
-      const countCities = response.data.data.count_cities;
-      const countCountries = response.data.data.count_countries;
+      // إحصائيات (إما جاية من الـ backend أو نحسبها محليًا)
+      const countCities = response.data.data.count_cities ?? cities.value.length;
+      const countCountries = response.data.data.count_countries ?? 0;
 
-      const avgEvents: number =
+      const avgEvents =
         cities.value.length > 0
           ? Number(
               (
-                cities.value.reduce((sum, city) => sum + city.events_count, 0) /
+                cities.value.reduce((sum, city) => sum + (city.events_count || 0), 0) /
                 cities.value.length
               ).toFixed(1)
             )
@@ -525,8 +525,8 @@ const fetchCities = async (page = 1) => {
         avgEvents,
       };
     }
-  } catch (error) {
-    console.error("Error fetching cities:", error);
+  } catch (error: any) {
+    console.error("Failed to load cities:", error);
   } finally {
     loading.value = false;
   }
@@ -534,38 +534,34 @@ const fetchCities = async (page = 1) => {
 
 const fetchCountries = async () => {
   try {
-    const response = await axios.get("/api/v1/countries");
-    if (response.data.status === "success") {
-      countries.value = response.data.data.countries;
+    const response = await cityService.getAllCountries();
+
+    if (response.data?.status === "success") {
+      countries.value = response.data.data.countries || [];
     }
   } catch (error) {
-    console.error("Error fetching countries:", error);
+    console.error("Failed to load countries:", error);
   }
 };
 
 const fetchStatistics = async () => {
   try {
-    const response = await axios.get("/api/v1/cities/statistics");
-    if (response.data.status === "success") {
+    const response = await cityService.getCitiesStatistics();
+    if (response.data?.status === "success") {
       statistics.value = response.data.data;
     }
   } catch (error) {
-    console.error("Error fetching statistics:", error);
+    console.error("Failed to load statistics:", error);
   }
 };
 
 const goToPage = (page: number) => {
-  if (page >= 1 && page <= lastPage.value) {
-    fetchCities(page);
-  }
+  if (page < 1 || page > lastPage.value) return;
+  currentPage.value = page;
+  fetchCities(page);
 };
 
 const handlePerPageChange = () => {
-  currentPage.value = 1;
-  fetchCities(1);
-};
-
-const handleSearch = () => {
   currentPage.value = 1;
   fetchCities(1);
 };
@@ -574,6 +570,80 @@ const handleCountryFilter = () => {
   currentPage.value = 1;
   fetchCities(1);
 };
+
+const editCity = (city: City) => {
+  editForm.value = {
+    id: city.id,
+    name: city.name,
+    country_id: String(city.country_id || ""),
+  };
+  showEditModal.value = true;
+};
+
+const closeEditModal = () => {
+  showEditModal.value = false;
+  editForm.value = { id: 0, name: "", country_id: "" };
+};
+
+const updateCity = async () => {
+  if (!editForm.value.name.trim()) return;
+
+  updating.value = true;
+
+  try {
+    const response = await cityService.updateCity(editForm.value.id, {
+      name: editForm.value.name.trim(),
+      country_id: editForm.value.country_id,
+    });
+
+    if (response.data?.status === "success") {
+      closeEditModal();
+      fetchCities(currentPage.value);
+      alert("تم تحديث المدينة بنجاح");
+    }
+  } catch (error: any) {
+    console.error("Update city failed:", error);
+    alert(error.response?.data?.message || "حدث خطأ أثناء التحديث");
+  } finally {
+    updating.value = false;
+  }
+};
+
+const deleteCity = (city: City) => {
+  cityToDelete.value = city;
+  showDeleteModal.value = true;
+};
+
+const closeDeleteModal = () => {
+  showDeleteModal.value = false;
+  cityToDelete.value = null;
+};
+
+const confirmDelete = async () => {
+  if (!cityToDelete.value?.id) return;
+
+  deleting.value = true;
+
+  try {
+    const response = await cityService.deleteCity(cityToDelete.value.id);
+
+    if (response.data?.status === "success") {
+      closeDeleteModal();
+      fetchCities(currentPage.value);
+      alert("تم حذف المدينة بنجاح");
+    }
+  } catch (error: any) {
+    console.error("Delete city failed:", error);
+    alert(error.response?.data?.message || "حدث خطأ أثناء الحذف");
+  } finally {
+    deleting.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchCities(1);
+  fetchCountries();
+});
 
 const getCityImage = (cityName: string): string => {
   const placeholders: Record<string, string> = {
@@ -587,6 +657,10 @@ const getCityImage = (cityName: string): string => {
       "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=100&h=100&fit=crop",
     Rome:
       "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=100&h=100&fit=crop",
+    Cairo:
+      "https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=100&h=100&fit=crop",
+    Dubai:
+      "https://images.unsplash.com/photo-1546412412-4c5c3d8d2c8e?w=100&h=100&fit=crop",
   };
 
   return (
@@ -596,82 +670,4 @@ const getCityImage = (cityName: string): string => {
     )}&size=100&background=random`
   );
 };
-
-// Edit City Functions
-const editCity = (city: City) => {
-  editForm.value = {
-    id: city.id,
-    name: city.name,
-    country_id: city.country_id.toString(),
-  };
-  showEditModal.value = true;
-};
-
-const closeEditModal = () => {
-  showEditModal.value = false;
-  editForm.value = {
-    id: 0,
-    name: "",
-    country_id: "",
-  };
-};
-
-const updateCity = async () => {
-  updating.value = true;
-  try {
-    const response = await axios.post(`/v1/cities/${editForm.value.id}/update`, {
-      name: editForm.value.name,
-      country_id: editForm.value.country_id,
-    });
-
-    if (response.data.status === "success") {
-      closeEditModal();
-      fetchCities(currentPage.value);
-      alert("City updated successfully!");
-    }
-  } catch (error: any) {
-    console.error("Error updating city:", error);
-    alert(error.response?.data?.message || "Error updating city");
-  } finally {
-    updating.value = false;
-  }
-};
-
-// Delete City Functions
-const deleteCity = (city: City) => {
-  cityToDelete.value = city;
-  showDeleteModal.value = true;
-};
-
-const closeDeleteModal = () => {
-  showDeleteModal.value = false;
-  cityToDelete.value = null;
-};
-
-const confirmDelete = async () => {
-  if (!cityToDelete.value) return;
-
-  deleting.value = true;
-  try {
-    const response = await axios.delete(`/v1/cities/${cityToDelete.value.id}/delete`);
-
-    if (response.data.status === "success") {
-      closeDeleteModal();
-      fetchCities(currentPage.value);
-      alert("City deleted successfully!");
-    }
-  } catch (error: any) {
-    console.error("Error deleting city:", error);
-    alert(error.response?.data?.message || "Error deleting city");
-  } finally {
-    deleting.value = false;
-  }
-};
-
-// Lifecycle
-onMounted(() => {
-  fetchCities();
-  fetchCountries();
-  fetchStatistics();
-});
 </script>

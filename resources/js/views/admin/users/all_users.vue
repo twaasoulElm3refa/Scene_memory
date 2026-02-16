@@ -28,7 +28,7 @@
             </svg>
             Export CSV
           </button>
-          <a href="/admin/users/add" class="btn create-btn" @click="openCreateModal">
+          <button class="btn create-btn" @click="openCreateModal">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -44,7 +44,7 @@
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
             Create New User
-          </a>
+          </button>
         </div>
       </div>
 
@@ -62,26 +62,20 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <line x1="4" y1="21" x2="4" y2="14"></line>
-            <line x1="4" y1="10" x2="4" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12" y2="3"></line>
-            <line x1="20" y1="21" x2="20" y2="16"></line>
-            <line x1="20" y1="12" x2="20" y2="3"></line>
-            <line x1="1" y1="14" x2="7" y2="14"></line>
-            <line x1="9" y1="8" x2="15" y2="8"></line>
-            <line x1="17" y1="16" x2="23" y2="16"></line>
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <input
             type="text"
             placeholder="Filter by name, email, or position..."
             v-model="searchQuery"
             class="search-input"
+            @input="currentPage = 1"
           />
         </div>
 
         <div class="filter-dropdowns">
-          <select v-model="roleFilter" class="filter-select">
+          <select v-model="roleFilter" class="filter-select" @change="currentPage = 1">
             <option value="">Role: All</option>
             <option value="admin">Admin</option>
             <option value="editor">Editor</option>
@@ -89,20 +83,20 @@
             <option value="user">User</option>
           </select>
 
-          <select v-model="statusFilter" class="filter-select">
+          <select v-model="statusFilter" class="filter-select" @change="currentPage = 1">
             <option value="">Status: All</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
 
-          <select v-model="joinedFilter" class="filter-select">
+          <select v-model="joinedFilter" class="filter-select" @change="currentPage = 1">
             <option value="">Joined: All Time</option>
             <option value="7">Last 7 Days</option>
             <option value="30">Last 30 Days</option>
             <option value="90">Last 90 Days</option>
           </select>
 
-          <button class="btn refresh-btn" @click="fetchUsers()">
+          <button class="btn refresh-btn" @click="fetchUsers(currentPage)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -124,7 +118,7 @@
         </div>
       </div>
 
-      <!-- Users Card List -->
+      <!-- Users List -->
       <div class="users-list">
         <div v-if="loading" class="loading-state">
           <div class="spinner"></div>
@@ -140,8 +134,6 @@
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
           >
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
@@ -152,203 +144,148 @@
         </div>
 
         <div v-else class="user-cards-grid">
-          <!-- Table Header -->
           <div class="table-header">
             <div class="col-user">USER</div>
             <div class="col-contact">CONTACT</div>
-            <div class="col-demographics">Country</div>
+            <div class="col-demographics">COUNTRY / BIRTH</div>
             <div class="col-role">ROLE & POSITION</div>
             <div class="col-activity">ACTIVITY</div>
             <div class="col-actions">ACTIONS</div>
           </div>
 
-          <!-- User Cards -->
           <div v-for="user in paginatedUsers" :key="user.id" class="user-card">
             <div class="col-user">
               <div class="user-info">
                 <div class="user-avatar">
                   <img v-if="user.avatar" :src="user.avatar" :alt="user.name" />
                   <div v-else class="avatar-placeholder">
-                    {{ getInitials(user.name || user.email) }}
+                    {{ format.getInitials(user.name || user.email) }}
                   </div>
                 </div>
                 <div class="user-details">
                   <div class="user-name">{{ user.name || "Unknown User" }}</div>
                   <div class="user-meta">
-                    Member since {{ formatYear(user.created_at) }}
+                    Member since {{ format.formatYear(user.created_at) }}
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="col-contact">
-              <div class="contact-info">
-                <div class="contact-email">{{ user.email }}</div>
-                <div class="contact-phone">{{ user.phone || "+1 (555) 123-4567" }}</div>
-              </div>
+              <div class="contact-email">{{ user.email }}</div>
+              <div class="contact-phone">{{ user.phone || "— — —" }}</div>
             </div>
 
             <div class="col-demographics">
-              <div class="demographics-info">
-                <div class="demo-country">{{ user.country || "United States" }}</div>
-                <div class="demo-date">
-                  {{ user.birth_date || formatDate(user.created_at) }}
-                </div>
+              <div class="demo-country">{{ user.country || "N/A" }}</div>
+              <div class="demo-date">
+                {{ user.birth_date || format.formatDate(user.created_at) }}
               </div>
             </div>
 
             <div class="col-role">
-              <div class="role-info">
-                <div class="role-title">{{ getRoleTitle(user.role) }}</div>
-                <span :class="['role-badge', getRoleBadgeClass(user.role)]">
-                  {{ (user.role || "user").toUpperCase() }}
-                </span>
-              </div>
+              <div class="role-title">{{ format.getRoleTitle(user.role) }}</div>
+              <span :class="['role-badge', format.getRoleBadgeClass(user.role)]">
+                {{ (user.role || "user").toUpperCase() }}
+              </span>
             </div>
 
             <div class="col-activity">
-              <div class="activity-info">
-                <span
-                  :class="[
-                    'status-badge',
-                    user.is_active ? 'status-active' : 'status-inactive',
-                  ]"
-                >
-                  {{ user.is_active ? "Active" : "Inactive" }}
-                </span>
-                <div class="last-login">
-                  Last login: {{ formatLastLogin(user.last_login_at) }}
-                </div>
+              <span
+                :class="[
+                  'status-badge',
+                  user.is_active ? 'status-active' : 'status-inactive',
+                ]"
+              >
+                {{ user.is_active ? "Active" : "Inactive" }}
+              </span>
+              <div class="last-login">
+                Last login: {{ format.formatLastLogin(user.last_login_at) }}
               </div>
             </div>
 
             <div class="col-actions">
-              <div class="action-buttons">
-                <button
-                  class="btn-icon edit-icon"
-                  @click="openEditModal(user)"
-                  title="Edit user"
+              <button
+                class="btn-icon edit-icon"
+                @click="openEditModal(user)"
+                title="Edit"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-                    ></path>
-                    <path
-                      d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-                    ></path>
-                  </svg>
-                </button>
-                <button
-                  class="btn-icon delete-icon"
-                  @click="deleteUser(user.id)"
-                  title="Delete user"
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  ></path>
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                class="btn-icon delete-icon"
+                @click="handleDeleteUser(user.id)"
+                title="Delete"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path
-                      d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                    ></path>
-                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                  </svg>
-                </button>
-              </div>
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path
+                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                  ></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Pagination Footer -->
-        <div v-if="pagination.last_page > 1" class="pagination-footer">
+        <!-- Pagination -->
+        <div v-if="pagination.total > 0" class="pagination-footer">
           <div class="pagination-info">
-            Showing <strong>{{ paginationStart }}</strong> to
-            <strong>{{ paginationEnd }}</strong> of
+            Showing <strong>{{ paginationStart }}</strong
+            >– <strong>{{ paginationEnd }}</strong> of
             <strong>{{ pagination.total }}</strong> users
           </div>
 
           <div class="pagination-controls">
             <button
               class="btn page-btn"
-              :disabled="pagination.current_page === 1"
-              @click="fetchUsers(pagination.current_page - 1)"
+              :disabled="currentPage === 1"
+              @click="changePage(currentPage - 1)"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
+              ← Previous
             </button>
 
             <button
               v-for="page in visiblePages"
               :key="page"
-              :class="[
-                'btn page-number',
-                page === pagination.current_page ? 'active-page' : '',
-              ]"
-              @click="fetchUsers(page)"
+              :class="{ 'active-page': page === currentPage }"
+              class="btn page-number"
+              @click="changePage(page)"
             >
               {{ page }}
             </button>
 
-            <span v-if="showEllipsis" class="pagination-ellipsis">...</span>
-
-            <button
-              v-if="pagination.last_page > 5"
-              :class="[
-                'btn page-number',
-                pagination.last_page === pagination.current_page ? 'active-page' : '',
-              ]"
-              @click="fetchUsers(pagination.last_page)"
-            >
-              {{ pagination.last_page }}
-            </button>
-
             <button
               class="btn page-btn"
-              :disabled="pagination.current_page === pagination.last_page"
-              @click="fetchUsers(pagination.current_page + 1)"
+              :disabled="currentPage === pagination.last_page"
+              @click="changePage(currentPage + 1)"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
+              Next →
             </button>
           </div>
         </div>
@@ -356,170 +293,99 @@
 
       <!-- Statistics Cards -->
       <div class="stats-section">
-        <div class="stat-card retention-card">
-          <div class="stat-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-          </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
           <div class="stat-content">
-            <div class="stat-label">ACCOUNT RETENTION</div>
-            <div class="stat-value">94.2%</div>
-            <div class="stat-change positive">+2.4% from last month</div>
+            <div class="stat-label">Active Users Today</div>
+            <div class="stat-value">{{ stats.activeUsers }}</div>
           </div>
         </div>
-
-        <div class="stat-card active-card">
-          <div class="stat-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-              <polyline points="17 6 23 6 23 12"></polyline>
-            </svg>
-          </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
           <div class="stat-content">
-            <div class="stat-label">DAILY ACTIVE USERS</div>
-            <div class="stat-value">{{ stats.activeUsers || "1,208" }}</div>
-            <div class="stat-subtitle">Real-time platform activity</div>
-          </div>
-        </div>
-
-        <div class="stat-card signups-card">
-          <div class="stat-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="8.5" cy="7" r="4"></circle>
-              <line x1="20" y1="8" x2="20" y2="14"></line>
-              <line x1="23" y1="11" x2="17" y2="11"></line>
-            </svg>
-          </div>
-          <div class="stat-content">
-            <div class="stat-label">NEW SIGNUPS</div>
-            <div class="stat-value">{{ stats.newSignups || "42" }}</div>
-            <div class="stat-subtitle">
-              Pending approval: {{ stats.pendingApproval || "3" }}
-            </div>
+            <div class="stat-label">New Signups</div>
+            <div class="stat-value">{{ stats.newSignups }}</div>
+            <div class="stat-subtitle">Pending: {{ stats.pendingApproval }}</div>
           </div>
         </div>
       </div>
 
       <!-- Edit Modal -->
       <div v-if="editModalOpen" class="modal-overlay" @click.self="closeEditModal">
-        <div class="modal-wrapper">
-          <div class="modal-header">
-            <h2>Edit User</h2>
-            <button class="close-btn" @click="closeEditModal">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
+        <div class="modal-content">
+          <h2>Edit User</h2>
+          <div v-if="editErrors.length" class="error-list">
+            <ul>
+              <li v-for="(err, i) in editErrors" :key="i">{{ err }}</li>
+            </ul>
+          </div>
+          <div v-if="editSuccess" class="success-msg">{{ editSuccess }}</div>
+
+          <div class="form-group">
+            <label>Name</label>
+            <input v-model="editForm.name" type="text" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input v-model="editForm.email" type="email" />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select v-model="editForm.role">
+              <option value="user">User</option>
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+          <div class="form-group checkbox">
+            <input type="checkbox" v-model="editForm.is_active" id="active" />
+            <label for="active">Account is active</label>
           </div>
 
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Name</label>
-              <input
-                v-model="editForm.name"
-                type="text"
-                class="input-field"
-                placeholder="Enter full name"
-              />
-            </div>
+          <div class="modal-actions">
+            <button class="btn cancel" @click="closeEditModal">Cancel</button>
+            <button class="btn save" @click="submitEdit" :disabled="loading">Save</button>
+          </div>
+        </div>
+      </div>
 
-            <div class="form-group">
-              <label>Email</label>
-              <input
-                v-model="editForm.email"
-                type="email"
-                class="input-field"
-                placeholder="Enter email address"
-              />
-            </div>
-
-            <div class="form-group">
-              <label>Role</label>
-              <select v-model="editForm.role" class="input-field">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="viewer">Viewer</option>
-              </select>
-            </div>
-
-            <div class="form-group checkbox-group">
-              <input type="checkbox" v-model="editForm.is_active" id="is_active" />
-              <label for="is_active">Account is active</label>
-            </div>
-
-            <div v-if="editErrors.length" class="error-msg">
-              <ul>
-                <li v-for="(err, i) in editErrors" :key="i">{{ err }}</li>
-              </ul>
-            </div>
-
-            <div v-if="editSuccess" class="success-msg">{{ editSuccess }}</div>
+      <!-- Create Modal -->
+      <div v-if="createModalOpen" class="modal-overlay" @click.self="closeCreateModal">
+        <div class="modal-content">
+          <h2>Create New User</h2>
+          <div v-if="createErrors.length" class="error-list">
+            <ul>
+              <li v-for="(err, i) in createErrors" :key="i">{{ err }}</li>
+            </ul>
           </div>
 
-          <div class="modal-footer">
-            <button class="btn cancel-btn" @click="closeEditModal">Cancel</button>
-            <button class="btn save-btn" @click="submitEdit">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              Save Changes
+          <div class="form-group">
+            <label>Full Name</label>
+            <input v-model="createForm.name" type="text" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input v-model="createForm.email" type="email" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input v-model="createForm.password" type="password" required />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select v-model="createForm.role">
+              <option value="user">User</option>
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn cancel" @click="closeCreateModal">Cancel</button>
+            <button class="btn save" @click="submitCreate" :disabled="loading">
+              Create User
             </button>
           </div>
         </div>
@@ -529,17 +395,33 @@
 </template>
 
 <script setup>
+import { ref, reactive, computed, onMounted } from "vue";
 import AdminLayout from "@/layouts/AdminLayout.vue";
-import { ref, reactive, onMounted, computed } from "vue";
-import axios from "axios";
+import { userService } from "@/services/admin/user/userService";
+import { statsService } from "@/services/admin/user/statsService";
+import { userFormatService as format } from "@/services/admin/user/userFormatService";
 
-const theme = localStorage.getItem("theme") || "light";
-const themeClass = computed(() => (theme === "dark" ? "dark-theme" : "light-theme"));
+const themeClass = computed(() => {
+  return localStorage.getItem("theme") === "dark" ? "dark-theme" : "light-theme";
+});
 
-// State
 const users = ref([]);
 const loading = ref(false);
-const pagination = ref({ current_page: 1, last_page: 1, per_page: 10, total: 0 });
+
+const pagination = ref({
+  current_page: 1,
+  last_page: 1,
+  per_page: 10,
+  total: 0,
+});
+
+const currentPage = computed({
+  get: () => pagination.value.current_page,
+  set: (val) => {
+    pagination.value.current_page = val;
+    fetchUsers(val);
+  },
+});
 
 const stats = ref({
   activeUsers: 0,
@@ -547,57 +429,62 @@ const stats = ref({
   pendingApproval: 0,
 });
 
-// Filters
 const searchQuery = ref("");
 const roleFilter = ref("");
 const statusFilter = ref("");
 const joinedFilter = ref("");
 
-// Edit Modal
+// Edit modal
 const editModalOpen = ref(false);
 const editForm = reactive({
   id: null,
   name: "",
   email: "",
   role: "user",
-  is_active: false,
+  is_active: true,
 });
 const editErrors = ref([]);
 const editSuccess = ref("");
 
-// Create Modal
+// Create modal
 const createModalOpen = ref(false);
-const createForm = reactive({ name: "", email: "", password: "", role: "user" });
+const createForm = reactive({
+  name: "",
+  email: "",
+  password: "",
+  role: "user",
+});
+const createErrors = ref([]);
 
-// Computed
 const filteredUsers = computed(() => {
-  let filtered = users.value;
+  let list = [...users.value];
 
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
-    filtered = filtered.filter(
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.toLowerCase().trim();
+    list = list.filter(
       (u) =>
-        (u.name && u.name.toLowerCase().includes(query)) ||
-        (u.email && u.email.toLowerCase().includes(query))
+        (u.name && u.name.toLowerCase().includes(q)) ||
+        (u.email && u.email.toLowerCase().includes(q))
     );
   }
 
   if (roleFilter.value) {
-    filtered = filtered.filter((u) => (u.role || "user") === roleFilter.value);
+    list = list.filter((u) => (u.role || "user") === roleFilter.value);
   }
 
   if (statusFilter.value) {
-    const isActive = statusFilter.value === "active";
-    filtered = filtered.filter((u) => !!u.is_active === isActive);
+    const active = statusFilter.value === "active";
+    list = list.filter((u) => !!u.is_active === active);
   }
 
-  return filtered;
+  // joinedFilter logic can be added here if backend supports it
+
+  return list;
 });
 
 const paginatedUsers = computed(() => {
   const start = (pagination.value.current_page - 1) * pagination.value.per_page;
-  const end = start + pagination.value.per_page;
-  return filteredUsers.value.slice(start, end);
+  return filteredUsers.value.slice(start, start + pagination.value.per_page);
 });
 
 const paginationStart = computed(() => {
@@ -606,7 +493,7 @@ const paginationStart = computed(() => {
 
 const paginationEnd = computed(() => {
   const end = pagination.value.current_page * pagination.value.per_page;
-  return Math.min(end, pagination.value.total);
+  return Math.min(end, filteredUsers.value.length);
 });
 
 const visiblePages = computed(() => {
@@ -614,76 +501,63 @@ const visiblePages = computed(() => {
   const total = pagination.value.last_page;
   const pages = [];
 
-  if (total <= 5) {
+  if (total <= 7) {
     for (let i = 1; i <= total; i++) pages.push(i);
   } else {
-    if (current <= 3) {
-      for (let i = 1; i <= 3; i++) pages.push(i);
-    } else if (current >= total - 2) {
-      for (let i = total - 2; i < total; i++) pages.push(i);
+    if (current <= 4) {
+      for (let i = 1; i <= 5; i++) pages.push(i);
+      pages.push("...");
+      pages.push(total);
+    } else if (current >= total - 3) {
+      pages.push(1);
+      pages.push("...");
+      for (let i = total - 4; i <= total; i++) pages.push(i);
     } else {
-      pages.push(current - 1, current, current + 1);
+      pages.push(1);
+      pages.push("...");
+      for (let i = current - 1; i <= current + 1; i++) pages.push(i);
+      pages.push("...");
+      pages.push(total);
     }
   }
-
-  return pages;
+  return pages.filter((p) => p !== "...");
 });
 
-const showEllipsis = computed(() => {
-  return (
-    pagination.value.last_page > 5 &&
-    pagination.value.current_page < pagination.value.last_page - 2
-  );
-});
+const changePage = (page) => {
+  if (page < 1 || page > pagination.value.last_page) return;
+  currentPage.value = page;
+};
 
-// Methods
 const fetchUsers = async (page = 1) => {
   loading.value = true;
   try {
-    const token = localStorage.getItem("auth_token");
-    const res = await axios.get(`/v1/users/all/get?page=${page}`, {
-      headers: { Authorization: token ? `Bearer ${token}` : "" },
-    });
-    const data = res.data.data;
-    users.value = data.data || [];
-    pagination.value = {
-      current_page: data.current_page,
-      last_page: data.last_page,
-      per_page: data.per_page,
-      total: data.total,
-    };
-  } catch (err) {
-    alert("Failed to load users");
+    const result = await userService.fetchUsers(page);
+    if (result.success) {
+      users.value = result.data.data || [];
+      pagination.value = {
+        current_page: result.data.current_page,
+        last_page: result.data.last_page,
+        per_page: result.data.per_page,
+        total: result.data.total,
+      };
+    } else {
+      alert(result.error?.message || "Failed to load users");
+    }
+  } catch (e) {
+    console.error(e);
+    alert("Network or server error");
   } finally {
     loading.value = false;
   }
 };
 
-// دالة لجلب عدد المستخدمين النشطين اليوم
-async function fetchActiveUsers() {
-  try {
-    const response = await axios.get("/v1/users/all/last-login");
-    if (response.data.status === "success") {
-      stats.value.activeUsers = response.data.data;
-    }
-  } catch (error) {
-    console.error("Error fetching active users:", error);
-  }
-}
+const fetchStats = async () => {
+  stats.value.activeUsers = await statsService.fetchActiveUsersCount();
+  const newData = await statsService.fetchNewSignups();
+  stats.value.newSignups = newData.newSignups || 0;
+  stats.value.pendingApproval = newData.pendingApproval || 0;
+};
 
-// دالة لجلب عدد المستخدمين الجدد
-async function fetchNewUsers() {
-  try {
-    const response = await axios.get("/v1/users/all/new-users");
-    if (response.data.status === "success") {
-      stats.value.newSignups = response.data.data;
-      // لو في pendingApproval داخل الـ API ممكن تحطه هنا برضه
-      stats.value.pendingApproval = response.data.pendingApproval || 0;
-    }
-  } catch (error) {
-    console.error("Error fetching new users:", error);
-  }
-}
 const openEditModal = (user) => {
   editForm.id = user.id;
   editForm.name = user.name || "";
@@ -702,44 +576,25 @@ const closeEditModal = () => {
 const submitEdit = async () => {
   editErrors.value = [];
   editSuccess.value = "";
-  try {
-    const token = localStorage.getItem("auth_token");
-    await axios.post(
-      `/v1/users/${editForm.id}`,
-      {
-        name: editForm.name,
-        email: editForm.email,
-        role: editForm.role,
-        is_active: editForm.is_active,
-      },
-      { headers: { Authorization: token ? `Bearer ${token}` : "" } }
-    );
-    const idx = users.value.findIndex((u) => u.id === editForm.id);
-    if (idx !== -1) users.value[idx] = { ...users.value[idx], ...editForm };
-    editSuccess.value = "User updated successfully!";
-    setTimeout(() => closeEditModal(), 1400);
-  } catch (err) {
-    if (err.response?.status === 422 && err.response.data?.errors)
-      editErrors.value = Object.values(err.response.data.errors).flat();
-    else editErrors.value = [err.response?.data?.message || "Failed to update user"];
-  }
-};
+  loading.value = true;
 
-const deleteUser = async (id) => {
-  if (
-    !confirm("Are you sure you want to delete this user? This action cannot be undone.")
-  )
-    return;
-  try {
-    const token = localStorage.getItem("auth_token");
-    await axios.delete(`/v1/users/${id}`, {
-      headers: { Authorization: token ? `Bearer ${token}` : "" },
-    });
-    users.value = users.value.filter((u) => u.id !== id);
-    alert("User deleted successfully");
-  } catch (err) {
-    alert("Failed to delete user");
+  const result = await userService.updateUser(editForm.id, { ...editForm });
+
+  if (result.success) {
+    const idx = users.value.findIndex((u) => u.id === editForm.id);
+    if (idx !== -1) {
+      Object.assign(users.value[idx], editForm);
+    }
+    editSuccess.value = "User updated successfully";
+    setTimeout(closeEditModal, 1200);
+  } else {
+    if (result.error.isValidationError) {
+      editErrors.value = Object.values(result.error.errors).flat();
+    } else {
+      editErrors.value = [result.error.message];
+    }
   }
+  loading.value = false;
 };
 
 const openCreateModal = () => {
@@ -747,6 +602,7 @@ const openCreateModal = () => {
   createForm.email = "";
   createForm.password = "";
   createForm.role = "user";
+  createErrors.value = [];
   createModalOpen.value = true;
 };
 
@@ -755,79 +611,43 @@ const closeCreateModal = () => {
 };
 
 const submitCreate = async () => {
-  try {
-    const token = localStorage.getItem("auth_token");
-    const res = await axios.post(`/v1/users/create`, createForm, {
-      headers: { Authorization: token ? `Bearer ${token}` : "" },
-    });
-    users.value.unshift(res.data.data);
+  createErrors.value = [];
+  loading.value = true;
+
+  const result = await userService.createUser({ ...createForm });
+
+  if (result.success) {
+    users.value.unshift(result.data);
     alert("User created successfully");
     closeCreateModal();
-  } catch (err) {
-    alert(err.response?.data?.message || "Failed to create user");
+  } else {
+    if (result.error.isValidationError) {
+      createErrors.value = Object.values(result.error.errors).flat();
+    } else {
+      createErrors.value = [result.error.message];
+    }
   }
+  loading.value = false;
 };
 
-// Helpers
-const getInitials = (name) => {
-  if (!name) return "?";
-  const parts = name.split(" ");
-  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  return name.substring(0, 2).toUpperCase();
-};
+const handleDeleteUser = async (id) => {
+  if (!confirm("Delete this user permanently?")) return;
 
-const formatYear = (date) => {
-  if (!date) return new Date().getFullYear();
-  return new Date(date).getFullYear();
-};
+  loading.value = true;
+  const result = await userService.deleteUser(id);
 
-const formatDate = (date) => {
-  if (!date) return "Mar 12, 1990";
-  const d = new Date(date);
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-};
-
-const formatLastLogin = (date) => {
-  if (!date) return "2h ago";
-  const now = new Date();
-  const login = new Date(date);
-  const diff = Math.floor((now - login) / 1000);
-
-  if (diff < 60) return "just now";
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
-  return `${Math.floor(diff / 604800)}w ago`;
-};
-
-const getRoleTitle = (role) => {
-  const titles = {
-    admin: "Creative Director",
-    editor: "Senior UX Designer",
-    viewer: "Lead Photographer",
-    user: "Project Manager",
-  };
-  return titles[role] || "Team Member";
-};
-
-const getRoleBadgeClass = (role) => {
-  const classes = {
-    admin: "role-admin",
-    editor: "role-editor",
-    viewer: "role-viewer",
-    user: "role-user",
-  };
-  return classes[role] || "role-user";
+  if (result.success) {
+    users.value = users.value.filter((u) => u.id !== id);
+    alert("User deleted");
+  } else {
+    alert(result.error?.message || "Delete failed");
+  }
+  loading.value = false;
 };
 
 onMounted(() => {
   fetchUsers();
-  fetchActiveUsers();
-  fetchNewUsers();
+  fetchStats();
 });
 </script>
 

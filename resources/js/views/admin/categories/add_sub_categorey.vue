@@ -188,9 +188,7 @@ async function submitForm() {
     });
 
     if (response.data?.status === "success") {
-      // نجاح → رجوع أو إعادة توجيه
       router.push(`/admin/categories/${form.value.category_id}`);
-      // أو يمكنك عرض رسالة نجاح toast إذا كنت تستخدم مكتبة مثل vue-toastification
     }
   } catch (err) {
     if (err.response?.status === 422) {

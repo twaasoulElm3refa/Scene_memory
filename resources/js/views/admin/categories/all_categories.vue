@@ -423,8 +423,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import axios from "axios";
 import AdminLayout from "@/layouts/AdminLayout.vue";
+import { categoryService } from "@/services/admin/categories/categoryService";
+import { useRouter } from "vue-router";
 
 const categories = ref([]);
 const currentPage = ref(1);
@@ -434,7 +435,7 @@ const lastPage = ref(1);
 const from = ref(1);
 const to = ref(0);
 const loading = ref(false);
-
+const router = useRouter();
 const showModal = ref(false);
 const isEditMode = ref(false);
 const showDeleteConfirm = ref(false);
@@ -447,38 +448,81 @@ const form = ref({
   errors: {},
 });
 
-/* ========= FETCH CATEGORIES (PAGINATED) ========= */
+/* ========= FETCH ========= */
 async function fetchCategories(page = 1) {
   loading.value = true;
-  try {
-    const res = await axios.get("/v1/categories/all/paginated", {
-      params: { page },
-    });
+  const result = await categoryService.getCategories(page);
 
-    const pag = res.data.data;
-
-    categories.value = pag.data.map((c) => ({
-      id: c.id,
-      name: c.name,
-      image: c.image || null,
-      events_count: c.sub_categories_count ?? c.events_count ?? 0,
-      created_at: c.created_at,
-    }));
-
-    currentPage.value = pag.current_page;
-    perPage.value = pag.per_page;
-    total.value = pag.total;
-    lastPage.value = pag.last_page;
-    from.value = pag.from || 1;
-    to.value = pag.to || 0;
-  } catch (e) {
-    console.error("Fetch categories error:", e.response?.data || e);
-  } finally {
-    loading.value = false;
+  if (result.success) {
+    categories.value = result.data.data;
+    const p = result.data.pagination;
+    currentPage.value = p.current_page;
+    perPage.value = p.per_page;
+    total.value = p.total;
+    lastPage.value = p.last_page;
+    from.value = p.from;
+    to.value = p.to;
+  } else {
+    console.error(result.error);
+    // يمكنك عرض toast أو alert هنا
   }
+
+  loading.value = false;
+}
+// في <script setup>
+function viewCategory(categoryId) {
+  if (!categoryId) {
+    console.warn("No category ID provided");
+    return;
+  }
+  router.push(`/admin/categories/${categoryId}`);
+}
+/* ========= CREATE / UPDATE ========= */
+async function submitForm() {
+  form.value.processing = true;
+  form.value.errors = {};
+
+  let result;
+
+  if (isEditMode.value) {
+    result = await categoryService.updateCategory(form.value.id, form.value.name);
+  } else {
+    result = await categoryService.createCategory(form.value.name);
+  }
+
+  if (result.success) {
+    closeModal();
+    await fetchCategories(currentPage.value);
+  } else {
+    if (result.error?.type === "validation") {
+      form.value.errors = result.error.messages;
+    } else {
+      alert(result.error || "حدث خطأ أثناء الحفظ");
+    }
+  }
+
+  form.value.processing = false;
 }
 
-/* ========= MODALS ========= */
+/* ========= DELETE ========= */
+async function performDelete() {
+  if (!categoryToDelete.value?.id) return;
+
+  form.value.processing = true;
+
+  const result = await categoryService.deleteCategory(categoryToDelete.value.id);
+
+  if (result.success) {
+    showDeleteConfirm.value = false;
+    await fetchCategories(currentPage.value);
+  } else {
+    alert(result.error || "فشل الحذف");
+  }
+
+  form.value.processing = false;
+}
+
+/* ========= Modal & Navigation helpers ========= */
 function openCreateModal() {
   form.value = { id: null, name: "", processing: false, errors: {} };
   isEditMode.value = false;
@@ -498,77 +542,19 @@ function openEditModal(cat) {
 
 function closeModal() {
   showModal.value = false;
+  // reset form after animation
   setTimeout(() => {
     form.value = { id: null, name: "", processing: false, errors: {} };
   }, 300);
 }
 
-function viewCategory(id) {
-  window.location.href = `/admin/categories/${id}`;
-}
-/* ========= SAVE (CREATE + UPDATE) ========= */
-async function submitForm() {
-  form.value.processing = true;
-  form.value.errors = {};
-
-  try {
-    let promise;
-
-    if (isEditMode.value) {
-      // تعديل → لازم نفس المسار اللي في الـ routes بالظبط
-      promise = axios.post(`/v1/categories/edit/${form.value.id}/update/edit`, {
-        name: form.value.name.trim(),
-      });
-    } else {
-      // إنشاء جديد
-      promise = axios.post("/v1/categories/create", {
-        name: form.value.name.trim(),
-      });
-    }
-
-    await promise;
-
-    closeModal();
-    fetchCategories(currentPage.value);
-  } catch (err) {
-    if (err.response?.status === 422) {
-      form.value.errors = err.response.data.errors || {};
-    } else if (err.response?.status === 405) {
-      console.error("Method Not Allowed → تأكد من المسار والـ method (POST)");
-    } else {
-      console.error("Save error:", err.response?.data || err);
-    }
-  } finally {
-    form.value.processing = false;
-  }
-}
-
-/* ========= DELETE ========= */
 function confirmDelete(cat) {
   categoryToDelete.value = cat;
   showDeleteConfirm.value = true;
 }
 
-async function performDelete() {
-  if (!categoryToDelete.value) return;
-
-  try {
-    // نفس المسار الموجود في الـ routes
-    await axios.delete(
-      `/v1/categories/delete/${categoryToDelete.value.id}/delete/delete`
-    );
-
-    showDeleteConfirm.value = false;
-    fetchCategories(currentPage.value);
-  } catch (err) {
-    console.error("Delete error:", err.response?.data || err);
-    alert("حدث خطأ أثناء الحذف");
-  }
-}
-
-/* ========= PAGINATION HELPERS ========= */
 function changePage(page) {
-  if (page < 1 || page > lastPage.value) return;
+  if (page < 1 || page > lastPage.value || loading.value) return;
   currentPage.value = page;
   fetchCategories(page);
 }
@@ -591,7 +577,6 @@ const visiblePages = computed(() => {
   return pages;
 });
 
-/* ========= DATE FORMAT ========= */
 function formatDate(date) {
   if (!date) return "—";
   return new Date(date).toLocaleDateString("ar-EG", {

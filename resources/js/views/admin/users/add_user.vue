@@ -17,7 +17,7 @@
         </button>
       </div>
 
-      <form @submit.prevent="submit">
+      <form @submit.prevent="handleSubmit">
         <!-- Personal Information Section -->
         <div class="section">
           <div class="section-header">
@@ -54,7 +54,7 @@
               <label>Phone Number</label>
               <input
                 v-model="form.phone"
-                type="text"
+                type="tel"
                 class="input"
                 placeholder="+1 (555) 000-0000"
               />
@@ -63,12 +63,7 @@
 
             <div class="form-group">
               <label>Date of Birth</label>
-              <input
-                v-model="form.date_of_birth"
-                type="date"
-                class="input"
-                placeholder="mm/dd/yyyy"
-              />
+              <input v-model="form.date_of_birth" type="date" class="input" />
               <p v-if="fieldErrors.date_of_birth" class="error">
                 {{ fieldErrors.date_of_birth }}
               </p>
@@ -96,7 +91,7 @@
                 v-model="form.position"
                 type="text"
                 class="input"
-                placeholder="Senior Editor"
+                placeholder="e.g. Senior Editor"
               />
               <p v-if="fieldErrors.position" class="error">{{ fieldErrors.position }}</p>
             </div>
@@ -111,25 +106,45 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group">
+            <div class="form-group password-group">
               <label>Password</label>
-              <input
-                v-model="form.password"
-                type="password"
-                class="input"
-                placeholder="Enter password"
-              />
+              <div class="password-wrapper">
+                <input
+                  v-model="form.password"
+                  :type="showPassword ? 'text' : 'password'"
+                  class="input"
+                  placeholder="Enter password"
+                />
+                <button
+                  type="button"
+                  class="toggle-password-btn"
+                  @click="showPassword = !showPassword"
+                  tabindex="-1"
+                >
+                  {{ showPassword ? "🙈" : "👁️" }}
+                </button>
+              </div>
               <p v-if="fieldErrors.password" class="error">{{ fieldErrors.password }}</p>
             </div>
 
-            <div class="form-group">
+            <div class="form-group password-group">
               <label>Confirm Password</label>
-              <input
-                v-model="form.password_confirmation"
-                type="password"
-                class="input"
-                placeholder="Confirm password"
-              />
+              <div class="password-wrapper">
+                <input
+                  v-model="form.password_confirmation"
+                  :type="showConfirmPassword ? 'text' : 'password'"
+                  class="input"
+                  placeholder="Confirm password"
+                />
+                <button
+                  type="button"
+                  class="toggle-password-btn"
+                  @click="showConfirmPassword = !showConfirmPassword"
+                  tabindex="-1"
+                >
+                  {{ showConfirmPassword ? "🙈" : "👁️" }}
+                </button>
+              </div>
               <p v-if="fieldErrors.password_confirmation" class="error">
                 {{ fieldErrors.password_confirmation }}
               </p>
@@ -158,14 +173,12 @@
                 </label>
                 <span class="toggle-label">Account is Active</span>
               </div>
-              <p class="help-text">
-                When disabled, the user will not be able to log in to the system.
-              </p>
+              <p class="help-text">When disabled, the user will not be able to log in.</p>
             </div>
           </div>
         </div>
 
-        <!-- Alerts -->
+        <!-- Messages -->
         <div v-if="generalErrors.length" class="alert error-bg">
           <div v-for="err in generalErrors" :key="err">{{ err }}</div>
         </div>
@@ -174,11 +187,20 @@
           {{ successMessage }}
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Actions -->
         <div class="actions">
-          <button type="button" class="btn btn-secondary" @click="cancel">Cancel</button>
-          <button type="submit" class="btn btn-primary">
-            <span class="btn-icon">💾</span> Save User
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="handleCancel"
+            :disabled="isSubmitting"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+            <span v-if="isSubmitting" class="loading">⏳</span>
+            <span v-else class="btn-icon">💾</span>
+            {{ isSubmitting ? "Saving..." : "Save User" }}
           </button>
         </div>
       </form>
@@ -188,24 +210,19 @@
         <div class="info-card">
           <div class="info-icon">📧</div>
           <h3>Activation Email</h3>
-          <p>
-            The user will receive an automated email with login instructions once saved.
-          </p>
+          <p>The user will receive login instructions once saved.</p>
         </div>
 
         <div class="info-card">
           <div class="info-icon">🔒</div>
           <h3>Security Policy</h3>
-          <p>
-            All passwords must meet minimum complexity requirements (8+ chars, numbers,
-            symbols).
-          </p>
+          <p>Passwords must be 8+ characters with numbers & symbols.</p>
         </div>
 
         <div class="info-card">
           <div class="info-icon">👥</div>
           <h3>Seat Management</h3>
-          <p>Adding this user will use 1 of your 25 available professional seats.</p>
+          <p>This will use 1 of your 25 available professional seats.</p>
         </div>
       </div>
     </div>
@@ -213,67 +230,39 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
-import axios from "axios";
+import { ref } from "vue";
 import AdminLayout from "@/layouts/AdminLayout.vue";
+import { useUserForm } from "@/services/admin/user/useUserForm"; // ← تأكد من المسار الصحيح
 
 const theme = localStorage.getItem("theme") || "light";
 
-const form = reactive({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
-  phone: "",
-  country: "",
-  position: "",
-  date_of_birth: "",
-  role: "viewer",
-  is_active: true,
-});
+const {
+  form,
+  fieldErrors,
+  generalErrors,
+  successMessage,
+  isSubmitting,
+  submit,
+  resetForm,
+} = useUserForm();
 
-const fieldErrors = reactive({});
-const generalErrors = ref([]);
-const successMessage = ref("");
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
-const submit = async () => {
-  Object.keys(fieldErrors).forEach((k) => (fieldErrors[k] = ""));
-  generalErrors.value = [];
-  successMessage.value = "";
-
-  if (form.password !== form.password_confirmation) {
-    fieldErrors.password_confirmation = "Password confirmation does not match";
-    return;
-  }
-
-  try {
-    await axios.post("/v1/users/create", form);
-
-    successMessage.value = "User created successfully!";
-    Object.keys(form).forEach((k) => {
-      if (k === "role") form[k] = "viewer";
-      else if (k === "is_active") form[k] = true;
-      else form[k] = "";
-    });
-  } catch (error) {
-    if (error.response?.status === 422) {
-      const errs = error.response.data.errors;
-      Object.keys(errs).forEach((key) => {
-        fieldErrors[key] = errs[key][0];
-      });
-    } else {
-      generalErrors.value.push("Something went wrong");
-    }
+const handleSubmit = async () => {
+  const success = await submit();
+  if (success) {
+    resetForm();
+    showPassword.value = false;
+    showConfirmPassword.value = false;
   }
 };
 
-const cancel = () => {
+const handleCancel = () => {
   if (confirm("Are you sure you want to cancel? All changes will be lost.")) {
-    Object.keys(form).forEach((k) => {
-      if (k === "role") form[k] = "viewer";
-      else if (k === "is_active") form[k] = true;
-      else form[k] = "";
-    });
+    resetForm();
+    showPassword.value = false;
+    showConfirmPassword.value = false;
   }
 };
 
@@ -283,6 +272,38 @@ const goBack = () => {
 </script>
 
 <style scoped>
+/* ── أنماط إضافية لزر إظهار/إخفاء كلمة المرور ── */
+.password-group {
+  position: relative;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0 8px;
+  line-height: 1;
+}
+
+.toggle-password-btn:hover {
+  color: #333;
+}
+
+/* لضمان أن الحقل لا يتداخل مع الزر */
+.input {
+  padding-right: 48px !important; /* مساحة للأيقونة */
+}
+
 /* ===== COMMON ===== */
 .wrapper {
   max-width: 1000px;
