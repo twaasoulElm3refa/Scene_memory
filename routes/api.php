@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\api\admin\ContactController;
 use App\Http\Controllers\api\admin\EventAdminController;
+use App\Http\Controllers\api\admin\FooterController;
+use App\Http\Controllers\api\admin\NewsletterController;
 use App\Http\Controllers\api\admin\UserController;
+use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
 use App\Http\Controllers\api\auth\SocialAuthController;
@@ -10,7 +14,6 @@ use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\SubCategoryController;
-use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +48,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [CategoryController::class,  'index']);
         Route::get('/all/paginated', [CategoryController::class,  'paginated']);
         Route::get('/{id}', [CategoryController::class,  'single']);
-        Route::get('/{id}/sub_categories/get', [CategoryController::class,  'sub_categories']); 
+        Route::get('/{id}/sub_categories/get', [CategoryController::class,  'sub_categories']);
         Route::post('/create', [CategoryController::class,  'create'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::post('/edit/{id}/update/edit', [CategoryController::class,  'update'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}/delete/delete', [CategoryController::class,  'delete'])->middleware('auth:sanctum', AdminMiddleware::class);
@@ -56,9 +59,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [SubCategoryController::class,  'index']);
         Route::get('/all/paginated', [SubCategoryController::class,  'paginated']);
         Route::get('/{id}', [SubCategoryController::class,  'single']);
-        Route::post('/create', [SubCategoryController::class,  'create'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::post('/update/{id}', [SubCategoryController::class,  'update'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::delete('/delete/{id}', [SubCategoryController::class,  'delete'])->middleware(AdminMiddleware::class,'auth:sanctum');
+        Route::post('/create', [SubCategoryController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/update/{id}', [SubCategoryController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::delete('/delete/{id}', [SubCategoryController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
 
     // COUNTRIES CRUD
@@ -67,9 +70,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:15,1');
         Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:15,1');
         Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:15,1');
-        Route::post('/create', [CountriesController::class,  'create'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class,'auth:sanctum');
+        Route::post('/create', [CountriesController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
 
     // CITIES CRUD
@@ -77,12 +80,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:15,1');
         Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:15,1');
         Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:15,1');
-        Route::post('/create', [CitiesController::class,  'create'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::post('/{id}/update', [CitiesController::class,'update'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::delete('/{id}/delete', [CitiesController::class,'delete'])->middleware(AdminMiddleware::class,'auth:sanctum');
+        Route::post('/create', [CitiesController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/{id}/update', [CitiesController::class, 'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::delete('/{id}/delete', [CitiesController::class, 'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
 
-    // Events 
+    // Events
     Route::prefix('events')->middleware(['throttle:45,1'])->group(function () {
         // Home Events
         Route::get('/', [EventController::class, 'all']);
@@ -93,9 +96,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/{slug}/single/get', [EventController::class,  'single']);
 
         // Events CRUD
-        Route::post('/create', [EventAdminController::class,  'create'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class,'auth:sanctum');
-        Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class,'auth:sanctum');
+        Route::post('/create', [EventAdminController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
 
     Route::prefix('users')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -106,10 +109,23 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
-        
+
         // USER COUNTS
         Route::get('/all/count', [UserCountsController::class, 'count']);
         Route::get('/all/last-login', [UserCountsController::class, 'last_login']);
         Route::get('/all/new-users', [UserCountsController::class, 'NewUsers']);
+    });
+
+    Route::prefix('')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        Route::get('/contacts', [ContactController::class, 'all']);
+        Route::post('/contacts/respond', [ContactController::class, 'respond']);
+
+        Route::get('/newsletters', [NewsletterController::class, 'all']);
+        Route::post('/newsletters/respond', [NewsletterController::class, 'responde']);
+
+        Route::get('/footer', [FooterController::class, 'all']);
+        Route::post('/footer/create', [FooterController::class, 'cretae']);
+        Route::post('/footer/update', [FooterController::class, 'cretae']);
+
     });
 });

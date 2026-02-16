@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Categories;
 use App\Models\Cities;
 use App\Models\subCategorey;
 use App\Models\User;
