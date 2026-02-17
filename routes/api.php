@@ -117,15 +117,21 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        // CONTACTS
         Route::get('/contacts', [ContactController::class, 'all']);
-        Route::post('/contacts/respond', [ContactController::class, 'respond']);
+        Route::get('/contacts/{id}', [ContactController::class, 'single']);
+        Route::post('/contacts/create', [ContactController::class, 'create']);
+        Route::post('/contacts/respond/{id}', [ContactController::class, 'respond']);
+        Route::delete('/contacts/delete/{id}', [ContactController::class,'delete']);
 
+        // Newsletters
         Route::get('/newsletters', [NewsletterController::class, 'all']);
-        Route::post('/newsletters/respond', [NewsletterController::class, 'responde']);
+        Route::post('/newsletters/create', [NewsletterController::class, 'create']);
+        Route::post('/newsletters/respond/{id}', [NewsletterController::class, 'respond']);
 
+        // Footer
         Route::get('/footer', [FooterController::class, 'all']);
-        Route::post('/footer/create', [FooterController::class, 'cretae']);
-        Route::post('/footer/update', [FooterController::class, 'cretae']);
+        Route::post('/footer/update', [FooterController::class, 'update']);
 
     });
 });

@@ -29,6 +29,8 @@ import show_event from "../views/admin/events/show_event.vue";
 import contacts_admin from "../views/admin/settings/contacts_admin.vue";
 import footer from "../views/admin/settings/footer.vue";
 import newsletter from "../views/admin/settings/newsletter.vue";
+import edit_event from "../views/admin/events/edit_event.vue";
+import show_contact from "../views/admin/settings/show_contact.vue";
 
 const routes = [
     {
@@ -101,6 +103,12 @@ const routes = [
     {
         path: "/admin/contacts",
         component: contacts_admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/contacts/:id",
+        component: show_contact,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {
@@ -202,6 +210,12 @@ const routes = [
     {
         path: "/admin/events/:id",
         component: show_event,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/events/:id/edit",
+        component: edit_event,
         meta: { hideNavbar: true, hideFooter: true },
     },
 

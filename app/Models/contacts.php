@@ -13,4 +13,9 @@ class contacts extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function contactResponds()
+    {
+        return $this->hasMany(contactResponds::class,'contact_id');
+    }
 }

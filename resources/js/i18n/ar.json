@@ -164,6 +164,11 @@
       "info": "معلومات التواصل"
     },
     "form": {
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "الاسم هنا",
+      "emailAddress": "البريد الالكتروني",
+      "messagePlaceholder": "اكتب رسالتك هنا...",
+      "emailPlaceholder": "البريد هنا",
       "title": "ارسل لنا رسالة",
       "subtitle": "سنرد عليك في أقرب وقت ممكن. نحن هنا لمساعدتك!",
       "full_name": "الاسم الكامل",

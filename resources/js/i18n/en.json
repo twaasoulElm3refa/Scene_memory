@@ -164,6 +164,11 @@
       "info": "Contact Information"
     },
     "form": {
+        "fullName": " Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "emailAddress": "Email Address",
+      "messagePlaceholder": "Tell us how we can help...",
+      "emailPlaceholder": "hello@example.com",
       "title": "Send Us a Message",
       "subtitle": "We'll get back to you as soon as possible. We're here to help!",
       "full_name": "Full Name",

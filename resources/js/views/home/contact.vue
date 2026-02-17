@@ -60,10 +60,21 @@
               </div>
 
               <!-- Submit Button -->
-              <button type="submit" class="btn-submit">
-                {{ $t("contacts.form.sendMessage") }}
-                <span class="arrow">→</span>
+              <button type="submit" class="btn-submit" :disabled="isSubmitting">
+                <span v-if="isSubmitting">{{ $t("contacts.form.sending") }}</span>
+                <span v-else>
+                  {{ $t("contacts.form.sendMessage") }}
+                  <span class="arrow">→</span>
+                </span>
               </button>
+
+              <!-- حالة الإرسال (نجاح أو خطأ) -->
+              <div v-if="successMessage" class="alert alert-success mt-3">
+                {{ successMessage }}
+              </div>
+              <div v-if="errorMessage" class="alert alert-danger mt-3">
+                {{ errorMessage }}
+              </div>
             </form>
           </div>
 
@@ -155,6 +166,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ContactUs",
   data() {
@@ -166,16 +179,44 @@ export default {
         message: "",
       },
       faqs: [{ id: 0 }, { id: 1 }, { id: 2 }],
+      isSubmitting: false,
+      successMessage: "",
+      errorMessage: "",
     };
   },
   methods: {
-    submitForm() {
-      // Handle form submission
-      console.log("Form submitted:", this.form);
-      // Add your API call here
-      alert(this.$t("contacts.form.successMessage"));
-      this.resetForm();
+    async submitForm() {
+      this.isSubmitting = true;
+      this.successMessage = "";
+      this.errorMessage = "";
+
+      const payload = {
+        name: this.form.fullName,
+        email: this.form.email,
+        subject: this.form.subject,
+        message: this.form.message,
+      };
+
+      try {
+        const response = await axios.post("v1/contacts/create", payload);
+
+        if (response.status === 200 || response.status === 201) {
+          this.successMessage =
+            this.$t("contacts.form.successMessage") || "تم إرسال رسالتك بنجاح!";
+          this.resetForm();
+        }
+      } catch (error) {
+        console.error("Error submitting contact form:", error);
+
+        this.errorMessage =
+          error.response?.data?.message ||
+          this.$t("contacts.form.errorMessage") ||
+          "حدث خطأ أثناء الإرسال، حاول مرة أخرى لاحقًا";
+      } finally {
+        this.isSubmitting = false;
+      }
     },
+
     resetForm() {
       this.form = {
         fullName: "",
@@ -202,6 +243,30 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+/* لو عايز تضيف أي ستايل إضافي للـ alerts أو الـ disabled state */
+.alert {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .row {

@@ -37,12 +37,9 @@ class EventAdminController extends Controller
     public function update(Request $request): JsonResponse
     {
         $data = $request->all();
-
         try {
-            $event = Events::findOrFail($request->id);
-
+            $event = Events::where('slug', request('id'))->first();
             $oldSlug = $event->slug;
-
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 
             if ($request->hasFile('image')) {
