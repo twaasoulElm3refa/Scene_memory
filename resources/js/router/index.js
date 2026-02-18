@@ -31,6 +31,7 @@ import footer from "../views/admin/settings/footer.vue";
 import newsletter from "../views/admin/settings/newsletter.vue";
 import edit_event from "../views/admin/events/edit_event.vue";
 import show_contact from "../views/admin/settings/show_contact.vue";
+import user_home from "../views/user/user_home.vue";
 
 const routes = [
     {
@@ -220,6 +221,12 @@ const routes = [
     },
 
 
+    // Owner dashboard
+    {
+        path: "/owner",
+        component: user_home,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
 ];
 
 const router = createRouter({
@@ -233,16 +240,27 @@ router.beforeEach((to, from, next) => {
 
     if (to.path.startsWith("/admin")) {
         if (!token) return next("/auth");
-        if (role !== "admin") return next("/");
-        return next();
+        if (role === "admin") return next();
+        if (role === "owner") return next("/owner");
+        return next("/"); 
+    }
+
+    if (to.path.startsWith("/owner")) {
+        if (!token) return next("/auth");
+        if (role === "owner") return next();
+        if (role === "admin") return next("/admin");
+        return next("/"); 
     }
 
     if (to.path === "/auth") {
         if (!token) return next();
-        return role === "admin" ? next("/admin") : next("/");
+        if (role === "admin") return next("/admin");
+        if (role === "owner") return next("/owner");
+        return next("/"); 
     }
 
     next();
 });
+
 
 export default router;
