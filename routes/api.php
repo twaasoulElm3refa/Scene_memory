@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\admin\ContactController;
 use App\Http\Controllers\api\admin\EventAdminController;
+use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
 use App\Http\Controllers\api\admin\UserController;
@@ -122,7 +123,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/contacts/{id}', [ContactController::class, 'single']);
         Route::post('/contacts/create', [ContactController::class, 'create']);
         Route::post('/contacts/respond/{id}', [ContactController::class, 'respond']);
-        Route::delete('/contacts/delete/{id}', [ContactController::class,'delete']);
+        Route::delete('/contacts/delete/{id}', [ContactController::class, 'delete']);
 
         // Newsletters
         Route::get('/newsletters', [NewsletterController::class, 'all']);
@@ -133,5 +134,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/footer', [FooterController::class, 'all']);
         Route::post('/footer/update', [FooterController::class, 'update']);
 
+    });
+
+    Route::prefix('event-images')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        Route::get('/{id}', [EventImageController::class,'allPerEvent']);
+        Route::post('/create/{id}', [EventImageController::class, 'create']);
+        Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
     });
 });

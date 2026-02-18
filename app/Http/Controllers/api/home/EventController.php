@@ -112,11 +112,26 @@ class EventController extends Controller
         $cacheTime = now()->addHours(6);
 
         $event = Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
-            return Events::with(['city:id,name', 'sub_categorey:id,name', 'user:id,name', 'images'])->where('slug', $slug)->first();
+            return Events::with(['city:id,name', 'sub_categorey:id,name', 'user:id,name', 'images'])
+                ->where('slug', $slug)
+                ->first();
         });
 
         if (! $event) {
             return $this->error('Event not found', 404);
+        }
+
+        if ($event->image) {
+            $url = \Storage::url($event->image);
+            $event->image = $url ?: null;
+        }
+
+        if ($event->images && $event->images->isNotEmpty()) {
+            foreach ($event->images as $image) {
+                if ($image->url) {
+                    $image->url = \Storage::url($image->url) ?: null;
+                }
+            }
         }
 
         return $this->success($event, 'Event data');
