@@ -15,7 +15,9 @@ use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\SubCategoryController;
+use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\OwnerMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -140,5 +142,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/{id}', [EventImageController::class,'allPerEvent']);
         Route::post('/create/{id}', [EventImageController::class, 'create']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
+    });
+
+    Route::prefix('user-dshboard')->middleware(['auth:sanctum', OwnerMiddleware::class])->group(function () {
+       Route::get('/my-events', [UserDashboardController::class, 'myEvents']); 
     });
 });

@@ -31,8 +31,8 @@ class Events extends Model
 
     public function images()
     {
-        return $this->hasMany(eventsImges::class,'event_id');
-    }
+        return $this->hasMany(eventsImges::class, 'event_id');
+        }
 
     public function sub_categorey()
     {

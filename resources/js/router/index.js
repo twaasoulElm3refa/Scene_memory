@@ -32,6 +32,7 @@ import newsletter from "../views/admin/settings/newsletter.vue";
 import edit_event from "../views/admin/events/edit_event.vue";
 import show_contact from "../views/admin/settings/show_contact.vue";
 import user_home from "../views/user/user_home.vue";
+import single_event_dashbaord from "../views/user/single_event_dashbaord.vue";
 
 const routes = [
     {
@@ -227,6 +228,11 @@ const routes = [
         component: user_home,
         meta: { hideNavbar: true, hideFooter: true },
     },
+    {
+        path: "/owner/:slug",
+        component: single_event_dashbaord,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
 ];
 
 const router = createRouter({
@@ -242,21 +248,21 @@ router.beforeEach((to, from, next) => {
         if (!token) return next("/auth");
         if (role === "admin") return next();
         if (role === "owner") return next("/owner");
-        return next("/"); 
+        return next("/");
     }
 
     if (to.path.startsWith("/owner")) {
         if (!token) return next("/auth");
         if (role === "owner") return next();
         if (role === "admin") return next("/admin");
-        return next("/"); 
+        return next("/");
     }
 
     if (to.path === "/auth") {
         if (!token) return next();
         if (role === "admin") return next("/admin");
         if (role === "owner") return next("/owner");
-        return next("/"); 
+        return next("/");
     }
 
     next();
