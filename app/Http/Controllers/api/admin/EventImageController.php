@@ -52,14 +52,18 @@ class EventImageController extends Controller
 
     public function delete()
     {
-        $event = eventsImges::findOrFail(request('id'));
-        $slug = Events::find($event->event_id);
-        $theSlug= $slug->slug;
-        $this->clearCache($theSlug);
-        $event->delete();
-        $this->clearCache();
+        try {
+            $event = eventsImges::findOrFail(request('id'));
+            $slug = Events::find($event->event_id);
+            $theSlug = $slug->slug;
+            $this->clearCache($theSlug);
+            $event->delete();
+            $this->clearCache();
 
-        return $this->success($event, 'Data Deleted Successfully');
+            return $this->success($event, 'Data Deleted Successfully');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
     }
 
     private function clearCache($slug = '')

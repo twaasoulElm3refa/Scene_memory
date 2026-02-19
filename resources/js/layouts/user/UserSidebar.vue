@@ -53,11 +53,7 @@
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
-      <router-link
-        to="/dashboard/memories"
-        class="nav-item"
-        active-class="nav-item--active"
-      >
+      <router-link to="/owner" class="nav-item" active-class="nav-item--active">
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -72,7 +68,7 @@
         My Memories
       </router-link>
 
-      <router-link to="/dashboard/add" class="nav-item" active-class="nav-item--active">
+      <router-link to="/owner/create" class="nav-item" active-class="nav-item--active">
         <svg
           class="nav-icon"
           viewBox="0 0 24 24"
@@ -114,9 +110,7 @@
         <div class="user-avatar">
           <img
             v-if="user"
-            :src="`https://ui-avatars.com/api/?name=${encodeURIComponent(
-              user.name
-            )}&background=2563eb&color=fff&size=40`"
+            :src="`https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8=`"
             :alt="user?.name"
           />
           <div v-else class="avatar-placeholder"></div>
@@ -132,12 +126,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-
+import axios from "axios";
 const user = ref(null);
 
 const formatRole = (role) => {
   if (!role) return "";
-  // e.g. "admin" → "PRO EXPLORER" style badge or just uppercase
   const map = {
     admin: "PRO EXPLORER",
     user: "EXPLORER",
@@ -149,15 +142,16 @@ const formatRole = (role) => {
 onMounted(async () => {
   try {
     const token = localStorage.getItem("auth_token");
-    const response = await fetch("/v1/users", {
+
+    const response = await axios.get("/v1/users/profile", {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json();
-    if (data.status === "success") {
-      user.value = data.data.user;
+
+    if (response.data.status === "success") {
+      user.value = response.data.data.user;
     }
   } catch (err) {
     console.error("Failed to fetch user profile:", err);

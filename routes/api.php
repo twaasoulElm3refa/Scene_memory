@@ -18,6 +18,7 @@ use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
+use App\Http\Middleware\OwnEvent;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -25,8 +26,8 @@ Route::prefix('v1')->group(function () {
     // AUTH
     Route::prefix('users')->group(function () {
         // Auth Routes
-        Route::post('/register', [AuthController::class, 'register'])->middleware(['throttle:3,1', 'guest']);
-        Route::post('/login', [AuthController::class, 'login'])->middleware(['throttle:7,1', 'guest']);
+        Route::post('/register', [AuthController::class, 'register'])->middleware(['throttle:3,1']);
+        Route::post('/login', [AuthController::class, 'login'])->middleware(['throttle:4,1']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
             ->middleware(['throttle:5,1', 'guest']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])
@@ -138,13 +139,23 @@ Route::prefix('v1')->group(function () {
 
     });
 
+    // Event Media
     Route::prefix('event-images')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
-        Route::get('/{id}', [EventImageController::class,'allPerEvent']);
+        Route::get('/{id}', [EventImageController::class, 'allPerEvent']);
         Route::post('/create/{id}', [EventImageController::class, 'create']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
     });
 
+    // User Dashboard
     Route::prefix('user-dshboard')->middleware(['auth:sanctum', OwnerMiddleware::class])->group(function () {
-       Route::get('/my-events', [UserDashboardController::class, 'myEvents']); 
+        Route::get('/my-events', [UserDashboardController::class, 'myEvents']);
+        Route::post('/{slug}', [UserDashboardController::class, 'addMedia']);
+        Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
+        Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
+
+        // Create Media
+        Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware(OwnerMiddleware::class, 'auth:sanctum');
+        Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnerMiddleware::class, OwnEvent::class, 'auth:sanctum');
+
     });
 });

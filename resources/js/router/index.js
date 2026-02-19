@@ -33,6 +33,8 @@ import edit_event from "../views/admin/events/edit_event.vue";
 import show_contact from "../views/admin/settings/show_contact.vue";
 import user_home from "../views/user/user_home.vue";
 import single_event_dashbaord from "../views/user/single_event_dashbaord.vue";
+import create_event_user from "../views/user/create_event_user.vue";
+import update_event_user from "../views/user/update_event_user.vue";
 
 const routes = [
     {
@@ -228,9 +230,19 @@ const routes = [
         component: user_home,
         meta: { hideNavbar: true, hideFooter: true },
     },
+     {
+        path: "/owner/create",
+        component: create_event_user,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
     {
         path: "/owner/:slug",
         component: single_event_dashbaord,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/owner/:slug/update",
+        component: update_event_user,
         meta: { hideNavbar: true, hideFooter: true },
     },
 ];

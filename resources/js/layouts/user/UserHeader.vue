@@ -9,10 +9,10 @@
         <span class="user-role">{{ user.role }}</span>
       </div>
 
-      <button class="create-btn" @click="$emit('create')">
+      <router-link to="/owner/create" class="create-btn text-decoration-none">
         <span class="btn-icon">+</span>
         Create New Memory
-      </button>
+      </router-link>
     </div>
   </header>
 </template>

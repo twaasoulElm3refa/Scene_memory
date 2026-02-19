@@ -66,7 +66,7 @@
           <section class="section images-section">
             <div class="section-header">
               <h3>الصور المرفقة</h3>
-              <button class="btn small">إضافة صور</button>
+              <button class="btn small" @click="openAddImagesModal">إضافة صور</button>
             </div>
 
             <div class="image-grid">
@@ -89,7 +89,11 @@
         <!-- Right Sidebar -->
         <aside class="sidebar">
           <div class="sidebar-card owner-card">
-            <img src="https://via.placeholder.com/80" alt="avatar" class="avatar" />
+            <img
+              src="https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8="
+              alt="avatar"
+              class="avatar"
+            />
             <h4>{{ event.user?.name || "Mohamed Maher" }}</h4>
             <p>صاحب الذكرى</p>
           </div>
@@ -105,17 +109,83 @@
             </ul>
           </div>
 
-          <div class="sidebar-card actions">
-            <button class="btn full danger">حذف الذكرى</button>
+          <div
+            class="sidebar-card actions"
+            style="display: flex; flex-direction: column; gap: 10px"
+          >
+            <router-link :to="`/owner/${event.slug}/update`" class="btn full green">
+              تعديل الذكرى
+            </router-link>
+
+            <button
+              class="btn full danger"
+              @click="deleteEvent"
+              :disabled="deletingEvent"
+            >
+              {{ deletingEvent ? "جاري الحذف..." : "حذف الذكرى" }}
+            </button>
           </div>
         </aside>
+      </div>
+    </div>
+
+    <!-- Add Images Modal -->
+    <div v-if="showAddModal" class="modal-overlay" @click.self="closeAddImagesModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>إضافة صور جديدة</h3>
+          <button class="close-btn" @click="closeAddImagesModal">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="dropzone" @dragover.prevent @drop.prevent="handleDrop">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              @change="handleFileChange"
+              ref="fileInput"
+              hidden
+            />
+            <p>اسحب الصور هنا أو</p>
+            <button
+              type="button"
+              class="btn primary small"
+              @click="$refs.fileInput.click()"
+            >
+              اختر من الجهاز
+            </button>
+            <p class="hint">يمكنك اختيار أكثر من صورة (jpg, png, ...)</p>
+          </div>
+
+          <div v-if="selectedFiles.length" class="preview-grid">
+            <div v-for="(file, index) in selectedFiles" :key="index" class="preview-item">
+              <img :src="file.preview" alt="معاينة" />
+              <button class="remove-preview" @click="removeFile(index)">×</button>
+              <p class="file-name">{{ file.name }}</p>
+            </div>
+          </div>
+
+          <p v-if="uploadError" class="error-text">{{ uploadError }}</p>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn secondary" @click="closeAddImagesModal">إلغاء</button>
+          <button
+            class="btn primary"
+            :disabled="uploading || !selectedFiles.length"
+            @click="uploadImages"
+          >
+            {{ uploading ? "جاري الرفع..." : "رفع الصور" }}
+          </button>
+        </div>
       </div>
     </div>
   </UserLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import UserLayout from "../../layouts/user/UserLayout.vue";
@@ -128,7 +198,48 @@ const loading = ref(true);
 const error = ref(null);
 const deleting = ref(null);
 
+// Modal states
+const showAddModal = ref(false);
+const selectedFiles = ref([]);
+const fileInput = ref(null);
+const uploading = ref(false);
+const uploadError = ref(null);
+
 const API_BASE = "/v1";
+// أضف هذه المتغيرات مع اللي موجودة
+const deletingEvent = ref(false);
+
+async function deleteEvent() {
+  if (
+    !confirm("هل أنت متأكد من حذف هذه الذكرى نهائيًا؟\nهذا الإجراء لا يمكن التراجع عنه.")
+  ) {
+    return;
+  }
+
+  if (!event.value?.id) {
+    alert("لا يمكن العثور على معرف الذكرى");
+    return;
+  }
+
+  try {
+    deletingEvent.value = true;
+
+    // ← هنا نستخدم نفس الـ route اللي كتبته في البداية
+    const response = await axios.delete(`/v1/user-dshboard/${event.value.id}/destroy`);
+
+    if (response.data.status === "success") {
+      alert("تم حذف الذكرى بنجاح");
+      window.location.href = "/owner";
+    } else {
+      alert(response.data.message || "حدث خطأ أثناء الحذف");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("فشل حذف الذكرى، حاول مرة أخرى");
+  } finally {
+    deletingEvent.value = false;
+  }
+}
 
 function getFullUrl(path) {
   if (!path) return "";
@@ -165,7 +276,7 @@ async function deleteImage(id) {
   if (!confirm("متأكد من حذف الصورة؟")) return;
   try {
     deleting.value = id;
-    await axios.delete(`${API_BASE}/event-images/${id}/delete`);
+    await axios.delete(`${API_BASE}/user-dshboard/${id}/delete`);
     event.value.images = event.value.images.filter((i) => i.id !== id);
   } catch (err) {
     alert("فشل الحذف");
@@ -174,10 +285,213 @@ async function deleteImage(id) {
   }
 }
 
+// ── Modal Logic ────────────────────────────────────────────────
+
+function openAddImagesModal() {
+  showAddModal.value = true;
+  selectedFiles.value = [];
+  uploadError.value = null;
+}
+
+function closeAddImagesModal() {
+  if (uploading.value) return;
+  showAddModal.value = false;
+  selectedFiles.value = [];
+  if (fileInput.value) fileInput.value.value = "";
+}
+
+function handleFileChange(e) {
+  const files = Array.from(e.target.files);
+  addFiles(files);
+}
+
+function handleDrop(e) {
+  const files = Array.from(e.dataTransfer.files);
+  addFiles(files);
+}
+
+function addFiles(newFiles) {
+  newFiles.forEach((file) => {
+    if (!file.type.startsWith("image/")) return;
+    const preview = URL.createObjectURL(file);
+    selectedFiles.value.push({ file, preview, name: file.name });
+  });
+}
+
+function removeFile(index) {
+  const removed = selectedFiles.value.splice(index, 1)[0];
+  URL.revokeObjectURL(removed.preview);
+}
+
+async function uploadImages() {
+  if (!selectedFiles.value.length) return;
+
+  uploading.value = true;
+  uploadError.value = null;
+
+  const formData = new FormData();
+  selectedFiles.value.forEach((item) => {
+    formData.append("url[]", item.file); // ← array name = url[]
+  });
+
+  try {
+    const response = await axios.post(`${API_BASE}/user-dshboard/${slug}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response.data.status === "success") {
+      if (response.data.data?.images) {
+        event.value.images = [...event.value.images, ...response.data.data.images];
+      } else {
+        await fetchEvent();
+      }
+
+      closeAddImagesModal();
+      alert("تم رفع الصور بنجاح");
+      window.location.reload();
+    } else {
+      uploadError.value = response.data.message || "حدث خطأ أثناء الرفع";
+    }
+  } catch (err) {
+    console.error(err);
+    uploadError.value = "فشل رفع الصور، حاول مرة أخرى";
+  } finally {
+    uploading.value = false;
+  }
+}
+
+// Cleanup object URLs when component unmounts
+onUnmounted(() => {
+  selectedFiles.value.forEach((item) => {
+    URL.revokeObjectURL(item.preview);
+  });
+});
+
 onMounted(fetchEvent);
 </script>
 
 <style scoped>
+/* أضف هذه الـ styles حسب تصميمك - مثال بسيط */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.dropzone {
+  border: 2px dashed #aaa;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  background: #f9f9f9;
+  transition: all 0.2s;
+}
+
+.dropzone:hover {
+  border-color: #666;
+  background: #f0f0f0;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.preview-item {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.remove-preview {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.file-name {
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 6px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+}
+
+.error-text {
+  color: #dc3545;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.hint {
+  color: #777;
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
 .scene-memory-single {
   font-family: "Tajawal", system-ui, sans-serif;
   direction: rtl;
@@ -256,6 +570,15 @@ onMounted(fetchEvent);
   font-weight: 500;
   cursor: pointer;
   border: none;
+  background-color: #006d77;
+  color: rgba(255, 255, 255, 0.74);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #05666e;
+  color: white;
+  transform: scale(1.1);
 }
 
 .btn.primary {
@@ -278,7 +601,15 @@ onMounted(fetchEvent);
   background: #d00000;
   color: white;
 }
-
+.green {
+  background-color: rgba(0, 128, 0, 0.877);
+  color: wheat;
+}
+.green:hover {
+  background-color: green;
+  color: white;
+  transition: scale(1.1);
+}
 .info-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

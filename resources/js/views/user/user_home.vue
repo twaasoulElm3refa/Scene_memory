@@ -85,7 +85,7 @@
           <h2 class="text-2xl font-bold text-gray-800">الرحلات الأخيرة</h2>
           <router-link
             to="/owner/create"
-            class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+            class="px-5 py-2.5 text-decoration-none bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
           >
             إضافة رحلة جديدة
           </router-link>
@@ -127,7 +127,7 @@
               <div class="mt-4">
                 <router-link
                   :to="`/owner/${event.slug}`"
-                  class="inline-flex items-center px-5 py-2.5 bg-white/95 hover:bg-white text-blue-900 font-medium rounded-lg text-sm transition-all backdrop-blur-sm shadow-md hover:shadow-lg active:scale-95 gap-2"
+                  class="inline-flex items-center text-decoration-none px-5 py-2.5 bg-white/95 hover:bg-white text-blue-900 font-medium rounded-lg text-sm transition-all backdrop-blur-sm shadow-md hover:shadow-lg active:scale-95 gap-2"
                 >
                   <span>عرض التفاصيل</span>
                   <svg
@@ -189,6 +189,7 @@ onMounted(async () => {
       events.value = response.data.data.events || [];
       eventsCount.value = response.data.data.count || events.value.length;
       totalImages.value = response.data.data.totalImages || 0;
+      console.log(response.data.data);
     }
   } catch (error) {
     console.error("خطأ في جلب الرحلات:", error);

@@ -3,14 +3,14 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\concerns\ApiResponse;
+use App\Models\Events;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OwnerMiddleware
+class OwnEvent
 {
     use ApiResponse;
-
     /**
      * Handle an incoming request.
      *
@@ -18,15 +18,12 @@ class OwnerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            $user = auth()->user();
-            if (! $user || $user->role !== 'owner') {
-                return $this->unauthorized('You are not owner');
+        if(auth()->check()){
+            $event = Events::where('user_id',auth()->user()->id )->first();
+            if(!$event){
+                return $this->unauthorized('You are not the owner of this event');
             }
-
-            return $next($request);
-        } catch (\Exception $e) {
-            return $this->error($e->getMessage());
         }
+        return $next($request);
     }
 }
