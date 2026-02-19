@@ -70,36 +70,44 @@ class EventController extends Controller
         return $this->success($events, 'Events');
     }
 
-    public function MarkerSearch()
-    {
-        $city = request('city');
+   public function MarkerSearch()
+{
+    $city = request('city');
 
-        if (! $city) {
-            return $this->error('city not found', 404);
-        }
-
-        $cacheKey = 'city_events_'.strtolower($city);
-
-        $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
-            $DBCITY = Cities::query()
-                ->where('name', $city)
-                ->first();
-
-            if (! $DBCITY) {
-                return null;
-            }
-
-            return $DBCITY->events()->with('city')
-                ->select('slug', 'title', 'image', 'start_date', 'city_id')
-                ->get();
-        });
-
-        if (! $events) {
-            return $this->error('City not found in DB', 404);
-        }
-
-        return $this->success($events, 'City is found');
+    if (! $city) {
+        return $this->error('city not found', 404);
     }
+
+    $cacheKey = 'city_events_'.strtolower($city);
+
+    $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
+        $DBCITY = Cities::query()
+            ->where('name', $city)
+            ->first();
+
+        if (! $DBCITY) {
+            return null;
+        }
+
+        return $DBCITY->events()
+            ->with('city')
+            ->select('slug', 'title', 'image', 'start_date', 'city_id')
+            ->latest()
+            ->get()
+            ->map(function ($event) {
+                $event->image_url = $event->image 
+                    ? asset('storage/' . ltrim($event->image, '/')) 
+                    : null;
+                return $event;
+            });
+    });
+
+    if (! $events) {
+        return $this->error('City not found in DB', 404);
+    }
+
+    return $this->success($events, 'City is found');
+}
 
     public function single()
     {

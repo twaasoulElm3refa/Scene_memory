@@ -10,18 +10,12 @@ export const EventService = {
     try {
       const cityId = filters.cityId || "all"; 
       const subCategoryId = filters.subCategoryId || "all"; 
-      console.log(cityId, subCategoryId);
       const params = {};
       if (filters.fromDate) params.from = filters.fromDate;
       if (filters.toDate) params.to = filters.toDate;
       if (filters.searchQuery?.trim()) params.search = filters.searchQuery.trim();
-
       const url = `/events/${cityId}/${subCategoryId}`;
-
       const res = await api.get(url, { params });
-      
-      console.log(res.data);
-
       return res.data?.data || res.data || [];
     } catch (err) {
       console.error("Error searching events:", err);

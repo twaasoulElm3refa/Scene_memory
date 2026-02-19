@@ -162,6 +162,7 @@ const links = [
   { label: "من نحن", href: "/who", active: "who" },
   { label: "جميع الاحداث", href: "/all_events", active: "all_events" },
   { label: "تواصل معنا", href: "/contact", active: "contact" },
+  { label: "اضافه حدث", href: "/add_event", active: "add_event" },
 ];
 const userInitial = computed(() => {
   if (!userName.value) return "UU";

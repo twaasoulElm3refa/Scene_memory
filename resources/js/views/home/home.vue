@@ -64,10 +64,15 @@
             <select
               v-model="selectedCity"
               :disabled="!selectedCountry"
-              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition"
+              class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-gray-900"
             >
-              <option value="">{{ $t("filters.city") }}</option>
-              <option v-for="city in cities" :key="city.id" :value="city.id">
+              <option class="text-gray-900" value="">{{ $t("filters.city") }}</option>
+              <option
+                v-for="city in cities"
+                :key="city.id"
+                :value="city.id"
+                class="text-gray-900"
+              >
                 {{ city.name }}
               </option>
             </select>
@@ -165,10 +170,7 @@
           >
             <div class="aspect-[4/3] relative overflow-hidden bg-gray-100">
               <img
-                :src="
-                  event.image ||
-                  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800'
-                "
+                :src="event.image_url || fallbackImage"
                 :alt="event.title"
                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700"
                 loading="lazy"
@@ -208,7 +210,7 @@
                 </div>
                 <a
                   :href="`/single_event/${event.slug}`"
-                  class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+                  class="text-blue-600 text-decoration-none hover:text-blue-800 text-sm font-medium flex items-center gap-1"
                 >
                   {{ $t("common.details") }}
                 </a>
@@ -527,7 +529,8 @@ const visiblePages = computed(() => {
   for (let i = start; i <= end; i++) pages.push(i);
   return pages;
 });
-
+const fallbackImage =
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800";
 const paginatedEvents = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
@@ -625,6 +628,7 @@ const search = async (isInitial = false) => {
       city: ev.city?.name || "غير محدد",
       category_name: ev.category?.name || ev.category_name || "فعالية",
       image: ev.image || null,
+      image_url: ev.image_url || null,
     }));
   } catch (err) {
     console.error("Search error:", err);
@@ -647,6 +651,7 @@ const handleMarkerEvents = (e) => {
     city: ev.city?.name || "غير محدد",
     category_name: ev.category_name || "من الخريطة",
     image: ev.image || null,
+    image_url: ev.image_url || null,
   }));
 
   currentPage.value = 1;

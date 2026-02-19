@@ -151,11 +151,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/my-events', [UserDashboardController::class, 'myEvents']);
         Route::post('/{slug}', [UserDashboardController::class, 'addMedia']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
-        Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
 
-        // Create Media
+        // Create Event
         Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware(OwnerMiddleware::class, 'auth:sanctum');
         Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnerMiddleware::class, OwnEvent::class, 'auth:sanctum');
-
+        Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
     });
 });
