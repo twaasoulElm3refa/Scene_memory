@@ -18,12 +18,24 @@
     <!-- Dashboard -->
     <RouterLink
       to="/admin"
-      class="sidebar-btn group"
+      class="sidebar-btn group text-decoration-none"
       :class="{ active: route.path === '/admin' }"
     >
       <span class="flex items-center gap-3">
         <DashboardIcon class="w-5 h-5" />
         Dashboard
+      </span>
+    </RouterLink>
+
+    <!-- Create Event Requests -->
+    <RouterLink
+      to="/admin/requests"
+      class="sidebar-btn group text-decoration-none"
+      :class="{ active: route.path === '/admin/requests' }"
+    >
+      <span class="flex items-center gap-3">
+        <DashboardIcon class="w-5 h-5" />
+        Create Event Requests
       </span>
     </RouterLink>
 

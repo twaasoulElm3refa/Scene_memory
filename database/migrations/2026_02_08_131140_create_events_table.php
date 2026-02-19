@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('langitude')->nullable();
             $table->string('lattitude')->nullable();
             $table->string('slug')->nullable();
+            $table->string('is_active')->default(true)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

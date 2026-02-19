@@ -35,11 +35,19 @@ import user_home from "../views/user/user_home.vue";
 import single_event_dashbaord from "../views/user/single_event_dashbaord.vue";
 import create_event_user from "../views/user/create_event_user.vue";
 import update_event_user from "../views/user/update_event_user.vue";
+import create_event from "../views/home/create_event.vue";
+import requests from "../views/admin/requests/requests.vue";
 
 const routes = [
     {
         path: "/",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/add_event",
+        component: create_event,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
@@ -86,6 +94,8 @@ const routes = [
         path: "/contact",
         component: contact,
     },
+
+    // Auth Routes
     {
         path: "/auth",
         component: Register,
@@ -102,6 +112,11 @@ const routes = [
     {
         path: "/admin",
         component: admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/requests",
+        component: requests,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {
@@ -230,7 +245,7 @@ const routes = [
         component: user_home,
         meta: { hideNavbar: true, hideFooter: true },
     },
-     {
+    {
         path: "/owner/create",
         component: create_event_user,
         meta: { hideNavbar: true, hideFooter: true },

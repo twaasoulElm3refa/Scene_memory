@@ -157,7 +157,7 @@ const selectLanguage = (lang) => {
   window.location.reload();
 };
 
-const links = [
+const allLinks = [
   { label: "الرئيسية", href: "/", active: "home" },
   { label: "من نحن", href: "/who", active: "who" },
   { label: "جميع الاحداث", href: "/all_events", active: "all_events" },
@@ -176,6 +176,12 @@ const userInitial = computed(() => {
   return initials;
 });
 
+const links = computed(() => {
+  if (isLoggedIn.value) {
+    return allLinks;
+  }
+  return allLinks.filter((link) => link.active !== "add_event");
+});
 const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
 
 const logout = () => {

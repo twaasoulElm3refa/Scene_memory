@@ -16,6 +16,7 @@ use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
+use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
 use App\Http\Middleware\OwnEvent;
@@ -100,6 +101,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{slug}/single/get', [EventController::class,  'single']);
 
         // Events CRUD
+        Route::post('/home/create', [HomeController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/create', [EventAdminController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
