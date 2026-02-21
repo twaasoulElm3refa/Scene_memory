@@ -17,7 +17,7 @@
       </div>
 
       <!-- Main Content -->
-      <div v-else-if="requestData" class="max-w-5xl mx-auto space-y-8">
+      <div v-else class="max-w-5xl mx-auto space-y-8">
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <button
@@ -42,12 +42,12 @@
 
           <span
             :class="
-              statusClasses[requestData.status] ||
+              statusClasses[apiData.request.status] ||
               'bg-gray-100 text-gray-700 border-gray-200'
             "
             class="px-5 py-1.5 rounded-full text-sm font-semibold uppercase tracking-wide border shadow-sm"
           >
-            {{ requestData.status || "pending" }}
+            {{ apiData.request.status || "pending" }}
           </span>
         </div>
 
@@ -57,11 +57,11 @@
         >
           <img
             :src="
-              requestData.image
-                ? `/storage/${requestData.image}`
+              apiData.event.image
+                ? `/storage/${apiData.event.image}`
                 : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop&q=80'
             "
-            :alt="requestData.title || 'Event image'"
+            :alt="apiData.event.title || 'Event image'"
             class="w-full h-80 md:h-[28rem] object-cover transition-transform duration-700 hover:scale-105"
             @error="handleImageError"
           />
@@ -79,14 +79,14 @@
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Title</p>
                 <p class="text-xl font-semibold text-gray-900">
-                  {{ requestData.title || "—" }}
+                  {{ apiData.event.title || "—" }}
                 </p>
               </div>
 
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Description</p>
                 <p class="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {{ requestData.description || "No description provided." }}
+                  {{ apiData.event.description || "No description provided." }}
                 </p>
               </div>
 
@@ -94,18 +94,20 @@
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">Start Date</p>
                   <p class="text-gray-900 font-medium">
-                    {{ requestData.start_date || "—" }}
+                    {{ apiData.event.start_date || "—" }}
                   </p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">End Date</p>
                   <p class="text-gray-900 font-medium">
-                    {{ requestData.end_date || "—" }}
+                    {{ apiData.event.end_date || "—" }}
                   </p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">Time</p>
-                  <p class="text-gray-900 font-medium">{{ requestData.time || "—" }}</p>
+                  <p class="text-gray-900 font-medium">
+                    {{ apiData.event.time || "—" }}
+                  </p>
                 </div>
               </div>
 
@@ -113,13 +115,13 @@
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">City</p>
                   <p class="text-gray-900 font-medium">
-                    {{ requestData.city?.name || "—" }}
+                    {{ apiData.event.city?.name || "—" }}
                   </p>
                 </div>
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">Category</p>
                   <p class="text-gray-900 font-medium">
-                    {{ requestData.sub_categorey?.name || "—" }}
+                    {{ apiData.event.sub_categorey?.name || "—" }}
                   </p>
                 </div>
               </div>
@@ -128,14 +130,14 @@
                 <p class="text-sm text-gray-500 mb-1.5">Active</p>
                 <span
                   :class="
-                    requestData.is_active === '1' || requestData.is_active === 1
+                    apiData.event.is_active === '1' || apiData.event.is_active === 1
                       ? 'bg-green-50 text-green-700 border-green-200'
                       : 'bg-red-50 text-red-700 border-red-200'
                   "
                   class="inline-flex px-3.5 py-1 rounded-full text-sm font-medium border"
                 >
                   {{
-                    requestData.is_active === "1" || requestData.is_active === 1
+                    apiData.event.is_active === "1" || apiData.event.is_active === 1
                       ? "Active"
                       : "Inactive"
                   }}
@@ -154,14 +156,21 @@
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Requested by</p>
                 <p class="text-gray-900 font-medium">
-                  {{ requestData.user?.name || "—" }}
+                  {{ apiData.event.user?.name || "—" }}
                 </p>
               </div>
 
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Created At</p>
                 <p class="text-gray-900 font-medium">
-                  {{ formatDate(requestData.created_at) }}
+                  {{ formatDate(apiData.event.created_at) }}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-sm text-gray-500 mb-1.5">Request Status</p>
+                <p class="text-gray-900 font-medium capitalize">
+                  {{ apiData.request.status || "—" }}
                 </p>
               </div>
             </div>
@@ -169,21 +178,27 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="action-buttons flex flex-col sm:flex-row gap-4 pt-8">
+        <div class="action-buttons flex rounded sm:flex-row gap-5 pt-8 justify-center">
           <button
-            @click="updateStatus('approved')"
-            :disabled="requestData.status === 'approved' || actionLoading"
-            class="bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-semibold py-3.5 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            @click="approveRequest"
+            :disabled="apiData.request.status !== 'pending' || actionLoading"
+            :class="
+              apiData.request.status !== 'pending' ? 'opacity-60 cursor-not-allowed' : ''
+            "
+            class="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full min-w-[220px]"
           >
-            Approve Request
+            {{ actionLoading ? "Processing..." : "Approve Request" }}
           </button>
 
           <button
-            @click="updateStatus('rejected')"
-            :disabled="requestData.status === 'rejected' || actionLoading"
-            class="bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white font-semibold py-3.5 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            @click="declineRequest"
+            :disabled="apiData.request.status !== 'pending' || actionLoading"
+            :class="
+              apiData.request.status !== 'pending' ? 'opacity-60 cursor-not-allowed' : ''
+            "
+            class="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[220px]"
           >
-            Reject Request
+            {{ actionLoading ? "Processing..." : "Reject Request" }}
           </button>
         </div>
       </div>
@@ -193,17 +208,19 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 
 const route = useRoute();
-const requestData = ref(null);
+const router = useRouter();
+
+const apiData = ref(null);
 const loading = ref(true);
 const error = ref(null);
 const actionLoading = ref(false);
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL || "/v1";
+const baseUrl = "/v1";
 
 const statusClasses = {
   pending: "bg-amber-50 text-amber-800 border-amber-200",
@@ -232,7 +249,12 @@ const fetchRequest = async () => {
     const { data } = await axios.get(`${baseUrl}/requests/${route.params.id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` },
     });
-    requestData.value = data.data;
+
+    // Save the whole useful structure
+    apiData.value = {
+      request: data.data.request,
+      event: data.data.event,
+    };
   } catch (err) {
     error.value = err.response?.data?.message || "Failed to load request details.";
   } finally {
@@ -240,19 +262,41 @@ const fetchRequest = async () => {
   }
 };
 
-const updateStatus = async (status) => {
-  if (!confirm(`Are you sure you want to ${status} this request?`)) return;
+const approveRequest = async () => {
+  if (!confirm("Are you sure you want to APPROVE this event request?")) return;
 
   try {
     actionLoading.value = true;
-    await axios.patch(
-      `${baseUrl}/requests/${route.params.id}`,
-      { status },
+    await axios.post(
+      `${baseUrl}/approve/${route.params.id}`,
+      {},
       { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
     );
-    requestData.value.status = status;
+
+    apiData.value.request.status = "approved";
+    alert("Request approved successfully!");
   } catch (err) {
-    alert(err.response?.data?.message || "Failed to update status.");
+    alert(err.response?.data?.message || "Failed to approve request.");
+  } finally {
+    actionLoading.value = false;
+  }
+};
+
+const declineRequest = async () => {
+  if (!confirm("Are you sure you want to REJECT this event request?")) return;
+
+  try {
+    actionLoading.value = true;
+    await axios.post(
+      `${baseUrl}/decline/${route.params.id}`,
+      {},
+      { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
+    );
+
+    apiData.value.request.status = "rejected";
+    alert("Request rejected successfully!");
+  } catch (err) {
+    alert(err.response?.data?.message || "Failed to reject request.");
   } finally {
     actionLoading.value = false;
   }
@@ -262,27 +306,19 @@ onMounted(fetchRequest);
 </script>
 
 <style scoped>
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
 .action-buttons button {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  width: 25%;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.9rem;
-  border-radius: 9999px;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+  border-radius: 7%;
 }
 
 @media (max-width: 640px) {
   .action-buttons {
     flex-direction: column;
+    gap: 1rem;
   }
 
   .action-buttons button {

@@ -38,9 +38,9 @@ class RequestController extends Controller
     public function show($id)
     {   
         try {
-            $request = EventRequestCreate::find($id);
+            $request = EventRequestCreate::find($id)->select('id','event_id','status')->first();
             $event=Events::with('city:id,name','sub_categorey:id,name','user:id,name')->where('id',$request->event_id)->first();
-            return $this->success($event, 'request');
+            return $this->success(['request' => $request, 'event' => $event], 'request');
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }

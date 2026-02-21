@@ -163,8 +163,8 @@ Route::prefix('v1')->group(function () {
     Route::prefix('requests')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/all/paginated', [RequestController::class, 'allPaginated']);
         Route::get('/{id}', [RequestController::class, 'show']);
-        Route::post('/approve/{id}', [RequestController::class, 'approve']);
-        Route::post('/decline/{id}', [RequestController::class, 'decline']);
+        Route::post('/approve/{request_id}', [RequestController::class, 'approve']);
+        Route::post('/decline/{request_id}', [RequestController::class, 'decline']);
         Route::delete('/{id}', [RequestController::class, 'destroy']);
     });
 
