@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 class RequestController extends Controller
@@ -56,6 +57,9 @@ class RequestController extends Controller
             $event = Events::find($request->event_id);
             $event->is_active = 1;
             $event->save();
+            $user=User::find($event->user_id);
+            $user->role='owner';
+            $user->save();
             $this->clearEventsCache();
 
             return $this->success($request, 'Request Approved Successfully');
@@ -82,6 +86,8 @@ class RequestController extends Controller
     {
         try {
             $request = EventRequestCreate::find($id);
+            $event=Events::find($request->event_id);
+            $event->delete();
             $request->delete();
             $this->clearEventsCache();
 

@@ -24,7 +24,7 @@ class EventController extends Controller
         $cacheKey = "events_page_{$page}_per_{$perPage}";
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            $events = Events::with(['city:id,name', 'sub_categorey:id,name'])
+            $events = Events::with(['city:id,name', 'sub_categorey:id,name'])->where('is_active', 1)
                 ->select('id', 'slug', 'title', 'image', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
@@ -58,7 +58,7 @@ class EventController extends Controller
         ]));
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
-            return Events::with('city')
+            return Events::with('city')->where('is_active', 1)
                 ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
                 ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
                 ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
@@ -70,44 +70,46 @@ class EventController extends Controller
         return $this->success($events, 'Events');
     }
 
-   public function MarkerSearch()
-{
-    $city = request('city');
+    public function MarkerSearch()
+    {
+        $city = request('city');
 
-    if (! $city) {
-        return $this->error('city not found', 404);
-    }
-
-    $cacheKey = 'city_events_'.strtolower($city);
-
-    $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
-        $DBCITY = Cities::query()
-            ->where('name', $city)
-            ->first();
-
-        if (! $DBCITY) {
-            return null;
+        if (! $city) {
+            return $this->error('city not found', 404);
         }
 
-        return $DBCITY->events()
-            ->with('city')
-            ->select('slug', 'title', 'image', 'start_date', 'city_id')
-            ->latest()
-            ->get()
-            ->map(function ($event) {
-                $event->image_url = $event->image 
-                    ? asset('storage/' . ltrim($event->image, '/')) 
-                    : null;
-                return $event;
-            });
-    });
+        $cacheKey = 'city_events_'.strtolower($city);
 
-    if (! $events) {
-        return $this->error('City not found in DB', 404);
+        $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
+            $DBCITY = Cities::query()
+                ->where('name', $city)
+                ->first();
+
+            if (! $DBCITY) {
+                return null;
+            }
+
+            return $DBCITY->events()
+                ->with('city')
+                ->select('slug', 'title', 'image', 'start_date', 'city_id')
+                ->where('is_active', 1)
+                ->latest()
+                ->get()
+                ->map(function ($event) {
+                    $event->image_url = $event->image
+                        ? asset('storage/'.ltrim($event->image, '/'))
+                        : null;
+
+                    return $event;
+                });
+        });
+
+        if (! $events) {
+            return $this->error('City not found in DB', 404);
+        }
+
+        return $this->success($events, 'City is found');
     }
-
-    return $this->success($events, 'City is found');
-}
 
     public function single()
     {
