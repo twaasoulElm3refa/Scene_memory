@@ -11,6 +11,6 @@ class EventRequestCreate extends Model
 
     public function events()
     {
-        return $this->belongsTo(Events::class);
+        return $this->belongsTo(Events::class,'event_id');
     }
 }

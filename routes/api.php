@@ -5,6 +5,7 @@ use App\Http\Controllers\api\admin\EventAdminController;
 use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
+use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Controllers\api\auth\AuthController;
@@ -101,7 +102,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/{slug}/single/get', [EventController::class,  'single']);
 
         // Events CRUD
-        Route::post('/home/create', [HomeController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/create', [EventAdminController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -158,5 +158,19 @@ Route::prefix('v1')->group(function () {
         Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware(OwnerMiddleware::class, 'auth:sanctum');
         Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnerMiddleware::class, OwnEvent::class, 'auth:sanctum');
         Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
+    });
+
+    Route::prefix('requests')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        Route::get('/all/paginated', [RequestController::class, 'allPaginated']);
+        Route::get('/{id}', [RequestController::class, 'show']);
+        Route::post('/approve/{id}', [RequestController::class, 'approve']);
+        Route::post('/decline/{id}', [RequestController::class, 'decline']);
+        Route::delete('/{id}', [RequestController::class, 'destroy']);
+    });
+
+    Route::prefix('create')->middleware(['auth:sanctum'])->group(function () {
+        Route::post('/', [HomeController::class,'create']);
+        Route::post('/{id}', [HomeController::class,'update']);
+        Route::delete('/{id}', [HomeController::class,'destroy']);
     });
 });

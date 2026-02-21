@@ -28,6 +28,8 @@ class EventsRequest extends FormRequest
             'sub_categorey_id' => 'required|exists:sub_categoreys,id',
             'image'=>'nullable|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'start_date'=>'required',
+            'lattitude'=>'nullable',
+            'langitude'=>'nullable',
             'end_date'=>'required',
             'time'=>'nullable',
         ];

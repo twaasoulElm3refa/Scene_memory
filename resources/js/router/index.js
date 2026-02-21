@@ -37,6 +37,7 @@ import create_event_user from "../views/user/create_event_user.vue";
 import update_event_user from "../views/user/update_event_user.vue";
 import create_event from "../views/home/create_event.vue";
 import requests from "../views/admin/requests/requests.vue";
+import show_request from "../views/admin/requests/show_request.vue";
 
 const routes = [
     {
@@ -117,6 +118,11 @@ const routes = [
     {
         path: "/admin/requests",
         component: requests,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/requests/:id",
+        component: show_request,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {

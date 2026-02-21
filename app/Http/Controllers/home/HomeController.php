@@ -31,8 +31,7 @@ class HomeController extends Controller
                 'status' => 'pending'
             ]);
             $this->clearEventsCache();
-
-            return $this->success($event, 'Event Created Successfully');
+            return $this->success($event->load('requests'), 'Event Created Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
@@ -46,6 +45,7 @@ class HomeController extends Controller
             Cache::forget("events_page_{$page}_per_{$perPage}");
         }
         Cache::forget("events_single_{$slug}");
+        Cache::forget("requests_page_1");
         Cache::forget('events_count');
         Cache::forget('memories');
     }

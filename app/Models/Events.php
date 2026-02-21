@@ -41,6 +41,6 @@ class Events extends Model
 
     public function requests()
     {
-        return $this->hasMany(EventRequestCreate::class, 'event_id');
+        return $this->hasOne(EventRequestCreate::class, 'event_id');
     }
 }

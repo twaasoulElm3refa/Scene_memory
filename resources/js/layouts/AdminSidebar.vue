@@ -34,7 +34,7 @@
       :class="{ active: route.path === '/admin/requests' }"
     >
       <span class="flex items-center gap-3">
-        <DashboardIcon class="w-5 h-5" />
+        <MessagesIcon class="w-5 h-5" />
         Create Event Requests
       </span>
     </RouterLink>
@@ -280,6 +280,7 @@ import { useRoute } from "vue-router";
 
 import {
   HomeIcon as DashboardIcon,
+  InboxIcon as MessagesIcon,
   UsersIcon,
   GlobeAltIcon as GlobeIcon,
   BuildingOfficeIcon,
@@ -296,7 +297,7 @@ const open = reactive({
   categories: route.path.startsWith("/admin/categories"),
   products: route.path.startsWith("/admin/countries"),
   brands: route.path.startsWith("/admin/cities"),
-  events: route.path.startsWith("/admin/events"), // 👈 الجديد
+  events: route.path.startsWith("/admin/events"),
   settings: route.path.startsWith("/admin/settings"),
 });
 
@@ -308,7 +309,7 @@ const usersActive = computed(() => route.path.startsWith("/admin/users"));
 const categoriesActive = computed(() => route.path.startsWith("/admin/categories"));
 const productsActive = computed(() => route.path.startsWith("/admin/countries"));
 const brandsActive = computed(() => route.path.startsWith("/admin/cities"));
-const eventsActive = computed(() => route.path.startsWith("/admin/events")); // 👈 الجديد
+const eventsActive = computed(() => route.path.startsWith("/admin/events"));
 const settingsActive = computed(() => route.path.startsWith("/admin/settings"));
 </script>
 

@@ -48,7 +48,7 @@
           </div>
         </div>
 
-        <!-- 2. الموقع والتصنيف -->
+        <!-- 2. الموقع والتصنيف + الخريطة -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
             <div class="card-body p-4">
@@ -57,7 +57,7 @@
                 الموقع والتصنيف
               </h2>
 
-              <div class="row g-3">
+              <div class="row g-3 mb-4">
                 <div class="col-12 col-sm-6 col-lg-3">
                   <label class="form-label fw-medium"
                     >الدولة <span class="text-danger">*</span></label
@@ -116,7 +116,7 @@
                     >التصنيف الفرعي <span class="text-danger">*</span></label
                   >
                   <select
-                    v-model="form.sub_category_id"
+                    v-model="form.sub_categorey_id"
                     :disabled="!selectedCategoryId || subCategories.length === 0"
                     class="form-select form-select-md rounded-3"
                     required
@@ -132,10 +132,49 @@
                   </select>
                 </div>
               </div>
+
+              <!-- الخريطة -->
+              <div class="mt-3">
+                <label class="form-label fw-medium d-block mb-2">
+                  اختر الموقع على الخريطة <span class="text-danger">*</span>
+                </label>
+
+                <l-map
+                  ref="mapRef"
+                  :zoom="zoom"
+                  :center="center"
+                  style="height: 350px; border-radius: 12px; border: 1px solid #dee2e6"
+                  @click="onMapClick"
+                >
+                  <l-tile-layer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  />
+
+                  <l-marker
+                    v-if="form.latitude && form.longitude"
+                    :lat-lng="[form.latitude, form.longitude]"
+                  >
+                    <l-tooltip :permanent="true" direction="top">
+                      الموقع المختار
+                    </l-tooltip>
+                  </l-marker>
+                </l-map>
+
+                <div class="mt-2 small text-muted" v-if="form.latitude && form.longitude">
+                  الإحداثيات المختارة:
+                  <strong>Lat: {{ form.latitude.toFixed(6) }}</strong> ,
+                  <strong>Lng: {{ form.longitude.toFixed(6) }}</strong>
+                </div>
+                <div v-else class="mt-2 small text-danger">
+                  من فضلك اختر موقعاً على الخريطة
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- باقي الأقسام (المواعيد + الصورة) بدون تغيير -->
         <!-- 3. المواعيد -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
@@ -271,7 +310,7 @@
           </button>
           <button
             type="submit"
-            :disabled="loading"
+            :disabled="loading || !form.latitude || !form.longitude"
             class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow"
           >
             {{ loading ? "جاري الإنشاء..." : "إنشاء الحدث" }}
@@ -283,18 +322,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import axios from "axios";
+import "leaflet/dist/leaflet.css";
+import { LMap, LTileLayer, LMarker, LTooltip } from "@vue-leaflet/vue-leaflet";
+
 const form = ref({
   title: "",
   description: "",
   city_id: "",
-  sub_category_id: "",
+  sub_categorey_id: "",
   start_date: "",
   end_date: "",
   time: "",
   image: null,
   image_preview: null,
+  latitude: null,
+  longitude: null,
 });
 
 const countries = ref([]);
@@ -307,9 +351,28 @@ const selectedCategoryId = ref("");
 const loading = ref(false);
 const fileInput = ref(null);
 
+const zoom = ref(6);
+const center = ref([30.0444, 31.2357]);
+const mapRef = ref(null);
+
 onMounted(async () => {
   await Promise.all([fetchCountries(), fetchCategories()]);
+  nextTick(() => {
+    if (mapRef.value?.leafletObject) {
+      mapRef.value.leafletObject.invalidateSize();
+    }
+  });
 });
+onUnmounted(() => {
+  if (mapRef.value?.leafletObject) {
+    mapRef.value.leafletObject.remove();
+  }
+});
+
+function onMapClick(e) {
+  form.value.latitude = e.latlng.lat;
+  form.value.longitude = e.latlng.lng;
+}
 
 async function fetchCountries() {
   try {
@@ -345,7 +408,7 @@ async function fetchCategories() {
 
 async function loadSubCategories() {
   subCategories.value = [];
-  form.value.sub_category_id = "";
+  form.value.sub_categorey_id = "";
 
   if (!selectedCategoryId.value) return;
 
@@ -357,7 +420,6 @@ async function loadSubCategories() {
   }
 }
 
-// Image logic remains the same
 function handleImageSelect(e) {
   const file = e.target.files?.[0];
   if (file) processImage(file);
@@ -390,43 +452,55 @@ async function createEvent() {
     !form.value.title?.trim() ||
     !form.value.description?.trim() ||
     !form.value.city_id ||
-    !form.value.sub_category_id ||
-    !form.value.start_date
+    !form.value.sub_categorey_id ||
+    !form.value.start_date ||
+    !form.value.latitude ||
+    !form.value.longitude
   ) {
-    return alert("برجاء ملء جميع الحقول المطلوبة");
+    return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
   }
 
   loading.value = true;
-
   const fd = new FormData();
   fd.append("title", form.value.title);
   fd.append("description", form.value.description);
   fd.append("city_id", form.value.city_id);
-  fd.append("sub_categorey_id", form.value.sub_category_id); // ← typo kept as per backend
+  fd.append("sub_categorey_id", form.value.sub_categorey_id);
   fd.append("start_date", form.value.start_date);
   if (form.value.end_date) fd.append("end_date", form.value.end_date);
   if (form.value.time) fd.append("time", form.value.time);
   if (form.value.image) fd.append("image", form.value.image);
 
+  fd.append("lattitude", form.value.latitude);
+  fd.append("langitude", form.value.longitude);
+
+  // ─── هنا الطباعة ────────────────────────────────
+  console.log("البيانات اللي هتتبعت:");
+  for (let [key, value] of fd.entries()) {
+    if (value instanceof File) {
+      console.log(`${key}: [File] ${value.name} (${(value.size / 1024).toFixed(1)} KB)`);
+    } else {
+      console.log(`${key}:`, value);
+    }
+  }
+  console.log("───────────────────────────────────────");
+  // ────────────────────────────────────────────────
+
   try {
-    await axios.post("/v1/user-dshboard/create/Event", fd, {
+    await axios.post("/v1/create", fd, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
         Accept: "application/json",
       },
     });
-    window.location.href = "/admin/events";
     alert("تم إنشاء الحدث بنجاح!");
+    window.location.href = "/";
   } catch (err) {
     console.error(err);
     alert("فشل إنشاء الحدث: " + (err.response?.data?.message || "خطأ غير معروف"));
   } finally {
     loading.value = false;
   }
-}
-
-function saveAsDraft() {
-  alert("ميزة حفظ المسودة غير مفعلة بعد");
 }
 </script>
