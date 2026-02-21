@@ -177,20 +177,6 @@
             </svg>
           </div>
         </div>
-
-        <button
-          class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            />
-          </svg>
-          Export Data
-        </button>
       </div>
 
       <!-- Loading State -->
@@ -300,15 +286,13 @@
                     </svg>
                   </router-link>
 
-                  <!-- Approve (only for pending) -->
+                  <!-- Delete -->
                   <button
-                    v-if="request.status === 'pending'"
-                    @click="handleApprove(request)"
-                    :disabled="request._loading"
-                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-green-600 hover:bg-green-50 transition-all disabled:opacity-40"
+                    @click="deleteRequest(request)"
+                    class="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:text-white hover:bg-red-600 transition-all"
                   >
                     <svg
-                      class="w-6 h-6"
+                      class="w-5 h-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -317,29 +301,7 @@
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </button>
-
-                  <!-- Reject (only for pending) -->
-                  <button
-                    v-if="request.status === 'pending'"
-                    @click="handleReject(request)"
-                    :disabled="request._loading"
-                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all disabled:opacity-40"
-                  >
-                    <svg
-                      class="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        d="M6 18L18 6M6 6l12 12"
                       />
                     </svg>
                   </button>
@@ -457,26 +419,20 @@ const pageLinks = computed(() => {
   const total = pagination.value.last_page;
   const current = currentPage.value;
   const pages = [];
-
-  // Always show first page
   pages.push({ page: 1, label: "1", active: 1 === current });
 
-  // Show ellipsis if needed
   if (current > 3) {
     pages.push({ page: null, label: "..." });
   }
 
-  // Show pages around current
   for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
     pages.push({ page: i, label: String(i), active: i === current });
   }
 
-  // Show ellipsis before last page
   if (current < total - 2) {
     pages.push({ page: null, label: "..." });
   }
 
-  // Always show last page if more than 1 page
   if (total > 1) {
     pages.push({
       page: total,
@@ -505,15 +461,12 @@ async function fetchRequests(page = 1) {
     const res = await requestsService.getAllPaginated(page, params);
     const responseData = res.data;
 
-    // حفظ البيانات الرئيسية
     const paginatedData = responseData.data?.requests || responseData.data;
     requests.value = (paginatedData.data || []).map((r) => ({
       ...r,
       _loading: false,
     }));
     pagination.value = paginatedData;
-
-    // حفظ الـ counts من الـ response
     if (responseData.data?.PendingCounts !== undefined) {
       counts.value = {
         total: responseData.data.total ?? paginatedData.total,
@@ -528,39 +481,23 @@ async function fetchRequests(page = 1) {
     loading.value = false;
   }
 }
+const deleteRequest = async (request) => {
+  if (!confirm(`Are you sure you want to delete request #${request.id}?`)) return;
 
-async function handleApprove(request) {
-  request._loading = true;
   try {
-    await requestsService.approveRequest(request.id);
-    request.status = "approved";
-
-    // تحديث العدادات محلياً (اختياري - لو الـ backend ما بيرجعش counts جديدة)
-    if (counts.value.pending > 0) counts.value.pending--;
-    if (counts.value.approved !== null) counts.value.approved++;
+    request._loading = true;
+    await axios.delete(`/v1/requests/${request.id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` },
+    });
+    requests.value = requests.value.filter((r) => r.id !== request.id);
+    alert("Request deleted successfully!");
+    window.location.reload();
   } catch (err) {
-    console.error("Approve failed:", err);
+    alert(err.response?.data?.message || "Failed to delete request.");
   } finally {
     request._loading = false;
   }
-}
-
-async function handleReject(request) {
-  request._loading = true;
-  try {
-    await requestsService.rejectRequest(request.id);
-    request.status = "rejected";
-
-    // تحديث العدادات محلياً
-    if (counts.value.pending > 0) counts.value.pending--;
-    if (counts.value.rejected !== null) counts.value.rejected++;
-  } catch (err) {
-    console.error("Reject failed:", err);
-  } finally {
-    request._loading = false;
-  }
-}
-
+};
 function formatDate(dateStr) {
   if (!dateStr) return "—";
   return new Date(dateStr).toLocaleDateString("en-US", {

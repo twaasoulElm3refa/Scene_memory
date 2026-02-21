@@ -181,22 +181,14 @@
         <div class="action-buttons flex rounded sm:flex-row gap-5 pt-8 justify-center">
           <button
             @click="approveRequest"
-            :disabled="apiData.request.status !== 'pending' || actionLoading"
-            :class="
-              apiData.request.status !== 'pending' ? 'opacity-60 cursor-not-allowed' : ''
-            "
-            class="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full min-w-[220px]"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full min-w-[220px]"
           >
             {{ actionLoading ? "Processing..." : "Approve Request" }}
           </button>
 
           <button
             @click="declineRequest"
-            :disabled="apiData.request.status !== 'pending' || actionLoading"
-            :class="
-              apiData.request.status !== 'pending' ? 'opacity-60 cursor-not-allowed' : ''
-            "
-            class="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[220px]"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[220px]"
           >
             {{ actionLoading ? "Processing..." : "Reject Request" }}
           </button>
@@ -268,13 +260,14 @@ const approveRequest = async () => {
   try {
     actionLoading.value = true;
     await axios.post(
-      `${baseUrl}/approve/${route.params.id}`,
+      `${baseUrl}/requests/approve/${route.params.id}`,
       {},
       { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
     );
 
     apiData.value.request.status = "approved";
     alert("Request approved successfully!");
+    window.location.href = "/admin/requests";
   } catch (err) {
     alert(err.response?.data?.message || "Failed to approve request.");
   } finally {
@@ -288,13 +281,14 @@ const declineRequest = async () => {
   try {
     actionLoading.value = true;
     await axios.post(
-      `${baseUrl}/decline/${route.params.id}`,
+      `${baseUrl}/requests/decline/${route.params.id}`,
       {},
       { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
     );
 
     apiData.value.request.status = "rejected";
     alert("Request rejected successfully!");
+    window.location.href = "/admin/requests";
   } catch (err) {
     alert(err.response?.data?.message || "Failed to reject request.");
   } finally {
