@@ -37,3 +37,48 @@
   color: var(--text-main);
   min-height: 100vh;
 }
+
+/* === Custom Event Markers === */
+.custom-event-marker {
+  position: relative !important;
+  width: 30px !important;
+  height: 42px !important;
+  background: transparent !important;
+}
+
+.custom-event-marker .marker-label {
+  position: absolute;
+  bottom: 100%;               /* فوق الدبوس */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  margin-bottom: 4px;
+  z-index: 9999;              /* مهم جدًا عشان يفضل فوق */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  line-height: 1.2;
+}
+
+.custom-event-marker svg {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 42px;
+}
+
+/* تحسين الـ popup إذا أردت */
+.leaflet-popup.custom-event-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}

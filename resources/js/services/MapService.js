@@ -168,7 +168,19 @@ export default class MapService {
     }
 
     _sendCityToBackend(city) {
+        if (!city) {
+            console.warn("No city to send to backend");
+            this._dispatchMarkerEvent([]);
+            return;
+        }
+
         const encodedCity = encodeURIComponent(city);
+
+        // ← هنا الطباعة اللي عايزها
+        console.log("City (original):", city);
+        console.log("Encoded city:", encodedCity);
+        console.log("Full backend URL:", `/api/v1/events/${encodedCity}/marker/search`);
+
         const url = `/api/v1/events/${encodedCity}/marker/search`;
 
         fetch(url, {
@@ -179,12 +191,13 @@ export default class MapService {
             },
         })
             .then(res => {
+                console.log("Backend response status:", res.status);
                 if (!res.ok) throw new Error(`Backend HTTP error: ${res.status}`);
                 return res.json();
             })
             .then(data => {
-                console.log("Backend MarkerSearch response:", data);
                 const events = data?.data || [];
+                console.log("Events received from backend:", events);
                 this._dispatchMarkerEvent(events);
             })
             .catch(err => {
@@ -193,14 +206,94 @@ export default class MapService {
             });
     }
 
-    // ── جديد ── إرسال custom event للـ component
     _dispatchMarkerEvent(eventsArray) {
         const customEvent = new CustomEvent("marker-events-loaded", {
             detail: { events: eventsArray },
             bubbles: true,
             composed: true,
         });
-        // بنبعت الحدث على document عشان يوصل للـ component بسهولة
         document.dispatchEvent(customEvent);
+    }
+    addEventMarkers(events, targetMap = this.map) {
+        if (!events || !Array.isArray(events) || events.length === 0) {
+            console.log("No events to display on map");
+            return;
+        }
+
+        // 1. إنشاء أو تنظيف الـ Layer Group
+        if (!this.eventMarkersLayer) {
+            this.eventMarkersLayer = L.layerGroup().addTo(targetMap);
+        } else {
+            this.eventMarkersLayer.clearLayers();
+        }
+
+        events.forEach(event => {
+            const lat = parseFloat(event.lattitude);
+            const lng = parseFloat(event.langitude);
+
+            if (isNaN(lat) || isNaN(lng)) {
+                console.warn("Invalid coordinates for event:", event.title);
+                return;
+            }
+
+            const eventIcon = L.divIcon({
+                className: "custom-event-marker",
+                html: `
+        <div class="marker-label">${(event.title || "حدث").replace(/</g, "&lt;")}</div>
+        <svg width="32" height="42" viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 0C7.16 0 0 7.16 0 16c0 12 16 26 16 26s16-14 16-26c0-8.84-7.16-16-16-16z" fill="#e53e3e"/>
+            <circle cx="16" cy="16" r="6" fill="white"/>
+        </svg>
+    `,
+                iconSize: [30, 42],
+                iconAnchor: [15, 42],
+                popupAnchor: [0, -45],    
+            });
+
+            const marker = L.marker([lat, lng], {
+                icon: eventIcon
+            });
+
+            // محتوى الـ popup (نفس السابق أو يمكن تطويره)
+            let popupContent = `
+            <div dir="rtl" style="text-align:right; min-width:180px; font-family: Tajawal, sans-serif;">
+                <strong style="font-size:1.1em;">${event.title || "حدث بدون عنوان"}</strong><br>
+                <div style="color:#555; margin:6px 0;">
+                    ${event.start_date ? new Date(event.start_date).toLocaleDateString('ar-EG') : "التاريخ غير محدد"}
+                </div>
+        `;
+
+            if (event.image_url) {
+                popupContent += `
+                <img src="${event.image_url}" alt="${event.title}" 
+                     style="max-width:100%; height:auto; border-radius:6px; margin:8px 0;">
+                <br>
+            `;
+            }
+
+            if (event.slug) {
+                popupContent += `
+                <a href="/events/${event.slug}" target="_blank" 
+                   style="color:#2563eb; text-decoration:underline;">
+                   عرض التفاصيل →
+                </a>
+            `;
+            }
+
+            popupContent += `</div>`;
+
+            marker.bindPopup(popupContent, {
+                maxWidth: 260,
+                className: 'custom-event-popup'
+            });
+
+            marker.addTo(this.eventMarkersLayer);
+        });
+
+        // ضبط الخريطة لتشمل كل الدبابيس (اختياري)
+        if (events.length > 1 && this.eventMarkersLayer) {
+            const group = L.featureGroup(this.eventMarkersLayer.getLayers());
+            targetMap.fitBounds(group.getBounds(), { padding: [60, 60] });
+        }
     }
 }

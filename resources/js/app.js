@@ -4,6 +4,7 @@ import router from "./router";
 import { createI18n  } from "vue-i18n";
 import ar from "./i18n/ar.json";
 import en from "./i18n/en.json";
+import '../css/app.css';
 
 const messages = {
     ar,

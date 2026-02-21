@@ -9,6 +9,9 @@
           backgroundImage: `url('https://images.unsplash.com/photo-1524666041070-9d87656c25bb?auto=format&fit=crop&q=80')`,
         }"
       ></div>
+      <div
+        class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+      ></div>
     </div>
 
     <!-- شريط الفلاتر -->
@@ -461,7 +464,7 @@
       </div>
     </div>
 
-    <!-- Fullscreen Map -->
+    <!-- Fullscreen Map
     <div v-if="fullscreen" class="fixed inset-0 bg-black z-50 flex flex-col">
       <div class="bg-gray-900 p-4 flex justify-between items-center">
         <h2 class="text-white text-xl font-semibold">
@@ -472,7 +475,7 @@
         </button>
       </div>
       <div id="map-full" class="flex-1"></div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -484,6 +487,8 @@ import { LocationService } from "@/services/LocationService";
 import { EventService } from "@/services/EventService";
 import { debounce } from "lodash";
 import api from "@/services/ApiClient";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const marker = ref({ lat: 30.0444, lng: 31.2357 });
 const fullscreen = ref(false);
@@ -506,14 +511,17 @@ const loading = ref(false);
 const searched = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = 4;
+
 let mapService = null;
+
+// ====================== Map Markers Layer ======================
+const eventMarkersLayer = ref(null);
+const fullEventMarkersLayer = ref(null);
 
 // ====================== Computed ======================
 const totalPages = computed(() => Math.ceil(displayedEvents.value.length / itemsPerPage));
+
 const maxVisible = 5;
-const debouncedSearch = debounce(() => {
-  search();
-}, 500);
 
 const visiblePages = computed(() => {
   const total = totalPages.value;
@@ -529,8 +537,10 @@ const visiblePages = computed(() => {
   for (let i = start; i <= end; i++) pages.push(i);
   return pages;
 });
+
 const fallbackImage =
   "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800";
+
 const paginatedEvents = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
@@ -551,10 +561,72 @@ const formatDate = (dateStr) => {
   }
 };
 
+// ====================== Add Markers to Map ======================
+const addEventMarkers = (events, targetMap, layerRef) => {
+  if (!targetMap) return;
+
+  // Clear previous markers
+  if (layerRef.value) {
+    layerRef.value.clearLayers();
+  } else {
+    layerRef.value = L.layerGroup().addTo(targetMap);
+  }
+
+  if (!events?.length) return;
+
+  events.forEach((event) => {
+    const lat = parseFloat(event.lattitude);
+    const lng = parseFloat(event.langitude);
+
+    if (isNaN(lat) || isNaN(lng)) return;
+
+    const marker = L.marker([lat, lng]);
+
+    let popupContent = `
+      <div class="text-right min-w-[180px]">
+        <h3 class="font-bold text-base mb-1">${event.title || "فعالية بدون عنوان"}</h3>
+        <p class="text-sm text-gray-600 mb-2">
+          ${event.start_date ? formatDate(event.start_date) : "التاريخ غير محدد"}
+        </p>
+    `;
+
+    if (event.image_url) {
+      popupContent += `
+        <img src="${event.image_url}" alt="${event.title}" class="w-full h-28 object-cover rounded mb-2">
+      `;
+    }
+
+    popupContent += `
+        <p class="text-sm mb-2">${event.city || "غير محدد"}</p>
+        <a href="/single_event/${
+          event.slug
+        }" class="text-blue-600 hover:underline text-sm font-medium">
+          عرض التفاصيل →
+        </a>
+      </div>
+    `;
+
+    marker.bindPopup(popupContent, {
+      maxWidth: 240,
+      className: "custom-event-popup",
+    });
+
+    marker.addTo(layerRef.value);
+  });
+
+  // Optional: fit bounds if multiple markers
+  if (events.length > 1) {
+    const group = L.featureGroup(layerRef.value.getLayers());
+    targetMap.fitBounds(group.getBounds(), { padding: [60, 60] });
+  }
+};
+
 // ====================== Lifecycle ======================
 onMounted(async () => {
   mapService = new MapService(marker);
-  mapService.initMap("map");
+
+  // Initialize main map
+  mapService.initMap("map", 6); // zoom 6 لمصر ككل
 
   try {
     categories.value = await CategoryService.getAllCategories();
@@ -568,21 +640,21 @@ onMounted(async () => {
 
 onUnmounted(() => {
   document.removeEventListener("marker-events-loaded", handleMarkerEvents);
+  if (mapService) {
+    mapService.closeFullscreen();
+  }
 });
 
 const onMainCategoryChange = async () => {
   selectedSubCategory.value = "";
   subCategories.value = [];
 
-  if (!selectedCategory.value) {
-    return;
-  }
+  if (!selectedCategory.value) return;
 
   loadingSubCategories.value = true;
 
   try {
     const res = await api.get(`/categories/${selectedCategory.value}/sub_categories/get`);
-    console.log(res.data);
     subCategories.value = res.data.data || [];
   } catch (err) {
     console.error("Error loading sub-categories:", err);
@@ -592,7 +664,7 @@ const onMainCategoryChange = async () => {
     search();
   }
 };
-// ====================== Methods ======================
+
 const loadCities = async () => {
   if (!selectedCountry.value) {
     cities.value = [];
@@ -629,6 +701,8 @@ const search = async (isInitial = false) => {
       category_name: ev.category?.name || ev.category_name || "فعالية",
       image: ev.image || null,
       image_url: ev.image_url || null,
+      lattitude: ev.lattitude,
+      langitude: ev.langitude,
     }));
   } catch (err) {
     console.error("Search error:", err);
@@ -643,16 +717,26 @@ const handleMarkerEvents = (e) => {
   const eventsFromMap = e.detail?.events || [];
 
   displayedEvents.value = eventsFromMap.map((ev) => ({
-    id: ev.id,
+    id: ev.id || ev._id,
     slug: ev.slug,
     title: ev.title || "فعالية بدون عنوان",
-    description: ev.description || "—",
     start_date: ev.start_date,
-    city: ev.city?.name || "غير محدد",
+    city: ev.city?.name || ev.city || "غير محدد",
     category_name: ev.category_name || "من الخريطة",
-    image: ev.image || null,
     image_url: ev.image_url || null,
+    lattitude: ev.lattitude || ev.latitude,
+    langitude: ev.langitude || ev.longitude,
   }));
+
+  // Add markers to main map
+  if (mapService?.map) {
+    addEventMarkers(displayedEvents.value, mapService.map, eventMarkersLayer);
+  }
+
+  // Add markers to fullscreen map if open
+  if (fullscreen.value && mapService?.fullMap) {
+    addEventMarkers(displayedEvents.value, mapService.fullMap, fullEventMarkersLayer);
+  }
 
   currentPage.value = 1;
   searched.value = true;
@@ -674,10 +758,20 @@ watch(
   },
   { deep: true }
 );
+
+const debouncedSearch = debounce(() => {
+  search();
+}, 500);
+
 const openFullscreen = async () => {
   fullscreen.value = true;
   await nextTick();
-  mapService.openFullscreen("map-full");
+  mapService.openFullscreen("map-full", 6);
+
+  // Re-add markers to the new fullscreen map
+  if (displayedEvents.value.length > 0) {
+    addEventMarkers(displayedEvents.value, mapService.fullMap, fullEventMarkersLayer);
+  }
 };
 
 const closeFullscreen = () => {
@@ -704,5 +798,52 @@ const closeFullscreen = () => {
 /* تحسين شكل الـ Tabs */
 button {
   min-width: 44px;
+}
+/* يمكنك إضافة ستايل للـ popup إذا أردت */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+}
+
+.custom-event-popup .leaflet-popup-content {
+  margin: 0;
+  font-family: inherit;
+}
+
+/* في App.vue أو main.css أو component مع scoped=false */
+.custom-event-marker {
+  position: relative;
+  text-align: center;
+}
+
+.custom-event-marker .marker-label {
+  position: absolute;
+  bottom: 100%; /* فوق الدبوس */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  margin-bottom: 6px;
+  z-index: 1000;
+}
+
+.custom-event-marker .marker-pin {
+  font-size: 32px; /* حجم الدبوس */
+  color: #e53e3e; /* أحمر قوي */
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* تحسين الـ popup إذا أردت */
+.leaflet-popup.custom-event-popup .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 </style>
