@@ -19,17 +19,12 @@ use Throwable;
 class AuthController extends Controller
 {
     use authApiResponse;
+    
     public function register(registerRequest $request)
     {
         try {
             $user = DB::transaction(function () use ($request) {
                 $data = $request->validated();
-                if($request->hasFile('image')) {
-                    $image = $request->file('image');
-                    $path = $image->store('images', 'public');
-                    $data['image'] = $path;
-                }
-
                 return User::create([
                     'name' => $data['name']?? null,
                     'email' => $data['email'] ?? null,
@@ -43,13 +38,7 @@ class AuthController extends Controller
                     'last_login_at' => now(),
                 ]);
             });
-
             $token = $user->createToken('rag-token')->plainTextToken;
-
-            $user->update([
-                'last_login_at' => now(),
-            ]);
-
             return $this->success([
                 'token' => $token,
                 'user' => new UserResource($user),
@@ -59,7 +48,6 @@ class AuthController extends Controller
             \Log::error('Register Error', [
                 'message' => $e->getMessage(),
             ]);
-
             return $this->error(
                 'Registration failed. Please try again later.',
                 500
@@ -134,8 +122,6 @@ class AuthController extends Controller
         ]);
     }
 
-
-
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -167,7 +153,6 @@ class AuthController extends Controller
         ]);
     }
 
-
     public function updateProfile(Request $request)
     {
         $user = $request->user();
@@ -187,6 +172,7 @@ class AuthController extends Controller
             ]
         ]);
     }
+
     public function updatePassword(Request $request)
     {
         $user = $request->user();

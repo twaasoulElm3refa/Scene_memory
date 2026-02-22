@@ -111,6 +111,7 @@ Route::prefix('v1')->group(function () {
         // USERS CRUD
         Route::get('/', [UserController::class, 'index']);
         Route::get('/all/get', [UserController::class, 'all']);
+        Route::get('/latest/get', [UserController::class, 'latest']);
         Route::get('/{id}', [UserController::class, 'show']);
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);

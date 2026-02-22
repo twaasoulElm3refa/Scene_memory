@@ -109,29 +109,44 @@
         class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
       >
         <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-          <h2 class="text-lg font-semibold">Recent Activity</h2>
-          <a href="#" class="text-blue-600 hover:underline text-sm font-medium"
+          <h2 class="text-lg font-semibold">Recent users</h2>
+          <a
+            href="/admin/users"
+            class="text-blue-600 text-decoration-none hover:underline text-sm font-medium"
             >View all</a
           >
         </div>
         <div class="divide-y divide-gray-100">
           <div
-            v-for="item in recentActivity"
-            :key="item.id"
+            v-for="user in recentActivity"
+            :key="user.id"
             class="p-6 flex items-center gap-4 hover:bg-gray-50"
           >
-            <div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0"></div>
-            <div class="flex-1 min-w-0">
-              <p class="font-medium text-gray-900">{{ item.title }}</p>
-              <p class="text-sm text-gray-500">{{ item.subtitle }}</p>
+            <div
+              class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold"
+            >
+              {{ user.name.charAt(0) }}
             </div>
+
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-gray-900">{{ user.name }}</p>
+              <p class="text-sm text-gray-500">{{ user.email }}</p>
+            </div>
+
             <div class="text-right">
-              <p class="text-sm text-gray-500">{{ item.time }}</p>
+              <p class="text-sm text-gray-500">
+                {{ new Date(user.created_at).toLocaleDateString() }}
+              </p>
+
               <span
-                :class="statusClasses[item.status]"
                 class="inline-block px-2.5 py-1 text-xs font-medium rounded-full mt-1"
+                :class="{
+                  'bg-red-100 text-red-600': user.role === 'admin',
+                  'bg-yellow-100 text-yellow-600': user.role === 'owner',
+                  'bg-green-100 text-green-600': user.role === 'user',
+                }"
               >
-                {{ item.status }}
+                {{ user.role }}
               </span>
             </div>
           </div>
@@ -144,19 +159,22 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h2 class="text-lg font-semibold mb-4">Quick Actions</h2>
           <div class="grid grid-cols-2 gap-4">
-            <button
-              class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
+            <router-link
+              to="/admin/events/create"
+              class="flex text-decoration-none flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
             >
               <span class="text-blue-600 text-2xl mb-1">+</span>
               <span class="text-sm font-medium">New Event</span>
-            </button>
-            <button
-              class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
+            </router-link>
+
+            <router-link
+              to="/admin/users/add "
+              class="flex text-decoration-none flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
             >
               <span class="text-blue-600 text-2xl mb-1">👤</span>
-              <span class="text-sm font-medium">Add Admin</span>
-            </button>
-            <button
+              <span class="text-sm font-medium">Create User</span>
+            </router-link>
+            <!-- <button
               class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
             >
               <span class="text-blue-600 text-2xl mb-1">↓</span>
@@ -167,7 +185,7 @@
             >
               <span class="text-blue-600 text-2xl mb-1">📢</span>
               <span class="text-sm font-medium">Send Notifications</span>
-            </button>
+            </button> -->
           </div>
         </div>
 
@@ -218,37 +236,20 @@ const stats = ref({
   countries: 0,
 });
 
-const recentActivity = ref([
-  // نفس البيانات الوهمية اللي كانت موجودة
-  {
-    id: 1,
-    title: "Summer Tech Gala",
-    subtitle: "New Event by Alex Johnson",
-    time: "2 mins ago",
-    status: "LIVE",
-  },
-  {
-    id: 2,
-    title: "Sarah Miller",
-    subtitle: "sarah.m@example.com",
-    time: "1 hour ago",
-    status: "VERIFIED",
-  },
-  {
-    id: 3,
-    title: "City Lights Photo Tour",
-    subtitle: "Memory Upload by Marco Polo",
-    time: "3 hours ago",
-    status: "PENDING REVIEW",
-  },
-  {
-    id: 4,
-    title: "David Chen",
-    subtitle: "d.chen@org.co",
-    time: "5 hours ago",
-    status: "VERIFIED",
-  },
-]);
+const recentActivity = ref([]);
+const getLatestUsers = async () => {
+  try {
+    const response = await axios.get("/v1/users/latest/get");
+    recentActivity.value = response.data.data;
+  } catch (error) {
+    console.error("Error fetching latest users:", error);
+  }
+};
+
+onMounted(() => {
+  getLatestUsers();
+  fetchStats();
+});
 
 const statusClasses = {
   LIVE: "bg-green-100 text-green-700",
@@ -286,6 +287,4 @@ async function fetchStats() {
     console.error("Failed to load dashboard stats:", err);
   }
 }
-
-onMounted(fetchStats);
 </script>

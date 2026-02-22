@@ -82,4 +82,10 @@ class UserController extends Controller
 
         return $this->success($user, 'user Deleted Successfully');
     }
+
+    public function latest()
+    {
+        $users=User::select(['id','name','email','created_at','role'])->latest()->limit(5)->get();
+        return $this->success($users,'Last 5 users ');
+    }
 }

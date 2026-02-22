@@ -155,8 +155,8 @@
             <div class="form-group">
               <label>User Role</label>
               <select v-model="form.role" class="input select">
-                <option value="viewer">Viewer</option>
-                <option value="editor">Editor</option>
+                <option value="owner">owner</option>
+                <option value="user">user</option>
                 <option value="admin">Admin</option>
               </select>
               <p class="help-text">
@@ -232,7 +232,7 @@
 <script setup>
 import { ref } from "vue";
 import AdminLayout from "@/layouts/AdminLayout.vue";
-import { useUserForm } from "@/services/admin/user/useUserForm"; // ← تأكد من المسار الصحيح
+import { useUserForm } from "@/services/admin/user/useUserForm";
 
 const theme = localStorage.getItem("theme") || "light";
 
