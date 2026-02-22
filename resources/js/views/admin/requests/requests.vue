@@ -124,7 +124,7 @@
       <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div class="flex items-center gap-3">
           <!-- Status Filter -->
-          <div class="relative">
+          <!-- <div class="relative">
             <select
               v-model="statusFilter"
               @change="fetchRequests(1)"
@@ -148,10 +148,10 @@
                 d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"
               />
             </svg>
-          </div>
+          </div> -->
 
           <!-- Date Filter -->
-          <div class="relative">
+          <!-- <div class="relative">
             <select
               v-model="dateFilter"
               @change="fetchRequests(1)"
@@ -175,7 +175,7 @@
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-          </div>
+          </div> -->
         </div>
       </div>
 

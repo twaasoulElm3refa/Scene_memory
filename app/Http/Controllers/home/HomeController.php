@@ -5,16 +5,19 @@ namespace App\Http\Controllers\home;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsRequest;
+use App\Mail\EventRequest;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
     use ApiResponse;
-      public function create(EventsRequest $request): JsonResponse
+
+    public function create(EventsRequest $request): JsonResponse
     {
         $data = $request->validated();
         try {
@@ -27,10 +30,11 @@ class HomeController extends Controller
             $data['user_id'] = auth()->user()->id;
             $event = Events::create($data);
             EventRequestCreate::create([
-                'event_id'=> $event->id,
-                'status' => 'pending'
+                'event_id' => $event->id,
+                'status' => 'pending',
             ]);
             $this->clearEventsCache();
+            Mail::to('m7mdellham77@gmail.com')->send(new EventRequest($event));
             return $this->success($event->load('requests'), 'Event Created Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
@@ -45,7 +49,7 @@ class HomeController extends Controller
             Cache::forget("events_page_{$page}_per_{$perPage}");
         }
         Cache::forget("events_single_{$slug}");
-        Cache::forget("requests_page_1");
+        Cache::forget('requests_page_1');
         Cache::forget('events_count');
         Cache::forget('memories');
     }

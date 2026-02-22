@@ -37,6 +37,9 @@ class AuthController extends Controller
                     'image' => $data['image']??null,
                     'role' => 'user',
                     'is_active' => true,
+                    'country' => $data['country'] ?? null,
+                    'date_of_birth'=> $data['date_of_birth'] ?? null,
+                    'position'=> $data['position'] ?? null,
                     'last_login_at' => now(),
                 ]);
             });

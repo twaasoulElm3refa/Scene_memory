@@ -177,20 +177,61 @@
           </div>
         </div>
 
+        <!-- Rejection Reason (shown only when rejecting) -->
+        <div
+          v-if="showRejectReason"
+          class="bg-white rounded-2xl shadow border border-red-100 p-7 mt-6"
+        >
+          <h3 class="text-xl font-bold text-red-700 mb-4">Reason for Rejection</h3>
+          <textarea
+            v-model="rejectReason"
+            rows="4"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-y"
+            placeholder="Please enter the reason why this request is being rejected..."
+          ></textarea>
+          <p v-if="rejectReasonError" class="mt-2 text-sm text-red-600">
+            {{ rejectReasonError }}
+          </p>
+        </div>
+
         <!-- Action Buttons -->
-        <div class="action-buttons flex rounded sm:flex-row gap-5 pt-8 justify-center">
+        <div class="flex flex-col sm:flex-row gap-5 pt-8 justify-center">
           <button
             @click="approveRequest"
-            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full min-w-[220px]"
+            :disabled="actionLoading"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full min-w-[220px] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {{ actionLoading ? "Processing..." : "Approve Request" }}
           </button>
 
           <button
-            @click="declineRequest"
-            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[220px]"
+            v-if="!showRejectReason"
+            @click="showRejectReason = true"
+            :disabled="actionLoading"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[220px] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {{ actionLoading ? "Processing..." : "Reject Request" }}
+            Reject Request
+          </button>
+
+          <button
+            v-else
+            @click="declineRequest"
+            :disabled="actionLoading || !rejectReason.trim()"
+            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[220px] disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {{ actionLoading ? "Processing..." : "Confirm Rejection" }}
+          </button>
+
+          <button
+            v-if="showRejectReason"
+            @click="
+              showRejectReason = false;
+              rejectReason = '';
+              rejectReasonError = '';
+            "
+            class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2.5 px-10 transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 rounded-full min-w-[220px]"
+          >
+            Cancel
           </button>
         </div>
       </div>
@@ -211,6 +252,10 @@ const apiData = ref(null);
 const loading = ref(true);
 const error = ref(null);
 const actionLoading = ref(false);
+
+const showRejectReason = ref(false);
+const rejectReason = ref("");
+const rejectReasonError = ref("");
 
 const baseUrl = "/v1";
 
@@ -242,7 +287,6 @@ const fetchRequest = async () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` },
     });
 
-    // Save the whole useful structure
     apiData.value = {
       request: data.data.request,
       event: data.data.event,
@@ -276,13 +320,20 @@ const approveRequest = async () => {
 };
 
 const declineRequest = async () => {
+  const reason = (rejectReason.value || "").trim();
+
+  if (!reason) {
+    rejectReasonError.value = "Please provide a reason for rejection";
+    return;
+  }
+
   if (!confirm("Are you sure you want to REJECT this event request?")) return;
 
   try {
     actionLoading.value = true;
     await axios.post(
       `${baseUrl}/requests/decline/${route.params.id}`,
-      {},
+      { reason },
       { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
     );
 

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Mail\ApproveMail;
+use App\Mail\RejectMail;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -57,10 +61,11 @@ class RequestController extends Controller
             $event = Events::find($request->event_id);
             $event->is_active = 1;
             $event->save();
-            $user=User::find($event->user_id);
-            $user->role='owner';
+            $user = User::find($event->user_id);
+            $user->role = 'owner';
             $user->save();
             $this->clearEventsCache();
+            Mail::to($event->user->email)->send(new ApproveMail($event));
 
             return $this->success($request, 'Request Approved Successfully');
         } catch (\Exception $e) {
@@ -68,13 +73,16 @@ class RequestController extends Controller
         }
     }
 
-      public function decline($request_id)
+    public function decline(Request $req,$request_id)
     {
         try {
             $request = EventRequestCreate::find($request_id);
             $request->status = 'rejected';
             $request->save();
+            $event = Events::find($request->event_id);
             $this->clearEventsCache();
+            $reason=$req->reason;
+            Mail::to($event->user->email)->send(new RejectMail($event,$reason));
 
             return $this->success($request, 'Request Declined Successfully');
         } catch (\Exception $e) {
@@ -86,7 +94,7 @@ class RequestController extends Controller
     {
         try {
             $request = EventRequestCreate::find($id);
-            $event=Events::find($request->event_id);
+            $event = Events::find($request->event_id);
             $event->delete();
             $request->delete();
             $this->clearEventsCache();
@@ -108,6 +116,4 @@ class RequestController extends Controller
             Cache::forget("requests_page_{$page}");
         }
     }
-
-    
 }

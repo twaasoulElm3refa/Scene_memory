@@ -27,9 +27,7 @@ class registerRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'regex:/^[\p{L}\d\s]+$/u',
             ],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => [
                 'required',
                 'email',
