@@ -271,6 +271,17 @@
     </div>
 
     <div class="flex-grow"></div>
+
+    <!-- Visit Site Button – at the very bottom -->
+    <RouterLink
+      to="/"
+      class="sidebar-btn group item-center justify-center text-decoration-none mt-auto visit-site-btn"
+    >
+      <span class="flex items-center gap-3 justify-center font-medium">
+        <i class="fa-solid fa-arrow-up-right-from-square w-5 h-5"></i>
+        Visit Site
+      </span>
+    </RouterLink>
   </aside>
 </template>
 

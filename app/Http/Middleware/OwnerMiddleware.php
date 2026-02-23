@@ -20,9 +20,6 @@ class OwnerMiddleware
     {
         try {
             $user = auth()->user();
-            if (! $user || $user->role !== 'owner') {
-                return $this->unauthorized('You are not owner');
-            }
 
             return $next($request);
         } catch (\Exception $e) {

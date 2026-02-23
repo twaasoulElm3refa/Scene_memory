@@ -25,13 +25,13 @@ class UserDashboardController extends Controller
         $cacheKey = 'my_events_user_id_'.$userId;
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($userId) {
-            return Events::with('city:id,name', 'sub_categorey:id,name')->where('is_active', 1)
+            return Events::with('city:id,name', 'sub_categorey:id,name','firstImage')->where('is_active', 1)
                 ->where('user_id', $userId)
                 ->withCount('images')
                 ->orderBy('created_at', 'desc')
                 ->select([
                     'id', 'user_id', 'title', 'slug',
-                    'start_date', 'image',
+                    'start_date',
                     'city_id', 'sub_categorey_id',
                 ])
                 ->get();

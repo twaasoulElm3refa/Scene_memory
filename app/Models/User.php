@@ -71,4 +71,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(contacts::class,'user_id');
     }
+
+    public function MediaRequest()
+    {
+        return $this->hasMany(MediaRequest::class,'user_id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(comments::class,'user_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Likes::class,'user_id');
+    }
 }
+

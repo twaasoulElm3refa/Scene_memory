@@ -1,14 +1,7 @@
 <template>
   <AdminLayout>
     <div class="p-6 max-w-4xl mx-auto">
-      <div class="mb-10">
-        <h1 class="text-3xl font-bold text-gray-900">إضافة حدث جديد</h1>
-        <p class="text-gray-600 mt-2 text-lg">
-          قم بملء التفاصيل أدناه لإنشاء إدخال حدث جديد في Scene Memory
-        </p>
-      </div>
-
-      <form @submit.prevent="createEvent" class="space-y-12">
+      <form @submit.prevent="createEvent" class="space-y-6">
         <!-- 1. Basic Information -->
         <section class="bg-white shadow-md rounded-xl p-7 border border-gray-100">
           <h2 class="text-2xl font-semibold mb-7 flex items-center gap-3 text-gray-800">
@@ -172,26 +165,27 @@
           </div>
         </section>
 
-        <!-- 4. Cover Image -->
+        <!-- 4. Cover Images (Multiple) -->
         <section class="bg-white shadow-md rounded-xl p-7 border border-gray-100">
           <h2 class="text-2xl font-semibold mb-7 flex items-center gap-3 text-gray-800">
-            <span class="text-blue-600 text-3xl">④</span> صورة الغلاف
+            <span class="text-blue-600 text-3xl">④</span> صور الحدث
           </h2>
 
           <div
             @dragover.prevent
             @drop.prevent="handleImageDrop"
-            class="border-2 border-dashed border-gray-400 rounded-xl p-12 text-center hover:border-blue-500 transition-all cursor-pointer bg-gray-50"
+            class="border-2 border-dashed border-gray-400 rounded-xl p-10 text-center hover:border-blue-500 transition-all cursor-pointer bg-gray-50"
           >
             <input
               ref="fileInput"
               type="file"
               accept="image/png,image/jpeg,image/webp"
+              multiple
               hidden
               @change="handleImageSelect"
             />
 
-            <div v-if="!form.image_preview" class="space-y-4">
+            <div v-if="form.urls.length === 0" class="space-y-4 py-8">
               <div
                 class="mx-auto w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center"
               >
@@ -210,32 +204,49 @@
                 </svg>
               </div>
               <p class="text-lg font-medium text-gray-700">
-                اضغط للرفع أو اسحب وأفلت الصورة هنا
+                اضغط للرفع أو اسحب وأفلت الصور هنا
               </p>
               <p class="text-sm text-gray-500">
-                PNG • JPG • WEBP | الحد الأقصى 5 ميجا بايت
+                PNG • JPG • WEBP | الحد الأقصى 5 ميجا لكل صورة
               </p>
               <button
                 type="button"
                 @click="$refs.fileInput.click()"
-                class="mt-3 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-sm"
+                class="mt-4 px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-sm"
               >
-                اختيار صورة
+                اختيار الصور
               </button>
             </div>
 
-            <div v-else class="space-y-5">
-              <img
-                :src="form.image_preview"
-                alt="معاينة صورة الحدث"
-                class="max-h-72 mx-auto rounded-lg shadow-lg object-cover border border-gray-200"
-              />
+            <!-- Preview Area -->
+            <div v-else class="space-y-6">
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div
+                  v-for="(preview, index) in form.url_previews"
+                  :key="index"
+                  class="relative group"
+                >
+                  <img
+                    :src="preview"
+                    :alt="`صورة الحدث ${index + 1}`"
+                    class="w-full h-40 object-cover rounded-lg shadow border border-gray-200"
+                  />
+                  <button
+                    type="button"
+                    @click="removeImage(index)"
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+
               <button
                 type="button"
-                @click="clearImage"
-                class="text-red-600 hover:text-red-800 font-medium text-base underline"
+                @click="$refs.fileInput.click()"
+                class="mt-4 px-6 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition"
               >
-                إزالة الصورة
+                إضافة المزيد من الصور
               </button>
             </div>
           </div>
@@ -248,13 +259,6 @@
             class="px-8 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition"
           >
             إلغاء
-          </button>
-          <button
-            type="button"
-            @click="saveAsDraft"
-            class="px-8 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition"
-          >
-            حفظ كمسودة
           </button>
           <button
             type="submit"
@@ -282,8 +286,8 @@ const form = ref({
   start_date: "",
   end_date: "",
   time: "",
-  image: null,
-  image_preview: null,
+  urls: [],
+  url_previews: [],
 });
 
 const countries = ref([]);
@@ -346,32 +350,44 @@ async function loadSubCategories() {
   }
 }
 
-// Image logic remains the same
 function handleImageSelect(e) {
-  const file = e.target.files?.[0];
-  if (file) processImage(file);
+  const files = Array.from(e.target.files || []);
+  processImages(files);
 }
 
 function handleImageDrop(e) {
-  const file = e.dataTransfer.files?.[0];
-  if (file) processImage(file);
+  const files = Array.from(e.dataTransfer.files || []);
+  processImages(files);
 }
 
-function processImage(file) {
-  if (file.size > 5 * 1024 * 1024) return alert("حجم الملف يتجاوز 5 ميجا");
-  if (!["image/png", "image/jpeg", "image/webp"].includes(file.type))
-    return alert("المسموح: PNG, JPG, WEBP فقط");
+function processImages(newFiles) {
+  const validFiles = newFiles.filter((file) => {
+    if (file.size > 5 * 1024 * 1024) {
+      alert(`حجم الملف ${file.name} يتجاوز 5 ميجا`);
+      return false;
+    }
+    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+      alert(`نوع الملف ${file.name} غير مدعوم (مسموح: PNG, JPG, WEBP)`);
+      return false;
+    }
+    return true;
+  });
 
-  form.value.image = file;
-  const reader = new FileReader();
-  reader.onload = (ev) => (form.value.image_preview = ev.target.result);
-  reader.readAsDataURL(file);
+  validFiles.forEach((file) => {
+    form.value.urls.push(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      form.value.url_previews.push(ev.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  if (fileInput.value) fileInput.value.value = "";
 }
 
-function clearImage() {
-  form.value.image = null;
-  form.value.image_preview = null;
-  fileInput.value && (fileInput.value.value = "");
+function removeImage(index) {
+  form.value.urls.splice(index, 1);
+  form.value.url_previews.splice(index, 1);
 }
 
 async function createEvent() {
@@ -385,17 +401,24 @@ async function createEvent() {
     return alert("برجاء ملء جميع الحقول المطلوبة");
   }
 
+  if (form.value.urls.length === 0) {
+    return alert("يرجى رفع صورة واحدة على الأقل");
+  }
+
   loading.value = true;
 
   const fd = new FormData();
   fd.append("title", form.value.title);
   fd.append("description", form.value.description);
   fd.append("city_id", form.value.city_id);
-  fd.append("sub_categorey_id", form.value.sub_category_id); // ← typo kept as per backend
+  fd.append("sub_categorey_id", form.value.sub_category_id);
   fd.append("start_date", form.value.start_date);
-  if (form.value.end_date) fd.append("end_date", form.value.end_date);
+  form.value.end_date && fd.append("end_date", form.value.end_date);
   if (form.value.time) fd.append("time", form.value.time);
-  if (form.value.image) fd.append("image", form.value.image);
+
+  form.value.urls.forEach((file) => {
+    fd.append("urls[]", file);
+  });
 
   try {
     await axios.post("/v1/events/create", fd, {

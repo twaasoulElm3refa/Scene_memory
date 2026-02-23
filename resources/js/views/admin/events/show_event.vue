@@ -91,12 +91,16 @@
         <div class="left-column">
           <!-- Event Image -->
           <div class="event-image-card">
-            <img
-              :src="event.image?.trim() || fallbackImage"
-              :alt="event.title"
-              class="event-image"
-              loading="lazy"
-            />
+            <!-- Event Image -->
+            <div class="event-image-card">
+              <img
+                :src="getMainImage() || fallbackImage"
+                :alt="event.title"
+                class="event-image"
+                loading="lazy"
+              />
+              ...
+            </div>
             <div class="image-overlay">
               <span class="badge badge-primary">{{
                 event.sub_categorey?.name || "TECHNOLOGY"
@@ -709,6 +713,13 @@ const closeAddMediaModal = () => {
   if (uploading.value) return;
   isAddMediaModalOpen.value = false;
   clearSelectedFile();
+};
+
+const getMainImage = () => {
+  if (!event.value?.images || event.value.images.length === 0) {
+    return null;
+  }
+  return event.value.images[0].url?.trim() || null;
 };
 
 const clearSelectedFile = () => {

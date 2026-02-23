@@ -43,4 +43,29 @@ class Events extends Model
     {
         return $this->hasOne(EventRequestCreate::class, 'event_id');
     }
+
+    public function MediaRequest()
+    {
+        return $this->hasMany(MediaRequest::class, 'event_id');
+    }
+
+    public function photos()
+    {
+        return $this->hasMany(EventPhotos::class,'event_id');
+    }
+
+    public function firstImage()
+    {
+        return $this->hasOne(eventsImges::class,'event_id');
+    }
+    
+    public function comments()
+    {
+        return $this->hasMany(comments::class,'event_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Likes::class,'event_id');
+    }
 }

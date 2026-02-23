@@ -61,9 +61,6 @@ class RequestController extends Controller
             $event = Events::find($request->event_id);
             $event->is_active = 1;
             $event->save();
-            $user = User::find($event->user_id);
-            $user->role = 'owner';
-            $user->save();
             $this->clearEventsCache();
             Mail::to($event->user->email)->send(new ApproveMail($event));
 

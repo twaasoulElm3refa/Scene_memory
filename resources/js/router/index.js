@@ -38,6 +38,7 @@ import update_event_user from "../views/user/update_event_user.vue";
 import create_event from "../views/home/create_event.vue";
 import requests from "../views/admin/requests/requests.vue";
 import show_request from "../views/admin/requests/show_request.vue";
+import media_requests from "../views/user/media_requests.vue";
 
 const routes = [
     {
@@ -251,6 +252,12 @@ const routes = [
         component: user_home,
         meta: { hideNavbar: true, hideFooter: true },
     },
+
+    {
+        path: "/owner/requests",
+        component: media_requests,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
     {
         path: "/owner/create",
         component: create_event_user,
@@ -280,21 +287,12 @@ router.beforeEach((to, from, next) => {
     if (to.path.startsWith("/admin")) {
         if (!token) return next("/auth");
         if (role === "admin") return next();
-        if (role === "owner") return next("/owner");
-        return next("/");
-    }
-
-    if (to.path.startsWith("/owner")) {
-        if (!token) return next("/auth");
-        if (role === "owner") return next();
-        if (role === "admin") return next("/admin");
         return next("/");
     }
 
     if (to.path === "/auth") {
         if (!token) return next();
         if (role === "admin") return next("/admin");
-        if (role === "owner") return next("/owner");
         return next("/");
     }
 

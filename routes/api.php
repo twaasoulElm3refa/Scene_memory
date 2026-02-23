@@ -16,6 +16,7 @@ use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\SubCategoryController;
+use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
@@ -42,7 +43,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/facebook-callback', [SocialAuthController::class, 'handleFacebookCallback']);
 
         // profile Routes
-        Route::middleware(['auth:sanctum', 'throttle:15,1'])->group(function () {
+        Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
             Route::put('/profile', [AuthController::class, 'updateProfile']);
             Route::put('/password', [AuthController::class, 'updatePassword']);
@@ -116,7 +117,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
-
+  
         // USER COUNTS
         Route::get('/all/count', [UserCountsController::class, 'count']);
         Route::get('/all/last-login', [UserCountsController::class, 'last_login']);
@@ -150,15 +151,22 @@ Route::prefix('v1')->group(function () {
     });
 
     // User Dashboard
-    Route::prefix('user-dshboard')->middleware(['auth:sanctum', OwnerMiddleware::class])->group(function () {
+    Route::prefix('user-dshboard')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/my-events', [UserDashboardController::class, 'myEvents']);
         Route::post('/{slug}', [UserDashboardController::class, 'addMedia']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
 
         // Create Event
-        Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware(OwnerMiddleware::class, 'auth:sanctum');
-        Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnerMiddleware::class, OwnEvent::class, 'auth:sanctum');
+        Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware('auth:sanctum');
+        Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnEvent::class, 'auth:sanctum');
         Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
+    });
+
+    Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('/{id}', [MediaRequestController::class,'all']);
+        Route::post('/approve/{id}', [MediaRequestController::class,'approve']);
+        Route::post('/reject/{id}', [MediaRequestController::class,'reject']);
+        Route::post('/upload/{id}', [MediaRequestController::class,'upload']);
     });
 
     Route::prefix('requests')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {

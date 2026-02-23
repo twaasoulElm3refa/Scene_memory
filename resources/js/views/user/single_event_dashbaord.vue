@@ -4,20 +4,22 @@
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else-if="event" class="scene-memory-single">
       <!-- Hero / Main Image Section -->
-      <div class="hero" :style="{ backgroundImage: `url(${getFullUrl(event.image)})` }">
+      <div
+        class="hero"
+        :style="{
+          backgroundImage: `url(${getMainImageUrl()})`,
+        }"
+      >
         <div class="hero-overlay">
           <div class="hero-content">
             <div class="badges">
               <span class="badge private" v-if="event.private">خاص</span>
               <span class="badge shared" v-if="event.shared">مشترك</span>
             </div>
-
             <h1 class="title">{{ event.title }}</h1>
-
             <div class="owner">
               بواسطة: <strong>{{ event.user?.name || "غير معروف" }}</strong>
             </div>
-
             <div class="actions">
               <button class="btn secondary">رجوع للقائمة</button>
               <button class="btn primary">تعديل الذكرى</button>
@@ -25,7 +27,6 @@
           </div>
         </div>
       </div>
-
       <!-- Info Cards Row -->
       <div class="info-cards">
         <div class="card">
@@ -33,26 +34,22 @@
           <div class="label">التصنيف</div>
           <div class="value">{{ event.sub_categorey?.name || "غير محدد" }}</div>
         </div>
-
         <div class="card">
           <div class="icon">📍</div>
           <div class="label">المدينة</div>
           <div class="value">{{ event.city?.name || "غير محدد" }}</div>
         </div>
-
         <div class="card">
           <div class="icon">⏰</div>
           <div class="label">الوقت</div>
           <div class="value">{{ event.time || "غير محدد" }}</div>
         </div>
-
         <div class="card">
           <div class="icon">📅</div>
           <div class="label">تاريخ الحدث</div>
           <div class="value">{{ formatDate(event.start_date) }}</div>
         </div>
       </div>
-
       <!-- Main Content + Sidebar -->
       <div class="main-with-sidebar">
         <div class="main-content">
@@ -61,31 +58,46 @@
             <h3>تفاصيل الذكرى</h3>
             <p>{{ event.description || "لا يوجد وصف متاح" }}</p>
           </section>
-
-          <!-- Additional Images -->
+          <!-- Attached Media (Images + Videos) -->
           <section class="section images-section">
             <div class="section-header">
-              <h3>الصور المرفقة</h3>
-              <button class="btn small" @click="openAddImagesModal">إضافة صور</button>
+              <h3>الصور والفيديوهات المرفقة</h3>
+              <button class="btn small" @click="openAddImagesModal">إضافة ميديا</button>
             </div>
-
             <div class="image-grid">
-              <div v-for="img in event.images" :key="img.id" class="image-item">
-                <img :src="getFullUrl(img.url)" :alt="`صورة ${img.id}`" />
-                <button
-                  class="delete-overlay"
-                  @click="deleteImage(img.id)"
-                  :disabled="deleting === img.id"
-                >
-                  {{ deleting === img.id ? "جاري الحذف..." : "حذف" }}
-                </button>
-              </div>
+              <div v-for="media in event.images" :key="media.id" class="image-item">
+                <div v-if="isImage(media.url)" class="media-wrapper">
+                  <img :src="getFullUrl(media.url)" :alt="`صورة ${media.id}`" />
+                </div>
+                <div v-else-if="isVideo(media.url)" class="media-wrapper">
+                  <video controls :src="getFullUrl(media.url)" />
+                </div>
 
-              <div v-if="!event.images?.length" class="no-images">لا توجد صور إضافية</div>
+                <!-- الأزرار فوق الميديا -->
+                <div class="media-actions">
+                  <button
+                    class="action-btn fullscreen-btn"
+                    @click="openFullscreen(media)"
+                    title="عرض كامل الشاشة"
+                  >
+                    ⛶
+                  </button>
+                  <button
+                    class="action-btn delete-btn"
+                    @click="deleteImage(media.id)"
+                    :disabled="deleting === media.id"
+                    title="حذف"
+                  >
+                    {{ deleting === media.id ? "جاري الحذف..." : "🗑" }}
+                  </button>
+                </div>
+              </div>
+              <div v-if="!event.images?.length" class="no-images">
+                لا توجد صور أو فيديوهات
+              </div>
             </div>
           </section>
         </div>
-
         <!-- Right Sidebar -->
         <aside class="sidebar">
           <div class="sidebar-card owner-card">
@@ -97,7 +109,6 @@
             <h4>{{ event.user?.name || "Mohamed Maher" }}</h4>
             <p>صاحب الذكرى</p>
           </div>
-
           <div class="sidebar-card stats">
             <h4>إحصائيات الذكرى</h4>
             <ul>
@@ -108,7 +119,6 @@
               <li>الحالة: <strong class="status-active">نشط</strong></li>
             </ul>
           </div>
-
           <div
             class="sidebar-card actions"
             style="display: flex; flex-direction: column; gap: 10px"
@@ -116,7 +126,6 @@
             <router-link :to="`/owner/${event.slug}/update`" class="btn full green">
               تعديل الذكرى
             </router-link>
-
             <button
               class="btn full danger"
               @click="deleteEvent"
@@ -128,26 +137,24 @@
         </aside>
       </div>
     </div>
-
-    <!-- Add Images Modal -->
+    <!-- Add Media Modal (Images + Videos) -->
     <div v-if="showAddModal" class="modal-overlay" @click.self="closeAddImagesModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>إضافة صور جديدة</h3>
+          <h3>إضافة صور أو فيديوهات جديدة</h3>
           <button class="close-btn" @click="closeAddImagesModal">×</button>
         </div>
-
         <div class="modal-body">
           <div class="dropzone" @dragover.prevent @drop.prevent="handleDrop">
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="image/*,video/*"
               @change="handleFileChange"
               ref="fileInput"
               hidden
             />
-            <p>اسحب الصور هنا أو</p>
+            <p>اسحب الصور أو الفيديوهات هنا أو</p>
             <button
               type="button"
               class="btn primary small"
@@ -155,20 +162,24 @@
             >
               اختر من الجهاز
             </button>
-            <p class="hint">يمكنك اختيار أكثر من صورة (jpg, png, ...)</p>
+            <p class="hint">
+              يمكنك اختيار صور (jpg, png, ...) أو فيديوهات (mp4, mov, ...)
+            </p>
           </div>
-
           <div v-if="selectedFiles.length" class="preview-grid">
             <div v-for="(file, index) in selectedFiles" :key="index" class="preview-item">
-              <img :src="file.preview" alt="معاينة" />
+              <div v-if="file.type.startsWith('image/')" class="preview-media">
+                <img :src="file.preview" alt="معاينة" />
+              </div>
+              <div v-else-if="file.type.startsWith('video/')" class="preview-media">
+                <video controls :src="file.preview" />
+              </div>
               <button class="remove-preview" @click="removeFile(index)">×</button>
               <p class="file-name">{{ file.name }}</p>
             </div>
           </div>
-
           <p v-if="uploadError" class="error-text">{{ uploadError }}</p>
         </div>
-
         <div class="modal-footer">
           <button class="btn secondary" @click="closeAddImagesModal">إلغاء</button>
           <button
@@ -176,9 +187,27 @@
             :disabled="uploading || !selectedFiles.length"
             @click="uploadImages"
           >
-            {{ uploading ? "جاري الرفع..." : "رفع الصور" }}
+            {{ uploading ? "جاري الرفع..." : "رفع الميديا" }}
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div v-if="fullscreenMedia" class="fullscreen-modal" @click="closeFullscreen">
+      <button class="close-fullscreen" @click="closeFullscreen">×</button>
+      <div class="fullscreen-content" @click.stop>
+        <img
+          v-if="isImage(fullscreenMedia.url)"
+          :src="getFullUrl(fullscreenMedia.url)"
+          alt="عرض كامل"
+        />
+        <video
+          v-else-if="isVideo(fullscreenMedia.url)"
+          controls
+          autoplay
+          :src="getFullUrl(fullscreenMedia.url)"
+        />
       </div>
     </div>
   </UserLayout>
@@ -198,16 +227,16 @@ const loading = ref(true);
 const error = ref(null);
 const deleting = ref(null);
 
-// Modal states
 const showAddModal = ref(false);
 const selectedFiles = ref([]);
 const fileInput = ref(null);
 const uploading = ref(false);
 const uploadError = ref(null);
 
-const API_BASE = "/v1";
-// أضف هذه المتغيرات مع اللي موجودة
+const fullscreenMedia = ref(null); // ← جديد: لتخزين الميديا المعروضة بكامل الشاشة
 const deletingEvent = ref(false);
+
+const API_BASE = "/v1";
 
 async function deleteEvent() {
   if (
@@ -215,18 +244,13 @@ async function deleteEvent() {
   ) {
     return;
   }
-
   if (!event.value?.id) {
     alert("لا يمكن العثور على معرف الذكرى");
     return;
   }
-
   try {
     deletingEvent.value = true;
-
-    // ← هنا نستخدم نفس الـ route اللي كتبته في البداية
     const response = await axios.delete(`/v1/user-dshboard/${event.value.id}/destroy`);
-
     if (response.data.status === "success") {
       alert("تم حذف الذكرى بنجاح");
       window.location.href = "/owner";
@@ -247,6 +271,17 @@ function getFullUrl(path) {
   return `${import.meta.env.VITE_API_URL || ""}${path}`;
 }
 
+function getMainImageUrl() {
+  if (event.value?.images?.length > 0) {
+    const first = event.value.images[0];
+    if (isImage(first.url)) {
+      return getFullUrl(first.url);
+    }
+  }
+  // fallback
+  return "https://via.placeholder.com/1200x600?text=صورة+الذكرى+الرئيسية";
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return "غير محدد";
   return new Date(dateStr).toLocaleDateString("ar-EG", {
@@ -254,6 +289,31 @@ function formatDate(dateStr) {
     month: "long",
     day: "numeric",
   });
+}
+
+function isImage(url) {
+  if (!url) return false;
+  const lower = url.toLowerCase();
+  return (
+    lower.endsWith(".jpg") ||
+    lower.endsWith(".jpeg") ||
+    lower.endsWith(".png") ||
+    lower.endsWith(".gif") ||
+    lower.endsWith(".webp") ||
+    lower.endsWith(".bmp")
+  );
+}
+
+function isVideo(url) {
+  if (!url) return false;
+  const lower = url.toLowerCase();
+  return (
+    lower.endsWith(".mp4") ||
+    lower.endsWith(".mov") ||
+    lower.endsWith(".avi") ||
+    lower.endsWith(".mkv") ||
+    lower.endsWith(".webm")
+  );
 }
 
 async function fetchEvent() {
@@ -273,7 +333,7 @@ async function fetchEvent() {
 }
 
 async function deleteImage(id) {
-  if (!confirm("متأكد من حذف الصورة؟")) return;
+  if (!confirm("متأكد من حذف الميديا؟")) return;
   try {
     deleting.value = id;
     await axios.delete(`${API_BASE}/user-dshboard/${id}/delete`);
@@ -285,8 +345,17 @@ async function deleteImage(id) {
   }
 }
 
-// ── Modal Logic ────────────────────────────────────────────────
+// ── Fullscreen Logic ────────────────────────────────────────────────
+function openFullscreen(media) {
+  fullscreenMedia.value = media;
+  // يمكن إضافة document.body.style.overflow = 'hidden' إذا أردت
+}
 
+function closeFullscreen() {
+  fullscreenMedia.value = null;
+}
+
+// ── Modal Logic ────────────────────────────────────────────────
 function openAddImagesModal() {
   showAddModal.value = true;
   selectedFiles.value = [];
@@ -312,9 +381,14 @@ function handleDrop(e) {
 
 function addFiles(newFiles) {
   newFiles.forEach((file) => {
-    if (!file.type.startsWith("image/")) return;
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) return;
     const preview = URL.createObjectURL(file);
-    selectedFiles.value.push({ file, preview, name: file.name });
+    selectedFiles.value.push({
+      file,
+      preview,
+      name: file.name,
+      type: file.type,
+    });
   });
 }
 
@@ -325,13 +399,12 @@ function removeFile(index) {
 
 async function uploadImages() {
   if (!selectedFiles.value.length) return;
-
   uploading.value = true;
   uploadError.value = null;
 
   const formData = new FormData();
   selectedFiles.value.forEach((item) => {
-    formData.append("url[]", item.file); // ← array name = url[]
+    formData.append("url[]", item.file);
   });
 
   try {
@@ -347,22 +420,20 @@ async function uploadImages() {
       } else {
         await fetchEvent();
       }
-
       closeAddImagesModal();
-      alert("تم رفع الصور بنجاح");
+      alert("تم رفع الميديا بنجاح");
       window.location.reload();
     } else {
       uploadError.value = response.data.message || "حدث خطأ أثناء الرفع";
     }
   } catch (err) {
     console.error(err);
-    uploadError.value = "فشل رفع الصور، حاول مرة أخرى";
+    uploadError.value = "فشل رفع الميديا، حاول مرة أخرى";
   } finally {
     uploading.value = false;
   }
 }
 
-// Cleanup object URLs when component unmounts
 onUnmounted(() => {
   selectedFiles.value.forEach((item) => {
     URL.revokeObjectURL(item.preview);
@@ -372,6 +443,131 @@ onUnmounted(() => {
 onMounted(fetchEvent);
 </script>
 
+<style scoped>
+/* ------------------ تعديلات الأنماط الجديدة ------------------ */
+
+.image-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f0f0f0;
+}
+
+.media-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-wrapper img,
+.media-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* الأزرار فوق الميديا */
+.media-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.image-item:hover .media-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.fullscreen-btn {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+}
+
+.delete-btn {
+  background: rgba(220, 38, 38, 0.85);
+  color: white;
+}
+
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Fullscreen Modal */
+.fullscreen-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.fullscreen-content {
+  max-width: 95vw;
+  max-height: 95vh;
+  position: relative;
+}
+
+.fullscreen-content img,
+.fullscreen-content video {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.close-fullscreen {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 40px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.close-fullscreen:hover {
+  background: rgba(220, 38, 38, 0.8);
+}
+
+/* باقي الأنماط الخاصة بك موجودة مسبقًا */
+</style>
 <style scoped>
 /* أضف هذه الـ styles حسب تصميمك - مثال بسيط */
 .modal-overlay {

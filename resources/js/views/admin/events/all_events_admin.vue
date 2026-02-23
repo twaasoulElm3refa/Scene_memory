@@ -21,7 +21,7 @@
           <div v-for="event in events" :key="event.id" class="event-card">
             <div class="event-image">
               <img
-                :src="getEventImage(event.image)"
+                :src="getEventImage(event)"
                 :alt="event.title"
                 @error="handleImageError"
               />
@@ -273,12 +273,25 @@ export default {
       deleteEvent(id);
     };
 
-    const getEventImage = (image) => {
-      if (!image) {
-        return "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
+    const getEventImage = (event) => {
+      // لو فيه مصفوفة images وفيها عناصر
+      if (event.images && Array.isArray(event.images) && event.images.length > 0) {
+        const firstImage = event.images[0];
+
+        // افتراضي: الحقل اسمه url أو path — غيّر حسب الـ API response بتاعك
+        let imagePath = firstImage.url || firstImage.path || firstImage.image;
+
+        if (imagePath) {
+          // لو المسار نسبي → ضيف /storage/ أو الـ base URL المناسب
+          if (!imagePath.startsWith("http") && !imagePath.startsWith("//")) {
+            return `/storage/${imagePath.replace(/^\/+/, "")}`;
+          }
+          return imagePath;
+        }
       }
 
-      return `/storage/${image}`;
+      // fallback لو مفيش صور أو المسار فاضي
+      return "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
     };
 
     const deleteEvent = async (id) => {

@@ -148,7 +148,7 @@
                 >
                   <l-tile-layer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   />
 
                   <l-marker
@@ -174,7 +174,6 @@
           </div>
         </div>
 
-        <!-- باقي الأقسام (المواعيد + الصورة) بدون تغيير -->
         <!-- 3. المواعيد -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
@@ -215,30 +214,32 @@
           </div>
         </div>
 
-        <!-- 4. صورة الغلاف -->
+        <!-- 4. صور الحدث (متعددة) -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
             <div class="card-body p-4">
               <h2 class="card-title h4 fw-bold mb-3 d-flex align-items-center gap-2">
                 <span class="text-primary fs-3 fw-bolder">④</span>
-                صورة الغلاف
+                صور الحدث
               </h2>
 
               <div
                 @dragover.prevent
                 @drop.prevent="handleImageDrop"
                 class="border border-2 border-dashed border-secondary-subtle rounded-3 p-4 text-center bg-body-tertiary"
-                style="min-height: 180px"
+                style="min-height: 220px"
               >
                 <input
                   ref="fileInput"
                   type="file"
                   accept="image/png,image/jpeg,image/webp"
+                  multiple
                   hidden
                   @change="handleImageSelect"
                 />
 
-                <div v-if="!form.image_preview" class="py-4">
+                <!-- حالة بدون صور -->
+                <div v-if="form.url_previews.length === 0" class="py-4">
                   <div
                     class="mx-auto mb-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center"
                     style="width: 70px; height: 70px"
@@ -259,33 +260,62 @@
                       />
                     </svg>
                   </div>
-                  <p class="fs-5 fw-medium text-secondary mb-2">
-                    اضغط أو اسحب الصورة هنا
-                  </p>
-                  <p class="text-muted small mb-3">PNG • JPG • WEBP | max 5MB</p>
+                  <p class="fs-5 fw-medium text-secondary mb-2">اضغط أو اسحب الصور هنا</p>
+                  <p class="text-muted small mb-3">PNG • JPG • WEBP | max 5MB لكل صورة</p>
                   <button
                     type="button"
                     @click="$refs.fileInput.click()"
                     class="btn btn-primary btn-md px-4 py-2 rounded-pill"
                   >
-                    اختيار صورة
+                    اختيار صور
                   </button>
                 </div>
 
+                <!-- عرض الصور بعد الرفع -->
                 <div v-else class="py-3">
-                  <img
-                    :src="form.image_preview"
-                    alt="معاينة"
-                    class="img-fluid rounded-3 shadow mx-auto d-block"
-                    style="max-height: 280px; object-fit: cover"
-                  />
+                  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 mb-3">
+                    <div
+                      v-for="(preview, index) in form.url_previews"
+                      :key="index"
+                      class="col"
+                    >
+                      <div class="position-relative">
+                        <img
+                          :src="preview"
+                          alt="معاينة"
+                          class="img-fluid rounded-3 shadow"
+                          style="height: 140px; object-fit: cover; width: 100%"
+                        />
+                        <button
+                          type="button"
+                          @click="removeImage(index)"
+                          class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle shadow-sm"
+                          style="
+                            width: 28px;
+                            height: 28px;
+                            line-height: 1;
+                            font-size: 1.1rem;
+                            padding: 0;
+                          "
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
                   <button
+                    v-if="form.urls.length < 8"
                     type="button"
-                    @click="clearImage"
-                    class="btn btn-link text-danger mt-2 small"
+                    @click="$refs.fileInput.click()"
+                    class="btn btn-outline-primary btn-sm px-4"
                   >
-                    إزالة الصورة
+                    إضافة المزيد
                   </button>
+
+                  <small class="text-muted d-block mt-2">
+                    {{ form.urls.length }} / 8 صور
+                  </small>
                 </div>
               </div>
             </div>
@@ -335,8 +365,8 @@ const form = ref({
   start_date: "",
   end_date: "",
   time: "",
-  image: null,
-  image_preview: null,
+  urls: [], // الملفات الفعلية (File objects)
+  url_previews: [], // روابط المعاينة (data URLs)
   latitude: null,
   longitude: null,
 });
@@ -355,6 +385,8 @@ const zoom = ref(6);
 const center = ref([30.0444, 31.2357]);
 const mapRef = ref(null);
 
+const MAX_IMAGES = 8;
+
 onMounted(async () => {
   await Promise.all([fetchCountries(), fetchCategories()]);
   nextTick(() => {
@@ -363,6 +395,7 @@ onMounted(async () => {
     }
   });
 });
+
 onUnmounted(() => {
   if (mapRef.value?.leafletObject) {
     mapRef.value.leafletObject.remove();
@@ -420,33 +453,55 @@ async function loadSubCategories() {
   }
 }
 
+// ─── معالجة رفع الصور ───────────────────────────────────────
 function handleImageSelect(e) {
-  const file = e.target.files?.[0];
-  if (file) processImage(file);
+  const files = Array.from(e.target.files || []);
+  processImages(files);
 }
 
 function handleImageDrop(e) {
-  const file = e.dataTransfer.files?.[0];
-  if (file) processImage(file);
+  const files = Array.from(e.dataTransfer.files || []);
+  processImages(files);
 }
 
-function processImage(file) {
-  if (file.size > 5 * 1024 * 1024) return alert("حجم الملف يتجاوز 5 ميجا");
-  if (!["image/png", "image/jpeg", "image/webp"].includes(file.type))
-    return alert("المسموح: PNG, JPG, WEBP فقط");
+function processImages(newFiles) {
+  const currentCount = form.value.urls.length;
+  const canAdd = MAX_IMAGES - currentCount;
 
-  form.value.image = file;
-  const reader = new FileReader();
-  reader.onload = (ev) => (form.value.image_preview = ev.target.result);
-  reader.readAsDataURL(file);
+  if (newFiles.length > canAdd) {
+    alert(`يمكنك إضافة ${canAdd} صور${canAdd === 1 ? "ة" : ""} فقط`);
+    newFiles = newFiles.slice(0, canAdd);
+  }
+
+  newFiles.forEach((file) => {
+    if (file.size > 5 * 1024 * 1024) {
+      alert(`حجم الصورة ${file.name} يتجاوز 5 ميجا`);
+      return;
+    }
+    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+      alert(`نوع الملف ${file.name} غير مدعوم (PNG, JPG, WEBP فقط)`);
+      return;
+    }
+
+    form.value.urls.push(file);
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      form.value.url_previews.push(ev.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // تنظيف الـ input بعد الرفع
+  if (fileInput.value) fileInput.value.value = "";
 }
 
-function clearImage() {
-  form.value.image = null;
-  form.value.image_preview = null;
-  fileInput.value && (fileInput.value.value = "");
+function removeImage(index) {
+  form.value.urls.splice(index, 1);
+  form.value.url_previews.splice(index, 1);
 }
 
+// ─── إنشاء الحدث ─────────────────────────────────────────────
 async function createEvent() {
   if (
     !form.value.title?.trim() ||
@@ -460,21 +515,31 @@ async function createEvent() {
     return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
   }
 
+  if (form.value.urls.length === 0) {
+    return alert("يرجى رفع صورة واحدة على الأقل");
+  }
+
   loading.value = true;
   const fd = new FormData();
+
   fd.append("title", form.value.title);
   fd.append("description", form.value.description);
   fd.append("city_id", form.value.city_id);
   fd.append("sub_categorey_id", form.value.sub_categorey_id);
   fd.append("start_date", form.value.start_date);
+
   if (form.value.end_date) fd.append("end_date", form.value.end_date);
   if (form.value.time) fd.append("time", form.value.time);
-  if (form.value.image) fd.append("image", form.value.image);
 
   fd.append("lattitude", form.value.latitude);
   fd.append("langitude", form.value.longitude);
 
-  // ─── هنا الطباعة ────────────────────────────────
+  // إضافة الصور المتعددة
+  form.value.urls.forEach((file) => {
+    fd.append("urls[]", file);
+  });
+
+  // طباعة للتصحيح
   console.log("البيانات اللي هتتبعت:");
   for (let [key, value] of fd.entries()) {
     if (value instanceof File) {
@@ -484,7 +549,6 @@ async function createEvent() {
     }
   }
   console.log("───────────────────────────────────────");
-  // ────────────────────────────────────────────────
 
   try {
     await axios.post("/v1/create", fd, {

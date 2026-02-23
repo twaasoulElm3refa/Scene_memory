@@ -122,7 +122,7 @@ class EventController extends Controller
         $cacheTime = now()->addHours(6);
 
         $event = Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
-            return Events::with(['city:id,name', 'sub_categorey:id,name', 'user:id,name', 'images:id,url,event_id,created_at'])
+            return Events::with(['city:id,name', 'sub_categorey:id,name', 'user:id,name', 'images'])
                 ->where('slug', $slug)
                 ->first();
         });

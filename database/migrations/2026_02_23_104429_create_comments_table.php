@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Events;
-use App\Models\MediaRequest;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events_imges', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Events::class,'event_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(MediaRequest::class,'media_request_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('url')->nullable();
-            $table->string('is_active')->default(false)->nullable();
+            $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events_imges');
+        Schema::dropIfExists('comments');
     }
 };

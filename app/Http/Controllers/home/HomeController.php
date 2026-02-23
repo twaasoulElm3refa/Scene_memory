@@ -8,6 +8,7 @@ use App\Http\Requests\EventsRequest;
 use App\Mail\EventRequest;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
+use App\Models\eventsImges;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -20,21 +21,29 @@ class HomeController extends Controller
     public function create(EventsRequest $request): JsonResponse
     {
         $data = $request->validated();
+        unset($data['urls']);
         try {
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
             $data['is_active'] = 0;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $data['image'] = $image->store('events', 'public');
-            }
             $data['user_id'] = auth()->user()->id;
             $event = Events::create($data);
+            if ($request->hasFile('urls')) {
+                foreach ($request->file('urls') as $file) {
+                    $path = $file->store('Photos', 'public');
+                    $media = eventsImges::create([
+                        'event_id' => $event->id,
+                        'url' => $path,
+
+                    ]);
+                }
+            }
             EventRequestCreate::create([
                 'event_id' => $event->id,
                 'status' => 'pending',
             ]);
             $this->clearEventsCache();
             Mail::to('m7mdellham77@gmail.com')->send(new EventRequest($event));
+
             return $this->success($event->load('requests'), 'Event Created Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());

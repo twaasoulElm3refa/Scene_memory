@@ -98,7 +98,7 @@ class CategoryController extends Controller
 
         $this->clearAllCategoriesCache();
 
-        return $this->success($category, 'Category created successfully', 201);
+        return $this->success($category, 'Category created successfully');
     }
 
     public function update(categoreyRequest $request, $id): JsonResponse

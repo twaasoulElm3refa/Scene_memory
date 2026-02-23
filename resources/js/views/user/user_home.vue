@@ -97,9 +97,13 @@
             :key="event.id"
             class="group relative rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 bg-white"
           >
-            <!-- الصورة -->
+            <!-- الصورة – استخدام first_image.url مع /storage/ -->
             <img
-              :src="`/storage/${event.image}`"
+              :src="
+                event.first_image
+                  ? `/storage/${event.first_image.url}`
+                  : '/images/default-event.jpg'
+              "
               alt="صورة الرحلة"
               class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -123,7 +127,7 @@
                 }}
               </p>
 
-              <!-- زرار عرض التفاصيل – ظاهر بوضوح -->
+              <!-- زرار عرض التفاصيل -->
               <div class="mt-4">
                 <router-link
                   :to="`/owner/${event.slug}`"

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EventsMediaRequest extends FormRequest
+class UploadMediaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class EventsMediaRequest extends FormRequest
     {
         return [
             'url' => 'required|array|min:1',
-            'url.*' => 'required|mimes:jpeg,jpg,png,webp,gif,mp4|max:5120',
+            'url.*' => 'required|file|image|mimes:jpeg,jpg,png,webp,gif|max:5120',
         ];
     }
 }
