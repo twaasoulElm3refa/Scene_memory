@@ -91,7 +91,7 @@ class EventController extends Controller
 
             return $DBCITY->events()
                 ->with('city')
-                ->select('slug', 'title', 'image', 'start_date', 'city_id','langitude','lattitude')
+                ->select('slug', 'title', 'image', 'start_date', 'city_id', 'langitude', 'lattitude')
                 ->where('is_active', 1)
                 ->latest()
                 ->get()
@@ -122,18 +122,22 @@ class EventController extends Controller
         $cacheTime = now()->addHours(6);
 
         $event = Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
-            return Events::with(['city:id,name', 'sub_categorey:id,name', 'user:id,name', 'images'])
+            return Events::with([
+                'city:id,name',
+                'sub_categorey:id,name',
+                'user:id,name',
+                'images',
+
+                'comments' => fn ($q) => $q->latest('created_at')
+                    ->take(3)
+                    ->with('user:id,name'),
+            ])->withCount('comments')
                 ->where('slug', $slug)
                 ->first();
         });
 
         if (! $event) {
             return $this->error('Event not found', 404);
-        }
-
-        if ($event->image) {
-            $url = \Storage::url($event->image);
-            $event->image = $url ?: null;
         }
 
         if ($event->images && $event->images->isNotEmpty()) {

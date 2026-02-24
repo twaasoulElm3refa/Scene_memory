@@ -41,6 +41,8 @@ app.component("admin-header", AdminHeader);
 app.component("admin-layout", AdminLayout);
 app.component("admin-sidebar", AdminSidebar);
 
+localStorage.setItem('theme', 'light');
+document.documentElement.classList.remove('dark');
 app.use(router);
 app.use(i18n);
 app.mount("#app");

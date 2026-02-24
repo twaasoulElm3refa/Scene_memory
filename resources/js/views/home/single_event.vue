@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-50">
     <div v-if="loading" class="text-center py-40">
-      <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 mx-auto mb-8"></div>
+      <div
+        class="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 mx-auto mb-8"
+      ></div>
       <p class="text-gray-700 text-2xl font-medium">جاري تحميل الحدث...</p>
     </div>
 
@@ -11,11 +13,11 @@
 
     <div v-else>
       <div class="relative">
+        <!-- Hero Media -->
         <component
           :is="heroMediaComponent"
           v-if="heroMedia"
           :src="heroMedia.url"
-          :alt="event.title"
           class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover"
           controls
           autoplay
@@ -23,6 +25,7 @@
           loop
           playsinline
         />
+
         <img
           v-else
           src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2400"
@@ -30,18 +33,30 @@
           class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover"
         />
 
+        <!-- Overlay + Play Icon فقط لو الفيديو -->
+        <div
+          v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.url))"
+          class="absolute inset-0 bg-black/30 flex items-center justify-center z-10 pointer-events-none"
+        >
+          <div
+            class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300"
+          >
+            <span class="text-white text-5xl md:text-7xl drop-shadow-lg">▶</span>
+          </div>
+        </div>
+
         <!-- Tags -->
-        <div class="absolute top-6 left-6 md:left-10 flex flex-wrap gap-3">
+        <div class="absolute top-6 left-6 md:left-10 flex flex-wrap gap-3 z-20">
           <span
             class="bg-blue-100/90 backdrop-blur-sm text-blue-900 px-5 py-2 rounded-full text-base font-bold shadow-lg uppercase tracking-wider"
           >
-            {{ event.city?.name || 'غير محدد' }}
+            {{ event.city?.name || "غير محدد" }}
           </span>
           <span
-            v-if="event.categorey?.name"
+            v-if="event.sub_categorey?.name"
             class="bg-green-100/90 backdrop-blur-sm text-green-900 px-5 py-2 rounded-full text-base font-bold shadow-lg uppercase tracking-wider"
           >
-            {{ event.categorey.name }}
+            {{ event.sub_categorey.name }}
           </span>
         </div>
       </div>
@@ -52,7 +67,9 @@
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
             <!-- Main Content -->
             <div class="lg:col-span-2 p-8 md:p-12 lg:p-16">
-              <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1
+                class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+              >
                 {{ event.title }}
               </h1>
 
@@ -62,7 +79,9 @@
 
               <!-- Media Gallery -->
               <div v-if="hasMedia" class="mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">
+                <h2
+                  class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4"
+                >
                   وسائط الحدث
                 </h2>
 
@@ -70,29 +89,45 @@
                   <div
                     v-for="(media, index) in event.images"
                     :key="media.id || index"
-                    class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                    class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative"
                     @click="openLightbox(index)"
                   >
                     <!-- صورة -->
                     <img
-                      v-if="!media.video"
+                      v-if="!media.video && media.url && !isVideoUrl(media.url)"
                       :src="media.url"
-                      :alt="`${event.title} - صورة ${index + 1}`"
                       class="w-full h-full object-cover"
+                      loading="lazy"
                     />
 
                     <!-- فيديو -->
-                    <div v-else class="relative w-full h-full bg-black">
+                    <div
+                      v-else-if="media.video || (media.url && isVideoUrl(media.url))"
+                      class="relative w-full h-full bg-black"
+                    >
                       <video
-                        :src="media.video"
+                        :src="media.video || media.url"
                         class="w-full h-full object-cover"
                         muted
                         loop
                         playsinline
+                        preload="metadata"
                       ></video>
-                      <div class="absolute inset-0 flex items-center justify-center">
-                        <span class="text-white text-5xl opacity-70">▶</span>
+                      <div
+                        class="absolute inset-0 flex items-center justify-center bg-black/20"
+                      >
+                        <span class="text-white text-6xl opacity-80 drop-shadow-2xl"
+                          >▶</span
+                        >
                       </div>
+                    </div>
+
+                    <!-- fallback -->
+                    <div
+                      v-else
+                      class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500"
+                    >
+                      لا يوجد وسائط
                     </div>
                   </div>
                 </div>
@@ -100,17 +135,95 @@
 
               <!-- نبذة عن الحدث -->
               <div class="mb-12">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">
+                <h2
+                  class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4"
+                >
                   نبذة عن الحدث
                 </h2>
                 <p class="text-gray-700 mb-8 text-lg leading-relaxed">
                   {{ event.description }}
                 </p>
               </div>
+
+              <!-- قسم التعليقات -->
+              <div class="comments-section">
+                <h2 class="comments-title">
+                  التعليقات ({{ event.comments_count || event.comments?.length || 0 }})
+                </h2>
+
+                <div
+                  v-for="comment in event.comments"
+                  :key="comment.id"
+                  class="comment-box"
+                >
+                  <div class="comment-content">
+                    <div class="comment-text">
+                      <div class="comment-header">
+                        <p class="comment-user">
+                          {{ comment.user?.name || "زائر" }}
+                        </p>
+                        <span class="comment-date">
+                          {{ formatCommentDate(comment.created_at) }}
+                        </span>
+                      </div>
+
+                      <p class="comment-body">
+                        {{ comment.comment }}
+                      </p>
+                    </div>
+
+                    <!-- زر الحذف -->
+                    <button
+                      v-if="comment.user_id === currentUserId"
+                      @click="deleteComment(comment.id)"
+                      class="delete-btn"
+                      title="حذف التعليق"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                <!-- فورم إضافة تعليق -->
+                <div class="comment-form">
+                  <h3 class="form-title">أضف تعليقك</h3>
+
+                  <form @submit.prevent="addComment">
+                    <textarea
+                      v-model="newComment"
+                      rows="3"
+                      class="comment-textarea"
+                      placeholder="اكتب تعليقك هنا..."
+                      :disabled="commentLoading"
+                      required
+                    ></textarea>
+
+                    <div class="form-actions">
+                      <button
+                        type="submit"
+                        :disabled="commentLoading || !newComment.trim()"
+                        class="submit-btn"
+                      >
+                        <span v-if="commentLoading">جاري الإرسال...</span>
+                        <span v-else>إرسال</span>
+                      </button>
+                    </div>
+
+                    <p v-if="commentError" class="error-msg">
+                      {{ commentError }}
+                    </p>
+                    <p v-if="commentSuccess" class="success-msg">
+                      تم إضافة تعليقك بنجاح!
+                    </p>
+                  </form>
+                </div>
+              </div>
             </div>
 
             <!-- Sidebar -->
-            <div class="bg-gray-50/70 p-8 md:p-12 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+            <div
+              class="bg-gray-50/70 p-8 md:p-12 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto"
+            >
               <div class="space-y-10">
                 <div>
                   <h3 class="text-2xl font-bold text-gray-900 mb-6">معلومات الحدث</h3>
@@ -136,7 +249,7 @@
                       <span class="text-3xl">🕒</span>
                       <div>
                         <p class="font-semibold text-base">الوقت</p>
-                        <p class="text-lg">09:00 ص – 06:00 م</p>
+                        <p class="text-lg">{{ event.time || "غير محدد" }}</p>
                       </div>
                     </div>
 
@@ -144,7 +257,7 @@
                       <span class="text-3xl">📍</span>
                       <div>
                         <p class="font-semibold text-base">المكان</p>
-                        <p class="text-lg">{{ event.city?.name || 'غير محدد' }}</p>
+                        <p class="text-lg">{{ event.city?.name || "غير محدد" }}</p>
                       </div>
                     </div>
                     <div v-if="event.user?.name" class="flex items-center gap-2">
@@ -175,25 +288,27 @@
         </div>
       </div>
 
-      <!-- Lightbox for images & videos -->
+      <!-- Lightbox -->
       <div
         v-if="lightboxOpen"
         class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
         @click="lightboxOpen = false"
       >
         <div class="relative max-w-[95vw] max-h-[95vh]">
-          <!-- Image in lightbox -->
+          <!-- صورة -->
           <img
-            v-if="!currentMedia?.video"
-            :src="currentMedia?.url"
+            v-if="currentMedia && !isVideoUrl(currentMedia.url) && !currentMedia.video"
+            :src="currentMedia.url"
             class="max-w-full max-h-[90vh] object-contain"
             @click.stop
           />
 
-          <!-- Video in lightbox -->
+          <!-- فيديو -->
           <video
-            v-else
-            :src="currentMedia?.video"
+            v-else-if="
+              currentMedia && (currentMedia.video || isVideoUrl(currentMedia.url))
+            "
+            :src="currentMedia.video || currentMedia.url"
             class="max-w-full max-h-[90vh]"
             controls
             autoplay
@@ -215,6 +330,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import axios from "axios";
 import { EventService } from "@/services/singleEventService";
 
 const route = useRoute();
@@ -225,6 +341,28 @@ const loading = ref(true);
 const lightboxOpen = ref(false);
 const lightboxIndex = ref(0);
 
+const newComment = ref("");
+const commentLoading = ref(false);
+const commentError = ref("");
+const commentSuccess = ref(false);
+const currentUserId = ref(null);
+
+const fetchCurrentUser = async () => {
+  try {
+    const token = localStorage.getItem("auth_token");
+    if (!token) return;
+
+    const res = await axios.get("/v1/users/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    currentUserId.value = res.data?.data?.user.id || res.data?.id;
+    console.log("currentUserId:", currentUserId.value);
+  } catch (err) {
+    console.log("لم يتم جلب بيانات المستخدم", err);
+  }
+};
+
 const hasMedia = computed(() => event.value?.images?.length > 0);
 
 const heroMedia = computed(() => {
@@ -232,13 +370,21 @@ const heroMedia = computed(() => {
 });
 
 const heroMediaComponent = computed(() => {
-  if (heroMedia.value?.video) return 'video';
-  return 'img';
+  if (heroMedia.value?.video || isVideoUrl(heroMedia.value?.url)) {
+    return "video";
+  }
+  return "img";
 });
 
 const currentMedia = computed(() => {
   return event.value?.images?.[lightboxIndex.value] || null;
 });
+
+const isVideoUrl = (url) => {
+  if (!url) return false;
+  const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
+  return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+};
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
@@ -254,12 +400,96 @@ const formatDate = (dateStr) => {
   }
 };
 
+const formatCommentDate = (dateStr) => {
+  if (!dateStr) return "—";
+  try {
+    const date = new Date(dateStr);
+    return date.toLocaleString("ar-EG", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "—";
+  }
+};
+
 const openLightbox = (index) => {
   lightboxIndex.value = index;
   lightboxOpen.value = true;
 };
 
+const addComment = async () => {
+  if (!newComment.value.trim()) return;
+  commentLoading.value = true;
+  commentError.value = "";
+  commentSuccess.value = false;
+
+  try {
+    const response = await axios.post(
+      `/v1/comments/${event.value.id}/create`,
+      { comment: newComment.value.trim() },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (response.data.status === "success") {
+      const newCommentData = response.data.data || {
+        id: Date.now(),
+        event_id: event.value.id,
+        user_id: currentUserId.value,
+        comment: newComment.value.trim(),
+        created_at: new Date().toISOString(),
+        user: { name: "أنت" },
+      };
+
+      event.value.comments.unshift(newCommentData);
+
+      newComment.value = "";
+      commentSuccess.value = true;
+      setTimeout(() => (commentSuccess.value = false), 4000);
+    }
+    window.location.reload();
+  } catch (err) {
+    console.error("خطأ في إضافة التعليق:", err);
+    commentError.value =
+      err.response?.data?.message || "حدث خطأ أثناء إرسال التعليق، حاول مرة أخرى";
+  } finally {
+    commentLoading.value = false;
+  }
+};
+
+const deleteComment = async (commentId) => {
+  if (!confirm("هل أنت متأكد من حذف التعليق؟")) return;
+
+  try {
+    const token = localStorage.getItem("auth_token");
+    await axios.delete(`/v1/comments/${commentId}/delete`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+    event.value.comments = event.value.comments.filter((c) => c.id !== commentId);
+    if (event.value.comments_count !== undefined) {
+      event.value.comments_count--;
+    }
+    window.location.reload();
+  } catch (err) {
+    console.error("خطأ أثناء حذف التعليق:", err);
+    alert(err.response?.data?.message || "حدث خطأ أثناء الحذف");
+  }
+};
+
 onMounted(async () => {
+  await fetchCurrentUser();
+
   if (!slug) {
     loading.value = false;
     return;
@@ -267,7 +497,8 @@ onMounted(async () => {
 
   loading.value = true;
   try {
-    event.value = await EventService.getSingleEvent(slug);
+    const response = await EventService.getSingleEvent(slug);
+    event.value = response.data?.data || response;
   } catch (err) {
     console.error("خطأ في جلب الحدث:", err);
     event.value = null;
@@ -276,3 +507,143 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+.comments-section {
+  margin-bottom: 40px;
+}
+
+.comments-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.comment-box {
+  background: #f9fafb;
+  padding: 8px 10px; /* صغير جدًا */
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-top: 6px;
+  position: relative;
+  transition: 0.2s ease;
+}
+
+.comment-box:hover {
+  background: #f3f4f6;
+}
+
+.comment-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.comment-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.comment-user {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.comment-date {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.comment-body {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  width: 20px; /* أصغر */
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  margin-left: 6px;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.comment-form {
+  margin-top: 30px;
+}
+
+.form-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.comment-textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+  resize: none;
+  outline: none;
+  transition: 0.2s;
+}
+
+.comment-textarea:focus {
+  border-color: #3b82f6;
+}
+
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  background: #1d4ed8;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-msg {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.success-msg {
+  color: #16a34a;
+  font-size: 12px;
+  margin-top: 6px;
+}
+</style>

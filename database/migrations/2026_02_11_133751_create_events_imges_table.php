@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Events;
-use App\Models\MediaRequest;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +15,6 @@ return new class extends Migration
         Schema::create('events_imges', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Events::class,'event_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(MediaRequest::class,'media_request_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('url')->nullable();
             $table->string('is_active')->default(false)->nullable();
             $table->timestamps();

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class,'user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Cities::class,'city_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(subCategorey::class,'sub_categorey_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('start_date')->nullable();

@@ -13,6 +13,7 @@ use App\Http\Controllers\api\auth\GoogleAuthController;
 use App\Http\Controllers\api\auth\SocialAuthController;
 use App\Http\Controllers\api\home\CategoryController;
 use App\Http\Controllers\api\home\CitiesController;
+use App\Http\Controllers\api\home\CommentController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\SubCategoryController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\OwnComment;
 use App\Http\Middleware\OwnerMiddleware;
 use App\Http\Middleware\OwnEvent;
 use Illuminate\Support\Facades\Route;
@@ -181,5 +183,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/', [HomeController::class,'create']);
         Route::post('/{id}', [HomeController::class,'update']);
         Route::delete('/{id}', [HomeController::class,'destroy']);
+    });
+
+    Route::prefix('comments')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('/{id}', [CommentController::class,'allPaginated']);
+        Route::post('{id}/create', [CommentController::class, 'create']);
+        Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
     });
 });
