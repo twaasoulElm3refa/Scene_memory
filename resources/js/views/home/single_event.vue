@@ -232,9 +232,7 @@
                       </button>
                     </div>
 
-                    <p v-if="commentError" class="error-msg">
-                      {{ commentError }}
-                    </p>
+                    <p v-if="commentError" class="error-msg">'يرجي تسجيل الدخول اولا'</p>
                     <p v-if="commentSuccess" class="success-msg">
                       تم إضافة تعليقك بنجاح!
                     </p>

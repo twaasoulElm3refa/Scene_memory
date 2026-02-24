@@ -176,7 +176,6 @@ export default class MapService {
 
         const encodedCity = encodeURIComponent(city);
 
-        // ← هنا الطباعة اللي عايزها
         console.log("City (original):", city);
         console.log("Encoded city:", encodedCity);
         console.log("Full backend URL:", `/api/v1/events/${encodedCity}/marker/search`);

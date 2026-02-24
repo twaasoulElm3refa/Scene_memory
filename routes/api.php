@@ -184,13 +184,13 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [HomeController::class, 'destroy']);
     });
 
-    Route::prefix('comments')->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('comments')->middleware('throttle:10,1')->group(function () {
         Route::get('/{id}', [CommentController::class, 'allPaginated']);
         Route::post('{id}/create', [CommentController::class, 'create']);
         Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
     });
 
-    Route::prefix('likes')->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('likes')->middleware('throttle:10,1')->group(function () {
         Route::get('/{id}', [LikesController::class, 'count']);
         Route::post('{id}/create', [LikesController::class, 'create']);
     });

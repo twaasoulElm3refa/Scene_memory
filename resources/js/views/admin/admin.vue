@@ -272,11 +272,6 @@ async function fetchStats() {
       axios.get("/v1/countries/all/count"),
     ]);
 
-    console.log("Events Response:", eventsRes);
-    console.log("Users Response:", usersRes);
-    console.log("Memories Response:", memoriesRes);
-    console.log("Countries Response:", countriesRes);
-
     stats.value = {
       events: eventsRes.data.status === "success" ? eventsRes.data.data : 0,
       users: usersRes.data.status === "success" ? usersRes.data.data : 0,

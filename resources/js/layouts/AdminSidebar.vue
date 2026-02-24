@@ -253,13 +253,6 @@
             Contacts
           </RouterLink>
           <RouterLink
-            to="/admin/newsletters"
-            class="sidebar-btn dropdown-item"
-            :class="{ active: route.path === '/admin/newsletters' }"
-          >
-            Newsletters
-          </RouterLink>
-          <RouterLink
             to="/admin/footer"
             class="sidebar-btn dropdown-item"
             :class="{ active: route.path === '/admin/footer' }"

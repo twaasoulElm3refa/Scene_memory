@@ -21,6 +21,8 @@
     "loadingEvents": "جاري تحميل الفعاليات..."
   },
   "events": {
+    "cities": "مدينه",
+    "categories": "فئه",
     "all_memories": "كل ذكريات الأحداث",
     "showing_snapshots": "عرض {total} لقطة تاريخية من جميع أنحاء العالم",
     "sort_by": "ترتيب حسب",

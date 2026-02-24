@@ -58,6 +58,10 @@
           </div>
           <h3 class="event-title">{{ event.title }}</h3>
           <p class="event-category">{{ event.sub_categorey?.name || "-" }}</p>
+          <!-- <br /> -->
+          <router-link :to="{ path: `/single_event/${event.slug}` }" class="btn-view">
+            تفاصيل الحدث
+          </router-link>
         </div>
       </div>
     </div>
@@ -371,6 +375,25 @@ export default {
 .sort-select:focus {
   border-color: #3b82f6;
   outline: none;
+}
+
+.btn-view {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 3%;
+}
+
+.btn-view:hover {
+  background: #e2e8f0;
+  color: #1a1a2e;
+  scale: 1.2;
+  transition: all 0.5s ease;
 }
 
 /* Loading & Error States */

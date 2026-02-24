@@ -78,11 +78,15 @@ class EventController extends Controller
             return $this->error('city not found', 404);
         }
 
+        $city = str_replace(['منطقة', 'مدينة', 'محافظة'], '', $city);
+        $city = trim($city);
+
         $cacheKey = 'city_events_'.strtolower($city);
 
         $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
+
             $DBCITY = Cities::query()
-                ->where('name', $city)
+                ->where('name', 'LIKE', "%{$city}%")
                 ->first();
 
             if (! $DBCITY) {
