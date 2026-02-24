@@ -16,13 +16,12 @@ use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CommentController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
+use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\OwnComment;
-use App\Http\Middleware\OwnerMiddleware;
 use App\Http\Middleware\OwnEvent;
 use Illuminate\Support\Facades\Route;
 
@@ -119,7 +118,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
-  
+
         // USER COUNTS
         Route::get('/all/count', [UserCountsController::class, 'count']);
         Route::get('/all/last-login', [UserCountsController::class, 'last_login']);
@@ -165,10 +164,10 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
-        Route::get('/{id}', [MediaRequestController::class,'all']);
-        Route::post('/approve/{id}', [MediaRequestController::class,'approve']);
-        Route::post('/reject/{id}', [MediaRequestController::class,'reject']);
-        Route::post('/upload/{id}', [MediaRequestController::class,'upload']);
+        Route::get('/{id}', [MediaRequestController::class, 'all']);
+        Route::post('/approve/{id}', [MediaRequestController::class, 'approve']);
+        Route::post('/reject/{id}', [MediaRequestController::class, 'reject']);
+        Route::post('/upload/{id}', [MediaRequestController::class, 'upload']);
     });
 
     Route::prefix('requests')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -180,14 +179,19 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('create')->middleware(['auth:sanctum'])->group(function () {
-        Route::post('/', [HomeController::class,'create']);
-        Route::post('/{id}', [HomeController::class,'update']);
-        Route::delete('/{id}', [HomeController::class,'destroy']);
+        Route::post('/', [HomeController::class, 'create']);
+        Route::post('/{id}', [HomeController::class, 'update']);
+        Route::delete('/{id}', [HomeController::class, 'destroy']);
     });
 
     Route::prefix('comments')->middleware(['auth:sanctum'])->group(function () {
-        Route::get('/{id}', [CommentController::class,'allPaginated']);
+        Route::get('/{id}', [CommentController::class, 'allPaginated']);
         Route::post('{id}/create', [CommentController::class, 'create']);
         Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
+    });
+
+    Route::prefix('likes')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('/{id}', [LikesController::class, 'count']);
+        Route::post('{id}/create', [LikesController::class, 'create']);
     });
 });

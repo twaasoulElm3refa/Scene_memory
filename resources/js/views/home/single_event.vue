@@ -67,11 +67,39 @@
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
             <!-- Main Content -->
             <div class="lg:col-span-2 p-8 md:p-12 lg:p-16">
-              <h1
-                class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight"
-              >
-                {{ event.title }}
-              </h1>
+              <!-- العنوان + زر اللايك -->
+              <div class="flex items-center justify-between mb-6">
+                <h1
+                  class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
+                >
+                  {{ event.title }}
+                </h1>
+
+                <button
+                  @click="toggleLike"
+                  :disabled="likeLoading || isLiked"
+                  class="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-200"
+                  :class="{
+                    'bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100': isLiked,
+                    'bg-gray-100 text-gray-600 hover:bg-pink-50 hover:text-pink-600 border border-gray-300': !isLiked,
+                  }"
+                >
+                  <svg
+                    class="w-7 h-7 transition-transform"
+                    :class="{ 'scale-110': isLiked }"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    />
+                  </svg>
+                  <span class="text-lg font-semibold">{{ likesCount }}</span>
+                  <span v-if="likeLoading" class="text-sm animate-pulse">...</span>
+                </button>
+              </div>
 
               <p class="text-lg md:text-xl text-gray-700 mb-10 leading-relaxed">
                 {{ event.description }}
@@ -92,7 +120,6 @@
                     class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative"
                     @click="openLightbox(index)"
                   >
-                    <!-- صورة -->
                     <img
                       v-if="!media.video && media.url && !isVideoUrl(media.url)"
                       :src="media.url"
@@ -100,7 +127,6 @@
                       loading="lazy"
                     />
 
-                    <!-- فيديو -->
                     <div
                       v-else-if="media.video || (media.url && isVideoUrl(media.url))"
                       class="relative w-full h-full bg-black"
@@ -122,7 +148,6 @@
                       </div>
                     </div>
 
-                    <!-- fallback -->
                     <div
                       v-else
                       class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500"
@@ -172,7 +197,6 @@
                       </p>
                     </div>
 
-                    <!-- زر الحذف -->
                     <button
                       v-if="comment.user_id === currentUserId"
                       @click="deleteComment(comment.id)"
@@ -184,7 +208,6 @@
                   </div>
                 </div>
 
-                <!-- فورم إضافة تعليق -->
                 <div class="comment-form">
                   <h3 class="form-title">أضف تعليقك</h3>
 
@@ -295,7 +318,6 @@
         @click="lightboxOpen = false"
       >
         <div class="relative max-w-[95vw] max-h-[95vh]">
-          <!-- صورة -->
           <img
             v-if="currentMedia && !isVideoUrl(currentMedia.url) && !currentMedia.video"
             :src="currentMedia.url"
@@ -303,7 +325,6 @@
             @click.stop
           />
 
-          <!-- فيديو -->
           <video
             v-else-if="
               currentMedia && (currentMedia.video || isVideoUrl(currentMedia.url))
@@ -347,6 +368,11 @@ const commentError = ref("");
 const commentSuccess = ref(false);
 const currentUserId = ref(null);
 
+// ── لايكات ────────────────────────────────────────
+const likesCount = ref(0);
+const isLiked = ref(false);
+const likeLoading = ref(false);
+
 const fetchCurrentUser = async () => {
   try {
     const token = localStorage.getItem("auth_token");
@@ -356,18 +382,71 @@ const fetchCurrentUser = async () => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    currentUserId.value = res.data?.data?.user.id || res.data?.id;
-    console.log("currentUserId:", currentUserId.value);
+    currentUserId.value = res.data?.data?.user?.id || res.data?.id;
   } catch (err) {
-    console.log("لم يتم جلب بيانات المستخدم", err);
+    console.log("فشل جلب بيانات المستخدم", err);
+  }
+};
+
+const fetchLikesInfo = async () => {
+  if (!event.value?.id) return;
+
+  try {
+    const token = localStorage.getItem("auth_token") || "";
+    const res = await axios.get(`/v1/likes/${event.value.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (res.data.status === "success" && res.data.data) {
+      likesCount.value = res.data.data.count ?? 0;
+      isLiked.value = !!res.data.data.liked;
+    }
+  } catch (err) {
+    console.error("خطأ في جلب بيانات اللايكات", err);
+    likesCount.value = 0;
+    isLiked.value = false;
+  }
+};
+
+const toggleLike = async () => {
+  if (likeLoading.value || isLiked.value) return;
+  if (!event.value?.id) return;
+
+  const token = localStorage.getItem("auth_token");
+  if (!token) {
+    alert("يرجى تسجيل الدخول أولاً");
+    return;
+  }
+
+  likeLoading.value = true;
+
+  try {
+    const res = await axios.post(
+      `/v1/likes/${event.value.id}/create`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (res.data.status === "success") {
+      likesCount.value += 1;
+      isLiked.value = true;
+    }
+  } catch (err) {
+    console.error("خطأ أثناء إضافة اللايك", err);
+    alert(err.response?.data?.message || "حدث خطأ أثناء الإعجاب");
+  } finally {
+    likeLoading.value = false;
   }
 };
 
 const hasMedia = computed(() => event.value?.images?.length > 0);
 
-const heroMedia = computed(() => {
-  return event.value?.images?.[0] || null;
-});
+const heroMedia = computed(() => event.value?.images?.[0] || null);
 
 const heroMediaComponent = computed(() => {
   if (heroMedia.value?.video || isVideoUrl(heroMedia.value?.url)) {
@@ -376,14 +455,12 @@ const heroMediaComponent = computed(() => {
   return "img";
 });
 
-const currentMedia = computed(() => {
-  return event.value?.images?.[lightboxIndex.value] || null;
-});
+const currentMedia = computed(() => event.value?.images?.[lightboxIndex.value] || null);
 
 const isVideoUrl = (url) => {
   if (!url) return false;
-  const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
-  return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+  const exts = [".mp4", ".webm", ".ogg", ".mov"];
+  return exts.some((ext) => url.toLowerCase().endsWith(ext));
 };
 
 const formatDate = (dateStr) => {
@@ -403,8 +480,7 @@ const formatDate = (dateStr) => {
 const formatCommentDate = (dateStr) => {
   if (!dateStr) return "—";
   try {
-    const date = new Date(dateStr);
-    return date.toLocaleString("ar-EG", {
+    return new Date(dateStr).toLocaleString("ar-EG", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -450,7 +526,6 @@ const addComment = async () => {
       };
 
       event.value.comments.unshift(newCommentData);
-
       newComment.value = "";
       commentSuccess.value = true;
       setTimeout(() => (commentSuccess.value = false), 4000);
@@ -458,8 +533,7 @@ const addComment = async () => {
     window.location.reload();
   } catch (err) {
     console.error("خطأ في إضافة التعليق:", err);
-    commentError.value =
-      err.response?.data?.message || "حدث خطأ أثناء إرسال التعليق، حاول مرة أخرى";
+    commentError.value = err.response?.data?.message || "حدث خطأ أثناء إرسال التعليق";
   } finally {
     commentLoading.value = false;
   }
@@ -480,7 +554,6 @@ const deleteComment = async (commentId) => {
     if (event.value.comments_count !== undefined) {
       event.value.comments_count--;
     }
-    window.location.reload();
   } catch (err) {
     console.error("خطأ أثناء حذف التعليق:", err);
     alert(err.response?.data?.message || "حدث خطأ أثناء الحذف");
@@ -499,6 +572,9 @@ onMounted(async () => {
   try {
     const response = await EventService.getSingleEvent(slug);
     event.value = response.data?.data || response;
+
+    // جلب بيانات اللايكات (عدد + حالة المستخدم)
+    await fetchLikesInfo();
   } catch (err) {
     console.error("خطأ في جلب الحدث:", err);
     event.value = null;
