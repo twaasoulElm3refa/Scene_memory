@@ -25,20 +25,25 @@
         @submit.prevent="handleSubmit"
         class="bg-white rounded-lg border border-gray-200 p-6"
       >
-        <!-- Country Name -->
+        <!-- Country Code -->
         <div class="mb-6">
-          <label for="countryName" class="block text-sm font-semibold text-gray-900 mb-2">
-            Country Name
+          <label for="countryCode" class="block text-sm font-semibold text-gray-900 mb-2">
+            Country Code
           </label>
           <input
-            id="countryName"
-            v-model="formData.name"
+            id="countryCode"
+            v-model="formData.code"
             type="text"
-            placeholder="e.g., United States"
+            placeholder="e.g., US, GB, FR, EG, SA"
             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             required
+            maxlength="3"
+            pattern="[A-Za-z]{2,3}"
+            title="Use 2 or 3 letter ISO country code (e.g. EG, USA, GBR)"
           />
-          <p class="text-sm text-gray-500 mt-1">The full common name of the country.</p>
+          <p class="text-sm text-gray-500 mt-1">
+            ISO Alpha-2 or Alpha-3 code (usually 2 or 3 uppercase letters)
+          </p>
         </div>
 
         <!-- Country Flag / Image -->
@@ -62,13 +67,17 @@
           >
             <!-- Preview Image -->
             <div v-if="imagePreview" class="mb-4">
-              <img :src="imagePreview" alt="Preview" class="max-h-48 mx-auto rounded" />
+              <img
+                :src="imagePreview"
+                alt="Flag preview"
+                class="max-h-48 mx-auto rounded"
+              />
               <button
                 type="button"
                 @click.stop="clearImage"
                 class="mt-3 text-sm text-red-600 hover:text-red-700 font-medium"
               >
-                Remove Image
+                Remove Flag
               </button>
             </div>
 
@@ -159,9 +168,9 @@ import AdminLayout from "../../../layouts/AdminLayout.vue";
 
 const router = useRouter();
 
-// Form data
+// Form data → فقط code + image
 const formData = ref({
-  name: "",
+  code: "",
   image: null,
 });
 
@@ -190,7 +199,6 @@ const handleDrop = (event) => {
 };
 
 const validateAndSetImage = (file) => {
-  // Validate file type
   const validTypes = [
     "image/svg+xml",
     "image/png",
@@ -203,7 +211,6 @@ const validateAndSetImage = (file) => {
     return;
   }
 
-  // Validate file size (max 2MB)
   if (file.size > 2 * 1024 * 1024) {
     errorMessage.value = "File size exceeds 2MB. Please upload a smaller file.";
     return;
@@ -212,7 +219,6 @@ const validateAndSetImage = (file) => {
   errorMessage.value = "";
   formData.value.image = file;
 
-  // Create preview
   const reader = new FileReader();
   reader.onload = (e) => {
     imagePreview.value = e.target.result;
@@ -227,19 +233,16 @@ const triggerFileInput = () => {
 const clearImage = () => {
   formData.value.image = null;
   imagePreview.value = null;
-  if (fileInput.value) {
-    fileInput.value.value = "";
-  }
+  if (fileInput.value) fileInput.value.value = "";
 };
 
-// Form submission
+// Form submission → يرسل code + image فقط
 const handleSubmit = async () => {
   errorMessage.value = "";
   successMessage.value = "";
 
-  // Validation
-  if (!formData.value.name.trim()) {
-    errorMessage.value = "Country name is required.";
+  if (!formData.value.code.trim()) {
+    errorMessage.value = "Country code is required.";
     return;
   }
 
@@ -251,12 +254,10 @@ const handleSubmit = async () => {
   isSubmitting.value = true;
 
   try {
-    // Create FormData for file upload
     const data = new FormData();
-    data.append("name", formData.value.name);
+    data.append("code", formData.value.code.trim().toUpperCase());
     data.append("image", formData.value.image);
 
-    // Make API request
     const response = await fetch("/api/v1/countries/create", {
       method: "POST",
       headers: {
@@ -270,13 +271,10 @@ const handleSubmit = async () => {
       throw new Error(error.message || "Failed to create country");
     }
 
-    const result = await response.json();
-
     successMessage.value = "Country created successfully!";
 
-    // Reset form
     setTimeout(() => {
-      router.push("/admin/countries"); // Adjust route as needed
+      router.push("/admin/countries");
     }, 1500);
   } catch (error) {
     errorMessage.value = error.message || "An error occurred while creating the country.";
@@ -286,6 +284,6 @@ const handleSubmit = async () => {
 };
 
 const handleCancel = () => {
-  router.push("/admin/countries"); // Adjust route as needed
+  router.push("/admin/countries");
 };
 </script>

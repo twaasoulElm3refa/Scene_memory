@@ -308,6 +308,7 @@ async function fetchCountries() {
   try {
     const res = await axios.get("/v1/countries");
     countries.value = res.data.data || [];
+    console.log(countries.value);
   } catch (err) {
     console.error("فشل تحميل الدول", err);
   }

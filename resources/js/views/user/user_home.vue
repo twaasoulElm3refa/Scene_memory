@@ -52,7 +52,7 @@
             </svg>
           </div>
           <h4 class="text-3xl font-bold text-gray-800">{{ uniqueCitiesCount }}</h4>
-          <p class="text-gray-500 mt-1">المدن المكتشفة</p>
+          <p class="text-gray-500 mt-1">عدد المدن</p>
         </div>
 
         <!-- Card 3: Total Images -->
@@ -75,7 +75,7 @@
             </svg>
           </div>
           <h4 class="text-3xl font-bold text-gray-800">{{ totalImages }}</h4>
-          <p class="text-gray-500 mt-1">إجمالي الصور</p>
+          <p class="text-gray-500 mt-1">إجمالي الصور في الاحداث</p>
         </div>
       </div>
 
@@ -193,7 +193,6 @@ onMounted(async () => {
       events.value = response.data.data.events || [];
       eventsCount.value = response.data.data.count || events.value.length;
       totalImages.value = response.data.data.totalImages || 0;
-      console.log(response.data.data);
     }
   } catch (error) {
     console.error("خطأ في جلب الرحلات:", error);

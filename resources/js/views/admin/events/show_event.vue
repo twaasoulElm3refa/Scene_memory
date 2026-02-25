@@ -225,57 +225,46 @@
               </div>
             </div>
 
-            <p class="registration-note">
-              Registration closes on {{ formatDate(event.start_date) }}
-            </p>
-          </div>
-
-          <!-- Location Card
-          <div class="info-card">
-            <div class="card-header">
-              <h3 class="card-title">Location</h3>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#2196F3"
-                stroke-width="2"
-              >
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            </div>
-
-            <div class="location-details">
-              <h4 class="location-name">
-                {{ event.city?.name || "Moscone Center West" }}
-              </h4>
-              <p class="location-address">
-                Lat: {{ event.lattitude }}, Long: {{ event.langitude }}
-              </p>
-              <a href="#" class="location-link">{{ getCityDisplay() }}</a>
-            </div>
-
-            <div class="map-placeholder">
-              <div class="map-marker">
+            <div
+              class="event-stats mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-5 text-sm"
+            >
+              <div class="flex items-center gap-2 bg-red-50 px-3 py-1.5 rounded-full">
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="32"
-                  height="32"
+                  class="text-red-500"
+                  width="18"
+                  height="18"
+                  fill="currentColor"
                   viewBox="0 0 24 24"
-                  fill="#2196F3"
-                  stroke="white"
-                  stroke-width="2"
                 >
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
+                  <path
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  />
                 </svg>
+                <span class="font-medium text-red-600 dark:text-red-400">{{
+                  event.likes_count || 0
+                }}</span>
+                <span>Likes</span>
               </div>
-              <div class="map-city">{{ event.city?.name?.toUpperCase() }}</div>
+
+              <div class="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-full">
+                <svg
+                  class="text-blue-500"
+                  width="18"
+                  height="18"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"
+                  />
+                </svg>
+                <span class="font-medium text-blue-600 dark:text-blue-400">{{
+                  event.comments_count || 0
+                }}</span>
+                <span>Comments</span>
+              </div>
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
 

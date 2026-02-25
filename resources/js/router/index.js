@@ -246,33 +246,33 @@ const routes = [
     },
 
 
-    // Owner dashboard
-    {
-        path: "/owner",
-        component: user_home,
-        meta: { hideNavbar: true, hideFooter: true },
-    },
+    // // Owner dashboard
+    // {
+    //     path: "/owner",
+    //     component: user_home,
+    //     meta: { hideNavbar: true, hideFooter: true },
+    // },
 
-    {
-        path: "/owner/requests",
-        component: media_requests,
-        meta: { hideNavbar: true, hideFooter: true },
-    },
-    {
-        path: "/owner/create",
-        component: create_event_user,
-        meta: { hideNavbar: true, hideFooter: true },
-    },
-    {
-        path: "/owner/:slug",
-        component: single_event_dashbaord,
-        meta: { hideNavbar: true, hideFooter: true },
-    },
-    {
-        path: "/owner/:slug/update",
-        component: update_event_user,
-        meta: { hideNavbar: true, hideFooter: true },
-    },
+    // {
+    //     path: "/owner/requests",
+    //     component: media_requests,
+    //     meta: { hideNavbar: true, hideFooter: true },
+    // },
+    // {
+    //     path: "/owner/create",
+    //     component: create_event_user,
+    //     meta: { hideNavbar: true, hideFooter: true },
+    // },
+    // {
+    //     path: "/owner/:slug",
+    //     component: single_event_dashbaord,
+    //     meta: { hideNavbar: true, hideFooter: true },
+    // },
+    // {
+    //     path: "/owner/:slug/update",
+    //     component: update_event_user,
+    //     meta: { hideNavbar: true, hideFooter: true },
+    // },
 ];
 
 const router = createRouter({

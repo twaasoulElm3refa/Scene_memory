@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="events-container">
-      <h3 class="page-title">جميع الفعاليات</h3>
+      <h3 class="page-title">جميع الفعاليات ({{ pagination.total }} فعاليه)</h3>
 
       <!-- Loading State -->
       <div v-if="loading" class="loading-state">
@@ -274,23 +274,13 @@ export default {
     };
 
     const getEventImage = (event) => {
-      // لو فيه مصفوفة images وفيها عناصر
-      if (event.images && Array.isArray(event.images) && event.images.length > 0) {
-        const firstImage = event.images[0];
-
-        // افتراضي: الحقل اسمه url أو path — غيّر حسب الـ API response بتاعك
-        let imagePath = firstImage.url || firstImage.path || firstImage.image;
-
-        if (imagePath) {
-          // لو المسار نسبي → ضيف /storage/ أو الـ base URL المناسب
-          if (!imagePath.startsWith("http") && !imagePath.startsWith("//")) {
-            return `/storage/${imagePath.replace(/^\/+/, "")}`;
-          }
-          return imagePath;
+      if (event.first_image && event.first_image.url) {
+        const imageUrl = event.first_image.url;
+        if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+          return imageUrl;
         }
+        return `/storage/${imageUrl.replace(/^\/+/, "")}`;
       }
-
-      // fallback لو مفيش صور أو المسار فاضي
       return "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
     };
 

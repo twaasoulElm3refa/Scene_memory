@@ -65,6 +65,7 @@ export const countryService = {
    * @returns {Promise}
    */
   deleteCountry(id) {
+    console.log(id);
     return api.delete(`${COUNTRIES_ENDPOINT}/${id}/delete`);
   },
 

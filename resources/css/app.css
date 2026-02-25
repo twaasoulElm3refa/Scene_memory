@@ -74,3 +74,12 @@
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
+.status-badge {
+  @apply inline-block px-2.5 py-0.5 text-xs font-medium rounded-full;
+}
+.status-active {
+  @apply bg-green-100 text-green-800;
+}
+.status-review {
+  @apply bg-yellow-100 text-yellow-800;
+}

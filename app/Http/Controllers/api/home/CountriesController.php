@@ -4,7 +4,6 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CountriesRequest;
 use App\Models\Countries;
 use App\Models\Events;
 use App\Models\User;
@@ -19,9 +18,9 @@ class CountriesController extends Controller
 
     public function index()
     {
-        $cacheKey = "countries_index";
+        $cacheKey = 'countries_index';
         $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::get(['id', 'name']);
+            return Countries::with('translation')->get('id','code','image');
         });
         if ($countries->count() == 0) {
             return $this->error('No More countries', 404);
@@ -30,12 +29,12 @@ class CountriesController extends Controller
         return $this->success($countries, 'All countries');
     }
 
-     public function paginated()
+    public function paginated()
     {
         $page = request('page', 1);
         $cacheKey = "countries_index_page_{$page}";
         $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::paginate(5);
+            return Countries::with("translation")->paginate(5);
         });
         if ($countries->count() == 0) {
             return $this->error('No More countries', 404);
@@ -54,12 +53,13 @@ class CountriesController extends Controller
         if (! $countries) {
             return $this->error('No More countries', 404);
         }
-        $users= User::where('country',$countries->name)->count();
+        $users = User::where('country', $countries->name)->count();
         $countryCities = $countries->cities->pluck('id');
-        $countCities=count($countries->cities);
-        $countevents=Events::whereIn('city_id',$countryCities)->count();
-        $events=Events::whereIn('city_id',$countryCities)->paginate(5);
-        return $this->success(  ['countries'=>$countries,'events'=>$events,'cities'=>$countCities,'users'=>$users,'countevents'=>$countevents,], 'category');
+        $countCities = count($countries->cities);
+        $countevents = Events::whereIn('city_id', $countryCities)->count();
+        $events = Events::whereIn('city_id', $countryCities)->paginate(5);
+
+        return $this->success(['countries' => $countries, 'events' => $events, 'cities' => $countCities, 'users' => $users, 'countevents' => $countevents], 'category');
     }
 
     public function count()
@@ -72,23 +72,7 @@ class CountriesController extends Controller
         return $this->success($count, 'Countries count');
     }
 
-    public function create(CountriesRequest $request)
-    {
-        $data = $request->validated();
-        try {
-            $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
-            if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('countries', 'public');
-            }
-            $country = Countries::create($data);
-            Cache::forget('countries_count');
-            Cache::flush(); 
-
-            return $this->success($country, 'Country Created Successfully');
-        } catch (\Exception $e) {
-            return $this->error($e->getMessage());
-        }
-    }
+   
 
     public function update(Request $request, $id)
     {
@@ -102,7 +86,7 @@ class CountriesController extends Controller
             $country->update($data);
             Cache::forget("countries_single_{$id}");
             Cache::forget('countries_count');
-            Cache::flush(); 
+            Cache::flush();
 
             return $this->success($country, 'Country Updated Successfully');
         } catch (\Exception $e) {
@@ -116,7 +100,7 @@ class CountriesController extends Controller
         $country->delete();
         Cache::forget("countries_single_{$country->id}");
         Cache::forget('countries_count');
-        Cache::flush(); 
+        Cache::flush();
 
         return $this->success($country, 'Country Deleted Successfully');
     }

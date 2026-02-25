@@ -12,7 +12,7 @@
     <div class="flex gap-4 mb-6 justify-end">
       <router-link
         to="/admin/cities/create"
-        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        class="inline-flex text-decoration-none items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -24,17 +24,6 @@
         </svg>
         Create City
       </router-link>
-
-      <select
-        v-model="selectedCountry"
-        @change="handleCountryFilter"
-        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="">Filter by Country</option>
-        <option v-for="country in countries" :key="country.id" :value="country.id">
-          {{ country.name }}
-        </option>
-      </select>
     </div>
 
     <!-- Cities Table -->

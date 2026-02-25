@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\admin\ContactController;
+use App\Http\Controllers\api\admin\CountriesCreateController;
 use App\Http\Controllers\api\admin\EventAdminController;
 use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
@@ -78,7 +79,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:15,1');
         Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:15,1');
         Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:15,1');
-        Route::post('/create', [CountriesController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });

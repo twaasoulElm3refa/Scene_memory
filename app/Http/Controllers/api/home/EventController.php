@@ -24,18 +24,10 @@ class EventController extends Controller
         $cacheKey = "events_page_{$page}_per_{$perPage}";
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            $events = Events::with(['city:id,name', 'sub_categorey:id,name'])->where('is_active', 1)
-                ->select('id', 'slug', 'title', 'image', 'start_date', 'city_id', 'sub_categorey_id')
+            $events = Events::with(['city:id,name', 'sub_categorey:id,name','firstImage:id,event_id,url'])->where('is_active', 1)
+                ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
-
-            $events->getCollection()->transform(function ($event) {
-                if (! $event->image) {
-                    $event->image = 'https://via.placeholder.com/300x200?text=Event+Image';
-                }
-
-                return $event;
-            });
 
             return $events;
         });
@@ -135,7 +127,7 @@ class EventController extends Controller
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)
                     ->with('user:id,name'),
-            ])->withCount('comments')
+            ])->withCount('comments')->withCount('likes')
                 ->where('slug', $slug)
                 ->first();
         });

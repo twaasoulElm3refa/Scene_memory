@@ -22,7 +22,8 @@ class CountriesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:countries,name',
+            // 'name' => 'required|string|unique:countries,name',
+            'code'=>'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }

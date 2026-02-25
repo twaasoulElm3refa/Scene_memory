@@ -176,10 +176,6 @@ export default class MapService {
 
         const encodedCity = encodeURIComponent(city);
 
-        console.log("City (original):", city);
-        console.log("Encoded city:", encodedCity);
-        console.log("Full backend URL:", `/api/v1/events/${encodedCity}/marker/search`);
-
         const url = `/api/v1/events/${encodedCity}/marker/search`;
 
         fetch(url, {
@@ -190,13 +186,11 @@ export default class MapService {
             },
         })
             .then(res => {
-                console.log("Backend response status:", res.status);
                 if (!res.ok) throw new Error(`Backend HTTP error: ${res.status}`);
                 return res.json();
             })
             .then(data => {
                 const events = data?.data || [];
-                console.log("Events received from backend:", events);
                 this._dispatchMarkerEvent(events);
             })
             .catch(err => {

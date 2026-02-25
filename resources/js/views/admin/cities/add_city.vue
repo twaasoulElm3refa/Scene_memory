@@ -184,7 +184,8 @@ const fetchCountries = async () => {
     });
     const data = await response.json();
     if (data.status === "success") {
-      countries.value = data.data;
+      countries.value = data.data.map((country) => country.translation);
+      console.log(countries.value);
     }
   } catch (error) {
     console.error("Error fetching countries:", error);
@@ -199,7 +200,7 @@ const handleSearch = () => {
 
 // Select country from dropdown
 const selectCountry = (country: { id: number; name: string }) => {
-  formData.value.country_id = country.id;
+  formData.value.country_id = country.country_id;
   searchQuery.value = country.name;
   showDropdown.value = false;
 };
@@ -212,7 +213,6 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 };
 
-// Handle form submission
 const handleSubmit = async () => {
   errors.value = {};
 
@@ -229,7 +229,7 @@ const handleSubmit = async () => {
   loading.value = true;
 
   try {
-    const token = localStorage.getItem("auth_token"); // Adjust based on your auth implementation
+    const token = localStorage.getItem("auth_token");
 
     const response = await fetch("/api/v1/cities/create", {
       method: "POST",
@@ -244,10 +244,8 @@ const handleSubmit = async () => {
     const data = await response.json();
 
     if (response.ok && data.status === "success") {
-      // Redirect to cities list on success
       router.push("/admin/cities");
     } else {
-      // Handle validation errors
       if (data.errors) {
         errors.value = data.errors;
       } else {
@@ -262,18 +260,15 @@ const handleSubmit = async () => {
   }
 };
 
-// Handle cancel
 const handleCancel = () => {
   router.push("/admin/cities");
 };
 
-// Initialize
 onMounted(() => {
   fetchCountries();
   document.addEventListener("click", handleClickOutside);
 });
 
-// Cleanup
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
