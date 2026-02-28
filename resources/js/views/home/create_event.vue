@@ -70,7 +70,7 @@
                   >
                     <option value="" disabled>اختر الدولة</option>
                     <option v-for="c in countries" :key="c.id" :value="c.id">
-                      {{ c.name }}
+                      {{ c.translation.name }}
                     </option>
                   </select>
                 </div>

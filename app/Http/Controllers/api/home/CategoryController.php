@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\api\home;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\concerns\ApiResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\categoreyRequest;
 use App\Models\Categories;
 use App\Models\subCategorey;
@@ -14,14 +14,14 @@ class CategoryController extends Controller
 {
     use ApiResponse;
 
-    protected $cacheTime = 600; 
+    protected $cacheTime = 600;
 
     public function index(): JsonResponse
     {
-        $cacheKey = 'categories:index:all';
+        $cacheKey = 'categories:index:all_'.app()->getLocale();
 
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Categories::with('translation')->orderBy('created_at','desc')->get();
+            return Categories::with('translation')->orderBy('created_at', 'desc')->get();
         });
 
         if ($categories->isEmpty()) {
@@ -31,10 +31,12 @@ class CategoryController extends Controller
         return $this->success($categories, 'All categories');
     }
 
+   
+
     public function paginated(): JsonResponse
     {
-        $page    = request()->input('page', 1);
-        $perPage = 4; 
+        $page = request()->input('page', 1);
+        $perPage = 4;
         $version = Cache::get('categories:version', 1);
 
         $cacheKey = "categories:paginated:v{$version}:p{$page}:pp{$perPage}";
@@ -70,10 +72,10 @@ class CategoryController extends Controller
 
     public function sub_categories($id): JsonResponse
     {
-        $cacheKey = "categories:sub:{$id}";
+        $cacheKey = "categories:sub:{$id}_".app()->getLocale();
 
         $subCategories = Cache::remember($cacheKey, $this->cacheTime, function () use ($id) {
-            return subCategorey::where('category_id', $id)
+            return subCategorey::with('translation')->where('category_id', $id)
                 ->get(['id', 'name']);
         });
 
@@ -92,7 +94,7 @@ class CategoryController extends Controller
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
 
-        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])) . '-' . time();
+        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
 
         $category = Categories::create($data);
 
@@ -115,7 +117,7 @@ class CategoryController extends Controller
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
 
-        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])) . '-' . time();
+        $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
 
         $category->update($data);
 
@@ -132,6 +134,7 @@ class CategoryController extends Controller
         }
         $category->delete();
         $this->clearAllCategoriesCache();
+
         return $this->success(null, 'Category deleted successfully');
     }
 

@@ -29,7 +29,20 @@ class CountriesController extends Controller
 
         return $this->success($countries, 'All countries');
     }
+    public function all()
+    {
+        $cacheKey = 'countries_index_all';
+        $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
+            return Countries::get(['id','name', 'code', 'image']);
+        });
+        if ($countries->count() == 0) {
+            return $this->error('No More countries', 404);
+        }
 
+        return $this->success($countries, 'All countries');
+    }
+
+   
     public function paginated()
     {
         $page = request('page', 1);

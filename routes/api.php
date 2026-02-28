@@ -79,6 +79,7 @@ Route::prefix('v1')->group(function () {
     // COUNTRIES CRUD
     Route::prefix('countries')->group(function () {
         Route::get('/', [CountriesController::class,  'index']);
+        Route::get('/all/get', [CountriesController::class,  'all']);
         Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:15,1');
         Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:15,1');
         Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:15,1');

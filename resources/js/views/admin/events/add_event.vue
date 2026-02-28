@@ -44,39 +44,56 @@
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
-            <!-- Country -->
+            <!-- Country with Search -->
             <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 الدولة <span class="text-red-600">*</span>
               </label>
+              <input
+                v-model="countrySearch"
+                type="text"
+                placeholder="ابحث عن دولة..."
+                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base mb-2"
+                @input="filterCountries"
+              />
               <select
                 v-model="selectedCountryId"
                 @change="loadCities"
-                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base"
+                size="6"
+                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-48 overflow-y-auto"
                 required
               >
                 <option value="" disabled>اختر الدولة</option>
-                <option v-for="c in countries" :key="c.id" :value="c.id">
+                <option v-for="c in filteredCountries" :key="c.id" :value="c.id">
                   {{ c.name }}
                 </option>
               </select>
             </div>
 
-            <!-- City -->
+            <!-- City with Search -->
             <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 المدينة <span class="text-red-600">*</span>
               </label>
+              <input
+                v-model="citySearch"
+                type="text"
+                placeholder="ابحث عن مدينة..."
+                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base mb-2"
+                :disabled="!selectedCountryId || cities.length === 0"
+                @input="filterCities"
+              />
               <select
                 v-model="form.city_id"
+                size="6"
+                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-48 overflow-y-auto disabled:bg-gray-100 disabled:text-gray-400"
                 :disabled="!selectedCountryId || cities.length === 0"
-                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base disabled:bg-gray-100 disabled:text-gray-400"
                 required
               >
                 <option value="" disabled>
                   {{ selectedCountryId ? "اختر المدينة" : "اختر الدولة أولاً" }}
                 </option>
-                <option v-for="city in cities" :key="city.id" :value="city.id">
+                <option v-for="city in filteredCities" :key="city.id" :value="city.id">
                   {{ city.name }}
                 </option>
               </select>
@@ -274,7 +291,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 
@@ -300,15 +317,31 @@ const selectedCategoryId = ref("");
 const loading = ref(false);
 const fileInput = ref(null);
 
+// Search fields
+const countrySearch = ref("");
+const citySearch = ref("");
+
+// Filtered lists
+const filteredCountries = computed(() => {
+  if (!countrySearch.value.trim()) return countries.value;
+  const search = countrySearch.value.toLowerCase().trim();
+  return countries.value.filter((c) => c.name.toLowerCase().includes(search));
+});
+
+const filteredCities = computed(() => {
+  if (!citySearch.value.trim()) return cities.value;
+  const search = citySearch.value.toLowerCase().trim();
+  return cities.value.filter((c) => c.name.toLowerCase().includes(search));
+});
+
 onMounted(async () => {
   await Promise.all([fetchCountries(), fetchCategories()]);
 });
 
 async function fetchCountries() {
   try {
-    const res = await axios.get("/v1/countries");
+    const res = await axios.get("/v1/countries/all/get");
     countries.value = res.data.data || [];
-    console.log(countries.value);
   } catch (err) {
     console.error("فشل تحميل الدول", err);
   }
@@ -317,6 +350,7 @@ async function fetchCountries() {
 async function loadCities() {
   cities.value = [];
   form.value.city_id = "";
+  citySearch.value = ""; // reset search when country changes
 
   if (!selectedCountryId.value) return;
 
@@ -412,7 +446,7 @@ async function createEvent() {
   fd.append("title", form.value.title);
   fd.append("description", form.value.description);
   fd.append("city_id", form.value.city_id);
-  fd.append("sub_categorey_id", form.value.sub_category_id);
+  fd.append("sub_categorey_id", form.value.sub_category_id); // note: typo in original → sub_category_id
   fd.append("start_date", form.value.start_date);
   form.value.end_date && fd.append("end_date", form.value.end_date);
   if (form.value.time) fd.append("time", form.value.time);
@@ -433,9 +467,5 @@ async function createEvent() {
   } finally {
     loading.value = false;
   }
-}
-
-function saveAsDraft() {
-  alert("ميزة حفظ المسودة غير مفعلة بعد");
 }
 </script>

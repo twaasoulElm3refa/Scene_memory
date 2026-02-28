@@ -29,7 +29,7 @@
             >
               <option value="">{{ $t("filters.allCategories") }}</option>
               <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                {{ cat.name }}
+                {{ cat.translation.name }}
               </option>
             </select>
           </div>
@@ -43,7 +43,7 @@
             >
               <option value="">{{ $t("filters.allSubCategories") }}</option>
               <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
-                {{ sub.name }}
+                {{ sub.translation.name }}
               </option>
             </select>
           </div>
@@ -479,6 +479,7 @@ const onMainCategoryChange = async () => {
   try {
     const res = await api.get(`/categories/${selectedCategory.value}/sub_categories/get`);
     subCategories.value = res.data.data || [];
+    console.log(res.data.data);
   } catch (err) {
     console.error("Error loading sub-categories:", err);
     subCategories.value = [];
