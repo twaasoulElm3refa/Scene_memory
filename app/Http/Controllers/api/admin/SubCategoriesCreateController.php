@@ -47,6 +47,7 @@ class SubCategoriesCreateController extends Controller
                         ]);
                     }
                 }
+                $this->clearCache();
                 return $subCategory;
             });
             Cache::increment('categories_cache_version');
@@ -72,5 +73,14 @@ class SubCategoriesCreateController extends Controller
 
             return null;
         }
+    }
+
+    private function clearCache()
+    {
+        for( $i = 0; $i < 10; $i++ ) {
+         $cacheKey = "categories:paginated:v1:p{$i}:pp4";
+         Cache::forget($cacheKey);
+        }
+        Cache::flush();
     }
 }

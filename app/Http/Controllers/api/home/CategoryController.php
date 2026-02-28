@@ -21,7 +21,7 @@ class CategoryController extends Controller
         $cacheKey = 'categories:index:all';
 
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Categories::get(['id', 'name']);
+            return Categories::with('translation')->orderBy('created_at','desc')->get();
         });
 
         if ($categories->isEmpty()) {
@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $cacheKey = "categories:paginated:v{$version}:p{$page}:pp{$perPage}";
 
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Categories::query()
+            return Categories::query()->latest()
                 ->select('id', 'name', 'image', 'created_at')
                 ->withCount('subCategories')
                 ->paginate($perPage);
