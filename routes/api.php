@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\api\admin\CategoriesCreateController;
+use App\Http\Controllers\api\admin\CitiesCreateController;
 use App\Http\Controllers\api\admin\ContactController;
 use App\Http\Controllers\api\admin\CountriesCreateController;
 use App\Http\Controllers\api\admin\EventAdminController;
@@ -7,6 +9,7 @@ use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
 use App\Http\Controllers\api\admin\RequestController;
+use App\Http\Controllers\api\admin\SubCategoriesCreateController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Controllers\api\auth\AuthController;
@@ -58,7 +61,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/all/paginated', [CategoryController::class,  'paginated']);
         Route::get('/{id}', [CategoryController::class,  'single']);
         Route::get('/{id}/sub_categories/get', [CategoryController::class,  'sub_categories']);
-        Route::post('/create', [CategoryController::class,  'create'])->middleware('auth:sanctum', AdminMiddleware::class);
+        Route::post('/create', [CategoriesCreateController::class,  'create'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::post('/edit/{id}/update/edit', [CategoryController::class,  'update'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}/delete/delete', [CategoryController::class,  'delete'])->middleware('auth:sanctum', AdminMiddleware::class);
     });
@@ -68,7 +71,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [SubCategoryController::class,  'index']);
         Route::get('/all/paginated', [SubCategoryController::class,  'paginated']);
         Route::get('/{id}', [SubCategoryController::class,  'single']);
-        Route::post('/create', [SubCategoryController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/create', [SubCategoriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/update/{id}', [SubCategoryController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/delete/{id}', [SubCategoryController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
@@ -78,6 +81,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [CountriesController::class,  'index']);
         Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:15,1');
         Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:15,1');
+        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:15,1');
         Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:15,1');
         Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -89,7 +93,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:15,1');
         Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:15,1');
         Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:15,1');
-        Route::post('/create', [CitiesController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/create', [CitiesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CitiesController::class, 'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CitiesController::class, 'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });

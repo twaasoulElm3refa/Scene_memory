@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Cities;
 use App\Models\Countries;
 use App\Models\Events;
 use App\Models\User;
@@ -18,9 +19,9 @@ class CountriesController extends Controller
 
     public function index()
     {
-        $cacheKey = 'countries_index';
+        $cacheKey = 'countries_index_'.app()->getLocale();
         $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::with('translation')->get('id','code','image');
+            return Countries::with('translation')->get('id', 'code', 'image');
         });
         if ($countries->count() == 0) {
             return $this->error('No More countries', 404);
@@ -34,7 +35,7 @@ class CountriesController extends Controller
         $page = request('page', 1);
         $cacheKey = "countries_index_page_{$page}";
         $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::with("translation")->paginate(5);
+            return Countries::with('translation')->paginate(15);
         });
         if ($countries->count() == 0) {
             return $this->error('No More countries', 404);
@@ -43,12 +44,22 @@ class CountriesController extends Controller
         return $this->success($countries, 'All countries');
     }
 
+    public function cities()
+    {
+        $countryId = request('id');
+        $cacheKey = "countries_single_{$countryId}".app()->getLocale();
+        $cities = Cache::remember($cacheKey, $this->cacheTime, function () {
+            return Cities::with('translation')->where('country_id', request('id'))->get();
+        });
+         return $this->success($cities, 'All cities');
+    }
+
     public function single()
     {
         $countryId = request('id');
         $cacheKey = "countries_single_{$countryId}";
         $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::with('cities')->find(request('id'));
+            return Countries::with(['cities.translation'])->find(request('id'));
         });
         if (! $countries) {
             return $this->error('No More countries', 404);
@@ -71,8 +82,6 @@ class CountriesController extends Controller
 
         return $this->success($count, 'Countries count');
     }
-
-   
 
     public function update(Request $request, $id)
     {

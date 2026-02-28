@@ -17,4 +17,15 @@ class subCategorey extends Model
     {
         return $this->belongsTo(Categories::class, 'category_id');
     }
+
+     public function translations()
+    {
+        return $this->hasMany(SubCategoreyTranslations::class, 'category_id');
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(SubCategoreyTranslations::class, 'category_id')
+            ->where('locale', app()->getLocale());
+    }
 }

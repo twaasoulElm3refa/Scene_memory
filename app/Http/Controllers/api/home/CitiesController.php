@@ -4,7 +4,6 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CityRequest;
 use App\Models\Cities;
 use App\Models\Countries;
 use Illuminate\Http\Request;
@@ -18,10 +17,10 @@ class CitiesController extends Controller
 
     public function index()
     {
-        $cacheKey = 'cities_index';
+        $cacheKey = 'cities_index_'.app()->getLocale();
 
         $cities = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Cities::get(['id', 'name', 'country_id']);
+            return Cities::with('translation')->get();
         });
 
         if ($cities->isEmpty()) {
@@ -38,7 +37,7 @@ class CitiesController extends Controller
 
         $cities = Cache::remember($cacheKey, $this->cacheTime, function () {
             return Cities::select('id', 'name', 'country_id')
-                ->with('countries:id,name')
+                ->with('countries:id,name', 'translation')
                 ->withCount('events')
                 ->paginate(5);
         });
@@ -57,28 +56,13 @@ class CitiesController extends Controller
         $cacheKey = "cities_single_{$cityId}";
 
         $cities = Cache::remember($cacheKey, $this->cacheTime, function () use ($cityId) {
-            return Cities::with('events')->find($cityId);
+            return Cities::with('events', 'translation')->find($cityId);
         });
         if (! $cities) {
             return $this->error('No More cities', 404);
         }
+
         return $this->success($cities, 'City data');
-    }
-
-    public function create(CityRequest $request)
-    {
-        $data = $request->validated();
-        try {
-            $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
-            $city = Cities::create($data);
-            Cache::forget('cities_count');
-            Cache::forget('cities_index_page_1');
-            Cache::flush();
-
-            return $this->success($city, 'City Created Successfully');
-        } catch (\Exception $e) {
-            return $this->error($e->getMessage());
-        }
     }
 
     public function update(Request $request)
@@ -88,9 +72,7 @@ class CitiesController extends Controller
             $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
             $city = Cities::findOrFail(request('id'));
             $city->update($data);
-            Cache::forget('cities_count');
-            Cache::forget('cities_index_page_1');
-            Cache::flush();
+            $this->clearCache();
 
             return $this->success($city, 'City Updated Successfully');
         } catch (\Exception $e) {
@@ -103,13 +85,20 @@ class CitiesController extends Controller
         try {
             $city = Cities::findOrFail(request('id'));
             $city->delete();
-            Cache::forget('cities_count');
-            Cache::forget('cities_index_page_1');
-            Cache::flush();
+            $this->clearCache();
 
             return $this->success($city, 'City Deleted Successfully');
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
+    }
+
+    private function clearCache()
+    {
+        Cache::forget('cities_count');
+        for ($i = 0; $i < 10; $i++) {
+            Cache::forget('cities_index_page_'.$i);
+        }
+        Cache::flush();
     }
 }

@@ -22,4 +22,15 @@ class Cities extends Model
     {
         return $this->hasMany(Events::class, 'city_id');
     }
+
+    public function translations()
+    {
+        return $this->hasMany(CityTranslations::class, 'city_id');
+    }
+
+      public function translation()
+    {
+        return $this->hasOne(CityTranslations::class, 'city_id')
+            ->where('locale', app()->getLocale());
+    }
 }
