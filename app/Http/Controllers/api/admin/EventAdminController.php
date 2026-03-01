@@ -17,30 +17,7 @@ class EventAdminController extends Controller
 {
     use ApiResponse;
 
-    public function create(EventsRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-        unset($data['urls']);
-        try {
-            $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
-            $data['user_id'] = auth()->user()->id;
-            $event = Events::create($data);
-            if ($request->hasFile('urls')) {
-                foreach ($request->file('urls') as $file) {
-                    $path = $file->store('Photos', 'public');
-                    $media = eventsImges::create([
-                        'event_id' => $event->id,
-                        'url' => $path,
-
-                    ]);
-                }
-            }
-            $this->clearEventsCache();
-            return $this->success($event->load('photos'), 'Event Created Successfully');
-        } catch (\Throwable $th) {
-            return $this->error($th->getMessage());
-        }
-    }
+   
 
     public function update(Request $request): JsonResponse
     {

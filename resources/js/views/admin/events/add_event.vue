@@ -1,15 +1,15 @@
 <template>
   <AdminLayout>
     <div class="p-6 max-w-4xl mx-auto">
-      <form @submit.prevent="createEvent" class="space-y-6">
-        <!-- 1. Basic Information -->
+      <form @submit.prevent="createEvent" class="space-y-8">
+        <!-- 1. المعلومات الأساسية -->
         <section class="bg-white shadow-md rounded-xl p-7 border border-gray-100">
           <h2 class="text-2xl font-semibold mb-7 flex items-center gap-3 text-gray-800">
             <span class="text-blue-600 text-3xl">①</span> المعلومات الأساسية
           </h2>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
-            <div class="md:col-span-2">
+          <div class="grid grid-cols-1 gap-7">
+            <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 عنوان الحدث <span class="text-red-600">*</span>
               </label>
@@ -22,7 +22,7 @@
               />
             </div>
 
-            <div class="md:col-span-2">
+            <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 الوصف <span class="text-red-600">*</span>
               </label>
@@ -37,14 +37,14 @@
           </div>
         </section>
 
-        <!-- 2. Location & Category -->
+        <!-- 2. الموقع والتصنيف + الخريطة -->
         <section class="bg-white shadow-md rounded-xl p-7 border border-gray-100">
           <h2 class="text-2xl font-semibold mb-7 flex items-center gap-3 text-gray-800">
             <span class="text-blue-600 text-3xl">②</span> الموقع والتصنيف
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
-            <!-- Country with Search -->
+            <!-- الدولة -->
             <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 الدولة <span class="text-red-600">*</span>
@@ -70,7 +70,7 @@
               </select>
             </div>
 
-            <!-- City with Search -->
+            <!-- المدينة -->
             <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 المدينة <span class="text-red-600">*</span>
@@ -99,7 +99,7 @@
               </select>
             </div>
 
-            <!-- Category -->
+            <!-- الفئة الرئيسية -->
             <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 الفئة الرئيسية <span class="text-red-600">*</span>
@@ -117,7 +117,7 @@
               </select>
             </div>
 
-            <!-- Sub-category -->
+            <!-- التصنيف الفرعي -->
             <div>
               <label class="block text-base font-medium text-gray-800 mb-2">
                 التصنيف الفرعي <span class="text-red-600">*</span>
@@ -137,9 +137,38 @@
               </select>
             </div>
           </div>
+
+          <!-- الخريطة -->
+          <div class="mt-10">
+            <label class="block text-base font-medium text-gray-800 mb-3">
+              حدد الموقع الدقيق على الخريطة (اختياري)
+            </label>
+            <div
+              class="border border-gray-300 rounded-lg overflow-hidden"
+              style="height: 400px"
+            >
+              <l-map
+                ref="map"
+                :zoom="zoom"
+                :center="center"
+                @click="onMapClick"
+                style="height: 100%"
+              >
+                <l-tile-layer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <l-marker v-if="markerPosition" :lat-lng="markerPosition" />
+              </l-map>
+            </div>
+            <p v-if="form.lattitude && form.langitude" class="mt-2 text-sm text-gray-600">
+              الإحداثيات المحددة: خط العرض {{ form.lattitude }} | خط الطول
+              {{ form.langitude }}
+            </p>
+          </div>
         </section>
 
-        <!-- 3. Scheduling -->
+        <!-- 3. المواعيد -->
         <section class="bg-white shadow-md rounded-xl p-7 border border-gray-100">
           <h2 class="text-2xl font-semibold mb-7 flex items-center gap-3 text-gray-800">
             <span class="text-blue-600 text-3xl">③</span> المواعيد
@@ -182,7 +211,7 @@
           </div>
         </section>
 
-        <!-- 4. Cover Images (Multiple) -->
+        <!-- 4. صور الحدث -->
         <section class="bg-white shadow-md rounded-xl p-7 border border-gray-100">
           <h2 class="text-2xl font-semibold mb-7 flex items-center gap-3 text-gray-800">
             <span class="text-blue-600 text-3xl">④</span> صور الحدث
@@ -235,7 +264,6 @@
               </button>
             </div>
 
-            <!-- Preview Area -->
             <div v-else class="space-y-6">
               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 <div
@@ -269,8 +297,8 @@
           </div>
         </section>
 
-        <!-- Actions -->
-        <div class="flex flex-col sm:flex-row justify-end gap-4 pt-8">
+        <!-- أزرار الإجراءات -->
+        <div class="flex flex-col sm:flex-row justify-end gap-4 pt-6">
           <button
             type="button"
             class="px-8 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition"
@@ -289,11 +317,13 @@
     </div>
   </AdminLayout>
 </template>
-
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+// استيراد مكونات vue-leaflet
+import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+import "leaflet/dist/leaflet.css"; // مهم جداً - يمكن وضعه في main.js أيضاً
 
 const form = ref({
   title: "",
@@ -305,6 +335,8 @@ const form = ref({
   time: "",
   urls: [],
   url_previews: [],
+  lattitude: null, // كما طلبت بالضبط
+  langitude: null, // كما طلبت بالضبط
 });
 
 const countries = ref([]);
@@ -317,11 +349,10 @@ const selectedCategoryId = ref("");
 const loading = ref(false);
 const fileInput = ref(null);
 
-// Search fields
+// Search
 const countrySearch = ref("");
 const citySearch = ref("");
 
-// Filtered lists
 const filteredCountries = computed(() => {
   if (!countrySearch.value.trim()) return countries.value;
   const search = countrySearch.value.toLowerCase().trim();
@@ -333,6 +364,20 @@ const filteredCities = computed(() => {
   const search = citySearch.value.toLowerCase().trim();
   return cities.value.filter((c) => c.name.toLowerCase().includes(search));
 });
+
+// خريطة
+const zoom = ref(13);
+const center = ref([30.04, 31.24]); // القاهرة كمركز افتراضي - يمكنك تغييره
+const markerPosition = ref(null);
+
+function onMapClick(e) {
+  const lat = e.latlng.lat;
+  const lng = e.latlng.lng;
+
+  markerPosition.value = [lat, lng];
+  form.value.lattitude = lat.toFixed(6);
+  form.value.langitude = lng.toFixed(6);
+}
 
 onMounted(async () => {
   await Promise.all([fetchCountries(), fetchCategories()]);
@@ -350,7 +395,7 @@ async function fetchCountries() {
 async function loadCities() {
   cities.value = [];
   form.value.city_id = "";
-  citySearch.value = ""; // reset search when country changes
+  citySearch.value = "";
 
   if (!selectedCountryId.value) return;
 
@@ -446,10 +491,14 @@ async function createEvent() {
   fd.append("title", form.value.title);
   fd.append("description", form.value.description);
   fd.append("city_id", form.value.city_id);
-  fd.append("sub_categorey_id", form.value.sub_category_id); // note: typo in original → sub_category_id
+  fd.append("sub_categorey_id", form.value.sub_category_id);
   fd.append("start_date", form.value.start_date);
   form.value.end_date && fd.append("end_date", form.value.end_date);
   if (form.value.time) fd.append("time", form.value.time);
+
+  // إضافة الإحداثيات بنفس الأسماء المطلوبة
+  if (form.value.lattitude) fd.append("lattitude", form.value.lattitude);
+  if (form.value.langitude) fd.append("langitude", form.value.langitude);
 
   form.value.urls.forEach((file) => {
     fd.append("urls[]", file);
@@ -459,8 +508,8 @@ async function createEvent() {
     await axios.post("/v1/events/create", fd, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    window.location.href = "/admin/events";
     alert("تم إنشاء الحدث بنجاح!");
+    window.location.href = "/admin/events";
   } catch (err) {
     console.error(err);
     alert("فشل إنشاء الحدث: " + (err.response?.data?.message || "خطأ غير معروف"));
@@ -469,3 +518,8 @@ async function createEvent() {
   }
 }
 </script>
+
+<style>
+/* إذا لم تضف الـ CSS في main.js أو index.html */
+@import "leaflet/dist/leaflet.css";
+</style>

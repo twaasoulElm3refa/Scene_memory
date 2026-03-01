@@ -29,3 +29,4 @@ class subCategorey extends Model
             ->where('locale', app()->getLocale());
     }
 }
+    

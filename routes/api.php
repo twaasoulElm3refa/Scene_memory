@@ -5,6 +5,7 @@ use App\Http\Controllers\api\admin\CitiesCreateController;
 use App\Http\Controllers\api\admin\ContactController;
 use App\Http\Controllers\api\admin\CountriesCreateController;
 use App\Http\Controllers\api\admin\EventAdminController;
+use App\Http\Controllers\api\admin\EventAdminCreateController;
 use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
@@ -110,7 +111,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{slug}/single/get', [EventController::class,  'single']);
 
         // Events CRUD
-        Route::post('/create', [EventAdminController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/create', [EventAdminCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
@@ -200,4 +201,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{id}', [LikesController::class, 'count']);
         Route::post('{id}/create', [LikesController::class, 'create']);
     });
+
+    // 93 Endpoints for the API
 });
+

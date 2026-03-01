@@ -68,4 +68,16 @@ class Events extends Model
     {
         return $this->hasMany(Likes::class,'event_id');
     }
+
+      public function translations()
+    {
+        return $this->hasMany(EventTranslations::class, 'event_id');
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(EventTranslations::class, 'event_id')
+            ->where('locale', app()->getLocale());
+    }
+    
 }
