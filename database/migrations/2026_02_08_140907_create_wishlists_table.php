@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(Events::class,'event_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
