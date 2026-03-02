@@ -222,7 +222,6 @@
                             line-height: 1;
                             font-size: 1.1rem;
                             padding: 0;
-<<<<<<< HEAD
                           ">
                                                     ×
                                                 </button>
@@ -260,75 +259,16 @@
             </form>
         </div>
     </div>
-=======
-                          "
-                        >
-                          ×
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    v-if="form.urls.length < 8"
-                    type="button"
-                    @click="$refs.fileInput.click()"
-                    class="btn btn-outline-primary btn-sm px-4"
-                  >
-                    إضافة المزيد
-                  </button>
-
-                  <small class="text-muted d-block mt-2">
-                    {{ form.urls.length }} / 8 صور
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- الأزرار -->
-        <div
-          class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 pt-3 pb-4"
-        >
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill"
-          >
-            إلغاء
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill"
-          >
-            حفظ كمسودة
-          </button>
-          <button
-            type="submit"
-            :disabled="loading || !form.latitude || !form.longitude"
-            class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow"
-          >
-            {{ loading ? "جاري الإنشاء..." : "إنشاء الحدث" }}
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
->>>>>>> 0bc9755d587678ffce451a3dc6993f8daca0c8a3
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
-<<<<<<< HEAD
 import { computed } from "vue";
-=======
->>>>>>> 0bc9755d587678ffce451a3dc6993f8daca0c8a3
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LTooltip } from "@vue-leaflet/vue-leaflet";
 
 const form = ref({
-<<<<<<< HEAD
     title: "",
     description: "",
     city_id: "",
@@ -340,19 +280,6 @@ const form = ref({
     url_previews: [],
     latitude: null,
     longitude: null,
-=======
-  title: "",
-  description: "",
-  city_id: "",
-  sub_categorey_id: "",
-  start_date: "",
-  end_date: "",
-  time: "",
-  urls: [], // الملفات الفعلية (File objects)
-  url_previews: [], // روابط المعاينة (data URLs)
-  latitude: null,
-  longitude: null,
->>>>>>> 0bc9755d587678ffce451a3dc6993f8daca0c8a3
 });
 
 const countries = ref([]);
@@ -368,15 +295,11 @@ const fileInput = ref(null);
 const zoom = ref(6);
 const center = ref([30.0444, 31.2357]);
 const mapRef = ref(null);
-<<<<<<< HEAD
 const countrySearch = ref("");
-=======
->>>>>>> 0bc9755d587678ffce451a3dc6993f8daca0c8a3
 
 const MAX_IMAGES = 8;
 
 onMounted(async () => {
-<<<<<<< HEAD
     await Promise.all([fetchCountries(), fetchCategories()]);
     nextTick(() => {
         if (mapRef.value?.leafletObject) {
@@ -555,185 +478,5 @@ async function createEvent() {
     } finally {
         loading.value = false;
     }
-=======
-  await Promise.all([fetchCountries(), fetchCategories()]);
-  nextTick(() => {
-    if (mapRef.value?.leafletObject) {
-      mapRef.value.leafletObject.invalidateSize();
-    }
-  });
-});
-
-onUnmounted(() => {
-  if (mapRef.value?.leafletObject) {
-    mapRef.value.leafletObject.remove();
-  }
-});
-
-function onMapClick(e) {
-  form.value.latitude = e.latlng.lat;
-  form.value.longitude = e.latlng.lng;
-}
-
-async function fetchCountries() {
-  try {
-    const res = await axios.get("/v1/countries");
-    countries.value = res.data.data || [];
-  } catch (err) {
-    console.error("فشل تحميل الدول", err);
-  }
-}
-
-async function loadCities() {
-  cities.value = [];
-  form.value.city_id = "";
-
-  if (!selectedCountryId.value) return;
-
-  try {
-    const res = await axios.get(`/v1/countries/${selectedCountryId.value}`);
-    cities.value = res.data.data?.countries?.cities || [];
-  } catch (err) {
-    console.error("فشل تحميل المدن", err);
-  }
-}
-
-async function fetchCategories() {
-  try {
-    const res = await axios.get("/v1/categories");
-    categories.value = res.data.data || [];
-  } catch (err) {
-    console.error("فشل تحميل الفئات", err);
-  }
-}
-
-async function loadSubCategories() {
-  subCategories.value = [];
-  form.value.sub_categorey_id = "";
-
-  if (!selectedCategoryId.value) return;
-
-  try {
-    const res = await axios.get(`/v1/categories/${selectedCategoryId.value}`);
-    subCategories.value = res.data.data?.sub_categories || [];
-  } catch (err) {
-    console.error("فشل تحميل التصنيفات الفرعية", err);
-  }
-}
-
-// ─── معالجة رفع الصور ───────────────────────────────────────
-function handleImageSelect(e) {
-  const files = Array.from(e.target.files || []);
-  processImages(files);
-}
-
-function handleImageDrop(e) {
-  const files = Array.from(e.dataTransfer.files || []);
-  processImages(files);
-}
-
-function processImages(newFiles) {
-  const currentCount = form.value.urls.length;
-  const canAdd = MAX_IMAGES - currentCount;
-
-  if (newFiles.length > canAdd) {
-    alert(`يمكنك إضافة ${canAdd} صور${canAdd === 1 ? "ة" : ""} فقط`);
-    newFiles = newFiles.slice(0, canAdd);
-  }
-
-  newFiles.forEach((file) => {
-    if (file.size > 5 * 1024 * 1024) {
-      alert(`حجم الصورة ${file.name} يتجاوز 5 ميجا`);
-      return;
-    }
-    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
-      alert(`نوع الملف ${file.name} غير مدعوم (PNG, JPG, WEBP فقط)`);
-      return;
-    }
-
-    form.value.urls.push(file);
-
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      form.value.url_previews.push(ev.target.result);
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // تنظيف الـ input بعد الرفع
-  if (fileInput.value) fileInput.value.value = "";
-}
-
-function removeImage(index) {
-  form.value.urls.splice(index, 1);
-  form.value.url_previews.splice(index, 1);
-}
-
-// ─── إنشاء الحدث ─────────────────────────────────────────────
-async function createEvent() {
-  if (
-    !form.value.title?.trim() ||
-    !form.value.description?.trim() ||
-    !form.value.city_id ||
-    !form.value.sub_categorey_id ||
-    !form.value.start_date ||
-    !form.value.latitude ||
-    !form.value.longitude
-  ) {
-    return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
-  }
-
-  if (form.value.urls.length === 0) {
-    return alert("يرجى رفع صورة واحدة على الأقل");
-  }
-
-  loading.value = true;
-  const fd = new FormData();
-
-  fd.append("title", form.value.title);
-  fd.append("description", form.value.description);
-  fd.append("city_id", form.value.city_id);
-  fd.append("sub_categorey_id", form.value.sub_categorey_id);
-  fd.append("start_date", form.value.start_date);
-
-  if (form.value.end_date) fd.append("end_date", form.value.end_date);
-  if (form.value.time) fd.append("time", form.value.time);
-
-  fd.append("lattitude", form.value.latitude);
-  fd.append("langitude", form.value.longitude);
-
-  // إضافة الصور المتعددة
-  form.value.urls.forEach((file) => {
-    fd.append("urls[]", file);
-  });
-
-  // طباعة للتصحيح
-  console.log("البيانات اللي هتتبعت:");
-  for (let [key, value] of fd.entries()) {
-    if (value instanceof File) {
-      console.log(`${key}: [File] ${value.name} (${(value.size / 1024).toFixed(1)} KB)`);
-    } else {
-      console.log(`${key}:`, value);
-    }
-  }
-  console.log("───────────────────────────────────────");
-
-  try {
-    await axios.post("/v1/create", fd, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        Accept: "application/json",
-      },
-    });
-    alert("تم إنشاء الحدث بنجاح!");
-    window.location.href = "/";
-  } catch (err) {
-    console.error(err);
-    alert("فشل إنشاء الحدث: " + (err.response?.data?.message || "خطأ غير معروف"));
-  } finally {
-    loading.value = false;
-  }
->>>>>>> 0bc9755d587678ffce451a3dc6993f8daca0c8a3
 }
 </script>
