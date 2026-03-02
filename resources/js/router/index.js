@@ -63,6 +63,7 @@ const routes = [
 
     {
         path: "/single_event/:slug",
+        name: "single_event",
         component: single_event,
         meta: { hideNavbar: false, hideFooter: false },
     },

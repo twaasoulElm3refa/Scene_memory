@@ -1,3 +1,456 @@
 <template>
-    My Wishlists
+  <div class="container mx-auto px-4 py-8" dir="rtl">
+    <h1 class="mb-8 text-center text-3xl font-bold text-gray-800 md:text-4xl">
+      قائمة المفضله
+    </h1>
+
+    <div v-if="loading" class="py-20 text-center text-xl text-gray-500">
+      جاري التحميل...
+    </div>
+
+    <div
+      v-else-if="wishlists.length === 0"
+      class="rounded-xl bg-gray-50 py-16 text-center text-lg text-gray-600 shadow-sm"
+    >
+      <p>لا توجد عناصر في قائمة الرغبات حاليًا</p>
+      <p class="mt-2 text-sm">ابدأ بإضافة مناسباتك المفضلة!</p>
+    </div>
+
+    <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        v-for="item in wishlists"
+        :key="item.id"
+        class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-100/40"
+      >
+        <!-- الصورة -->
+        <div class="relative aspect-[4/3] overflow-hidden">
+          <img
+            :src="item.image || 'https://picsum.photos/seed/event-' + item.id + '/800/600'"
+            :alt="item.image ? item.title : 'صورة افتراضية للمناسبة'"
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          ></div>
+        </div>
+
+        <!-- المحتوى -->
+        <div class="flex flex-1 flex-col p-5">
+          <!-- التصنيف (Badge) -->
+          <div class="mb-2">
+            <span
+              v-if="item.sub_categorey?.name"
+              class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-800 ring-1 ring-inset ring-indigo-600/30"
+            >
+              {{ item.sub_categorey.name }}
+            </span>
+            <span
+              v-else
+              class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
+            >
+              غير مصنف
+            </span>
+          </div>
+
+          <h3
+            class="mb-2 line-clamp-2 text-xl font-semibold text-gray-800 group-hover:text-indigo-700"
+          >
+            {{ item.title || "بدون عنوان" }}
+          </h3>
+
+          <p class="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-600">
+            {{ item.description || "—" }}
+          </p>
+
+          <div class="mt-auto space-y-2.5 text-sm text-gray-700">
+            <div class="flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span
+                ><strong class="font-medium">المدينة:</strong>
+                {{ item.city?.name || "غير محدد" }}</span
+              >
+            </div>
+
+            <div class="flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <span
+                ><strong class="font-medium">التاريخ:</strong>
+                {{ formatDate(item.start_date) }} → {{ formatDate(item.end_date) }}</span
+              >
+            </div>
+
+            <div v-if="item.time" class="flex items-center gap-2">
+              <svg
+                class="h-4 w-4 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span
+                ><strong class="font-medium">الوقت:</strong> {{ item.time }}</span
+              >
+            </div>
+          </div>
+
+          <!-- زر التفاصيل -->
+          <div class="mt-5 pt-4 border-t border-gray-100">
+            <router-link
+              :to="{ name: 'single_event', params: { slug: item.slug } }"
+              class="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+            >
+              عرض التفاصيل
+              <svg
+                class="mr-2 h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </router-link>
+          </div>
+
+          <!-- زر الحذف الجديد -->
+          <div class="mt-3">
+            <button
+              @click="deleteFromWishlist(item.id)"
+              :disabled="deletingItemId === item.id"
+              class="inline-flex w-full items-center justify-center rounded-lg border border-red-500 bg-white px-5 py-2.5 text-sm font-medium text-red-600 transition-all hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 disabled:opacity-50"
+            >
+              <svg
+                v-if="deletingItemId === item.id"
+                class="mr-2 h-4 w-4 animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              {{ deletingItemId === item.id ? "جاري الحذف..." : "إزالة من المفضلة" }}
+            </button>
+          </div>
+
+          <div class="mt-3 text-xs text-gray-500 text-center">
+            أُضيف في: {{ formatDateTime(item.created_at) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      v-if="pagination.last_page > 1"
+      class="mt-10 flex items-center justify-center gap-6"
+    >
+      <button
+        :disabled="!pagination.prev_page_url"
+        @click="changePage(currentPage - 1)"
+        class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
+      >
+        السابق
+      </button>
+
+      <span class="text-sm font-medium text-gray-700">
+        صفحة {{ currentPage }} من {{ pagination.last_page }}
+      </span>
+
+      <button
+        :disabled="!pagination.next_page_url"
+        @click="changePage(currentPage + 1)"
+        class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
+      >
+        التالي
+      </button>
+    </div>
+  </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const wishlists = ref([])
+const pagination = ref({})
+const currentPage = ref(1)
+const loading = ref(false)
+const deletingItemId = ref(null)
+
+const PLACEHOLDER_IMAGE = 'https://picsum.photos/seed/wishlist/600/400'
+
+const fetchWishlists = async (page = 1) => {
+  loading.value = true
+  try {
+    const response = await axios.get(`/v1/Wishlist/me?page=${page}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+      }
+    })
+
+    if (response.data.status === 'success') {
+      wishlists.value = response.data.data.data
+      pagination.value = {
+        current_page: response.data.data.current_page,
+        last_page: response.data.data.last_page,
+        prev_page_url: response.data.data.prev_page_url,
+        next_page_url: response.data.data.next_page_url,
+        total: response.data.data.total
+      }
+      currentPage.value = page
+    }
+  } catch (error) {
+    console.error('Error fetching wishlists:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+const deleteFromWishlist = async (id) => {
+  if (!confirm('هل أنت متأكد من إزالة هذا العنصر من قائمة المفضلة؟')) return
+
+  deletingItemId.value = id
+
+  try {
+    const response = await axios.delete(`/v1/Wishlist/${id}/delete`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+      }
+    })
+    if (response.data.status === 'success') {
+      wishlists.value = wishlists.value.filter(item => item.id !== id)
+      if (wishlists.value.length === 0 && currentPage.value > 1) {
+        changePage(currentPage.value - 1)
+      }
+    }
+  } catch (error) {
+    console.error('Error deleting from wishlist:', error)
+    let errorMessage = 'حدث خطأ أثناء الحذف، حاول مرة أخرى'
+
+    if (error.response) {
+      const res = error.response.data
+      if (res?.message) {
+        errorMessage = res.message
+      } else if (res?.error) {
+        errorMessage = res.error
+      } else if (res?.errors && typeof res.errors === 'object') {
+        const firstError = Object.values(res.errors)[0]
+        errorMessage = Array.isArray(firstError) ? firstError[0] : firstError
+      } else if (res?.data?.message) {
+        errorMessage = res.data.message
+      }
+    } else if (error.request) {
+      errorMessage = 'مشكلة في الاتصال بالخادم، تأكد من الإنترنت وحاول مرة أخرى'
+    } else {
+      errorMessage = error.message || 'خطأ غير متوقع'
+    }
+
+    alert(errorMessage)
+  } finally {
+    deletingItemId.value = null
+  }
+}
+
+const formatDate = (dateString) => {
+  if (!dateString) return '—'
+  return new Date(dateString).toLocaleDateString('ar-EG', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const formatDateTime = (dateString) => {
+  if (!dateString) return '—'
+  return new Date(dateString).toLocaleString('ar-EG', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const changePage = (page) => {
+  if (page < 1 || page > pagination.value.last_page) return
+  fetchWishlists(page)
+}
+
+onMounted(() => {
+  fetchWishlists(1)
+})
+</script>
+
+<style scoped>
+.my-wishlists-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.wishlist-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.wishlist-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-image {
+  height: 160px;
+  background: #f0f2f5;
+  position: relative;
+}
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder-image {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  background: linear-gradient(135deg, #e2e8f0, #f1f5f9);
+}
+
+.card-content {
+  padding: 1.25rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem;
+  color: #1e293b;
+}
+
+.description {
+  color: #64748b;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.meta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.meta-info strong {
+  color: #334155;
+}
+
+.created-at {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-align: left;
+}
+
+.pagination {
+  margin-top: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.pagination button {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty-state,
+.loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+</style>

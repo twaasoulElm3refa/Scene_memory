@@ -10,14 +10,12 @@ const messages = {
     ar,
     en
 }
-
 const i18n = createI18n({
     legacy: false,
     locale: localStorage.getItem('language')?.toLowerCase() || 'ar',
     fallbackLocale: 'en',
     messages
 })
-
 // your imports (bootstrap, css, etc.)
 import "./bootstrap";
 import "animate.css";

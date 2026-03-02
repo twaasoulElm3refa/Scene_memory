@@ -21,8 +21,10 @@ use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CommentController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
+use App\Http\Controllers\api\home\EventUserCreateController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\SubCategoryController;
+use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
@@ -112,6 +114,7 @@ Route::prefix('v1')->group(function () {
 
         // Events CRUD
         Route::post('/create', [EventAdminCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/create/user', [EventUserCreateController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
@@ -202,6 +205,11 @@ Route::prefix('v1')->group(function () {
         Route::post('{id}/create', [LikesController::class, 'create']);
     });
 
-    // 93 Endpoints for the API
+    Route::prefix('Wishlist')->middleware('auth:sanctum')->group(function () {
+        Route::get('/me', [WhisListController::class,'me']);
+        Route::post('/{id}', [WhisListController::class,'add']);
+        Route::delete('/{id}/delete', [WhisListController::class,'delete']);
+    });
+    // 96 Endpoints for the API
 });
 
