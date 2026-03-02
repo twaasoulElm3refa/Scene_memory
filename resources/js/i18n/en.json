@@ -1,0 +1,262 @@
+{
+  "search": {
+    "placeholder": "Search for events..."
+  },
+  "filters": {
+    "allCategories": "All Categories",
+    "country": "Country",
+    "city": "City",
+    "category": "Category",
+    "subCategory": "Subcategory",
+    "from": "From",
+    "to": "To",
+    "allSubCategories": "All Subcategories"
+  },
+  "common": {
+    "search": "Search",
+    "placeholder": "Search for events...",
+    "searching": "Searching...",
+    "details": "Details →",
+    "notSpecified": "Not specified",
+    "loadingEvents": "Loading events..."
+  },
+  "events": {
+    "all_memories": "All Event Memories",
+    "showing_snapshots": "Showing {total} historical snapshots from around the globe.",
+    "sort_by": "Sort by",
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "title": "Title"
+    },
+    "loading": "Loading events...",
+    "retry": "Try Again",
+    "page_info": "Page {current} of {last}",
+    "active_memories": "ACTIVE MEMORIES",
+    "latestEvents": "Latest Events",
+    "recentMemories": "Recent Memories",
+    "discoverAroundYou": "Discover what's happening around you and get ready for the best moments",
+    "noEventsFound": "No Events Found",
+    "noMatchingEvents": "No events matching your search criteria or location were found.",
+    "event": "Event",
+    "startDate": "Start Date"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "about": {
+    "title": "About Us - Seen Memory",
+    "subtitle": "We preserve your most precious moments, scene after scene",
+    "text1": "At Seen Memory, we believe that the most beautiful moments of life deserve to be preserved clearly and emotionally. We are more than just a storage platform – we are a digital memory album for your life's journey.",
+    "features": {
+      "immersiveAlbums": "Create immersive memory albums containing photos, videos, and audio notes",
+      "aiOrganize": "AI-supported organization that automatically classifies and tags your memories",
+      "privacy": "Complete privacy and security – your memories are encrypted and only you can access them"
+    },
+    "startJourney": "Start your memory journey now",
+    "highlightMoments": "Highlight moments of your life",
+    "organizedBy": "Organized by scenes, people, and places",
+    "stats": {
+      "memories": "Memories Preserved",
+      "users": "Happy Users",
+      "backup": "24/7 Secure Backup"
+    }
+  },
+  "newsletter": {
+    "title": "Stay Connected to Your Memories",
+    "description": "Receive weekly memory tips, feature updates, and inspiring stories in your email",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Your first name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "consent": "I agree to receive memory tips, updates, and promotional offers from time to time. I can unsubscribe at any time.",
+    "subscribe": "Subscribe to Memory Updates",
+    "community": "Join over 5,000 memory keepers in our community"
+  },
+  "map": {
+    "exploreMap": "Explore the Map"
+  },
+  "hero": {
+    "title_main": "We Preserve Your Memories",
+    "title_highlight": "To Keep Them Alive Forever",
+    "description": "At Scene Memory, we believe every moment deserves to last. We're here to help you capture, organize, and remember the important events in your life.",
+    "cta_start": "Start Your Journey With Us",
+    "cta_watch": "Watch Intro Video",
+    "feature_organized": "Organized Memories",
+    "feature_organized_desc": "Every moment in its perfect place",
+    "feature_private": "Guaranteed Privacy",
+    "feature_private_desc": "Your memories completely secure",
+    "feature_reminders": "Smart Reminders",
+    "feature_reminders_desc": "Never miss an important occasion",
+    "feature_evolving": "Constant Evolution",
+    "feature_evolving_desc": "Always improving your experience"
+  },
+  "our_story": {
+    "badge": "Our Story",
+    "title": "How Our Journey Began",
+    "intro": "It all started with a simple idea: How can we help people preserve the precious memories that shape their lives?",
+    "stage1_title": "The Beginning",
+    "stage1_desc": "In 2020, our founders noticed how many important moments fade over time. They decided to build a simple yet powerful tool to preserve these memories.",
+    "stage2_title": "Growth",
+    "stage2_desc": "As users grew, we added smart reminders, advanced categorization, and secure sharing with loved ones.",
+    "stage3_title": "The Vision",
+    "stage3_desc": "Today, we aim to be the world's best platform for memory preservation and organization — with strong focus on privacy and seamless experience."
+  },
+  "mission_vision": {
+    "mission_badge": "Our Mission",
+    "mission_title": "What We Believe In",
+    "mission_text": "Our mission is to empower everyone to preserve their precious memories in an easy, secure, and organized way. We believe every moment in life deserves to be saved and remembered.",
+    "value_people_first": "People First",
+    "value_people_first_desc": "User experience drives every decision we make",
+    "value_privacy": "Privacy is Sacred",
+    "value_privacy_desc": "Your memories stay private — we never share them",
+    "value_growth": "Continuous Growth",
+    "value_growth_desc": "We evolve constantly to meet our users' needs",
+    "vision_badge": "Our Vision",
+    "vision_title": "Where We're Heading",
+    "vision_text": "We aspire to be the world's leading platform for capturing and organizing memories — accessible, secure, and effortless for anyone, anywhere.",
+    "goals_2025": "Our 2025 Goals",
+    "goal_users": "Reach 1 Million Users",
+    "goal_languages": "Add 10 New Languages",
+    "goal_ai": "Launch Advanced AI Features"
+  },
+  "team": {
+    "badge": "Our Team",
+    "title": "The Minds Behind Scene Memory",
+    "description": "Our diverse team of developers, designers, and UX experts works together to create an unforgettable memory-keeping experience."
+  },
+  "values": {
+    "badge": "Our Values",
+    "title": "What Makes Us Different"
+  },
+  "stats": {
+    "title": "Our Numbers Speak",
+    "description": "Since launch, we've helped thousands of people preserve millions of precious memories"
+  },
+  "cta": {
+    "title": "Join the Scene Memory Family",
+    "description": "Start your memory journey today. Free, secure, and built just for you.",
+    "btn_signup": "Sign Up For Free",
+    "btn_features": "Explore Features",
+    "trust": "Join 50,000+ people who trust us with their memories"
+  },
+  "footer": {
+    "slogan": "Preserving your memories to keep them alive forever",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "contact": "Contact Us",
+    "copyright": "© 2024 Scene Memory. All rights reserved.",
+    "made_with": "Made with  for your memories"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "We're Here",
+      "title_highlight": "To Help You",
+      "description": "The Scene Memory team is ready to answer all your inquiries and assist you anytime",
+      "stat_24_7": "24/7 Support",
+      "stat_response_time": "Average Response Time",
+      "stat_satisfaction": "Customer Satisfaction",
+      "stat_happy_users": "Happy Users"
+    },
+    "tabs": {
+      "form": "Send Message",
+      "info": "Contact Information"
+    },
+    "form": {
+        "fullName": " Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "emailAddress": "Email Address",
+      "messagePlaceholder": "Tell us how we can help...",
+      "emailPlaceholder": "hello@example.com",
+      "title": "Send Us a Message",
+      "subtitle": "We'll get back to you as soon as possible. We're here to help!",
+      "full_name": "Full Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Message",
+      "message_placeholder": "Write your message here...",
+      "newsletter": "I would like to receive Scene Memory newsletter and offers",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "success_title": "Message Sent Successfully!",
+      "success_message": "Thank you for contacting us. We'll get back to you soon."
+    },
+    "info": {
+      "title": "Contact Information",
+      "address_title": "Headquarters",
+      "address": "Nile Street, Cairo, Egypt",
+      "view_map": "View on Map",
+      "phone_title": "Phone",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "Available from 9 AM to 9 PM",
+      "email_title": "Email",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "Response within 24 hours",
+      "follow_us": "Follow Us On",
+      "map_title": "Our Location on Map",
+      "map_location": "Cairo, Egypt",
+      "open_map": "Open Map"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Answers to the most common questions"
+    },
+    "live_support": {
+      "title": "Live Support",
+      "description": "Chat with one of our team members now for instant help",
+      "btn_chat": "Start Live Chat",
+      "btn_schedule": "Schedule a Call",
+      "available": "Currently Available: 3 Support Agents"
+    }
+  },
+  "contacts": {
+    "title": "Get in Touch",
+    "description": "Have a question about your event memories? We're here to help you preserve every moment across the globe.",
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "emailAddress": "Email Address",
+      "emailPlaceholder": "hello@example.com",
+      "subject": "Subject",
+      "generalInquiry": "General Inquiry",
+      "support": "Support",
+      "feedback": "Feedback",
+      "other": "Other",
+      "message": "Message",
+      "messagePlaceholder": "Tell us how we can help...",
+      "sendMessage": "Send Message",
+      "successMessage": "Thank you! Your message has been sent successfully."
+    },
+    "info": {
+      "emailUs": "Email Us",
+      "available": "Our team is available 24/7",
+      "visitStudio": "Visit Our Studio",
+      "address": "123 Memory Lane, Tech District\nSan Francisco, CA 94103",
+      "followJourney": "Follow the Journey"
+    },
+    "map": {
+      "title": "Scene Memory World Map",
+      "description": "Visualizing thousands of memories across 140+ countries."
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": {
+      "0": {
+        "question": "How do I add a memory?",
+        "answer": "Simply upload your photos and tag the location on our interactive world map."
+      },
+      "1": {
+        "question": "Is my data secure?",
+        "answer": "We use enterprise-grade encryption to ensure your private memories stay private."
+      },
+      "2": {
+        "question": "Can I share albums?",
+        "answer": "Yes! You can create collaborative albums with friends and family via secure links."
+      }
+    }
+  }
+}
