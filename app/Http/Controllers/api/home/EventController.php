@@ -21,10 +21,10 @@ class EventController extends Controller
         $page = request()->get('page', 1);
         $perPage = 8;
 
-        $cacheKey = "events_page_{$page}_per_{$perPage}";
+        $cacheKey = "events_page_{$page}_per_{$perPage}_".app()->getLocale();
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            $events = Events::with(['city:id,name', 'sub_categorey:id,name','firstImage:id,event_id,url'])->where('is_active', 1)
+            $events = Events::with(['city.translation', 'sub_categorey.translation','translation','firstImage:id,event_id,url'])->where('is_active', 1)
                 ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);

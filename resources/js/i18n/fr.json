@@ -21,6 +21,8 @@
         "loadingEvents": "Chargement des événements..."
     },
     "events": {
+        "categories": "Catégories",
+        "cities": "Villes",
         "all_memories": "Tous les souvenirs d'événements",
         "showing_snapshots": "Affichage de {total} instantanés historiques à travers le monde.",
         "sort_by": "Trier par",
