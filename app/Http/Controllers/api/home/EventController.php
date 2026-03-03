@@ -50,13 +50,13 @@ class EventController extends Controller
         ]));
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
-            return Events::with('city')->where('is_active', 1)
+            return Events::with('city.translation','translation')->where('is_active', 1)
                 ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
                 ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
                 ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
                 ->when($to, fn ($q) => $q->whereDate('end_date', '<=', $to))
                 ->orderBy('start_date')
-                ->get(['id', 'title', 'description', 'start_date', 'end_date', 'city_id']);
+                ->get(['id', 'title','slug', 'description', 'start_date', 'end_date', 'city_id']);
         });
 
         return $this->success($events, 'Events');

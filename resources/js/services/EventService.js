@@ -8,8 +8,8 @@ export const EventService = {
    */
   async searchEvents(filters = {}) {
     try {
-      const cityId = filters.cityId || "all"; 
-      const subCategoryId = filters.subCategoryId || "all"; 
+      const cityId = filters.cityId || "all";
+      const subCategoryId = filters.subCategoryId || "all";
       const params = {};
       if (filters.fromDate) params.from = filters.fromDate;
       if (filters.toDate) params.to = filters.toDate;
@@ -20,7 +20,7 @@ export const EventService = {
     } catch (err) {
       console.error("Error searching events:", err);
       throw new Error(
-        err.response?.data?.message || 
+        err.response?.data?.message ||
         "حدث خطأ أثناء جلب الفعاليات"
       );
     }
