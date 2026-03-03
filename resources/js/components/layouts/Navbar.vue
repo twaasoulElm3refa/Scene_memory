@@ -103,7 +103,7 @@ const userImage = ref(null);
 const currentLanguage = ref("AR");
 const languageDropdownOpen = ref(false);
 
-const languages = ["AR", "EN"];
+const languages = ["AR", "EN", "FR"];
 
 const selectLanguage = (lang) => {
     currentLanguage.value = lang;
@@ -177,7 +177,7 @@ const fetchProfile = async () => {
 
 onMounted(() => {
     const savedLang = localStorage.getItem("language");
-    if (savedLang && ["ar", "en"].includes(savedLang.toLowerCase())) {
+    if (savedLang && ["ar", "en", "fr"].includes(savedLang.toLowerCase())) {
         currentLanguage.value = savedLang.toUpperCase();
     } else {
         currentLanguage.value = "AR";
@@ -194,7 +194,6 @@ onMounted(() => {
         fetchProfile();
     });
 });
-
 const applyTheme = () => {
     document.documentElement.setAttribute("data-theme", theme.value);
     document.documentElement.setAttribute("data-bs-theme", theme.value);

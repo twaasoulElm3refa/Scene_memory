@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesSeeder::class);
         $this->call(SubCategoreySeeder::class);
         $this->call(footerSeeder::class);
+        $this->call(EventsSeeder::class);
         }
 }

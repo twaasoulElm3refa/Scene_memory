@@ -243,7 +243,7 @@ class EventsSeeder extends Seeder
             'description'=> $event->description,
             'locale'=> 'ar',
            ]);
-            TranslateEventJob::dispatch($event, $event->name, $event->description);
+            TranslateEventJob::dispatch($event->id, $event->title, $event->description);
         }
 
     }

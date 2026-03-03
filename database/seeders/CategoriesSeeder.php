@@ -45,7 +45,7 @@ class CategoriesSeeder extends Seeder
                 'locale' => 'ar',
                 'name' => $category['name'],
             ]);
-            TranslateCategoryJob::dispatch($categorey, $category['name']);
+            TranslateCategoryJob::dispatch($categorey->id, $categorey->name);
         }
     }
 }

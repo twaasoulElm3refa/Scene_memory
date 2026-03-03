@@ -17,12 +17,11 @@ class SetLocale
     {
         $locale = $request->header('Accept-Language', 'ar');
 
-        if (in_array($locale, ['ar', 'en'])) {
+        if (in_array($locale, ['ar', 'en','fr'])) {
             app()->setLocale($locale);
         } else {
-            app()->setLocale('ar'); 
+            app()->setLocale('ar');
         }
-
         return $next($request);
     }
 }

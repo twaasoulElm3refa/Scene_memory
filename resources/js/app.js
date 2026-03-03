@@ -4,11 +4,13 @@ import router from "./router";
 import { createI18n  } from "vue-i18n";
 import ar from "./i18n/ar.json";
 import en from "./i18n/en.json";
+import fr from "./i18n/fr.json";
 import '../css/app.css';
 
 const messages = {
     ar,
-    en
+    en,
+    fr
 }
 const i18n = createI18n({
     legacy: false,
