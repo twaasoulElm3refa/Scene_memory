@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CategoreyTranslations;
 use App\Models\Categories;
 use Illuminate\Database\Seeder;
 
@@ -37,7 +38,12 @@ class CategoriesSeeder extends Seeder
             ],
         ];
         foreach ($categgories as $category) {
-            Categories::create($category);
+          $categorey=  Categories::create($category);
+            CategoreyTranslations::create([
+                'category_id'=> $categorey->id,
+                'locale' => 'ar',
+                'name' => $category['name'],
+            ]);
         }
     }
 }

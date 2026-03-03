@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Events;
+use App\Models\EventTranslations;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -234,7 +235,14 @@ class EventsSeeder extends Seeder
 
         foreach ($events as $event) {
             $event['slug'] = Str::slug($event['title']).'-'.Str::random(5).time();
-            Events::create($event);
+           $event= Events::create($event);
+           EventTranslations::create([
+            'event_id'=> $event->id,
+            'title'=> $event->title,
+            'description'=> $event->description,
+            'locale'=> 'ar',
+           ]);
+
         }
 
     }

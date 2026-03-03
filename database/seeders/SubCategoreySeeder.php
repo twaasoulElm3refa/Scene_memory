@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Categories;
 use App\Models\subCategorey;
+use App\Models\SubCategoreyTranslations;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -30,10 +31,16 @@ class SubCategoreySeeder extends Seeder
             }
 
             foreach ($data[$category->name] as $sub) {
-                subCategorey::create([
+              $sub=  subCategorey::create([
                     'name' => $sub,
                     'category_id' => $category->id,
                     'slug'=>Str::slug($sub).'-'.Str::random(5).'-'.time(),
+                ]);
+
+                SubCategoreyTranslations::create([
+                    'category_id' => $sub->id,
+                    'locale'  => 'ar',
+                    'name'    => $sub->name,
                 ]);
             }
         }

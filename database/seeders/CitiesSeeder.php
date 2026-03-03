@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Cities;
+use App\Models\CityTranslations;
 use Illuminate\Database\Seeder;
 
 class CitiesSeeder extends Seeder
@@ -14,21 +15,26 @@ class CitiesSeeder extends Seeder
     {
         $cities = [
             [
-                'id' => 1, 
-                'name' => 'الرياض', 
+                'id' => 1,
+                'name' => 'الرياض',
                 'slug' => 'الرياض',
-                'country_id' => 2,
+                'country_id' => 192,
             ],
             [
                 'id'=> 2,
                 'name' => 'القاهرة',
                 'slug' => 'القاهرة',
-                'country_id' => 1,
+                'country_id' => 63,
             ],
         ];
 
         foreach ($cities as $city) {
-            Cities::create($city);
+           $city= Cities::create($city);
+           CityTranslations::create([
+                'city_id' => $city->id,
+                'locale'  => 'ar',
+                'name'    => $city->name,
+            ]);
         }
     }
 }
