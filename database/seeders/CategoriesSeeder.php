@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\TranslateCategoryJob;
 use App\Models\CategoreyTranslations;
 use App\Models\Categories;
 use Illuminate\Database\Seeder;
@@ -44,6 +45,7 @@ class CategoriesSeeder extends Seeder
                 'locale' => 'ar',
                 'name' => $category['name'],
             ]);
+            TranslateCategoryJob::dispatch($categorey, $category['name']);
         }
     }
 }

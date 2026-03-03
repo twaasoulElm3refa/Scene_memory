@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\TranslateSubCategoryJob;
 use App\Models\Categories;
 use App\Models\subCategorey;
 use App\Models\SubCategoreyTranslations;
@@ -42,6 +43,7 @@ class SubCategoreySeeder extends Seeder
                     'locale'  => 'ar',
                     'name'    => $sub->name,
                 ]);
+                TranslateSubCategoryJob::dispatch($sub->id, $sub->name);
             }
         }
     }

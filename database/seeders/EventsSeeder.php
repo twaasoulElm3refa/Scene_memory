@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\TranslateEventJob;
 use App\Models\Events;
 use App\Models\EventTranslations;
 use Illuminate\Database\Seeder;
@@ -242,7 +243,7 @@ class EventsSeeder extends Seeder
             'description'=> $event->description,
             'locale'=> 'ar',
            ]);
-
+            TranslateEventJob::dispatch($event, $event->name, $event->description);
         }
 
     }

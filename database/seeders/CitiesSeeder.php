@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\TranslateCityJob;
 use App\Models\Cities;
 use App\Models\CityTranslations;
 use Illuminate\Database\Seeder;
@@ -35,6 +36,7 @@ class CitiesSeeder extends Seeder
                 'locale'  => 'ar',
                 'name'    => $city->name,
             ]);
+            TranslateCityJob::dispatch($city->id, $city->name);
         }
     }
 }
