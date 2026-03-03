@@ -4,11 +4,13 @@
       <div
         class="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 mx-auto mb-8"
       ></div>
-      <p class="text-gray-700 text-2xl font-medium">جاري تحميل الحدث...</p>
+      <p class="text-gray-700 text-2xl font-medium">
+        {{ $t('event.loading') }}
+      </p>
     </div>
 
     <div v-else-if="!event" class="text-center py-32 text-gray-600 text-2xl">
-      الحدث غير موجود أو تم حذفه.
+      {{ $t('event.not_found') }}
     </div>
 
     <div v-else>
@@ -29,7 +31,7 @@
         <img
           v-else
           src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2400"
-          :alt="event.title"
+          :alt="event.translation.title"
           class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover"
         />
 
@@ -50,13 +52,13 @@
           <span
             class="bg-blue-100/90 backdrop-blur-sm text-blue-900 px-5 py-2 rounded-full text-base font-bold shadow-lg uppercase tracking-wider"
           >
-            {{ event.city?.name || "غير محدد" }}
+            {{ event.city?.translation.name || $t('event.city_default') }}
           </span>
           <span
-            v-if="event.sub_categorey?.name"
+            v-if="event.sub_categorey?.translation.name"
             class="bg-green-100/90 backdrop-blur-sm text-green-900 px-5 py-2 rounded-full text-base font-bold shadow-lg uppercase tracking-wider"
           >
-            {{ event.sub_categorey.name }}
+            {{ event.sub_categorey.translation.name }}
           </span>
         </div>
       </div>
@@ -72,7 +74,7 @@
                 <h1
                   class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight"
                 >
-                  {{ event.title }}
+                  {{ event.translation.title }}
                 </h1>
 
                 <button
@@ -102,7 +104,7 @@
               </div>
 
               <p class="text-lg md:text-xl text-gray-700 mb-10 leading-relaxed">
-                {{ event.description }}
+                {{ event.translation.description }}
               </p>
 
               <!-- Media Gallery -->
@@ -110,7 +112,7 @@
                 <h2
                   class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4"
                 >
-                  وسائط الحدث
+                  {{ $t('event.media_gallery_title') }}
                 </h2>
 
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -142,9 +144,7 @@
                       <div
                         class="absolute inset-0 flex items-center justify-center bg-black/20"
                       >
-                        <span class="text-white text-6xl opacity-80 drop-shadow-2xl"
-                          >▶</span
-                        >
+                        <span class="text-white text-6xl opacity-80 drop-shadow-2xl">▶</span>
                       </div>
                     </div>
 
@@ -152,7 +152,7 @@
                       v-else
                       class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500"
                     >
-                      لا يوجد وسائط
+                      {{ $t('event.no_media') }}
                     </div>
                   </div>
                 </div>
@@ -163,17 +163,17 @@
                 <h2
                   class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4"
                 >
-                  نبذة عن الحدث
+                  {{ $t('event.about_event_title') }}
                 </h2>
                 <p class="text-gray-700 mb-8 text-lg leading-relaxed">
-                  {{ event.description }}
+                  {{ event.translation.des }}
                 </p>
               </div>
 
               <!-- قسم التعليقات -->
               <div class="comments-section">
                 <h2 class="comments-title">
-                  التعليقات ({{ event.comments_count || event.comments?.length || 0 }})
+                  {{ $t('event.comments_title') }} ({{ event.comments_count || event.comments?.length || 0 }})
                 </h2>
 
                 <div
@@ -185,7 +185,7 @@
                     <div class="comment-text">
                       <div class="comment-header">
                         <p class="comment-user">
-                          {{ comment.user?.name || "زائر" }}
+                          {{ comment.user?.name || $t('event.visitor') }}
                         </p>
                         <span class="comment-date">
                           {{ formatCommentDate(comment.created_at) }}
@@ -201,7 +201,7 @@
                       v-if="comment.user_id === currentUserId"
                       @click="deleteComment(comment.id)"
                       class="delete-btn"
-                      title="حذف التعليق"
+                      :title="$t('event.delete_comment_title')"
                     >
                       ✕
                     </button>
@@ -209,14 +209,16 @@
                 </div>
 
                 <div class="comment-form">
-                  <h3 class="form-title">أضف تعليقك</h3>
+                  <h3 class="form-title">
+                    {{ $t('event.add_comment_title') }}
+                  </h3>
 
                   <form @submit.prevent="addComment">
                     <textarea
                       v-model="newComment"
                       rows="3"
                       class="comment-textarea"
-                      placeholder="اكتب تعليقك هنا..."
+                      :placeholder="$t('event.comment_placeholder')"
                       :disabled="commentLoading"
                       required
                     ></textarea>
@@ -227,14 +229,16 @@
                         :disabled="commentLoading || !newComment.trim()"
                         class="submit-btn"
                       >
-                        <span v-if="commentLoading">جاري الإرسال...</span>
-                        <span v-else>إرسال</span>
+                        <span v-if="commentLoading">{{ $t('event.sending_comment') }}</span>
+                        <span v-else>{{ $t('event.submit_comment') }}</span>
                       </button>
                     </div>
 
-                    <p v-if="commentError" class="error-msg">يرجى تسجيل الدخول أولاً</p>
+                    <p v-if="commentError" class="error-msg">
+                      {{ $t('event.comment_login_required') }}
+                    </p>
                     <p v-if="commentSuccess" class="success-msg">
-                      تم إضافة تعليقك بنجاح!
+                      {{ $t('event.comment_added_success') }}
                     </p>
                   </form>
                 </div>
@@ -247,13 +251,15 @@
             >
               <div class="space-y-10">
                 <div>
-                  <h3 class="text-2xl font-bold text-gray-900 mb-6">معلومات الحدث</h3>
+                  <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                    {{ $t('event.event_info_title') }}
+                  </h3>
 
                   <div class="space-y-3 text-gray-800">
                     <div class="flex items-center gap-2">
                       <span class="text-3xl">📅</span>
                       <div>
-                        <p class="font-semibold text-base">من</p>
+                        <p class="font-semibold text-base">{{ $t('event.from_date') }}</p>
                         <p class="text-lg">{{ formatDate(event.start_date) }}</p>
                       </div>
                     </div>
@@ -261,7 +267,7 @@
                     <div class="flex items-center gap-2">
                       <span class="text-3xl">📅</span>
                       <div>
-                        <p class="font-semibold text-base">إلى</p>
+                        <p class="font-semibold text-base">{{ $t('event.to_date') }}</p>
                         <p class="text-lg">{{ formatDate(event.end_date) }}</p>
                       </div>
                     </div>
@@ -269,22 +275,23 @@
                     <div class="flex items-center gap-2">
                       <span class="text-3xl">🕒</span>
                       <div>
-                        <p class="font-semibold text-base">الوقت</p>
-                        <p class="text-lg">{{ event.time || "غير محدد" }}</p>
+                        <p class="font-semibold text-base">{{ $t('event.time_label') }}</p>
+                        <p class="text-lg">{{ event.time || $t('event.time_default') }}</p>
                       </div>
                     </div>
 
                     <div class="flex items-center gap-2">
                       <span class="text-3xl">📍</span>
                       <div>
-                        <p class="font-semibold text-base">المكان</p>
-                        <p class="text-lg">{{ event.city?.name || "غير محدد" }}</p>
+                        <p class="font-semibold text-base">{{ $t('event.location') }}</p>
+                        <p class="text-lg">{{ event.city?.translation.name || $t('event.city_default') }}</p>
                       </div>
                     </div>
+
                     <div v-if="event.user?.name" class="flex items-center gap-2">
                       <span class="text-3xl">👤</span>
                       <div>
-                        <p class="font-semibold text-base">منظم الحدث</p>
+                        <p class="font-semibold text-base">{{ $t('event.organizer') }}</p>
                         <p class="text-lg">{{ event.user.name }}</p>
                       </div>
                     </div>
@@ -298,13 +305,12 @@
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg py-4 px-8 rounded transition shadow-lg flex items-center justify-center gap-2"
                     :class="{ 'opacity-70 cursor-not-allowed': wishlistLoading || isInWishlist }"
                   >
-                    <span v-if="wishlistLoading" class="animate-pulse">جاري الإضافة...</span>
+                    <span v-if="wishlistLoading" class="animate-pulse">{{ $t('event.adding_to_wishlist') }}</span>
                     <template v-else>
-                      ♥ {{ isInWishlist ? "موجود في المفضلة" : "أضف إلى المفضلة" }}
+                      ♥ {{ isInWishlist ? $t('event.already_in_wishlist') : $t('event.add_to_wishlist') }}
                     </template>
                   </button>
 
-                  <!-- رسالة الخطأ -->
                   <p
                     v-if="wishlistError"
                     class="text-red-600 text-center text-sm mt-2 bg-red-50 p-3 rounded-lg"
@@ -312,12 +318,11 @@
                     {{ wishlistError }}
                   </p>
 
-                  <!-- رسالة النجاح -->
                   <p
                     v-if="wishlistSuccess"
                     class="text-green-600 text-center text-sm mt-2 bg-green-50 p-3 rounded-lg"
                   >
-                    تمت الإضافة إلى المفضلة بنجاح!
+                    {{ $t('event.wishlist_success') }}
                   </p>
                 </div>
               </div>
@@ -341,9 +346,7 @@
           />
 
           <video
-            v-else-if="
-              currentMedia && (currentMedia.video || isVideoUrl(currentMedia.url))
-            "
+            v-else-if="currentMedia && (currentMedia.video || isVideoUrl(currentMedia.url))"
             :src="currentMedia.video || currentMedia.url"
             class="max-w-full max-h-[90vh]"
             controls
@@ -383,12 +386,10 @@ const commentError = ref("");
 const commentSuccess = ref(false);
 const currentUserId = ref(null);
 
-// ── لايكات ────────────────────────────────────────
 const likesCount = ref(0);
 const isLiked = ref(false);
 const likeLoading = ref(false);
 
-// ── المفضلة (Wishlist) ─────────────────────────────
 const wishlistLoading = ref(false);
 const isInWishlist = ref(false);
 const wishlistError = ref("");
@@ -532,7 +533,12 @@ const isVideoUrl = (url) => {
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
   try {
-    return new Date(dateStr).toLocaleDateString("ar-EG", {
+    const savedLang = (localStorage.getItem("language") || "ar").toLowerCase();
+    let locale = "en-US";
+    if (savedLang === "ar") locale = "ar-EG";
+    else if (savedLang === "fr") locale = "fr-FR";
+
+    return new Date(dateStr).toLocaleDateString(locale, {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -542,11 +548,15 @@ const formatDate = (dateStr) => {
     return "—";
   }
 };
-
 const formatCommentDate = (dateStr) => {
   if (!dateStr) return "—";
   try {
-    return new Date(dateStr).toLocaleString("ar-EG", {
+    const savedLang = (localStorage.getItem("language") || "ar").toLowerCase();
+    let locale = "en-US";
+    if (savedLang === "ar") locale = "ar-EG";
+    else if (savedLang === "fr") locale = "fr-FR";
+
+    return new Date(dateStr).toLocaleString(locale, {
       year: "numeric",
       month: "short",
       day: "numeric",

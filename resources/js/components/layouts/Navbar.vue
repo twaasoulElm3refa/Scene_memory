@@ -14,7 +14,7 @@
             <nav class="d-none d-md-flex flex-grow-1 justify-content-center">
                 <a v-for="link in links" :key="link.href" :href="link.href" class="nav-link px-2"
                     :class="{ active: isActive(link.active) }">
-                    {{ link.label }}
+                    {{ $t(link.labelKey) }}
                 </a>
             </nav>
 
@@ -41,7 +41,7 @@
             ">
                         <button class="dropdown-item" v-for="lang in languages" :key="lang"
                             @click="selectLanguage(lang)">
-                            {{ lang }}
+                            {{ $t(`languages.${lang}`) }}
                         </button>
                     </div>
                 </div>
@@ -63,17 +63,17 @@
                 z-index: 1000;
                 min-width: 150px;
               ">
-                            <a class="dropdown-item" href="/profile">الملف الشخصي</a>
+                            <a class="dropdown-item" href="/profile">{{ $t("nav.profile") }}</a>
                             <hr class="dropdown-divider" />
                             <button class="dropdown-item text-danger" @click="logout">
-                                تسجيل الخروج
+                                {{ $t("nav.logout") }}
                             </button>
                         </div>
                     </template>
 
                     <template v-else>
                         <a href="/auth" class="btn-user user-hover fw-bold shadow-gray text-decoration-none">
-                            تسجيل الدخول
+                            {{ $t("nav.login") }}
                         </a>
                     </template>
                 </div>
@@ -84,7 +84,7 @@
         <div v-if="mobileMenu" class="d-md-none mt-2 bg-white dark:bg-dark shadow-lg rounded p-3">
             <a v-for="link in links" :key="link.href" :href="link.href" class="d-block nav-link py-2 px-1"
                 :class="{ active: isActive(link.active) }">
-                {{ link.label }}
+                {{ $t(link.labelKey) }}
             </a>
         </div>
     </header>
@@ -114,13 +114,14 @@ const selectLanguage = (lang) => {
 };
 
 const allLinks = [
-    { label: "الرئيسية", href: "/", active: "home" },
-    { label: "من نحن", href: "/who", active: "who" },
-    { label: "جميع الاحداث", href: "/all_events", active: "all_events" },
-    { label: "تواصل معنا", href: "/contact", active: "contact" },
-    { label: "اضافه حدث", href: "/add_event", active: "add_event" },
-    { label: "المفضلة", href: "/WishList", active: "Wishlist" },
+    { labelKey: "nav.home",        href: "/",          active: "home"       },
+    { labelKey: "nav.about",       href: "/who",       active: "who"        },
+    { labelKey: "nav.allEvents",   href: "/all_events",active: "all_events" },
+    { labelKey: "nav.contact",     href: "/contact",   active: "contact"    },
+    { labelKey: "nav.addEvent",    href: "/add_event", active: "add_event"  },
+    { labelKey: "nav.wishlist",    href: "/WishList",  active: "Wishlist"   },
 ];
+
 const userInitial = computed(() => {
     if (!userName.value) return "UU";
     const nameParts = userName.value.split(" ");
@@ -143,6 +144,7 @@ const links = computed(() => {
             link.active !== "Wishlist"
     );
 });
+
 const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
 
 const logout = () => {
@@ -194,6 +196,7 @@ onMounted(() => {
         fetchProfile();
     });
 });
+
 const applyTheme = () => {
     document.documentElement.setAttribute("data-theme", theme.value);
     document.documentElement.setAttribute("data-bs-theme", theme.value);

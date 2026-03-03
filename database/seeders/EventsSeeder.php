@@ -24,6 +24,7 @@ class EventsSeeder extends Seeder
                 'description' => 'جولة سياحية على النيل وزيارة أهم المعالم.',
                 'start_date' => '2026-03-01',
                 'end_date' => '2026-03-03',
+                'time' => '18:00', // مساءً مناسب للرحلة النيلية
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -36,6 +37,7 @@ class EventsSeeder extends Seeder
                 'description' => 'أحدث اللوحات الفنية من فنانين محليين ودوليين.',
                 'start_date' => '2026-04-10',
                 'end_date' => '2026-04-15',
+                'time' => '10:00', // صباحاً مناسب للمعارض
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -48,6 +50,7 @@ class EventsSeeder extends Seeder
                 'description' => 'بطولة بين الأندية المحلية للشباب.',
                 'start_date' => '2026-05-05',
                 'end_date' => '2026-05-08',
+                'time' => '16:00',
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -60,6 +63,7 @@ class EventsSeeder extends Seeder
                 'description' => 'تعلم أساسيات البرمجة للأطفال والشباب.',
                 'start_date' => '2026-06-12',
                 'end_date' => '2026-06-14',
+                'time' => '09:00',
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -72,6 +76,7 @@ class EventsSeeder extends Seeder
                 'description' => 'جولة خاصة عند غروب الشمس مع مرشد سياحي ووجبة خفيفة.',
                 'start_date' => '2026-11-05',
                 'end_date' => '2026-11-05',
+                'time' => '16:30', // قريب من الغروب
                 'image' => null,
                 'langitude' => '31.1342',
                 'lattitude' => '29.9792',
@@ -84,6 +89,7 @@ class EventsSeeder extends Seeder
                 'description' => 'تعرف على أساسيات الـ AI والـ Machine Learning بطريقة عملية.',
                 'start_date' => '2026-11-15',
                 'end_date' => '2026-11-17',
+                'time' => '09:30',
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -96,6 +102,7 @@ class EventsSeeder extends Seeder
                 'description' => 'أكبر تجمع لدور النشر العربية والعالمية مع فعاليات ثقافية.',
                 'start_date' => '2026-12-01',
                 'end_date' => '2026-12-10',
+                'time' => '10:00',
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -108,6 +115,7 @@ class EventsSeeder extends Seeder
                 'description' => 'فعالية رياضية جماعية تشمل تمارين ومسابقات ممتعة.',
                 'start_date' => '2026-12-20',
                 'end_date' => '2026-12-20',
+                'time' => '08:00', // صباح الشتاء
                 'image' => null,
                 'langitude' => '46.7220',
                 'lattitude' => '24.7743',
@@ -120,6 +128,7 @@ class EventsSeeder extends Seeder
                 'description' => 'عرض مسرحي كوميدي موسيقي من إنتاج فرقة محلية مميزة.',
                 'start_date' => '2027-01-08',
                 'end_date' => '2027-01-15',
+                'time' => '20:00', // عرض مسائي
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -132,6 +141,7 @@ class EventsSeeder extends Seeder
                 'description' => 'زيارة الموقع السياحي الشهير مع نزهة وتصوير.',
                 'start_date' => '2027-02-10',
                 'end_date' => '2027-02-11',
+                'time' => '07:00', // صباح باكر للجو المناسب
                 'image' => null,
                 'langitude' => '46.1500',
                 'lattitude' => '26.0667',
@@ -144,6 +154,7 @@ class EventsSeeder extends Seeder
                 'description' => 'أمسيات فنية تجمع بين الرقص الشرقي والموسيقى التقليدية.',
                 'start_date' => '2027-03-05',
                 'end_date' => '2027-03-05',
+                'time' => '19:30',
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -156,6 +167,7 @@ class EventsSeeder extends Seeder
                 'description' => 'مسابقة برمجة جماعية لتطوير حلول تقنية مبتكرة خلال 48 ساعة.',
                 'start_date' => '2027-04-01',
                 'end_date' => '2027-04-03',
+                'time' => '09:00',
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -168,6 +180,7 @@ class EventsSeeder extends Seeder
                 'description' => 'منافسات تنس للمحترفين والهاويين على ملاعب النيل.',
                 'start_date' => '2027-05-12',
                 'end_date' => '2027-05-16',
+                'time' => '15:00',
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -180,6 +193,7 @@ class EventsSeeder extends Seeder
                 'description' => 'عروض ضوئية ثلاثية الأبعاد ومعارض فنية تفاعلية.',
                 'start_date' => '2027-06-01',
                 'end_date' => '2027-06-07',
+                'time' => '18:00', // مناسب للعروض الضوئية المسائية
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -192,6 +206,7 @@ class EventsSeeder extends Seeder
                 'description' => 'قراءة ومناقشة الشعر العربي المعاصر.',
                 'start_date' => '2026-07-20',
                 'end_date' => '2026-07-20',
+                'time' => '19:00',
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -204,6 +219,7 @@ class EventsSeeder extends Seeder
                 'description' => 'زيارة المواقع التاريخية واستكشاف التراث السعودي.',
                 'start_date' => '2026-08-01',
                 'end_date' => '2026-08-02',
+                'time' => '08:30',
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -216,6 +232,7 @@ class EventsSeeder extends Seeder
                 'description' => 'حفلات موسيقية لأشهر الفرق المحلية والعالمية.',
                 'start_date' => '2026-09-05',
                 'end_date' => '2026-09-07',
+                'time' => '20:00',
                 'image' => null,
                 'langitude' => '31.2357',
                 'lattitude' => '30.0444',
@@ -228,6 +245,7 @@ class EventsSeeder extends Seeder
                 'description' => 'ماراثون مفتوح لجميع الأعمار حول مدينة الرياض.',
                 'start_date' => '2026-10-10',
                 'end_date' => '2026-10-10',
+                'time' => '07:00', // صباح باكر للماراثون
                 'image' => null,
                 'langitude' => '46.6753',
                 'lattitude' => '24.7136',
@@ -236,13 +254,13 @@ class EventsSeeder extends Seeder
 
         foreach ($events as $event) {
             $event['slug'] = Str::slug($event['title']).'-'.Str::random(5).time();
-           $event= Events::create($event);
-           EventTranslations::create([
-            'event_id'=> $event->id,
-            'title'=> $event->title,
-            'description'=> $event->description,
-            'locale'=> 'ar',
-           ]);
+            $event = Events::create($event);
+            EventTranslations::create([
+                'event_id' => $event->id,
+                'title' => $event->title,
+                'description' => $event->description,
+                'locale' => 'ar',
+            ]);
             TranslateEventJob::dispatch($event->id, $event->title, $event->description);
         }
 

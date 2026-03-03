@@ -6,6 +6,7 @@ export const EventService = {
 
     try {
       const res = await api.get(`/events/${slug}/single/get`);
+      console.log(res.data.data);
       return res.data.data || null;
     } catch (err) {
       console.error("Error fetching single event:", err);

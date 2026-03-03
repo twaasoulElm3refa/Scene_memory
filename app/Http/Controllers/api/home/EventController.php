@@ -114,15 +114,16 @@ class EventController extends Controller
             return $this->error('Invalid slug', 400);
         }
 
-        $cacheKey = "events_single_{$slug}";
+        $cacheKey = "events_single_{$slug}_".app()->getLocale();
         $cacheTime = now()->addHours(6);
 
         $event = Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
             return Events::with([
-                'city:id,name',
-                'sub_categorey:id,name',
+                'city.translation',
+                'sub_categorey.translation',
                 'user:id,name',
                 'images',
+                'translation',
 
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)

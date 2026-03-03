@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr" id="html-root" data-theme="dark">
+@php
+    $locale = app()->getLocale();
+    $dir = in_array($locale, ['ar']) ? 'rtl' : 'ltr';
+@endphp
+
+<html id="html-root" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -16,8 +21,7 @@
 <body class="app-body">
     <div id="app"></div>
 
-    <!-- Theme init -->
-    <script>
+    {{-- <script>
         (function() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             if(!savedTheme){
@@ -26,7 +30,13 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
             document.documentElement.setAttribute('data-bs-theme', savedTheme);
         })();
-    </script>
+    </script> --}}
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
 </body>
 </html>
+<script>
+    const html = document.getElementById('html-root');
+    const lang = localStorage.getItem('language') || 'ar';
+    html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    html.setAttribute('lang', lang);
+</script>

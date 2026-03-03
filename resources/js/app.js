@@ -18,7 +18,6 @@ const i18n = createI18n({
     fallbackLocale: 'en',
     messages
 })
-// your imports (bootstrap, css, etc.)
 import "./bootstrap";
 import "animate.css";
 import "../css/app.css";
