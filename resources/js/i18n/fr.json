@@ -246,7 +246,10 @@
         "languages": {
             "AR": "Arabe",
             "EN": "Anglais",
-            "FR": "Français"
+            "FR": "Français",
+            "DE": "Allemand",
+            "RU": "Russe",
+            "ES": "Espagnol"
         },
         "event": {
             "loading": "Chargement de l'événement en cours...",

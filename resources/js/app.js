@@ -5,12 +5,18 @@ import { createI18n  } from "vue-i18n";
 import ar from "./i18n/ar.json";
 import en from "./i18n/en.json";
 import fr from "./i18n/fr.json";
+import de from "./i18n/de.json";
+import ru from "./i18n/ru.json";
+import es from "./i18n/es.json";
 import '../css/app.css';
 
 const messages = {
     ar,
     en,
-    fr
+    fr,
+    de,
+    ru,
+    es
 }
 const i18n = createI18n({
     legacy: false,

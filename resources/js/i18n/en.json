@@ -26,7 +26,10 @@
     "languages": {
         "AR": "Arabic",
         "EN": "English",
-        "FR": "French"
+        "FR": "French",
+        "DE": "German",
+        "RU": "Russian",
+        "ES": "Spanish"
     },
     "event": {
         "loading": "Loading event...",

@@ -26,7 +26,10 @@
     "languages": {
         "AR": "العربية",
         "EN": "English",
-        "FR": "Français"
+        "FR": "Français",
+        "DE": "Deutsch",
+        "RU": "Русский",
+        "ES": "Español"
     },
     "event": {
         "loading": "جاري تحميل الحدث...",

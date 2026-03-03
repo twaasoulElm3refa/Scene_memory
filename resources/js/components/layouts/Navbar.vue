@@ -103,7 +103,8 @@ const userImage = ref(null);
 const currentLanguage = ref("AR");
 const languageDropdownOpen = ref(false);
 
-const languages = ["AR", "EN", "FR"];
+// Добавлены русский (RU) и испанский (ES)
+const languages = ["AR", "EN", "FR", "DE", "RU", "ES"];
 
 const selectLanguage = (lang) => {
     currentLanguage.value = lang;
@@ -179,7 +180,9 @@ const fetchProfile = async () => {
 
 onMounted(() => {
     const savedLang = localStorage.getItem("language");
-    if (savedLang && ["ar", "en", "fr"].includes(savedLang.toLowerCase())) {
+
+    // Обновлён список поддерживаемых языков (в нижнем регистре)
+    if (savedLang && ["ar", "en", "fr", "de", "ru", "es"].includes(savedLang.toLowerCase())) {
         currentLanguage.value = savedLang.toUpperCase();
     } else {
         currentLanguage.value = "AR";
