@@ -36,12 +36,6 @@ class CategoriesCreateController extends Controller
                     'slug'  => Str::slug($data['name']) . '-' . time(),
                 ]);
 
-                CategoreyTranslations::create([
-                    'category_id' => $category->id,
-                    'locale'      => 'ar',
-                    'name'        => $data['name'],
-                ]);
-
                 return $category;
             });
 

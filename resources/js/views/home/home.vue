@@ -163,7 +163,7 @@
                                 <div class="flex items-center gap-1.5 text-sm text-gray-600">
                                     <span></span>
                                     <span class="font-medium">
-                                       {{ event.city || $t("common.notSpecified") || '0' }}
+                                        {{ event.translation?.name || $t("common.notSpecified") || '0' }}
                                     </span>
                                 </div>
                                 <a :href="`/single_event/${event.slug}`"
@@ -291,8 +291,11 @@ const paginatedEvents = computed(() => {
 // ====================== Format Date ======================
 const formatDate = (dateStr) => {
     if (!dateStr) return "—";
+
+    const language = localStorage.getItem("language") || "ar";
+
     try {
-        return new Date(dateStr).toLocaleDateString("ar-EG", {
+        return new Date(dateStr).toLocaleDateString(language, {
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -474,10 +477,10 @@ const handleMarkerEvents = (e) => {
     displayedEvents.value = eventsFromMap.map((ev) => ({
         id: ev.id || ev._id,
         slug: ev.slug,
-        title: ev.title || "فعالية بدون عنوان",
+        title: ev.title ||'فعالية بدون عنوان',
         start_date: ev.start_date,
-        city: ev.city?.name || ev.city || "غير محدد",
-        category_name: ev.category_name || "من الخريطة",
+        city: ev.city?.name || ev.city || '',
+        category_name: ev.category_name || '',
         image_url: ev.image_url || null,
         lattitude: ev.lattitude || ev.latitude,
         langitude: ev.langitude || ev.longitude,

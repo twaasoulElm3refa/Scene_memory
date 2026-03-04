@@ -36,13 +36,6 @@ class SubCategoriesCreateController extends Controller
                     'slug'        => Str::slug($data['name']) . '-' . time(),
                     'category_id' => $data['category_id'] ?? null,
                 ]);
-
-                SubCategoreyTranslations::create([
-                    'category_id' => $subCategory->id,
-                    'locale'      => 'ar',
-                    'name'        => $data['name'],
-                ]);
-
                 return $subCategory;
             });
 

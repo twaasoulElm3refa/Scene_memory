@@ -1,0 +1,364 @@
+{
+    "search": {
+        "placeholder": "イベントを検索..."
+    },
+    "filters": {
+        "allCategories": "すべてのカテゴリ",
+        "country": "国",
+        "category": "カテゴリ",
+        "subCategory": "サブカテゴリ",
+        "from": "から",
+        "to": "まで",
+        "city": "都市",
+        "allSubCategories": "すべてのサブカテゴリ"
+    },
+    "nav": {
+        "home": "ホーム",
+        "about": "私たちについて",
+        "allEvents": "すべてのイベント",
+        "contact": "お問い合わせ",
+        "addEvent": "イベントを追加",
+        "wishlist": "お気に入り",
+        "profile": "プロフィール",
+        "logout": "ログアウト",
+        "login": "ログイン"
+    },
+    "languages": {
+        "AR": "アラビア語",
+        "EN": "英語",
+        "FR": "フランス語",
+        "DE": "ドイツ語",
+        "RU": "ロシア語",
+        "ES": "スペイン語",
+        "IT": "イタリア語",
+        "HI": "ヒンディー語",
+        "ZH": "中国語",
+        "FA": "ペルシア語",
+        "JA": "日本語"
+    },
+    "event": {
+        "loading": "イベントを読み込み中...",
+        "not_found": "イベントが存在しないか削除されました。",
+        "city_default": "未指定",
+        "visitor": "訪問者",
+        "media_gallery_title": "イベントメディア",
+        "no_media": "メディアがありません",
+        "about_event_title": "イベントについて",
+        "comments_title": "コメント",
+        "add_comment_title": "コメントを追加",
+        "comment_placeholder": "ここにコメントを入力...",
+        "submit_comment": "送信",
+        "sending_comment": "送信中...",
+        "comment_login_required": "まずログインしてください",
+        "comment_added_success": "コメントが正常に追加されました！",
+        "delete_comment_title": "コメントを削除",
+        "event_info_title": "イベント情報",
+        "from_date": "から",
+        "to_date": "まで",
+        "time_label": "時間",
+        "time_default": "未指定",
+        "location": "場所",
+        "organizer": "イベント主催者",
+        "add_to_wishlist": "お気に入りに追加",
+        "already_in_wishlist": "既にお気に入りに入っています",
+        "adding_to_wishlist": "追加中...",
+        "wishlist_success": "お気に入りに正常に追加されました！"
+    },
+    "common": {
+        "search": "検索",
+        "placeholder": "イベントを検索...",
+        "searching": "検索中...",
+        "details": "詳細",
+        "notSpecified": "未指定",
+        "loadingEvents": "イベントを読み込み中..."
+    },
+    "events": {
+        "cities": "都市",
+        "no_title": "タイトルなしイベント",
+        "undefined_city": "未定義",
+        "from_map": "地図から",
+        "categories": "カテゴリ",
+        "all_memories": "すべてのイベントの思い出",
+        "showing_snapshots": "世界中からの歴史的なスナップショット {total} 件を表示",
+        "sort_by": "並べ替え",
+        "sort": {
+            "newest": "新しい順",
+            "oldest": "古い順",
+            "title": "タイトル"
+        },
+        "loading": "イベントを読み込み中...",
+        "retry": "再試行",
+        "page_info": "ページ {current} / {last}",
+        "active_memories": "アクティブなイベント",
+        "latestEvents": "最新のイベント",
+        "recentMemories": "最近のイベント",
+        "discoverAroundYou": "あなたの周りで起こっていることを発見し、最も美しい瞬間を迎える準備をしましょう",
+        "noEventsFound": "イベントが見つかりません",
+        "noMatchingEvents": "検索条件または場所に一致するイベントが見つかりませんでした",
+        "event": "イベント",
+        "startDate": "開始日"
+    },
+    "pagination": {
+        "previous": "前へ",
+        "next": "次へ"
+    },
+    "about": {
+        "title": "私たちについて - Scene Memory",
+        "subtitle": "最も大切な瞬間を、一幕一幕大切に保存します",
+        "text1": "Scene Memoryでは、人生で最も美しい瞬間は鮮明かつ感情豊かに保存されるべきだと信じています。私たちは単なるストレージプラットフォームではなく、あなたの人生の旅のデジタル思い出アルバムです。",
+        "features": {
+            "immersiveAlbums": "写真、ビデオ、音声メモを含む没入型思い出アルバムの作成",
+            "aiOrganize": "AIによる自動分類とタグ付けで思い出を整理",
+            "privacy": "完全なプライバシーとセキュリティ - 思い出は暗号化され、あなただけがアクセス可能"
+        },
+        "startJourney": "今すぐ思い出の旅を始めましょう",
+        "highlightMoments": "人生のハイライト瞬間を強調",
+        "organizedBy": "シーン、人、場所ごとに整理",
+        "stats": {
+            "memories": "保存された思い出",
+            "users": "満足したユーザー",
+            "backup": "安全なバックアップ"
+        }
+    },
+    "newsletter": {
+        "title": "思い出とつながり続けましょう",
+        "description": "思い出のヒント、機能アップデート、感動的なストーリーを毎週メールでお届け",
+        "firstName": "名",
+        "firstNamePlaceholder": "あなたの名前",
+        "email": "メールアドレス",
+        "emailPlaceholder": "you@example.com",
+        "consent": "Scene Memoryからの思い出アドバイス、アップデート、プロモーションを時折受け取ることに同意します。いつでも購読を解除できます。",
+        "subscribe": "思い出アップデートを購読",
+        "community": "私たちの5,000人以上の思い出を守るコミュニティに参加しましょう"
+    },
+    "map": {
+        "exploreMap": "マップを探索"
+    },
+    "hero": {
+        "title_main": "私たちはあなたの思い出を保存します",
+        "title_highlight": "永遠に生き続けるために",
+        "description": "Scene Memoryでは、すべての瞬間が残る価値があると信じています。私たちはあなたの人生の重要なイベントを保存、整理、思い出すお手伝いをします。",
+        "cta_start": "私たちとの旅を始める",
+        "cta_watch": "紹介ビデオを見る",
+        "feature_organized": "整理された思い出",
+        "feature_organized_desc": "すべての瞬間が適切な場所に",
+        "feature_private": "保証されたプライバシー",
+        "feature_private_desc": "思い出は完全に安全",
+        "feature_reminders": "スマートリマインダー",
+        "feature_reminders_desc": "重要な機会を絶対に逃さない",
+        "feature_evolving": "継続的な進化",
+        "feature_evolving_desc": "常にあなたの体験を向上させています"
+    },
+    "our_story": {
+        "badge": "私たちの物語",
+        "title": "私たちの旅の始まり",
+        "intro": "私たちの物語はシンプルなアイデアから始まりました：人々が人生を形作る貴重な思い出をどうやって保存できるか？",
+        "stage1_title": "始まり",
+        "stage1_desc": "2020年、創業者たちは多くの大切な瞬間が時間とともに失われることに気づきました。彼らはこれらの思い出を保存するシンプルかつ強力なツールを作ることを決意しました。",
+        "stage2_title": "成長",
+        "stage2_desc": "ユーザーが増えるにつれ、スマートリマインダー、高度な分類、愛する人との安全な共有などの新機能を追加しました。",
+        "stage3_title": "ビジョン",
+        "stage3_desc": "今日、私たちはプライバシーとスムーズな体験に重点を置き、世界最高の思い出保存・整理プラットフォームになることを目指しています。"
+    },
+    "mission_vision": {
+        "mission_badge": "私たちの使命",
+        "mission_title": "私たちが信じること",
+        "mission_text": "私たちの使命は、誰もが簡単、安全、整理された方法で貴重な思い出を保存できるようにすることです。私たちは人生のすべての瞬間が保存され、記憶される価値があると信じています。",
+        "value_people_first": "人を第一に",
+        "value_people_first_desc": "ユーザー体験がすべての決定の中心",
+        "value_privacy": "プライバシーは神聖",
+        "value_privacy_desc": "あなたの思い出はあなただけのもの、私たちは誰とも共有しません",
+        "value_growth": "継続的な成長",
+        "value_growth_desc": "ユーザーのニーズに応えるために常に進化",
+        "vision_badge": "私たちのビジョン",
+        "vision_title": "私たちの目指す方向",
+        "vision_text": "私たちは世界一の思い出保存・整理プラットフォームになることを目指します。どこにいる誰でも簡単に安全に大切な瞬間を保存できる場所です。",
+        "goals_2025": "2025年の目標",
+        "goal_users": "100万ユーザーの達成",
+        "goal_languages": "10言語の追加",
+        "goal_ai": "AI機能のリリース"
+    },
+    "team": {
+        "badge": "私たちのチーム",
+        "title": "Scene Memoryを支える頭脳",
+        "description": "多様な開発者、デザイナー、UX専門家からなるチームが、一緒に忘れられない思い出保存体験を作り上げています。"
+    },
+    "values": {
+        "badge": "私たちの価値観",
+        "title": "私たちを特別にするもの"
+    },
+    "stats": {
+        "title": "数字が物語る",
+        "description": "設立以来、何千人もの人々が何百万もの貴重な思い出を保存する手助けをしてきました"
+    },
+    "cta": {
+        "title": "Scene Memoryファミリーに参加しよう",
+        "description": "今日から思い出保存の旅を始めましょう。無料、安全、あなたのために設計されています。",
+        "btn_signup": "無料アカウント登録",
+        "btn_features": "機能を知る",
+        "trust": "50,000人以上が私たちを信頼して思い出を保存しています"
+    },
+    "footer": {
+        "slogan": "思い出を保存し、永遠に生き続けさせる",
+        "terms": "利用規約",
+        "privacy": "プライバシーポリシー",
+        "contact": "お問い合わせ",
+        "copyright": "© 2024 Scene Memory. All Rights Reserved.",
+        "made_with": "愛を込めて、あなたの思い出のために作られました"
+    },
+    "contact": {
+        "hero": {
+            "title_main": "私たちはここにいます",
+            "title_highlight": "あなたを助けるために",
+            "description": "Scene Memoryチームはあなたのすべての質問に答え、いつでもサポートします",
+            "stat_24_7": "24時間サポート",
+            "stat_response_time": "平均応答時間",
+            "stat_satisfaction": "顧客満足度",
+            "stat_happy_users": "満足ユーザー"
+        },
+        "tabs": {
+            "form": "メッセージを送信",
+            "info": "連絡先情報"
+        },
+        "form": {
+            "fullName": "フルネーム",
+            "fullNamePlaceholder": "名前をここに",
+            "emailAddress": "メールアドレス",
+            "messagePlaceholder": "メッセージをここに書いてください...",
+            "emailPlaceholder": "あなたのメール",
+            "title": "私たちにメッセージを送る",
+            "subtitle": "できるだけ早く返信します。私たちはあなたをサポートするためにここにいます！",
+            "full_name": "フルネーム",
+            "email": "メールアドレス",
+            "subject": "件名",
+            "message": "メッセージ",
+            "message_placeholder": "メッセージをここに書いてください...",
+            "newsletter": "Scene Memoryのニュースレターとオファーを受け取りたい",
+            "submit": "メッセージを送信",
+            "submitting": "送信中...",
+            "success_title": "送信成功！",
+            "success_message": "ご連絡ありがとうございます。できるだけ早く返信いたします。"
+        },
+        "info": {
+            "title": "連絡先情報",
+            "address_title": "本社",
+            "address": "ナイル通り、カイロ、エジプト",
+            "view_map": "マップで表示",
+            "phone_title": "電話",
+            "phone1": "+20 123 456 789",
+            "phone2": "+20 987 654 321",
+            "phone_hours": "午前9時～午後9時まで対応",
+            "email_title": "メール",
+            "email1": "info@scenememory.com",
+            "email2": "support@scenememory.com",
+            "email_response": "24時間以内に返信",
+            "follow_us": "フォローする",
+            "map_title": "マップ上の私たちの場所",
+            "map_location": "カイロ、エジプト",
+            "open_map": "マップを開く"
+        },
+        "faq": {
+            "title": "よくある質問",
+            "subtitle": "最もよくある質問への回答"
+        },
+        "live_support": {
+            "title": "ライブサポート",
+            "description": "今すぐチームメンバーと話して即座のサポートを受けましょう",
+            "btn_chat": "ライブチャットを始める",
+            "btn_schedule": "通話をスケジュール",
+            "available": "現在対応可能：3名のサポート担当者"
+        }
+    },
+    "contacts": {
+        "title": "お問い合わせ",
+        "description": "イベントの思い出について質問がありますか？私たちは世界中のあらゆる瞬間を保存するお手伝いをします。",
+        "form": {
+            "fullName": "フルネーム",
+            "fullNamePlaceholder": "アハメド・モハメド",
+            "emailAddress": "メールアドレス",
+            "emailPlaceholder": "hello@example.com",
+            "subject": "件名",
+            "generalInquiry": "一般的なお問い合わせ",
+            "support": "技術サポート",
+            "feedback": "フィードバック",
+            "other": "その他",
+            "message": "メッセージ",
+            "messagePlaceholder": "どのようにお手伝いできるか教えてください...",
+            "sendMessage": "メッセージを送信",
+            "successMessage": "ありがとうございます！メッセージが正常に送信されました。"
+        },
+        "info": {
+            "emailUs": "メールで連絡",
+            "available": "チームは24時間対応可能です",
+            "visitStudio": "スタジオを訪問",
+            "address": "123 メモリーロード、テック地区\nサンフランシスコ、カリフォルニア 94103",
+            "followJourney": "私たちの旅をフォロー"
+        },
+        "map": {
+            "title": "Scene Memory世界マップ",
+            "description": "140カ国以上にある何千もの思い出を想像してください。"
+        }
+    },
+    "faq": {
+        "title": "よくある質問",
+        "questions": {
+            "0": {
+                "question": "思い出をどうやって追加しますか？",
+                "answer": "写真をアップロードし、インタラクティブマップ上で場所にマークするだけです。"
+            },
+            "1": {
+                "question": "データは安全ですか？",
+                "answer": "企業レベルの暗号化を使用して、思い出がプライベートなまま保たれます。"
+            },
+            "2": {
+                "question": "アルバムを共有できますか？",
+                "answer": "はい！安全なリンクを通じて友人や家族と共同アルバムを作成できます。"
+            }
+        }
+    },
+    "eventForm": {
+        "title": "新しいイベントを追加",
+        "basicInfo": "基本情報",
+        "locationCategory": "場所とカテゴリ",
+        "dates": "日付",
+        "images": "イベント画像",
+        "eventTitle": "イベントタイトル",
+        "description": "説明",
+        "country": "国",
+        "searchCountry": "国を検索...",
+        "selectCountry": "国を選択",
+        "city": "都市",
+        "selectCity": "都市を選択",
+        "selectCityFirst": "まず国を選択してください",
+        "mainCategory": "メインデテゴリ",
+        "subCategory": "サブカテゴリ",
+        "selectSubFirst": "まずカテゴリを選択してください",
+        "selectLocationMap": "マップ上で場所を選択",
+        "selectedCoords": "選択した座標：緯度 {lat} , 経度 {lng}",
+        "lat": "緯度",
+        "lng": "経度",
+        "pleaseSelectLocation": "マップ上で場所を選択してください",
+        "startDate": "開始日",
+        "endDate": "終了日",
+        "startTime": "開始時間",
+        "dragDropHere": "クリックまたは画像をここにドラッグ＆ドロップ",
+        "formatsMax": "PNG • JPG • WEBP | 画像1枚あたり最大5MB",
+        "chooseImages": "画像を選択",
+        "addMore": "さらに追加",
+        "imagesCount": "{count} / 8 枚",
+        "remove": "削除"
+    },
+    "commons": {
+        "required": "必須",
+        "cancel": "キャンセル",
+        "saveDraft": "下書きとして保存",
+        "create": "イベントを作成",
+        "creating": "作成中...",
+        "choose": "選択"
+    },
+    "eventss": {
+        "no_title": "タイトルなしイベント",
+        "undefined_city": "未定義",
+        "from_map": "地図から"
+    }
+}

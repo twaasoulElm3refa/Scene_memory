@@ -1,0 +1,364 @@
+{
+    "search": {
+        "placeholder": "搜索活动..."
+    },
+    "filters": {
+        "allCategories": "所有类别",
+        "country": "国家",
+        "category": "类别",
+        "subCategory": "子类别",
+        "from": "从",
+        "to": "到",
+        "city": "城市",
+        "allSubCategories": "所有子类别"
+    },
+    "nav": {
+        "home": "首页",
+        "about": "关于我们",
+        "allEvents": "所有事件",
+        "contact": "联系我们",
+        "addEvent": "添加事件",
+        "wishlist": "收藏夹",
+        "profile": "个人资料",
+        "logout": "退出登录",
+        "login": "登录"
+    },
+    "languages": {
+        "AR": "阿拉伯语",
+        "EN": "英语",
+        "FR": "法语",
+        "DE": "德语",
+        "RU": "俄语",
+        "ES": "西班牙语",
+        "IT": "意大利语",
+        "HI": "印地语",
+        "ZH": "中文",
+        "FA": "波斯语",
+        "JA": "日语"
+    },
+    "event": {
+        "loading": "正在加载事件...",
+        "not_found": "事件不存在或已被删除。",
+        "city_default": "未指定",
+        "visitor": "访客",
+        "media_gallery_title": "事件媒体",
+        "no_media": "没有媒体",
+        "about_event_title": "关于事件",
+        "comments_title": "评论",
+        "add_comment_title": "添加您的评论",
+        "comment_placeholder": "在这里写您的评论...",
+        "submit_comment": "提交",
+        "sending_comment": "正在发送...",
+        "comment_login_required": "请先登录",
+        "comment_added_success": "您的评论已成功添加！",
+        "delete_comment_title": "删除评论",
+        "event_info_title": "事件信息",
+        "from_date": "从",
+        "to_date": "到",
+        "time_label": "时间",
+        "time_default": "未指定",
+        "location": "地点",
+        "organizer": "事件组织者",
+        "add_to_wishlist": "添加到收藏夹",
+        "already_in_wishlist": "已在收藏夹中",
+        "adding_to_wishlist": "正在添加...",
+        "wishlist_success": "已成功添加到收藏夹！"
+    },
+    "common": {
+        "search": "搜索",
+        "placeholder": "搜索活动...",
+        "searching": "正在搜索...",
+        "details": "详情",
+        "notSpecified": "未指定",
+        "loadingEvents": "正在加载事件..."
+    },
+    "events": {
+        "no_title": "无标题活动",
+        "undefined_city": "未定义",
+        "from_map": "来自地图",
+        "cities": "城市",
+        "categories": "类别",
+        "all_memories": "所有事件回忆",
+        "showing_snapshots": "显示来自世界各地的 {total} 个历史快照",
+        "sort_by": "排序方式",
+        "sort": {
+            "newest": "最新优先",
+            "oldest": "最旧优先",
+            "title": "标题"
+        },
+        "loading": "正在加载事件...",
+        "retry": "重试",
+        "page_info": "第 {current} 页，共 {last} 页",
+        "active_memories": "活跃事件",
+        "latestEvents": "最新活动",
+        "recentMemories": "最近事件",
+        "discoverAroundYou": "发现您周围正在发生的事情，准备好迎接最美好的时刻",
+        "noEventsFound": "没有找到活动",
+        "noMatchingEvents": "未找到符合搜索条件或位置的活动",
+        "event": "活动",
+        "startDate": "开始日期"
+    },
+    "pagination": {
+        "previous": "上一页",
+        "next": "下一页"
+    },
+    "about": {
+        "title": "关于我们 - Scene Memory",
+        "subtitle": "我们保存您最珍贵的时刻，一幕接一幕",
+        "text1": "在 Scene Memory，我们相信人生中最美好的时刻值得被清晰而充满感情地保存。我们不仅仅是一个存储平台——我们是您人生旅程的数字回忆相册。",
+        "features": {
+            "immersiveAlbums": "创建包含照片、视频和语音笔记的沉浸式回忆相册",
+            "aiOrganize": "人工智能支持的组织功能，自动分类和标记您的回忆",
+            "privacy": "完全隐私和安全 – 您的回忆经过加密，只有您能访问"
+        },
+        "startJourney": "现在开始您的回忆之旅",
+        "highlightMoments": "突出您人生中的重要时刻",
+        "organizedBy": "按场景、人物和地点组织",
+        "stats": {
+            "memories": "已保存的回忆",
+            "users": "满意用户",
+            "backup": "安全备份"
+        }
+    },
+    "newsletter": {
+        "title": "与您的回忆保持联系",
+        "description": "每周通过电子邮件接收回忆技巧、功能更新和鼓舞人心的故事",
+        "firstName": "名字",
+        "firstNamePlaceholder": "您的名字",
+        "email": "电子邮件",
+        "emailPlaceholder": "you@example.com",
+        "consent": "我同意偶尔接收 Scene Memory 的回忆建议、更新和促销信息。我可以随时取消订阅。",
+        "subscribe": "订阅回忆更新",
+        "community": "加入我们超过 5,000 名回忆守护者的社区"
+    },
+    "map": {
+        "exploreMap": "探索地图"
+    },
+    "hero": {
+        "title_main": "我们保存您的回忆",
+        "title_highlight": "让它们永远鲜活",
+        "description": "在 Scene Memory，我们相信每一刻都值得留存。我们在这里帮助您保存、组织和回忆人生中重要的事件。",
+        "cta_start": "开始与我们一起的旅程",
+        "cta_watch": "观看介绍视频",
+        "feature_organized": "有组织的回忆",
+        "feature_organized_desc": "每一刻都在合适的位置",
+        "feature_private": "保证隐私",
+        "feature_private_desc": "您的回忆完全安全",
+        "feature_reminders": "智能提醒",
+        "feature_reminders_desc": "永不错过任何重要场合",
+        "feature_evolving": "持续进化",
+        "feature_evolving_desc": "我们始终在改善您的体验"
+    },
+    "our_story": {
+        "badge": "我们的故事",
+        "title": "我们的旅程如何开始",
+        "intro": "我们的故事始于一个简单的想法：如何帮助人们保存塑造他们人生的珍贵回忆？",
+        "stage1_title": "起点",
+        "stage1_desc": "2020 年，我们的创始人注意到许多重要时刻会随着时间流逝而消失。他们决定构建一个简单却强大的工具来保存这些回忆。",
+        "stage2_title": "成长",
+        "stage2_desc": "随着用户增加，我们添加了新功能，如智能提醒、高级分类，以及与亲人安全分享回忆。",
+        "stage3_title": "愿景",
+        "stage3_desc": "今天，我们致力于成为全球最佳的回忆保存与组织平台，专注于隐私和流畅体验。"
+    },
+    "mission_vision": {
+        "mission_badge": "我们的使命",
+        "mission_title": "我们的信念",
+        "mission_text": "我们的使命是让每个人都能以简单、安全、有组织的方式保存珍贵回忆。我们相信人生中的每一刻都值得被保存和铭记。",
+        "value_people_first": "以人为本",
+        "value_people_first_desc": "用户体验是我们每个决策的核心",
+        "value_privacy": "隐私神圣",
+        "value_privacy_desc": "您的回忆只属于您，我们绝不与任何人分享",
+        "value_growth": "持续成长",
+        "value_growth_desc": "我们不断进化以满足用户需求",
+        "vision_badge": "我们的愿景",
+        "vision_title": "我们的方向",
+        "vision_text": "我们立志成为全球首屈一指的回忆保存与组织平台，让任何地方的任何人都能轻松安全地保存重要时刻。",
+        "goals_2025": "2025 年目标",
+        "goal_users": "达到一百万用户",
+        "goal_languages": "新增 10 种语言",
+        "goal_ai": "推出人工智能功能"
+    },
+    "team": {
+        "badge": "我们的团队",
+        "title": "Scene Memory 背后的头脑",
+        "description": "我们多元化的开发者、设计师和用户体验专家团队共同打造难忘的回忆保存体验。"
+    },
+    "values": {
+        "badge": "我们的价值观",
+        "title": "我们的独特之处"
+    },
+    "stats": {
+        "title": "数字说明一切",
+        "description": "自成立以来，我们已帮助成千上万人保存数百万珍贵回忆"
+    },
+    "cta": {
+        "title": "加入 Scene Memory 大家庭",
+        "description": "今天就开始您的回忆保存之旅。免费、安全、专为您设计。",
+        "btn_signup": "免费注册账号",
+        "btn_features": "了解功能",
+        "trust": "加入超过 50,000 名信任我们保存回忆的人"
+    },
+    "footer": {
+        "slogan": "保存您的回忆，让它们永远鲜活",
+        "terms": "条款和条件",
+        "privacy": "隐私政策",
+        "contact": "联系我们",
+        "copyright": "© 2024 Scene Memory. 保留所有权利。",
+        "made_with": "用心打造，为保存您的回忆"
+    },
+    "contact": {
+        "hero": {
+            "title_main": "我们在这里",
+            "title_highlight": "为您提供帮助",
+            "description": "Scene Memory 团队随时为您解答所有疑问并提供帮助",
+            "stat_24_7": "全天候支持",
+            "stat_response_time": "平均响应时间",
+            "stat_satisfaction": "客户满意度",
+            "stat_happy_users": "满意用户"
+        },
+        "tabs": {
+            "form": "发送消息",
+            "info": "联系信息"
+        },
+        "form": {
+            "fullName": "全名",
+            "fullNamePlaceholder": "姓名在此",
+            "emailAddress": "电子邮件",
+            "messagePlaceholder": "在此写下您的消息...",
+            "emailPlaceholder": "您的邮箱",
+            "title": "给我们发消息",
+            "subtitle": "我们会尽快回复您。我们在这里为您服务！",
+            "full_name": "全名",
+            "email": "电子邮件",
+            "subject": "主题",
+            "message": "消息",
+            "message_placeholder": "在此写下您的消息...",
+            "newsletter": "我希望接收 Scene Memory 的新闻简讯和优惠",
+            "submit": "发送消息",
+            "submitting": "正在发送...",
+            "success_title": "发送成功！",
+            "success_message": "感谢您的联系，我们会尽快回复您。"
+        },
+        "info": {
+            "title": "联系信息",
+            "address_title": "总部",
+            "address": "尼罗河街，开罗，埃及",
+            "view_map": "在地图上查看",
+            "phone_title": "电话",
+            "phone1": "+20 123 456 789",
+            "phone2": "+20 987 654 321",
+            "phone_hours": "上午 9 点至晚上 9 点可用",
+            "email_title": "电子邮件",
+            "email1": "info@scenememory.com",
+            "email2": "support@scenememory.com",
+            "email_response": "24 小时内回复",
+            "follow_us": "关注我们",
+            "map_title": "我们在地图上的位置",
+            "map_location": "开罗，埃及",
+            "open_map": "打开地图"
+        },
+        "faq": {
+            "title": "常见问题",
+            "subtitle": "回答最常见的问题"
+        },
+        "live_support": {
+            "title": "实时支持",
+            "description": "现在与我们的团队成员交谈以获得即时帮助",
+            "btn_chat": "开始实时聊天",
+            "btn_schedule": "安排通话",
+            "available": "目前可用：3 名支持人员"
+        }
+    },
+    "contacts": {
+        "title": "联系我们",
+        "description": "您对事件回忆有任何疑问吗？我们在这里帮助您在全世界保存每一刻。",
+        "form": {
+            "fullName": "全名",
+            "fullNamePlaceholder": "艾哈迈德·穆罕默德",
+            "emailAddress": "电子邮件",
+            "emailPlaceholder": "hello@example.com",
+            "subject": "主题",
+            "generalInquiry": "一般咨询",
+            "support": "技术支持",
+            "feedback": "反馈",
+            "other": "其他",
+            "message": "消息",
+            "messagePlaceholder": "告诉我们如何帮助您...",
+            "sendMessage": "发送消息",
+            "successMessage": "谢谢您！您的消息已成功发送。"
+        },
+        "info": {
+            "emailUs": "给我们发邮件",
+            "available": "我们的团队全天候可用",
+            "visitStudio": "访问我们的工作室",
+            "address": "123 记忆之路，科技区\n旧金山，加利福尼亚 94103",
+            "followJourney": "关注我们的旅程"
+        },
+        "map": {
+            "title": "Scene Memory 世界地图",
+            "description": "想象遍布超过 140 个国家的数千个回忆。"
+        }
+    },
+    "faq": {
+        "title": "常见问题",
+        "questions": {
+            "0": {
+                "question": "如何添加回忆？",
+                "answer": "只需上传您的照片并在我们的互动地图上标记位置。"
+            },
+            "1": {
+                "question": "我的数据安全吗？",
+                "answer": "我们使用企业级加密，确保您的回忆保持私密。"
+            },
+            "2": {
+                "question": "我可以分享相册吗？",
+                "answer": "是的！您可以通过安全链接与朋友和家人创建协作相册。"
+            }
+        }
+    },
+    "eventForm": {
+        "title": "添加新事件",
+        "basicInfo": "基本信息",
+        "locationCategory": "位置和分类",
+        "dates": "日期",
+        "images": "事件图片",
+        "eventTitle": "事件标题",
+        "description": "描述",
+        "country": "国家",
+        "searchCountry": "搜索国家...",
+        "selectCountry": "选择国家",
+        "city": "城市",
+        "selectCity": "选择城市",
+        "selectCityFirst": "请先选择国家",
+        "mainCategory": "主要类别",
+        "subCategory": "子类别",
+        "selectSubFirst": "请先选择类别",
+        "selectLocationMap": "在地图上选择位置",
+        "selectedCoords": "所选坐标：纬度 {lat} , 经度 {lng}",
+        "lat": "纬度",
+        "lng": "经度",
+        "pleaseSelectLocation": "请选择地图上的位置",
+        "startDate": "开始日期",
+        "endDate": "结束日期",
+        "startTime": "开始时间",
+        "dragDropHere": "点击或拖放图片到此处",
+        "formatsMax": "PNG • JPG • WEBP | 每张图片最大 5MB",
+        "chooseImages": "选择图片",
+        "addMore": "添加更多",
+        "imagesCount": "{count} / 8 张图片",
+        "remove": "删除"
+    },
+    "commons": {
+        "required": "必填",
+        "cancel": "取消",
+        "saveDraft": "保存为草稿",
+        "create": "创建事件",
+        "creating": "正在创建...",
+        "choose": "选择"
+    },
+    "eventss": {
+        "no_title": "无标题活动",
+        "undefined_city": "未定义",
+        "from_map": "来自地图"
+    }
+}

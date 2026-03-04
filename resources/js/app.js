@@ -10,6 +10,9 @@ import ru from "./i18n/ru.json";
 import es from "./i18n/es.json";
 import it from "./i18n/it.json";
 import hi from "./i18n/hi.json";
+import ja from "./i18n/ja.json";
+import zh from "./i18n/zh.json";
+import fa from "./i18n/fa.json";
 import '../css/app.css';
 
 const messages = {
@@ -20,7 +23,10 @@ const messages = {
     ru,
     es,
     it,
-    hi
+    hi,
+    ja,
+    zh,
+    fa
 }
 const i18n = createI18n({
     legacy: false,

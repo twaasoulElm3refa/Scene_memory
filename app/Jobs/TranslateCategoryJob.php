@@ -17,7 +17,7 @@ class TranslateCategoryJob implements ShouldQueue
     protected $categoryId;
     protected $text;
 
-    public function __construct($categoryId, $text)
+    public function __construct($categoryId, $text , )
     {
         $this->categoryId = $categoryId;
         $this->text = $text;
@@ -31,14 +31,14 @@ class TranslateCategoryJob implements ShouldQueue
             return;
         }
 
-        $locales = ['en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
+        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
 
         foreach ($locales as $locale) {
 
             try {
                 $tr = new GoogleTranslate($locale);
-                $tr->setSource('ar');
-
+                $tr->setSource(app()->getLocale());
+                /Log::alert(app()->getLocale());
                 $translated = $tr->translate($this->text);
 
                 if ($translated) {
@@ -53,4 +53,4 @@ class TranslateCategoryJob implements ShouldQueue
             }
         }
     }
-}   
+}

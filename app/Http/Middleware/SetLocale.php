@@ -17,7 +17,7 @@ class SetLocale
     {
         $locale = $request->header('Accept-Language', 'ar');
 
-        if (in_array($locale, ['ar', 'en','fr','de','ru','es','it','hi','ja'])) {
+        if (in_array($locale, ['ar', 'en','fr','de','ru','es','it','hi','ja','fa','zh','ur'])) {
             app()->setLocale($locale);
         } else {
             app()->setLocale('ar');

@@ -103,8 +103,7 @@ const userImage = ref(null);
 const currentLanguage = ref("AR");
 const languageDropdownOpen = ref(false);
 
-// أضفنا IT و HI
-const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI"];
+const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH"];
 
 const selectLanguage = (lang) => {
     currentLanguage.value = lang;
@@ -115,12 +114,12 @@ const selectLanguage = (lang) => {
 };
 
 const allLinks = [
-    { labelKey: "nav.home",        href: "/",          active: "home"       },
-    { labelKey: "nav.about",       href: "/who",       active: "who"        },
-    { labelKey: "nav.allEvents",   href: "/all_events",active: "all_events" },
-    { labelKey: "nav.contact",     href: "/contact",   active: "contact"    },
-    { labelKey: "nav.addEvent",    href: "/add_event", active: "add_event"  },
-    { labelKey: "nav.wishlist",    href: "/WishList",  active: "Wishlist"   },
+    { labelKey: "nav.home", href: "/", active: "home" },
+    { labelKey: "nav.about", href: "/who", active: "who" },
+    { labelKey: "nav.allEvents", href: "/all_events", active: "all_events" },
+    { labelKey: "nav.contact", href: "/contact", active: "contact" },
+    { labelKey: "nav.addEvent", href: "/add_event", active: "add_event" },
+    { labelKey: "nav.wishlist", href: "/WishList", active: "Wishlist" },
 ];
 
 const userInitial = computed(() => {
@@ -181,7 +180,7 @@ const fetchProfile = async () => {
 onMounted(() => {
     const savedLang = localStorage.getItem("language");
 
-    if (savedLang && ["ar", "en", "fr", "de", "ru", "es", "it", "hi"].includes(savedLang.toLowerCase())) {
+    if (savedLang && ["ar", "en", "fr", "de", "ru", "es", "it", "hi", "ja", "fa", "zh"].includes(savedLang.toLowerCase())) {
         currentLanguage.value = savedLang.toUpperCase();
     } else {
         currentLanguage.value = "AR";

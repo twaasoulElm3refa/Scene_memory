@@ -31,7 +31,7 @@ class TranslateCityJob implements ShouldQueue
             return;
         }
 
-        $locales = ['en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
+        $locales = ['ar','en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
 
         foreach ($locales as $locale) {
 

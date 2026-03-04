@@ -31,7 +31,10 @@
         "RU": "Русский",
         "ES": "Español",
         "IT": "Italiano",
-        "HI": "हिन्दी"
+        "HI": "हिन्दी",
+        "ZH": "中文",
+        "FA": "فارسى",
+        "JA": "日本語"
     },
     "event": {
         "loading": "Caricamento evento...",
@@ -70,6 +73,9 @@
         "loadingEvents": "Caricamento eventi..."
     },
     "events": {
+        "no_title": "Evento senza titolo",
+        "undefined_city": "Non definito",
+        "from_map": "Dalla mappa",
         "cities": "Città",
         "categories": "Categoria",
         "all_memories": "Tutti i ricordi degli eventi",
@@ -349,5 +355,10 @@
         "create": "Crea Evento",
         "creating": "Creazione in corso...",
         "choose": "Scegli"
+    },
+    "eventss": {
+        "no_title": "Evento senza titolo",
+        "undefined_city": "Non definito",
+        "from_map": "Dalla mappa"
     }
 }

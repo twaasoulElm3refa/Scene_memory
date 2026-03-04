@@ -26,17 +26,12 @@ class EventAdminCreateController extends Controller
 
             $event = DB::transaction(function () use ($data, $request) {
 
-                $data['slug'] = Str::slug($data['title']) 
-                                . '-' . Str::random(5) 
+                $data['slug'] = Str::slug($data['title'])
+                                . '-' . Str::random(5)
                                 . '-' . time();
 
                 $data['user_id'] = auth()->id();
                 $event = Events::create($data);
-                $event->translations()->create([
-                    'locale'      => 'ar',
-                    'title'       => $data['title'],
-                    'description' => $data['description'],
-                ]);
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $path = $file->store('Photos', 'public');
@@ -54,6 +49,7 @@ class EventAdminCreateController extends Controller
                 $event->id,
                 $data['title'],
                 $data['description']
+                ,app()->getLocale()
             );
 
             $this->clearEventsCache($event->slug);

@@ -30,12 +30,6 @@ class CitiesCreateController extends Controller
                     'slug'       => Str::slug($data['name']) . '-' . time(),
                 ]);
 
-                CityTranslations::create([
-                    'city_id' => $city->id,
-                    'locale'  => 'ar',
-                    'name'    => $data['name'],
-                ]);
-
                 return $city;
             });
 

@@ -31,7 +31,10 @@
         "RU": "Русский",
         "ES": "Español",
         "IT": "Italiano",
-        "HI": "हिंदी"
+        "HI": "हिंदी",
+        "ZH": "中文",
+        "FA": "فارسى",
+        "JA": "日本語"
     },
     "event": {
         "loading": "Chargement de l'événement...",
@@ -70,6 +73,9 @@
         "loadingEvents": "Chargement des événements..."
     },
     "events": {
+        "no_title": "Événement sans titre",
+        "undefined_city": "Indéfini",
+        "from_map": "Depuis la carte",
         "cities": "Ville",
         "categories": "Catégorie",
         "all_memories": "Tous les souvenirs d'événements",
@@ -349,5 +355,10 @@
         "create": "Créer l'Événement",
         "creating": "Création en cours...",
         "choose": "Choisir"
+    },
+    "eventss": {
+        "no_title": "Événement sans titre",
+        "undefined_city": "Indéfini",
+        "from_map": "Depuis la carte"
     }
 }

@@ -17,12 +17,14 @@ class TranslateEventJob implements ShouldQueue
     protected $eventId;
     protected $title;
     protected $description;
+    protected $lang;
 
-    public function __construct($eventId, $title, $description)
+    public function __construct($eventId, $title, $description ,$lang="en")
     {
         $this->eventId = $eventId;
         $this->title = $title;
         $this->description = $description;
+        $this->lang = $lang;
     }
 
     public function handle(): void
@@ -33,13 +35,13 @@ class TranslateEventJob implements ShouldQueue
             return;
         }
 
-        $locales = ['en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
 
         foreach ($locales as $locale) {
 
             try {
                 $tr = new GoogleTranslate($locale);
-                $tr->setSource('ar');
+                $tr->setSource($this->lang);
 
                 $translatedTitle = $tr->translate($this->title);
                 $translatedDescription = $tr->translate($this->description);
