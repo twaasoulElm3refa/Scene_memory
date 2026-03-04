@@ -309,5 +309,45 @@
                 "answer": "Yes! You can create collaborative albums with friends and family via secure links."
             }
         }
+    },
+    "eventForm": {
+        "title": "Add New Event",
+        "basicInfo": "Basic Information",
+        "locationCategory": "Location & Category",
+        "dates": "Dates & Times",
+        "images": "Event Images",
+        "eventTitle": "Event Title",
+        "description": "Description",
+        "country": "Country",
+        "searchCountry": "Search for a country...",
+        "selectCountry": "Select Country",
+        "city": "City",
+        "selectCity": "Select City",
+        "selectCityFirst": "Select country first",
+        "mainCategory": "Main Category",
+        "subCategory": "Sub Category",
+        "selectSubFirst": "Select main category first",
+        "selectLocationMap": "Select Location on Map",
+        "selectedCoords": "Selected coordinates:",
+        "lat": "Lat",
+        "lng": "Lng",
+        "pleaseSelectLocation": "Please select a location on the map",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "startTime": "Start Time",
+        "dragDropHere": "Click or drag images here",
+        "formatsMax": "PNG • JPG • WEBP | max 5MB per image",
+        "chooseImages": "Choose Images",
+        "addMore": "Add More",
+        "imagesCount": "{count} / 8 images",
+        "remove": "Remove"
+    },
+    "commons": {
+        "required": "required",
+        "cancel": "Cancel",
+        "saveDraft": "Save as Draft",
+        "create": "Create Event",
+        "creating": "Creating...",
+        "choose": "Choose"
     }
 }

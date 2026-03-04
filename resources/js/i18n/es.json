@@ -309,5 +309,45 @@
                 "answer": "¡Sí! Puedes crear álbumes colaborativos con amigos y familia mediante enlaces seguros."
             }
         }
+    },
+    "eventForm": {
+        "title": "Añadir Nuevo Evento",
+        "basicInfo": "Información Básica",
+        "locationCategory": "Ubicación y Categoría",
+        "dates": "Fechas",
+        "images": "Imágenes del Evento",
+        "eventTitle": "Título del Evento",
+        "description": "Descripción",
+        "country": "País",
+        "searchCountry": "Buscar país...",
+        "selectCountry": "Seleccionar País",
+        "city": "Ciudad",
+        "selectCity": "Seleccionar Ciudad",
+        "selectCityFirst": "Selecciona primero el país",
+        "mainCategory": "Categoría Principal",
+        "subCategory": "Subcategoría",
+        "selectSubFirst": "Selecciona primero la categoría",
+        "selectLocationMap": "Selecciona la ubicación en el mapa",
+        "selectedCoords": "Coordenadas seleccionadas: Lat: {lat} , Lng: {lng}",
+        "lat": "Lat",
+        "lng": "Lng",
+        "pleaseSelectLocation": "Por favor selecciona una ubicación en el mapa",
+        "startDate": "Fecha de Inicio",
+        "endDate": "Fecha de Fin",
+        "startTime": "Hora de Inicio",
+        "dragDropHere": "Haz clic o arrastra imágenes aquí",
+        "formatsMax": "PNG • JPG • WEBP | máx. 5MB por imagen",
+        "chooseImages": "Elegir Imágenes",
+        "addMore": "Añadir Más",
+        "imagesCount": "{count} / 8 imágenes",
+        "remove": "Eliminar"
+    },
+    "commons": {
+        "required": "requerido",
+        "cancel": "Cancelar",
+        "saveDraft": "Guardar como borrador",
+        "create": "Crear Evento",
+        "creating": "Creando...",
+        "choose": "Elegir"
     }
 }

@@ -309,5 +309,45 @@
                 "answer": "हाँ! आप दोस्तों और परिवार के साथ सुरक्षित लिंक के माध्यम से सहयोगी एलबम बना सकते हैं।"
             }
         }
+    },
+    "eventForm": {
+        "title": "नया इवेंट जोड़ें",
+        "basicInfo": "मूल जानकारी",
+        "locationCategory": "स्थान और श्रेणी",
+        "dates": "तिथियाँ",
+        "images": "इवेंट की तस्वीरें",
+        "eventTitle": "इवेंट का शीर्षक",
+        "description": "विवरण",
+        "country": "देश",
+        "searchCountry": "देश खोजें...",
+        "selectCountry": "देश चुनें",
+        "city": "शहर",
+        "selectCity": "शहर चुनें",
+        "selectCityFirst": "पहले देश चुनें",
+        "mainCategory": "मुख्य श्रेणी",
+        "subCategory": "उप-श्रेणी",
+        "selectSubFirst": "पहले मुख्य श्रेणी चुनें",
+        "selectLocationMap": "मानचित्र पर स्थान चुनें",
+        "selectedCoords": "चुने गए निर्देशांक: अक्षांश: {lat} , देशांतर: {lng}",
+        "lat": "अक्षांश",
+        "lng": "देशांतर",
+        "pleaseSelectLocation": "कृपया मानचित्र पर एक स्थान चुनें",
+        "startDate": "प्रारंभ तिथि",
+        "endDate": "समाप्ति तिथि",
+        "startTime": "प्रारंभ समय",
+        "dragDropHere": "यहाँ क्लिक करें या इमेज खींचकर छोड़ें",
+        "formatsMax": "PNG • JPG • WEBP | अधिकतम 5MB प्रति इमेज",
+        "chooseImages": "इमेज चुनें",
+        "addMore": "और जोड़ें",
+        "imagesCount": "{count} / 8 तस्वीरें",
+        "remove": "हटाएं"
+    },
+    "commons": {
+        "required": "आवश्यक",
+        "cancel": "रद्द करें",
+        "saveDraft": "ड्राफ्ट के रूप में सहेजें",
+        "create": "इवेंट बनाएं",
+        "creating": "बन रहा है...",
+        "choose": "चुनें"
     }
 }

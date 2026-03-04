@@ -309,5 +309,45 @@
                 "answer": "نعم! يمكنك إنشاء ألبومات تعاونية مع الأصدقاء والعائلة عبر روابط آمنة."
             }
         }
+    },
+    "eventForm": {
+        "title": "إضافة حدث جديد",
+        "basicInfo": "المعلومات الأساسية",
+        "locationCategory": "الموقع والتصنيف",
+        "dates": "المواعيد",
+        "images": "صور الحدث",
+        "eventTitle": "عنوان الحدث",
+        "description": "الوصف",
+        "country": "الدولة",
+        "searchCountry": "ابحث عن دولة...",
+        "selectCountry": "اختر الدولة",
+        "city": "المدينة",
+        "selectCity": "اختر المدينة",
+        "selectCityFirst": "اختر الدولة أولاً",
+        "mainCategory": "الفئة الرئيسية",
+        "subCategory": "التصنيف الفرعي",
+        "selectSubFirst": "اختر الفئة أولاً",
+        "selectLocationMap": "اختر الموقع على الخريطة",
+        "selectedCoords": "الإحداثيات المختارة: Lat: {lat} , Lng: {lng}",
+        "lat": "Lat",
+        "lng": "Lng",
+        "pleaseSelectLocation": "من فضلك اختر موقعاً على الخريطة",
+        "startDate": "تاريخ البداية",
+        "endDate": "تاريخ النهاية",
+        "startTime": "وقت البداية",
+        "dragDropHere": "اضغط أو اسحب الصور هنا",
+        "formatsMax": "PNG • JPG • WEBP | max 5MB لكل صورة",
+        "chooseImages": "اختيار صور",
+        "addMore": "إضافة المزيد",
+        "imagesCount": "{count} / 8 صور",
+        "remove": "حذف"
+    },
+    "commons": {
+        "required": "مطلوب",
+        "cancel": "إلغاء",
+        "saveDraft": "حفظ كمسودة",
+        "create": "إنشاء الحدث",
+        "creating": "جاري الإنشاء...",
+        "choose": "اختر"
     }
 }

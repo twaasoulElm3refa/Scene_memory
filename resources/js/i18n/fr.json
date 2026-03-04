@@ -309,5 +309,45 @@
                 "answer": "Oui ! Vous pouvez créer des albums collaboratifs avec vos amis et votre famille via des liens sécurisés."
             }
         }
+    },
+    "eventForm": {
+        "title": "Ajouter un Nouvel Événement",
+        "basicInfo": "Informations de Base",
+        "locationCategory": "Lieu et Catégorie",
+        "dates": "Dates",
+        "images": "Images de l'Événement",
+        "eventTitle": "Titre de l'Événement",
+        "description": "Description",
+        "country": "Pays",
+        "searchCountry": "Rechercher un pays...",
+        "selectCountry": "Sélectionner le Pays",
+        "city": "Ville",
+        "selectCity": "Sélectionner la Ville",
+        "selectCityFirst": "Sélectionnez d'abord le pays",
+        "mainCategory": "Catégorie Principale",
+        "subCategory": "Sous-catégorie",
+        "selectSubFirst": "Sélectionnez d'abord la catégorie",
+        "selectLocationMap": "Sélectionnez l'emplacement sur la carte",
+        "selectedCoords": "Coordonnées sélectionnées : Lat : {lat} , Lng : {lng}",
+        "lat": "Lat",
+        "lng": "Lng",
+        "pleaseSelectLocation": "Veuillez sélectionner un emplacement sur la carte",
+        "startDate": "Date de Début",
+        "endDate": "Date de Fin",
+        "startTime": "Heure de Début",
+        "dragDropHere": "Cliquez ou glissez-déposez les images ici",
+        "formatsMax": "PNG • JPG • WEBP | max 5 Mo par image",
+        "chooseImages": "Choisir des Images",
+        "addMore": "Ajouter Plus",
+        "imagesCount": "{count} / 8 images",
+        "remove": "Supprimer"
+    },
+    "commons": {
+        "required": "requis",
+        "cancel": "Annuler",
+        "saveDraft": "Enregistrer comme brouillon",
+        "create": "Créer l'Événement",
+        "creating": "Création en cours...",
+        "choose": "Choisir"
     }
 }

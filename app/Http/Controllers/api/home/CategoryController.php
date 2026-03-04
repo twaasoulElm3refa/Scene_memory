@@ -31,7 +31,7 @@ class CategoryController extends Controller
         return $this->success($categories, 'All categories');
     }
 
-   
+
 
     public function paginated(): JsonResponse
     {
@@ -60,7 +60,7 @@ class CategoryController extends Controller
         $cacheKey = "categories:single:{$id}";
 
         $category = Cache::remember($cacheKey, $this->cacheTime, function () use ($id) {
-            return Categories::with('subCategories')->find($id);
+            return Categories::with('subCategories.translation',)->find($id);
         });
 
         if (! $category) {

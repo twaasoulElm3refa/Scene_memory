@@ -309,5 +309,45 @@
                 "answer": "Ja! Du kannst kollaborative Alben mit Freunden und Familie über sichere Links erstellen."
             }
         }
+    },
+    "eventForm": {
+        "title": "Neues Event hinzufügen",
+        "basicInfo": "Grundinformationen",
+        "locationCategory": "Ort & Kategorie",
+        "dates": "Termine",
+        "images": "Event-Bilder",
+        "eventTitle": "Event-Titel",
+        "description": "Beschreibung",
+        "country": "Land",
+        "searchCountry": "Land suchen...",
+        "selectCountry": "Land auswählen",
+        "city": "Stadt",
+        "selectCity": "Stadt auswählen",
+        "selectCityFirst": "Zuerst Land auswählen",
+        "mainCategory": "Hauptkategorie",
+        "subCategory": "Unterkategorie",
+        "selectSubFirst": "Zuerst Hauptkategorie auswählen",
+        "selectLocationMap": "Ort auf der Karte auswählen",
+        "selectedCoords": "Ausgewählte Koordinaten: Lat: {lat} , Lng: {lng}",
+        "lat": "Breitengrad",
+        "lng": "Längengrad",
+        "pleaseSelectLocation": "Bitte wählen Sie einen Ort auf der Karte",
+        "startDate": "Startdatum",
+        "endDate": "Enddatum",
+        "startTime": "Startzeit",
+        "dragDropHere": "Klicken oder Bilder hierher ziehen",
+        "formatsMax": "PNG • JPG • WEBP | max. 5 MB pro Bild",
+        "chooseImages": "Bilder auswählen",
+        "addMore": "Mehr hinzufügen",
+        "imagesCount": "{count} / 8 Bilder",
+        "remove": "Entfernen"
+    },
+    "commons": {
+        "required": "erforderlich",
+        "cancel": "Abbrechen",
+        "saveDraft": "Als Entwurf speichern",
+        "create": "Event erstellen",
+        "creating": "Wird erstellt...",
+        "choose": "Auswählen"
     }
 }
