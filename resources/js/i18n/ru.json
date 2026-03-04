@@ -29,7 +29,9 @@
         "FR": "Français",
         "DE": "Deutsch",
         "RU": "Русский",
-        "ES": "Español"
+        "ES": "Español",
+        "IT": "Italiano",
+        "HI": "हिंदी"
     },
     "event": {
         "loading": "Загрузка события...",

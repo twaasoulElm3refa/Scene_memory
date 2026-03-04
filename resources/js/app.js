@@ -8,6 +8,8 @@ import fr from "./i18n/fr.json";
 import de from "./i18n/de.json";
 import ru from "./i18n/ru.json";
 import es from "./i18n/es.json";
+import it from "./i18n/it.json";
+import hi from "./i18n/hi.json";
 import '../css/app.css';
 
 const messages = {
@@ -16,7 +18,9 @@ const messages = {
     fr,
     de,
     ru,
-    es
+    es,
+    it,
+    hi
 }
 const i18n = createI18n({
     legacy: false,

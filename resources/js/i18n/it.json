@@ -1,0 +1,313 @@
+{
+    "search": {
+        "placeholder": "Cerca eventi..."
+    },
+    "filters": {
+        "allCategories": "Tutte le categorie",
+        "country": "Paese",
+        "category": "Categoria",
+        "subCategory": "Sottocategoria",
+        "from": "Da",
+        "to": "A",
+        "city": "Città",
+        "allSubCategories": "Tutte le sottocategorie"
+    },
+    "nav": {
+        "home": "Home",
+        "about": "Chi siamo",
+        "allEvents": "Tutti gli eventi",
+        "contact": "Contattaci",
+        "addEvent": "Aggiungi evento",
+        "wishlist": "Preferiti",
+        "profile": "Profilo",
+        "logout": "Esci",
+        "login": "Accedi"
+    },
+    "languages": {
+        "AR": "العربية",
+        "EN": "English",
+        "FR": "Français",
+        "DE": "Deutsch",
+        "RU": "Русский",
+        "ES": "Español",
+        "IT": "Italiano",
+        "HI": "हिन्दी"
+    },
+    "event": {
+        "loading": "Caricamento evento...",
+        "not_found": "L'evento non esiste o è stato eliminato.",
+        "city_default": "Non specificato",
+        "visitor": "Visitatore",
+        "media_gallery_title": "Media dell'evento",
+        "no_media": "Nessun media disponibile",
+        "about_event_title": "Informazioni sull'evento",
+        "comments_title": "Commenti",
+        "add_comment_title": "Aggiungi il tuo commento",
+        "comment_placeholder": "Scrivi il tuo commento qui...",
+        "submit_comment": "Invia",
+        "sending_comment": "Invio in corso...",
+        "comment_login_required": "Effettua prima il login",
+        "comment_added_success": "Il tuo commento è stato aggiunto con successo!",
+        "delete_comment_title": "Elimina commento",
+        "event_info_title": "Dettagli evento",
+        "from_date": "Da",
+        "to_date": "A",
+        "time_label": "Orario",
+        "time_default": "Non specificato",
+        "location": "Luogo",
+        "organizer": "Organizzatore",
+        "add_to_wishlist": "Aggiungi ai preferiti",
+        "already_in_wishlist": "Già nei preferiti",
+        "adding_to_wishlist": "Aggiunta in corso...",
+        "wishlist_success": "Aggiunto ai preferiti con successo!"
+    },
+    "common": {
+        "search": "Cerca",
+        "placeholder": "Cerca eventi...",
+        "searching": "Ricerca in corso...",
+        "details": "Dettagli",
+        "notSpecified": "Non specificato",
+        "loadingEvents": "Caricamento eventi..."
+    },
+    "events": {
+        "cities": "Città",
+        "categories": "Categoria",
+        "all_memories": "Tutti i ricordi degli eventi",
+        "showing_snapshots": "Mostra {total} istantanee storiche da tutto il mondo",
+        "sort_by": "Ordina per",
+        "sort": {
+            "newest": "Più recenti prima",
+            "oldest": "Più vecchi prima",
+            "title": "Titolo"
+        },
+        "loading": "Caricamento eventi...",
+        "retry": "Riprova",
+        "page_info": "Pagina {current} di {last}",
+        "active_memories": "Eventi attivi",
+        "latestEvents": "Eventi più recenti",
+        "recentMemories": "Ricordi recenti",
+        "discoverAroundYou": "Scopri cosa succede vicino a te e preparati ai momenti più belli",
+        "noEventsFound": "Nessun evento trovato",
+        "noMatchingEvents": "Nessun evento corrisponde ai tuoi criteri di ricerca o alla tua posizione",
+        "event": "Evento",
+        "startDate": "Data di inizio"
+    },
+    "pagination": {
+        "previous": "Precedente",
+        "next": "Successivo"
+    },
+    "about": {
+        "title": "Chi siamo - Scene Memory",
+        "subtitle": "Preserviamo i tuoi momenti più preziosi, scena dopo scena",
+        "text1": "In Scene Memory crediamo che i momenti più belli della vita meritino di essere conservati con chiarezza ed emozione. Siamo molto più di una semplice piattaforma di archiviazione: siamo un album digitale di ricordi per il viaggio della tua vita.",
+        "features": {
+            "immersiveAlbums": "Crea album immersivi di ricordi con foto, video e note vocali",
+            "aiOrganize": "Organizzazione con IA che classifica e tagg automaticamente i tuoi ricordi",
+            "privacy": "Privacy e sicurezza totali – i tuoi ricordi sono crittografati e accessibili solo a te"
+        },
+        "startJourney": "Inizia ora il tuo viaggio di ricordi",
+        "highlightMoments": "Evidenzia i momenti della tua vita",
+        "organizedBy": "Organizzati per scene, persone e luoghi",
+        "stats": {
+            "memories": "Ricordo preservato",
+            "users": "Utente felice",
+            "backup": "Backup sicuro"
+        }
+    },
+    "newsletter": {
+        "title": "Resta connesso ai tuoi ricordi",
+        "description": "Ricevi ogni settimana consigli sui ricordi, aggiornamenti sulle funzionalità e storie ispiratrici nella tua email",
+        "firstName": "Nome",
+        "firstNamePlaceholder": "Il tuo nome",
+        "email": "Email",
+        "emailPlaceholder": "tu@example.com",
+        "consent": "Accetto di ricevere occasionalmente consigli, aggiornamenti e offerte promozionali da Scene Memory. Posso annullare l'iscrizione in qualsiasi momento.",
+        "subscribe": "Iscriviti agli aggiornamenti sui ricordi",
+        "community": "Unisciti a oltre 5.000 custodi di ricordi nella nostra community"
+    },
+    "map": {
+        "exploreMap": "Esplora la mappa"
+    },
+    "hero": {
+        "title_main": "Preserviamo i tuoi ricordi",
+        "title_highlight": "perché vivano per sempre",
+        "description": "In Scene Memory crediamo che ogni momento meriti di durare. Siamo qui per aiutarti a conservare, organizzare e ricordare gli eventi importanti della tua vita.",
+        "cta_start": "Inizia il tuo viaggio con noi",
+        "cta_watch": "Guarda il video introduttivo",
+        "feature_organized": "Ricordi organizzati",
+        "feature_organized_desc": "Ogni momento al posto giusto",
+        "feature_private": "Privacy garantita",
+        "feature_private_desc": "I tuoi ricordi completamente al sicuro",
+        "feature_reminders": "Promemoria intelligenti",
+        "feature_reminders_desc": "Non dimenticare mai un'occasione importante",
+        "feature_evolving": "Evoluzione continua",
+        "feature_evolving_desc": "Miglioriamo costantemente la tua esperienza"
+    },
+    "our_story": {
+        "badge": "La nostra storia",
+        "title": "Come è iniziato il nostro viaggio",
+        "intro": "La nostra storia è nata da un'idea semplice: come possiamo aiutare le persone a preservare i ricordi preziosi che danno forma alla loro vita?",
+        "stage1_title": "Gli inizi",
+        "stage1_desc": "Nel 2020 i nostri fondatori hanno notato come tanti momenti importanti svanissero col tempo. Hanno deciso di creare uno strumento semplice ma potente per conservarli.",
+        "stage2_title": "La crescita",
+        "stage2_desc": "Con l'aumento degli utenti abbiamo aggiunto promemoria intelligenti, categorizzazioni avanzate e condivisione sicura con i propri cari.",
+        "stage3_title": "La visione",
+        "stage3_desc": "Oggi aspiriamo a essere la migliore piattaforma al mondo per preservare e organizzare ricordi, con un forte focus su privacy ed esperienza fluida."
+    },
+    "mission_vision": {
+        "mission_badge": "La nostra missione",
+        "mission_title": "In cosa crediamo",
+        "mission_text": "La nostra missione è permettere a ogni persona di preservare i propri ricordi preziosi in modo facile, sicuro e organizzato. Crediamo che ogni istante della nostra vita meriti di essere conservato e ricordato.",
+        "value_people_first": "Le persone al primo posto",
+        "value_people_first_desc": "L'esperienza utente guida ogni nostra decisione",
+        "value_privacy": "La privacy è sacra",
+        "value_privacy_desc": "I tuoi ricordi restano solo tuoi – non li condividiamo con nessuno",
+        "value_growth": "Crescita continua",
+        "value_growth_desc": "Evoluiamo costantemente per soddisfare le esigenze dei nostri utenti",
+        "vision_badge": "La nostra visione",
+        "vision_title": "Dove stiamo andando",
+        "vision_text": "Aspiriamo a diventare la piattaforma leader mondiale per la conservazione e l'organizzazione dei ricordi, dove chiunque, ovunque, possa conservare facilmente e in sicurezza i momenti importanti.",
+        "goals_2025": "I nostri obiettivi per il 2025",
+        "goal_users": "Raggiungere un milione di utenti",
+        "goal_languages": "Aggiungere 10 nuove lingue",
+        "goal_ai": "Lanciare funzionalità IA avanzate"
+    },
+    "team": {
+        "badge": "Il nostro team",
+        "title": "Le menti dietro Scene Memory",
+        "description": "Il nostro team variegato di sviluppatori, designer ed esperti UX lavora insieme per creare un'esperienza indimenticabile di conservazione dei ricordi."
+    },
+    "values": {
+        "badge": "I nostri valori",
+        "title": "Ciò che ci distingue"
+    },
+    "stats": {
+        "title": "I nostri numeri parlano da soli",
+        "description": "Dal lancio abbiamo aiutato migliaia di persone a preservare milioni di ricordi preziosi"
+    },
+    "cta": {
+        "title": "Unisciti alla famiglia Scene Memory",
+        "description": "Inizia oggi a preservare i tuoi ricordi. Gratis, sicuro e pensato apposta per te.",
+        "btn_signup": "Registrati gratis",
+        "btn_features": "Scopri le funzionalità",
+        "trust": "Unisciti a oltre 50.000 persone che si affidano a noi per i loro ricordi"
+    },
+    "footer": {
+        "slogan": "Preserva i tuoi ricordi perché vivano per sempre",
+        "terms": "Termini e condizioni",
+        "privacy": "Informativa sulla privacy",
+        "contact": "Contattaci",
+        "copyright": "© 2024 Scene Memory. Tutti i diritti riservati.",
+        "made_with": "Fatto con ♥ per preservare i tuoi ricordi"
+    },
+    "contact": {
+        "hero": {
+            "title_main": "Siamo qui",
+            "title_highlight": "per aiutarti",
+            "description": "Il team di Scene Memory è pronto a rispondere a tutte le tue domande e ad assisterti in qualsiasi momento",
+            "stat_24_7": "Supporto 24/7",
+            "stat_response_time": "Tempo medio di risposta",
+            "stat_satisfaction": "Soddisfazione clienti",
+            "stat_happy_users": "Utente felice"
+        },
+        "tabs": {
+            "form": "Invia messaggio",
+            "info": "Informazioni di contatto"
+        },
+        "form": {
+            "fullName": "Nome completo",
+            "fullNamePlaceholder": "Il tuo nome qui",
+            "emailAddress": "Indirizzo email",
+            "messagePlaceholder": "Scrivi il tuo messaggio qui...",
+            "emailPlaceholder": "tuo@email.com",
+            "title": "Invia un messaggio",
+            "subtitle": "Ti risponderemo il prima possibile. Siamo qui per te!",
+            "full_name": "Nome completo",
+            "email": "Email",
+            "subject": "Oggetto",
+            "message": "Messaggio",
+            "message_placeholder": "Scrivi il tuo messaggio qui...",
+            "newsletter": "Voglio ricevere la newsletter e le offerte di Scene Memory",
+            "submit": "Invia messaggio",
+            "submitting": "Invio in corso...",
+            "success_title": "Inviato con successo!",
+            "success_message": "Grazie per averci contattato – ti risponderemo al più presto."
+        },
+        "info": {
+            "title": "Informazioni di contatto",
+            "address_title": "Sede principale",
+            "address": "Via del Nilo, Il Cairo, Egitto",
+            "view_map": "Visualizza sulla mappa",
+            "phone_title": "Telefono",
+            "phone1": "+20 123 456 789",
+            "phone2": "+20 987 654 321",
+            "phone_hours": "Disponibile dalle 9:00 alle 21:00",
+            "email_title": "Email",
+            "email1": "info@scenememory.com",
+            "email2": "support@scenememory.com",
+            "email_response": "Risposta entro 24 ore",
+            "follow_us": "Seguici su",
+            "map_title": "La nostra posizione sulla mappa",
+            "map_location": "Il Cairo, Egitto",
+            "open_map": "Apri mappa"
+        },
+        "faq": {
+            "title": "Domande frequenti",
+            "subtitle": "Risposte alle domande più comuni"
+        },
+        "live_support": {
+            "title": "Supporto live",
+            "description": "Parla ora con un membro del team per aiuto immediato",
+            "btn_chat": "Avvia chat live",
+            "btn_schedule": "Pianifica una chiamata",
+            "available": "Disponibile ora: 3 agenti di supporto"
+        }
+    },
+    "contacts": {
+        "title": "Contattaci",
+        "description": "Hai una domanda sui tuoi ricordi di eventi? Siamo qui per aiutarti a preservare ogni momento in tutto il mondo.",
+        "form": {
+            "fullName": "Nome completo",
+            "fullNamePlaceholder": "Ahmed Mohamed",
+            "emailAddress": "Indirizzo email",
+            "emailPlaceholder": "ciao@example.com",
+            "subject": "Oggetto",
+            "generalInquiry": "Domanda generale",
+            "support": "Supporto tecnico",
+            "feedback": "Feedback",
+            "other": "Altro",
+            "message": "Messaggio",
+            "messagePlaceholder": "Dicci come possiamo aiutarti...",
+            "sendMessage": "Invia messaggio",
+            "successMessage": "Grazie! Il tuo messaggio è stato inviato con successo."
+        },
+        "info": {
+            "emailUs": "Scrivici",
+            "available": "Il nostro team è disponibile 24/7",
+            "visitStudio": "Visita il nostro studio",
+            "address": "123 Memory Lane, Tech District\nSan Francisco, CA 94103",
+            "followJourney": "Segui il nostro viaggio"
+        },
+        "map": {
+            "title": "Mappa mondiale di Scene Memory",
+            "description": "Visualizza migliaia di ricordi in oltre 140 paesi."
+        }
+    },
+    "faq": {
+        "title": "Domande frequenti",
+        "questions": {
+            "0": {
+                "question": "Come aggiungo un ricordo?",
+                "answer": "Carica semplicemente le tue foto e posiziona un marker sulla nostra mappa interattiva."
+            },
+            "1": {
+                "question": "I miei dati sono al sicuro?",
+                "answer": "Utilizziamo crittografia a livello aziendale per garantire che i tuoi ricordi restino privati."
+            },
+            "2": {
+                "question": "Posso condividere gli album?",
+                "answer": "Sì! Puoi creare album collaborativi con amici e famiglia tramite link sicuri."
+            }
+        }
+    }
+}

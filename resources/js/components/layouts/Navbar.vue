@@ -103,8 +103,8 @@ const userImage = ref(null);
 const currentLanguage = ref("AR");
 const languageDropdownOpen = ref(false);
 
-// Добавлены русский (RU) и испанский (ES)
-const languages = ["AR", "EN", "FR", "DE", "RU", "ES"];
+// أضفنا IT و HI
+const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI"];
 
 const selectLanguage = (lang) => {
     currentLanguage.value = lang;
@@ -181,8 +181,7 @@ const fetchProfile = async () => {
 onMounted(() => {
     const savedLang = localStorage.getItem("language");
 
-    // Обновлён список поддерживаемых языков (в нижнем регистре)
-    if (savedLang && ["ar", "en", "fr", "de", "ru", "es"].includes(savedLang.toLowerCase())) {
+    if (savedLang && ["ar", "en", "fr", "de", "ru", "es", "it", "hi"].includes(savedLang.toLowerCase())) {
         currentLanguage.value = savedLang.toUpperCase();
     } else {
         currentLanguage.value = "AR";
@@ -250,9 +249,7 @@ const isActive = (name) => document.body.dataset.route === name;
 /* Light Mode → Cart hover أسود */
 [data-theme="light"] .cart-btn:hover {
     background: #000000;
-    /* أسود */
     color: #000000;
-    /* أيقونة أبيض */
     border-color: #000000;
     transform: scale(1.08);
 }
@@ -373,7 +370,6 @@ const isActive = (name) => document.body.dataset.route === name;
 
 [data-theme="light"] .btn-icon:hover {
     background: #f3f4f6;
-    /* رمادي فاتح جدًا */
     color: #111827;
     border-color: #9ca3af;
     transform: scale(1.08);
@@ -382,9 +378,7 @@ const isActive = (name) => document.body.dataset.route === name;
 /* Cart Badge – في الـ light mode */
 [data-theme="light"] .badge {
     background: #111827;
-    /* أسود */
     color: #ffffff;
-    /* أبيض */
 }
 
 /* ── Login / User Button ── */
@@ -424,6 +418,5 @@ const isActive = (name) => document.body.dataset.route === name;
     color: #ffffff;
     transform: scale(1.06);
     box-shadow: 0 0 16px rgba(17, 24, 39, 0.35);
-    /* shadow أسود خفيف */
 }
 </style>
