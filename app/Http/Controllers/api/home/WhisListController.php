@@ -16,7 +16,7 @@ class WhisListController extends Controller
     {
         try {
             $whishlists = Wishlist::where('user_id', auth()->user()->id)->pluck('event_id');
-            $events = Events::with(['city:id,name', 'sub_categorey:id,name'])
+            $events = Events::with(['city.translation', 'sub_categorey.translation','translation','firstImage:id,event_id,url'])
                 ->whereIn('id', $whishlists)
                 ->select([
                     'id',

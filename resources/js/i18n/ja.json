@@ -360,5 +360,29 @@
         "no_title": "タイトルなしイベント",
         "undefined_city": "未定義",
         "from_map": "地図から"
+    },
+    "wishlist": {
+        "title": "お気に入りリスト",
+        "loading": "読み込み中...",
+        "empty": {
+            "main": "現在、ウィッシュリストにアイテムはありません",
+            "hint": "お気に入りのイベントを追加しましょう！"
+        },
+        "fallback_image_alt": "イベントのデフォルト画像",
+        "uncategorized": "未分類",
+        "no_title": "タイトルなし",
+        "city_label": "都市：",
+        "date_label": "日付：",
+        "time_label": "時間：",
+        "not_specified": "未指定",
+        "view_details": "詳細を見る",
+        "remove": "お気に入りから削除",
+        "deleting": "削除中...",
+        "added_at": "追加日",
+        "pagination": {
+            "previous": "前へ",
+            "next": "次へ",
+            "page_info": "ページ {current} / {total}"
+        }
     }
 }

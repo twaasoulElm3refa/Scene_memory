@@ -360,5 +360,29 @@
         "no_title": "Evento sin título",
         "undefined_city": "No definido",
         "from_map": "Desde el mapa"
+    },
+    "wishlist": {
+        "title": "Lista de favoritos",
+        "loading": "Cargando...",
+        "empty": {
+            "main": "No hay elementos en tu lista de deseos todavía",
+            "hint": "¡Comienza a agregar tus eventos favoritos!"
+        },
+        "fallback_image_alt": "Imagen predeterminada del evento",
+        "uncategorized": "Sin categoría",
+        "no_title": "Sin título",
+        "city_label": "Ciudad:",
+        "date_label": "Fecha:",
+        "time_label": "Hora:",
+        "not_specified": "No especificado",
+        "view_details": "Ver detalles",
+        "remove": "Eliminar de favoritos",
+        "deleting": "Eliminando...",
+        "added_at": "Añadido el",
+        "pagination": {
+            "previous": "Anterior",
+            "next": "Siguiente",
+            "page_info": "Página {current} de {total}"
+        }
     }
 }

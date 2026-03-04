@@ -24,17 +24,17 @@
         "login": "登录"
     },
     "languages": {
-        "AR": "阿拉伯语",
-        "EN": "英语",
-        "FR": "法语",
-        "DE": "德语",
-        "RU": "俄语",
-        "ES": "西班牙语",
-        "IT": "意大利语",
-        "HI": "印地语",
+        "AR": "العربية",
+        "EN": "English",
+        "FR": "Français",
+        "DE": "Deutsch",
+        "RU": "Русский",
+        "ES": "Español",
+        "IT": "Italiano",
+        "HI": "हिंदी",
         "ZH": "中文",
-        "FA": "波斯语",
-        "JA": "日语"
+        "FA": "فارسى",
+        "JA": "日本語"
     },
     "event": {
         "loading": "正在加载事件...",
@@ -360,5 +360,29 @@
         "no_title": "无标题活动",
         "undefined_city": "未定义",
         "from_map": "来自地图"
+    },
+    "wishlist": {
+        "title": "收藏夹",
+        "loading": "加载中...",
+        "empty": {
+            "main": "您的愿望清单中暂无项目",
+            "hint": "开始添加您喜爱的事件吧！"
+        },
+        "fallback_image_alt": "活动默认图片",
+        "uncategorized": "未分类",
+        "no_title": "无标题",
+        "city_label": "城市：",
+        "date_label": "日期：",
+        "time_label": "时间：",
+        "not_specified": "未指定",
+        "view_details": "查看详情",
+        "remove": "从收藏中移除",
+        "deleting": "正在移除...",
+        "added_at": "添加于",
+        "pagination": {
+            "previous": "上一页",
+            "next": "下一页",
+            "page_info": "第 {current} 页 / 共 {total} 页"
+        }
     }
 }

@@ -360,5 +360,29 @@
         "no_title": "رویداد بدون عنوان",
         "undefined_city": "نامشخص",
         "from_map": "از نقشه"
+    },
+    "wishlist": {
+        "title": "لیست علاقه‌مندی‌ها",
+        "loading": "در حال بارگذاری...",
+        "empty": {
+            "main": "در حال حاضر هیچ موردی در لیست علاقه‌مندی‌های شما وجود ندارد",
+            "hint": "با اضافه کردن رویدادهای مورد علاقه‌تان شروع کنید!"
+        },
+        "fallback_image_alt": "تصویر پیش‌فرض رویداد",
+        "uncategorized": "دسته‌بندی نشده",
+        "no_title": "بدون عنوان",
+        "city_label": "شهر:",
+        "date_label": "تاریخ:",
+        "time_label": "زمان:",
+        "not_specified": "مشخص نشده",
+        "view_details": "مشاهده جزئیات",
+        "remove": "حذف از علاقه‌مندی‌ها",
+        "deleting": "در حال حذف...",
+        "added_at": "اضافه شده در",
+        "pagination": {
+            "previous": "قبلی",
+            "next": "بعدی",
+            "page_info": "صفحه {current} از {total}"
+        }
     }
 }

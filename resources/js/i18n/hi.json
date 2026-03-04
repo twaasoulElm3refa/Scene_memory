@@ -360,5 +360,29 @@
         "no_title": "शीर्षक रहित इवेंट",
         "undefined_city": "अपरिभाषित",
         "from_map": "मानचित्र से"
+    },
+    "wishlist": {
+        "title": "पसंदीदा सूची",
+        "loading": "लोड हो रहा है...",
+        "empty": {
+            "main": "आपकी इच्छा सूची में अभी कोई आइटम नहीं है",
+            "hint": "अपने पसंदीदा इवेंट जोड़ना शुरू करें!"
+        },
+        "fallback_image_alt": "इवेंट की डिफ़ॉल्ट छवि",
+        "uncategorized": "अवर्गीकृत",
+        "no_title": "शीर्षक नहीं",
+        "city_label": "शहर:",
+        "date_label": "तारीख:",
+        "time_label": "समय:",
+        "not_specified": "निर्दिष्ट नहीं",
+        "view_details": "विवरण देखें",
+        "remove": "पसंदीदा से हटाएं",
+        "deleting": "हटा रहा है...",
+        "added_at": "जोड़ा गया",
+        "pagination": {
+            "previous": "पिछला",
+            "next": "अगला",
+            "page_info": "पेज {current} का {total}"
+        }
     }
 }

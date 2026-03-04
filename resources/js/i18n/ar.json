@@ -357,5 +357,29 @@
         "no_title": "فعالية بدون عنوان",
         "undefined_city": "غير محدد",
         "from_map": "من الخريطة"
+    },
+    "wishlist": {
+        "title": "قائمة المفضلة",
+        "loading": "جاري التحميل...",
+        "empty": {
+            "main": "لا توجد عناصر في قائمة الرغبات حاليًا",
+            "hint": "ابدأ بإضافة مناسباتك المفضلة!"
+        },
+        "fallback_image_alt": "صورة افتراضية للمناسبة",
+        "uncategorized": "غير مصنف",
+        "no_title": "بدون عنوان",
+        "city_label": "المدينة:",
+        "date_label": "التاريخ:",
+        "time_label": "الوقت:",
+        "not_specified": "غير محدد",
+        "view_details": "عرض التفاصيل",
+        "remove": "إزالة من المفضلة",
+        "deleting": "جاري الحذف...",
+        "added_at": "أُضيف في",
+        "pagination": {
+            "previous": "السابق",
+            "next": "التالي",
+            "page_info": "صفحة {current} من {total}"
+        }
     }
 }

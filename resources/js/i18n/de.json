@@ -360,5 +360,29 @@
         "no_title": "Unbenanntes Ereignis",
         "undefined_city": "Nicht definiert",
         "from_map": "Von der Karte"
+    },
+    "wishlist": {
+        "title": "Favoritenliste",
+        "loading": "Lade...",
+        "empty": {
+            "main": "Noch keine Einträge in deiner Wunschliste",
+            "hint": "Füge deine Lieblingsveranstaltungen hinzu!"
+        },
+        "fallback_image_alt": "Standard-Veranstaltungsbild",
+        "uncategorized": "Nicht kategorisiert",
+        "no_title": "Kein Titel",
+        "city_label": "Stadt:",
+        "date_label": "Datum:",
+        "time_label": "Zeit:",
+        "not_specified": "Nicht angegeben",
+        "view_details": "Details anzeigen",
+        "remove": "Aus Favoriten entfernen",
+        "deleting": "Wird entfernt...",
+        "added_at": "Hinzugefügt am",
+        "pagination": {
+            "previous": "Zurück",
+            "next": "Weiter",
+            "page_info": "Seite {current} von {total}"
+        }
     }
 }

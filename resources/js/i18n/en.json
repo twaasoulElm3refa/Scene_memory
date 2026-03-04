@@ -360,5 +360,29 @@
         "no_title": "Untitled Event",
         "undefined_city": "Undefined",
         "from_map": "From the Map"
+    },
+    "wishlist": {
+        "title": "Favorites List",
+        "loading": "Loading...",
+        "empty": {
+            "main": "No items in your wishlist yet",
+            "hint": "Start adding your favorite events!"
+        },
+        "fallback_image_alt": "Default event image",
+        "uncategorized": "Uncategorized",
+        "no_title": "No title",
+        "city_label": "City:",
+        "date_label": "Date:",
+        "time_label": "Time:",
+        "not_specified": "Not specified",
+        "view_details": "View Details",
+        "remove": "Remove from Favorites",
+        "deleting": "Removing...",
+        "added_at": "Added on",
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next",
+            "page_info": "Page {current} of {total}"
+        }
     }
 }
