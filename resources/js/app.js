@@ -21,7 +21,7 @@ const messages = {
 const i18n = createI18n({
     legacy: false,
     locale: localStorage.getItem('language')?.toLowerCase() || 'ar',
-    fallbackLocale: 'en',
+    fallbackLocale: 'ar',
     messages
 })
 import "./bootstrap";
