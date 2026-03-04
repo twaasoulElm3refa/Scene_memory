@@ -5,7 +5,6 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\categoreyRequest;
-use App\Models\CategoreyTranslations;
 use App\Models\Categories;
 use App\Jobs\TranslateCategoryJob;
 use Illuminate\Http\JsonResponse;

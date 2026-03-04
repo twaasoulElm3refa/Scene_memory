@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\home;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
+use App\Jobs\TranslateCommentJob;
 use App\Models\comments;
 use App\Models\Events;
 use Illuminate\Http\Request;
@@ -26,12 +27,12 @@ class CommentController extends Controller
             $event = Events::find($data['event_id']);
             Cache::forget("events_single_{$event->slug}");
             Cache::flush();
+            TranslateCommentJob::dispatch($comment->id, $data['comment']);
 
             return $this->success($comment, 'Comment Created Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
-
     }
 
     public function destroy(Request $request)
@@ -42,9 +43,10 @@ class CommentController extends Controller
             if ($request->user()->id != $comment->user_id) {
                 return $this->unauthorized('You are not the owner of this comment');
             }
-            
+
             $this->clearCache($comment->event_id);
             $comment->delete();
+
             return $this->success([], 'comment deleted successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
@@ -57,6 +59,7 @@ class CommentController extends Controller
             $cacheKey = 'comments_page_'.request('page', 1).'_event_'.request('id');
             $comments = Cache::remember($cacheKey, $this->cacheTime, function () {
                 $comments = Comments::where('event_id', request('id'))->latest()->paginate(10);
+
                 return $comments;
             });
 
@@ -68,7 +71,7 @@ class CommentController extends Controller
 
     private function clearCache($event_id)
     {
-        for( $i = 0; $i < 10; $i++ ) {
+        for ($i = 0; $i < 10; $i++) {
             Cache::forget("comments_page_{$i}_event_{$event_id}");
         }
         Cache::flush();

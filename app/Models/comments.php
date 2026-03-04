@@ -6,16 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class comments extends Model
 {
-    protected $table = "comments";
+    protected $table = 'comments';
+
     protected $guarded = [];
 
     public function event()
     {
-        return $this->belongsTo(Events::class,'event_id');
+        return $this->belongsTo(Events::class, 'event_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function translations()
+    {
+        return $this->hasMany(CommentTranslation::class, 'comment_id');
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(CommentTranslation::class, 'comment_id')
+            ->where('locale', app()->getLocale());
     }
 }
