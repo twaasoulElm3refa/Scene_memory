@@ -103,7 +103,7 @@ const userImage = ref(null);
 const currentLanguage = ref("AR");
 const languageDropdownOpen = ref(false);
 
-const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH"];
+const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH",'UR'];
 
 const selectLanguage = (lang) => {
     currentLanguage.value = lang;
@@ -180,7 +180,7 @@ const fetchProfile = async () => {
 onMounted(() => {
     const savedLang = localStorage.getItem("language");
 
-    if (savedLang && ["ar", "en", "fr", "de", "ru", "es", "it", "hi", "ja", "fa", "zh"].includes(savedLang.toLowerCase())) {
+    if (savedLang && ["ar", "en", "fr", "de", "ru", "es", "it", "hi", "ja", "fa", "zh", "ur"].includes(savedLang.toLowerCase())) {
         currentLanguage.value = savedLang.toUpperCase();
     } else {
         currentLanguage.value = "AR";

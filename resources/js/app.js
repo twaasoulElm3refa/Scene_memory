@@ -13,6 +13,7 @@ import hi from "./i18n/hi.json";
 import ja from "./i18n/ja.json";
 import zh from "./i18n/zh.json";
 import fa from "./i18n/fa.json";
+import ur from "./i18n/ur.json";
 import '../css/app.css';
 
 const messages = {
@@ -26,7 +27,8 @@ const messages = {
     hi,
     ja,
     zh,
-    fa
+    fa,
+    ur
 }
 const i18n = createI18n({
     legacy: false,

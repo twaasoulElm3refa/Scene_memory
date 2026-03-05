@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsRequest;
 use App\Jobs\TranslateEventJob;
+use App\Models\EventRequestCreate;
 use App\Models\Events;
 use App\Models\eventsImges;
 use Illuminate\Http\JsonResponse;
@@ -32,7 +33,11 @@ class EventUserCreateController extends Controller
                                 . '-' . time();
 
                 $data['user_id'] = auth()->id();
+                $data['is_active'] = 0;
                 $event = Events::create($data);
+                EventRequestCreate::create([
+                    'event_id'=> $event->id,
+                ]);
                 $event->translations()->create([
                     'locale'      => 'ar',
                     'title'       => $data['title'],

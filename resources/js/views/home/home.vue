@@ -309,7 +309,6 @@ const formatDate = (dateStr) => {
 const addEventMarkers = (events, targetMap, layerRef) => {
     if (!targetMap) return;
 
-    // Clear previous markers
     if (layerRef.value) {
         layerRef.value.clearLayers();
     } else {
@@ -327,27 +326,26 @@ const addEventMarkers = (events, targetMap, layerRef) => {
         const marker = L.marker([lat, lng]);
 
         let popupContent = `
-      <div class="text-right min-w-[180px]">
+        <div class="text-right min-w-[180px]">
         <h3 class="font-bold text-base mb-1">${event.title || "فعالية بدون عنوان"}</h3>
         <p class="text-sm text-gray-600 mb-2">
-          ${event.start_date ? formatDate(event.start_date) : "التاريخ غير محدد"}
+        ${event.start_date ? formatDate(event.start_date) : "التاريخ غير محدد"}
         </p>
-    `;
+        `;
 
         if (event.image_url) {
             popupContent += `
-        <img src="${event.image_url}" alt="${event.title}" class="w-full h-28 object-cover rounded mb-2">
-      `;
+            <img src="${event.image_url}" alt="${event.title}" class="w-full h-28 object-cover rounded mb-2">
+            `;
         }
 
         popupContent += `
         <p class="text-sm mb-2">${event.city || "غير محدد"}</p>
-        <a href="/single_event/${event.slug
-            }" class="text-blue-600 hover:underline text-sm font-medium">
-          عرض التفاصيل →
+        <a href="/single_event/${event.slug}" class="text-blue-600 hover:underline text-sm font-medium">
+        عرض التفاصيل →
         </a>
-      </div>
-    `;
+        </div>
+        `;
 
         marker.bindPopup(popupContent, {
             maxWidth: 240,
@@ -357,12 +355,17 @@ const addEventMarkers = (events, targetMap, layerRef) => {
         marker.addTo(layerRef.value);
     });
 
-    if (events.length > 1) {
-        const group = L.featureGroup(layerRef.value.getLayers());
-        targetMap.fitBounds(group.getBounds(), { padding: [60, 60] });
+    const markers = layerRef.value.getLayers();
+
+    if (markers.length > 1) {
+        const group = L.featureGroup(markers);
+        const bounds = group.getBounds();
+
+        if (bounds.isValid()) {
+            targetMap.fitBounds(bounds, { padding: [60, 60] });
+        }
     }
 };
-
 // ====================== Lifecycle ======================
 onMounted(async () => {
     mapService = new MapService(marker);
@@ -476,7 +479,7 @@ const handleMarkerEvents = (e) => {
     displayedEvents.value = eventsFromMap.map((ev) => ({
         id: ev.id || ev._id,
         slug: ev.slug,
-        title: ev.title ||'فعالية بدون عنوان',
+        title: ev.title || 'فعالية بدون عنوان',
         start_date: ev.start_date,
         city: ev.city?.translation.name || ev.city || '.....',
         category_name: ev.sub_categorey?.translation?.name || '..........',
