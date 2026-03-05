@@ -175,8 +175,8 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [MediaRequestController::class, 'all']);
-        Route::post('/approve/{id}', [MediaRequestController::class, 'approve']);
-        Route::post('/reject/{id}', [MediaRequestController::class, 'reject']);
+        Route::post('/approve/{id}', [MediaRequestController::class, 'approve'])->middleware(AdminMiddleware::class);
+        Route::post('/reject/{id}', [MediaRequestController::class, 'reject'])->middleware(AdminMiddleware::class);
         Route::post('/upload/{id}', [MediaRequestController::class, 'upload']);
     });
 
@@ -211,5 +211,6 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
     });
     // 96 Endpoints for the API
+
 });
 

@@ -115,7 +115,7 @@ class EventController extends Controller
                 'city.translation',
                 'sub_categorey.translation',
                 'user:id,name',
-                'images',
+                'images' => fn($q) => $q->where('is_active', 1),
                 'translation',
 
                 'comments' => fn ($q) => $q->latest('created_at')

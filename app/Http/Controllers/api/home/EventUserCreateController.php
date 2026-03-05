@@ -50,6 +50,7 @@ class EventUserCreateController extends Controller
                         eventsImges::create([
                             'event_id' => $event->id,
                             'url'      => $path,
+                            'is_active'=>1,
                         ]);
                     }
                 }

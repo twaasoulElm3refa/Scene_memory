@@ -14,10 +14,8 @@ class MediaRequest extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
-    public function event()
+    public function image()
     {
-        return $this->belongsTo(Events::class,'event_id');
+        return $this->belongsTo(eventsImges::class,'image_id');
     }
-    
-    
 }

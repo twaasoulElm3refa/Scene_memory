@@ -19,7 +19,7 @@ class MediaRequestController extends Controller
     {
         $cacheKey = 'mediaRequest_'.request()->input('page', 1);
         $mediaRequest = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Events::with('MediaRequest')->find(request('id'));
+             $eventimges =eventsImges::where('event_id', request('id'))->where('is_active', 0)->orderBy('created_at','desc')->get();
 
         });
 
@@ -38,12 +38,11 @@ class MediaRequestController extends Controller
                 $media = eventsImges::create([
                     'event_id' => $event->id,
                     'url' => $path,
-
+                    'is_active' => 0
                 ]);
                 $createdMedia[] = $media;
             }
         }
-
         return $this->success($createdMedia, 'تم إضافة الوسائط بنجاح');
     }
 }
