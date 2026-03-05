@@ -19,8 +19,8 @@ class MediaRequestController extends Controller
     {
         $cacheKey = 'mediaRequest_'.request()->input('page', 1);
         $mediaRequest = Cache::remember($cacheKey, $this->cacheTime, function () {
-             $eventimges =eventsImges::where('event_id', request('id'))->where('is_active', 0)->orderBy('created_at','desc')->get();
-
+             $eventimges =eventsImges::where('event_id', request('id'))->where('is_active', 0)->orderBy('created_at','desc')->paginate(10);
+            return $eventimges;
         });
 
         return $this->success($mediaRequest, 'get media request successfully');
