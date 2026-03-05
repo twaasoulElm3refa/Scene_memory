@@ -183,6 +183,7 @@ export default class MapService {
             headers: {
                 Accept: "application/json",
                 Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
+                "Accept-Language": localStorage.getItem("language") || "ar",
             },
         })
             .then(res => {
@@ -240,7 +241,7 @@ export default class MapService {
     `,
                 iconSize: [30, 42],
                 iconAnchor: [15, 42],
-                popupAnchor: [0, -45],    
+                popupAnchor: [0, -45],
             });
 
             const marker = L.marker([lat, lng], {
@@ -258,7 +259,7 @@ export default class MapService {
 
             if (event.image_url) {
                 popupContent += `
-                <img src="${event.image_url}" alt="${event.title}" 
+                <img src="${event.image_url}" alt="${event.title}"
                      style="max-width:100%; height:auto; border-radius:6px; margin:8px 0;">
                 <br>
             `;
@@ -266,7 +267,7 @@ export default class MapService {
 
             if (event.slug) {
                 popupContent += `
-                <a href="/events/${event.slug}" target="_blank" 
+                <a href="/events/${event.slug}" target="_blank"
                    style="color:#2563eb; text-decoration:underline;">
                    عرض التفاصيل →
                 </a>

@@ -163,7 +163,7 @@
                                 <div class="flex items-center gap-1.5 text-sm text-gray-600">
                                     <span></span>
                                     <span class="font-medium">
-                                        {{ event.translation?.name || $t("common.notSpecified") || '0' }}
+                                        {{ event.city || $t("common.notSpecified") || '0' }}
                                     </span>
                                 </div>
                                 <a :href="`/single_event/${event.slug}`"
@@ -357,7 +357,6 @@ const addEventMarkers = (events, targetMap, layerRef) => {
         marker.addTo(layerRef.value);
     });
 
-    // Optional: fit bounds if multiple markers
     if (events.length > 1) {
         const group = L.featureGroup(layerRef.value.getLayers());
         targetMap.fitBounds(group.getBounds(), { padding: [60, 60] });
@@ -456,7 +455,7 @@ const search = async (isInitial = false) => {
             title: ev.title || "فعالية بدون عنوان",
             start_date: ev.start_date,
             city: ev.city?.translation?.name || "غير محدد",
-            category_name: ev.category?.name || ev.category_name || "فعالية",
+            category_name: ev.sub_categorey.translation.name || "فعالية",
             image: ev.image || null,
             image_url: ev.image_url || null,
             lattitude: ev.lattitude,
@@ -479,19 +478,17 @@ const handleMarkerEvents = (e) => {
         slug: ev.slug,
         title: ev.title ||'فعالية بدون عنوان',
         start_date: ev.start_date,
-        city: ev.city?.name || ev.city || '',
-        category_name: ev.category_name || '',
+        city: ev.city?.translation.name || ev.city || '.....',
+        category_name: ev.sub_categorey?.translation?.name || '..........',
         image_url: ev.image_url || null,
-        lattitude: ev.lattitude || ev.latitude,
-        langitude: ev.langitude || ev.longitude,
+        translation: ev.translation,
     }));
 
-    // Add markers to main map
+    console.log(displayedEvents.value);
+
     if (mapService?.map) {
         addEventMarkers(displayedEvents.value, mapService.map, eventMarkersLayer);
     }
-
-    // Add markers to fullscreen map if open
     if (fullscreen.value && mapService?.fullMap) {
         addEventMarkers(displayedEvents.value, mapService.fullMap, fullEventMarkersLayer);
     }

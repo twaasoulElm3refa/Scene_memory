@@ -41,7 +41,7 @@ class TranslateEventJob implements ShouldQueue
 
             try {
                 $tr = new GoogleTranslate($locale);
-                $tr->setSource($this->lang);
+                $tr->setSource('ar');
 
                 $translatedTitle = $tr->translate($this->title);
                 $translatedDescription = $tr->translate($this->description);

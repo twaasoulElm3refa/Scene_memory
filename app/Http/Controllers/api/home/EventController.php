@@ -24,7 +24,7 @@ class EventController extends Controller
         $cacheKey = "events_page_{$page}_per_{$perPage}_".app()->getLocale();
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            $events = Events::with(['city.translation', 'sub_categorey.translation','translation','firstImage:id,event_id,url'])->where('is_active', 1)
+            $events = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,url'])->where('is_active', 1)
                 ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
@@ -42,21 +42,22 @@ class EventController extends Controller
         $from = $request->query('from');
         $to = $request->query('to');
 
-        $cacheKey = 'events_'.md5(json_encode([
-            'city' => $cityId,
-            'sub_categorey_id   ' => $categoryId,
-            'from' => $from,
-            'to' => $to,
-        ]));
+        $cacheKey = 'events_from_marker_'.
+            app()->getLocale().'_'.
+            $cityId.'_'.
+            $categoryId.'_'.
+            $from.'_'.
+            $to;
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
-            return Events::with('city.translation','translation')->where('is_active', 1)
+            return Events::with('city.translation', 'sub_categorey.translation', 'translation')
+                ->where('is_active', 1)
                 ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
                 ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
                 ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
                 ->when($to, fn ($q) => $q->whereDate('end_date', '<=', $to))
                 ->orderBy('start_date')
-                ->get(['id', 'title','slug', 'description', 'start_date', 'end_date', 'city_id']);
+                ->get();
         });
 
         return $this->success($events, 'Events');
@@ -69,25 +70,19 @@ class EventController extends Controller
         if (! $city) {
             return $this->error('city not found', 404);
         }
-
         $city = str_replace(['منطقة', 'مدينة', 'محافظة'], '', $city);
         $city = trim($city);
-
-        $cacheKey = 'city_events_'.strtolower($city);
-
+        $cacheKey = 'city_events_'.strtolower($city).'_'.app()->getLocale();
         $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
-
             $DBCITY = Cities::query()
                 ->where('name', 'LIKE', "%{$city}%")
                 ->first();
-
             if (! $DBCITY) {
                 return null;
             }
-
             return $DBCITY->events()
-                ->with('city')
-                ->select('slug', 'title', 'image', 'start_date', 'city_id', 'langitude', 'lattitude')
+                ->with('city.translation', 'sub_categorey.translation', 'translation')
+                ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id')
                 ->where('is_active', 1)
                 ->latest()
                 ->get()
@@ -99,11 +94,9 @@ class EventController extends Controller
                     return $event;
                 });
         });
-
         if (! $events) {
             return $this->error('City not found in DB', 404);
         }
-
         return $this->success($events, 'City is found');
     }
 
