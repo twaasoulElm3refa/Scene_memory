@@ -8,8 +8,6 @@ class CommentTranslation extends Model
 {
     protected $table = 'comment_translations';
 
-    public $timestamps = false;
-
     protected $guarded = [];
 
     public function comment()

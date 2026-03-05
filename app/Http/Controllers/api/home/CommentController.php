@@ -56,9 +56,15 @@ class CommentController extends Controller
     public function allPaginated()
     {
         try {
-            $cacheKey = 'comments_page_'.request('page', 1).'_event_'.request('id');
+            $cacheKey = 'comments_page_'.request('page', 1).'_event_'.request('id').'_'.app()->getLocale();
             $comments = Cache::remember($cacheKey, $this->cacheTime, function () {
-                $comments = Comments::where('event_id', request('id'))->latest()->paginate(10);
+                $comments = Comments::with([
+                    'translation:id,comment_id,locale,comment,created_at',
+                ])
+                    ->select('id', 'event_id', 'user_id')
+                    ->where('event_id', request('id'))
+                    ->latest()
+                    ->paginate(10);
 
                 return $comments;
             });

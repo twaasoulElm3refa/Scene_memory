@@ -120,7 +120,7 @@ class EventController extends Controller
 
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)
-                    ->with('user:id,name'),
+                    ->with('user:id,name','translation'),
             ])->withCount('comments')->withCount('likes')
                 ->where('slug', $slug)
                 ->first();

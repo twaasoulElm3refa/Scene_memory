@@ -193,7 +193,7 @@
                       </div>
 
                       <p class="comment-body">
-                        {{ comment.comment }}
+                        {{ comment.translation?.comment || comment.comment }}
                       </p>
                     </div>
 
