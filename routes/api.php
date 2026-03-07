@@ -19,6 +19,7 @@ use App\Http\Controllers\api\auth\SocialAuthController;
 use App\Http\Controllers\api\home\CategoryController;
 use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CommentController;
+use App\Http\Controllers\api\home\CommentInteractionController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
@@ -194,8 +195,12 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [HomeController::class, 'destroy']);
     });
 
-    Route::prefix('comments')->middleware('throttle:10,1')->group(function () {
-        Route::get('/{id}', [CommentController::class, 'allPaginated']);
+    Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
+        Route::get('/{slug}', [CommentController::class, 'allPaginated']);
+        Route::post('/{id}/support', [CommentInteractionController::class, 'support']);
+        Route::post('/{id}/Exhibitions', [CommentInteractionController::class, 'exhibitions']);
+        Route::post('/{id}/neutral', [CommentInteractionController::class, 'neutral']);
+        Route::get('/{id}/interactions', [CommentController::class, 'interactions']);
         Route::post('{id}/create', [CommentController::class, 'create']);
         Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
     });
@@ -210,6 +215,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}', [WhisListController::class,'add']);
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
     });
+
     // 96 Endpoints for the API
 
 });

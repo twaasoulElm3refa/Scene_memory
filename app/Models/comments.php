@@ -30,4 +30,9 @@ class comments extends Model
         return $this->hasOne(CommentTranslation::class, 'comment_id')
             ->where('locale', app()->getLocale());
     }
+
+    public function interactions()
+    {
+        return $this->hasMany(CommentInteractions::class, 'comment_id');
+    }
 }

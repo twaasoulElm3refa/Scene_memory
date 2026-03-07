@@ -36,6 +36,7 @@ import requests from "../views/admin/requests/requests.vue";
 import show_request from "../views/admin/requests/show_request.vue";
 import wishlist from "../views/home/wishlist.vue";
 import MediaUploadRequest from "../views/admin/requests/MediaUploadRequest.vue";
+import all_comments from "../views/home/all_comments.vue";
 
 const routes = [
     {
@@ -66,6 +67,13 @@ const routes = [
         path: "/single_event/:slug",
         name: "single_event",
         component: single_event,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/single_event/:slug/comments",
+        name: "all_comments",
+        component: all_comments,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

@@ -57,14 +57,26 @@ class CommentController extends Controller
     {
         try {
             $cacheKey = 'comments_page_'.request('page', 1).'_event_'.request('id').'_'.app()->getLocale();
-            $comments = Cache::remember($cacheKey, $this->cacheTime, function () {
+            $event = Events::where('slug', request('slug'))->first();
+            $comments = Cache::remember($cacheKey, $this->cacheTime, function () use ($event) {
                 $comments = Comments::with([
                     'translation:id,comment_id,locale,comment,created_at',
+                    'user:id,name',
                 ])
-                    ->select('id', 'event_id', 'user_id')
-                    ->where('event_id', request('id'))
+                    ->withCount([
+                        'interactions as support_count' => function ($q) {
+                            $q->where('type', 'support');
+                        },
+                        'interactions as exhibitions_count' => function ($q) {
+                            $q->where('type', 'Exhibitions');
+                        },
+                        'interactions as neutral_count' => function ($q) {
+                            $q->where('type', 'neutral');
+                        },
+                    ])
+                    ->where('event_id', $event->id)
                     ->latest()
-                    ->paginate(10);
+                    ->paginate(5);
 
                 return $comments;
             });
