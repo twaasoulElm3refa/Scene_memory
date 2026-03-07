@@ -41,7 +41,6 @@ class EventController extends Controller
         $categoryId = $request->sub_category_id;
         $from = $request->query('from');
         $to = $request->query('to');
-
         $cacheKey = 'events_from_marker_'.
             app()->getLocale().'_'.
             $cityId.'_'.

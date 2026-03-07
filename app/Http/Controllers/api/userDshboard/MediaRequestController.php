@@ -38,7 +38,7 @@ class MediaRequestController extends Controller
                 $media = eventsImges::create([
                     'event_id' => $event->id,
                     'url' => $path,
-                    'is_active' => 0
+                    'is_active' => 1
                 ]);
                 $createdMedia[] = $media;
             }

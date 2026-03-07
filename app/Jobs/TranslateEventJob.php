@@ -6,7 +6,6 @@ use App\Models\Events;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
@@ -17,36 +16,54 @@ class TranslateEventJob implements ShouldQueue
     protected $eventId;
     protected $title;
     protected $description;
-    protected $lang;
 
-    public function __construct($eventId, $title, $description ,$lang="en")
+    public function __construct($eventId, $title, $description)
     {
         $this->eventId = $eventId;
         $this->title = $title;
         $this->description = $description;
-        $this->lang = $lang;
     }
 
     public function handle(): void
     {
         $event = Events::find($this->eventId);
 
-        if (! $event) {
+        if (!$event) {
             return;
         }
 
         $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
 
-        foreach ($locales as $locale) {
+        try {
 
-            try {
-                $tr = new GoogleTranslate($locale);
-                $tr->setSource('ar');
+            $tr = new GoogleTranslate();
+            $tr->setSource('auto');
+            $tr->setTarget('en');
+            $tr->translate($this->title);
 
-                $translatedTitle = $tr->translate($this->title);
-                $translatedDescription = $tr->translate($this->description);
+            $sourceLang = $tr->getLastDetectedSource() ?: 'en';
+            $event->translations()->updateOrCreate(
+                ['locale' => $sourceLang],
+                [
+                    'title' => $this->title,
+                    'description' => $this->description,
+                ]
+            );
 
-                if ($translatedTitle && $translatedDescription) {
+            foreach ($locales as $locale) {
+
+                if ($locale === $sourceLang) {
+                    continue;
+                }
+
+                try {
+
+                    $tr->setSource($sourceLang);
+                    $tr->setTarget($locale);
+
+                    $translatedTitle = $tr->translate($this->title);
+                    $translatedDescription = $tr->translate($this->description);
+
                     $event->translations()->updateOrCreate(
                         ['locale' => $locale],
                         [
@@ -54,11 +71,14 @@ class TranslateEventJob implements ShouldQueue
                             'description' => $translatedDescription,
                         ]
                     );
-                }
 
-            } catch (\Exception $e) {
-                \Log::error('Event Translate Error: '.$e->getMessage());
+                } catch (\Exception $e) {
+                    \Log::error("Translation error to {$locale}: ".$e->getMessage());
+                }
             }
+
+        } catch (\Exception $e) {
+            \Log::error('Detect Language Error: '.$e->getMessage());
         }
     }
 }

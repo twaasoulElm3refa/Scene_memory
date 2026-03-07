@@ -451,6 +451,7 @@ const search = async (isInitial = false) => {
             searchQuery: searchQuery.value?.trim() || null,
         });
 
+
         displayedEvents.value = (Array.isArray(result) ? result : []).map((ev) => ({
             id: ev.id,
             slug: ev.slug,
@@ -486,8 +487,6 @@ const handleMarkerEvents = (e) => {
         image_url: ev.image_url || null,
         translation: ev.translation,
     }));
-
-    console.log(displayedEvents.value);
 
     if (mapService?.map) {
         addEventMarkers(displayedEvents.value, mapService.map, eventMarkersLayer);

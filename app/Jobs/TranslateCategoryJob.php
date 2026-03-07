@@ -37,7 +37,7 @@ class TranslateCategoryJob implements ShouldQueue
 
             try {
                 $tr = new GoogleTranslate($locale);
-                $tr->setSource(app()->getLocale());
+                $tr->setSource('ar');
                 $translated = $tr->translate($this->text);
 
                 if ($translated) {
