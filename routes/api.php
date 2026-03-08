@@ -9,6 +9,7 @@ use App\Http\Controllers\api\admin\EventAdminCreateController;
 use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
+use App\Http\Controllers\api\admin\ReportController;
 use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
 use App\Http\Controllers\api\admin\UserController;
@@ -200,9 +201,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}/support', [CommentInteractionController::class, 'support']);
         Route::post('/{id}/Exhibitions', [CommentInteractionController::class, 'exhibitions']);
         Route::post('/{id}/neutral', [CommentInteractionController::class, 'neutral']);
-        Route::get('/{id}/interactions', [CommentController::class, 'interactions']);
+        Route::post('/{id}/report', [CommentInteractionController::class, 'report']);
         Route::post('{id}/create', [CommentController::class, 'create']);
         Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
+    });
+    Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
+        Route::get('/reports/all', [ReportController::class, 'reports'])->middleware(AdminMiddleware::class);
+        Route::delete('/reports/{id}/delete', [ReportController::class, 'delete'])->middleware(AdminMiddleware::class);
     });
 
     Route::prefix('likes')->middleware('throttle:10,1')->group(function () {
@@ -215,8 +220,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}', [WhisListController::class,'add']);
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
     });
-
-    // 96 Endpoints for the API
-
+    // 100 Endpoints for the API
 });
 

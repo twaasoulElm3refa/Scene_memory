@@ -22,7 +22,9 @@ class CommentController extends Controller
         $data = $request->validated();
         try {
             $data['event_id'] = request('id');
-            $data['user_id'] = auth()->user()->id;
+            if (auth()->check()) {
+                $data['user_id'] = auth()->user()->id;
+            }
             $comment = comments::create($data);
             $event = Events::find($data['event_id']);
             Cache::forget("events_single_{$event->slug}");
@@ -40,11 +42,20 @@ class CommentController extends Controller
         try {
             $comment = Comments::find(request('id'));
 
+            if (auth()->user()->role == 'admin') {
+                $this->clearCache($comment->event_id);
+                $comment->delete();
+
+                return $this->success([], 'comment deleted successfully');
+            }
+
             if ($request->user()->id != $comment->user_id) {
                 return $this->unauthorized('You are not the owner of this comment');
             }
 
             $this->clearCache($comment->event_id);
+            Cache::forget('reports_all');
+            Cache::flush();
             $comment->delete();
 
             return $this->success([], 'comment deleted successfully');

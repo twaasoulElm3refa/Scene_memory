@@ -13,9 +13,62 @@ const pagination = ref({
 const loading = ref(false);
 const errorMsg = ref(null);
 const slug = route.params.slug;
-
 const reactions = ref({});
 const reactionLoading = ref({});
+
+// ======= Report Modal State =======
+const reportModal = ref(false);
+const reportCommentId = ref(null);
+const reportReason = ref('');
+const reportLoading = ref(false);
+const reportSuccess = ref(false);
+const reportError = ref('');
+
+const reportReasons = [
+  { value: 'spam',             label: 'بريد مزعج',          icon: '🚫' },
+  { value: 'offensive',        label: 'محتوى مسيء',         icon: '😡' },
+  { value: 'inappropriate',    label: 'غير لائق',            icon: '⚠️' },
+  { value: 'illegal',          label: 'محتوى غير قانوني',    icon: '⚖️' },
+  { value: 'untrue',           label: 'محتوى كاذب',          icon: '🤥' },
+  { value: 'False information',label: 'معلومات مضللة',       icon: '📛' },
+  { value: 'other',            label: 'سبب آخر',             icon: '💬' },
+];
+
+const openReportModal = (commentId) => {
+  reportCommentId.value = commentId;
+  reportReason.value = '';
+  reportSuccess.value = false;
+  reportError.value = '';
+  reportModal.value = true;
+};
+
+const closeReportModal = () => {
+  reportModal.value = false;
+  reportCommentId.value = null;
+  reportReason.value = '';
+  reportSuccess.value = false;
+  reportError.value = '';
+};
+
+const submitReport = async () => {
+  if (!reportReason.value) {
+    reportError.value = 'يرجى اختيار سبب البلاغ';
+    return;
+  }
+  reportLoading.value = true;
+  reportError.value = '';
+  try {
+    await CommentService.reportComment(reportCommentId.value, reportReason.value);
+    reportSuccess.value = true;
+    setTimeout(() => closeReportModal(), 2000);
+  } catch (err) {
+    reportError.value = 'حدث خطأ أثناء إرسال البلاغ. حاول مرة أخرى.';
+    console.error(err);
+  } finally {
+    reportLoading.value = false;
+  }
+};
+// ==================================
 
 const fetchComments = async (page = 1) => {
   loading.value = true;
@@ -23,18 +76,12 @@ const fetchComments = async (page = 1) => {
   try {
     const response = await CommentService.getAllComments(slug, page);
     comments.value = response.data.data || [];
-
     pagination.value = {
       current_page: response.data.current_page || 1,
       last_page: response.data.last_page || 1,
       total: response.data.total || 0,
       per_page: response.data.per_page || 10,
     };
-
-    // اختياري: لو الـ backend بيرجع حالة الـ reaction لكل تعليق
-    // comments.value.forEach(c => {
-    //   if (c.my_reaction) reactions.value[c.id] = c.my_reaction;
-    // });
   } catch (error) {
     errorMsg.value = "حصل خطأ أثناء جلب التعليقات";
     console.error(error);
@@ -60,51 +107,38 @@ const reactionEndpointMap = {
 
 const setReaction = async (commentId, type) => {
   if (reactionLoading.value[commentId]) return;
-
   const commentIndex = comments.value.findIndex(c => c.id === commentId);
   if (commentIndex === -1) return;
-
   const comment = comments.value[commentIndex];
-
   const previousReaction = reactions.value[commentId];
   const isToggle = previousReaction === type;
 
-  // حفظ القيم القديمة للـ rollback
   const oldReaction = previousReaction;
   const oldSupport = comment.support_count || 0;
   const oldExhibitions = comment.exhibitions_count || 0;
   const oldNeutral = comment.neutral_count || 0;
 
-  // Optimistic UI update
   reactions.value[commentId] = isToggle ? null : type;
 
-  // تعديل العدادات بشكل آمن (باستخدام Vue.set أو مباشرة مع ref)
   if (isToggle) {
-    // إلغاء التصويت
     if (previousReaction === 'support') comment.support_count = Math.max(0, oldSupport - 1);
     if (previousReaction === 'exhibitions') comment.exhibitions_count = Math.max(0, oldExhibitions - 1);
     if (previousReaction === 'neutral') comment.neutral_count = Math.max(0, oldNeutral - 1);
   } else {
-    // إزالة التصويت القديم إن وجد
     if (previousReaction === 'support') comment.support_count = Math.max(0, oldSupport - 1);
     if (previousReaction === 'exhibitions') comment.exhibitions_count = Math.max(0, oldExhibitions - 1);
     if (previousReaction === 'neutral') comment.neutral_count = Math.max(0, oldNeutral - 1);
-
-    // إضافة التصويت الجديد
     if (type === 'support') comment.support_count = (oldSupport + 1);
     if (type === 'exhibitions') comment.exhibitions_count = (oldExhibitions + 1);
     if (type === 'neutral') comment.neutral_count = (oldNeutral + 1);
   }
 
   reactionLoading.value[commentId] = true;
-
   try {
     const endpoint = reactionEndpointMap[type];
     await CommentService.reactToComment(commentId, endpoint);
-    // نجح → نترك التغييرات كما هي
   } catch (error) {
     console.error('فشل في إرسال الـ reaction:', error);
-    // rollback
     reactions.value[commentId] = oldReaction;
     comment.support_count = oldSupport;
     comment.exhibitions_count = oldExhibitions;
@@ -117,6 +151,7 @@ const setReaction = async (commentId, type) => {
 
 <template>
   <div class="comments-section max-w-2xl mx-auto px-4 py-8" dir="rtl">
+
     <!-- Header -->
     <div class="flex items-center gap-3 mb-6">
       <div class="w-1 h-7 bg-indigo-500 rounded-full"></div>
@@ -178,9 +213,23 @@ const setReaction = async (commentId, type) => {
             </div>
             <span class="font-medium">{{ comment.user?.name || 'مستخدم' }}</span>
           </div>
-          <span>
-            {{ new Date(comment.created_at || comment.translation?.created_at).toLocaleString('ar-EG') }}
-          </span>
+          <div class="flex items-center gap-3">
+            <span>
+              {{ new Date(comment.created_at || comment.translation?.created_at).toLocaleString('ar-EG') }}
+            </span>
+            <!-- زر الإبلاغ -->
+            <button
+              @click="openReportModal(comment.id)"
+              class="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors duration-150 px-2 py-1 rounded-lg hover:bg-red-50"
+              title="الإبلاغ عن هذا التعليق"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18l-2 9H5L3 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12v7h14v-7" />
+              </svg>
+              إبلاغ
+            </button>
+          </div>
         </div>
 
         <!-- Reaction Buttons -->
@@ -254,12 +303,10 @@ const setReaction = async (commentId, type) => {
       >
         &#8594; السابق
       </button>
-
       <span class="text-sm">
         صفحة <strong class="text-indigo-600">{{ pagination.current_page }}</strong> من
         <strong>{{ pagination.last_page }}</strong>
       </span>
-
       <button
         :disabled="pagination.current_page === pagination.last_page"
         @click="goToPage(pagination.current_page + 1)"
@@ -268,5 +315,125 @@ const setReaction = async (commentId, type) => {
         التالي &#8592;
       </button>
     </div>
+
   </div>
+
+  <!-- ============ Report Modal ============ -->
+  <Teleport to="body">
+    <Transition name="modal">
+      <div
+        v-if="reportModal"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        dir="rtl"
+      >
+        <!-- Backdrop -->
+        <div
+          class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          @click="closeReportModal"
+        ></div>
+
+        <!-- Modal Box -->
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 z-10">
+
+          <!-- Success State -->
+          <div v-if="reportSuccess" class="flex flex-col items-center py-6 gap-3 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">✅</div>
+            <h4 class="text-lg font-bold text-gray-800">تم إرسال البلاغ</h4>
+            <p class="text-sm text-gray-500">شكراً لك، سنراجع هذا التعليق قريباً.</p>
+          </div>
+
+          <!-- Form State -->
+          <template v-else>
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                  </svg>
+                </div>
+                <h3 class="text-base font-bold text-gray-800">الإبلاغ عن تعليق</h3>
+              </div>
+              <button
+                @click="closeReportModal"
+                class="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+
+            <p class="text-sm text-gray-500 mb-4">اختر سبب الإبلاغ عن هذا التعليق:</p>
+
+            <!-- Reasons Grid -->
+            <div class="grid grid-cols-2 gap-2 mb-5">
+              <button
+                v-for="reason in reportReasons"
+                :key="reason.value"
+                @click="reportReason = reason.value"
+                :class="[
+                  'flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm text-right transition-all duration-150',
+                  reportReason === reason.value
+                    ? 'bg-red-50 border-red-400 text-red-700 font-semibold shadow-sm'
+                    : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-red-300 hover:bg-red-50/50'
+                ]"
+              >
+                <span class="text-base leading-none">{{ reason.icon }}</span>
+                <span class="leading-tight">{{ reason.label }}</span>
+              </button>
+            </div>
+
+            <!-- Error Message -->
+            <p v-if="reportError" class="text-xs text-red-500 mb-3 flex items-center gap-1">
+              <span>⚠️</span> {{ reportError }}
+            </p>
+
+            <!-- Actions -->
+            <div class="flex gap-2 justify-end">
+              <button
+                @click="closeReportModal"
+                class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition"
+              >
+                إلغاء
+              </button>
+              <button
+                @click="submitReport"
+                :disabled="reportLoading || !reportReason"
+                :class="[
+                  'px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-150',
+                  reportReason && !reportLoading
+                    ? 'bg-red-500 hover:bg-red-600 text-white shadow-sm'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                ]"
+              >
+                <span v-if="reportLoading" class="flex items-center gap-1.5">
+                  <svg class="animate-spin w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                  جاري الإرسال...
+                </span>
+                <span v-else>إرسال البلاغ</span>
+              </button>
+            </div>
+          </template>
+
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+
 </template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.25s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+</style>

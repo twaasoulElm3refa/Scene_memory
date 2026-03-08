@@ -24,6 +24,10 @@ const CommentService = {
     reactToComment(commentId, reactionType) {
         return api.post(`/comments/${commentId}/${reactionType}`);
     },
+
+    reportComment(commentId, reason) {
+        return axios.post(`/v1/comments/${commentId}/report`, { reason });
+    }
 };
 
 export default CommentService;

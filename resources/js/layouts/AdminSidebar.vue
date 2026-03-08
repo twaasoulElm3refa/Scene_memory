@@ -21,6 +21,15 @@
             </span>
         </RouterLink>
 
+        <!-- Reports -->
+        <RouterLink to="/admin/reports" class="sidebar-btn group text-decoration-none"
+            :class="{ active: route.path === '/admin/reports' }">
+            <span class="flex items-center gap-3">
+                <PresentationChartBarIcon class="w-5 h-5" />
+                Reports
+            </span>
+        </RouterLink>
+
         <!-- Create Event Requests Dropdown -->
         <div class="sidebar-group">
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': requestsActive }"
@@ -46,6 +55,7 @@
                 </div>
             </Transition>
         </div>
+
         <!-- USERS -->
         <div class="sidebar-group">
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': usersActive }"
@@ -222,6 +232,7 @@ import {
     HomeIcon as DashboardIcon,
     InboxIcon as MessagesIcon,
     UsersIcon,
+    PresentationChartBarIcon,
     GlobeAltIcon as GlobeIcon,
     BuildingOfficeIcon,
     Cog6ToothIcon as CogIcon,
@@ -248,7 +259,7 @@ const toggle = (key) => {
 open.requests = route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media");
 
 const requestsActive = computed(() =>
-  route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media")
+    route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media")
 );
 
 const usersActive = computed(() => route.path.startsWith("/admin/users"));

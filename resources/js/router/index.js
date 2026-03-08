@@ -37,6 +37,7 @@ import show_request from "../views/admin/requests/show_request.vue";
 import wishlist from "../views/home/wishlist.vue";
 import MediaUploadRequest from "../views/admin/requests/MediaUploadRequest.vue";
 import all_comments from "../views/home/all_comments.vue";
+import all_reports from "../views/admin/reports/all_reports.vue";
 
 const routes = [
     {
@@ -126,6 +127,11 @@ const routes = [
     {
         path: "/admin",
         component: admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/reports",
+        component: all_reports,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {

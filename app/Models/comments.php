@@ -35,4 +35,9 @@ class comments extends Model
     {
         return $this->hasMany(CommentInteractions::class, 'comment_id');
     }
+
+    public function report()
+    {
+        return $this->hasMany(CommentReport::class,'comment_id');
+    }
 }
