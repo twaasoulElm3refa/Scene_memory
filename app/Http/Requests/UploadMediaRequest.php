@@ -23,7 +23,7 @@ class UploadMediaRequest extends FormRequest
     {
         return [
             'url' => 'required|array|min:1',
-            'url.*' => 'required|file|image|mimes:jpeg,jpg,png,webp,gif|max:5120',
+            'url.*' => 'required',
         ];
     }
 }

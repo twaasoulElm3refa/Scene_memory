@@ -2,9 +2,7 @@
     <div class="min-h-screen bg-gray-50 font-sans">
         <!-- Hero Map Section -->
         <div class="relative h-[500px] md:h-[600px] bg-gray-900 overflow-hidden">
-            <div id="map" class="absolute inset-0 bg-cover bg-center opacity-70" :style="{
-                backgroundImage: `url('https://images.unsplash.com/photo-1524666041070-9d87656c25bb?auto=format&fit=crop&q=80')`,
-            }"></div>
+            <div id="map" class="absolute inset-0 bg-cover bg-center opacity-70"></div>
             <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"></div>
         </div>
 
