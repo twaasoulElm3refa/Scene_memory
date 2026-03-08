@@ -120,6 +120,7 @@ const allLinks = [
     { labelKey: "nav.contact", href: "/contact", active: "contact" },
     { labelKey: "nav.addEvent", href: "/add_event", active: "add_event" },
     { labelKey: "nav.wishlist", href: "/WishList", active: "Wishlist" },
+    { labelKey: "nav.historical", href: "/historical", active: "historical" },
 ];
 
 const userInitial = computed(() => {

@@ -15,6 +15,7 @@
      "upload_media": "Media hochladen",
     "view_all_comments": "Alle Kommentare anzeigen",
     "nav": {
+        "historical": "Historische Personen",
         "home": "Startseite",
         "about": "Über uns",
         "allEvents": "Alle Veranstaltungen",

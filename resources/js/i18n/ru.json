@@ -15,6 +15,7 @@
     "upload_media": "Загрузить медиа",
     "view_all_comments": "Показать все комментарии",
     "nav": {
+        "historical": "Исторические люди",
         "home": "Главная",
         "about": "О нас",
         "allEvents": "Все события",

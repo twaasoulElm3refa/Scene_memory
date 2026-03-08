@@ -15,6 +15,7 @@
      "upload_media": "Upload Media",
     "view_all_comments": "View all comments",
     "nav": {
+          "historical": "Historical People",
         "home": "Home",
         "about": "About Us",
         "allEvents": "All Events",

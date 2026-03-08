@@ -108,6 +108,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('events')->middleware(['throttle:45,1'])->group(function () {
         // Home Events
         Route::get('/', [EventController::class, 'all']);
+        Route::get('/historical', [EventController::class, 'historical']);
         Route::get('/count', [EventController::class, 'count']);
         Route::get('/memories', [EventController::class, 'memories']);
         Route::get('/{city_id}/{sub_category_id}', [EventController::class,  'index']);
@@ -220,6 +221,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}', [WhisListController::class,'add']);
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
     });
-    // 100 Endpoints for the API
+    // 102 Endpoints for the API
 });
 

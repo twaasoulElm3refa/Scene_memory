@@ -15,6 +15,7 @@
     "upload_media": "بارگذاری مدیا",
     "view_all_comments": "مشاهده همه نظرات",
     "nav": {
+        "historical": "رویدادهای تاریخی",
         "home": "خانه",
         "about": "درباره ما",
         "allEvents": "همه رویدادها",

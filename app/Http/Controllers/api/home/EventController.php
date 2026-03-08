@@ -35,6 +35,25 @@ class EventController extends Controller
         return $this->success($events, 'All events');
     }
 
+    public function historical()
+    {
+        $page = request()->get('page', 1);
+        $perPage = 8;
+
+        $cacheKey = "events_historical_page_{$page}_per_{$perPage}_".app()->getLocale();
+
+        $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
+            $events = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,url'])->where('is_active', 1)->where('is_historical', 1)
+                ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
+
+            return $events;
+        });
+
+        return $this->success($events, 'All events');
+    }
+
     public function index(Request $request)
     {
         $cityId = $request->city_id;
@@ -79,6 +98,7 @@ class EventController extends Controller
             if (! $DBCITY) {
                 return null;
             }
+
             return $DBCITY->events()
                 ->with('city.translation', 'sub_categorey.translation', 'translation')
                 ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id')
@@ -96,6 +116,7 @@ class EventController extends Controller
         if (! $events) {
             return $this->error('City not found in DB', 404);
         }
+
         return $this->success($events, 'City is found');
     }
 
@@ -114,12 +135,12 @@ class EventController extends Controller
                 'city.translation',
                 'sub_categorey.translation',
                 'user:id,name',
-                'images' => fn($q) => $q->where('is_active', 1),
+                'images' => fn ($q) => $q->where('is_active', 1),
                 'translation',
 
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)
-                    ->with('user:id,name','translation'),
+                    ->with('user:id,name', 'translation'),
             ])->withCount('comments')->withCount('likes')
                 ->where('slug', $slug)
                 ->first();

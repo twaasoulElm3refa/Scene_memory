@@ -15,6 +15,7 @@
     "upload_media": "メディアをアップロード",
     "view_all_comments": "すべてのコメントを見る",
     "nav": {
+        "historical": "歴史人物",
         "home": "ホーム",
         "about": "私たちについて",
         "allEvents": "すべてのイベント",

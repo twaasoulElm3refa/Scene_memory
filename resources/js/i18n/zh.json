@@ -15,6 +15,7 @@
     "upload_media": "上传媒体",
     "view_all_comments": "查看所有评论",
     "nav": {
+        "historical": "历史人物",
         "home": "首页",
         "about": "关于我们",
         "allEvents": "所有事件",

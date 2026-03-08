@@ -38,11 +38,18 @@ import wishlist from "../views/home/wishlist.vue";
 import MediaUploadRequest from "../views/admin/requests/MediaUploadRequest.vue";
 import all_comments from "../views/home/all_comments.vue";
 import all_reports from "../views/admin/reports/all_reports.vue";
+import historical from "../views/home/historical.vue";
 
 const routes = [
     {
         path: "/",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/historical",
+        component: historical,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
