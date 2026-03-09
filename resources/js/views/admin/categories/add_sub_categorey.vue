@@ -11,10 +11,8 @@
         </p>
       </div>
 
-      <!-- Form Card -->
       <div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
         <form @submit.prevent="submitForm" class="p-6 space-y-6">
-          <!-- اسم التصنيف الفرعي -->
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
               اسم التصنيف الفرعي <span class="text-red-500">*</span>
@@ -33,7 +31,6 @@
             </p>
           </div>
 
-          <!-- حقل رفع الصورة -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">
               الصورة (اختياري)
@@ -42,18 +39,9 @@
               <label
                 class="cursor-pointer px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg border border-gray-300 transition-colors flex items-center gap-2"
               >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                  />
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
                 اختيار صورة
                 <input
@@ -64,24 +52,18 @@
                 />
               </label>
 
-              <div
-                v-if="form.imagePreview"
-                class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200"
-              >
-                <img
-                  :src="form.imagePreview"
-                  alt="معاينة الصورة"
-                  class="w-full h-full object-cover"
-                />
+              <div v-if="form.imagePreview" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200">
+                <img :src="form.imagePreview" alt="معاينة الصورة" class="w-full h-full object-cover" />
               </div>
+
               <p v-else-if="form.imageName" class="text-sm text-gray-600">
                 {{ form.imageName }}
               </p>
+
               <p v-else class="text-sm text-gray-500">لم يتم اختيار صورة</p>
             </div>
           </div>
 
-          <!-- أزرار التحكم -->
           <div class="flex items-center justify-end gap-4 pt-4 border-t border-gray-200">
             <button
               type="button"
@@ -91,7 +73,6 @@
             >
               إلغاء
             </button>
-
             <button
               type="submit"
               class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-60 flex items-center gap-2"
@@ -108,97 +89,88 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
-import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import AdminLayout from '../../../layouts/AdminLayout.vue'
 
-const route = useRoute();
-const router = useRouter();
+// استيراد الـ service
+import { categoryService } from '@/services/admin/categories/categoryService'
 
-const parentCategoryName = ref("");
+const route = useRoute()
+const router = useRouter()
+
+const parentCategoryName = ref('')
 
 const form = ref({
-  name: "",
+  name: '',
   image: null,
   imagePreview: null,
-  imageName: "",
+  imageName: '',
   category_id: null,
   processing: false,
-  errors: {},
-});
+  errors: {}
+})
 
 onMounted(() => {
-  // جلب الـ ID من الـ URL
-  const categoryId = route.params.id;
+  const categoryId = route.params.id
   if (categoryId) {
-    form.value.category_id = categoryId;
-
-    // اختياري: جلب اسم الفئة الأم للعرض فقط
-    fetchParentCategoryName(categoryId);
+    form.value.category_id = Number(categoryId)
+    fetchParentCategoryName(categoryId)
   } else {
-    // لو مفيش ID → رجوع أو رسالة خطأ
-    router.back();
+    router.back()
   }
-});
+})
 
 async function fetchParentCategoryName(id) {
-  try {
-    const res = await axios.get(`/v1/categories/${id}`);
-    if (res.data?.status === "success") {
-      parentCategoryName.value = res.data.data.name;
-    }
-  } catch (err) {
-    console.error("فشل جلب اسم الفئة الأم", err);
+  const result = await categoryService.getCategoryWithSubs(id)
+
+  if (result.success) {
+    parentCategoryName.value = result.data?.name || 'غير معروف'
+  } else {
+    console.error('فشل جلب اسم الفئة الأم:', result.error)
+    parentCategoryName.value = 'حدث خطأ'
   }
 }
 
 function handleImageChange(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files?.[0]
+  if (!file) return
 
-  form.value.image = file;
-  form.value.imageName = file.name;
+  form.value.image = file
+  form.value.imageName = file.name
 
-  // معاينة الصورة
-  const reader = new FileReader();
+  const reader = new FileReader()
   reader.onload = (event) => {
-    form.value.imagePreview = event.target.result;
-  };
-  reader.readAsDataURL(file);
+    form.value.imagePreview = event.target.result
+  }
+  reader.readAsDataURL(file)
 }
 
 async function submitForm() {
-  form.value.processing = true;
-  form.value.errors = {};
-
-  const formData = new FormData();
-  formData.append("name", form.value.name.trim());
-  formData.append("category_id", form.value.category_id);
-
-  if (form.value.image) {
-    formData.append("image", form.value.image);
-  }
+  form.value.processing = true
+  form.value.errors = {}
 
   try {
-    const response = await axios.post("/v1/sub_categories/create", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const result = await categoryService.createSubCategoryWithImage({
+      category_id: form.value.category_id,
+      name: form.value.name,
+      image: form.value.image
+    })
 
-    if (response.data?.status === "success") {
-      router.push(`/admin/categories/${form.value.category_id}`);
+    if (result.success) {
+      router.push(`/admin/categories/${form.value.category_id}`)
+    } else {
+      if (result.error?.type === 'validation') {
+        form.value.errors = result.error.messages || {}
+      } else {
+        alert(result.error?.message || 'حدث خطأ أثناء إضافة التصنيف الفرعي')
+      }
     }
   } catch (err) {
-    if (err.response?.status === 422) {
-      form.value.errors = err.response.data.errors || {};
-    } else {
-      alert("حدث خطأ أثناء إضافة التصنيف الفرعي");
-      console.error(err);
-    }
+    console.error(err)
+    alert('حدث خطأ غير متوقع')
   } finally {
-    form.value.processing = false;
+    form.value.processing = false
   }
 }
 </script>

@@ -153,7 +153,7 @@
 
 <script setup>
 import { ref } from "vue";
-import AdminLayout from "@/layouts/AdminLayout.vue"; // تأكد من المسار الصحيح
+import AdminLayout from "@/layouts/AdminLayout.vue";
 import { categoryService } from "@/services/admin/categories/categoryService";
 
 const form = ref({
@@ -219,7 +219,6 @@ async function createCategory() {
   if (result.success) {
     alert("تم إنشاء التصنيف بنجاح!");
     cancel();
-    // أو يمكنك استخدام router.push('/admin/categories') إذا كنت تستخدم vue-router
   } else {
     if (result.error?.type === "validation") {
       form.value.errors = result.error.messages;

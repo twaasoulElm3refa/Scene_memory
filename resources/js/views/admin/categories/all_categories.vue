@@ -464,20 +464,16 @@ async function fetchCategories(page = 1) {
     to.value = p.to;
   } else {
     console.error(result.error);
-    // يمكنك عرض toast أو alert هنا
   }
 
   loading.value = false;
-}
-// في <script setup>
-function viewCategory(categoryId) {
+}function viewCategory(categoryId) {
   if (!categoryId) {
     console.warn("No category ID provided");
     return;
   }
   router.push(`/admin/categories/${categoryId}`);
 }
-/* ========= CREATE / UPDATE ========= */
 async function submitForm() {
   form.value.processing = true;
   form.value.errors = {};
@@ -500,11 +496,8 @@ async function submitForm() {
       alert(result.error || "حدث خطأ أثناء الحفظ");
     }
   }
-
   form.value.processing = false;
 }
-
-/* ========= DELETE ========= */
 async function performDelete() {
   if (!categoryToDelete.value?.id) return;
 
@@ -521,8 +514,6 @@ async function performDelete() {
 
   form.value.processing = false;
 }
-
-/* ========= Modal & Navigation helpers ========= */
 function openCreateModal() {
   form.value = { id: null, name: "", processing: false, errors: {} };
   isEditMode.value = false;
@@ -542,7 +533,6 @@ function openEditModal(cat) {
 
 function closeModal() {
   showModal.value = false;
-  // reset form after animation
   setTimeout(() => {
     form.value = { id: null, name: "", processing: false, errors: {} };
   }, 300);
@@ -562,18 +552,14 @@ function changePage(page) {
 const visiblePages = computed(() => {
   const pages = [];
   const maxVisible = 5;
-
   let start = Math.max(1, currentPage.value - 2);
   let end = Math.min(lastPage.value, start + maxVisible - 1);
-
   if (end - start < maxVisible - 1) {
     start = Math.max(1, end - maxVisible + 1);
   }
-
   for (let i = start; i <= end; i++) {
     pages.push(i);
   }
-
   return pages;
 });
 
@@ -585,7 +571,6 @@ function formatDate(date) {
     day: "numeric",
   });
 }
-
 onMounted(() => {
   fetchCategories();
 });
