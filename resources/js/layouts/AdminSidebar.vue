@@ -48,10 +48,6 @@
                         :class="{ active: route.path === '/admin/requests' }">
                         Event Create Request
                     </RouterLink>
-                    <RouterLink to="/admin/media" class="sidebar-btn dropdown-item"
-                        :class="{ active: route.path === '/admin/media' }">
-                        Media Upload Request
-                    </RouterLink>
                 </div>
             </Transition>
         </div>

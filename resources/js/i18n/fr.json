@@ -77,6 +77,8 @@
         "loadingEvents": "Chargement des événements..."
     },
     "events": {
+         "add_historical_event": "Ajouter un événement historique",
+        "brand_footer": "Tous vos événements favoris autour du monde",
         "no_title": "Événement sans titre",
         "undefined_city": "Indéfini",
         "from_map": "Depuis la carte",

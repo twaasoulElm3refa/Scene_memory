@@ -1,6 +1,7 @@
 <template>
     <div class="events-page">
         <!-- Header Section -->
+        <!-- Header Section -->
         <header class="page-header">
             <div class="header-content">
                 <h1 class="main-title">{{ $t("events.all_memories") }}</h1>
@@ -8,6 +9,14 @@
                     {{ $t("events.showing_snapshots", { total: totalEvents }) }}
                 </p>
             </div>
+
+            <div class="header-actions">
+                <!-- زرار RouterLink -->
+                <RouterLink to="/add_event/historical" class="btn btn-primary">
+                    {{ $t("events.add_historical_event") }}
+                </RouterLink>
+            </div>
+
             <div class="sort-control">
                 <label>{{ $t("events.sort_by") }}:</label>
                 <select v-model="sortBy" @change="sortEvents" class="sort-select">

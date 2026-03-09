@@ -118,7 +118,9 @@ Route::prefix('v1')->group(function () {
 
         // Events CRUD
         Route::post('/create', [EventAdminCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/historic', [EventAdminCreateController::class,  'historic'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/create/user', [EventUserCreateController::class,  'create'])->middleware('auth:sanctum');
+        Route::post('/historic/user', [EventUserCreateController::class,  'historic'])->middleware('auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });

@@ -77,6 +77,8 @@
         "loadingEvents": "正在加载事件..."
     },
     "events": {
+         "add_historical_event": "添加历史活动",
+        "brand_footer": "世界上所有活动",
         "no_title": "无标题活动",
         "undefined_city": "未定义",
         "from_map": "来自地图",

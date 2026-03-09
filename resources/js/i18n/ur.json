@@ -77,6 +77,8 @@
         "loadingEvents": "ایونٹس لوڈ ہو رہے ہیں..."
     },
     "events": {
+         "add_historical_event": "ایونٹ شامل کریں",
+        "brand_footer": "دنیا بھر سے تمام ایونٹس",
         "cities": "شہر",
         "categories": "کیٹیگری",
         "all_memories": "تمام ایونٹس کی یادیں",

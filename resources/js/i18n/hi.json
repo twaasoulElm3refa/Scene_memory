@@ -77,6 +77,8 @@
         "loadingEvents": "इवेंट्स लोड हो रहे हैं..."
     },
     "events": {
+         "add_historical_event": "इवेंट जोड़ें",
+        "brand_footer": "दुनिया में सभी इवेंट्स",
         "no_title": "शीर्षक रहित इवेंट",
         "undefined_city": "अपरिभाषित",
         "from_map": "मानचित्र से",

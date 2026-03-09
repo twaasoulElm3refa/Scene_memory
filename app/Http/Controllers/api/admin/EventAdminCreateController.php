@@ -64,7 +64,51 @@ class EventAdminCreateController extends Controller
             return $this->error($th->getMessage());
         }
     }
+    public function historic(EventsRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        unset($data['urls']);
+        try {
+            $event = DB::transaction(function () use ($data, $request) {
+                $data['slug'] = Str::slug($data['title'])
+                                . '-' . Str::random(5)
+                                . '-' . time();
 
+                $data['user_id'] = auth()->id();
+                $data['is_historical'] = 1;
+                $event = Events::create($data);
+                if ($request->hasFile('urls')) {
+                    foreach ($request->file('urls') as $file) {
+                        $path = $file->store('Photos', 'public');
+
+                        eventsImges::create([
+                            'event_id' => $event->id,
+                            'url'      => $path,
+                        ]);
+                    }
+                }
+                return $event;
+            });
+
+            TranslateEventJob::dispatch(
+                $event->id,
+                $data['title'],
+                $data['description']
+                ,app()->getLocale()
+            );
+
+            $this->clearEventsCache($event->slug);
+
+            return $this->success(
+                $event->load('translations','photos'),
+                'Event Created Successfully'
+            );
+
+        } catch (\Throwable $th) {
+
+            return $this->error($th->getMessage());
+        }
+    }
     private function clearEventsCache($slug = null)
     {
         $perPage = 8;

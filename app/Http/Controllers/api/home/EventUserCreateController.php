@@ -76,6 +76,55 @@ class EventUserCreateController extends Controller
         }
     }
 
+     public function historic(EventsRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        unset($data['urls']);
+        try {
+            $event = DB::transaction(function () use ($data, $request) {
+                $data['slug'] = Str::slug($data['title'])
+                                . '-' . Str::random(5)
+                                . '-' . time();
+                $data['user_id'] = auth()->id();
+                $data['is_active'] = 0;
+                $data['is_historical'] = 1;
+                $event = Events::create($data);
+                EventRequestCreate::create([
+                    'event_id'=> $event->id,
+                ]);
+                $event->translations()->create([
+                    'locale'      => 'ar',
+                    'title'       => $data['title'],
+                    'description' => $data['description'],
+                ]);
+                if ($request->hasFile('urls')) {
+                    foreach ($request->file('urls') as $file) {
+                        $path = $file->store('Photos', 'public');
+                        eventsImges::create([
+                            'event_id' => $event->id,
+                            'url'      => $path,
+                            'is_active'=>1,
+                        ]);
+                    }
+                }
+                return $event;
+            });
+            TranslateEventJob::dispatch(
+                $event->id,
+                $data['title'],
+                $data['description']
+            );
+            $this->clearEventsCache($event->slug);
+            return $this->success(
+                $event->load('translations','photos'),
+                'Event Created Successfully'
+            );
+        } catch (\Throwable $th) {
+
+            return $this->error($th->getMessage());
+        }
+    }
+
     private function clearEventsCache($slug = null)
     {
         $perPage = 8;

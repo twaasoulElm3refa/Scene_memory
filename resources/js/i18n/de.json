@@ -12,7 +12,7 @@
         "city": "Stadt",
         "allSubCategories": "Alle Unterkategorien"
     },
-     "upload_media": "Media hochladen",
+    "upload_media": "Media hochladen",
     "view_all_comments": "Alle Kommentare anzeigen",
     "nav": {
         "historical": "Historische Personen",
@@ -77,6 +77,8 @@
         "loadingEvents": "Veranstaltungen werden geladen..."
     },
     "events": {
+        "add_historical_event": "Veranstaltung hinzufügen",
+        "brand_footer": "Alle beliebtesten Veranstaltungen auf der Welt",
         "no_title": "Unbenanntes Ereignis",
         "undefined_city": "Nicht definiert",
         "from_map": "Von der Karte",

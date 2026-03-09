@@ -77,6 +77,8 @@
         "loadingEvents": "جاري تحميل الفعاليات..."
     },
     "events": {
+        "add_historical_event": "اضافه شخصيه تاريخية",
+        "brand_footer": "جميع الفعاليات المفضلة في كل مكان في العالم",
         "cities": "مدينه",
         "categories": "فئه",
         "all_memories": "كل ذكريات الأحداث",

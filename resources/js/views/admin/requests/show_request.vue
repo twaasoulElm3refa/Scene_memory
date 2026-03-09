@@ -7,7 +7,6 @@
           class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"
         ></div>
       </div>
-
       <!-- Error -->
       <div
         v-else-if="error"
@@ -15,7 +14,6 @@
       >
         <p class="text-lg font-medium">{{ error }}</p>
       </div>
-
       <!-- Main Content -->
       <div v-else class="max-w-5xl mx-auto space-y-8">
         <!-- Header -->
@@ -39,7 +37,6 @@
             </svg>
             Back
           </button>
-
           <span
             :class="
               statusClasses[apiData.request.status] ||
@@ -50,15 +47,14 @@
             {{ apiData.request.status || "pending" }}
           </span>
         </div>
-
         <!-- Hero Image -->
         <div
           class="rounded-3xl overflow-hidden shadow-xl border border-gray-200 bg-white"
         >
           <img
             :src="
-              apiData.event.image
-                ? `/storage/${apiData.event.image}`
+              apiData.event.first_image
+                ? `/storage/${apiData.event.first_image.url}`
                 : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop&q=80'
             "
             :alt="apiData.event.title || 'Event image'"
@@ -66,7 +62,6 @@
             @error="handleImageError"
           />
         </div>
-
         <!-- Main Info Cards -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <!-- Event Details -->
@@ -74,7 +69,6 @@
             <h2 class="text-2xl font-bold text-gray-900 pb-3 border-b border-gray-100">
               Event Request
             </h2>
-
             <div class="space-y-6">
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Title</p>
@@ -82,14 +76,12 @@
                   {{ apiData.event.title || "—" }}
                 </p>
               </div>
-
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Description</p>
                 <p class="text-gray-700 leading-relaxed whitespace-pre-line">
                   {{ apiData.event.description || "No description provided." }}
                 </p>
               </div>
-
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">Start Date</p>
@@ -110,7 +102,6 @@
                   </p>
                 </div>
               </div>
-
               <div class="grid grid-cols-2 gap-6">
                 <div>
                   <p class="text-sm text-gray-500 mb-1.5">City</p>
@@ -125,7 +116,6 @@
                   </p>
                 </div>
               </div>
-
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Active</p>
                 <span
@@ -145,13 +135,11 @@
               </div>
             </div>
           </div>
-
           <!-- Request Metadata -->
           <div class="bg-white rounded-2xl shadow border border-gray-100 p-7 space-y-6">
             <h2 class="text-2xl font-bold text-gray-900 pb-3 border-b border-gray-100">
               Request Details
             </h2>
-
             <div class="space-y-6">
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Requested by</p>
@@ -159,14 +147,12 @@
                   {{ apiData.event.user?.name || "—" }}
                 </p>
               </div>
-
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Created At</p>
                 <p class="text-gray-900 font-medium">
                   {{ formatDate(apiData.event.created_at) }}
                 </p>
               </div>
-
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Request Status</p>
                 <p class="text-gray-900 font-medium capitalize">
@@ -176,7 +162,6 @@
             </div>
           </div>
         </div>
-
         <!-- Rejection Reason (shown only when rejecting) -->
         <div
           v-if="showRejectReason"
@@ -193,7 +178,6 @@
             {{ rejectReasonError }}
           </p>
         </div>
-
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-5 pt-8 justify-center">
           <button
@@ -203,7 +187,6 @@
           >
             {{ actionLoading ? "Processing..." : "Approve Request" }}
           </button>
-
           <button
             v-if="!showRejectReason"
             @click="showRejectReason = true"
@@ -212,7 +195,6 @@
           >
             Reject Request
           </button>
-
           <button
             v-else
             @click="declineRequest"
@@ -221,7 +203,6 @@
           >
             {{ actionLoading ? "Processing..." : "Confirm Rejection" }}
           </button>
-
           <button
             v-if="showRejectReason"
             @click="
@@ -247,16 +228,13 @@ import AdminLayout from "../../../layouts/AdminLayout.vue";
 
 const route = useRoute();
 const router = useRouter();
-
 const apiData = ref(null);
 const loading = ref(true);
 const error = ref(null);
 const actionLoading = ref(false);
-
 const showRejectReason = ref(false);
 const rejectReason = ref("");
 const rejectReasonError = ref("");
-
 const baseUrl = "/v1";
 
 const statusClasses = {
@@ -286,7 +264,6 @@ const fetchRequest = async () => {
     const { data } = await axios.get(`${baseUrl}/requests/${route.params.id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` },
     });
-
     apiData.value = {
       request: data.data.request,
       event: data.data.event,
@@ -300,7 +277,6 @@ const fetchRequest = async () => {
 
 const approveRequest = async () => {
   if (!confirm("Are you sure you want to APPROVE this event request?")) return;
-
   try {
     actionLoading.value = true;
     await axios.post(
@@ -308,7 +284,6 @@ const approveRequest = async () => {
       {},
       { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
     );
-
     apiData.value.request.status = "approved";
     alert("Request approved successfully!");
     window.location.href = "/admin/requests";
@@ -321,14 +296,11 @@ const approveRequest = async () => {
 
 const declineRequest = async () => {
   const reason = (rejectReason.value || "").trim();
-
   if (!reason) {
     rejectReasonError.value = "Please provide a reason for rejection";
     return;
   }
-
   if (!confirm("Are you sure you want to REJECT this event request?")) return;
-
   try {
     actionLoading.value = true;
     await axios.post(
@@ -336,7 +308,6 @@ const declineRequest = async () => {
       { reason },
       { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
     );
-
     apiData.value.request.status = "rejected";
     alert("Request rejected successfully!");
     window.location.href = "/admin/requests";
@@ -349,25 +320,3 @@ const declineRequest = async () => {
 
 onMounted(fetchRequest);
 </script>
-
-<style scoped>
-.action-buttons button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.05rem;
-  transition: all 0.2s ease;
-  border-radius: 7%;
-}
-
-@media (max-width: 640px) {
-  .action-buttons {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .action-buttons button {
-    width: 100%;
-  }
-}
-</style>

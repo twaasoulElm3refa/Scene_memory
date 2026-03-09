@@ -77,6 +77,8 @@
         "loadingEvents": "イベントを読み込み中..."
     },
     "events": {
+         "add_historical_event": "イベントを追加",
+        "brand_footer": "世界中のイベントを見る",
         "cities": "都市",
         "no_title": "タイトルなしイベント",
         "undefined_city": "未定義",

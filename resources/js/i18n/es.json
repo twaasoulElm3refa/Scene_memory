@@ -15,7 +15,7 @@
     "upload_media": "Subir medios",
     "view_all_comments": "Ver todos los comentarios",
     "nav": {
-          "historical": "Personas históricas",
+        "historical": "Personas históricas",
         "home": "Inicio",
         "about": "Sobre nosotros",
         "allEvents": "Todos los eventos",
@@ -77,6 +77,8 @@
         "loadingEvents": "Cargando eventos..."
     },
     "events": {
+         "add_historical_event": "Añadir evento histórico",
+        "brand_footer": "Todos tus eventos favoritos en un solo lugar",
         "no_title": "Evento sin título",
         "undefined_city": "No definido",
         "from_map": "Desde el mapa",

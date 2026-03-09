@@ -39,6 +39,7 @@ import MediaUploadRequest from "../views/admin/requests/MediaUploadRequest.vue";
 import all_comments from "../views/home/all_comments.vue";
 import all_reports from "../views/admin/reports/all_reports.vue";
 import historical from "../views/home/historical.vue";
+import create_historical from "../views/home/create_historical.vue";
 
 const routes = [
     {
@@ -62,6 +63,12 @@ const routes = [
     {
         path: "/add_event",
         component: create_event,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/add_event/historical",
+        component: create_historical,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

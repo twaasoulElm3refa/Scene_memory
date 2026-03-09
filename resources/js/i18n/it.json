@@ -77,6 +77,8 @@
         "loadingEvents": "Caricamento eventi..."
     },
     "events": {
+         "add_historical_event": "Aggiungi evento storico",
+        "brand_footer": "Tutti i tuoi eventi preferiti in un solo posto",
         "no_title": "Evento senza titolo",
         "undefined_city": "Non definito",
         "from_map": "Dalla mappa",

@@ -44,7 +44,7 @@ class RequestController extends Controller
     {
         try {
             $request = EventRequestCreate::find($id)->select('id', 'event_id', 'status')->first();
-            $event = Events::with('city:id,name', 'sub_categorey:id,name', 'user:id,name')->where('id', $request->event_id)->first();
+            $event = Events::with('city:id,name', 'sub_categorey:id,name', 'user:id,name','firstImage')->where('id', $request->event_id)->first();
 
             return $this->success(['request' => $request, 'event' => $event], 'request');
         } catch (\Exception $e) {

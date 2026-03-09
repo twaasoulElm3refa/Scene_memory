@@ -77,6 +77,8 @@
         "loadingEvents": "در حال بارگذاری رویدادها..."
     },
     "events": {
+         "add_historical_event": "افزودن رویداد تاریخی",
+        "brand_footer": "تمام رویدادهای مورد علاقه شما در جهان",
         "no_title": "رویداد بدون عنوان",
         "undefined_city": "نامشخص",
         "from_map": "از نقشه",
