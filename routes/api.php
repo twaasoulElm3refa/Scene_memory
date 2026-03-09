@@ -227,6 +227,6 @@ Route::prefix('v1')->group(function () {
     Route::prefix('/notify')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
         Route::post('/create', [NotificationController::class, 'create']);
     });
-    // 102 Endpoints for the API
+    // 109 Endpoints for the API
 });
 

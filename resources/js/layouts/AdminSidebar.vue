@@ -326,6 +326,11 @@ const settingsActive = computed(() => route.path.startsWith("/admin/settings"));
     border: 1px solid transparent;
 }
 
+.sidebar-btn:hover {
+    background: #cacfd4;
+    transform: translateX(8px);
+}
+
 .group:hover .sidebar-btn {
     background: #f1f5f9;
     transform: translateX(4px);
