@@ -321,6 +321,7 @@
     },
     "eventForm": {
         "chooseFiles": "تصاویر منتخب کریں",
+         "mediaCount": "میڈیا کا تعداد",
         "title": "نیا ایونٹ شامل کریں",
         "basicInfo": "بنیادی معلومات",
         "locationCategory": "مقام اور کیٹیگری",

@@ -321,6 +321,7 @@
     },
     "eventForm": {
         "chooseFiles": "اختر صور / فيديوهات",
+        "mediaCount": "عدد الوسائط",
         "title": "إضافة حدث جديد",
         "basicInfo": "المعلومات الأساسية",
         "locationCategory": "الموقع والتصنيف",

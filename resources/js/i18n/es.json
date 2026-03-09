@@ -324,6 +324,7 @@
     },
     "eventForm": {
           "chooseFiles": "Elegir Archivos",
+           "mediaCount": "Conteo de Medios",
         "title": "Añadir Nuevo Evento",
         "basicInfo": "Información Básica",
         "locationCategory": "Ubicación y Categoría",

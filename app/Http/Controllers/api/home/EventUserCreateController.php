@@ -97,12 +97,18 @@ class EventUserCreateController extends Controller
                 ]);
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
-                        $path = $file->store('Photos', 'public');
-                        eventsImges::create([
-                            'event_id' => $event->id,
-                            'url' => $path,
-                            'is_active' => 1,
-                        ]);
+                        $mime = $file->getMimeType();
+                        if (str_starts_with($mime, 'image/')) {
+                            $path = $file->store('Photos', 'public');
+                            eventsImges::create([
+                                'event_id' => $event->id,
+                                'url' => $path,
+                                'is_active' => 1,
+                            ]);
+                        } elseif (str_starts_with($mime, 'video/')) {
+                            $path = $file->store('videos_temp', 'public');
+                            ProcessEventVideoJob::dispatch($event->id, $path);
+                        }
                     }
                 }
 

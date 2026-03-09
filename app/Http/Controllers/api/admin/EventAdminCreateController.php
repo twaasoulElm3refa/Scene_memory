@@ -5,9 +5,9 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsRequest;
+use App\Jobs\TranslateEventJob;
 use App\Models\Events;
 use App\Models\eventsImges;
-use App\Jobs\TranslateEventJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -25,11 +25,9 @@ class EventAdminCreateController extends Controller
         try {
 
             $event = DB::transaction(function () use ($data, $request) {
-
                 $data['slug'] = Str::slug($data['title'])
-                                . '-' . Str::random(5)
-                                . '-' . time();
-
+                                .'-'.Str::random(5)
+                                .'-'.time();
                 $data['user_id'] = auth()->id();
                 $event = Events::create($data);
                 if ($request->hasFile('urls')) {
@@ -38,32 +36,29 @@ class EventAdminCreateController extends Controller
 
                         eventsImges::create([
                             'event_id' => $event->id,
-                            'url'      => $path,
+                            'url' => $path,
                         ]);
                     }
                 }
+
                 return $event;
             });
-
             TranslateEventJob::dispatch(
                 $event->id,
                 $data['title'],
-                $data['description']
-                ,app()->getLocale()
+                $data['description'], app()->getLocale()
             );
-
             $this->clearEventsCache($event->slug);
 
             return $this->success(
-                $event->load('translations','photos'),
+                $event->load('translations', 'photos'),
                 'Event Created Successfully'
             );
-
         } catch (\Throwable $th) {
-
             return $this->error($th->getMessage());
         }
     }
+
     public function historic(EventsRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -71,8 +66,8 @@ class EventAdminCreateController extends Controller
         try {
             $event = DB::transaction(function () use ($data, $request) {
                 $data['slug'] = Str::slug($data['title'])
-                                . '-' . Str::random(5)
-                                . '-' . time();
+                                .'-'.Str::random(5)
+                                .'-'.time();
 
                 $data['user_id'] = auth()->id();
                 $data['is_historical'] = 1;
@@ -83,24 +78,24 @@ class EventAdminCreateController extends Controller
 
                         eventsImges::create([
                             'event_id' => $event->id,
-                            'url'      => $path,
+                            'url' => $path,
                         ]);
                     }
                 }
+
                 return $event;
             });
 
             TranslateEventJob::dispatch(
                 $event->id,
                 $data['title'],
-                $data['description']
-                ,app()->getLocale()
+                $data['description'], app()->getLocale()
             );
 
             $this->clearEventsCache($event->slug);
 
             return $this->success(
-                $event->load('translations','photos'),
+                $event->load('translations', 'photos'),
                 'Event Created Successfully'
             );
 

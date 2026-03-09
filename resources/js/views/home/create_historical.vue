@@ -1,13 +1,11 @@
 <template>
   <div class="min-vh-100 bg-light py-4">
     <div class="container px-3 px-md-4">
-      <!-- العنوان -->
       <div class="mb-4">
         <h1 class="display-6 fw-bold text-dark">{{ $t('eventForm.title') }}</h1>
       </div>
 
       <form @submit.prevent="createEvent" class="row g-3 g-md-4">
-        <!-- 1. المعلومات الأساسية -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
             <div class="card-body p-4">
@@ -39,7 +37,6 @@
           </div>
         </div>
 
-        <!-- 2. الموقع والتصنيف + الخريطة -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
             <div class="card-body p-4">
@@ -53,7 +50,6 @@
                   <label class="form-label fw-medium">
                     {{ $t('eventForm.country') }} <span class="text-danger">*</span>
                   </label>
-                  <!-- حقل البحث -->
                   <input v-model="countrySearch" type="text"
                     class="form-control form-control-md rounded-3 mb-2"
                     :placeholder="$t('eventForm.searchCountry')" />
@@ -112,7 +108,6 @@
                 </div>
               </div>
 
-              <!-- الخريطة -->
               <div class="mt-3">
                 <label class="form-label fw-medium d-block mb-2">
                   {{ $t('eventForm.selectLocationMap') }} <span class="text-danger">*</span>
@@ -145,7 +140,6 @@
           </div>
         </div>
 
-        <!-- 3. المواعيد -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
             <div class="card-body p-4">
@@ -176,23 +170,22 @@
           </div>
         </div>
 
-        <!-- 4. صور الحدث (متعددة) -->
         <div class="col-12">
           <div class="card shadow border-0 rounded-3">
             <div class="card-body p-4">
               <h2 class="card-title h4 fw-bold mb-3 d-flex align-items-center gap-2">
                 <span class="text-primary fs-3 fw-bolder">④</span>
-                {{ $t('eventForm.images') }}
+                {{ $t('eventForm.media') || 'صور وفيديوهات الحدث' }}
               </h2>
 
-              <div @dragover.prevent @drop.prevent="handleImageDrop"
+              <div @dragover.prevent @drop.prevent="handleMediaDrop"
                 class="border border-2 border-dashed border-secondary-subtle rounded-3 p-4 text-center bg-body-tertiary"
-                style="min-height: 220px">
-                <input ref="fileInput" type="file" accept="image/png,image/jpeg,image/webp" multiple
-                  hidden @change="handleImageSelect" />
+                style="min-height: 260px">
+                <input ref="fileInput" type="file"
+                  accept="image/png,image/jpeg,image/webp,video/mp4,video/quicktime,video/x-m4v"
+                  multiple hidden @change="handleMediaSelect" />
 
-                <!-- حالة بدون صور -->
-                <div v-if="form.url_previews.length === 0" class="py-4">
+                <div v-if="form.media_previews.length === 0" class="py-4">
                   <div class="mx-auto mb-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center"
                     style="width: 70px; height: 70px">
                     <svg class="text-primary" width="36" height="36" fill="none"
@@ -201,38 +194,55 @@
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                   </div>
-                  <p class="fs-5 fw-medium text-secondary mb-2">{{ $t('eventForm.dragDropHere') }}</p>
-                  <p class="text-muted small mb-3">{{ $t('eventForm.formatsMax') }}</p>
+                  <p class="fs-5 fw-medium text-secondary mb-2">{{ $t('eventForm.dragDropMedia') || 'اسحب الصور أو الفيديوهات هنا' }}</p>
+                  <p class="text-muted small mb-3">{{ $t('eventForm.mediaFormatsMax') || 'PNG, JPG, WEBP, MP4 (الحد الأقصى 8 ملفات)' }}</p>
                   <button type="button" @click="$refs.fileInput.click()"
                     class="btn btn-primary btn-md px-4 py-2 rounded-pill">
-                    {{ $t('eventForm.chooseImages') }}
+                    {{ $t('eventForm.chooseFiles') || 'اختر صور / فيديوهات' }}
                   </button>
                 </div>
 
-                <!-- عرض الصور بعد الرفع -->
                 <div v-else class="py-3">
                   <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 mb-3">
-                    <div v-for="(preview, index) in form.url_previews" :key="index" class="col">
+                    <div v-for="(preview, index) in form.media_previews" :key="index" class="col">
                       <div class="position-relative">
-                        <img :src="preview" :alt="$t('eventForm.images')" class="img-fluid rounded-3 shadow"
-                          style="height: 140px; object-fit: cover; width: 100%" />
-                        <button type="button" @click="removeImage(index)"
+                        <video v-if="isVideo(preview)"
+                          :src="preview"
+                          class="img-fluid rounded-3 shadow w-100"
+                          style="height: 140px; object-fit: cover;"
+                          controls
+                          muted
+                        ></video>
+
+                        <img v-else
+                          :src="preview"
+                          :alt="$t('eventForm.media')"
+                          class="img-fluid rounded-3 shadow"
+                          style="height: 140px; object-fit: cover; width: 100%"
+                        />
+
+                        <button type="button" @click="removeMedia(index)"
                           class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle shadow-sm"
                           :title="$t('eventForm.remove')"
                           style="width: 28px; height: 28px; line-height: 1; font-size: 1.1rem; padding: 0;">
                           ×
                         </button>
+
+                        <div v-if="isVideo(preview)"
+                          class="position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                          <span class="badge bg-dark text-white px-2 py-1 rounded-pill fs-6">فيديو</span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <button v-if="form.urls.length < 8" type="button" @click="$refs.fileInput.click()"
+                  <button v-if="form.media_files.length < 8" type="button" @click="$refs.fileInput.click()"
                     class="btn btn-outline-primary btn-sm px-4">
                     {{ $t('eventForm.addMore') }}
                   </button>
 
                   <small class="text-muted d-block mt-2">
-                    {{ $t('eventForm.imagesCount', { count: form.urls.length }) }}
+                    {{ $t('eventForm.mediaCount', { count: form.media_files.length }) || `${form.media_files.length} من 8 ملفات` }}
                   </small>
                 </div>
               </div>
@@ -245,9 +255,6 @@
           <button type="button" class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill">
             {{ $t('commons.cancel') }}
           </button>
-          <!-- <button type="button" class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill">
-            {{ $t('commons.saveDraft') }}
-          </button> -->
           <button type="submit" :disabled="loading || !form.latitude || !form.longitude"
             class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow">
             {{ loading ? $t('commons.creating') : $t('commons.create') }}
@@ -273,8 +280,8 @@ const form = ref({
   start_date: "",
   end_date: "",
   time: "",
-  urls: [],
-  url_previews: [],
+  media_files: [],
+  media_previews: [],
   latitude: null,
   longitude: null,
 });
@@ -294,7 +301,7 @@ const center = ref([30.0444, 31.2357]);
 const mapRef = ref(null);
 const countrySearch = ref("");
 
-const MAX_IMAGES = 8;
+const MAX_MEDIA = 8;
 
 axios.interceptors.request.use(
   (config) => {
@@ -306,6 +313,7 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 onMounted(async () => {
   await Promise.all([fetchCountries(), fetchCategories()]);
   nextTick(() => {
@@ -382,40 +390,50 @@ async function loadSubCategories() {
   }
 }
 
-function handleImageSelect(e) {
+function isVideo(previewUrl) {
+  return previewUrl.startsWith('data:video/');
+}
+
+function handleMediaSelect(e) {
   const files = Array.from(e.target.files || []);
-  processImages(files);
+  processMedia(files);
 }
 
-function handleImageDrop(e) {
+function handleMediaDrop(e) {
   const files = Array.from(e.dataTransfer.files || []);
-  processImages(files);
+  processMedia(files);
 }
 
-function processImages(newFiles) {
-  const currentCount = form.value.urls.length;
-  const canAdd = MAX_IMAGES - currentCount;
+function processMedia(newFiles) {
+  const currentCount = form.value.media_files.length;
+  const canAdd = MAX_MEDIA - currentCount;
 
   if (newFiles.length > canAdd) {
-    alert(`يمكنك إضافة ${canAdd} صور${canAdd === 1 ? "ة" : ""} فقط`);
+    alert(`يمكنك إضافة ${canAdd} ملف${canAdd === 1 ? "" : "ات"} فقط`);
     newFiles = newFiles.slice(0, canAdd);
   }
 
   newFiles.forEach((file) => {
-    if (file.size > 5 * 1024 * 1024) {
-      alert(`حجم الصورة ${file.name} يتجاوز 5 ميجا`);
-      return;
-    }
-    if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
-      alert(`نوع الملف ${file.name} غير مدعوم (PNG, JPG, WEBP فقط)`);
+    const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      alert(`حجم الملف ${file.name} كبير جدًا (${(file.size/1024/1024).toFixed(1)} MB)`);
       return;
     }
 
-    form.value.urls.push(file);
+    const allowedTypes = [
+      'image/png', 'image/jpeg', 'image/webp',
+      'video/mp4', 'video/quicktime', 'video/x-m4v'
+    ];
+    if (!allowedTypes.includes(file.type)) {
+      alert(`نوع الملف ${file.name} غير مدعوم`);
+      return;
+    }
+
+    form.value.media_files.push(file);
 
     const reader = new FileReader();
     reader.onload = (ev) => {
-      form.value.url_previews.push(ev.target.result);
+      form.value.media_previews.push(ev.target.result);
     };
     reader.readAsDataURL(file);
   });
@@ -423,9 +441,9 @@ function processImages(newFiles) {
   if (fileInput.value) fileInput.value.value = "";
 }
 
-function removeImage(index) {
-  form.value.urls.splice(index, 1);
-  form.value.url_previews.splice(index, 1);
+function removeMedia(index) {
+  form.value.media_files.splice(index, 1);
+  form.value.media_previews.splice(index, 1);
 }
 
 async function createEvent() {
@@ -441,8 +459,8 @@ async function createEvent() {
     return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
   }
 
-  if (form.value.urls.length === 0) {
-    return alert("يرجى رفع صورة واحدة على الأقل");
+  if (form.value.media_files.length === 0) {
+    return alert("يرجى رفع صورة أو فيديو واحد على الأقل");
   }
 
   loading.value = true;
@@ -459,10 +477,10 @@ async function createEvent() {
 
   fd.append("lattitude", form.value.latitude);
   fd.append("langitude", form.value.longitude);
-
-  form.value.urls.forEach((file) => {
+  form.value.media_files.forEach((file) => {
     fd.append("urls[]", file);
   });
+
   try {
     await axios.post("/v1/events/historic/user", fd, {
       headers: {

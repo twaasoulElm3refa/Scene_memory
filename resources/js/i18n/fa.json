@@ -324,6 +324,7 @@
     },
     "eventForm": {
           "chooseFiles": "انتخاب فایل‌ها",
+           "mediaCount": "تعداد مدیا",
         "title": "افزودن رویداد جدید",
         "basicInfo": "اطلاعات پایه",
         "locationCategory": "مکان و دسته‌بندی",

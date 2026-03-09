@@ -324,6 +324,7 @@
     },
     "eventForm": {
         "chooseFiles": "选择文件",
+         "mediaCount": "媒体数量",
         "title": "添加新事件",
         "basicInfo": "基本信息",
         "locationCategory": "位置和分类",
