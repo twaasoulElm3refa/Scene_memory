@@ -1,4 +1,4 @@
-import api from '@/services/admin/cities/api';   
+import api from '@/services/admin/cities/api';
 
 const COUNTRIES_ENDPOINT = '/v1/countries';
 
@@ -39,6 +39,31 @@ export const countryService = {
   },
 
   /**
+   * إنشاء دولة جديدة مع دعم رفع صورة العلم (multipart)
+   * @param {Object} data
+   * @param {string} data.code       - كود الدولة (ISO Alpha-2 أو Alpha-3)
+   * @param {File} [imageFile=null]  - ملف الصورة (اختياري لكن في الغالب مطلوب)
+   * @returns {Promise<AxiosResponse>}
+   */
+  createCountry(data, imageFile = null) {
+    const formData = new FormData();
+    const code = (data.code || '').trim().toUpperCase();
+    if (!code) {
+      throw new Error('Country code is required');
+    }
+    formData.append('code', code);
+
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    return api.post(`${COUNTRIES_ENDPOINT}/create`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+
+  /**
    * تحديث دولة (يدعم رفع صورة multipart)
    * @param {number} id
    * @param {Object} data
@@ -67,20 +92,5 @@ export const countryService = {
   deleteCountry(id) {
     console.log(id);
     return api.delete(`${COUNTRIES_ENDPOINT}/${id}/delete`);
-  },
-
-  // إضافة دولة جديدة (لو هتحتاجها في صفحة الإنشاء لاحقًا)
-  createCountry(data, imageFile = null) {
-    const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('code', data.code || '');
-
-    if (imageFile) {
-      formData.append('image', imageFile);
-    }
-
-    return api.post(`${COUNTRIES_ENDPOINT}/store`, formData, {   // أو /create حسب الـ backend
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
   },
 };

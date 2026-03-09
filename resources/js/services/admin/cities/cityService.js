@@ -1,4 +1,3 @@
-// src/services/cityService.js
 import api from './api';
 
 const CITY_ENDPOINT = '/v1/cities';

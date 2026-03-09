@@ -15,6 +15,7 @@ class CountriesSeeder extends Seeder
     {
         $countries = [
             ['id' => 1, 'name' => 'أفغانستان', 'code' => 'AF', 'slug' => 'أفغانستان'],
+            ['id' => 245, 'name' => 'الولايات المتحده الامريكية', 'code' => 'US', 'slug' => 'الولايات-المتحده-الامريكية'],
             ['id' => 2, 'name' => 'ألبانيا', 'code' => 'AL', 'slug' => 'ألبانيا'],
             ['id' => 3, 'name' => 'الجزائر', 'code' => 'DZ', 'slug' => 'الجزائر'],
             ['id' => 4, 'name' => 'ساموا الأمريكية', 'code' => 'AS', 'slug' => 'ساموا-الأمريكية'],
@@ -266,14 +267,14 @@ class CountriesSeeder extends Seeder
                 'id'   => $data['id'],
                 'code' => $code,
                 'slug' => $data['slug'],
-                'name' => $data['name'],     
+                'name' => $data['name'],
             ]);
 
             foreach ($locales as $locale) {
                 $translatedName = Countries::getName($code, $locale);
 
                 if (empty($translatedName)) {
-                    $translatedName = $data['name']; 
+                    $translatedName = $data['name'];
                 }
 
                 country_translations::create([

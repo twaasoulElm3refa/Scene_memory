@@ -165,16 +165,14 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { countryService } from "@/services/admin/countries/countryService";
 
 const router = useRouter();
 
-// Form data → فقط code + image
 const formData = ref({
   code: "",
-  image: null,
 });
 
-// UI states
 const imagePreview = ref(null);
 const isDragging = ref(false);
 const isSubmitting = ref(false);
@@ -182,71 +180,57 @@ const errorMessage = ref("");
 const successMessage = ref("");
 const fileInput = ref(null);
 
-// File handling
+let selectedFile = ref(null);
+
 const handleFileSelect = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    validateAndSetImage(file);
-  }
+  const file = event.target.files?.[0];
+  if (file) validateAndSetImage(file);
 };
 
 const handleDrop = (event) => {
   isDragging.value = false;
-  const file = event.dataTransfer.files[0];
-  if (file) {
-    validateAndSetImage(file);
-  }
+  const file = event.dataTransfer.files?.[0];
+  if (file) validateAndSetImage(file);
 };
 
 const validateAndSetImage = (file) => {
-  const validTypes = [
-    "image/svg+xml",
-    "image/png",
-    "image/jpeg",
-    "image/jpg",
-    "image/gif",
-  ];
+  const validTypes = ["image/svg+xml", "image/png", "image/jpeg", "image/jpg", "image/gif"];
   if (!validTypes.includes(file.type)) {
-    errorMessage.value = "Invalid file type. Please upload SVG, PNG, JPG or GIF.";
+    errorMessage.value = "Invalid file type. SVG, PNG, JPG, GIF only.";
     return;
   }
-
   if (file.size > 2 * 1024 * 1024) {
-    errorMessage.value = "File size exceeds 2MB. Please upload a smaller file.";
+    errorMessage.value = "File too large (max 2MB)";
     return;
   }
 
   errorMessage.value = "";
-  formData.value.image = file;
+  selectedFile.value = file;
 
   const reader = new FileReader();
-  reader.onload = (e) => {
-    imagePreview.value = e.target.result;
-  };
+  reader.onload = (e) => (imagePreview.value = e.target.result);
   reader.readAsDataURL(file);
 };
 
-const triggerFileInput = () => {
-  fileInput.value.click();
-};
-
 const clearImage = () => {
-  formData.value.image = null;
+  selectedFile.value = null;
   imagePreview.value = null;
   if (fileInput.value) fileInput.value.value = "";
 };
 
-// Form submission → يرسل code + image فقط
+const triggerFileInput = () => fileInput.value?.click();
+
 const handleSubmit = async () => {
   errorMessage.value = "";
   successMessage.value = "";
 
-  if (!formData.value.code.trim()) {
+  const code = formData.value.code.trim().toUpperCase();
+  if (!code) {
     errorMessage.value = "Country code is required.";
     return;
   }
 
-  if (!formData.value.image) {
+  if (!selectedFile.value) {
     errorMessage.value = "Country flag/image is required.";
     return;
   }
@@ -254,36 +238,26 @@ const handleSubmit = async () => {
   isSubmitting.value = true;
 
   try {
-    const data = new FormData();
-    data.append("code", formData.value.code.trim().toUpperCase());
-    data.append("image", formData.value.image);
-
-    const response = await fetch("/api/v1/countries/create", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-      body: data,
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Failed to create country");
+    const response = await countryService.createCountry(
+      { code },
+      selectedFile.value
+    );
+    if (response.data?.status === "success" || response.status === 201) {
+      successMessage.value = "Country created successfully!";
+      setTimeout(() => router.push("/admin/countries"), 1400);
+    } else {
+      throw new Error(response.data?.message || "Creation failed");
     }
-
-    successMessage.value = "Country created successfully!";
-
-    setTimeout(() => {
-      router.push("/admin/countries");
-    }, 1500);
-  } catch (error) {
-    errorMessage.value = error.message || "An error occurred while creating the country.";
+  } catch (err) {
+    console.error(err);
+    errorMessage.value =
+      err.response?.data?.message ||
+      err.message ||
+      "An error occurred while creating the country.";
   } finally {
     isSubmitting.value = false;
   }
 };
 
-const handleCancel = () => {
-  router.push("/admin/countries");
-};
+const handleCancel = () => router.push("/admin/countries");
 </script>
