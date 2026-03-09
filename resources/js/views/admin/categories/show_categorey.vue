@@ -528,8 +528,6 @@ const router = useRouter();
 const category = ref(null);
 const loading = ref(true);
 const error = ref(null);
-
-// تعديل
 const showEditModal = ref(false);
 const editForm = ref({
   id: null,
@@ -537,8 +535,6 @@ const editForm = ref({
   processing: false,
   errors: {},
 });
-
-// حذف
 const showDeleteConfirm = ref(false);
 const subToDelete = ref(null);
 const deleteProcessing = ref(false);
@@ -581,8 +577,6 @@ function formatDate(dateString) {
     minute: "2-digit",
   });
 }
-
-// فتح مودال التعديل
 function openEditModal(sub) {
   editForm.value = {
     id: sub.id,
@@ -592,14 +586,10 @@ function openEditModal(sub) {
   };
   showEditModal.value = true;
 }
-
-// إغلاق مودال التعديل
 function closeEditModal() {
   showEditModal.value = false;
   editForm.value = { id: null, name: "", processing: false, errors: {} };
 }
-
-// حفظ التعديل
 async function updateSubCategory() {
   editForm.value.processing = true;
   editForm.value.errors = {};
@@ -610,7 +600,7 @@ async function updateSubCategory() {
     });
 
     closeEditModal();
-    await fetchCategory(); // إعادة جلب البيانات
+    await fetchCategory();
   } catch (err) {
     if (err.response?.status === 422) {
       editForm.value.errors = err.response.data.errors || {};
@@ -622,14 +612,10 @@ async function updateSubCategory() {
     editForm.value.processing = false;
   }
 }
-
-// تأكيد الحذف
 function confirmDelete(sub) {
   subToDelete.value = sub;
   showDeleteConfirm.value = true;
 }
-
-// تنفيذ الحذف
 async function performDelete() {
   if (!subToDelete.value) return;
 

@@ -6,7 +6,7 @@ const CITY_ENDPOINT = '/v1/cities';
 export const cityService = {
   /**
    * جلب المدن مع الـ pagination + فلاتر
-   * @param {Object} params 
+   * @param {Object} params
    * @returns {Promise}
    */
   getPaginatedCities(params = {}) {
@@ -31,7 +31,7 @@ export const cityService = {
 
   /**
    * تحديث مدينة
-   * @param {number} id 
+   * @param {number} id
    * @param {Object} data {name, country_id}
    * @returns {Promise}
    */
@@ -41,7 +41,7 @@ export const cityService = {
 
   /**
    * حذف مدينة
-   * @param {number} id 
+   * @param {number} id
    * @returns {Promise}
    */
   deleteCity(id) {
@@ -56,5 +56,11 @@ export const cityService = {
     return api.get(`${CITY_ENDPOINT}/${id}`);
   },
 
-  
+  getAllCountries() {
+    return api.get('/v1/countries');
+  },
+
+  createCity(data) {
+    return api.post(`${CITY_ENDPOINT}/create`, data);
+  },
 };

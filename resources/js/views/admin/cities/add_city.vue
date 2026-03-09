@@ -148,10 +148,9 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { cityService } from "@/services/admin/cities/cityService";
 
 const router = useRouter();
-
-// Form data
 const formData = ref({
   name: "",
   country_id: null as number | null,
@@ -163,7 +162,6 @@ const countries = ref<Array<{ id: number; name: string }>>([]);
 const loading = ref(false);
 const errors = ref<Record<string, string>>({});
 
-// Filtered countries based on search
 const filteredCountries = computed(() => {
   if (!searchQuery.value) {
     return countries.value;
@@ -173,39 +171,32 @@ const filteredCountries = computed(() => {
   );
 });
 
-// Fetch countries from API
 const fetchCountries = async () => {
   try {
-    const response = await fetch("/api/v1/countries", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        Accept: "application/json",
-      },
-    });
-    const data = await response.json();
-    if (data.status === "success") {
-      countries.value = data.data.map((country) => country.translation);
-      console.log(countries.value);
+    const response = await cityService.getAllCountries();
+    if (response.data?.status === "success") {
+      countries.value = response.data.data.map((country) => ({
+        id: country.id || country.country_id,
+        name: country.name || country.translation?.name,
+      }));
+      console.log("Countries loaded:", countries.value);
     }
   } catch (error) {
     console.error("Error fetching countries:", error);
   }
 };
 
-// Handle search input
 const handleSearch = () => {
   showDropdown.value = true;
   formData.value.country_id = null;
 };
 
-// Select country from dropdown
 const selectCountry = (country: { id: number; name: string }) => {
-  formData.value.country_id = country.country_id;
+  formData.value.country_id = country.id;
   searchQuery.value = country.name;
   showDropdown.value = false;
 };
 
-// Close dropdown when clicking outside
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
   if (!target.closest(".select-wrapper")) {
@@ -216,11 +207,11 @@ const handleClickOutside = (event: MouseEvent) => {
 const handleSubmit = async () => {
   errors.value = {};
 
-  // Validation
-  if (!formData.value.name) {
+  if (!formData.value.name?.trim()) {
     errors.value.name = "City name is required";
     return;
   }
+
   if (!formData.value.country_id) {
     errors.value.country_id = "Please select a country";
     return;
@@ -229,32 +220,24 @@ const handleSubmit = async () => {
   loading.value = true;
 
   try {
-    const token = localStorage.getItem("auth_token");
+    const payload = {
+      name: formData.value.name.trim(),
+      country_id: formData.value.country_id,
+    };
 
-    const response = await fetch("/api/v1/cities/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(formData.value),
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.status === "success") {
+    const response = await cityService.createCity(payload);
+    if (response.data?.status === "success") {
       router.push("/admin/cities");
     } else {
-      if (data.errors) {
-        errors.value = data.errors;
+      if (response.data?.errors) {
+        errors.value = response.data.errors;
       } else {
-        alert(data.message || "Failed to create city");
+        alert(response.data?.message || "Failed to create city");
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating city:", error);
-    alert("An error occurred while creating the city");
+    alert(error.response?.data?.message || "An error occurred while creating the city");
   } finally {
     loading.value = false;
   }
