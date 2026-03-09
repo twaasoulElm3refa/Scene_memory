@@ -9,6 +9,7 @@ use App\Http\Controllers\api\admin\EventAdminCreateController;
 use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
+use App\Http\Controllers\api\admin\NotificationController;
 use App\Http\Controllers\api\admin\ReportController;
 use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
@@ -154,7 +155,6 @@ Route::prefix('v1')->group(function () {
         // Footer
         Route::get('/footer', [FooterController::class, 'all']);
         Route::post('/footer/update', [FooterController::class, 'update']);
-
     });
 
     // Event Media
@@ -220,6 +220,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [WhisListController::class,'me']);
         Route::post('/{id}', [WhisListController::class,'add']);
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
+    });
+
+    Route::prefix('/notify')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
+        Route::post('/create', [NotificationController::class, 'create']);
     });
     // 102 Endpoints for the API
 });
