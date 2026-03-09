@@ -323,6 +323,7 @@
         }
     },
     "eventForm": {
+          "chooseFiles": "انتخاب فایل‌ها",
         "title": "افزودن رویداد جدید",
         "basicInfo": "اطلاعات پایه",
         "locationCategory": "مکان و دسته‌بندی",

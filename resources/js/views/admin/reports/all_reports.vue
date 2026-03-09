@@ -108,7 +108,7 @@ onMounted(() => fetchReports());
 <template>
   <AdminLayout>
     <div class="p-6">
-      <h3 class="text-2xl font-bold text-gray-800 mb-6">تقارير التعليقات</h3>
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">البلاغات عن التعليقات</h3>
 
       <!-- Loading -->
       <div v-if="loading" class="flex justify-center items-center py-20">
@@ -186,7 +186,7 @@ onMounted(() => fetchReports());
               </td>
             </tr>
             <tr v-if="reports.length === 0">
-              <td colspan="6" class="text-center py-12 text-gray-400">لا توجد تقارير</td>
+              <td colspan="6" class="text-center py-12 text-gray-400">لا توجد بلاغات</td>
             </tr>
           </tbody>
         </table>

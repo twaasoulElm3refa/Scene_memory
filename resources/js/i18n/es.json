@@ -323,6 +323,7 @@
         }
     },
     "eventForm": {
+          "chooseFiles": "Elegir Archivos",
         "title": "Añadir Nuevo Evento",
         "basicInfo": "Información Básica",
         "locationCategory": "Ubicación y Categoría",

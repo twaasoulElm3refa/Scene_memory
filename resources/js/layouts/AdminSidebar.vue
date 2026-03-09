@@ -9,14 +9,13 @@
                 Scene Memory
             </span>
         </div>
-
         <div class="sidebar-spacer my-4"></div>
 
         <!-- Dashboard -->
         <RouterLink to="/admin" class="sidebar-btn group text-decoration-none"
             :class="{ active: route.path === '/admin' }">
             <span class="flex items-center gap-3">
-                <DashboardIcon class="w-5 h-5" />
+                <HomeIcon class="w-5 h-5" />
                 Dashboard
             </span>
         </RouterLink>
@@ -35,18 +34,18 @@
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': requestsActive }"
                 @click="toggle('requests')">
                 <span class="flex items-center gap-3">
-                    <MessagesIcon class="w-5 h-5" />
-                    Create Event Requests
+                    <InboxIcon class="w-5 h-5" />
+                    Events Requests
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300"
                     :class="{ 'rotate-180': open.requests }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.requests" class="dropdown">
                     <RouterLink to="/admin/requests" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/requests' }">
-                        Event Create Request
+                        <DocumentTextIcon class="w-5 h-5" />
+                        Events Requests
                     </RouterLink>
                 </div>
             </Transition>
@@ -62,15 +61,16 @@
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': open.users }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.users" class="dropdown">
                     <RouterLink to="/admin/users" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/users' }">
+                        <UsersIcon class="w-5 h-5" />
                         All Users
                     </RouterLink>
                     <RouterLink to="/admin/users/add" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/users/add' }">
+                        <UserPlusIcon class="w-5 h-5" />
                         Add User
                     </RouterLink>
                 </div>
@@ -82,21 +82,22 @@
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': categoriesActive }"
                 @click="toggle('categories')">
                 <span class="flex items-center gap-3">
-                    <CategoriesIcon class="w-5 h-5" />
+                    <Squares2X2Icon class="w-5 h-5" />
                     Categories
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300"
                     :class="{ 'rotate-180': open.categories }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.categories" class="dropdown">
                     <RouterLink to="/admin/categories" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/categories' }">
+                        <Squares2X2Icon class="w-5 h-5" />
                         All Categories
                     </RouterLink>
                     <RouterLink to="/admin/categories/create" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/categories/create' }">
+                        <PlusIcon class="w-5 h-5" />
                         Add Category
                     </RouterLink>
                 </div>
@@ -108,21 +109,22 @@
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': productsActive }"
                 @click="toggle('products')">
                 <span class="flex items-center gap-3">
-                    <GlobeIcon class="w-5 h-5" />
+                    <GlobeAltIcon class="w-5 h-5" />
                     Countries
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300"
                     :class="{ 'rotate-180': open.products }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.products" class="dropdown">
                     <RouterLink to="/admin/countries" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/countries' }">
+                        <GlobeAltIcon class="w-5 h-5" />
                         All Countries
                     </RouterLink>
                     <RouterLink to="/admin/countries/create" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/countries/create' }">
+                        <PlusIcon class="w-5 h-5" />
                         Add Country
                     </RouterLink>
                 </div>
@@ -139,15 +141,16 @@
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': open.brands }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.brands" class="dropdown">
                     <RouterLink to="/admin/cities" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/cities' }">
+                        <BuildingOfficeIcon class="w-5 h-5" />
                         All Cities
                     </RouterLink>
                     <RouterLink to="/admin/cities/create" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/cities/create' }">
+                        <PlusIcon class="w-5 h-5" />
                         Add City
                     </RouterLink>
                 </div>
@@ -164,15 +167,16 @@
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': open.events }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.events" class="dropdown">
                     <RouterLink to="/admin/events" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/events' }">
+                        <CalendarIcon class="w-5 h-5" />
                         All Events
                     </RouterLink>
                     <RouterLink to="/admin/events/create" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/events/create' }">
+                        <PlusIcon class="w-5 h-5" />
                         Add Event
                     </RouterLink>
                 </div>
@@ -192,15 +196,16 @@
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300"
                     :class="{ 'rotate-180': open.settings }" />
             </button>
-
             <Transition name="dropdown">
                 <div v-if="open.settings" class="dropdown">
                     <RouterLink to="/admin/contacts" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/contacts' }">
+                        <PhoneIcon class="w-5 h-5" />
                         Contacts
                     </RouterLink>
                     <RouterLink to="/admin/footer" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/footer' }">
+                        <DocumentIcon class="w-5 h-5" />
                         Footer
                     </RouterLink>
                 </div>
@@ -213,7 +218,7 @@
         <RouterLink to="/"
             class="sidebar-btn group item-center justify-center text-decoration-none mt-auto visit-site-btn">
             <span class="flex items-center gap-3 justify-center font-medium">
-                <i class="fa-solid fa-arrow-up-right-from-square w-5 h-5"></i>
+                <ArrowUpRightIcon class="w-5 h-5" />
                 Visit Site
             </span>
         </RouterLink>
@@ -223,18 +228,22 @@
 <script setup>
 import { reactive, computed } from "vue";
 import { useRoute } from "vue-router";
-
 import {
-    HomeIcon as DashboardIcon,
-    InboxIcon as MessagesIcon,
-    UsersIcon,
+    HomeIcon,
     PresentationChartBarIcon,
-    GlobeAltIcon as GlobeIcon,
+    InboxIcon,
+    UsersIcon,
+    Squares2X2Icon,
+    GlobeAltIcon,
     BuildingOfficeIcon,
-    Cog6ToothIcon as CogIcon,
-    Squares2X2Icon as CategoriesIcon,
     CalendarIcon,
     AdjustmentsHorizontalIcon,
+    UserPlusIcon,
+    PlusIcon,
+    DocumentTextIcon,
+    PhoneIcon,
+    DocumentIcon,
+    ArrowUpRightIcon,
 } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
@@ -257,7 +266,6 @@ open.requests = route.path.startsWith("/admin/requests") || route.path.startsWit
 const requestsActive = computed(() =>
     route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media")
 );
-
 const usersActive = computed(() => route.path.startsWith("/admin/users"));
 const categoriesActive = computed(() => route.path.startsWith("/admin/categories"));
 const productsActive = computed(() => route.path.startsWith("/admin/countries"));

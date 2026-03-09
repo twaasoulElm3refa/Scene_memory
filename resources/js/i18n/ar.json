@@ -320,6 +320,7 @@
         }
     },
     "eventForm": {
+        "chooseFiles": "اختر صور / فيديوهات",
         "title": "إضافة حدث جديد",
         "basicInfo": "المعلومات الأساسية",
         "locationCategory": "الموقع والتصنيف",

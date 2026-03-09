@@ -323,6 +323,7 @@
         }
     },
     "eventForm": {
+          "chooseFiles": "फ़ाइल चुनें",
         "title": "नया इवेंट जोड़ें",
         "basicInfo": "मूल जानकारी",
         "locationCategory": "स्थान और श्रेणी",

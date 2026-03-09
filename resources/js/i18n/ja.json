@@ -323,6 +323,7 @@
         }
     },
     "eventForm": {
+          "chooseFiles": "ファイルを選択",
         "title": "新しいイベントを追加",
         "basicInfo": "基本情報",
         "locationCategory": "場所とカテゴリ",
