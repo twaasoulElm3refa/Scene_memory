@@ -232,6 +232,6 @@ Route::prefix('v1')->group(function () {
     Route::prefix('replies')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
         Route::post('/reply/{id}', [CommentReplyController::class,'create']);
     });
-    // 110 Endpoints for the API
+    // 109 Endpoints for the API
 });
 
