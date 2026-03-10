@@ -40,4 +40,9 @@ class comments extends Model
     {
         return $this->hasMany(CommentReport::class,'comment_id');
     }
+
+    public function replies()
+    {
+        return $this->hasMany(CommentReplies::class,'comment_id');
+    }
 }

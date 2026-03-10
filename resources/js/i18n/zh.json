@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "回复",
+        "delete": " 删除",
+        "no_media_yet": "没有媒体",
+        "reply_placeholder": "在这里写您的回复...",
         "loading": "正在加载事件...",
         "not_found": "事件不存在或已被删除。",
         "city_default": "未指定",
@@ -324,7 +328,7 @@
     },
     "eventForm": {
         "chooseFiles": "选择文件",
-         "mediaCount": "媒体数量",
+        "mediaCount": "媒体数量",
         "title": "添加新事件",
         "basicInfo": "基本信息",
         "locationCategory": "位置和分类",

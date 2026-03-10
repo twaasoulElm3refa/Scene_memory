@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "Responder",
+        "delete": " Eliminar",
+        "no_media_yet": "Sin medios",
+        "reply_placeholder": "Escribe tu respuesta aqui...",
         "loading": "Cargando el evento...",
         "not_found": "El evento no existe o ha sido eliminado.",
         "city_default": "No especificado",
@@ -77,7 +81,7 @@
         "loadingEvents": "Cargando eventos..."
     },
     "events": {
-         "add_historical_event": "Añadir evento histórico",
+        "add_historical_event": "Añadir evento histórico",
         "brand_footer": "Todos tus eventos favoritos en un solo lugar",
         "no_title": "Evento sin título",
         "undefined_city": "No definido",
@@ -323,8 +327,8 @@
         }
     },
     "eventForm": {
-          "chooseFiles": "Elegir Archivos",
-           "mediaCount": "Conteo de Medios",
+        "chooseFiles": "Elegir Archivos",
+        "mediaCount": "Conteo de Medios",
         "title": "Añadir Nuevo Evento",
         "basicInfo": "Información Básica",
         "locationCategory": "Ubicación y Categoría",

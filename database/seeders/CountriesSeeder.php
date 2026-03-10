@@ -284,7 +284,5 @@ class CountriesSeeder extends Seeder
                 ]);
             }
         }
-
-        $this->command->info('add' . count($countries) . ' countries with translations');
     }
 }

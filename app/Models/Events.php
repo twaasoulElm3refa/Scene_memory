@@ -58,7 +58,7 @@ class Events extends Model
     {
         return $this->hasOne(eventsImges::class,'event_id');
     }
-    
+
     public function comments()
     {
         return $this->hasMany(comments::class,'event_id');
@@ -79,5 +79,16 @@ class Events extends Model
         return $this->hasOne(EventTranslations::class, 'event_id')
             ->where('locale', app()->getLocale());
     }
-    
+
+     public function adminTranslation()
+    {
+        return $this->hasOne(EventTranslations::class, 'event_id')
+            ->where('locale', 'ar');
+    }
+
+    public function views()
+    {
+        return $this->hasMany(EventViews::class,'event_id');
+    }
+
 }

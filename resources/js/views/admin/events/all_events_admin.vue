@@ -28,7 +28,7 @@
             </div>
 
             <div class="event-details">
-              <h4 class="event-title">{{ event.title }}</h4>
+              <h4 class="event-title">{{ event.translation.title }}</h4>
 
               <div class="event-info">
                 <div class="info-item">

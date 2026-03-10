@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "جواب دیں",
+        "delete": " حذف کریں    ",
+        "no_media_yet": "کوئی میڈیا نہیں",
+        "reply_placeholder": "اپنا جواب یہاں لکھیں...",
         "loading": "ایونٹ لوڈ ہو رہا ہے...",
         "not_found": "ایونٹ موجود نہیں یا حذف کر دیا گیا ہے۔",
         "city_default": "غیر واضح",
@@ -321,7 +325,7 @@
     },
     "eventForm": {
         "chooseFiles": "تصاویر منتخب کریں",
-         "mediaCount": "میڈیا کا تعداد",
+        "mediaCount": "میڈیا کا تعداد",
         "title": "نیا ایونٹ شامل کریں",
         "basicInfo": "بنیادی معلومات",
         "locationCategory": "مقام اور کیٹیگری",

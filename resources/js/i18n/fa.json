@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "پاسخ دادن",
+        "delete": " حذف",
+        "no_media_yet": "رسانه‌ای وجود ندارد",
+        "reply_placeholder": "پاسخ خود را اینجا بنویسید...",
         "loading": "در حال بارگذاری رویداد...",
         "not_found": "رویداد وجود ندارد یا حذف شده است.",
         "city_default": "مشخص نشده",
@@ -77,7 +81,7 @@
         "loadingEvents": "در حال بارگذاری رویدادها..."
     },
     "events": {
-         "add_historical_event": "افزودن رویداد تاریخی",
+        "add_historical_event": "افزودن رویداد تاریخی",
         "brand_footer": "تمام رویدادهای مورد علاقه شما در جهان",
         "no_title": "رویداد بدون عنوان",
         "undefined_city": "نامشخص",
@@ -323,8 +327,8 @@
         }
     },
     "eventForm": {
-          "chooseFiles": "انتخاب فایل‌ها",
-           "mediaCount": "تعداد مدیا",
+        "chooseFiles": "انتخاب فایل‌ها",
+        "mediaCount": "تعداد مدیا",
         "title": "افزودن رویداد جدید",
         "basicInfo": "اطلاعات پایه",
         "locationCategory": "مکان و دسته‌بندی",

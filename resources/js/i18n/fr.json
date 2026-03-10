@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "Répondre",
+        "delete": " Supprimer",
+        "no_media_yet": "Aucun média",
+        "reply_placeholder": "Écrivez votre commentaire ici...",
         "loading": "Chargement de l'événement...",
         "not_found": "L'événement n'existe pas ou a été supprimé.",
         "city_default": "Non spécifié",
@@ -77,7 +81,7 @@
         "loadingEvents": "Chargement des événements..."
     },
     "events": {
-         "add_historical_event": "Ajouter un événement historique",
+        "add_historical_event": "Ajouter un événement historique",
         "brand_footer": "Tous vos événements favoris autour du monde",
         "no_title": "Événement sans titre",
         "undefined_city": "Indéfini",
@@ -323,8 +327,8 @@
         }
     },
     "eventForm": {
-          "chooseFiles": "Choisir des fichiers",
-           "mediaCount": "Nombre de médias",
+        "chooseFiles": "Choisir des fichiers",
+        "mediaCount": "Nombre de médias",
         "title": "Ajouter un Nouvel Événement",
         "basicInfo": "Informations de Base",
         "locationCategory": "Lieu et Catégorie",

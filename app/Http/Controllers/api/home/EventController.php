@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cities;
 use App\Models\Events;
 use App\Models\eventsImges;
+use App\Models\EventViews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -137,19 +138,21 @@ class EventController extends Controller
                 'user:id,name',
                 'images' => fn ($q) => $q->where('is_active', 1),
                 'translation',
-
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)
-                    ->with('user:id,name', 'translation'),
-            ])->withCount('comments')->withCount('likes')
+                    ->with('user:id,name', 'translation','replies', 'replies.user:id,name'),
+
+            ])->withCount('comments')->withCount('likes')->withCount('views')
                 ->where('slug', $slug)
                 ->first();
         });
-
         if (! $event) {
             return $this->error('Event not found', 404);
         }
-
+        EventViews::firstOrCreate([
+            'event_id' => $event->id,
+            'ip_address' => request()->getClientIp(),
+        ]);
         if ($event->images && $event->images->isNotEmpty()) {
             foreach ($event->images as $image) {
                 if ($image->url) {

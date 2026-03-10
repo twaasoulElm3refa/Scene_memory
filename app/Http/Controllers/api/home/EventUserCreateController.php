@@ -10,6 +10,7 @@ use App\Jobs\TranslateEventJob;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
 use App\Models\eventsImges;
+use App\Models\EventViews;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;

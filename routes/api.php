@@ -22,6 +22,7 @@ use App\Http\Controllers\api\home\CategoryController;
 use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CommentController;
 use App\Http\Controllers\api\home\CommentInteractionController;
+use App\Http\Controllers\api\home\CommentReplyController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
@@ -41,7 +42,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('users')->group(function () {
         // Auth Routes
         Route::post('/register', [AuthController::class, 'register'])->middleware(['throttle:3,1']);
-        Route::post('/login', [AuthController::class, 'login'])->middleware(['throttle:4,1']);
+        Route::post('/login', [AuthController::class, 'login'])->middleware(['throttle:6,1']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
             ->middleware(['throttle:5,1', 'guest']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])
@@ -224,9 +225,13 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
     });
 
-    Route::prefix('/notify')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
+    Route::prefix('notify')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
         Route::post('/create', [NotificationController::class, 'create']);
     });
-    // 109 Endpoints for the API
+
+    Route::prefix('replies')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
+        Route::post('/reply/{id}', [CommentReplyController::class,'create']);
+    });
+    // 110 Endpoints for the API
 });
 

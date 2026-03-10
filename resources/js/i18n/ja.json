@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "返信",
+        "delete": "削除",
+        "no_media_yet": "メディアがありません",
+        "reply_placeholder": "ここに返信を入力...",
         "loading": "イベントを読み込み中...",
         "not_found": "イベントが存在しないか削除されました。",
         "city_default": "未指定",
@@ -77,7 +81,7 @@
         "loadingEvents": "イベントを読み込み中..."
     },
     "events": {
-         "add_historical_event": "イベントを追加",
+        "add_historical_event": "イベントを追加",
         "brand_footer": "世界中のイベントを見る",
         "cities": "都市",
         "no_title": "タイトルなしイベント",
@@ -323,8 +327,8 @@
         }
     },
     "eventForm": {
-          "chooseFiles": "ファイルを選択",
-           "mediaCount": "メディア数",
+        "chooseFiles": "ファイルを選択",
+        "mediaCount": "メディア数",
         "title": "新しいイベントを追加",
         "basicInfo": "基本情報",
         "locationCategory": "場所とカテゴリ",

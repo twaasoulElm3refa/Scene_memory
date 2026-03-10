@@ -12,10 +12,10 @@
         "city": "City",
         "allSubCategories": "All Subcategories"
     },
-     "upload_media": "Upload Media",
+    "upload_media": "Upload Media",
     "view_all_comments": "View all comments",
     "nav": {
-          "historical": "Historical People",
+        "historical": "Historical People",
         "home": "Home",
         "about": "About Us",
         "allEvents": "All Events",
@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "Reply",
+        "delete": " Delete",
+        "no_media_yet": "No media yet",
+        "reply_placeholder": "Write your reply here...",
         "loading": "Loading event...",
         "not_found": "The event does not exist or has been deleted.",
         "city_default": "Not specified",
@@ -77,7 +81,7 @@
         "loadingEvents": "Loading events..."
     },
     "events": {
-         "add_historical_event": "Add Historical Event",
+        "add_historical_event": "Add Historical Event",
         "brand_footer": "All your favorite events around the world",
         "no_title": "Untitled Event",
         "undefined_city": "Undefined",
@@ -324,7 +328,7 @@
     },
     "eventForm": {
         "chooseFiles": "Choose Files",
-         "mediaCount": "Media Count",
+        "mediaCount": "Media Count",
         "title": "Add New Event",
         "basicInfo": "Basic Information",
         "locationCategory": "Location & Category",

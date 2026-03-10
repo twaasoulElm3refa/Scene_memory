@@ -73,13 +73,13 @@
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Title</p>
                 <p class="text-xl font-semibold text-gray-900">
-                  {{ apiData.event.title || "—" }}
+                  {{ apiData.event.admin_translation?.title || "—" }}
                 </p>
               </div>
               <div>
                 <p class="text-sm text-gray-500 mb-1.5">Description</p>
                 <p class="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {{ apiData.event.description || "No description provided." }}
+                  {{ apiData.event.admin_translation?.description || "No description provided." }}
                 </p>
               </div>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
@@ -268,6 +268,7 @@ const fetchRequest = async () => {
       request: data.data.request,
       event: data.data.event,
     };
+    console.log(apiData.value);
   } catch (err) {
     error.value = err.response?.data?.message || "Failed to load request details.";
   } finally {

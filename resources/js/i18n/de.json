@@ -41,6 +41,10 @@
         "UR": "اردو"
     },
     "event": {
+        "reply": "Antworten",
+        "delete": " Löschen",
+        "no_media_yet": "Keine Medien vorhanden",
+        "reply_placeholder": "Schreibe deine Antwort hier...",
         "loading": "Veranstaltung wird geladen...",
         "not_found": "Die Veranstaltung existiert nicht oder wurde gelöscht.",
         "city_default": "Nicht angegeben",
@@ -324,7 +328,7 @@
     },
     "eventForm": {
         "chooseFiles": "Dateien auswählen",
-         "mediaCount": "Anzahl der Medien: {count}",
+        "mediaCount": "Anzahl der Medien: {count}",
         "title": "Neues Event hinzufügen",
         "basicInfo": "Grundinformationen",
         "locationCategory": "Ort & Kategorie",
