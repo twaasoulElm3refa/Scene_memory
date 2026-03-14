@@ -26,6 +26,7 @@
         "logout": "Log Out",
         "login": "Log In"
     },
+     "login_to_comment": "Please log in to leave a comment",
     "languages": {
         "AR": "العربية",
         "EN": "English",

@@ -21,7 +21,7 @@ class CommentInteractionController extends Controller
         $event = Events::find($comment->event_id);
         $interctions = CommentInteractions::firstOrCreate([
             'comment_id' => $comment->id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->user()->id ?? null,
             'type' => 'support',
         ]);
         $this->clearCache($event->slug);
@@ -35,7 +35,7 @@ class CommentInteractionController extends Controller
         $event = Events::find($comment->event_id);
         $interctions = CommentInteractions::firstOrCreate([
             'comment_id' => $comment->id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->user()->id ?? null,
             'type' => 'Exhibitions',
         ]);
         $this->clearCache($event->slug);
@@ -48,7 +48,7 @@ class CommentInteractionController extends Controller
         $event = Events::find($comment->event_id);
         $interctions = CommentInteractions::firstOrCreate([
             'comment_id' => $comment->id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->user()->id ?? null,
             'type' => 'neutral',
         ]);
         $this->clearCache($event->slug);
@@ -60,7 +60,7 @@ class CommentInteractionController extends Controller
         $comment = comments::find(request('id'));
         $interctions = CommentReport::firstOrCreate([
             'comment_id' => $comment->id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->user()->id ?? null,
             'reason' => $request->reason,
         ]);
         Cache::forget('reports_all');

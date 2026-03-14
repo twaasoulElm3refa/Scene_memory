@@ -26,6 +26,7 @@
         "logout": "退出登录",
         "login": "登录"
     },
+    "login_to_comment": "请登录以发表评论",
     "languages": {
         "AR": "العربية",
         "EN": "English",

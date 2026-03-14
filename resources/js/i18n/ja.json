@@ -26,6 +26,7 @@
         "logout": "ログアウト",
         "login": "ログイン"
     },
+     "login_to_comment": "コメントを残すにはログインしてください",
     "languages": {
         "AR": "العربية",
         "EN": "English",

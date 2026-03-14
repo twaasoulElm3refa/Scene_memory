@@ -9,8 +9,8 @@ if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
 // Constants
 // ─────────────────────────────────────────────
 const STYLE_URL      = "https://tiles.openfreemap.org/styles/liberty";
-const STYLE_LS_KEY   = "mapservice_style_cache_v2"; // bump version to bust cache
-const STYLE_TTL_MS   = 24 * 60 * 60 * 1000;         // 1 day
+const STYLE_LS_KEY   = "mapservice_style_cache_v2";
+const STYLE_TTL_MS   = 24 * 60 * 60 * 1000;
 const GEOCODE_DEBOUNCE_MS = 600;
 
 export default class MapService {
@@ -24,26 +24,13 @@ export default class MapService {
 
         this.reverseGeocodeCache = new Map();
         this.cityEventCache      = new Map();
-
-        // In-memory style cache (lang → style object)
         this._styleCache = {};
-
-        // Single shared style-fetch promise to prevent duplicate requests
         this._styleFetchPromise = null;
-
-        // Debounce timer for reverse geocoding
         this._geocodeTimer = null;
-
         const stored = localStorage.getItem("language") || "ar";
         this._currentLang = stored === "ar" ? "ar" : "en";
-
-        // Kick off style prefetch immediately so it's ready before the map opens
         this._prefetchStyle();
     }
-
-    // ─────────────────────────────────────────────
-    // Public API
-    // ─────────────────────────────────────────────
 
     initMap(mapId, zoom = 10) {
         this._buildMap(mapId, zoom).then(map => {
@@ -75,7 +62,6 @@ export default class MapService {
     }
 
     addEventMarkers(events, targetMap = this.map) {
-        // Remove old markers
         this.eventMarkers.forEach(m => m.remove());
         this.eventMarkers = [];
 
@@ -85,7 +71,6 @@ export default class MapService {
         const bounds  = new maplibregl.LngLatBounds();
         let   validCount = 0;
 
-        // Build all markers in one loop (no second pass for bounds)
         const fragment = events.map(event => {
             const lat = parseFloat(event.lattitude);
             const lng = parseFloat(event.langitude);
@@ -115,29 +100,25 @@ export default class MapService {
         }
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Private — Style with Persistent LS Cache
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
-    /** Fire-and-forget prefetch on construction */
     _prefetchStyle() {
         this._getOrFetchStyle(this._currentLang).catch(() => {});
     }
 
     async _getOrFetchStyle(lang) {
-        // 1. In-memory hit (fastest)
         if (this._styleCache[lang]) {
             return this._deepClone(this._styleCache[lang]);
         }
 
-        // 2. localStorage hit (survives page reloads)
         const fromLS = this._loadStyleFromLS(lang);
         if (fromLS) {
             this._styleCache[lang] = fromLS;
             return this._deepClone(fromLS);
         }
 
-        // 3. Only ONE network request at a time (deduplicate parallel calls)
         if (!this._styleFetchPromise) {
             this._styleFetchPromise = this._fetchAndCacheStyle(lang).finally(() => {
                 this._styleFetchPromise = null;
@@ -154,18 +135,14 @@ export default class MapService {
         const style = await response.json();
         this._patchStyleLanguage(style, lang);
 
-        // Save to in-memory cache
         this._styleCache[lang] = this._deepClone(style);
 
-        // Save to localStorage with timestamp
         try {
             localStorage.setItem(
                 `${STYLE_LS_KEY}_${lang}`,
                 JSON.stringify({ ts: Date.now(), style })
             );
-        } catch {
-            // Quota exceeded — silently skip LS persistence
-        }
+        } catch {}
 
         return style;
     }
@@ -206,9 +183,9 @@ export default class MapService {
         style.glyphs = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Private — Map Builder
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
     async _buildMap(containerId, zoom) {
         const style = await this._getOrFetchStyle(this._currentLang);
@@ -218,17 +195,16 @@ export default class MapService {
             style,
             center: [this.markerRef.value.lng, this.markerRef.value.lat],
             zoom,
-            // Performance tweaks
-            fadeDuration: 0,          // skip fade-in animation on tiles
+            fadeDuration: 0,
             trackResize:  true,
         });
 
         return new Promise(resolve => map.on("load", () => resolve(map)));
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Private — Marker & Location
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
     _addDraggableMarker(mapInstance, isFullscreen = false) {
         const marker = new maplibregl.Marker({ draggable: true, color: "#e53e3e" })
@@ -262,9 +238,9 @@ export default class MapService {
         }
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Private — Reverse Geocode (debounced)
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
     _debouncedReverseGeocode(lat, lng) {
         clearTimeout(this._geocodeTimer);
@@ -275,12 +251,13 @@ export default class MapService {
     }
 
     _reverseGeocode(lat, lng) {
-        const key = `${lat.toFixed(5)},${lng.toFixed(5)}`; // ~1 m precision is enough
+        const key = `${lat.toFixed(5)},${lng.toFixed(5)}`;
 
         if (this.reverseGeocodeCache.has(key)) {
             const { city, state, stateEn } = this.reverseGeocodeCache.get(key);
             this._setCityState(city, state);
-            stateEn ? this._sendCityToBackend(stateEn) : this._dispatchMarkerEvent([]);
+            // ─── التعديل الرئيسي هنا ───
+            state ? this._sendCityToBackend(state) : this._dispatchMarkerEvent([]);
             return;
         }
 
@@ -290,7 +267,6 @@ export default class MapService {
                 { headers: { "User-Agent": "SceneMemoryApp/1.0" } }
             ).then(r => r.json());
 
-        // Fire both requests in parallel
         Promise.all([fetchLang("ar"), fetchLang("en")])
             .then(([arData, enData]) => {
                 const city    = this._extractCity(arData)  || this._extractCity(enData);
@@ -299,7 +275,8 @@ export default class MapService {
 
                 this.reverseGeocodeCache.set(key, { city, state, stateEn });
                 this._setCityState(city, state);
-                stateEn ? this._sendCityToBackend(stateEn) : this._dispatchMarkerEvent([]);
+                // ─── التعديل الرئيسي هنا ───
+                state ? this._sendCityToBackend(state) : this._dispatchMarkerEvent([]);
             })
             .catch(() => {
                 this._setCityState(null, null);
@@ -327,9 +304,9 @@ export default class MapService {
         this.markerRef.value.state = state;
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Private — Backend & Events
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
     _sendCityToBackend(city) {
         if (this.cityEventCache.has(city)) {
@@ -359,9 +336,9 @@ export default class MapService {
         );
     }
 
-    // ═══════════════════════════════════════════════
-    // Private — Popup HTML Builder (extracted to avoid rebuilding on each event)
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
+    // Private — Popup HTML Builder
+    // ─────────────────────────────────────────────
 
     _buildPopupHTML(event, isAr) {
         const fontFamily = isAr
@@ -398,13 +375,13 @@ export default class MapService {
         return html + "</div>";
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Private — Marker Element
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
     _createEventMarkerEl() {
         const el = document.createElement("div");
-        el.className = "map-event-marker"; // use a CSS class instead of inline style where possible
+        el.className = "map-event-marker";
         el.style.cssText = `
             width:32px; height:32px;
             background:#e53e3e;
@@ -425,12 +402,11 @@ export default class MapService {
         return el;
     }
 
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
     // Utils
-    // ═══════════════════════════════════════════════
+    // ─────────────────────────────────────────────
 
     _deepClone(obj) {
-        // structuredClone is faster than JSON parse/stringify where available
         return typeof structuredClone === "function"
             ? structuredClone(obj)
             : JSON.parse(JSON.stringify(obj));
