@@ -1,13 +1,12 @@
-- Ranking System
-- Rating System
-- Threded Comments//
-- Search With Event Title
-- Share Event Links
-- Divide Event Media To Gallery(Only Photos - Only Videos - All Media)
-- Related Events
-- On This Day Events
-- Trending Systems
-- User Badges
-- Event Statistics
+saas system
+monthly subscription
+link media with payment table === shutter stock
+scemory = اسم الموقع
+responsive frontend view
+view on snapchat the same idea
+show events on map
+payment gateway with a percentage for us and rest for the owner
+هو يحدد واحنا ناخد نسبه
+او هو يحدد واحنا نعمل
+taxes
 
-- new map to translate countries

@@ -29,12 +29,11 @@ class UserRequest extends FormRequest
             'country' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|string|max:255',
-            'role' => 'nullable|string|in:admin,user,owner',
+            'role' => 'nullable|string',
             'password' => [
                 'required',
                 'confirmed',
                 Password::min(8)
-                    ->letters()
                     ->mixedCase()
                     ->numbers()
             ],

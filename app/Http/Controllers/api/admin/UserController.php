@@ -52,7 +52,6 @@ class UserController extends Controller
             $data['last_login_at'] = now();
             $user = User::create($data);
             Cache::forget('users_all_page_'.request('page', 1));
-
             return $this->success($user, 'user Created Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());

@@ -1,233 +1,327 @@
 <template>
-    <AdminLayout>
-        <div :class="['wrapper', theme]" :data-theme="theme">
-            <!-- Header -->
-            <div class="header">
-                <div>
-                    <div class="breadcrumb">
-                        <span class="breadcrumb-item">Users</span>
-                        <span class="breadcrumb-separator">›</span>
-                        <span class="breadcrumb-item active">Add New User</span>
-                    </div>
-                    <h1 class="title">Add New User</h1>
-                    <p class="subtitle">Create a new account and assign platform permissions.</p>
-                </div>
-                <button class="back-btn" @click="goBack">
-                    <span class="arrow">←</span> Back to list
-                </button>
-            </div>
-
-            <form @submit.prevent="handleSubmit">
-                <!-- Personal Information Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <span class="icon">👤</span>
-                        <h2 class="section-title">Personal Information</h2>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input v-model="form.name" type="text" class="input" placeholder="e.g. John Doe" />
-                            <p v-if="fieldErrors.name" class="error">{{ fieldErrors.name }}</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input v-model="form.email" type="email" class="input" placeholder="john@scenememory.com" />
-                            <p v-if="fieldErrors.email" class="error">{{ fieldErrors.email }}</p>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Phone Number</label>
-                            <input v-model="form.phone" type="tel" class="input" placeholder="+1 (555) 000-0000" />
-                            <p v-if="fieldErrors.phone" class="error">{{ fieldErrors.phone }}</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Date of Birth</label>
-                            <input v-model="form.date_of_birth" type="date" class="input" />
-                            <p v-if="fieldErrors.date_of_birth" class="error">
-                                {{ fieldErrors.date_of_birth }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Country</label>
-                            <select v-model="form.country" class="input select">
-                                <option value="">Select a country</option>
-                                <option value="US">United States</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="CA">Canada</option>
-                                <option value="EG">Egypt</option>
-                                <option value="SA">Saudi Arabia</option>
-                                <option value="AE">United Arab Emirates</option>
-                            </select>
-                            <p v-if="fieldErrors.country" class="error">{{ fieldErrors.country }}</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Position / Job Title</label>
-                            <input v-model="form.position" type="text" class="input" placeholder="e.g. Senior Editor" />
-                            <p v-if="fieldErrors.position" class="error">{{ fieldErrors.position }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Account Settings Section -->
-                <div class="section">
-                    <div class="section-header">
-                        <span class="icon">🔐</span>
-                        <h2 class="section-title">Account Settings</h2>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group password-group">
-                            <label>Password</label>
-                            <div class="password-wrapper">
-                                <input v-model="form.password" :type="showPassword ? 'text' : 'password'" class="input"
-                                    placeholder="Enter password" />
-                                <button type="button" class="toggle-password-btn" @click="showPassword = !showPassword"
-                                    tabindex="-1">
-                                    {{ showPassword ? "🙈" : "👁️" }}
-                                </button>
-                            </div>
-                            <p v-if="fieldErrors.password" class="error">{{ fieldErrors.password }}</p>
-                        </div>
-
-                        <div class="form-group password-group">
-                            <label>Confirm Password</label>
-                            <div class="password-wrapper">
-                                <input v-model="form.password_confirmation"
-                                    :type="showConfirmPassword ? 'text' : 'password'" class="input"
-                                    placeholder="Confirm password" />
-                                <button type="button" class="toggle-password-btn"
-                                    @click="showConfirmPassword = !showConfirmPassword" tabindex="-1">
-                                    {{ showConfirmPassword ? "🙈" : "👁️" }}
-                                </button>
-                            </div>
-                            <p v-if="fieldErrors.password_confirmation" class="error">
-                                {{ fieldErrors.password_confirmation }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>User Role</label>
-                            <select v-model="form.role" class="input select">
-                                <option value="user">user</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                            <p class="help-text">
-                                This determines the user's access level to the platform modules.
-                            </p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Active Status</label>
-                            <div class="toggle-container">
-                                <label class="toggle-switch">
-                                    <input v-model="form.is_active" type="checkbox" />
-                                    <span class="slider"></span>
-                                </label>
-                                <span class="toggle-label">Account is Active</span>
-                            </div>
-                            <p class="help-text">When disabled, the user will not be able to log in.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Messages -->
-                <div v-if="generalErrors.length" class="alert error-bg">
-                    <div v-for="err in generalErrors" :key="err">{{ err }}</div>
-                </div>
-
-                <div v-if="successMessage" class="alert success-bg">
-                    {{ successMessage }}
-                </div>
-
-                <!-- Actions -->
-                <div class="actions">
-                    <button type="button" class="btn btn-secondary" @click="handleCancel" :disabled="isSubmitting">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-                        <span v-if="isSubmitting" class="loading">⏳</span>
-                        <span v-else class="btn-icon">💾</span>
-                        {{ isSubmitting ? "Saving..." : "Save User" }}
-                    </button>
-                </div>
-            </form>
-
-            <!-- Info Cards -->
-            <div class="info-cards">
-                <div class="info-card">
-                    <div class="info-icon">📧</div>
-                    <h3>Activation Email</h3>
-                    <p>The user will receive login instructions once saved.</p>
-                </div>
-
-                <div class="info-card">
-                    <div class="info-icon">🔒</div>
-                    <h3>Security Policy</h3>
-                    <p>Passwords must be 8+ characters with numbers & symbols.</p>
-                </div>
-
-                <div class="info-card">
-                    <div class="info-icon">👥</div>
-                    <h3>Seat Management</h3>
-                    <p>This will use 1 of your 25 available professional seats.</p>
-                </div>
-            </div>
+  <AdminLayout>
+    <div :class="['wrapper', theme]" :data-theme="theme">
+      <!-- Header -->
+      <div class="header">
+        <div>
+          <div class="breadcrumb">
+            <span class="breadcrumb-item">Users</span>
+            <span class="breadcrumb-separator">›</span>
+            <span class="breadcrumb-item active">Add New User</span>
+          </div>
+          <h1 class="title">Add New User</h1>
+          <p class="subtitle">Create a new account and assign platform permissions.</p>
         </div>
-    </AdminLayout>
+        <button class="back-btn" @click="goBack">
+          <span class="arrow">←</span> Back to list
+        </button>
+      </div>
+
+      <form @submit.prevent="handleSubmit" novalidate>
+        <!-- Personal Information -->
+        <div class="section">
+          <div class="section-header">
+            <span class="icon">👤</span>
+            <h2 class="section-title">Personal Information</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name <span class="required">*</span></label>
+              <input v-model.trim="form.name" type="text" class="input" placeholder="e.g. John Doe" />
+              <p v-if="fieldErrors.name" class="error">{{ fieldErrors.name }}</p>
+            </div>
+
+            <div class="form-group">
+              <label>Email Address <span class="required">*</span></label>
+              <input v-model.trim="form.email" type="email" class="input" placeholder="john@example.com" />
+              <p v-if="fieldErrors.email" class="error">{{ fieldErrors.email }}</p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input v-model.trim="form.phone" type="tel" class="input" placeholder="+20 100 123 4567" />
+              <p v-if="fieldErrors.phone" class="error">{{ fieldErrors.phone }}</p>
+            </div>
+
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input v-model="form.date_of_birth" type="date" class="input" />
+              <p v-if="fieldErrors.date_of_birth" class="error">{{ fieldErrors.date_of_birth }}</p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Country</label>
+              <select v-model="form.country" class="input select">
+                <option value="">Select a country</option>
+                <option value="US">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="EG">Egypt</option>
+                <option value="SA">Saudi Arabia</option>
+                <option value="AE">United Arab Emirates</option>
+                <!-- أضف المزيد حسب احتياجك -->
+              </select>
+              <p v-if="fieldErrors.country" class="error">{{ fieldErrors.country }}</p>
+            </div>
+
+            <div class="form-group">
+              <label>Position / Job Title</label>
+              <input v-model.trim="form.position" type="text" class="input" placeholder="e.g. Senior Editor" />
+              <p v-if="fieldErrors.position" class="error">{{ fieldErrors.position }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="section">
+          <div class="section-header">
+            <span class="icon">🔐</span>
+            <h2 class="section-title">Account Settings</h2>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group password-group">
+              <label>Password <span class="required">*</span></label>
+              <div class="password-wrapper">
+                <input
+                  v-model="form.password"
+                  :type="showPassword ? 'text' : 'password'"
+                  class="input"
+                  placeholder="Enter password"
+                  autocomplete="new-password"
+                />
+                <button type="button" class="toggle-password-btn" @click="showPassword = !showPassword">
+                  {{ showPassword ? '🙈' : '👁️' }}
+                </button>
+              </div>
+              <p v-if="fieldErrors.password" class="error">{{ fieldErrors.password }}</p>
+            </div>
+
+            <div class="form-group password-group">
+              <label>Confirm Password <span class="required">*</span></label>
+              <div class="password-wrapper">
+                <input
+                  v-model="form.password_confirmation"
+                  :type="showConfirmPassword ? 'text' : 'password'"
+                  class="input"
+                  placeholder="Confirm password"
+                  autocomplete="new-password"
+                />
+                <button
+                  type="button"
+                  class="toggle-password-btn"
+                  @click="showConfirmPassword = !showConfirmPassword"
+                >
+                  {{ showConfirmPassword ? '🙈' : '👁️' }}
+                </button>
+              </div>
+              <p v-if="fieldErrors.password_confirmation" class="error">{{ fieldErrors.password_confirmation }}</p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>User Role</label>
+              <select v-model="form.role" class="input select">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+              <p v-if="fieldErrors.role" class="error">{{ fieldErrors.role }}</p>
+            </div>
+
+            <div class="form-group">
+              <label>Active Status</label>
+              <div class="toggle-container">
+                <label class="toggle-switch">
+                  <input v-model="form.is_active" type="checkbox" />
+                  <span class="slider round"></span>
+                </label>
+                <span class="toggle-label">{{ form.is_active ? 'Active' : 'Inactive' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Server Messages -->
+        <div v-if="generalErrors.length" class="alert error-bg">
+          <div v-for="(err, index) in generalErrors" :key="index">{{ err }}</div>
+        </div>
+
+        <div v-if="successMessage" class="alert success-bg">
+          {{ successMessage }}
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button type="button" class="btn btn-secondary" @click="handleCancel" :disabled="isSubmitting">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+            <span v-if="isSubmitting" class="loading">⏳ Saving...</span>
+            <span v-else>Save User</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Info Cards -->
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-icon">📧</div>
+          <h3>Activation Email</h3>
+          <p>The user will receive login instructions once saved.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🔒</div>
+          <h3>Security Policy</h3>
+          <p>Password must be 8+ chars, upper & lower case, and numbers.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">👥</div>
+          <h3>Seat Management</h3>
+          <p>This will consume 1 professional seat.</p>
+        </div>
+      </div>
+    </div>
+  </AdminLayout>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import AdminLayout from "@/layouts/AdminLayout.vue";
-import { useUserForm } from "@/services/admin/user/useUserForm";
+import { ref, reactive } from 'vue'
+import axios from 'axios'
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
-const theme = localStorage.getItem("theme") || "light";
+const theme = localStorage.getItem('theme') || 'light'
 
-const {
-    form,
-    fieldErrors,
-    generalErrors,
-    successMessage,
-    isSubmitting,
-    submit,
-    resetForm,
-} = useUserForm();
+const form = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  date_of_birth: '',
+  country: '',
+  position: '',
+  password: '',
+  password_confirmation: '',
+  role: 'user',
+  is_active: true,
+})
 
-const showPassword = ref(false);
-const showConfirmPassword = ref(false);
+const fieldErrors = reactive({})
+const generalErrors = ref([])
+const successMessage = ref('')
+const isSubmitting = ref(false)
+
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+
+function clearFieldErrors() {
+  Object.keys(fieldErrors).forEach(key => {
+    delete fieldErrors[key]
+  })
+}
+
+function handleValidationErrors(errors) {
+  clearFieldErrors()
+  generalErrors.value = []
+
+  if (!errors || typeof errors !== 'object') {
+    generalErrors.value = ['An unexpected error occurred.']
+    return
+  }
+
+  Object.keys(errors).forEach(key => {
+    if (Array.isArray(errors[key])) {
+      fieldErrors[key] = errors[key][0] // نأخذ أول رسالة خطأ فقط
+    } else if (typeof errors[key] === 'string') {
+      fieldErrors[key] = errors[key]
+    }
+  })
+
+  // إذا كان فيه أخطاء عامة (غير مرتبطة بحقل معين)
+  if (errors.message && !Object.keys(fieldErrors).length) {
+    generalErrors.value.push(errors.message)
+  }
+}
 
 const handleSubmit = async () => {
-    const success = await submit();
-    if (success) {
-        resetForm();
-        showPassword.value = false;
-        showConfirmPassword.value = false;
+  clearFieldErrors()
+  generalErrors.value = []
+  successMessage.value = ''
+  isSubmitting.value = true
+
+  try {
+    const response = await axios.post('/v1/users/create', form, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
+    })
+
+    successMessage.value = 'User created successfully!'
+
+    // reset form
+    Object.assign(form, {
+      name: '',
+      email: '',
+      phone: '',
+      date_of_birth: '',
+      country: '',
+      position: '',
+      password: '',
+      password_confirmation: '',
+      role: 'user',
+      is_active: true,
+    })
+
+    showPassword.value = false
+    showConfirmPassword.value = false
+
+    // اختياري: بعد 3 ثوانٍ ارجع للقائمة
+    // setTimeout(() => goBack(), 3000)
+  } catch (err) {
+    if (err.response?.status === 422) {
+      // Laravel validation error
+      handleValidationErrors(err.response.data.errors)
+    } else if (err.response?.data?.message) {
+      generalErrors.value = [err.response.data.message]
+    } else {
+      generalErrors.value = ['Something went wrong. Please try again later.']
     }
-};
+  } finally {
+    isSubmitting.value = false
+  }
+}
 
 const handleCancel = () => {
-    if (confirm("Are you sure you want to cancel? All changes will be lost.")) {
-        resetForm();
-        showPassword.value = false;
-        showConfirmPassword.value = false;
-    }
-};
+  if (!confirm('Discard all changes?')) return
+
+  Object.assign(form, {
+    name: '',
+    email: '',
+    phone: '',
+    date_of_birth: '',
+    country: '',
+    position: '',
+    password: '',
+    password_confirmation: '',
+    role: 'user',
+    is_active: true,
+  })
+
+  clearFieldErrors()
+  generalErrors.value = []
+  successMessage.value = ''
+  showPassword.value = false
+  showConfirmPassword.value = false
+}
 
 const goBack = () => {
-    window.history.back();
-};
+  window.history.back()
+}
 </script>
 
 <style scoped>
@@ -235,7 +329,9 @@ const goBack = () => {
 .password-group {
     position: relative;
 }
-
+.required {
+  color: #e53e3e;
+}
 .password-wrapper {
     position: relative;
 }

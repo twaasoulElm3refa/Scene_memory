@@ -1,6 +1,5 @@
-// src/services/MapService.js
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 export default class MapService {
     constructor(markerRef) {
@@ -9,37 +8,41 @@ export default class MapService {
         this.marker = null;
         this.fullMap = null;
         this.fullMarker = null;
+        this.eventMarkers = [];
+
+        // caches
+        this.reverseGeocodeCache = new Map(); // key = `${lat},${lng}`, value = {city, state}
+        this.cityEventCache = new Map(); // key = city, value = events array
     }
 
     initMap(mapId, zoom = 10) {
-        this.map = L.map(mapId).setView(
-            [this.markerRef.value.lat, this.markerRef.value.lng],
-            zoom
-        );
+        this.map = new maplibregl.Map({
+            container: mapId,
+            style: this._getStyle(),
+            center: [this.markerRef.value.lng, this.markerRef.value.lat],
+            zoom: zoom,
+        });
 
-        this._addTiles(this.map);
-        this.marker = L.marker(
-            [this.markerRef.value.lat, this.markerRef.value.lng],
-            { draggable: true }
-        ).addTo(this.map);
+        this.map.addControl(new maplibregl.NavigationControl());
 
-        this._setupEvents(this.map, this.marker);
+        this.map.on("load", () => {
+            this._addDraggableMarker(this.map, false);
+        });
     }
 
     openFullscreen(mapId, zoom = 12) {
-        this.fullMap = L.map(mapId).setView(
-            [this.markerRef.value.lat, this.markerRef.value.lng],
-            zoom
-        );
+        this.fullMap = new maplibregl.Map({
+            container: mapId,
+            style: this._getStyle(),
+            center: [this.markerRef.value.lng, this.markerRef.value.lat],
+            zoom: zoom,
+        });
 
-        this._addTiles(this.fullMap);
+        this.fullMap.addControl(new maplibregl.NavigationControl());
 
-        this.fullMarker = L.marker(
-            [this.markerRef.value.lat, this.markerRef.value.lng],
-            { draggable: true }
-        ).addTo(this.fullMap);
-
-        this._setupEvents(this.fullMap, this.fullMarker, true);
+        this.fullMap.on("load", () => {
+            this._addDraggableMarker(this.fullMap, true);
+        });
     }
 
     closeFullscreen() {
@@ -50,28 +53,27 @@ export default class MapService {
         }
     }
 
-    _addTiles(map) {
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            maxZoom: 19,
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        }).addTo(map);
+    _getStyle() {
+        const MAPTILER_KEY = "YU0yOJ7Mluv9CxBIa97r";
+        const lang = localStorage.getItem("language") || "ar";
+        return `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}&language=${lang}`;
     }
 
-    _setupEvents(map, marker, isFullscreen = false) {
-        const updatePosition = (lat, lng) => {
-            this._updateLocation(lat, lng, isFullscreen);
-            this._reverseGeocode(lat, lng);
+    _addDraggableMarker(mapInstance, isFullscreen = false) {
+        const marker = new maplibregl.Marker({ draggable: true })
+            .setLngLat([this.markerRef.value.lng, this.markerRef.value.lat])
+            .addTo(mapInstance);
+
+        if (isFullscreen) this.fullMarker = marker;
+        else this.marker = marker;
+
+        const updatePosition = (lngLat) => {
+            this._updateLocation(lngLat.lat, lngLat.lng);
+            this._reverseGeocode(lngLat.lat, lngLat.lng);
         };
 
-        marker.on("dragend", (e) => {
-            const pos = e.target.getLatLng();
-            updatePosition(pos.lat, pos.lng);
-        });
-
-        map.on("click", (e) => {
-            const pos = e.latlng;
-            updatePosition(pos.lat, pos.lng);
-        });
+        marker.on("dragend", () => updatePosition(marker.getLngLat()));
+        mapInstance.on("click", (e) => updatePosition(e.lngLat));
     }
 
     setLocation(lat, lng) {
@@ -79,84 +81,61 @@ export default class MapService {
         this._reverseGeocode(lat, lng);
     }
 
-    _updateLocation(lat, lng, fromFullscreen = false) {
+    _updateLocation(lat, lng) {
         this.markerRef.value.lat = lat;
         this.markerRef.value.lng = lng;
 
         if (this.marker) {
-            this.marker.setLatLng([lat, lng]);
-            this.map.setView([lat, lng], 12);
+            this.marker.setLngLat([lng, lat]);
+            this.map.flyTo({ center: [lng, lat], zoom: 12 });
         }
 
         if (this.fullMarker) {
-            this.fullMarker.setLatLng([lat, lng]);
-            this.fullMap.setView([lat, lng], 12);
+            this.fullMarker.setLngLat([lng, lat]);
+            this.fullMap.flyTo({ center: [lng, lat], zoom: 12 });
         }
     }
 
     _reverseGeocode(lat, lng) {
-        // استخدم proxy مجاني لتجاوز CORS
-        const baseUrl = "https://nominatim.openstreetmap.org/reverse";
-        const url = `https://corsproxy.io/?${encodeURIComponent(baseUrl +
-            `?format=jsonv2&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&accept-language=ar,en`)}`;
+        const key = `${lat.toFixed(6)},${lng.toFixed(6)}`;
+        if (this.reverseGeocodeCache.has(key)) {
+            const cached = this.reverseGeocodeCache.get(key);
+            this._setCityState(cached.city, cached.state);
+            if (cached.state) this._sendCityToBackend(cached.state);
+            else this._dispatchMarkerEvent([]);
+            return;
+        }
+
+        const backendLang = 'ar';
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&accept-language=${backendLang}`;
 
         fetch(url, {
-            headers: {
-                'User-Agent': 'SceneMemoryApp/1.0 (your-email@example.com)',
-            }
+            headers: { "User-Agent": "SceneMemoryApp (your-contact-email@example.com)" }
         })
             .then(res => {
-                if (!res.ok) throw new Error(`Nominatim HTTP error: ${res.status}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 return res.json();
             })
             .then(data => {
-                if (data.error) {
-                    console.warn("Nominatim returned error:", data.error);
-                    this._setCityState(null, null);
-                    this._dispatchMarkerEvent([]);
-                    return;
-                }
+                if (data.error) throw new Error(data.error);
 
                 const addr = data.address || {};
-
-                let city =
-                    addr.city ||
-                    addr.town ||
-                    addr.village ||
-                    addr.municipality ||
-                    addr.hamlet ||
-                    addr.suburb ||
-                    addr.neighbourhood ||
-                    addr.city_district ||
-                    null;
-
-                let state =
-                    addr.state ||
-                    addr.region ||
-                    addr.province ||
-                    addr.county ||
-                    addr.state_district ||
-                    null;
-
-                if (city === state && addr.suburb) {
-                    city = addr.suburb;
-                }
+                let city = addr.city || addr.town || addr.village || addr.municipality || addr.hamlet || addr.suburb || addr.neighbourhood || addr.city_district || null;
+                let state = addr.state || addr.region || addr.province || addr.county || addr.state_district || null;
 
                 if (!city && data.display_name) {
-                    const parts = data.display_name.split(',').map(p => p.trim()).filter(Boolean);
-                    if (parts.length >= 4) city = parts[3];
+                    const parts = data.display_name.split(',').map(p => p.trim());
+                    if (parts.length >= 3) city = parts[parts.length - 3];
                 }
 
+                this.reverseGeocodeCache.set(key, { city, state });
                 this._setCityState(city, state);
 
-                if (state) {
-                    this._sendCityToBackend(state);
-                } else {
-                    this._dispatchMarkerEvent([]);
-                }
+                if (state) this._sendCityToBackend(state);
+                else this._dispatchMarkerEvent([]);
             })
             .catch(err => {
-                console.error("Nominatim fetch failed:", err);
+                console.error("[Reverse Geocode] Error:", err);
                 this._setCityState(null, null);
                 this._dispatchMarkerEvent([]);
             });
@@ -168,126 +147,72 @@ export default class MapService {
     }
 
     _sendCityToBackend(city) {
-        if (!city) {
-            console.warn("No city to send to backend");
-            this._dispatchMarkerEvent([]);
+        if (this.cityEventCache.has(city)) {
+            this._dispatchMarkerEvent(this.cityEventCache.get(city));
             return;
         }
 
         const encodedCity = encodeURIComponent(city);
-
-        const url = `/api/v1/events/${encodedCity}/marker/search`;
-
-        fetch(url, {
-            method: "GET",
+        fetch(`/api/v1/events/${encodedCity}/marker/search`, {
             headers: {
                 Accept: "application/json",
                 Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
                 "Accept-Language": localStorage.getItem("language") || "ar",
             },
         })
-            .then(res => {
-                if (!res.ok) throw new Error(`Backend HTTP error: ${res.status}`);
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 const events = data?.data || [];
+                this.cityEventCache.set(city, events);
                 this._dispatchMarkerEvent(events);
             })
-            .catch(err => {
-                console.error("MarkerSearch fetch failed:", err);
+            .catch(() => {
                 this._dispatchMarkerEvent([]);
             });
     }
 
     _dispatchMarkerEvent(eventsArray) {
-        const customEvent = new CustomEvent("marker-events-loaded", {
-            detail: { events: eventsArray },
-            bubbles: true,
-            composed: true,
-        });
-        document.dispatchEvent(customEvent);
+        document.dispatchEvent(
+            new CustomEvent("marker-events-loaded", { detail: { events: eventsArray } })
+        );
     }
-    addEventMarkers(events, targetMap = this.map) {
-        if (!events || !Array.isArray(events) || events.length === 0) {
-            console.log("No events to display on map");
-            return;
-        }
 
-        // 1. إنشاء أو تنظيف الـ Layer Group
-        if (!this.eventMarkersLayer) {
-            this.eventMarkersLayer = L.layerGroup().addTo(targetMap);
-        } else {
-            this.eventMarkersLayer.clearLayers();
-        }
+    addEventMarkers(events, targetMap = this.map) {
+        this.eventMarkers.forEach(m => m.remove());
+        this.eventMarkers = [];
+
+        if (!events?.length) return;
 
         events.forEach(event => {
             const lat = parseFloat(event.lattitude);
             const lng = parseFloat(event.langitude);
+            if (isNaN(lat) || isNaN(lng)) return;
 
-            if (isNaN(lat) || isNaN(lng)) {
-                console.warn("Invalid coordinates for event:", event.title);
-                return;
-            }
+            const marker = new maplibregl.Marker({ color: "#e53e3e" })
+                .setLngLat([lng, lat])
+                .addTo(targetMap);
 
-            const eventIcon = L.divIcon({
-                className: "custom-event-marker",
-                html: `
-        <div class="marker-label">${(event.title || "حدث").replace(/</g, "&lt;")}</div>
-        <svg width="32" height="42" viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 0C7.16 0 0 7.16 0 16c0 12 16 26 16 26s16-14 16-26c0-8.84-7.16-16-16-16z" fill="#e53e3e"/>
-            <circle cx="16" cy="16" r="6" fill="white"/>
-        </svg>
-    `,
-                iconSize: [30, 42],
-                iconAnchor: [15, 42],
-                popupAnchor: [0, -45],
-            });
-
-            const marker = L.marker([lat, lng], {
-                icon: eventIcon
-            });
-
-            // محتوى الـ popup (نفس السابق أو يمكن تطويره)
-            let popupContent = `
-            <div dir="rtl" style="text-align:right; min-width:180px; font-family: Tajawal, sans-serif;">
-                <strong style="font-size:1.1em;">${event.title || "حدث بدون عنوان"}</strong><br>
-                <div style="color:#555; margin:6px 0;">
-                    ${event.start_date ? new Date(event.start_date).toLocaleDateString('ar-EG') : "التاريخ غير محدد"}
-                </div>
-        `;
-
-            if (event.image_url) {
-                popupContent += `
-                <img src="${event.image_url}" alt="${event.title}"
-                     style="max-width:100%; height:auto; border-radius:6px; margin:8px 0;">
-                <br>
+            let popupHTML = `
+                <div style="min-width:180px;font-family:sans-serif">
+                <strong>${event.title || "Event"}</strong><br>
+                ${event.start_date ? new Date(event.start_date).toLocaleDateString() : ""}
             `;
-            }
+            if (event.image_url) popupHTML += `<img src="${event.image_url}" style="width:100%;border-radius:6px;margin-top:6px">`;
+            if (event.slug) popupHTML += `<br><a href="/events/${event.slug}" target="_blank">View Details</a>`;
+            popupHTML += `</div>`;
 
-            if (event.slug) {
-                popupContent += `
-                <a href="/events/${event.slug}" target="_blank"
-                   style="color:#2563eb; text-decoration:underline;">
-                   عرض التفاصيل →
-                </a>
-            `;
-            }
-
-            popupContent += `</div>`;
-
-            marker.bindPopup(popupContent, {
-                maxWidth: 260,
-                className: 'custom-event-popup'
-            });
-
-            marker.addTo(this.eventMarkersLayer);
+            marker.setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(popupHTML));
+            this.eventMarkers.push(marker);
         });
 
-        // ضبط الخريطة لتشمل كل الدبابيس (اختياري)
-        if (events.length > 1 && this.eventMarkersLayer) {
-            const group = L.featureGroup(this.eventMarkersLayer.getLayers());
-            targetMap.fitBounds(group.getBounds(), { padding: [60, 60] });
+        if (events.length > 1) {
+            const bounds = new maplibregl.LngLatBounds();
+            events.forEach(event => {
+                const lat = parseFloat(event.lattitude);
+                const lng = parseFloat(event.langitude);
+                if (!isNaN(lat) && !isNaN(lng)) bounds.extend([lng, lat]);
+            });
+            if (bounds.isValid()) targetMap.fitBounds(bounds, { padding: 60 });
         }
     }
 }

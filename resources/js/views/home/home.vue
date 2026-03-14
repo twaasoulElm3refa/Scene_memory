@@ -1,9 +1,9 @@
 <template>
     <div class="min-h-screen bg-gray-50 font-sans">
-        <!-- Hero Map Section -->
         <div class="relative h-[500px] md:h-[600px] bg-gray-900 overflow-hidden">
-            <div id="map" class="absolute inset-0 bg-cover bg-center opacity-70"></div>
-            <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"></div>
+            <div id="map" class="absolute inset-0"></div>
+            <div class="absolute inset-0 bg-black/20 flex items-center justify-center z-10 pointer-events-none">
+            </div>
         </div>
 
         <!-- شريط الفلاتر -->
@@ -304,66 +304,68 @@ const formatDate = (dateStr) => {
 };
 
 // ====================== Add Markers to Map ======================
-const addEventMarkers = (events, targetMap, layerRef) => {
-    if (!targetMap) return;
+// const addEventMarkers = (events, targetMap, layerRef) => {
+//     if (!targetMap) return;
 
-    if (layerRef.value) {
-        layerRef.value.clearLayers();
-    } else {
-        layerRef.value = L.layerGroup().addTo(targetMap);
-    }
+//     if (layerRef.value) {
+//         layerRef.value.clearLayers();
+//     } else {
+//         layerRef.value = L.layerGroup().addTo(targetMap);
+//     }
 
-    if (!events?.length) return;
+//     if (!events?.length) return;
 
-    events.forEach((event) => {
-        const lat = parseFloat(event.lattitude);
-        const lng = parseFloat(event.langitude);
+//     events.forEach((event) => {
+//         const lat = parseFloat(event.lattitude);
+//         const lng = parseFloat(event.langitude);
 
-        if (isNaN(lat) || isNaN(lng)) return;
+//         if (isNaN(lat) || isNaN(lng)) return;
 
-        const marker = L.marker([lat, lng]);
+//         const marker = L.marker([lat, lng]);
 
-        let popupContent = `
-        <div class="text-right min-w-[180px]">
-        <h3 class="font-bold text-base mb-1">${event.title || "فعالية بدون عنوان"}</h3>
-        <p class="text-sm text-gray-600 mb-2">
-        ${event.start_date ? formatDate(event.start_date) : "التاريخ غير محدد"}
-        </p>
-        `;
+//         let popupContent = `
+//         <div class="text-right min-w-[180px]">
+//         <h3 class="font-bold text-base mb-1">${event.title || "فعالية بدون عنوان"}</h3>
+//         <p class="text-sm text-gray-600 mb-2">
+//         ${event.start_date ? formatDate(event.start_date) : "التاريخ غير محدد"}
+//         </p>
+//         `;
 
-        if (event.image_url) {
-            popupContent += `
-            <img src="${event.image_url}" alt="${event.title}" class="w-full h-28 object-cover rounded mb-2">
-            `;
-        }
+//         if (event.image_url) {
+//             popupContent += `
+//             <img src="${event.image_url}" alt="${event.title}" class="w-full h-28 object-cover rounded mb-2">
+//             `;
+//         }
 
-        popupContent += `
-        <p class="text-sm mb-2">${event.city || "غير محدد"}</p>
-        <a href="/single_event/${event.slug}" class="text-blue-600 hover:underline text-sm font-medium">
-        عرض التفاصيل →
-        </a>
-        </div>
-        `;
+//         popupContent += `
+//         <p class="text-sm mb-2">${event.city || "غير محدد"}</p>
+//         <a href="/single_event/${event.slug}" class="text-blue-600 hover:underline text-sm font-medium">
+//         عرض التفاصيل →
+//         </a>
+//         </div>
+//         `;
 
-        marker.bindPopup(popupContent, {
-            maxWidth: 240,
-            className: "custom-event-popup",
-        });
+//         marker.bindPopup(popupContent, {
+//             maxWidth: 240,
+//             className: "custom-event-popup",
+//         });
 
-        marker.addTo(layerRef.value);
-    });
+//         marker.addTo(layerRef.value);
+//     });
 
-    const markers = layerRef.value.getLayers();
+//     const markers = layerRef.value.getLayers();
 
-    if (markers.length > 1) {
-        const group = L.featureGroup(markers);
-        const bounds = group.getBounds();
+//     if (markers.length > 1) {
+//         const group = L.featureGroup(markers);
+//         const bounds = group.getBounds();
 
-        if (bounds.isValid()) {
-            targetMap.fitBounds(bounds, { padding: [60, 60] });
-        }
-    }
-};
+//         if (bounds.isValid()) {
+//             targetMap.fitBounds(bounds, { padding: [60, 60] });
+//         }
+//     }
+// };
+
+
 // ====================== Lifecycle ======================
 onMounted(async () => {
     mapService = new MapService(marker);
@@ -486,9 +488,6 @@ const handleMarkerEvents = (e) => {
         translation: ev.translation,
     }));
 
-    if (mapService?.map) {
-        addEventMarkers(displayedEvents.value, mapService.map, eventMarkersLayer);
-    }
     if (fullscreen.value && mapService?.fullMap) {
         addEventMarkers(displayedEvents.value, mapService.fullMap, fullEventMarkersLayer);
     }
@@ -544,6 +543,11 @@ const closeFullscreen = () => {
     font-weight: 500;
     transition: all 0.2s;
     min-width: 90px;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
 }
 
 .btn-small:hover:not(:disabled) {
