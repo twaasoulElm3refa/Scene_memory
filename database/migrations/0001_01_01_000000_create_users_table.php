@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->string('position')->nullable();
             $table->string('date_of_birth')->nullable();
-            $table->string('role')->default('user');
+            $table->enum('role',['admin', 'user', 'creator'])->default('user');
             $table->string('email')->unique();
             $table->boolean('is_active')->default(true)->nullable();
             $table->timestamp('email_verified_at')->nullable();

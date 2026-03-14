@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Events::class,'event_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('url')->nullable();
             $table->string('is_active')->default(false)->nullable();
+            $table->enum('licence_type',['free', 'plan1', 'plan2'])->default(false)->nullable();
             $table->timestamps();
         });
     }

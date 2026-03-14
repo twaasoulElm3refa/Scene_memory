@@ -1,46 +1,62 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
+if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
+    maplibregl.setRTLTextPlugin("/mapbox-gl-rtl-text.min.js", null, true);
+}
+
+// ─────────────────────────────────────────────
+// Constants
+// ─────────────────────────────────────────────
+const STYLE_URL      = "https://tiles.openfreemap.org/styles/liberty";
+const STYLE_LS_KEY   = "mapservice_style_cache_v2"; // bump version to bust cache
+const STYLE_TTL_MS   = 24 * 60 * 60 * 1000;         // 1 day
+const GEOCODE_DEBOUNCE_MS = 600;
+
 export default class MapService {
     constructor(markerRef) {
         this.markerRef = markerRef;
-        this.map = null;
-        this.marker = null;
-        this.fullMap = null;
+        this.map        = null;
+        this.marker     = null;
+        this.fullMap    = null;
         this.fullMarker = null;
         this.eventMarkers = [];
 
-        // caches
-        this.reverseGeocodeCache = new Map(); // key = `${lat},${lng}`, value = {city, state}
-        this.cityEventCache = new Map(); // key = city, value = events array
+        this.reverseGeocodeCache = new Map();
+        this.cityEventCache      = new Map();
+
+        // In-memory style cache (lang → style object)
+        this._styleCache = {};
+
+        // Single shared style-fetch promise to prevent duplicate requests
+        this._styleFetchPromise = null;
+
+        // Debounce timer for reverse geocoding
+        this._geocodeTimer = null;
+
+        const stored = localStorage.getItem("language") || "ar";
+        this._currentLang = stored === "ar" ? "ar" : "en";
+
+        // Kick off style prefetch immediately so it's ready before the map opens
+        this._prefetchStyle();
     }
 
+    // ─────────────────────────────────────────────
+    // Public API
+    // ─────────────────────────────────────────────
+
     initMap(mapId, zoom = 10) {
-        this.map = new maplibregl.Map({
-            container: mapId,
-            style: this._getStyle(),
-            center: [this.markerRef.value.lng, this.markerRef.value.lat],
-            zoom: zoom,
-        });
-
-        this.map.addControl(new maplibregl.NavigationControl());
-
-        this.map.on("load", () => {
+        this._buildMap(mapId, zoom).then(map => {
+            this.map = map;
+            this.map.addControl(new maplibregl.NavigationControl());
             this._addDraggableMarker(this.map, false);
         });
     }
 
     openFullscreen(mapId, zoom = 12) {
-        this.fullMap = new maplibregl.Map({
-            container: mapId,
-            style: this._getStyle(),
-            center: [this.markerRef.value.lng, this.markerRef.value.lat],
-            zoom: zoom,
-        });
-
-        this.fullMap.addControl(new maplibregl.NavigationControl());
-
-        this.fullMap.on("load", () => {
+        this._buildMap(mapId, zoom).then(map => {
+            this.fullMap = map;
+            this.fullMap.addControl(new maplibregl.NavigationControl());
             this._addDraggableMarker(this.fullMap, true);
         });
     }
@@ -48,37 +64,187 @@ export default class MapService {
     closeFullscreen() {
         if (this.fullMap) {
             this.fullMap.remove();
-            this.fullMap = null;
+            this.fullMap    = null;
             this.fullMarker = null;
         }
     }
 
-    _getStyle() {
-        const MAPTILER_KEY = "YU0yOJ7Mluv9CxBIa97r";
-        const lang = localStorage.getItem("language") || "ar";
-        return `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}&language=${lang}`;
+    setLocation(lat, lng) {
+        this._updateLocation(lat, lng);
+        this._debouncedReverseGeocode(lat, lng);
     }
 
+    addEventMarkers(events, targetMap = this.map) {
+        // Remove old markers
+        this.eventMarkers.forEach(m => m.remove());
+        this.eventMarkers = [];
+
+        if (!events?.length) return;
+
+        const isAr    = this._currentLang === "ar";
+        const bounds  = new maplibregl.LngLatBounds();
+        let   validCount = 0;
+
+        // Build all markers in one loop (no second pass for bounds)
+        const fragment = events.map(event => {
+            const lat = parseFloat(event.lattitude);
+            const lng = parseFloat(event.langitude);
+            if (isNaN(lat) || isNaN(lng)) return null;
+
+            bounds.extend([lng, lat]);
+            validCount++;
+
+            const el     = this._createEventMarkerEl();
+            const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
+                .setLngLat([lng, lat])
+                .addTo(targetMap);
+
+            marker.setPopup(
+                new maplibregl.Popup({ offset: 25 }).setHTML(
+                    this._buildPopupHTML(event, isAr)
+                )
+            );
+
+            return marker;
+        }).filter(Boolean);
+
+        this.eventMarkers = fragment;
+
+        if (validCount > 1 && bounds.isValid()) {
+            targetMap.fitBounds(bounds, { padding: 60 });
+        }
+    }
+
+    // ═══════════════════════════════════════════════
+    // Private — Style with Persistent LS Cache
+    // ═══════════════════════════════════════════════
+
+    /** Fire-and-forget prefetch on construction */
+    _prefetchStyle() {
+        this._getOrFetchStyle(this._currentLang).catch(() => {});
+    }
+
+    async _getOrFetchStyle(lang) {
+        // 1. In-memory hit (fastest)
+        if (this._styleCache[lang]) {
+            return this._deepClone(this._styleCache[lang]);
+        }
+
+        // 2. localStorage hit (survives page reloads)
+        const fromLS = this._loadStyleFromLS(lang);
+        if (fromLS) {
+            this._styleCache[lang] = fromLS;
+            return this._deepClone(fromLS);
+        }
+
+        // 3. Only ONE network request at a time (deduplicate parallel calls)
+        if (!this._styleFetchPromise) {
+            this._styleFetchPromise = this._fetchAndCacheStyle(lang).finally(() => {
+                this._styleFetchPromise = null;
+            });
+        }
+
+        return this._styleFetchPromise;
+    }
+
+    async _fetchAndCacheStyle(lang) {
+        const response = await fetch(STYLE_URL);
+        if (!response.ok) throw new Error(`[MapService] Style fetch failed: ${response.status}`);
+
+        const style = await response.json();
+        this._patchStyleLanguage(style, lang);
+
+        // Save to in-memory cache
+        this._styleCache[lang] = this._deepClone(style);
+
+        // Save to localStorage with timestamp
+        try {
+            localStorage.setItem(
+                `${STYLE_LS_KEY}_${lang}`,
+                JSON.stringify({ ts: Date.now(), style })
+            );
+        } catch {
+            // Quota exceeded — silently skip LS persistence
+        }
+
+        return style;
+    }
+
+    _loadStyleFromLS(lang) {
+        try {
+            const raw = localStorage.getItem(`${STYLE_LS_KEY}_${lang}`);
+            if (!raw) return null;
+            const { ts, style } = JSON.parse(raw);
+            if (Date.now() - ts > STYLE_TTL_MS) {
+                localStorage.removeItem(`${STYLE_LS_KEY}_${lang}`);
+                return null;
+            }
+            return style;
+        } catch {
+            return null;
+        }
+    }
+
+    _patchStyleLanguage(style, lang) {
+        if (!style?.layers) return;
+
+        const isAr          = lang === "ar";
+        const langField     = isAr ? "name:ar" : "name:en";
+        const nameExpr      = ["coalesce", ["get", langField], ["get", "name"]];
+        const fontStack     = ["Noto Sans Regular"];
+        const skipPatterns  = ["road-shield", "road-number", "highway-shield"];
+
+        style.layers.forEach(layer => {
+            if (layer.type !== "symbol") return;
+            if (!layer.layout?.["text-field"]) return;
+            if (skipPatterns.some(p => layer.id.includes(p))) return;
+            layer.layout["text-field"] = nameExpr;
+            layer.layout["text-font"]  = fontStack;
+            if (isAr) layer.layout["text-writing-mode"] = ["horizontal"];
+        });
+
+        style.glyphs = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
+    }
+
+    // ═══════════════════════════════════════════════
+    // Private — Map Builder
+    // ═══════════════════════════════════════════════
+
+    async _buildMap(containerId, zoom) {
+        const style = await this._getOrFetchStyle(this._currentLang);
+
+        const map = new maplibregl.Map({
+            container: containerId,
+            style,
+            center: [this.markerRef.value.lng, this.markerRef.value.lat],
+            zoom,
+            // Performance tweaks
+            fadeDuration: 0,          // skip fade-in animation on tiles
+            trackResize:  true,
+        });
+
+        return new Promise(resolve => map.on("load", () => resolve(map)));
+    }
+
+    // ═══════════════════════════════════════════════
+    // Private — Marker & Location
+    // ═══════════════════════════════════════════════
+
     _addDraggableMarker(mapInstance, isFullscreen = false) {
-        const marker = new maplibregl.Marker({ draggable: true })
+        const marker = new maplibregl.Marker({ draggable: true, color: "#e53e3e" })
             .setLngLat([this.markerRef.value.lng, this.markerRef.value.lat])
             .addTo(mapInstance);
 
         if (isFullscreen) this.fullMarker = marker;
-        else this.marker = marker;
+        else              this.marker     = marker;
 
-        const updatePosition = (lngLat) => {
-            this._updateLocation(lngLat.lat, lngLat.lng);
-            this._reverseGeocode(lngLat.lat, lngLat.lng);
+        const handleMove = ({ lat, lng }) => {
+            this._updateLocation(lat, lng);
+            this._debouncedReverseGeocode(lat, lng);
         };
 
-        marker.on("dragend", () => updatePosition(marker.getLngLat()));
-        mapInstance.on("click", (e) => updatePosition(e.lngLat));
-    }
-
-    setLocation(lat, lng) {
-        this._updateLocation(lat, lng);
-        this._reverseGeocode(lat, lng);
+        marker.on("dragend", () => handleMove(marker.getLngLat()));
+        mapInstance.on("click", e => handleMove(e.lngLat));
     }
 
     _updateLocation(lat, lng) {
@@ -96,55 +262,74 @@ export default class MapService {
         }
     }
 
+    // ═══════════════════════════════════════════════
+    // Private — Reverse Geocode (debounced)
+    // ═══════════════════════════════════════════════
+
+    _debouncedReverseGeocode(lat, lng) {
+        clearTimeout(this._geocodeTimer);
+        this._geocodeTimer = setTimeout(
+            () => this._reverseGeocode(lat, lng),
+            GEOCODE_DEBOUNCE_MS
+        );
+    }
+
     _reverseGeocode(lat, lng) {
-        const key = `${lat.toFixed(6)},${lng.toFixed(6)}`;
+        const key = `${lat.toFixed(5)},${lng.toFixed(5)}`; // ~1 m precision is enough
+
         if (this.reverseGeocodeCache.has(key)) {
-            const cached = this.reverseGeocodeCache.get(key);
-            this._setCityState(cached.city, cached.state);
-            if (cached.state) this._sendCityToBackend(cached.state);
-            else this._dispatchMarkerEvent([]);
+            const { city, state, stateEn } = this.reverseGeocodeCache.get(key);
+            this._setCityState(city, state);
+            stateEn ? this._sendCityToBackend(stateEn) : this._dispatchMarkerEvent([]);
             return;
         }
 
-        const backendLang = 'ar';
-        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&accept-language=${backendLang}`;
+        const fetchLang = lang =>
+            fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&accept-language=${lang}`,
+                { headers: { "User-Agent": "SceneMemoryApp/1.0" } }
+            ).then(r => r.json());
 
-        fetch(url, {
-            headers: { "User-Agent": "SceneMemoryApp (your-contact-email@example.com)" }
-        })
-            .then(res => {
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                return res.json();
-            })
-            .then(data => {
-                if (data.error) throw new Error(data.error);
+        // Fire both requests in parallel
+        Promise.all([fetchLang("ar"), fetchLang("en")])
+            .then(([arData, enData]) => {
+                const city    = this._extractCity(arData)  || this._extractCity(enData);
+                const state   = this._extractState(arData) || this._extractState(enData);
+                const stateEn = this._extractState(enData);
 
-                const addr = data.address || {};
-                let city = addr.city || addr.town || addr.village || addr.municipality || addr.hamlet || addr.suburb || addr.neighbourhood || addr.city_district || null;
-                let state = addr.state || addr.region || addr.province || addr.county || addr.state_district || null;
-
-                if (!city && data.display_name) {
-                    const parts = data.display_name.split(',').map(p => p.trim());
-                    if (parts.length >= 3) city = parts[parts.length - 3];
-                }
-
-                this.reverseGeocodeCache.set(key, { city, state });
+                this.reverseGeocodeCache.set(key, { city, state, stateEn });
                 this._setCityState(city, state);
-
-                if (state) this._sendCityToBackend(state);
-                else this._dispatchMarkerEvent([]);
+                stateEn ? this._sendCityToBackend(stateEn) : this._dispatchMarkerEvent([]);
             })
-            .catch(err => {
-                console.error("[Reverse Geocode] Error:", err);
+            .catch(() => {
                 this._setCityState(null, null);
                 this._dispatchMarkerEvent([]);
             });
     }
 
+    _extractCity(data) {
+        if (!data || data.error) return null;
+        const a = data.address || {};
+        return (
+            a.city || a.town || a.village || a.municipality ||
+            a.hamlet || a.suburb || a.neighbourhood || a.city_district || null
+        );
+    }
+
+    _extractState(data) {
+        if (!data || data.error) return null;
+        const a = data.address || {};
+        return a.state || a.region || a.province || a.county || a.state_district || null;
+    }
+
     _setCityState(city, state) {
-        this.markerRef.value.city = city;
+        this.markerRef.value.city  = city;
         this.markerRef.value.state = state;
     }
+
+    // ═══════════════════════════════════════════════
+    // Private — Backend & Events
+    // ═══════════════════════════════════════════════
 
     _sendCityToBackend(city) {
         if (this.cityEventCache.has(city)) {
@@ -152,11 +337,10 @@ export default class MapService {
             return;
         }
 
-        const encodedCity = encodeURIComponent(city);
-        fetch(`/api/v1/events/${encodedCity}/marker/search`, {
+        fetch(`/api/v1/events/${encodeURIComponent(city)}/marker/search`, {
             headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
+                Accept:            "application/json",
+                Authorization:     `Bearer ${localStorage.getItem("auth_token") || ""}`,
                 "Accept-Language": localStorage.getItem("language") || "ar",
             },
         })
@@ -166,9 +350,7 @@ export default class MapService {
                 this.cityEventCache.set(city, events);
                 this._dispatchMarkerEvent(events);
             })
-            .catch(() => {
-                this._dispatchMarkerEvent([]);
-            });
+            .catch(() => this._dispatchMarkerEvent([]));
     }
 
     _dispatchMarkerEvent(eventsArray) {
@@ -177,42 +359,80 @@ export default class MapService {
         );
     }
 
-    addEventMarkers(events, targetMap = this.map) {
-        this.eventMarkers.forEach(m => m.remove());
-        this.eventMarkers = [];
+    // ═══════════════════════════════════════════════
+    // Private — Popup HTML Builder (extracted to avoid rebuilding on each event)
+    // ═══════════════════════════════════════════════
 
-        if (!events?.length) return;
+    _buildPopupHTML(event, isAr) {
+        const fontFamily = isAr
+            ? "'Noto Sans Arabic', Tahoma, sans-serif"
+            : "sans-serif";
 
-        events.forEach(event => {
-            const lat = parseFloat(event.lattitude);
-            const lng = parseFloat(event.langitude);
-            if (isNaN(lat) || isNaN(lng)) return;
+        let html = `
+            <div style="
+                min-width:180px;
+                font-family:${fontFamily};
+                direction:${isAr ? "rtl" : "ltr"};
+                text-align:${isAr ? "right" : "left"};
+                unicode-bidi:embed;
+            ">
+                <strong>${event.title || (isAr ? "فعالية" : "Event")}</strong><br>
+                ${event.start_date
+                    ? new Date(event.start_date).toLocaleDateString(isAr ? "ar-EG" : "en-US")
+                    : ""}
+        `;
 
-            const marker = new maplibregl.Marker({ color: "#e53e3e" })
-                .setLngLat([lng, lat])
-                .addTo(targetMap);
-
-            let popupHTML = `
-                <div style="min-width:180px;font-family:sans-serif">
-                <strong>${event.title || "Event"}</strong><br>
-                ${event.start_date ? new Date(event.start_date).toLocaleDateString() : ""}
-            `;
-            if (event.image_url) popupHTML += `<img src="${event.image_url}" style="width:100%;border-radius:6px;margin-top:6px">`;
-            if (event.slug) popupHTML += `<br><a href="/events/${event.slug}" target="_blank">View Details</a>`;
-            popupHTML += `</div>`;
-
-            marker.setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(popupHTML));
-            this.eventMarkers.push(marker);
-        });
-
-        if (events.length > 1) {
-            const bounds = new maplibregl.LngLatBounds();
-            events.forEach(event => {
-                const lat = parseFloat(event.lattitude);
-                const lng = parseFloat(event.langitude);
-                if (!isNaN(lat) && !isNaN(lng)) bounds.extend([lng, lat]);
-            });
-            if (bounds.isValid()) targetMap.fitBounds(bounds, { padding: 60 });
+        if (event.image_url) {
+            html += `<img src="${event.image_url}" loading="lazy" style="width:100%;border-radius:6px;margin-top:6px">`;
         }
+
+        if (event.slug) {
+            html += `
+                <br>
+                <a href="/events/${event.slug}" target="_blank"
+                   style="color:#e53e3e;display:block;margin-top:4px">
+                    ${isAr ? "عرض التفاصيل" : "View Details"}
+                </a>`;
+        }
+
+        return html + "</div>";
+    }
+
+    // ═══════════════════════════════════════════════
+    // Private — Marker Element
+    // ═══════════════════════════════════════════════
+
+    _createEventMarkerEl() {
+        const el = document.createElement("div");
+        el.className = "map-event-marker"; // use a CSS class instead of inline style where possible
+        el.style.cssText = `
+            width:32px; height:32px;
+            background:#e53e3e;
+            border:3px solid #fff;
+            border-radius:50% 50% 50% 0;
+            transform:rotate(-45deg);
+            box-shadow:0 2px 8px rgba(0,0,0,0.35);
+            cursor:pointer;
+            will-change:transform;
+            transition:transform 0.15s ease;
+        `;
+        el.addEventListener("mouseenter", () => {
+            el.style.transform = "rotate(-45deg) scale(1.2)";
+        });
+        el.addEventListener("mouseleave", () => {
+            el.style.transform = "rotate(-45deg) scale(1)";
+        });
+        return el;
+    }
+
+    // ═══════════════════════════════════════════════
+    // Utils
+    // ═══════════════════════════════════════════════
+
+    _deepClone(obj) {
+        // structuredClone is faster than JSON parse/stringify where available
+        return typeof structuredClone === "function"
+            ? structuredClone(obj)
+            : JSON.parse(JSON.stringify(obj));
     }
 }

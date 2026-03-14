@@ -66,7 +66,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Wishlist::class,'user_id');
     }
-   
+
     public function contacts()
     {
         return $this->hasMany(contacts::class,'user_id');
@@ -85,6 +85,16 @@ class User extends Authenticatable
     public function likes()
     {
         return $this->hasMany(Likes::class,'user_id');
+    }
+
+    public function subscription()
+    {
+        return $this->hasMany(Subscriptions::class,'user_id');
+    }
+
+    public function licenceType()
+    {
+        return $this->belongsTo(licenceType::class,'user_id');
     }
 }
 
