@@ -1,2 +1,19 @@
 User-agent: *
-Disallow:
+
+# السماح بالصفحات العامة
+Allow: /
+Allow: /historical
+Allow: /all_events
+Allow: /single_event/
+
+# منع الصفحات الحساسة
+Disallow: /admin
+Disallow: /admin/
+Disallow: /auth
+Disallow: /profile
+Disallow: /api/
+Disallow: /v1/
+Disallow: /WishList
+
+# منع الزحف المفرط على الروابط الديناميكية
+Crawl-delay: 5

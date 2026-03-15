@@ -2,28 +2,32 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
-    maplibregl.setRTLTextPlugin("/mapbox-gl-rtl-text.min.js", null, true);
+    maplibregl.setRTLTextPlugin(
+        'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js',
+        null,
+        true
+    );
 }
 
 // ─────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────
-const STYLE_URL      = "https://tiles.openfreemap.org/styles/liberty";
-const STYLE_LS_KEY   = "mapservice_style_cache_v2";
-const STYLE_TTL_MS   = 24 * 60 * 60 * 1000;
+const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
+const STYLE_LS_KEY = "mapservice_style_cache_v2";
+const STYLE_TTL_MS = 24 * 60 * 60 * 1000;
 const GEOCODE_DEBOUNCE_MS = 600;
 
 export default class MapService {
     constructor(markerRef) {
         this.markerRef = markerRef;
-        this.map        = null;
-        this.marker     = null;
-        this.fullMap    = null;
+        this.map = null;
+        this.marker = null;
+        this.fullMap = null;
         this.fullMarker = null;
         this.eventMarkers = [];
 
         this.reverseGeocodeCache = new Map();
-        this.cityEventCache      = new Map();
+        this.cityEventCache = new Map();
         this._styleCache = {};
         this._styleFetchPromise = null;
         this._geocodeTimer = null;
@@ -51,7 +55,7 @@ export default class MapService {
     closeFullscreen() {
         if (this.fullMap) {
             this.fullMap.remove();
-            this.fullMap    = null;
+            this.fullMap = null;
             this.fullMarker = null;
         }
     }
@@ -67,9 +71,9 @@ export default class MapService {
 
         if (!events?.length) return;
 
-        const isAr    = this._currentLang === "ar";
-        const bounds  = new maplibregl.LngLatBounds();
-        let   validCount = 0;
+        const isAr = this._currentLang === "ar";
+        const bounds = new maplibregl.LngLatBounds();
+        let validCount = 0;
 
         const fragment = events.map(event => {
             const lat = parseFloat(event.lattitude);
@@ -79,7 +83,7 @@ export default class MapService {
             bounds.extend([lng, lat]);
             validCount++;
 
-            const el     = this._createEventMarkerEl();
+            const el = this._createEventMarkerEl();
             const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
                 .setLngLat([lng, lat])
                 .addTo(targetMap);
@@ -105,7 +109,7 @@ export default class MapService {
     // ─────────────────────────────────────────────
 
     _prefetchStyle() {
-        this._getOrFetchStyle(this._currentLang).catch(() => {});
+        this._getOrFetchStyle(this._currentLang).catch(() => { });
     }
 
     async _getOrFetchStyle(lang) {
@@ -142,7 +146,7 @@ export default class MapService {
                 `${STYLE_LS_KEY}_${lang}`,
                 JSON.stringify({ ts: Date.now(), style })
             );
-        } catch {}
+        } catch { }
 
         return style;
     }
@@ -165,18 +169,18 @@ export default class MapService {
     _patchStyleLanguage(style, lang) {
         if (!style?.layers) return;
 
-        const isAr          = lang === "ar";
-        const langField     = isAr ? "name:ar" : "name:en";
-        const nameExpr      = ["coalesce", ["get", langField], ["get", "name"]];
-        const fontStack     = ["Noto Sans Regular"];
-        const skipPatterns  = ["road-shield", "road-number", "highway-shield"];
+        const isAr = lang === "ar";
+        const langField = isAr ? "name:ar" : "name:en";
+        const nameExpr = ["coalesce", ["get", langField], ["get", "name"]];
+        const fontStack = ["Noto Sans Regular"];
+        const skipPatterns = ["road-shield", "road-number", "highway-shield"];
 
         style.layers.forEach(layer => {
             if (layer.type !== "symbol") return;
             if (!layer.layout?.["text-field"]) return;
             if (skipPatterns.some(p => layer.id.includes(p))) return;
             layer.layout["text-field"] = nameExpr;
-            layer.layout["text-font"]  = fontStack;
+            layer.layout["text-font"] = fontStack;
             if (isAr) layer.layout["text-writing-mode"] = ["horizontal"];
         });
 
@@ -196,7 +200,7 @@ export default class MapService {
             center: [this.markerRef.value.lng, this.markerRef.value.lat],
             zoom,
             fadeDuration: 0,
-            trackResize:  true,
+            trackResize: true,
         });
 
         return new Promise(resolve => map.on("load", () => resolve(map)));
@@ -212,7 +216,7 @@ export default class MapService {
             .addTo(mapInstance);
 
         if (isFullscreen) this.fullMarker = marker;
-        else              this.marker     = marker;
+        else this.marker = marker;
 
         const handleMove = ({ lat, lng }) => {
             this._updateLocation(lat, lng);
@@ -269,8 +273,8 @@ export default class MapService {
 
         Promise.all([fetchLang("ar"), fetchLang("en")])
             .then(([arData, enData]) => {
-                const city    = this._extractCity(arData)  || this._extractCity(enData);
-                const state   = this._extractState(arData) || this._extractState(enData);
+                const city = this._extractCity(arData) || this._extractCity(enData);
+                const state = this._extractState(arData) || this._extractState(enData);
                 const stateEn = this._extractState(enData);
 
                 this.reverseGeocodeCache.set(key, { city, state, stateEn });
@@ -300,7 +304,7 @@ export default class MapService {
     }
 
     _setCityState(city, state) {
-        this.markerRef.value.city  = city;
+        this.markerRef.value.city = city;
         this.markerRef.value.state = state;
     }
 
@@ -316,8 +320,8 @@ export default class MapService {
 
         fetch(`/api/v1/events/${encodeURIComponent(city)}/marker/search`, {
             headers: {
-                Accept:            "application/json",
-                Authorization:     `Bearer ${localStorage.getItem("auth_token") || ""}`,
+                Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
                 "Accept-Language": localStorage.getItem("language") || "ar",
             },
         })
@@ -355,8 +359,8 @@ export default class MapService {
             ">
                 <strong>${event.title || (isAr ? "فعالية" : "Event")}</strong><br>
                 ${event.start_date
-                    ? new Date(event.start_date).toLocaleDateString(isAr ? "ar-EG" : "en-US")
-                    : ""}
+                ? new Date(event.start_date).toLocaleDateString(isAr ? "ar-EG" : "en-US")
+                : ""}
         `;
 
         if (event.image_url) {
