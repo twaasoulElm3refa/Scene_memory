@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\footer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,12 +22,13 @@ class FooterController extends Controller
         $footer = Cache::remember($cache, $this->cacheTime, function () {
             return footer::find(1);
         });
+
         return $this->success($footer, 'footer data');
     }
 
     public function update(Request $request)
     {
-        $footer = Footer::findOrFail(1);
+        $footer = footer::findOrFail(1);
         $data = $request->except(['_token']);
         if ($request->hasFile('logo')) {
             if ($footer->logo && Storage::disk('public')->exists($footer->logo)) {
@@ -44,5 +46,8 @@ class FooterController extends Controller
     private function clearCache()
     {
         Cache::forget('footer');
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

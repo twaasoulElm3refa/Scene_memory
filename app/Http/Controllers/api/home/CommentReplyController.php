@@ -8,6 +8,7 @@ use App\Http\Requests\ReplyRequest;
 use App\Models\CommentReplies;
 use App\Models\comments;
 use App\Models\Events;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class CommentReplyController extends Controller
@@ -41,5 +42,8 @@ class CommentReplyController extends Controller
 
         // مسح cache التعليقات المرتبطة بالحدث
         Cache::tags(['comments'])->flush();
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

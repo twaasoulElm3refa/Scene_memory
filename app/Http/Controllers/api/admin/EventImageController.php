@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Events;
 use App\Models\eventsImges;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class EventImageController extends Controller
@@ -87,10 +88,13 @@ class EventImageController extends Controller
 
         // مسح كاش single event لكل اللغات
         if ($slug) {
-            $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+            $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
             foreach ($locales as $locale) {
                 Cache::forget("events_single_{$slug}_{$locale}");
             }
         }
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

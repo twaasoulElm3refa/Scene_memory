@@ -8,6 +8,7 @@ use App\Http\Requests\newsRequest;
 use App\Models\contactResponds;
 use App\Models\newsletters;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class NewsletterController extends Controller
@@ -50,5 +51,8 @@ class NewsletterController extends Controller
     private function clearCache($page = 1, $perPage = 5)
     {
         Cache::forget("categories:paginated:p{$page}:pp{$perPage}");
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

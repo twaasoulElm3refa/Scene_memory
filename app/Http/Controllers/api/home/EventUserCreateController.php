@@ -11,6 +11,7 @@ use App\Models\EventRequestCreate;
 use App\Models\Events;
 use App\Models\eventsImges;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -169,5 +170,8 @@ class EventUserCreateController extends Controller
         // Clear general counts & memories
         Cache::tags(['events'])->forget('events_count');
         Cache::tags(['events'])->forget('memories');
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

@@ -9,6 +9,7 @@ use App\Jobs\TranslateEventJob;
 use App\Models\Events;
 use App\Models\eventsImges;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -119,7 +120,7 @@ class EventAdminCreateController extends Controller
         }
 
         // مسح single event لكل اللغات
-        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
         foreach ($locales as $locale) {
             Cache::forget("events_single_{$slug}_{$locale}");
         }
@@ -127,5 +128,8 @@ class EventAdminCreateController extends Controller
         // مسح العدادات والذاكرة
         Cache::forget('events_count');
         Cache::forget('memories');
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

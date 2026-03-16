@@ -9,6 +9,7 @@ use App\Jobs\TranslateCommentJob;
 use App\Models\comments;
 use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class CommentController extends Controller
@@ -89,13 +90,13 @@ class CommentController extends Controller
 
             $comments = Cache::tags(['comments'])->remember($cacheKey, $this->cacheTime, function () use ($event) {
                 return comments::with([
-                        'translation:id,comment_id,locale,comment,created_at',
-                        'user:id,name',
-                    ])
+                    'translation:id,comment_id,locale,comment,created_at',
+                    'user:id,name',
+                ])
                     ->withCount([
-                        'interactions as support_count' => fn($q) => $q->where('type', 'support'),
-                        'interactions as exhibitions_count' => fn($q) => $q->where('type', 'Exhibitions'),
-                        'interactions as neutral_count' => fn($q) => $q->where('type', 'neutral'),
+                        'interactions as support_count' => fn ($q) => $q->where('type', 'support'),
+                        'interactions as exhibitions_count' => fn ($q) => $q->where('type', 'Exhibitions'),
+                        'interactions as neutral_count' => fn ($q) => $q->where('type', 'neutral'),
                     ])
                     ->where('event_id', $event->id)
                     ->latest()
@@ -114,5 +115,8 @@ class CommentController extends Controller
     private function clearCache($event_id)
     {
         Cache::tags(['comments'])->flush();
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

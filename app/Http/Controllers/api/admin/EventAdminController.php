@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Events;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -63,7 +64,7 @@ class EventAdminController extends Controller
         }
 
         // مسح الـ single event لكل اللغات
-        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
         foreach ($locales as $locale) {
             Cache::tags(['events'])->forget("events_single_{$slug}_{$locale}");
         }
@@ -71,5 +72,8 @@ class EventAdminController extends Controller
         // مسح العدادات والذاكرة
         Cache::tags(['events'])->forget('events_count');
         Cache::tags(['events'])->forget('memories');
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

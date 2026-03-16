@@ -9,6 +9,7 @@ use App\Models\CommentReport;
 use App\Models\comments;
 use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class CommentInteractionController extends Controller
@@ -104,5 +105,8 @@ class CommentInteractionController extends Controller
 
         // مسح كاش التعليقات الخاصة بالحدث
         Cache::tags(['comments'])->flush();
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

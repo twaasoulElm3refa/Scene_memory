@@ -5,9 +5,10 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\categoreyRequest;
-use App\Models\subCategorey;
 use App\Jobs\TranslateSubCategoryJob;
+use App\Models\subCategorey;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -27,9 +28,9 @@ class SubCategoriesCreateController extends Controller
                 }
 
                 return subCategorey::create([
-                    'name'        => $data['name'] ?? '',
-                    'image'       => $data['image'] ?? '',
-                    'slug'        => Str::slug($data['name']) . '-' . time(),
+                    'name' => $data['name'] ?? '',
+                    'image' => $data['image'] ?? '',
+                    'slug' => Str::slug($data['name']).'-'.time(),
                     'category_id' => $data['category_id'] ?? null,
                 ]);
             });
@@ -60,5 +61,8 @@ class SubCategoriesCreateController extends Controller
 
         // مسح الكاشات العامة للتصنيفات
         Cache::tags(['categories', 'subCategories'])->flush();
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }

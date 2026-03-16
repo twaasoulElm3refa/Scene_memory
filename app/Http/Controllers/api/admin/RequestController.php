@@ -9,6 +9,7 @@ use App\Mail\RejectMail;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
@@ -33,7 +34,7 @@ class RequestController extends Controller
                 return EventRequestCreate::with('events:id,title')->latest()->paginate($perPage);
             });
 
-            $countsKey = "requests:counts";
+            $countsKey = 'requests:counts';
             $counts = Cache::tags(['requests'])->remember($countsKey, $this->cacheTime, function () {
                 return [
                     'pending' => EventRequestCreate::where('status', 'pending')->count(),
@@ -149,5 +150,8 @@ class RequestController extends Controller
     {
         Cache::tags(['events'])->flush();
         Cache::tags(['requests'])->flush();
+        Artisan::call('queue:work', [
+            '--once' => true,
+        ]);
     }
 }
