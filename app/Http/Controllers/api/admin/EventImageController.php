@@ -15,61 +15,82 @@ class EventImageController extends Controller
 
     private $cacheTime = 600;
 
+    /**
+     * عرض كل الصور الخاصة بحدث محدد
+     */
     public function allPerEvent()
     {
-        $cacheKey = 'event_image'.$this->cacheTime;
-        $event = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return eventsImges::where('event_id', request('id'))->get();
+        $eventId = request('id');
+        $cacheKey = "event_image_event_{$eventId}";
+
+        $eventImages = Cache::remember($cacheKey, $this->cacheTime, function () use ($eventId) {
+            return eventsImges::where('event_id', $eventId)->get();
         });
 
-        return $this->success($event, 'Event data');
+        return $this->success($eventImages, 'Event images fetched successfully');
     }
 
+    /**
+     * إضافة صورة أو فيديو للحدث
+     */
     public function create(Request $request)
     {
-        $data = $request->all();
         try {
-            if ($request->hasFile('url')) {
-                $image = $request->file('url');
-                $data['url'] = $image->store('eventImages', 'public');
-            }
-            if ($request->hasFile('video')) {
-                $image = $request->file('video');
-                $data['video'] = $image->store('eventVideos', 'public');
-            }
-            $data['event_id'] = request('id');
-            $event = eventsImges::create($data);
-            $slug = Events::find(request('id'));
-            $data['slug'] = $slug->slug;
-            $this->clearCache($data['slug']);
+            $data = ['event_id' => request('id')];
 
-            return $this->success($event, 'Event Created Successfully');
+            if ($request->hasFile('url')) {
+                $data['url'] = $request->file('url')->store('eventImages', 'public');
+            }
+
+            if ($request->hasFile('video')) {
+                $data['video'] = $request->file('video')->store('eventVideos', 'public');
+            }
+
+            $eventImage = eventsImges::create($data);
+
+            $event = Events::findOrFail($data['event_id']);
+            $this->clearCache($event->id, $event->slug);
+
+            return $this->success($eventImage, 'Event media added successfully');
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
-
     }
 
+    /**
+     * حذف صورة أو فيديو
+     */
     public function delete()
     {
         try {
-            $event = eventsImges::findOrFail(request('id'));
-            $slug = Events::find($event->event_id);
-            $theSlug = $slug->slug;
-            $this->clearCache($theSlug);
-            $event->delete();
-            $this->clearCache();
+            $eventImage = eventsImges::findOrFail(request('id'));
+            $event = Events::findOrFail($eventImage->event_id);
 
-            return $this->success($event, 'Data Deleted Successfully');
+            $eventImage->delete();
+            $this->clearCache($event->id, $event->slug);
+
+            return $this->success($eventImage, 'Event media deleted successfully');
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
     }
 
-    private function clearCache($slug = '')
+    /**
+     * مسح الكاش الخاص بالحدث والصور
+     */
+    private function clearCache($eventId = null, $slug = null)
     {
-        Cache::forget('event_image'.$this->cacheTime);
-        cache::forget("events_single_{$slug}");
-        Cache::flush();
+        // مسح كاش الصور للحدث
+        if ($eventId) {
+            Cache::forget("event_image_event_{$eventId}");
+        }
+
+        // مسح كاش single event لكل اللغات
+        if ($slug) {
+            $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+            foreach ($locales as $locale) {
+                Cache::forget("events_single_{$slug}_{$locale}");
+            }
+        }
     }
 }

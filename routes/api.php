@@ -110,6 +110,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('events')->middleware(['throttle:45,1'])->group(function () {
         // Home Events
         Route::get('/', [EventController::class, 'all']);
+        Route::get('/daily', [EventController::class, 'daily']);
         Route::get('/historical', [EventController::class, 'historical']);
         Route::get('/count', [EventController::class, 'count']);
         Route::get('/memories', [EventController::class, 'memories']);
@@ -181,8 +182,8 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [MediaRequestController::class, 'all']);
-        Route::post('/approve/{id}', [MediaRequestController::class, 'approve'])->middleware(AdminMiddleware::class);
-        Route::post('/reject/{id}', [MediaRequestController::class, 'reject'])->middleware(AdminMiddleware::class);
+        // Route::post('/approve/{id}', [MediaRequestController::class, 'approve'])->middleware(AdminMiddleware::class);
+        // Route::post('/reject/{id}', [MediaRequestController::class, 'reject'])->middleware(AdminMiddleware::class);
         Route::post('/upload/{id}', [MediaRequestController::class, 'upload']);
     });
 

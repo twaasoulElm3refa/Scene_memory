@@ -134,7 +134,6 @@ class UserDashboardController extends Controller
         $cacheKey = 'my_events_user_id_'.$userId;
         Cache::forget($cacheKey);
         Cache::forget("events_single_{$slug}");
-        Cache::flush();
     }
 
     private function clearEventsCache($slug = null)

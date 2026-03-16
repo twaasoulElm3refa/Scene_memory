@@ -134,7 +134,7 @@ class ContactController extends Controller
 
     private function clearCache($page = 1, $perPage = 5)
     {
-        Cache::forget("categories:paginated:p{$page}:pp{$perPage}");
-        Cache::flush();
+        Cache::forget("contacts:paginated:p{$page}:pp{$perPage}");
+        Cache::forget('contacts:stats:quick');
     }
 }

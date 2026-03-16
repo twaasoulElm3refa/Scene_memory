@@ -20,37 +20,43 @@ class CountriesController extends Controller
     public function index()
     {
         $cacheKey = 'countries_index_'.app()->getLocale();
-        $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::with('translation')->get('id', 'code', 'image');
+
+        $countries = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () {
+            return Countries::with('translation')->get(['id', 'code', 'image']);
         });
-        if ($countries->count() == 0) {
+
+        if ($countries->isEmpty()) {
             return $this->error('No More countries', 404);
         }
 
         return $this->success($countries, 'All countries');
     }
+
     public function all()
     {
         $cacheKey = 'countries_index_all';
-        $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
+
+        $countries = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () {
             return Countries::get(['id','name', 'code', 'image']);
         });
-        if ($countries->count() == 0) {
+
+        if ($countries->isEmpty()) {
             return $this->error('No More countries', 404);
         }
 
         return $this->success($countries, 'All countries');
     }
 
-   
     public function paginated()
     {
         $page = request('page', 1);
         $cacheKey = "countries_index_page_{$page}";
-        $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
+
+        $countries = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () {
             return Countries::with('translation')->paginate(15);
         });
-        if ($countries->count() == 0) {
+
+        if ($countries->isEmpty()) {
             return $this->error('No More countries', 404);
         }
 
@@ -60,36 +66,48 @@ class CountriesController extends Controller
     public function cities()
     {
         $countryId = request('id');
-        $cacheKey = "countries_single_{$countryId}".app()->getLocale();
-        $cities = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Cities::with('translation')->where('country_id', request('id'))->get();
+        $cacheKey = "countries_single_{$countryId}_cities_".app()->getLocale();
+
+        $cities = Cache::tags(['countries', 'cities'])->remember($cacheKey, $this->cacheTime, function () use ($countryId) {
+            return Cities::with('translation')->where('country_id', $countryId)->get();
         });
-         return $this->success($cities, 'All cities');
+
+        return $this->success($cities, 'All cities');
     }
 
     public function single()
     {
         $countryId = request('id');
         $cacheKey = "countries_single_{$countryId}";
-        $countries = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return Countries::with(['cities.translation'])->find(request('id'));
+
+        $country = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () use ($countryId) {
+            return Countries::with(['cities.translation'])->find($countryId);
         });
-        if (! $countries) {
+
+        if (! $country) {
             return $this->error('No More countries', 404);
         }
-        $users = User::where('country', $countries->name)->count();
-        $countryCities = $countries->cities->pluck('id');
-        $countCities = count($countries->cities);
+
+        $users = User::where('country', $country->name)->count();
+        $countryCities = $country->cities->pluck('id');
+        $countCities = $countryCities->count();
         $countevents = Events::whereIn('city_id', $countryCities)->count();
         $events = Events::whereIn('city_id', $countryCities)->paginate(5);
 
-        return $this->success(['countries' => $countries, 'events' => $events, 'cities' => $countCities, 'users' => $users, 'countevents' => $countevents], 'category');
+        return $this->success([
+            'country' => $country,
+            'events' => $events,
+            'cities' => $countCities,
+            'users' => $users,
+            'countevents' => $countevents
+        ], 'Country data');
     }
 
     public function count()
     {
         $cacheKey = 'countries_count';
-        $count = Cache::remember($cacheKey, $this->cacheTime, function () {
+
+        $count = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () {
             return Countries::count();
         });
 
@@ -99,16 +117,18 @@ class CountriesController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->only(['name', 'image']);
+
         try {
             $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
+
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('countries', 'public');
             }
+
             $country = Countries::findOrFail($id);
             $country->update($data);
-            Cache::forget("countries_single_{$id}");
-            Cache::forget('countries_count');
-            Cache::flush();
+
+            $this->clearCache($id);
 
             return $this->success($country, 'Country Updated Successfully');
         } catch (\Exception $e) {
@@ -120,10 +140,20 @@ class CountriesController extends Controller
     {
         $country = Countries::findOrFail(request('id'));
         $country->delete();
-        Cache::forget("countries_single_{$country->id}");
-        Cache::forget('countries_count');
-        Cache::flush();
+
+        $this->clearCache($country->id);
 
         return $this->success($country, 'Country Deleted Successfully');
+    }
+
+    private function clearCache($id = null)
+    {
+        // مسح كل الكاشات المتعلقة بالدول
+        Cache::tags(['countries'])->flush();
+
+        if ($id) {
+            // مسح الكاشات المرتبطة بالمدن الخاصة بالدولة
+            Cache::tags(['cities'])->flush();
+        }
     }
 }

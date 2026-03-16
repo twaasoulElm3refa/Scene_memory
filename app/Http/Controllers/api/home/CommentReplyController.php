@@ -16,22 +16,30 @@ class CommentReplyController extends Controller
 
     public function create(ReplyRequest $request)
     {
-        $comment=comments::find(request("id"));
-        $event=Events::find($comment->event_id);
+        $comment = comments::findOrFail(request('id'));
+        $event = Events::findOrFail($comment->event_id);
+
         $data = $request->validated();
         $data['user_id'] = auth()->id();
-        $data['comment_id'] = request('id');
+        $data['comment_id'] = $comment->id;
+
         $reply = CommentReplies::create($data);
+
+        // مسح cache الحدث + التعليقات
         $this->clearCache($event->slug);
-        return $this->success($reply, 'Comment Created Successfully');
+
+        return $this->success($reply, 'Reply Created Successfully');
     }
 
     private function clearCache($slug = '')
     {
+        // مسح cache الحدث الفردي لكل اللغات
         $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
         foreach ($locales as $locale) {
-            Cache::forget("events_single_{$slug}_".$locale);
+            Cache::tags(['events'])->forget("events_single_{$slug}_".$locale);
         }
-        Cache::flush();
+
+        // مسح cache التعليقات المرتبطة بالحدث
+        Cache::tags(['comments'])->flush();
     }
 }

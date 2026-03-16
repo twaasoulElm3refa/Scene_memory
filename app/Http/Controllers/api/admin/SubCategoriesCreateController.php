@@ -6,7 +6,6 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\categoreyRequest;
 use App\Models\subCategorey;
-use App\Models\SubCategoreyTranslations;
 use App\Jobs\TranslateSubCategoryJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -22,31 +21,24 @@ class SubCategoriesCreateController extends Controller
         $data = $request->validated();
 
         try {
-
             $subCategory = DB::transaction(function () use ($data, $request) {
-
                 if ($request->hasFile('image')) {
-                    $data['image'] = $request->file('image')
-                        ->store('sub_categories', 'public');
+                    $data['image'] = $request->file('image')->store('sub_categories', 'public');
                 }
 
-                $subCategory = subCategorey::create([
+                return subCategorey::create([
                     'name'        => $data['name'] ?? '',
                     'image'       => $data['image'] ?? '',
                     'slug'        => Str::slug($data['name']) . '-' . time(),
                     'category_id' => $data['category_id'] ?? null,
                 ]);
-                return $subCategory;
             });
 
-            TranslateSubCategoryJob::dispatch(
-                $subCategory->id,
-                $data['name']
-            );
+            // Dispatch job for translation
+            TranslateSubCategoryJob::dispatch($subCategory->id, $data['name']);
 
-            $this->clearCache();
-
-            Cache::increment('categories_cache_version');
+            // مسح كل كاش التصنيفات
+            $this->clearAllCategoriesCache();
 
             return $this->success(
                 $subCategory->load('translations'),
@@ -54,16 +46,19 @@ class SubCategoriesCreateController extends Controller
             );
 
         } catch (\Exception $e) {
-
             return $this->error($e->getMessage());
         }
     }
 
-    private function clearCache()
+    /**
+     * مسح كل الكاشات المتعلقة بالتصنيفات والـ sub-categories
+     */
+    private function clearAllCategoriesCache()
     {
-        for ($i = 0; $i < 10; $i++) {
-            $cacheKey = "categories:paginated:v1:p{$i}:pp4";
-            Cache::forget($cacheKey);
-        }
+        // زيادة نسخة الكاش لتحديث كل pagination تلقائي
+        Cache::increment('categories_cache_version');
+
+        // مسح الكاشات العامة للتصنيفات
+        Cache::tags(['categories', 'subCategories'])->flush();
     }
 }

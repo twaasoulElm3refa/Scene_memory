@@ -44,6 +44,5 @@ class FooterController extends Controller
     private function clearCache()
     {
         Cache::forget('footer');
-        Cache::flush();
     }
 }

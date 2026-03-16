@@ -50,7 +50,6 @@ class CountriesCreateController extends Controller
             for( $i = 0; $i < 10; $i++ ) {
                 Cache::forget("countries_index_page_{$i}");
             }
-            Cache::flush();
 
             return $this->success(
                 $country->load('translations'),

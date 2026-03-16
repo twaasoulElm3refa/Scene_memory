@@ -8,7 +8,6 @@ use App\Http\Requests\categoreyRequest;
 use App\Jobs\TranslateCategoryJob;
 use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -20,24 +19,24 @@ class CategoriesCreateController extends Controller
     public function create(categoreyRequest $request): JsonResponse
     {
         $data = $request->validated();
+
         try {
             $category = DB::transaction(function () use ($data, $request) {
                 if ($request->hasFile('image')) {
-                    $data['image'] = $request->file('image')
-                        ->store('categories', 'public');
+                    $data['image'] = $request->file('image')->store('categories', 'public');
                 }
-                $category = Categories::create([
-                    'name' => $data['name'] ?? '',
-                    'image' => $data['image'] ?? '',
-                    'slug' => Str::slug($data['name']).'-'.time(),
-                ]);
 
-                return $category;
+                return Categories::create([
+                    'name'  => $data['name'] ?? '',
+                    'image' => $data['image'] ?? '',
+                    'slug'  => Str::slug($data['name']) . '-' . time(),
+                ]);
             });
-            TranslateCategoryJob::dispatch(
-                $category->id,
-                $data['name']
-            );
+
+            // Dispatch translation job
+            TranslateCategoryJob::dispatch($category->id, $data['name']);
+
+            // Clear cache after creation
             $this->clearAllCategoriesCache();
 
             return $this->success(
@@ -46,22 +45,19 @@ class CategoriesCreateController extends Controller
             );
 
         } catch (\Exception $e) {
-
             return $this->error($e->getMessage());
         }
     }
 
+    /**
+     * Clear all cache related to categories
+     */
     protected function clearAllCategoriesCache(): void
     {
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-        foreach ($locales as $locale) {
-            Cache::forget('categories:index:all_'.$locale);
-        }
-        for ($i = 0; $i < 2; $i++) {
-            Artisan::call('queue:listen', [
-                '--once' => true,
-            ]);
-        }
-        Cache::flush();
+        // Increase version to invalidate paginated cache automatically
+        Cache::increment('categories:version', 1);
+
+        // Flush all category-related cache using tags
+        Cache::tags(['categories'])->flush();
     }
 }

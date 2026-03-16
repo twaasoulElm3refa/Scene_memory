@@ -23,17 +23,16 @@ class EventAdminCreateController extends Controller
         unset($data['urls']);
 
         try {
-
             $event = DB::transaction(function () use ($data, $request) {
                 $data['slug'] = Str::slug($data['title'])
                                 .'-'.Str::random(5)
                                 .'-'.time();
                 $data['user_id'] = auth()->id();
                 $event = Events::create($data);
+
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $path = $file->store('Photos', 'public');
-
                         eventsImges::create([
                             'event_id' => $event->id,
                             'url' => $path,
@@ -43,11 +42,14 @@ class EventAdminCreateController extends Controller
 
                 return $event;
             });
+
             TranslateEventJob::dispatch(
                 $event->id,
                 $data['title'],
-                $data['description'], app()->getLocale()
+                $data['description'],
+                app()->getLocale()
             );
+
             $this->clearEventsCache($event->slug);
 
             return $this->success(
@@ -63,19 +65,19 @@ class EventAdminCreateController extends Controller
     {
         $data = $request->validated();
         unset($data['urls']);
+
         try {
             $event = DB::transaction(function () use ($data, $request) {
                 $data['slug'] = Str::slug($data['title'])
                                 .'-'.Str::random(5)
                                 .'-'.time();
-
                 $data['user_id'] = auth()->id();
                 $data['is_historical'] = 1;
                 $event = Events::create($data);
+
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $path = $file->store('Photos', 'public');
-
                         eventsImges::create([
                             'event_id' => $event->id,
                             'url' => $path,
@@ -89,7 +91,8 @@ class EventAdminCreateController extends Controller
             TranslateEventJob::dispatch(
                 $event->id,
                 $data['title'],
-                $data['description'], app()->getLocale()
+                $data['description'],
+                app()->getLocale()
             );
 
             $this->clearEventsCache($event->slug);
@@ -98,21 +101,30 @@ class EventAdminCreateController extends Controller
                 $event->load('translations', 'photos'),
                 'Event Created Successfully'
             );
-
         } catch (\Throwable $th) {
-
             return $this->error($th->getMessage());
         }
     }
+
+    /**
+     * مسح كل كاشات الأحداث بعد إنشاء أي حدث
+     */
     private function clearEventsCache($slug = null)
     {
         $perPage = 8;
 
+        // مسح صفحات pagination
         for ($page = 1; $page <= 10; $page++) {
             Cache::forget("events_page_{$page}_per_{$perPage}");
         }
 
-        Cache::forget("events_single_{$slug}");
+        // مسح single event لكل اللغات
+        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+        foreach ($locales as $locale) {
+            Cache::forget("events_single_{$slug}_{$locale}");
+        }
+
+        // مسح العدادات والذاكرة
         Cache::forget('events_count');
         Cache::forget('memories');
     }

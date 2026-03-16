@@ -8,6 +8,7 @@ use App\Models\Cities;
 use App\Models\Events;
 use App\Models\eventsImges;
 use App\Models\EventViews;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -140,7 +141,7 @@ class EventController extends Controller
                 'translation',
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)
-                    ->with('user:id,name', 'translation','replies', 'replies.user:id,name'),
+                    ->with('user:id,name', 'translation', 'replies', 'replies.user:id,name'),
 
             ])->withCount('comments')->withCount('likes')->withCount('views')
                 ->where('slug', $slug)
@@ -188,5 +189,23 @@ class EventController extends Controller
     public function getImageAttribute($value)
     {
         return $value ?: 'https://via.placeholder.com/300x200?text=Event+Image';
+    }
+
+    public function daily()
+    {
+        $cacheKey = 'daily_events_'.app()->getLocale();
+        $today = Carbon::today();
+        $daily = Cache::remember($cacheKey, $this->cacheTime, function () use ($today) {
+            return Events::where('is_active', 1)
+                ->where(function ($query) use ($today) {
+                    $query->whereDate('start_date', $today)
+                        ->orWhereDate('created_at', $today);
+                })
+                ->select('id', 'slug', 'title', 'start_date', 'end_date')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        });
+
+        return $this->success($daily, 'Daily events');
     }
 }

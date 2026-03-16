@@ -8,7 +8,6 @@ use App\Mail\ApproveMail;
 use App\Mail\RejectMail;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -17,51 +16,81 @@ class RequestController extends Controller
 {
     use ApiResponse;
 
-    private $cacheTime = 600;
+    private $cacheTime = 60 * 60;
 
+    /**
+     * عرض كل الـ requests مع pagination + counts
+     */
     public function allPaginated()
     {
         try {
-            $cacheKey = 'requests_page_'.request('page', 1);
-            $requests = Cache::remember($cacheKey, $this->cacheTime, function () {
-                return EventRequestCreate::with('events:id,title')->latest()->paginate(5);
-            });
-            $PendingCounts = EventRequestCreate::where('status', 'pending')->count();
-            $approvedCounts = EventRequestCreate::where('status', 'approved')->count();
-            $rejectedCounts = EventRequestCreate::where('status', 'rejected')->count();
+            $page = request('page', 1);
+            $perPage = 5;
 
-            return $this->success(['requests' => $requests,
-                'PendingCounts' => $PendingCounts,
-                'approvedCounts' => $approvedCounts,
-                'rejectedCounts' => $rejectedCounts],
-                'All requests');
+            $cacheKey = "requests:page_{$page}:per_{$perPage}";
+
+            $requests = Cache::tags(['requests'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
+                return EventRequestCreate::with('events:id,title')->latest()->paginate($perPage);
+            });
+
+            $countsKey = "requests:counts";
+            $counts = Cache::tags(['requests'])->remember($countsKey, $this->cacheTime, function () {
+                return [
+                    'pending' => EventRequestCreate::where('status', 'pending')->count(),
+                    'approved' => EventRequestCreate::where('status', 'approved')->count(),
+                    'rejected' => EventRequestCreate::where('status', 'rejected')->count(),
+                ];
+            });
+
+            return $this->success([
+                'requests' => $requests,
+                'PendingCounts' => $counts['pending'],
+                'approvedCounts' => $counts['approved'],
+                'rejectedCounts' => $counts['rejected'],
+            ], 'All requests');
+
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
     }
 
+    /**
+     * عرض request واحد مع بيانات الحدث المرتبط
+     */
     public function show($id)
     {
         try {
-            $request = EventRequestCreate::find($id)->select('id', 'event_id', 'status')->first();
-            $event = Events::with('city:id,name', 'sub_categorey:id,name', 'user:id,name','firstImage','adminTranslation')->where('id', $request->event_id)->first();
+            $request = EventRequestCreate::select('id', 'event_id', 'status')->find($id);
+            if (! $request) {
+                return $this->error('Request not found', 404);
+            }
 
-            return $this->success(['request' => $request, 'event' => $event], 'request');
+            $event = Events::with('city:id,name', 'sub_categorey:id,name', 'user:id,name', 'firstImage', 'adminTranslation')
+                ->find($request->event_id);
+
+            return $this->success(['request' => $request, 'event' => $event], 'Request retrieved');
+
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
     }
 
+    /**
+     * اعتماد request وتفعيل الحدث
+     */
     public function approve($request_id)
     {
         try {
-            $request = EventRequestCreate::find($request_id);
+            $request = EventRequestCreate::findOrFail($request_id);
             $request->status = 'approved';
             $request->save();
-            $event = Events::find($request->event_id);
+
+            $event = Events::findOrFail($request->event_id);
             $event->is_active = 1;
             $event->save();
+
             $this->clearEventsCache();
+
             Mail::to($event->user->email)->send(new ApproveMail($event));
 
             return $this->success($request, 'Request Approved Successfully');
@@ -70,16 +99,22 @@ class RequestController extends Controller
         }
     }
 
-    public function decline(Request $req,$request_id)
+    /**
+     * رفض request
+     */
+    public function decline(Request $req, $request_id)
     {
         try {
-            $request = EventRequestCreate::find($request_id);
+            $request = EventRequestCreate::findOrFail($request_id);
             $request->status = 'rejected';
             $request->save();
-            $event = Events::find($request->event_id);
+
+            $event = Events::findOrFail($request->event_id);
+
             $this->clearEventsCache();
-            $reason=$req->reason;
-            Mail::to($event->user->email)->send(new RejectMail($event,$reason));
+
+            $reason = $req->reason ?? '';
+            Mail::to($event->user->email)->send(new RejectMail($event, $reason));
 
             return $this->success($request, 'Request Declined Successfully');
         } catch (\Exception $e) {
@@ -87,13 +122,18 @@ class RequestController extends Controller
         }
     }
 
+    /**
+     * حذف request والحدث المرتبط
+     */
     public function destroy($id)
     {
         try {
-            $request = EventRequestCreate::find($id);
-            $event = Events::find($request->event_id);
+            $request = EventRequestCreate::findOrFail($id);
+            $event = Events::findOrFail($request->event_id);
+
             $event->delete();
             $request->delete();
+
             $this->clearEventsCache();
 
             return $this->success($request, 'Request Deleted Successfully');
@@ -102,15 +142,12 @@ class RequestController extends Controller
         }
     }
 
+    /**
+     * مسح كل الكاش المتعلق بالـ events و requests
+     */
     private function clearEventsCache()
     {
-        $perPage = 8;
-
-        for ($page = 1; $page <= 10; $page++) {
-            Cache::forget("events_page_{$page}_per_{$perPage}");
-        }
-        for ($page = 1; $page <= 10; $page++) {
-            Cache::forget("requests_page_{$page}");
-        }
+        Cache::tags(['events'])->flush();
+        Cache::tags(['requests'])->flush();
     }
 }

@@ -10,7 +10,6 @@ use App\Jobs\TranslateEventJob;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
 use App\Models\eventsImges;
-use App\Models\EventViews;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -20,10 +19,13 @@ class EventUserCreateController extends Controller
 {
     use ApiResponse;
 
+    private $cacheTime = 600;
+
     public function create(EventsRequest $request): JsonResponse
     {
         $data = $request->validated();
         unset($data['urls']);
+
         try {
             $event = DB::transaction(function () use ($data, $request) {
                 $data['slug'] = Str::slug($data['title'])
@@ -31,15 +33,19 @@ class EventUserCreateController extends Controller
                                 .'-'.time();
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
+
                 $event = Events::create($data);
+
                 EventRequestCreate::create([
                     'event_id' => $event->id,
                 ]);
+
                 $event->translations()->create([
                     'locale' => 'ar',
                     'title' => $data['title'],
                     'description' => $data['description'],
                 ]);
+
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $mime = $file->getMimeType();
@@ -59,11 +65,13 @@ class EventUserCreateController extends Controller
 
                 return $event;
             });
+
             TranslateEventJob::dispatch(
                 $event->id,
                 $data['title'],
                 $data['description']
             );
+
             $this->clearEventsCache($event->slug);
 
             return $this->success(
@@ -79,6 +87,7 @@ class EventUserCreateController extends Controller
     {
         $data = $request->validated();
         unset($data['urls']);
+
         try {
             $event = DB::transaction(function () use ($data, $request) {
                 $data['slug'] = Str::slug($data['title'])
@@ -87,15 +96,19 @@ class EventUserCreateController extends Controller
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
                 $data['is_historical'] = 1;
+
                 $event = Events::create($data);
+
                 EventRequestCreate::create([
                     'event_id' => $event->id,
                 ]);
+
                 $event->translations()->create([
                     'locale' => 'ar',
                     'title' => $data['title'],
                     'description' => $data['description'],
                 ]);
+
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $mime = $file->getMimeType();
@@ -115,11 +128,13 @@ class EventUserCreateController extends Controller
 
                 return $event;
             });
+
             TranslateEventJob::dispatch(
                 $event->id,
                 $data['title'],
                 $data['description']
             );
+
             $this->clearEventsCache($event->slug);
 
             return $this->success(
@@ -127,21 +142,32 @@ class EventUserCreateController extends Controller
                 'Event Created Successfully'
             );
         } catch (\Throwable $th) {
-
             return $this->error($th->getMessage());
         }
     }
 
+    /**
+     * Clear event-related cache safely using Redis tags
+     */
     private function clearEventsCache($slug = null)
     {
         $perPage = 8;
 
+        // Clear paginated caches
         for ($page = 1; $page <= 10; $page++) {
-            Cache::forget("events_page_{$page}_per_{$perPage}");
+            Cache::tags(['events'])->forget("events_page_{$page}_per_{$perPage}");
         }
 
-        Cache::forget("events_single_{$slug}");
-        Cache::forget('events_count');
-        Cache::forget('memories');
+        // Clear single event cache
+        if ($slug) {
+            $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
+            foreach ($locales as $locale) {
+                Cache::tags(['events'])->forget("events_single_{$slug}_{$locale}");
+            }
+        }
+
+        // Clear general counts & memories
+        Cache::tags(['events'])->forget('events_count');
+        Cache::tags(['events'])->forget('memories');
     }
 }

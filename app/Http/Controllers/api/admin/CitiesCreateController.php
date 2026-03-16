@@ -27,27 +27,28 @@ class CitiesCreateController extends Controller
                 ]);
                 return $city;
             });
-            TranslateCityJob::dispatch(
-                $city->id,
-                $data['name']
-            );
+
+            // Job لترجمة المدينة
+            TranslateCityJob::dispatch($city->id, $data['name']);
+
+            // مسح كل الكاش المرتبط بالمدن بعد إنشاء مدينة جديدة
             $this->clearCache();
+
             return $this->success(
                 $city->load('translations'),
                 'City Created Successfully'
             );
         } catch (\Exception $e) {
-
             return $this->error($e->getMessage());
         }
     }
 
+    /**
+     * مسح كل الكاش المرتبط بالمدن
+     */
     private function clearCache()
     {
-        Cache::forget('cities_count');
-        for ($i = 0; $i < 10; $i++) {
-            Cache::forget('cities_index_page_'.$i);
-        }
-        Cache::flush();
+        // مسح كل الـ cache المرتبط بالـ tag 'cities'
+        Cache::tags(['cities'])->flush();
     }
 }

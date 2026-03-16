@@ -4,10 +4,7 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EventsRequest;
-use App\Models\EventPhotos;
 use App\Models\Events;
-use App\Models\eventsImges;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -17,23 +14,22 @@ class EventAdminController extends Controller
 {
     use ApiResponse;
 
-   
-
     public function update(Request $request): JsonResponse
     {
         $data = $request->all();
         try {
-            $event = Events::where('slug', request('id'))->first();
+            $event = Events::where('slug', $request->input('id'))->firstOrFail();
             $oldSlug = $event->slug;
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 
             if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $data['image'] = $image->store('events', 'public');
+                $data['image'] = $request->file('image')->store('events', 'public');
             }
-            Cache::forget("events_single_{$oldSlug}");
 
             $event->update($data);
+
+            // مسح الكاش القديم بعد التحديث
+            $this->clearEventsCache($oldSlug);
 
             return $this->success($event, 'Event Updated Successfully');
 
@@ -44,23 +40,36 @@ class EventAdminController extends Controller
 
     public function destroy(): JsonResponse
     {
-        $oldSlug = request('id');
-        $event = Events::where('slug', '=', request('id'))->first();
+        $slug = request('id');
+        $event = Events::where('slug', $slug)->firstOrFail();
         $event->delete();
-        $this->clearEventsCache($oldSlug);
+
+        // مسح كل كاشات هذا الحدث بعد الحذف
+        $this->clearEventsCache($slug);
 
         return $this->success($event, 'Event Deleted Successfully');
     }
 
+    /**
+     * مسح كل كاشات الأحداث
+     */
     private function clearEventsCache($slug = null)
     {
         $perPage = 8;
 
+        // مسح صفحات pagination
         for ($page = 1; $page <= 10; $page++) {
-            Cache::forget("events_page_{$page}_per_{$perPage}");
+            Cache::tags(['events'])->forget("events_page_{$page}_per_{$perPage}");
         }
-        Cache::forget("events_single_{$slug}");
-        Cache::forget('events_count');
-        Cache::forget('memories');
+
+        // مسح الـ single event لكل اللغات
+        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+        foreach ($locales as $locale) {
+            Cache::tags(['events'])->forget("events_single_{$slug}_{$locale}");
+        }
+
+        // مسح العدادات والذاكرة
+        Cache::tags(['events'])->forget('events_count');
+        Cache::tags(['events'])->forget('memories');
     }
 }

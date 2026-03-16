@@ -18,9 +18,11 @@ class CategoryController extends Controller
 
     public function index(): JsonResponse
     {
-        $cacheKey = 'categories:index:all_'.app()->getLocale();
+        $locale = app()->getLocale();
+        $version = Cache::get('categories:version', 1);
+        $cacheKey = "categories:index:all:{$locale}:v{$version}";
 
-        $categories = Cache::remember($cacheKey, $this->cacheTime, function () {
+        $categories = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () {
             return Categories::with('translation')->orderBy('created_at', 'desc')->get();
         });
 
@@ -31,18 +33,16 @@ class CategoryController extends Controller
         return $this->success($categories, 'All categories');
     }
 
-
-
     public function paginated(): JsonResponse
     {
         $page = request()->input('page', 1);
         $perPage = 4;
         $version = Cache::get('categories:version', 1);
-
         $cacheKey = "categories:paginated:v{$version}:p{$page}:pp{$perPage}";
 
-        $categories = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Categories::query()->latest()
+        $categories = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
+            return Categories::query()
+                ->latest()
                 ->select('id', 'name', 'image', 'created_at')
                 ->withCount('subCategories')
                 ->paginate($perPage);
@@ -58,9 +58,8 @@ class CategoryController extends Controller
     public function single($id): JsonResponse
     {
         $cacheKey = "categories:single:{$id}";
-
-        $category = Cache::remember($cacheKey, $this->cacheTime, function () use ($id) {
-            return Categories::with('subCategories.translation',)->find($id);
+        $category = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () use ($id) {
+            return Categories::with('subCategories.translation')->find($id);
         });
 
         if (! $category) {
@@ -72,9 +71,10 @@ class CategoryController extends Controller
 
     public function sub_categories($id): JsonResponse
     {
-        $cacheKey = "categories:sub:{$id}_".app()->getLocale();
+        $locale = app()->getLocale();
+        $cacheKey = "categories:sub:{$id}_{$locale}";
 
-        $subCategories = Cache::remember($cacheKey, $this->cacheTime, function () use ($id) {
+        $subCategories = Cache::tags(['categories', 'subCategories'])->remember($cacheKey, $this->cacheTime, function () use ($id) {
             return subCategorey::with('translation')->where('category_id', $id)
                 ->get(['id', 'name']);
         });
@@ -106,7 +106,6 @@ class CategoryController extends Controller
     public function update(categoreyRequest $request, $id): JsonResponse
     {
         $category = Categories::find($id);
-
         if (! $category) {
             return $this->error('Category not found', 404);
         }
@@ -132,6 +131,7 @@ class CategoryController extends Controller
         if (! $category) {
             return $this->error('Category not found', 404);
         }
+
         $category->delete();
         $this->clearAllCategoriesCache();
 
@@ -139,11 +139,14 @@ class CategoryController extends Controller
     }
 
     /**
-     * بيتم استدعاؤه بعد كل عملية تغيير (create/update/delete)
+     * مسح كل كاشات التصنيفات بعد أي تعديل
      */
     protected function clearAllCategoriesCache(): void
     {
+        // زيادة نسخة الكاش لتحديث كل pagination تلقائياً
         Cache::increment('categories:version', 1);
-        Cache::forget('categories:index:all');
+
+        // مسح الكاشات العامة للتصنيفات
+        Cache::tags(['categories'])->flush();
     }
 }

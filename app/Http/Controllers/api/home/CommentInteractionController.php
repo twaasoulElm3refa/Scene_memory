@@ -15,65 +15,94 @@ class CommentInteractionController extends Controller
 {
     use ApiResponse;
 
+    /**
+     * دعم التعليق
+     */
     public function support()
     {
-        $comment = comments::find(request('id'));
-        $event = Events::find($comment->event_id);
-        $interctions = CommentInteractions::firstOrCreate([
+        $comment = comments::findOrFail(request('id'));
+        $event = Events::findOrFail($comment->event_id);
+
+        $interaction = CommentInteractions::firstOrCreate([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'type' => 'support',
         ]);
-        $this->clearCache($event->slug);
 
-        return $this->success($interctions, 'Interaction Created Successfully');
+        $this->clearEventCache($event->slug);
+
+        return $this->success($interaction, 'Interaction Created Successfully');
     }
 
+    /**
+     * معرض التعليق
+     */
     public function exhibitions()
     {
-        $comment = comments::find(request('id'));
-        $event = Events::find($comment->event_id);
-        $interctions = CommentInteractions::firstOrCreate([
+        $comment = comments::findOrFail(request('id'));
+        $event = Events::findOrFail($comment->event_id);
+
+        $interaction = CommentInteractions::firstOrCreate([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'type' => 'Exhibitions',
         ]);
-        $this->clearCache($event->slug);
-        return $this->success($interctions, 'Interaction Created Successfully');
+
+        $this->clearEventCache($event->slug);
+
+        return $this->success($interaction, 'Interaction Created Successfully');
     }
 
+    /**
+     * التعليقات المحايدة
+     */
     public function neutral()
     {
-        $comment = comments::find(request('id'));
-        $event = Events::find($comment->event_id);
-        $interctions = CommentInteractions::firstOrCreate([
+        $comment = comments::findOrFail(request('id'));
+        $event = Events::findOrFail($comment->event_id);
+
+        $interaction = CommentInteractions::firstOrCreate([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'type' => 'neutral',
         ]);
-        $this->clearCache($event->slug);
-        return $this->success($interctions, 'Interaction Created Successfully');
+
+        $this->clearEventCache($event->slug);
+
+        return $this->success($interaction, 'Interaction Created Successfully');
     }
 
+    /**
+     * الإبلاغ عن التعليق
+     */
     public function report(Request $request)
     {
-        $comment = comments::find(request('id'));
-        $interctions = CommentReport::firstOrCreate([
+        $comment = comments::findOrFail(request('id'));
+
+        $interaction = CommentReport::firstOrCreate([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'reason' => $request->reason,
         ]);
-        Cache::forget('reports_all');
-        Cache::flush();
-        return $this->success($interctions, 'Interaction Created Successfully');
+
+        // مسح cache كل التقارير
+        Cache::tags(['reports'])->flush();
+
+        return $this->success($interaction, 'Report Created Successfully');
     }
 
-    private function clearCache($slug = '')
+    /**
+     * مسح cache بيانات الحدث الفردية لكل اللغات
+     */
+    private function clearEventCache($slug)
     {
         $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
+
         foreach ($locales as $locale) {
-            Cache::forget("events_single_{$slug}_".$locale);
+            Cache::tags(['events'])->forget("events_single_{$slug}_".$locale);
         }
-        Cache::flush();
+
+        // مسح كاش التعليقات الخاصة بالحدث
+        Cache::tags(['comments'])->flush();
     }
 }
