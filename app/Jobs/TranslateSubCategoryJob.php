@@ -25,6 +25,7 @@ class TranslateSubCategoryJob implements ShouldQueue
 
     public function handle(): void
     {
+
         $subCategory = subCategorey::find($this->subCategoryId);
 
         if (! $subCategory) {

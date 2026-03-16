@@ -128,8 +128,5 @@ class EventAdminCreateController extends Controller
         // مسح العدادات والذاكرة
         Cache::forget('events_count');
         Cache::forget('memories');
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\CommentReport;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class ReportController extends Controller
@@ -50,8 +49,5 @@ class ReportController extends Controller
     {
         // مسح الكاش الرئيسي
         Cache::forget('reports_all');
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
     }
 }

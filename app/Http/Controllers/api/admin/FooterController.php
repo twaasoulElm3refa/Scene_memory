@@ -46,8 +46,5 @@ class FooterController extends Controller
     private function clearCache()
     {
         Cache::forget('footer');
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
     }
 }

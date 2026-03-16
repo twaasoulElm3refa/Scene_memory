@@ -8,7 +8,6 @@ use App\Http\Requests\categoreyRequest;
 use App\Jobs\TranslateSubCategoryJob;
 use App\Models\subCategorey;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -61,8 +60,5 @@ class SubCategoriesCreateController extends Controller
 
         // مسح الكاشات العامة للتصنيفات
         Cache::tags(['categories', 'subCategories'])->flush();
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
     }
 }

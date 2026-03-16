@@ -25,6 +25,7 @@ class TranslateCityJob implements ShouldQueue
 
     public function handle(): void
     {
+
         $city = Cities::find($this->cityId);
 
         if (! $city) {

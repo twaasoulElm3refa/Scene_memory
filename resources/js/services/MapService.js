@@ -37,6 +37,7 @@ export default class MapService {
         this._styleCache = {};
         this._styleFetchPromise = null;
         this._geocodeTimer = null;
+
         const stored = localStorage.getItem("language") || "ar";
         this._currentLang = stored === "ar" ? "ar" : "en";
         this._prefetchStyle();
@@ -47,6 +48,9 @@ export default class MapService {
             this.map = map;
             this.map.addControl(new maplibregl.NavigationControl());
             this._addDraggableMarker(this.map, false);
+
+            // ── هنا الجزء الجديد ──
+            this.loadDailyEvents();
         });
     }
 
@@ -60,7 +64,6 @@ export default class MapService {
 
     closeFullscreen() {
         if (this.fullMap) {
-            // نظّف دبابيس الـ fullscreen
             this.fullEventMarkers.forEach(m => m.remove());
             this.fullEventMarkers = [];
             this.fullMap.remove();
@@ -76,7 +79,7 @@ export default class MapService {
 
     /**
      * addEventMarkers
-     * events  → مصفوفة الأحداث
+     * events  → مصفوفة الأحداث (نفس شكل الـ response اللي بعته)
      * targetMap → الخريطة المستهدفة (افتراضي: this.map)
      * isFullscreen → هل هي خريطة fullscreen؟
      */
@@ -112,29 +115,30 @@ export default class MapService {
 
             const el = this._createEventMarkerEl();
 
+            // ── استخدام عنوان الترجمة أولوية ──
+            const displayTitle = event.translation?.title || event.title || (isAr ? "فعالية" : "Event");
+
             // ── Popup بعنوان الحدث ──
             const popup = new maplibregl.Popup({
                 offset: 30,
                 closeButton: true,
                 closeOnClick: false,
-                maxWidth: "220px",
-            }).setHTML(this._buildPopupHTML(event, isAr));
+                maxWidth: "240px",
+            }).setHTML(this._buildPopupHTML(event, displayTitle, isAr));
 
             const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
                 .setLngLat([lng, lat])
-                .setPopup(popup)           // ← ربط الـ popup بالدبوس
+                .setPopup(popup)
                 .addTo(targetMap);
 
-            // ── عند الضغط: افتح الـ popup أو انتقل للرابط ──
+            // ── كليك على الدبوس نفسه ──
             el.addEventListener("click", (e) => {
                 e.stopPropagation();
 
-                // أغلق الـ popup المفتوح قبل
                 if (this._activePopup && this._activePopup !== popup) {
                     this._activePopup.remove();
                 }
 
-                // افتح / أغلق الـ popup الحالي
                 if (marker.getPopup().isOpen()) {
                     marker.getPopup().remove();
                     this._activePopup = null;
@@ -144,17 +148,21 @@ export default class MapService {
                 }
             });
 
-            // ── عند الضغط على "عرض التفاصيل" داخل الـ popup → navigate ──
+            // ── كليك على زرار "عرض التفاصيل" داخل الـ popup ──
             popup.on("open", () => {
                 const link = popup.getElement()?.querySelector(".popup-details-link");
                 if (link) {
                     link.addEventListener("click", (e) => {
                         e.preventDefault();
+                        e.stopPropagation();
+
                         document.dispatchEvent(
                             new CustomEvent("event-marker-clicked", {
                                 detail: { slug: event.slug }
                             })
                         );
+
+                        // إغلاق الـ popup بعد الضغط
                         popup.remove();
                         this._activePopup = null;
                     });
@@ -168,8 +176,15 @@ export default class MapService {
             }
         });
 
+        // تكبير الخريطة لتشمل كل الدبابيس لو أكتر من واحد
         if (validCount > 1 && bounds.isValid()) {
             targetMap.fitBounds(bounds, { padding: 60, maxZoom: 15 });
+        } else if (validCount === 1) {
+            targetMap.flyTo({
+                center: [parseFloat(events[0].langitude), parseFloat(events[0].lattitude)],
+                zoom: 14,
+                essential: true
+            });
         }
     }
 
@@ -294,7 +309,6 @@ export default class MapService {
 
         marker.on("dragend", () => handleMove(marker.getLngLat()));
         mapInstance.on("click", e => {
-            // تأكد إن الكليك مش على دبوس حدث
             const target = e.originalEvent?.target;
             if (target?.closest(".map-event-marker")) return;
             handleMove(e.lngLat);
@@ -380,10 +394,6 @@ export default class MapService {
         this.markerRef.value.state = state;
     }
 
-    // ─────────────────────────────────────────────
-    // Private — Backend & Events
-    // ─────────────────────────────────────────────
-
     _sendCityToBackend(city) {
         if (this.cityEventCache.has(city)) {
             this._dispatchMarkerEvent(this.cityEventCache.get(city));
@@ -413,47 +423,48 @@ export default class MapService {
     }
 
     // ─────────────────────────────────────────────
-    // Private — Popup HTML Builder  ✅ محدّث
+    // Private — Popup HTML Builder   ←   محدث ليستخدم displayTitle
     // ─────────────────────────────────────────────
 
-    _buildPopupHTML(event, isAr) {
+    _buildPopupHTML(event, displayTitle, isAr) {
         const fontFamily = isAr
             ? "'Noto Sans Arabic', Tahoma, sans-serif"
             : "sans-serif";
 
-        const title = event.translation?.title || event.title || (isAr ? "فعالية" : "Event");
         const dateStr = event.start_date
             ? new Date(event.start_date).toLocaleDateString(isAr ? "ar-EG" : "en-US", {
-                year: "numeric", month: "short", day: "numeric"
-              })
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            })
             : "";
 
         let html = `
             <div style="
-                min-width:190px;
-                max-width:220px;
-                font-family:${fontFamily};
-                direction:${isAr ? "rtl" : "ltr"};
-                text-align:${isAr ? "right" : "left"};
-                unicode-bidi:embed;
-                padding: 2px 0;
+                min-width: 190px;
+                max-width: 240px;
+                font-family: ${fontFamily};
+                direction: ${isAr ? 'rtl' : 'ltr'};
+                text-align: ${isAr ? 'right' : 'left'};
+                unicode-bidi: embed;
+                padding: 4px 0;
             ">
                 <p style="
-                    margin:0 0 4px;
-                    font-size:14px;
-                    font-weight:700;
-                    color:#111;
-                    line-height:1.4;
-                ">${title}</p>
+                    margin: 0 0 6px;
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: #111;
+                    line-height: 1.4;
+                ">${displayTitle}</p>
         `;
 
         if (dateStr) {
-            html += `<p style="margin:0 0 6px;font-size:12px;color:#555;">📅 ${dateStr}</p>`;
+            html += `<p style="margin:0 0 8px; font-size:13px; color:#555;">📅 ${dateStr}</p>`;
         }
 
         if (event.image_url) {
             html += `<img src="${event.image_url}" loading="lazy"
-                style="width:100%;border-radius:8px;margin-bottom:6px;display:block;">`;
+                style="width:100%; max-height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px; display:block;">`;
         }
 
         if (event.slug) {
@@ -461,22 +472,24 @@ export default class MapService {
                 <a href="/single_event/${event.slug}"
                    class="popup-details-link"
                    style="
-                       display:inline-block;
-                       margin-top:4px;
-                       padding:4px 12px;
-                       background:#e53e3e;
-                       color:#fff;
-                       border-radius:20px;
-                       font-size:12px;
-                       font-weight:600;
-                       text-decoration:none;
-                       cursor:pointer;
+                       display: inline-block;
+                       margin-top: 6px;
+                       padding: 8px 16px;
+                       background: #e53e3e;
+                       color: white;
+                       border-radius: 9999px;
+                       font-size: 13px;
+                       font-weight: 600;
+                       text-decoration: none;
+                       cursor: pointer;
+                       transition: background 0.2s;
                    ">
                     ${isAr ? "عرض التفاصيل" : "View Details"}
                 </a>`;
         }
 
-        return html + "</div>";
+        html += `</div>`;
+        return html;
     }
 
     // ─────────────────────────────────────────────
@@ -487,18 +500,20 @@ export default class MapService {
         const el = document.createElement("div");
         el.className = "map-event-marker";
         el.style.cssText = `
-            width:32px; height:32px;
-            background:#e53e3e;
-            border:3px solid #fff;
+            width: 32px;
+            height: 32px;
+            background: #e53e3e;
+            border: 3px solid #ffffff;
             transform: rotate(-45deg);
             border-radius: 50% 50% 50% 0;
-            box-shadow:0 2px 8px rgba(0,0,0,0.35);
-            cursor:pointer;
-            will-change:transform;
-            transition:transform 0.15s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+            cursor: pointer;
+            will-change: transform;
+            transition: transform 0.18s ease;
         `;
+
         el.addEventListener("mouseenter", () => {
-            el.style.transform = "rotate(-45deg) scale(1.3)";
+            el.style.transform = "rotate(-45deg) scale(1.35)";
         });
         el.addEventListener("mouseleave", () => {
             el.style.transform = "rotate(-45deg) scale(1)";
@@ -516,5 +531,36 @@ export default class MapService {
             ? structuredClone(obj)
             : JSON.parse(JSON.stringify(obj));
     }
-}
 
+    /**
+ * Load and display daily events on map initialization
+ */
+    async loadDailyEvents() {
+        try {
+            const token = localStorage.getItem("auth_token") || "";
+            const lang = localStorage.getItem("language") || "ar";
+
+            const res = await fetch("/api/v1/events/daily", {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${token}`,
+                    "Accept-Language": lang,
+                },
+            });
+
+            if (!res.ok) {
+                console.warn("Daily events fetch failed", res.status);
+                return;
+            }
+
+            const json = await res.json();
+            const events = json?.data || [];
+
+            if (events.length > 0 && this.map) {
+                this.addEventMarkers(events, this.map, false);
+            }
+        } catch (err) {
+            console.error("Error loading daily events:", err);
+        }
+    }
+}

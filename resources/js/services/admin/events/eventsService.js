@@ -9,7 +9,6 @@ class EventService {
       const response = await axios.get(`${API_BASE_URL}/events`, {
         params: { page }
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching events:', error);

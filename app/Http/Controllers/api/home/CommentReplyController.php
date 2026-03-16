@@ -26,7 +26,6 @@ class CommentReplyController extends Controller
 
         $reply = CommentReplies::create($data);
 
-        // مسح cache الحدث + التعليقات
         $this->clearCache($event->slug);
 
         return $this->success($reply, 'Reply Created Successfully');
@@ -42,8 +41,6 @@ class CommentReplyController extends Controller
 
         // مسح cache التعليقات المرتبطة بالحدث
         Cache::tags(['comments'])->flush();
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
+
     }
 }

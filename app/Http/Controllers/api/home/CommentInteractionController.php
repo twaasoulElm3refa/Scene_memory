@@ -105,8 +105,5 @@ class CommentInteractionController extends Controller
 
         // مسح كاش التعليقات الخاصة بالحدث
         Cache::tags(['comments'])->flush();
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
     }
 }

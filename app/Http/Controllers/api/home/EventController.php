@@ -196,12 +196,12 @@ class EventController extends Controller
         $cacheKey = 'daily_events_'.app()->getLocale();
         $today = Carbon::today();
         $daily = Cache::remember($cacheKey, $this->cacheTime, function () use ($today) {
-            return Events::where('is_active', 1)
+            return Events::with('translation:event_id,title,id')->where('is_active', 1)
                 ->where(function ($query) use ($today) {
                     $query->whereDate('start_date', $today)
                         ->orWhereDate('created_at', $today);
                 })
-                ->select('id', 'slug', 'title', 'start_date', 'end_date')
+                ->select('id', 'slug', 'title', 'start_date', 'end_date', 'langitude', 'lattitude')
                 ->orderBy('created_at', 'desc')
                 ->get();
         });

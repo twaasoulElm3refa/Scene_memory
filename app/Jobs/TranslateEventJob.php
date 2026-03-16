@@ -26,6 +26,7 @@ class TranslateEventJob implements ShouldQueue
 
     public function handle(): void
     {
+
         $event = Events::find($this->eventId);
 
         if (!$event) {

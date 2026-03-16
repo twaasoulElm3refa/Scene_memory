@@ -43,6 +43,11 @@
             <span class="text-blue-600 text-3xl">②</span> الموقع والتصنيف
           </h2>
 
+          <!-- رسائل الخطأ العامة لهذا القسم -->
+          <div v-if="errors.general" class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+            {{ errors.general }}
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
             <!-- الدولة -->
             <div>
@@ -56,6 +61,11 @@
                 class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base mb-2"
                 @input="filterCountries"
               />
+
+              <div v-if="errors.countries" class="mb-2 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
+                {{ errors.countries }}
+              </div>
+
               <select
                 v-model="selectedCountryId"
                 @change="loadCities"
@@ -83,10 +93,16 @@
                 :disabled="!selectedCountryId || cities.length === 0"
                 @input="filterCities"
               />
+
+              <div v-if="errors.cities" class="mb-2 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
+                {{ errors.cities }}
+              </div>
+
               <select
                 v-model="form.city_id"
                 size="6"
-                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-48 overflow-y-auto disabled:bg-gray-100 disabled:text-gray-400"
+                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-base h-48 overflow-y-auto"
+                :class="{ 'disabled:bg-gray-100 disabled:text-gray-400': !selectedCountryId || cities.length === 0 }"
                 :disabled="!selectedCountryId || cities.length === 0"
                 required
               >
@@ -104,6 +120,11 @@
               <label class="block text-base font-medium text-gray-800 mb-2">
                 الفئة الرئيسية <span class="text-red-600">*</span>
               </label>
+
+              <div v-if="errors.categories" class="mb-2 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
+                {{ errors.categories }}
+              </div>
+
               <select
                 v-model="selectedCategoryId"
                 @change="loadSubCategories"
@@ -122,6 +143,11 @@
               <label class="block text-base font-medium text-gray-800 mb-2">
                 التصنيف الفرعي <span class="text-red-600">*</span>
               </label>
+
+              <div v-if="errors.subCategories" class="mb-2 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded">
+                {{ errors.subCategories }}
+              </div>
+
               <select
                 v-model="form.sub_category_id"
                 :disabled="!selectedCategoryId || subCategories.length === 0"
@@ -156,14 +182,13 @@
               >
                 <l-tile-layer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 <l-marker v-if="markerPosition" :lat-lng="markerPosition" />
               </l-map>
             </div>
             <p v-if="form.lattitude && form.langitude" class="mt-2 text-sm text-gray-600">
-              الإحداثيات المحددة: خط العرض {{ form.lattitude }} | خط الطول
-              {{ form.langitude }}
+              الإحداثيات المحددة: خط العرض {{ form.lattitude }} | خط الطول {{ form.langitude }}
             </p>
           </div>
         </section>
@@ -232,29 +257,13 @@
             />
 
             <div v-if="form.urls.length === 0" class="space-y-4 py-8">
-              <div
-                class="mx-auto w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center"
-              >
-                <svg
-                  class="w-10 h-10 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                  />
+              <div class="mx-auto w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+                <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
               </div>
-              <p class="text-lg font-medium text-gray-700">
-                اضغط للرفع أو اسحب وأفلت الصور هنا
-              </p>
-              <p class="text-sm text-gray-500">
-                PNG • JPG • WEBP | الحد الأقصى 5 ميجا لكل صورة
-              </p>
+              <p class="text-lg font-medium text-gray-700">اضغط للرفع أو اسحب وأفلت الصور هنا</p>
+              <p class="text-sm text-gray-500">PNG • JPG • WEBP | الحد الأقصى 5 ميجا لكل صورة</p>
               <button
                 type="button"
                 @click="$refs.fileInput.click()"
@@ -266,11 +275,7 @@
 
             <div v-else class="space-y-6">
               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                <div
-                  v-for="(preview, index) in form.url_previews"
-                  :key="index"
-                  class="relative group"
-                >
+                <div v-for="(preview, index) in form.url_previews" :key="index" class="relative group">
                   <img
                     :src="preview"
                     :alt="`صورة الحدث ${index + 1}`"
@@ -317,13 +322,13 @@
     </div>
   </AdminLayout>
 </template>
+
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-// استيراد مكونات vue-leaflet
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
-import "leaflet/dist/leaflet.css"; // مهم جداً - يمكن وضعه في main.js أيضاً
+import "leaflet/dist/leaflet.css";
 
 const form = ref({
   title: "",
@@ -335,8 +340,8 @@ const form = ref({
   time: "",
   urls: [],
   url_previews: [],
-  lattitude: null, // كما طلبت بالضبط
-  langitude: null, // كما طلبت بالضبط
+  lattitude: null,
+  langitude: null,
 });
 
 const countries = ref([]);
@@ -349,9 +354,18 @@ const selectedCategoryId = ref("");
 const loading = ref(false);
 const fileInput = ref(null);
 
-// Search
+// البحث
 const countrySearch = ref("");
 const citySearch = ref("");
+
+// حالات الخطأ
+const errors = ref({
+  general: "",
+  countries: "",
+  cities: "",
+  categories: "",
+  subCategories: "",
+});
 
 const filteredCountries = computed(() => {
   if (!countrySearch.value.trim()) return countries.value;
@@ -365,15 +379,14 @@ const filteredCities = computed(() => {
   return cities.value.filter((c) => c.name.toLowerCase().includes(search));
 });
 
-// خريطة
+// الخريطة
 const zoom = ref(13);
-const center = ref([30.04, 31.24]); // القاهرة كمركز افتراضي - يمكنك تغييره
+const center = ref([30.04, 31.24]); // القاهرة افتراضياً
 const markerPosition = ref(null);
 
 function onMapClick(e) {
   const lat = e.latlng.lat;
   const lng = e.latlng.lng;
-
   markerPosition.value = [lat, lng];
   form.value.lattitude = lat.toFixed(6);
   form.value.langitude = lng.toFixed(6);
@@ -384,15 +397,18 @@ onMounted(async () => {
 });
 
 async function fetchCountries() {
+  errors.value.countries = "";
   try {
     const res = await axios.get("/v1/countries/all/get");
     countries.value = res.data.data || [];
   } catch (err) {
     console.error("فشل تحميل الدول", err);
+    errors.value.countries = "تعذر تحميل قائمة الدول، تحقق من الاتصال بالإنترنت أو حاول لاحقاً";
   }
 }
 
 async function loadCities() {
+  errors.value.cities = "";
   cities.value = [];
   form.value.city_id = "";
   citySearch.value = "";
@@ -401,22 +417,26 @@ async function loadCities() {
 
   try {
     const res = await axios.get(`/v1/countries/${selectedCountryId.value}`);
-    cities.value = res.data.data?.countries?.cities || [];
+    cities.value = res.data.data?.country?.cities || [];
   } catch (err) {
     console.error("فشل تحميل المدن", err);
+    errors.value.cities = "تعذر تحميل المدن لهذه الدولة، حاول اختيار دولة أخرى أو أعد المحاولة";
   }
 }
 
 async function fetchCategories() {
+  errors.value.categories = "";
   try {
     const res = await axios.get("/v1/categories");
     categories.value = res.data.data || [];
   } catch (err) {
     console.error("فشل تحميل الفئات", err);
+    errors.value.categories = "تعذر تحميل قائمة الفئات الرئيسية، تحقق من الاتصال وحاول مرة أخرى";
   }
 }
 
 async function loadSubCategories() {
+  errors.value.subCategories = "";
   subCategories.value = [];
   form.value.sub_category_id = "";
 
@@ -427,6 +447,7 @@ async function loadSubCategories() {
     subCategories.value = res.data.data?.sub_categories || [];
   } catch (err) {
     console.error("فشل تحميل التصنيفات الفرعية", err);
+    errors.value.subCategories = "تعذر تحميل التصنيفات الفرعية، حاول اختيار فئة أخرى أو أعد المحاولة";
   }
 }
 
@@ -471,6 +492,8 @@ function removeImage(index) {
 }
 
 async function createEvent() {
+  errors.value.general = "";
+
   if (
     !form.value.title?.trim() ||
     !form.value.description?.trim() ||
@@ -478,11 +501,13 @@ async function createEvent() {
     !form.value.sub_category_id ||
     !form.value.start_date
   ) {
-    return alert("برجاء ملء جميع الحقول المطلوبة");
+    errors.value.general = "برجاء ملء جميع الحقول المطلوبة (*) بشكل صحيح";
+    return;
   }
 
   if (form.value.urls.length === 0) {
-    return alert("يرجى رفع صورة واحدة على الأقل");
+    errors.value.general = "يرجى رفع صورة واحدة على الأقل للحدث";
+    return;
   }
 
   loading.value = true;
@@ -491,12 +516,11 @@ async function createEvent() {
   fd.append("title", form.value.title);
   fd.append("description", form.value.description);
   fd.append("city_id", form.value.city_id);
-  fd.append("sub_categorey_id", form.value.sub_category_id);
+  fd.append("sub_categorey_id", form.value.sub_category_id); // ملاحظة: ربما خطأ إملائي في API ← sub_category_id
   fd.append("start_date", form.value.start_date);
-  form.value.end_date && fd.append("end_date", form.value.end_date);
+  if (form.value.end_date) fd.append("end_date", form.value.end_date);
   if (form.value.time) fd.append("time", form.value.time);
 
-  // إضافة الإحداثيات بنفس الأسماء المطلوبة
   if (form.value.lattitude) fd.append("lattitude", form.value.lattitude);
   if (form.value.langitude) fd.append("langitude", form.value.langitude);
 
@@ -511,8 +535,10 @@ async function createEvent() {
     alert("تم إنشاء الحدث بنجاح!");
     window.location.href = "/admin/events";
   } catch (err) {
-    console.error(err);
-    alert("فشل إنشاء الحدث: " + (err.response?.data?.message || "خطأ غير معروف"));
+    console.error("خطأ أثناء إنشاء الحدث", err);
+    errors.value.general =
+      err.response?.data?.message ||
+      "حدث خطأ أثناء إنشاء الحدث، تحقق من البيانات وحاول مرة أخرى";
   } finally {
     loading.value = false;
   }
@@ -520,6 +546,5 @@ async function createEvent() {
 </script>
 
 <style>
-/* إذا لم تضف الـ CSS في main.js أو index.html */
 @import "leaflet/dist/leaflet.css";
 </style>

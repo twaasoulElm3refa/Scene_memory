@@ -93,8 +93,5 @@ class EventImageController extends Controller
                 Cache::forget("events_single_{$slug}_{$locale}");
             }
         }
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
     }
 }

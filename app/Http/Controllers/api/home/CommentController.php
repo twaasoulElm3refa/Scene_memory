@@ -9,7 +9,6 @@ use App\Jobs\TranslateCommentJob;
 use App\Models\comments;
 use App\Models\Events;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class CommentController extends Controller
@@ -115,8 +114,6 @@ class CommentController extends Controller
     private function clearCache($event_id)
     {
         Cache::tags(['comments'])->flush();
-        Artisan::call('queue:work', [
-            '--once' => true,
-        ]);
+
     }
 }

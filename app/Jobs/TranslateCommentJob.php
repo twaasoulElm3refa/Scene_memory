@@ -25,6 +25,7 @@ class TranslateCommentJob implements ShouldQueue
 
     public function handle(): void
     {
+
         $comment = comments::find($this->commentId);
         if (!$comment) return;
 
@@ -42,6 +43,7 @@ class TranslateCommentJob implements ShouldQueue
                         ['comment' => $translated]
                     );
                 }
+
             } catch (\Exception $e) {
                 \Log::error('Translate Comment Error: ' . $e->getMessage());
             }
