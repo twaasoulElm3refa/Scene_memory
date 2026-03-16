@@ -24,7 +24,13 @@ export default class MapService {
         this.marker = null;
         this.fullMap = null;
         this.fullMarker = null;
+
+        // ── دبابيس الأحداث ──
         this.eventMarkers = [];
+        this.fullEventMarkers = [];
+
+        // ── الـ popup المفتوح حالياً ──
+        this._activePopup = null;
 
         this.reverseGeocodeCache = new Map();
         this.cityEventCache = new Map();
@@ -54,6 +60,9 @@ export default class MapService {
 
     closeFullscreen() {
         if (this.fullMap) {
+            // نظّف دبابيس الـ fullscreen
+            this.fullEventMarkers.forEach(m => m.remove());
+            this.fullEventMarkers = [];
             this.fullMap.remove();
             this.fullMap = null;
             this.fullMarker = null;
@@ -65,42 +74,102 @@ export default class MapService {
         this._debouncedReverseGeocode(lat, lng);
     }
 
-    addEventMarkers(events, targetMap = this.map) {
-        this.eventMarkers.forEach(m => m.remove());
-        this.eventMarkers = [];
+    /**
+     * addEventMarkers
+     * events  → مصفوفة الأحداث
+     * targetMap → الخريطة المستهدفة (افتراضي: this.map)
+     * isFullscreen → هل هي خريطة fullscreen؟
+     */
+    addEventMarkers(events, targetMap = this.map, isFullscreen = false) {
+        // امسح الدبابيس القديمة على الخريطة المستهدفة فقط
+        if (isFullscreen) {
+            this.fullEventMarkers.forEach(m => m.remove());
+            this.fullEventMarkers = [];
+        } else {
+            this.eventMarkers.forEach(m => m.remove());
+            this.eventMarkers = [];
+        }
 
-        if (!events?.length) return;
+        // أغلق أي popup مفتوح
+        if (this._activePopup) {
+            this._activePopup.remove();
+            this._activePopup = null;
+        }
+
+        if (!events?.length || !targetMap) return;
 
         const isAr = this._currentLang === "ar";
         const bounds = new maplibregl.LngLatBounds();
         let validCount = 0;
 
-        const fragment = events.map(event => {
+        events.forEach(event => {
             const lat = parseFloat(event.lattitude);
             const lng = parseFloat(event.langitude);
-            if (isNaN(lat) || isNaN(lng)) return null;
+            if (isNaN(lat) || isNaN(lng)) return;
 
             bounds.extend([lng, lat]);
             validCount++;
 
             const el = this._createEventMarkerEl();
+
+            // ── Popup بعنوان الحدث ──
+            const popup = new maplibregl.Popup({
+                offset: 30,
+                closeButton: true,
+                closeOnClick: false,
+                maxWidth: "220px",
+            }).setHTML(this._buildPopupHTML(event, isAr));
+
             const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
                 .setLngLat([lng, lat])
+                .setPopup(popup)           // ← ربط الـ popup بالدبوس
                 .addTo(targetMap);
 
-            marker.setPopup(
-                new maplibregl.Popup({ offset: 25 }).setHTML(
-                    this._buildPopupHTML(event, isAr)
-                )
-            );
+            // ── عند الضغط: افتح الـ popup أو انتقل للرابط ──
+            el.addEventListener("click", (e) => {
+                e.stopPropagation();
 
-            return marker;
-        }).filter(Boolean);
+                // أغلق الـ popup المفتوح قبل
+                if (this._activePopup && this._activePopup !== popup) {
+                    this._activePopup.remove();
+                }
 
-        this.eventMarkers = fragment;
+                // افتح / أغلق الـ popup الحالي
+                if (marker.getPopup().isOpen()) {
+                    marker.getPopup().remove();
+                    this._activePopup = null;
+                } else {
+                    marker.togglePopup();
+                    this._activePopup = popup;
+                }
+            });
+
+            // ── عند الضغط على "عرض التفاصيل" داخل الـ popup → navigate ──
+            popup.on("open", () => {
+                const link = popup.getElement()?.querySelector(".popup-details-link");
+                if (link) {
+                    link.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        document.dispatchEvent(
+                            new CustomEvent("event-marker-clicked", {
+                                detail: { slug: event.slug }
+                            })
+                        );
+                        popup.remove();
+                        this._activePopup = null;
+                    });
+                }
+            });
+
+            if (isFullscreen) {
+                this.fullEventMarkers.push(marker);
+            } else {
+                this.eventMarkers.push(marker);
+            }
+        });
 
         if (validCount > 1 && bounds.isValid()) {
-            targetMap.fitBounds(bounds, { padding: 60 });
+            targetMap.fitBounds(bounds, { padding: 60, maxZoom: 15 });
         }
     }
 
@@ -224,7 +293,12 @@ export default class MapService {
         };
 
         marker.on("dragend", () => handleMove(marker.getLngLat()));
-        mapInstance.on("click", e => handleMove(e.lngLat));
+        mapInstance.on("click", e => {
+            // تأكد إن الكليك مش على دبوس حدث
+            const target = e.originalEvent?.target;
+            if (target?.closest(".map-event-marker")) return;
+            handleMove(e.lngLat);
+        });
     }
 
     _updateLocation(lat, lng) {
@@ -260,7 +334,6 @@ export default class MapService {
         if (this.reverseGeocodeCache.has(key)) {
             const { city, state, stateEn } = this.reverseGeocodeCache.get(key);
             this._setCityState(city, state);
-            // ─── التعديل الرئيسي هنا ───
             state ? this._sendCityToBackend(state) : this._dispatchMarkerEvent([]);
             return;
         }
@@ -279,7 +352,6 @@ export default class MapService {
 
                 this.reverseGeocodeCache.set(key, { city, state, stateEn });
                 this._setCityState(city, state);
-                // ─── التعديل الرئيسي هنا ───
                 state ? this._sendCityToBackend(state) : this._dispatchMarkerEvent([]);
             })
             .catch(() => {
@@ -341,7 +413,7 @@ export default class MapService {
     }
 
     // ─────────────────────────────────────────────
-    // Private — Popup HTML Builder
+    // Private — Popup HTML Builder  ✅ محدّث
     // ─────────────────────────────────────────────
 
     _buildPopupHTML(event, isAr) {
@@ -349,29 +421,57 @@ export default class MapService {
             ? "'Noto Sans Arabic', Tahoma, sans-serif"
             : "sans-serif";
 
+        const title = event.translation?.title || event.title || (isAr ? "فعالية" : "Event");
+        const dateStr = event.start_date
+            ? new Date(event.start_date).toLocaleDateString(isAr ? "ar-EG" : "en-US", {
+                year: "numeric", month: "short", day: "numeric"
+              })
+            : "";
+
         let html = `
             <div style="
-                min-width:180px;
+                min-width:190px;
+                max-width:220px;
                 font-family:${fontFamily};
                 direction:${isAr ? "rtl" : "ltr"};
                 text-align:${isAr ? "right" : "left"};
                 unicode-bidi:embed;
+                padding: 2px 0;
             ">
-                <strong>${event.title || (isAr ? "فعالية" : "Event")}</strong><br>
-                ${event.start_date
-                ? new Date(event.start_date).toLocaleDateString(isAr ? "ar-EG" : "en-US")
-                : ""}
+                <p style="
+                    margin:0 0 4px;
+                    font-size:14px;
+                    font-weight:700;
+                    color:#111;
+                    line-height:1.4;
+                ">${title}</p>
         `;
 
+        if (dateStr) {
+            html += `<p style="margin:0 0 6px;font-size:12px;color:#555;">📅 ${dateStr}</p>`;
+        }
+
         if (event.image_url) {
-            html += `<img src="${event.image_url}" loading="lazy" style="width:100%;border-radius:6px;margin-top:6px">`;
+            html += `<img src="${event.image_url}" loading="lazy"
+                style="width:100%;border-radius:8px;margin-bottom:6px;display:block;">`;
         }
 
         if (event.slug) {
             html += `
-                <br>
-                <a href="/events/${event.slug}" target="_blank"
-                   style="color:#e53e3e;display:block;margin-top:4px">
+                <a href="/single_event/${event.slug}"
+                   class="popup-details-link"
+                   style="
+                       display:inline-block;
+                       margin-top:4px;
+                       padding:4px 12px;
+                       background:#e53e3e;
+                       color:#fff;
+                       border-radius:20px;
+                       font-size:12px;
+                       font-weight:600;
+                       text-decoration:none;
+                       cursor:pointer;
+                   ">
                     ${isAr ? "عرض التفاصيل" : "View Details"}
                 </a>`;
         }
@@ -390,19 +490,20 @@ export default class MapService {
             width:32px; height:32px;
             background:#e53e3e;
             border:3px solid #fff;
-            border-radius:50% 50% 50% 0;
-            transform:rotate(-45deg);
+            transform: rotate(-45deg);
+            border-radius: 50% 50% 50% 0;
             box-shadow:0 2px 8px rgba(0,0,0,0.35);
             cursor:pointer;
             will-change:transform;
             transition:transform 0.15s ease;
         `;
         el.addEventListener("mouseenter", () => {
-            el.style.transform = "rotate(-45deg) scale(1.2)";
+            el.style.transform = "rotate(-45deg) scale(1.3)";
         });
         el.addEventListener("mouseleave", () => {
             el.style.transform = "rotate(-45deg) scale(1)";
         });
+
         return el;
     }
 
@@ -416,3 +517,4 @@ export default class MapService {
             : JSON.parse(JSON.stringify(obj));
     }
 }
+

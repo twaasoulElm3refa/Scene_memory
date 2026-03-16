@@ -2,9 +2,9 @@ User-agent: *
 
 # السماح بالصفحات العامة
 Allow: /
-Allow: /historical
-Allow: /all_events
-Allow: /single_event/
+Disallow: /historical
+Disallow: /all_events
+Disallow: /single_event/
 
 # منع الصفحات الحساسة
 Disallow: /admin

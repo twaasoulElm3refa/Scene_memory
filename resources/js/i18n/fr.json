@@ -15,6 +15,7 @@
     "upload_media": "Médias",
     "view_all_comments": "Voir tous les commentaires",
     "nav": {
+        "terms": "Conditions génériales",
         "historical": "Personnes historiques",
         "home": "Accueil",
         "about": "À propos",
@@ -40,7 +41,7 @@
         "JA": "日本語",
         "UR": "اردو"
     },
-     "login_to_comment": "Veuillez vous connecter pour laissez un commentaire",
+    "login_to_comment": "Veuillez vous connecter pour laissez un commentaire",
     "event": {
         "reply": "Répondre",
         "delete": " Supprimer",
@@ -397,5 +398,25 @@
             "next": "Suivant",
             "page_info": "Page {current} sur {total}"
         }
+    },
+    "terms": {
+        "title": "Conditions d'utilisation",
+        "last_updated": "Dernière mise à jour : 2026",
+        "acceptance_title": "Acceptation des conditions",
+        "acceptance_text": "En accédant ou en utilisant cette plateforme, vous acceptez d'être lié par ces conditions d'utilisation.",
+        "accounts_title": "Comptes utilisateurs",
+        "accounts_text": "Les utilisateurs sont responsables de la confidentialité de leurs informations de compte.",
+        "content_title": "Propriété du contenu",
+        "content_text": "Tout le contenu de la plateforme est protégé par les lois sur le droit d'auteur et la propriété intellectuelle.",
+        "ai_title": "Restrictions liées à l'IA",
+        "ai_text": "L'utilisation du contenu de la plateforme pour entraîner des modèles d'intelligence artificielle sans licence officielle est interdite.",
+        "prohibited_title": "Utilisations interdites",
+        "prohibited_text": "Les utilisateurs ne doivent pas tenter d'accéder de manière non autorisée ou perturber le fonctionnement de la plateforme.",
+        "liability_title": "Limitation de responsabilité",
+        "liability_text": "La plateforme ne sera pas responsable des dommages indirects résultant de l'utilisation du service.",
+        "changes_title": "Modifications des conditions",
+        "changes_text": "Nous pouvons modifier ces conditions à tout moment.",
+        "contact_title": "Contact",
+        "contact_text": "Pour toute question concernant ces conditions, veuillez contacter l'administration."
     }
 }

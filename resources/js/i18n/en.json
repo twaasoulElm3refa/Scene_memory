@@ -15,6 +15,7 @@
     "upload_media": "Upload Media",
     "view_all_comments": "View all comments",
     "nav": {
+        "terms": "Terms and Conditions",
         "historical": "Historical People",
         "home": "Home",
         "about": "About Us",
@@ -26,7 +27,7 @@
         "logout": "Log Out",
         "login": "Log In"
     },
-     "login_to_comment": "Please log in to leave a comment",
+    "login_to_comment": "Please log in to leave a comment",
     "languages": {
         "AR": "العربية",
         "EN": "English",
@@ -397,5 +398,33 @@
             "next": "Next",
             "page_info": "Page {current} of {total}"
         }
-    }
+    },
+  "terms": {
+    "title": "Terms of Service",
+    "last_updated": "Last updated: 2026",
+
+    "acceptance_title": "Acceptance of Terms",
+    "acceptance_text": "By accessing or using this platform, you agree to be bound by these Terms of Service and all applicable laws and regulations.",
+
+    "accounts_title": "User Accounts",
+    "accounts_text": "Users are responsible for maintaining the confidentiality of their account information and for all activities that occur under their account.",
+
+    "content_title": "Content Ownership",
+    "content_text": "All content available on the platform, including text, images, and data, is protected by copyright and intellectual property laws.",
+
+    "ai_title": "Artificial Intelligence Restrictions",
+    "ai_text": "The use of platform content for training artificial intelligence models, machine learning systems, or data mining activities is strictly prohibited without obtaining an official license.",
+
+    "prohibited_title": "Prohibited Uses",
+    "prohibited_text": "Users may not misuse the platform, attempt unauthorized access, scrape data, or interfere with the platform’s operation.",
+
+    "liability_title": "Limitation of Liability",
+    "liability_text": "The platform shall not be liable for any indirect, incidental, or consequential damages arising from the use of the service.",
+
+    "changes_title": "Changes to Terms",
+    "changes_text": "We reserve the right to update or modify these Terms of Service at any time.",
+
+    "contact_title": "Contact Information",
+    "contact_text": "If you have any questions about these Terms, please contact the platform administration."
+  }
 }

@@ -132,7 +132,7 @@
                 <img
                   src="/images/google_logo.png"
                   alt="Google Logo"
-                  style="width: 36px; height: 36px"
+                  style="width: 65px; height: 36px"
                 />
                 Continue with Google
               </button>

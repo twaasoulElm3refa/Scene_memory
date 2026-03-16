@@ -15,6 +15,7 @@
     "upload_media": "上传媒体",
     "view_all_comments": "查看所有评论",
     "nav": {
+        "terms": "通用条款和条件",
         "historical": "历史人物",
         "home": "首页",
         "about": "关于我们",
@@ -397,5 +398,25 @@
             "next": "下一页",
             "page_info": "第 {current} 页 / 共 {total} 页"
         }
+    },
+    "terms": {
+        "title": "服务条款",
+        "last_updated": "最后更新：2026",
+        "acceptance_title": "条款的接受",
+        "acceptance_text": "访问或使用本平台即表示您同意遵守这些服务条款以及所有适用的法律法规。",
+        "accounts_title": "用户账户",
+        "accounts_text": "用户有责任保护其账户信息的机密性，并对其账户下发生的所有活动负责。",
+        "content_title": "内容所有权",
+        "content_text": "平台上的所有内容，包括文本、图像和数据，均受版权和知识产权法律保护。",
+        "ai_title": "人工智能限制",
+        "ai_text": "未经官方许可，严禁使用平台内容训练人工智能模型、机器学习系统或进行数据挖掘。",
+        "prohibited_title": "禁止的使用",
+        "prohibited_text": "用户不得滥用平台、尝试未经授权访问、抓取数据或干扰平台运行。",
+        "liability_title": "责任限制",
+        "liability_text": "对于因使用服务而产生的任何间接、附带或后果性损害，本平台不承担责任。",
+        "changes_title": "条款变更",
+        "changes_text": "我们保留随时更新或修改这些服务条款的权利。",
+        "contact_title": "联系方式",
+        "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
     }
 }

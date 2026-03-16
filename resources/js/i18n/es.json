@@ -15,6 +15,7 @@
     "upload_media": "Subir medios",
     "view_all_comments": "Ver todos los comentarios",
     "nav": {
+        "terms": "Condiciones generales",
         "historical": "Personas históricas",
         "home": "Inicio",
         "about": "Sobre nosotros",
@@ -40,7 +41,7 @@
         "JA": "日本語",
         "UR": "اردو"
     },
-     "login_to_comment": "Por favor, inicia sesión para dejar un comentario",
+    "login_to_comment": "Por favor, inicia sesión para dejar un comentario",
     "event": {
         "reply": "Responder",
         "delete": " Eliminar",
@@ -397,5 +398,25 @@
             "next": "Siguiente",
             "page_info": "Página {current} de {total}"
         }
+    },
+    "terms": {
+        "title": "Términos de servicio",
+        "last_updated": "Última actualización: 2026",
+        "acceptance_title": "Aceptación de los términos",
+        "acceptance_text": "Al acceder o utilizar esta plataforma, aceptas cumplir con estos términos de servicio.",
+        "accounts_title": "Cuentas de usuario",
+        "accounts_text": "Los usuarios son responsables de mantener la confidencialidad de sus cuentas.",
+        "content_title": "Propiedad del contenido",
+        "content_text": "Todo el contenido de la plataforma está protegido por leyes de propiedad intelectual.",
+        "ai_title": "Restricciones de inteligencia artificial",
+        "ai_text": "Está prohibido utilizar el contenido de la plataforma para entrenar modelos de inteligencia artificial sin licencia oficial.",
+        "prohibited_title": "Usos prohibidos",
+        "prohibited_text": "Los usuarios no deben intentar acceder sin autorización o interferir con la plataforma.",
+        "liability_title": "Limitación de responsabilidad",
+        "liability_text": "La plataforma no será responsable de daños indirectos derivados del uso del servicio.",
+        "changes_title": "Cambios en los términos",
+        "changes_text": "Podemos modificar estos términos en cualquier momento.",
+        "contact_title": "Contacto",
+        "contact_text": "Para cualquier pregunta sobre estos términos, contacte con la administración."
     }
 }

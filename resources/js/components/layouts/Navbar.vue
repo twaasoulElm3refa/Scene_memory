@@ -116,6 +116,7 @@ const selectLanguage = (lang) => {
 const allLinks = [
     { labelKey: "nav.home", href: "/", active: "home" },
     { labelKey: "nav.about", href: "/who", active: "who" },
+    { labelKey: "nav.terms", href: "/terms", active: "terms" },
     { labelKey: "nav.allEvents", href: "/all_events", active: "all_events" },
     { labelKey: "nav.contact", href: "/contact", active: "contact" },
     { labelKey: "nav.addEvent", href: "/add_event", active: "add_event" },

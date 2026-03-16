@@ -15,6 +15,7 @@
     "upload_media": "Media hochladen",
     "view_all_comments": "Alle Kommentare anzeigen",
     "nav": {
+        "terms": "Allgemeine Gesellschaftsbedingungen",
         "historical": "Historische Personen",
         "home": "Startseite",
         "about": "Über uns",
@@ -26,7 +27,7 @@
         "logout": "Abmelden",
         "login": "Anmelden"
     },
-     "login_to_comment": "Bitte anmelden, um Kommentare zu hinterlassen",
+    "login_to_comment": "Bitte anmelden, um Kommentare zu hinterlassen",
     "languages": {
         "AR": "العربية",
         "EN": "English",
@@ -397,5 +398,25 @@
             "next": "Weiter",
             "page_info": "Seite {current} von {total}"
         }
+    },
+    "terms": {
+        "title": "Nutzungsbedingungen",
+        "last_updated": "Letzte Aktualisierung: 2026",
+        "acceptance_title": "Akzeptanz der Bedingungen",
+        "acceptance_text": "Durch den Zugriff auf diese Plattform erklären Sie sich mit diesen Nutzungsbedingungen und allen geltenden Gesetzen einverstanden.",
+        "accounts_title": "Benutzerkonten",
+        "accounts_text": "Benutzer sind verantwortlich für die Vertraulichkeit ihrer Kontoinformationen und für alle Aktivitäten, die über ihr Konto erfolgen.",
+        "content_title": "Eigentum an Inhalten",
+        "content_text": "Alle Inhalte der Plattform, einschließlich Texte, Bilder und Daten, sind durch Urheberrechte und Gesetze zum geistigen Eigentum geschützt.",
+        "ai_title": "KI-Beschränkungen",
+        "ai_text": "Die Verwendung von Plattforminhalten zum Training von KI- oder Machine-Learning-Modellen ohne offizielle Lizenz ist strengstens untersagt.",
+        "prohibited_title": "Verbotene Nutzung",
+        "prohibited_text": "Benutzer dürfen die Plattform nicht missbrauchen, unbefugten Zugriff versuchen, Daten scrapen oder den Betrieb der Plattform stören.",
+        "liability_title": "Haftungsbeschränkung",
+        "liability_text": "Die Plattform haftet nicht für indirekte oder Folgeschäden, die aus der Nutzung des Dienstes entstehen.",
+        "changes_title": "Änderungen der Bedingungen",
+        "changes_text": "Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern.",
+        "contact_title": "Kontakt",
+        "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
     }
 }

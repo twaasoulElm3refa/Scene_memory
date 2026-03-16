@@ -15,6 +15,7 @@
     "upload_media": "Carica media",
     "view_all_comments": "Visualizza tutti i commenti",
     "nav": {
+        "terms": "Termini e condizioni generali",
         "historical": "Personaggi storici",
         "home": "Home",
         "about": "Chi siamo",
@@ -26,7 +27,7 @@
         "logout": "Esci",
         "login": "Accedi"
     },
-     "login_to_comment": "Effettua il login per lasciare un commento",
+    "login_to_comment": "Effettua il login per lasciare un commento",
     "languages": {
         "AR": "العربية",
         "EN": "English",
@@ -397,5 +398,25 @@
             "next": "Successivo",
             "page_info": "Pagina {current} di {total}"
         }
+    },
+    "terms": {
+        "title": "Termini di servizio",
+        "last_updated": "Ultimo aggiornamento: 2026",
+        "acceptance_title": "Accettazione dei termini",
+        "acceptance_text": "Accedendo o utilizzando questa piattaforma accetti di rispettare questi Termini di Servizio.",
+        "accounts_title": "Account utente",
+        "accounts_text": "Gli utenti sono responsabili della riservatezza delle informazioni del proprio account.",
+        "content_title": "Proprietà dei contenuti",
+        "content_text": "Tutti i contenuti della piattaforma sono protetti dalle leggi sul copyright e sulla proprietà intellettuale.",
+        "ai_title": "Restrizioni sull'intelligenza artificiale",
+        "ai_text": "È vietato utilizzare i contenuti della piattaforma per addestrare modelli di intelligenza artificiale senza una licenza ufficiale.",
+        "prohibited_title": "Usi proibiti",
+        "prohibited_text": "Gli utenti non devono abusare della piattaforma o tentare accessi non autorizzati.",
+        "liability_title": "Limitazione di responsabilità",
+        "liability_text": "La piattaforma non sarà responsabile per danni indiretti derivanti dall'uso del servizio.",
+        "changes_title": "Modifiche ai termini",
+        "changes_text": "Ci riserviamo il diritto di modificare questi termini in qualsiasi momento.",
+        "contact_title": "Contatto",
+        "contact_text": "Per qualsiasi domanda su questi termini, contattare l'amministrazione della piattaforma."
     }
 }
