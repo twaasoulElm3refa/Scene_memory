@@ -311,6 +311,7 @@ export default class MapService {
         mapInstance.on("click", e => {
             const target = e.originalEvent?.target;
             if (target?.closest(".map-event-marker")) return;
+            if (target?.closest(".maplibregl-popup")) return;
             handleMove(e.lngLat);
         });
     }

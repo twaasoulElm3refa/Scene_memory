@@ -3,7 +3,7 @@
         <div class="relative h-[500px] md:h-[600px] bg-gray-900 overflow-hidden">
             <div id="map" class="absolute inset-0"></div>
 
-            <!-- زرار Fullscreen -->
+            <!-- زرار Fullscreen
             <button @click="openFullscreen"
                 class="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition text-gray-800"
                 title="عرض الخريطة كامل الشاشة">
@@ -11,7 +11,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                 </svg>
-            </button>
+            </button> -->
 
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center z-10 pointer-events-none"></div>
         </div>
@@ -222,7 +222,6 @@
         </section>
     </div>
 </template>
-
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed, watch } from "vue";
 import { useRouter } from 'vue-router';
@@ -261,6 +260,7 @@ const itemsPerPage = 8;
 
 let mapService = null;
 
+// ====================== Computed ======================
 const totalPages = computed(() => Math.ceil(displayedEvents.value.length / itemsPerPage));
 
 const maxVisible = 5;
@@ -284,18 +284,23 @@ const paginatedEvents = computed(() => {
     return displayedEvents.value.slice(start, start + itemsPerPage);
 });
 
+// ====================== Methods ======================
 const formatDate = (dateStr) => {
     if (!dateStr) return "—";
     const language = localStorage.getItem("language") || "ar";
     try {
-        return new Date(dateStr).toLocaleDateString(language, { year: "numeric", month: "short", day: "numeric" });
+        return new Date(dateStr).toLocaleDateString(language, {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        });
     } catch {
         return "—";
     }
 };
 
 const filterCountries = () => {
-    const search = countrySearch.value.toLowerCase();
+    const search = countrySearch.value.toLowerCase().trim();
     filteredCountries.value = countries.value.filter(country =>
         country.translation?.name?.toLowerCase().includes(search)
     );
@@ -305,25 +310,31 @@ const selectCountry = (country) => {
     selectedCountry.value = country.id;
     countrySearch.value = country.translation?.name || "";
     showDropdown.value = false;
-    loadCities();
 };
 
+// تحميل المدن عند تغيير الدولة
 const loadCities = async () => {
     if (!selectedCountry.value) {
         cities.value = [];
+        selectedCity.value = "";
         return;
     }
+
     try {
         cities.value = await LocationService.getCitiesByCountry(selectedCountry.value);
-        selectedCity.value = "";
+        selectedCity.value = ""; // reset المدينة عند تغيير الدولة
+        console.log("✅ Cities loaded successfully:", cities.value.length);
     } catch (err) {
-        console.error("Error loading cities:", err);
+        console.error("❌ Error loading cities:", err);
+        cities.value = [];
+        selectedCity.value = "";
     }
 };
 
 const onMainCategoryChange = async () => {
     selectedSubCategory.value = "";
     subCategories.value = [];
+
     if (!selectedCategory.value) return;
 
     loadingSubCategories.value = true;
@@ -335,11 +346,10 @@ const onMainCategoryChange = async () => {
         subCategories.value = [];
     } finally {
         loadingSubCategories.value = false;
-        search();
     }
 };
 
-// ── Helper: رسم الدبابيس على الخرائط المفتوحة ──
+// رسم الدبابيس على الخرائط
 const renderMarkersOnMaps = (events) => {
     if (mapService?.map) {
         mapService.addEventMarkers(events, mapService.map, false);
@@ -351,6 +361,7 @@ const renderMarkersOnMaps = (events) => {
 
 const search = async (isInitial = false) => {
     if (!searched.value && !isInitial) return;
+
     loading.value = true;
 
     try {
@@ -388,7 +399,6 @@ const search = async (isInitial = false) => {
 
 const handleMarkerEvents = (e) => {
     const eventsFromMap = e.detail?.events || [];
-
     displayedEvents.value = eventsFromMap.map(ev => ({
         id: ev.id || ev._id,
         slug: ev.slug,
@@ -403,7 +413,6 @@ const handleMarkerEvents = (e) => {
     }));
 
     renderMarkersOnMaps(displayedEvents.value);
-
     currentPage.value = 1;
     searched.value = true;
     loading.value = false;
@@ -416,12 +425,23 @@ const handleEventMarkerClick = (e) => {
     }
 };
 
+// ====================== Watchers ======================
+
+// 1. Watch للدولة → تحميل المدن تلقائياً
+watch(selectedCountry, async (newVal) => {
+    await loadCities();
+}, { immediate: true });
+
+// 2. Watch عام للبحث التلقائي (مع debounce)
 watch(
     [selectedCategory, selectedSubCategory, selectedCountry, selectedCity, fromDate, toDate, searchQuery],
-    debounce(() => search(), 500),
+    debounce(() => {
+        if (searched.value) search();
+    }, 600),
     { deep: true }
 );
 
+// ====================== Lifecycle Hooks ======================
 onMounted(async () => {
     mapService = new MapService(marker);
     mapService.initMap("map", 6);
@@ -429,7 +449,7 @@ onMounted(async () => {
     try {
         categories.value = await CategoryService.getAllCategories();
         countries.value = await LocationService.getAllCountries();
-        filteredCountries.value = countries.value;
+        filteredCountries.value = [...countries.value]; // نسخة للبحث
     } catch (err) {
         console.error("Error loading initial data:", err);
     }
@@ -444,26 +464,20 @@ onUnmounted(() => {
     if (mapService) mapService.closeFullscreen();
 });
 
+// ====================== Fullscreen Functions ======================
 const openFullscreen = async () => {
     fullscreen.value = true;
     await nextTick();
-
-    // انتظر شوية عشان الـ DOM يتبني
-    await new Promise(r => setTimeout(r, 50));
+    await new Promise(r => setTimeout(r, 100));
 
     mapService.openFullscreen("map-full", 6);
 
-    // لو عندنا أحداث محملة → رسمها على خريطة الـ fullscreen بعد ما تتبني
     if (displayedEvents.value.length > 0) {
-        // نستنى الـ map يخلص load
-        const waitForFullMap = () => {
+        setTimeout(() => {
             if (mapService.fullMap) {
                 mapService.addEventMarkers(displayedEvents.value, mapService.fullMap, true);
-            } else {
-                setTimeout(waitForFullMap, 100);
             }
-        };
-        setTimeout(waitForFullMap, 300);
+        }, 400);
     }
 };
 

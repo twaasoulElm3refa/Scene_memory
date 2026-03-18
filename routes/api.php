@@ -41,7 +41,7 @@ Route::prefix('v1')->group(function () {
     // AUTH
     Route::prefix('users')->group(function () {
         // Auth Routes
-        Route::post('/register', [AuthController::class, 'register'])->middleware(['throttle:3,1']);
+        Route::post('/register', [AuthController::class, 'register'])->middleware(['throttle:4,1']);
         Route::post('/login', [AuthController::class, 'login'])->middleware(['throttle:6,1']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
             ->middleware(['throttle:5,1', 'guest']);

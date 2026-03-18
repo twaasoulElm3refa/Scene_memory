@@ -68,7 +68,8 @@
                                     <select v-model="form.city_id" :disabled="!selectedCountryId || cities.length === 0"
                                         class="form-select form-select-md rounded-3" required>
                                         <option value="" disabled>
-                                            {{ selectedCountryId ? $t('eventForm.selectCity') : $t('eventForm.selectCityFirst') }}
+                                            {{ selectedCountryId ? $t('eventForm.selectCity') :
+                                                $t('eventForm.selectCityFirst') }}
                                         </option>
                                         <option v-for="city in cities" :key="city.id" :value="city.id">
                                             {{ city.translation.name }}
@@ -95,7 +96,8 @@
                                         :disabled="!selectedCategoryId || subCategories.length === 0"
                                         class="form-select form-select-md rounded-3" required>
                                         <option value="" disabled>
-                                            {{ selectedCategoryId ? $t('eventForm.selectSubFirst') : $t('eventForm.selectSubFirst') }}
+                                            {{ selectedCategoryId ? $t('eventForm.selectSubFirst') :
+                                                $t('eventForm.selectSubFirst') }}
                                         </option>
                                         <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
                                             {{ sub.translation.name }}
@@ -104,28 +106,21 @@
                                 </div>
                             </div>
 
-                            <!-- الخريطة -->
                             <div class="mt-3">
                                 <label class="form-label fw-medium d-block mb-2">
                                     {{ $t('eventForm.selectLocationMap') }} <span class="text-danger">*</span>
                                 </label>
-                                <l-map ref="mapRef" :zoom="zoom" :center="center"
-                                    style="height: 350px; border-radius: 12px; border: 1px solid #dee2e6"
-                                    @click="onMapClick">
-                                    <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' />
-                                    <l-marker v-if="form.latitude && form.longitude"
-                                        :lat-lng="[form.latitude, form.longitude]">
-                                        <l-tooltip :permanent="true" direction="top">
-                                            {{ $t('eventForm.selectedCoords').replace('{lat}', form.latitude.toFixed(6)).replace('{lng}', form.longitude.toFixed(6)) }}
-                                        </l-tooltip>
-                                    </l-marker>
-                                </l-map>
+
+                                <div ref="mapContainer"
+                                    style="height: 350px; border-radius: 12px; border: 1px solid #dee2e6">
+                                </div>
+
                                 <div class="mt-2 small text-muted" v-if="form.latitude && form.longitude">
                                     {{ $t('eventForm.selectedCoords') }}
                                     <strong>{{ $t('eventForm.lat') }}: {{ form.latitude.toFixed(6) }}</strong> ,
                                     <strong>{{ $t('eventForm.lng') }}: {{ form.longitude.toFixed(6) }}</strong>
                                 </div>
+
                                 <div v-else class="mt-2 small text-danger">
                                     {{ $t('eventForm.pleaseSelectLocation') }}
                                 </div>
@@ -147,7 +142,8 @@
                                     <label class="form-label fw-medium">
                                         {{ $t('eventForm.startDate') }} <span class="text-danger">*</span>
                                     </label>
-                                    <input v-model="form.start_date" type="date" class="form-control rounded-3" required />
+                                    <input v-model="form.start_date" type="date" class="form-control rounded-3"
+                                        required />
                                 </div>
                                 <div class="col-12 col-sm-4">
                                     <label class="form-label fw-medium">{{ $t('eventForm.endDate') }}</label>
@@ -174,14 +170,15 @@
                                 class="border border-2 border-dashed border-secondary-subtle rounded-3 p-4 text-center bg-body-tertiary"
                                 style="min-height: 220px">
                                 <input ref="fileInput" type="file"
-                                    accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,video/ogg"
-                                    multiple hidden @change="handleMediaSelect" />
+                                    accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,video/ogg" multiple
+                                    hidden @change="handleMediaSelect" />
 
                                 <!-- حالة بدون ملفات -->
                                 <div v-if="form.media_previews.length === 0" class="py-4">
                                     <div class="mx-auto mb-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center"
                                         style="width: 70px; height: 70px">
-                                        <svg class="text-primary" width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="text-primary" width="36" height="36" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                         </svg>
@@ -203,17 +200,12 @@
                                         <div v-for="(preview, index) in form.media_previews" :key="index" class="col">
                                             <div class="position-relative">
                                                 <!-- صورة -->
-                                                <img v-if="isImage(preview)"
-                                                    :src="preview" :alt="'media ' + index"
+                                                <img v-if="isImage(preview)" :src="preview" :alt="'media ' + index"
                                                     class="img-fluid rounded-3 shadow"
                                                     style="height: 140px; object-fit: cover; width: 100%" />
                                                 <!-- فيديو -->
-                                                <video v-else
-                                                    :src="preview"
-                                                    class="rounded-3 shadow w-100"
-                                                    style="height: 140px; object-fit: cover;"
-                                                    controls
-                                                    muted></video>
+                                                <video v-else :src="preview" class="rounded-3 shadow w-100"
+                                                    style="height: 140px; object-fit: cover;" controls muted></video>
 
                                                 <button type="button" @click="removeMedia(index)"
                                                     class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle shadow-sm"
@@ -232,13 +224,14 @@
                                         </div>
                                     </div>
 
-                                    <button v-if="form.media_files.length < MAX_MEDIA" type="button" @click="$refs.fileInput.click()"
-                                        class="btn btn-outline-primary btn-sm px-4">
+                                    <button v-if="form.media_files.length < MAX_MEDIA" type="button"
+                                        @click="$refs.fileInput.click()" class="btn btn-outline-primary btn-sm px-4">
                                         {{ $t('eventForm.addMore') }}
                                     </button>
 
                                     <small class="text-muted d-block mt-2">
-                                        {{ $t('eventForm.mediaCount', { count: form.media_files.length }) }} / {{ MAX_MEDIA }}
+                                        {{ $t('eventForm.mediaCount', { count: form.media_files.length }) }} / {{
+                                            MAX_MEDIA }}
                                     </small>
                                 </div>
                             </div>
@@ -264,8 +257,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 import axios from "axios";
-import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer, LMarker, LTooltip } from "@vue-leaflet/vue-leaflet";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 const MAX_MEDIA = 8;
 
@@ -342,14 +335,22 @@ async function fetchCountries() {
 }
 
 async function loadCities() {
-    cities.value = [];
-    form.value.city_id = "";
-    if (!selectedCountryId.value) return;
+    if (!selectedCountryId.value) {
+        cities.value = [];
+        form.value.city_id = "";
+        return;
+    }
     try {
         const res = await axios.get(`/v1/countries/${selectedCountryId.value}`);
-        cities.value = res.data.data?.countries?.cities || [];
+        cities.value = res.data.data?.country?.cities || [];
+        form.value.city_id = "";
+
     } catch (err) {
         console.error("فشل تحميل المدن", err);
+        cities.value = [];
+        alert("حدث خطأ أثناء تحميل المدن");
+    } finally {
+        loading.value = false;
     }
 }
 
@@ -475,5 +476,67 @@ async function createEvent() {
     } finally {
         loading.value = false;
     }
+}
+
+const mapContainer = ref(null);
+let map = null;
+let marker = null;
+
+const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
+
+onMounted(() => {
+    initMap();
+});
+
+function initMap() {
+    const lang = localStorage.getItem("language") || "ar";
+    const isAr = lang === "ar";
+
+    map = new maplibregl.Map({
+        container: mapContainer.value,
+        style: STYLE_URL,
+        center: [31.2357, 30.0444],
+        zoom: 6,
+    });
+
+    map.addControl(new maplibregl.NavigationControl());
+
+    map.on("load", () => {
+        patchLanguage(map, isAr);
+    });
+
+    map.on("click", (e) => {
+        const { lat, lng } = e.lngLat;
+
+        form.value.latitude = lat;
+        form.value.longitude = lng;
+
+        if (!marker) {
+            marker = new maplibregl.Marker({ color: "#e53e3e" })
+                .setLngLat([lng, lat])
+                .addTo(map);
+        } else {
+            marker.setLngLat([lng, lat]);
+        }
+    });
+}
+
+function patchLanguage(map, isAr) {
+    const style = map.getStyle();
+    if (!style?.layers) return;
+
+    const langField = isAr ? "name:ar" : "name:en";
+    const nameExpr = ["coalesce", ["get", langField], ["get", "name"]];
+
+    style.layers.forEach(layer => {
+        if (layer.type !== "symbol") return;
+        if (!layer.layout?.["text-field"]) return;
+
+        map.setLayoutProperty(layer.id, "text-field", nameExpr);
+
+        if (isAr) {
+            map.setLayoutProperty(layer.id, "text-writing-mode", ["horizontal"]);
+        }
+    });
 }
 </script>

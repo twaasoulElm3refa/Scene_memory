@@ -149,5 +149,9 @@ class RequestController extends Controller
     {
         Cache::tags(['events'])->flush();
         Cache::tags(['requests'])->flush();
+        $locales=['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
+        foreach ($locales as $locale) {
+           Cache::forget('daily_events_'.$locale);
+        }
     }
 }
