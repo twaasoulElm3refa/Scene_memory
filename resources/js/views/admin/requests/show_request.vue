@@ -54,7 +54,7 @@
           <img
             :src="
               apiData.event.first_image
-                ? `/storage/${apiData.event.first_image.url}`
+                ? `/storage/${apiData.event.first_image.full_url}`
                 : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&auto=format&fit=crop&q=80'
             "
             :alt="apiData.event.title || 'Event image'"
@@ -268,7 +268,6 @@ const fetchRequest = async () => {
       request: data.data.request,
       event: data.data.event,
     };
-    console.log(apiData.value);
   } catch (err) {
     error.value = err.response?.data?.message || "Failed to load request details.";
   } finally {

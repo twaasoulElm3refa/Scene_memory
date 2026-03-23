@@ -18,4 +18,15 @@ class licenceType extends Model
     {
         return $this->hasMany(Subscriptions::class,'licence_id');
     }
+
+     public function translations()
+    {
+        return $this->hasMany(PlanTranslations::class, 'plan_id');
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(PlanTranslations::class, 'plan_id')
+            ->where('locale', app()->getLocale());
+    }
 }

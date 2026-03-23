@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Categories;
+use App\Models\licenceType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,45 +10,41 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
-class TranslateCategoryJob implements ShouldQueue
+class TranslatePlanJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $categoryId;
+    protected $planId;
     protected $text;
 
-    public function __construct($categoryId, $text )
+    public function __construct($planId, $text)
     {
-        $this->categoryId = $categoryId;
+        $this->planId = $planId;
         $this->text = $text;
     }
 
     public function handle(): void
     {
-        $category = Categories::find($this->categoryId);
-
-        if (! $category) {
-            return;
-        }
-
+        $plan = licenceType::find($this->planId);
+        if (! $plan) return;
         $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
 
         foreach ($locales as $locale) {
-
             try {
                 $tr = new GoogleTranslate($locale);
-                $tr->setSource('ar');
+                $tr->setSource('en');
+
                 $translated = $tr->translate($this->text);
 
                 if ($translated) {
-                    $category->translations()->updateOrCreate(
+                    $plan->translations()->updateOrCreate(
                         ['locale' => $locale],
                         ['name' => $translated]
                     );
                 }
 
             } catch (\Exception $e) {
-                \Log::error('Translate Error: '.$e->getMessage());
+                \Log::error('Translate Plan Error: ' . $e->getMessage());
             }
         }
     }

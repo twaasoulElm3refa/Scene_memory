@@ -27,6 +27,7 @@ use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
 use App\Http\Controllers\api\home\LikesController;
+use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
@@ -233,6 +234,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('replies')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
         Route::post('/reply/{id}', [CommentReplyController::class,'create']);
     });
-    // 109 Endpoints for the API
+
+
+    Route::prefix('plans')->group(function () {
+        Route::get('/all', [PlanController::class,'all']);
+        Route::get('/single/{id}', [PlanController::class,'single']);
+    });
+    // 111 Endpoints for the API
 });
 
