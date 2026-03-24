@@ -21,3 +21,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+runs.txt
+project.md
+Dockerfile
+docker-compose.yml

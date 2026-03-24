@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(licenceType::class,'licence_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->enum('status', ['active','expired','cancelled'])->default('');
+            $table->enum('status', ['active','expired','cancelled'])->default('active')->nullable();
             $table->string('start_at')->nullable();
             $table->string('end_at')->nullable();
             $table->timestamps();

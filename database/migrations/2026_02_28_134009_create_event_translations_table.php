@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Events::class, 'event_id')->constrained()->cascadeOnDelete();
             $table->string('locale')->index();
             $table->string('title');
-            $table->string('description');
+            $table->longText('description');
             $table->timestamps();
             $table->unique(['event_id', 'locale']);
         });
