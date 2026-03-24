@@ -1,8 +1,15 @@
 php artisan serve --host=0.0.0.0 --port=8000
 npm run dev -- --host 0.0.0.0 --port 5174
+php artisan optimize:clear
+php artisan migrate:fresh --seed
 
 docker exec -it laravel-app bash
 docker-compose up -d
 docker-compose down -v
 docker-compose down --rmi all
 docker-compose build --no-cache
+
+
+docker system prune -a
+docker system prune -a --volumes
+docker system df
