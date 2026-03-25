@@ -14,7 +14,8 @@
         <div v-else>
             <!-- Hero -->
             <div class="relative">
-                <component :is="heroMediaComponent" v-if="heroMedia" :src="heroMedia.full_url"
+                <component :is="heroMediaComponent" v-if="heroMedia"
+                    :src="getMediaUrl(heroMedia.full_url || heroMedia.preview_url)"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
                 <img v-else src="https://images.unsplash.com/..." :alt="event.translation.title"
@@ -99,18 +100,14 @@
                                     class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative"
                                     @click="openLightbox(index)">
 
-                                    <img v-if="!media.video && media.preview_url && !isVideoUrl(media.preview_url)"
-                                        :src="media.preview_url" class="w-full h-full object-cover" loading="lazy" />
+                                    <img v-if="!media.video && media.preview_url" :src="getMediaUrl(media.preview_url)"
+                                        class="w-full h-full object-cover" loading="lazy" />
 
-                                    <div v-else-if="media.video || (media.preview_url && isVideoUrl(media.preview_url))"
-                                        class="relative w-full h-full bg-black">
-                                        <video :src="media.video || media.preview_url"
-                                            class="w-full h-full object-cover" muted loop playsinline
-                                            preload="metadata"></video>
-                                        <div class="absolute inset-0 flex items-center justify-center bg-black/20">
-                                            <span class="text-white text-6xl opacity-80 drop-shadow-2xl">▶</span>
-                                        </div>
-                                    </div>
+                                    <video
+                                        v-else-if="media.video || (media.preview_url && isVideoUrl(media.preview_url))"
+                                        :src="getMediaUrl(media.video || media.preview_url)"
+                                        class="w-full h-full object-cover" muted loop playsinline preload="metadata">
+                                    </video>
 
                                     <div v-else
                                         class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
@@ -338,7 +335,7 @@
                                         <div class="mt-4 flex justify-end">
                                             <button type="submit" :disabled="commentLoading || !newComment.trim()"
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
-                                                <span v-if="commentLoading">{{ $t('event.sending_comment') || 'جاري الإرسال...' }}</span>
+                                                <span v-if="commentLoading">{{ $t('event.sending_comment') || 'جاري  الإرسال...' }}</span>
                                                 <span v-else>{{ $t('event.submit_comment') || 'إرسال التعليق' }}</span>
                                             </button>
                                         </div>
@@ -447,11 +444,12 @@
             <div v-if="lightboxOpen" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
                 @click="lightboxOpen = false">
                 <div class="relative max-w-[95vw] max-h-[95vh]">
-                    <img v-if="currentMedia && !isVideoUrl(currentMedia.url) && !currentMedia.video"
-                        :src="currentMedia.url" class="max-w-full max-h-[90vh] object-contain" @click.stop />
-                    <video v-else-if="currentMedia && (currentMedia.video || isVideoUrl(currentMedia.url))"
-                        :src="currentMedia.video || currentMedia.url" class="max-w-full max-h-[90vh]" controls autoplay
-                        @click.stop></video>
+                    <img v-if="currentMedia && !isVideoUrl(currentMedia.full_url || currentMedia.preview_url)"
+                        :src="getMediaUrl(currentMedia.full_url || currentMedia.preview_url)"
+                        class="max-w-full max-h-[90vh] object-contain" @click.stop />
+                    <video v-else-if="currentMedia"
+                        :src="getMediaUrl(currentMedia.full_url || currentMedia.video || currentMedia.preview_url)"
+                        class="max-w-full max-h-[90vh]" controls autoplay @click.stop></video>
                     <button class="absolute top-4 right-4 text-white text-5xl font-bold drop-shadow-lg"
                         @click="lightboxOpen = false">×</button>
                 </div>
@@ -662,6 +660,14 @@ const reactionEndpointMap = {
     support: "support",
     exhibitions: "Exhibitions",
     neutral: "neutral",
+};
+
+const STORAGE_URL = 'http://localhost:8000/storage/';
+
+const getMediaUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return STORAGE_URL + path;
 };
 
 const setReaction = async (commentId, type) => {

@@ -1,6 +1,5 @@
 FROM php:8.2-fpm
 
-# تثبيت dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     gnupg2 \
@@ -29,23 +28,26 @@ RUN apt-get update && apt-get install -y \
         intl \
         gd
 
-# Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
-# Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
+
 COPY . .
 
-# تثبيت dependencies
+# 🔥 هنا أهم سطر
+COPY uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 RUN composer install --no-dev --optimize-autoloader
 
-# صلاحيات
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["/entrypoint.sh"]

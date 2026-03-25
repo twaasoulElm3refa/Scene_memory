@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EventsRequest extends FormRequest
@@ -17,22 +19,27 @@ class EventsRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
-            'description'=> 'required|string',
+            'description' => 'required|string',
             'city_id' => 'required|exists:cities,id',
             'sub_categorey_id' => 'required|exists:sub_categoreys,id',
             'urls' => 'required|array|min:1',
-            'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,mp4|max:5120',
-            'start_date'=>'required',
-            'lattitude'=>'nullable',
-            'langitude'=>'nullable',
-            'end_date'=>'required',
-            'time'=>'nullable',
+            'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,mp4|max:20460',
+            'start_date' => 'required',
+            'lattitude' => 'nullable',
+            'langitude' => 'nullable',
+            'end_date' => 'required',
+            'time' => 'nullable',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        dd($validator->errors()->toArray());
     }
 }

@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+
   app:
     build:
       context: .
@@ -19,6 +20,13 @@ services:
     ports:
       - "8000:8000"
       - "5174:5174"
+    command: >
+      sh -c "
+      php artisan config:clear &&
+      php artisan cache:clear &&
+      php artisan storage:link || true &&
+      php artisan serve --host=0.0.0.0 --port=8000
+      "
 
   mysql:
     image: mysql:8.0
@@ -48,7 +56,7 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: laravel-phpmyadmin
     environment:
-      PMA_HOST: SceMory
+      PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: SceMory-password
     ports:
       - "8080:80"
@@ -64,7 +72,12 @@ services:
     volumes:
       - ./:/var/www:cached
       - /var/www/node_modules
-    command: php artisan queue:work --sleep=3 --tries=3
+    command: >
+      sh -c "
+      php artisan config:clear &&
+      php artisan storage:link || true &&
+      php artisan queue:work --sleep=3 --tries=3
+      "
     depends_on:
       - app
       - redis

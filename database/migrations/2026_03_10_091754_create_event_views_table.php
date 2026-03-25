@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Events::class,'event_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('count')->default(0);
-            $table->unsignedInteger('ip_address')->nullable();
+            $table->string('ip_address',255)->nullable();
             $table->timestamps();
             $table->unique(['ip_address','event_id']);
         });

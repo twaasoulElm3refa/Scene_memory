@@ -181,7 +181,6 @@ export default {
                     this.perPage = result.data.per_page || 8;
 
                     this.calculateStats();
-                    console.log(this.events);
                 } else {
                     throw new Error(result.message || "Failed to fetch events");
                 }

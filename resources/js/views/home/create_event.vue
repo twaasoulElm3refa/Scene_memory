@@ -395,7 +395,7 @@ function processMedia(newFiles) {
     }
 
     newFiles.forEach((file) => {
-        if (file.size > 5 * 1024 * 1024) {
+        if (file.size > 20 * 1024 * 1024) {
             alert(`حجم الملف ${file.name} يتجاوز 5 ميجا`);
             return;
         }
