@@ -422,7 +422,13 @@
     "plans": {
         "chooseYourPlan": "अपनी योजना चुनें",
         "getStarted": "मुफ्त में शुरू करें",
+        "perMonth": "प्रति माह",
+        "prioritySupport": "प्राथमिक सहायता",
+        "securePayments": "सुरक्षित भुगतान",
+        "moneyBack": "मनी-बैक गारंटी",
+        "support247": "24/7 सहायता",
         "subscribe": "अभी सदस्यता लें",
+        "noCreditCard": "क्रेडिट कार्ड नहीं आवश्यक",
         "free": "मुफ्त",
         "ourPlans": "हमारी योजनाएँ",
         "description": "हमारी विभिन्न योजनाएँ",

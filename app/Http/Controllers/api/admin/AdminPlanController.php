@@ -7,29 +7,49 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanRequest;
 use App\Jobs\TranslatePlanJob;
 use App\Models\licenceType;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class AdminPlanController extends Controller
 {
     use ApiResponse;
+    private $cacheTime = 60 * 24 * 7;
+
+    public function all()
+    {
+        $cacheKey = 'plans_admin_'.$this->cacheTime.''.app()->getLocale();
+        $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
+            return licenceType::with('translation')->get();
+        });
+
+        return $this->success($plans, 'All plans');
+    }
 
     public function create(PlanRequest $request)
     {
         $data=$request->validated();
         try {
+            $data['slug'] = Str::slug($data['name']).'-'.Str::random(5).'-'.time();
             $plan = licenceType::firstOrCreate($data);
-            TranslatePlanJob::dispatch($plan->id,$data['name']);
+            TranslatePlanJob::dispatch($plan->id, $data['name']);
+            $this->clearCache();
             return $this->success($plan,'plan Created Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
     }
 
+
     public function update()
     {
+        $data=request()->all();
         try {
+            $data['slug'] = Str::slug($data['name']).'-'.Str::random(5).'-'.time();
             $plan = licenceType::find(request('id'));
             $plan->update(request()->all());
-              TranslatePlanJob::dispatch($plan->id,$plan->name);
+            TranslatePlanJob::dispatch($plan->id, $plan->name);
+            $this->clearCache();
             return $this->success($plan,'plan Updated Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
@@ -41,11 +61,29 @@ class AdminPlanController extends Controller
         try {
             $plan = licenceType::find(request('id'));
             $plan->delete();
+            $this->clearCache();
             return $this->success($plan,'plan Deleted Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
     }
 
+    private function clearCache()
+    {
+        Cache::tags(['plans'])->flush();
+    }
 
+    public function single()
+    {
+       try {
+         $cacheKey = 'plan_single_admin_'.request('id').$this->cacheTime.''.app()->getLocale();
+        $plans = Cache::remember($cacheKey, $this->cacheTime, function () {
+            return licenceType::where('id',request('id'))->get();
+        });
+
+        return $this->success($plans, 'Single plan');
+       } catch (\Throwable $th) {
+        return $this->error($th->getMessage());
+       }
+    }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Countries::class,'country_id')->constrained()->cascadeOnDelete();
             $table->string('locale')->index();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->unique(['country_id', 'locale']);
         });
@@ -30,4 +30,3 @@ return new class extends Migration
         Schema::dropIfExists('country_translations');
     }
 };
-    

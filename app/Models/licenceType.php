@@ -29,4 +29,9 @@ class licenceType extends Model
         return $this->hasOne(PlanTranslations::class, 'plan_id')
             ->where('locale', app()->getLocale());
     }
+
+    public function advantges()
+    {
+        return $this->hasMany(PlanBenefits::class, 'plan_id');
+    }
 }

@@ -42,6 +42,7 @@ import historical from "../views/home/historical.vue";
 import create_historical from "../views/home/create_historical.vue";
 import all_plans from "../views/admin/Licenses/all_plans.vue";
 import create_plan from "../views/admin/Licenses/create_plan.vue";
+import single_plan from "../views/admin/Licenses/single_plan.vue";
 
 const routes = [
     {
@@ -225,6 +226,12 @@ const routes = [
     {
         path: "/admin/plans",
         component: all_plans,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/plans/:id",
+        component: single_plan,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {

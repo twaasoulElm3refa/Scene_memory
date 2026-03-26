@@ -16,7 +16,7 @@ class PlanController extends Controller
     public function all()
     {
         $cacheKey = 'plans'.$this->cacheTime.''.app()->getLocale();
-        $plans = Cache::remember($cacheKey, $this->cacheTime, function () {
+       $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
             return licenceType::with('translation')->get();
         });
 
@@ -26,6 +26,7 @@ class PlanController extends Controller
     public function single()
     {
         $cacheKey = 'plan_single_'.request('id').$this->cacheTime.''.app()->getLocale();
+
         $plans = Cache::remember($cacheKey, $this->cacheTime, function () {
             return licenceType::with('translation')->where('id',request('id'))->get();
         });

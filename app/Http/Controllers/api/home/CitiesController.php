@@ -40,7 +40,7 @@ class CitiesController extends Controller
     {
         $page = request('page', 1);
         $perPage = 5;
-        $cacheKey = "cities_paginated_page_{$page}_per_{$perPage}_".app("")->getLocale();
+        $cacheKey = "cities_paginated_page_{$page}_per_{$perPage}_".app()->getLocale();
 
         $cities = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
             return Cities::select('id', 'name', 'country_id')

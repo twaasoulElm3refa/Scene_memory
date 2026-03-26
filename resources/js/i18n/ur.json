@@ -426,6 +426,12 @@
         "price": "قیمت",
         "features": "خصوصیات",
         "Monthly": "ماہانہ",
+        "perMonth": "ماہانہ",
+        "noCreditCard": "کریڈٹ کارڈ نہیں ہے",
+        "prioritySupport": "ترجیحی مدد",
+        "securePayments": "محفوظ ادائیگیاں",
+        "moneyBack": "رقم واپس کی گارنٹی",
+        "support247": "24/7 سپورٹ",
         "Yearly": "سالانہ",
         "unlimitedEvents": "لامحدود ایونٹس",
         "addEvents": "ایونٹس شامل کریں"

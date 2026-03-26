@@ -422,7 +422,13 @@
     "plans": {
         "chooseYourPlan": "Wählen Sie Ihren Plan",
         "getStarted": "Kostenlos starten",
+        "perMonth": "pro Monat",
+        "prioritySupport": "Priorisierter Support",
+        "securePayments": "Sichere Zahlungen",
+        "moneyBack": "Geld-zurück-Garantie",
+        "support247": "24/7 Support",
         "subscribe": "Jetzt abonnieren",
+        "noCreditCard": "Keine Kreditkarte erforderlich",
         "free": "Kostenlos",
         "ourPlans": "Unsere Pläne",
         "description": "Unsere verschiedenen Pläne",

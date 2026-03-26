@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('footers', function (Blueprint $table) {
             $table->id();
-            $table->string('logo')->nullable();
-            $table->string('twitter')->nullable();
-            $table->string('facebook')->nullable();
-            $table->string('instagram')->nullable();
-            $table->string('google_play')->nullable();
-            $table->string('app_store')->nullable();
+            $table->text('logo')->nullable();
+            $table->text('twitter')->nullable();
+            $table->text('facebook')->nullable();
+            $table->text('instagram')->nullable();
+            $table->text('google_play')->nullable();
+            $table->text('app_store')->nullable();
             $table->timestamps();
         });
     }

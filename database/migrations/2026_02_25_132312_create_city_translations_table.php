@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Cities::class,'city_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('locale')->index();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unique(['city_id', 'locale']);

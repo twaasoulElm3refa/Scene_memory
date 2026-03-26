@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\subCategorey;
+use App\Models\licenceType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,14 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_categorey_translations', function (Blueprint $table) {
+        Schema::create('plan_benefits', function (Blueprint $table) {
             $table->id();
-             $table->foreignIdFor(subCategorey::class,'category_id')->constrained()->cascadeOnDelete();
-            $table->string('locale')->index();
-            $table->string('name')->nullable();
+            $table->foreignIdFor(licenceType::class,'plan_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('feature')->nullable();
+            $table->boolean('is_active')->default(true)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->unique(['category_id', 'locale']);
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_categorey_translations');
+        Schema::dropIfExists('plan_benefits');
     }
 };

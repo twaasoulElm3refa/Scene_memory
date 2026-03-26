@@ -240,10 +240,16 @@ Route::prefix('v1')->group(function () {
     Route::prefix('plans')->group(function () {
         Route::get('/all', [PlanController::class,'all']);
         Route::get('/single/{id}', [PlanController::class,'single']);
-        Route::post('/create', [AdminPlanController::class,'create']);
-        Route::put('/update/{id}', [AdminPlanController::class,'update']);
-        Route::delete('/delete/{id}', [AdminPlanController::class,'delete']);
+        Route::get('/all/admin', [AdminPlanController::class,'all'])->middleware(AdminMiddleware::class);
+        Route::get('/single/admin/{id}', [AdminPlanController::class,'single'])->middleware(AdminMiddleware::class);
+        Route::post('/create', [AdminPlanController::class,'create'])
+        ->middleware( AdminMiddleware::class);
+        Route::put('/update/{id}', [AdminPlanController::class,'update'])
+        ->middleware('auth:sanctum', AdminMiddleware::class);
+        Route::delete('/delete/{id}', [AdminPlanController::class,'delete'])
+        ->middleware('auth:sanctum', AdminMiddleware::class);
     });
+
     // 111 Endpoints for the API
 });
 

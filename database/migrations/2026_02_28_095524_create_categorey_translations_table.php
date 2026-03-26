@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Categories::class,'category_id')->constrained()->cascadeOnDelete();
             $table->string('locale')->index();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->unique(['category_id', 'locale']);

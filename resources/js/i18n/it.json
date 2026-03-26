@@ -422,6 +422,12 @@
     "plans": {
         "chooseYourPlan": "Scegli il tuo piano",
         "getStarted": "Inizia gratis",
+        "noCreditCard": "Nessuna carta di credito richiesta",
+        "perMonth": "al mese",
+        "prioritySupport": "Supporto prioritario",
+        "securePayments": "Pagamenti sicuri",
+        "moneyBack": "Garanzia di rimborso",
+        "support247": "Supporto 24/7",
         "subscribe": "Abbonati ora",
         "free": "Gratis",
         "ourPlans": "I nostri piani",
