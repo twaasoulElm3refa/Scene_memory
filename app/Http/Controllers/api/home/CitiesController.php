@@ -20,10 +20,10 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        $cacheKey = 'cities_index_'.app()->getLocale();
+        $cacheKey = 'cities_index_paginated_'.app()->getLocale();
 
         $cities = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () {
-            return Cities::with('translation')->get();
+            return Cities::with('translation')->paginate(10);
         });
 
         if ($cities->isEmpty()) {
@@ -40,7 +40,7 @@ class CitiesController extends Controller
     {
         $page = request('page', 1);
         $perPage = 5;
-        $cacheKey = "cities_paginated_page_{$page}_per_{$perPage}";
+        $cacheKey = "cities_paginated_page_{$page}_per_{$perPage}_".app("")->getLocale();
 
         $cities = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
             return Cities::select('id', 'name', 'country_id')
@@ -74,7 +74,7 @@ class CitiesController extends Controller
     public function single()
     {
         $cityId = request('id');
-        $cacheKey = "cities_single_{$cityId}";
+        $cacheKey = "cities_single_{$cityId}_".app()->getLocale();
 
         $city = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () use ($cityId) {
             return Cities::with('events', 'translation')->find($cityId);

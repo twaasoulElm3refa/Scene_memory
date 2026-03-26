@@ -418,5 +418,19 @@
         "changes_text": "Nous pouvons modifier ces conditions à tout moment.",
         "contact_title": "Contact",
         "contact_text": "Pour toute question concernant ces conditions, veuillez contacter l'administration."
+    },
+    "plans": {
+        "chooseYourPlan": "Choisissez votre plan",
+        "getStarted": "Commencez gratuitement",
+        "subscribe": "Abonnez-vous maintenant",
+        "free": "Gratuit",
+        "ourPlans": "Nos plans",
+        "description": "Nos différents plans",
+        "price": "Prix",
+        "features": "Fonctionnalités",
+        "Monthly": "Mensuel",
+        "Yearly": "Annuel",
+        "unlimitedEvents": "Événements illimités",
+        "addEvents": "Ajouter des événements"
     }
 }

@@ -229,10 +229,16 @@ const isActive = (name) => document.body.dataset.route === name;
     color: var(--text-main);
     text-decoration: none;
     font-weight: 500;
+    padding: 5px 8px; /* زيادة شويه padding أفقياً */
+    font-size: 14px;
     position: relative;
     padding-bottom: 4px;
     transition: color 0.3s ease;
+    display: inline-block; /* مهم عشان يبقى inline في RTL و LTR */
+    white-space: nowrap;   /* يمنع الكلمات من الانكسار */
+    text-align: center;    /* ضبط النص في المنتصف */
 }
+
 
 /* Animated Underline */
 .nav-link::after {

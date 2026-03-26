@@ -418,5 +418,19 @@
         "changes_text": "Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern.",
         "contact_title": "Kontakt",
         "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
+    },
+    "plans": {
+        "chooseYourPlan": "Wählen Sie Ihren Plan",
+        "getStarted": "Kostenlos starten",
+        "subscribe": "Jetzt abonnieren",
+        "free": "Kostenlos",
+        "ourPlans": "Unsere Pläne",
+        "description": "Unsere verschiedenen Pläne",
+        "price": "Preis",
+        "features": "Funktionen",
+        "Monthly": "Monatlich",
+        "Yearly": "Jährlich",
+        "unlimitedEvents": "Unbegrenzte Ereignisse",
+        "addEvents": "Ereignisse hinzufügen"
     }
 }

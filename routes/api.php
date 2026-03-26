@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\admin\AdminPlanController;
 use App\Http\Controllers\api\admin\CategoriesCreateController;
 use App\Http\Controllers\api\admin\CitiesCreateController;
 use App\Http\Controllers\api\admin\ContactController;
@@ -239,6 +240,9 @@ Route::prefix('v1')->group(function () {
     Route::prefix('plans')->group(function () {
         Route::get('/all', [PlanController::class,'all']);
         Route::get('/single/{id}', [PlanController::class,'single']);
+        Route::post('/create', [AdminPlanController::class,'create']);
+        Route::put('/update/{id}', [AdminPlanController::class,'update']);
+        Route::delete('/delete/{id}', [AdminPlanController::class,'delete']);
     });
     // 111 Endpoints for the API
 });

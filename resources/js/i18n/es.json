@@ -418,5 +418,19 @@
         "changes_text": "Podemos modificar estos términos en cualquier momento.",
         "contact_title": "Contacto",
         "contact_text": "Para cualquier pregunta sobre estos términos, contacte con la administración."
+    },
+    "plans": {
+        "chooseYourPlan": "Elige tu plan",
+        "getStarted": "Comienza gratis",
+        "subscribe": "Suscríbete ahora",
+        "free": "Gratis",
+        "ourPlans": "Nuestros planes",
+        "description": "Nuestros diferentes planes",
+        "price": "Precio",
+        "features": "Características",
+        "Monthly": "Mensual",
+        "Yearly": "Anual",
+        "unlimitedEvents": "Eventos ilimitados",
+        "addEvents": "Agregar eventos"
     }
 }

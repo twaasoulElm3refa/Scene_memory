@@ -29,6 +29,32 @@
             </span>
         </RouterLink>
 
+        <!-- PLANS -->
+        <div class="sidebar-group">
+            <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': plansActive }"
+                @click="toggle('plans')">
+                <span class="flex items-center gap-3">
+                    <ClipboardDocumentListIcon  class="w-5 h-5" /> <!-- ممكن تغير الأيقونة لأي أيقونة مناسبة -->
+                    Plans
+                </span>
+                <ChevronIcon class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': open.plans }" />
+            </button>
+            <Transition name="dropdown">
+                <div v-if="open.plans" class="dropdown">
+                    <RouterLink to="/admin/plans" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path === '/admin/plans' }">
+                        <ClipboardDocumentListIcon  class="w-5 h-5" />
+                        All Plans
+                    </RouterLink>
+                    <RouterLink to="/admin/plans/create" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path === '/admin/plans/create' }">
+                        <PlusIcon class="w-5 h-5" />
+                        Create Plan
+                    </RouterLink>
+                </div>
+            </Transition>
+        </div>
+
         <!-- Create Event Requests Dropdown -->
         <div class="sidebar-group">
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': requestsActive }"
@@ -234,6 +260,7 @@ import {
     InboxIcon,
     UsersIcon,
     Squares2X2Icon,
+    ClipboardDocumentListIcon ,
     GlobeAltIcon,
     BuildingOfficeIcon,
     CalendarIcon,
@@ -266,6 +293,9 @@ open.requests = route.path.startsWith("/admin/requests") || route.path.startsWit
 const requestsActive = computed(() =>
     route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media")
 );
+open.plans = route.path.startsWith("/admin/plans");
+
+const plansActive = computed(() => route.path.startsWith("/admin/plans"));
 const usersActive = computed(() => route.path.startsWith("/admin/users"));
 const categoriesActive = computed(() => route.path.startsWith("/admin/categories"));
 const productsActive = computed(() => route.path.startsWith("/admin/countries"));

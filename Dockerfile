@@ -26,7 +26,9 @@ RUN apt-get update && apt-get install -y \
         bcmath \
         zip \
         intl \
-        gd
+        gd \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
@@ -37,7 +39,6 @@ WORKDIR /var/www
 
 COPY . .
 
-# 🔥 هنا أهم سطر
 COPY uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 RUN composer install --no-dev --optimize-autoloader

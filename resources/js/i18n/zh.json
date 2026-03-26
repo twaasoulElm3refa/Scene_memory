@@ -418,5 +418,19 @@
         "changes_text": "我们保留随时更新或修改这些服务条款的权利。",
         "contact_title": "联系方式",
         "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
+    },
+    "plans": {
+        "chooseYourPlan": "选择您的计划",
+        "getStarted": "免费开始",
+        "subscribe": "立即订阅",
+        "free": "免费",
+        "ourPlans": "我们的计划",
+        "description": "我们的多种计划",
+        "price": "价格",
+        "features": "功能",
+        "Monthly": "每月",
+        "Yearly": "每年",
+        "unlimitedEvents": "无限事件",
+        "addEvents": "添加事件"
     }
 }

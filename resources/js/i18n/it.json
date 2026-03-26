@@ -418,5 +418,19 @@
         "changes_text": "Ci riserviamo il diritto di modificare questi termini in qualsiasi momento.",
         "contact_title": "Contatto",
         "contact_text": "Per qualsiasi domanda su questi termini, contattare l'amministrazione della piattaforma."
+    },
+    "plans": {
+        "chooseYourPlan": "Scegli il tuo piano",
+        "getStarted": "Inizia gratis",
+        "subscribe": "Abbonati ora",
+        "free": "Gratis",
+        "ourPlans": "I nostri piani",
+        "description": "I nostri diversi piani",
+        "price": "Prezzo",
+        "features": "Caratteristiche",
+        "Monthly": "Mensile",
+        "Yearly": "Annuale",
+        "unlimitedEvents": "Eventi illimitati",
+        "addEvents": "Aggiungi eventi"
     }
 }

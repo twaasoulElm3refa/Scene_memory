@@ -418,5 +418,19 @@
         "changes_text": "当社はこれらの利用規約をいつでも更新または変更する権利を有します。",
         "contact_title": "お問い合わせ",
         "contact_text": "これらの規約について質問がある場合は、プラットフォーム管理者までお問い合わせください。"
+    },
+    "plans": {
+        "chooseYourPlan": "プランを選択してください",
+        "getStarted": "無料で始める",
+        "subscribe": "今すぐ登録",
+        "free": "無料",
+        "ourPlans": "プラン一覧",
+        "description": "さまざまなプラン",
+        "price": "価格",
+        "features": "機能",
+        "Monthly": "月額",
+        "Yearly": "年額",
+        "unlimitedEvents": "無制限のイベント",
+        "addEvents": "イベントを追加"
     }
 }

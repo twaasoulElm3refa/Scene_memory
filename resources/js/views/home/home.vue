@@ -2,17 +2,6 @@
     <div class="min-h-screen bg-gray-50 font-sans">
         <div class="relative h-[500px] md:h-[600px] bg-gray-900 overflow-hidden">
             <div id="map" class="absolute inset-0"></div>
-
-            <!-- زرار Fullscreen
-            <button @click="openFullscreen"
-                class="absolute top-4 right-4 z-20 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition text-gray-800"
-                title="عرض الخريطة كامل الشاشة">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                </svg>
-            </button> -->
-
             <div class="absolute inset-0 bg-black/20 flex items-center justify-center z-10 pointer-events-none"></div>
         </div>
 
@@ -220,8 +209,68 @@
                 </div>
             </template>
         </section>
+
+
+                <!-- ── Pricing Plans Section ── -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-white">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 text-blue-600 bg-blue-50 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                    <span class="text-xl">💎</span>
+                    {{ $t("plans.chooseYourPlan") || "اختر خطتك" }}
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+                    {{ $t("plans.ourPlans") || "خطط الاشتراك" }}
+                </h2>
+                <p class="mt-3 text-gray-600 text-lg max-w-2xl mx-auto">
+                    {{ $t("plans.description") || "ابدأ مجاناً أو اختر الخطة المناسبة لك" }}
+                </p>
+            </div>
+
+            <div v-if="loadingPlans" class="flex justify-center py-20">
+                <div class="relative w-16 h-16">
+                    <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </div>
+
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div v-for="plan in plans" :key="plan.id"
+                    class="bg-white border border-gray-200 rounded-3xl p-8 hover:border-blue-500 hover:shadow-xl transition-all duration-300 group">
+
+                    <div class="text-center mb-8">
+                        <div class="text-4xl mb-3">{{ plan.name === 'free' ? '🌟' : '🚀' }}</div>
+                        <h3 class="text-2xl font-bold text-gray-900">
+                            {{ plan.translation?.name || plan.name }}
+                        </h3>
+                        <div class="mt-4 flex items-baseline justify-center">
+                            <span class="text-5xl font-bold text-blue-600">{{ plan.price }}</span>
+                            <span class="text-gray-500 ml-2">USD</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">{{ $t("plans.Monthly") }}</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-10 text-gray-600">
+                        <li class="flex items-center gap-3">
+                            <span class="text-green-500">✓</span>
+                            <span>{{ $t("plans.unlimitedEvents") }}</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-green-500">✓</span>
+                            <span>{{ $t("plans.addEvents") }}</span>
+                        </li>
+                    </ul>
+
+                    <button
+                        class="w-full py-4 rounded-2xl font-semibold transition-all duration-300
+                               bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 active:scale-95">
+                        {{ plan.name === 'free' ? $t("plans.getStarted") || "ابدأ مجاناً" : $t("plans.subscribe") || "اشترك الآن" }}
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed, watch } from "vue";
 import { useRouter } from 'vue-router';
@@ -229,6 +278,7 @@ import MapService from "@/services/MapService.js";
 import { CategoryService } from "@/services/CategoryService";
 import { LocationService } from "@/services/LocationService";
 import { EventService } from "@/services/EventService";
+import { PlanService } from "@/services/planService";
 import { debounce } from "lodash";
 import api from "@/services/ApiClient";
 
@@ -257,6 +307,8 @@ const loading = ref(false);
 const searched = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = 8;
+const plans = ref([]);
+const loadingPlans = ref(false);
 
 let mapService = null;
 
@@ -449,7 +501,8 @@ onMounted(async () => {
     try {
         categories.value = await CategoryService.getAllCategories();
         countries.value = await LocationService.getAllCountries();
-        filteredCountries.value = [...countries.value]; // نسخة للبحث
+        filteredCountries.value = [...countries.value];
+        await loadPlans();
     } catch (err) {
         console.error("Error loading initial data:", err);
     }
@@ -484,6 +537,19 @@ const openFullscreen = async () => {
 const closeFullscreen = () => {
     fullscreen.value = false;
     mapService.closeFullscreen();
+};
+
+const loadPlans = async () => {
+    loadingPlans.value = true;
+    try {
+        plans.value = await PlanService.getAllPlans();
+        console.log("✅ Plans loaded:", plans.value);
+    } catch (err) {
+        console.error("Error loading plans:", err);
+        plans.value = [];
+    } finally {
+        loadingPlans.value = false;
+    }
 };
 </script>
 

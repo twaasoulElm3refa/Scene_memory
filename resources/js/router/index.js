@@ -40,6 +40,8 @@ import all_comments from "../views/home/all_comments.vue";
 import all_reports from "../views/admin/reports/all_reports.vue";
 import historical from "../views/home/historical.vue";
 import create_historical from "../views/home/create_historical.vue";
+import all_plans from "../views/admin/Licenses/all_plans.vue";
+import create_plan from "../views/admin/Licenses/create_plan.vue";
 
 const routes = [
     {
@@ -217,6 +219,17 @@ const routes = [
     {
         path: "/admin/categories/create",
         component: add_categorey,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    {
+        path: "/admin/plans",
+        component: all_plans,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/plans/create",
+        component: create_plan,
         meta: { hideNavbar: true, hideFooter: true },
     },
 
