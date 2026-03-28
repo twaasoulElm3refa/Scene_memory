@@ -438,5 +438,9 @@
         "Yearly": "年額",
         "unlimitedEvents": "無制限のイベント",
         "addEvents": "イベントを追加"
-    }
+    },
+    "free": "無料",
+    "basic": "ベーシック",
+    "professional": "プロフェッショナル",
+    "premium": "プレミアム"
 }

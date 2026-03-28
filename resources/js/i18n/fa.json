@@ -438,5 +438,9 @@
         "Yearly": "سالانه",
         "unlimitedEvents": "رویدادهای نامحدود",
         "addEvents": "افزودن رویداد"
-    }
+    },
+    "free": "رایگان",
+    "basic": "پایه",
+    "professional": "حرفه‌ای",
+    "premium": "پریمیوم"
 }

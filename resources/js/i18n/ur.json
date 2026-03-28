@@ -435,5 +435,9 @@
         "Yearly": "سالانہ",
         "unlimitedEvents": "لامحدود ایونٹس",
         "addEvents": "ایونٹس شامل کریں"
-    }
+    },
+    "free": "مفت",
+    "basic": "بنیادی",
+    "professional": "پیشہ ور",
+    "premium": "پریمیم"
 }

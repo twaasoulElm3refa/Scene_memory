@@ -438,5 +438,9 @@
         "Yearly": "वार्षिक",
         "unlimitedEvents": "असीमित इवेंट",
         "addEvents": "इवेंट जोड़ें"
-    }
+    },
+    "free": "मुफ़्त",
+    "basic": "बेसिक",
+    "professional": "प्रोफेशनल",
+    "premium": "प्रीमियम"
 }

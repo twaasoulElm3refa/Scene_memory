@@ -438,5 +438,9 @@
         "Yearly": "Jährlich",
         "unlimitedEvents": "Unbegrenzte Ereignisse",
         "addEvents": "Ereignisse hinzufügen"
-    }
+    },
+    "free": "Kostenlos",
+    "basic": "Basis",
+    "professional": "Professionell",
+    "premium": "Premium"
 }

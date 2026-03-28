@@ -20,7 +20,12 @@ class AdminPlanController extends Controller
     {
         $cacheKey = 'plans_admin_'.$this->cacheTime.''.app()->getLocale();
         $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
-            return licenceType::with('translation')->get();
+           return licenceType::select('id','name','price')
+    ->with([
+        'translation:id,plan_id,name',
+        'advantges:id,plan_id,feature'
+    ])
+    ->get();
         });
 
         return $this->success($plans, 'All plans');
@@ -75,15 +80,19 @@ class AdminPlanController extends Controller
 
     public function single()
     {
-       try {
-         $cacheKey = 'plan_single_admin_'.request('id').$this->cacheTime.''.app()->getLocale();
-        $plans = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return licenceType::where('id',request('id'))->get();
-        });
+        try {
+            $cacheKey = 'plans_single_admin_' . request('id') . '_' . app()->getLocale();
 
-        return $this->success($plans, 'Single plan');
-       } catch (\Throwable $th) {
-        return $this->error($th->getMessage());
-       }
+            $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
+                return licenceType::with('advantges')
+                    ->where('id', request('id'))
+                    ->get();
+            });
+
+            return $this->success($plans, 'Single plan');
+
+        } catch (\Throwable $th) {
+            return $this->error($th->getMessage());
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\admin\AdminPlanController;
+use App\Http\Controllers\api\admin\BenefitsController;
 use App\Http\Controllers\api\admin\CategoriesCreateController;
 use App\Http\Controllers\api\admin\CitiesCreateController;
 use App\Http\Controllers\api\admin\ContactController;
@@ -249,6 +250,13 @@ Route::prefix('v1')->group(function () {
         Route::delete('/delete/{id}', [AdminPlanController::class,'delete'])
         ->middleware('auth:sanctum', AdminMiddleware::class);
     });
+
+    Route::prefix('benefits')->middleware([AdminMiddleware::class])->group(
+        function () {
+            Route::post('/create/{id}', [BenefitsController::class,'create']);
+            Route::post('/update/{id}/plan', [BenefitsController::class,'update']);
+            Route::delete('/delete/{id}/plan', [BenefitsController::class,'delete']);
+        });
 
     // 111 Endpoints for the API
 });

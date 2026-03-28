@@ -210,158 +210,127 @@
         </section>
 
 
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
-            <!-- Header Section with Enhanced Design -->
-            <div class="text-center mb-16">
+        <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+            <!-- Header Section -->
+            <div class="text-center mb-10">
                 <div
-                    class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold mb-5 shadow-lg shadow-blue-200">
-                    <span class="text-xl animate-pulse">⚡</span>
+                    class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 shadow-md">
+                    <span class="text-lg animate-pulse">⚡</span>
                     {{ $t("plans.chooseYourPlan") || "اختر خطتك" }}
                 </div>
-                <h2
-                    class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
                     {{ $t("plans.ourPlans") || "خطط الاشتراك" }}
                 </h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-600 mx-auto rounded-full mb-5"></div>
-                <p class="mt-4 text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
+
+                <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-blue-600 mx-auto rounded-full mb-4"></div>
+
+                <p class="text-gray-600 text-base max-w-xl mx-auto">
                     {{ $t("plans.description") || "ابدأ مجاناً أو اختر الخطة المناسبة لك واستمتع بمزايا حصرية" }}
                 </p>
             </div>
 
-            <!-- Loading State with Enhanced Animation -->
-            <div v-if="loadingPlans" class="flex justify-center items-center py-20">
-                <div class="relative">
-                    <div class="w-20 h-20 border-4 border-blue-200 rounded-full"></div>
-                    <div
-                        class="absolute top-0 left-0 w-20 h-20 border-4 border-blue-600 border-t-transparent rounded-full animate-spin">
-                    </div>
-                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div class="w-8 h-8 bg-blue-500 rounded-full animate-pulse"></div>
-                    </div>
-                </div>
+            <!-- Loading -->
+            <div v-if="loadingPlans" class="flex justify-center items-center py-16">
+                <div class="w-14 h-14 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
             </div>
 
-            <!-- Plans Grid with Enhanced Cards -->
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div v-for="(plan, index) in plans" :key="plan.id" :class="[
-                    'relative bg-white rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2',
-                    plan.name === 'free' ? 'border-2 border-gray-200' : 'border border-gray-200',
-                    plan.name === 'pro' ? 'shadow-2xl scale-105 lg:scale-110 z-10' : 'shadow-lg hover:shadow-2xl'
-                ]">
+            <!-- Plans Grid -->
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div v-for="(plan, index) in plans" :key="plan.id"
+                    class="relative border border-gray-200 bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
 
-                    <!-- Popular Badge for Pro Plan -->
-                    <div v-if="plan.name === 'pro'" class="absolute top-0 right-0 z-20">
+                    <!-- Popular Badge -->
+                    <div v-if="plan.name.toLowerCase() === 'professional' || plan.name.toLowerCase() === 'pro'"
+                        class="absolute top-0 right-0 z-20">
                         <div
-                            class="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-4 py-1.5 rounded-bl-2xl shadow-lg">
+                            class="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-4 py-1 rounded-bl-2xl">
                             {{ $t("plans.mostPopular") || "الأكثر شهرة" }}
                         </div>
                     </div>
 
-                    <!-- Gradient Border Effect -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl -z-10 blur-xl">
-                    </div>
-
-                    <div class="p-8 relative">
-                        <!-- Plan Icon with Dynamic Colors -->
-                        <div class="text-center mb-6">
-                            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 transition-all duration-300 group-hover:scale-110"
-                                :class="plan.name === 'free' ? 'bg-gradient-to-br from-gray-100 to-gray-200' :
-                                    plan.name === 'pro' ? 'bg-gradient-to-br from-blue-100 to-blue-200' :
-                                        'bg-gradient-to-br from-purple-100 to-purple-200'">
-                                <span class="text-5xl">{{ plan.name === 'free' ? '🎯' : plan.name === 'pro' ? '💎' :
-                                    '🚀'
-                                    }}</span>
+                    <div class="p-5">
+                        <!-- Plan Name & Icon -->
+                        <div class="text-center mb-5">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-3" :class="{
+                                'bg-gray-100': plan.name === 'free',
+                                'bg-blue-100': plan.name === 'basic' || plan.name === 'professional',
+                                'bg-purple-100': plan.name === 'premium'
+                            }">
+                                <span class="text-3xl">
+                                    {{ plan.name === 'free' ? '🎯' : plan.name === 'basic' ? '📘' :
+                                        plan.name === 'professional' ? '💎' : '🚀' }}
+                                </span>
                             </div>
 
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">
+                            <h3 class="text-xl font-bold text-gray-900">
                                 {{ plan.translation?.name || plan.name }}
                             </h3>
 
-                            <!-- Price Section with Better Formatting -->
-                            <div class="mt-4">
-                                <div class="flex items-baseline justify-center">
-                                    <span class="text-5xl font-extrabold"
-                                        :class="plan.name === 'pro' ? 'text-blue-600' : 'text-gray-900'">
-                                        {{ plan.price }}
-                                    </span>
-                                    <span class="text-gray-500 ml-2 font-medium">USD</span>
+                            <!-- Price -->
+                            <div class="mt-3">
+                                <div class="flex items-baseline justify-center gap-1">
+                                    <span class="text-3xl font-extrabold text-gray-900">{{ plan.price }}</span>
+                                    <span class="text-gray-500 text-sm">USD</span>
                                 </div>
-                                <p class="text-sm text-gray-500 mt-1 flex items-center justify-center gap-1">
-                                    <span>📅</span>
+                                <p class="text-xs text-gray-500 mt-1">
                                     {{ $t("plans.perMonth") || "/ شهرياً" }}
                                 </p>
                             </div>
                         </div>
 
-                        <!-- Features List with Icons -->
-                        <ul class="space-y-3 mb-8">
-                            <li
-                                class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900 transition-colors">
+                        <!-- Features -->
+                        <ul class="space-y-2 mb-6">
+                            <li v-for="feature in plan.advantges" :key="feature.id"
+                                class="flex items-start gap-2 text-gray-700 text-sm">
                                 <span
-                                    class="flex-shrink-0 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                                <span class="text-sm">{{ $t("plans.unlimitedEvents") || "فعاليات غير محدودة" }}</span>
+                                    class="w-4 h-4 bg-green-500 text-white rounded-full flex items-center justify-center text-[10px]">✓</span>
+                                <span>{{ feature.feature }}</span>
                             </li>
-                            <li
-                                class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900 transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                                <span class="text-sm">{{ $t("plans.addEvents") || "إضافة فعاليات" }}</span>
-                            </li>
-                            <li v-if="plan.name !== 'free'"
-                                class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900 transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                                <span class="text-sm">{{ $t("plans.prioritySupport") || "دعم優先" }}</span>
-                            </li>
-                            <li v-if="plan.name === 'pro'"
-                                class="flex items-center gap-3 text-gray-700 group-hover:text-gray-900 transition-colors">
-                                <span
-                                    class="flex-shrink-0 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                                <span class="text-sm">{{ $t("plans.analytics") || "تحليلات متقدمة" }}</span>
+
+                            <li v-if="plan.advantges.length === 0" class="text-gray-400 text-xs text-center py-2">
+                                {{ $t("plans.noFeatures") || "لا توجد ميزات حالياً" }}
                             </li>
                         </ul>
 
-                        <!-- CTA Button with Enhanced Styling -->
+                        <!-- Button -->
                         <button :class="[
-                            'w-full py-3.5 rounded font-bold transition-all duration-300 transform hover:scale-105 active:scale-95',
-                            plan.name === 'free' ? 'bg-gray-100 text-gray-900 hover:bg-gray-200 border-2 border-gray-300' :
-                                plan.name === 'pro' ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 shadow-lg shadow-blue-200' :
-                                    'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 shadow-lg shadow-purple-200'
+                            'w-full py-2.5 rounded-lg font-semibold text-sm transition-all',
+                            plan.name === 'free'
+                                ? 'bg-gray-100 hover:bg-gray-200 text-gray-900 border'
+                                : 'bg-blue-600 hover:bg-blue-700 text-white'
                         ]">
-                            <span class="flex items-center rounded-xl justify-center gap-2">
-                                {{ plan.name === 'free' ? ($t("plans.getStarted") || "ابدأ مجاناً") :
-                                    ($t("plans.subscribe") ||
-                                "اشترك الآن") }}
-                                <span v-if="plan.name !== 'free'" class="text-lg">→</span>
-                            </span>
+                            {{ plan.name === 'free'
+                                ? ($t("plans.getStarted") || "ابدأ مجاناً")
+                                : ($t("plans.subscribe") || "اشترك الآن")
+                            }}
                         </button>
 
-                        <!-- Additional Info -->
-                        <p v-if="plan.name === 'free'" class="text-center text-xs text-gray-500 mt-4">
-                            {{ $t("plans.noCreditCard") || "لا تحتاج إلى بطاقة ائتمان" }}
-                        </p>
-                        <p v-if="plan.name === 'pro'" class="text-center text-xs text-gray-500 mt-4">
-                            {{ $t("plans.cancelAnytime") || "يمكنك الإلغاء في أي وقت" }}
+                        <!-- Extra -->
+                        <p class="text-center text-xs text-gray-500 mt-3">
+                            {{ plan.name === 'free'
+                                ? ($t("plans.noCreditCard") || "لا تحتاج بطاقة")
+                                : ($t("plans.cancelAnytime") || "إلغاء في أي وقت")
+                            }}
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Trust Badges Section -->
-            <div class="mt-16 text-center">
-                <div class="flex flex-wrap items-center justify-center gap-6 md:gap-12">
-                    <div class="flex items-center gap-2 text-gray-500 text-sm">
-                        <span class="text-green-500 text-lg">✓</span>
+            <!-- Trust -->
+            <div class="mt-12 text-center">
+                <div class="flex flex-wrap justify-center gap-6 text-xs text-gray-500">
+                    <div class="flex items-center gap-1">
+                        <span class="text-green-500">✓</span>
                         <span>{{ $t("plans.securePayments") || "مدفوعات آمنة" }}</span>
                     </div>
-                    <div class="flex items-center gap-2 text-gray-500 text-sm">
-                        <span class="text-green-500 text-lg">✓</span>
-                        <span>{{ $t("plans.moneyBack") || "ضمان استعادة الأموال لمدة 30 يومًا" }}</span>
+                    <div class="flex items-center gap-1">
+                        <span class="text-green-500">✓</span>
+                        <span>{{ $t("plans.moneyBack") || "ضمان 30 يوم" }}</span>
                     </div>
-                    <div class="flex items-center gap-2 text-gray-500 text-sm">
-                        <span class="text-green-500 text-lg">✓</span>
-                        <span>{{ $t("plans.support247") || "دعم فني على مدار الساعة" }}</span>
+                    <div class="flex items-center gap-1">
+                        <span class="text-green-500">✓</span>
+                        <span>{{ $t("plans.support247") || "دعم 24/7" }}</span>
                     </div>
                 </div>
             </div>
@@ -641,7 +610,6 @@ const loadPlans = async () => {
     loadingPlans.value = true;
     try {
         plans.value = await PlanService.getAllPlans();
-        console.log("✅ Plans loaded:", plans.value);
     } catch (err) {
         console.error("Error loading plans:", err);
         plans.value = [];

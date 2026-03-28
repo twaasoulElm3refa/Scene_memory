@@ -438,5 +438,9 @@
         "Yearly": "每年",
         "unlimitedEvents": "无限事件",
         "addEvents": "添加事件"
-    }
+    },
+    "free": "免费",
+    "basic": "基础版",
+    "professional": "专业版",
+    "premium": "高级版"
 }
