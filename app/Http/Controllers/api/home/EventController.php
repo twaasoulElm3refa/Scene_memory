@@ -109,7 +109,7 @@ class EventController extends Controller
 
             return $DBCITY->events()
                 ->with('city.translation', 'sub_categorey.translation', 'translation')
-                ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id')
+                ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id','langitude','lattitude')
                 ->where('is_active', 1)
                 ->latest()
                 ->get()
