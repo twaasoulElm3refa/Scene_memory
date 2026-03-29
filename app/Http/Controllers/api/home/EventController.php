@@ -135,9 +135,9 @@ class EventController extends Controller
             return $this->error('Invalid slug', 400);
         }
 
-        $cacheKey = "events_single_{$slug}_".app()->getLocale();
+        $cacheKey = $this->eventCacheKey($slug);
 
-        $event = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($slug) {
+            $event = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($slug) {
             return Events::with([
                 'city.translation',
                 'sub_categorey.translation',
@@ -218,5 +218,10 @@ class EventController extends Controller
         });
 
         return $this->success($daily, 'Daily events');
+    }
+
+    private function eventCacheKey(string $slug): string
+    {
+        return 'event_' . strtolower(trim($slug)) . '_' . app()->getLocale();
     }
 }

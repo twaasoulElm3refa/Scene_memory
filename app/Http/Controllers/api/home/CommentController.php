@@ -20,6 +20,7 @@ class CommentController extends Controller
     /**
      * إنشاء تعليق جديد
      */
+    // في create()
     public function create(CommentRequest $request)
     {
         $data = $request->validated();
@@ -32,13 +33,14 @@ class CommentController extends Controller
             $comment = comments::create($data);
             $event = Events::find($data['event_id']);
 
-            // مسح cache التعليقات الخاصة بالحدث
-            $this->clearCache($event->id);
+            if ($event) {
+                // ✅ نمسح كل اللغات عشان منتجاهلش أي locale
+                foreach (['ar', 'en', 'fr'] as $locale) {
+                    $key = 'event_' . strtolower(trim($event->slug)) . '_' . $locale;
+                    Cache::tags(['events'])->forget($key);
+                }
+            }
 
-            // مسح cache بيانات الحدث الفردية (single event)
-            Cache::tags(['events'])->forget("events_single_{$event->slug}");
-
-            // تشغيل job للترجمة
             TranslateCommentJob::dispatch($comment->id, $data['comment']);
 
             return $this->success($comment, 'Comment Created Successfully');
@@ -57,7 +59,6 @@ class CommentController extends Controller
 
             // إذا الادمن
             if (auth()->user()->role == 'admin') {
-                $this->clearCache($comment->event_id);
                 $comment->delete();
 
                 return $this->success([], 'Comment deleted successfully');
@@ -68,7 +69,6 @@ class CommentController extends Controller
                 return $this->unauthorized('You are not the owner of this comment');
             }
 
-            $this->clearCache($comment->event_id);
             $comment->delete();
 
             return $this->success([], 'Comment deleted successfully');
@@ -108,12 +108,9 @@ class CommentController extends Controller
         }
     }
 
-    /**
-     * مسح كل cache التعليقات الخاصة بالحدث
-     */
-    private function clearCache($event_id)
+// ✅ استخدم helper method واحدة للـ key
+    private function eventCacheKey(string $slug): string
     {
-        Cache::tags(['comments'])->flush();
-
+        return 'event_' . strtolower(trim($slug)) . '_' . app()->getLocale();
     }
 }
