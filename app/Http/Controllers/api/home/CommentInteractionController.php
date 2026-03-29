@@ -30,7 +30,13 @@ class CommentInteractionController extends Controller
             'type' => 'support',
         ]);
 
-        $this->clearEventCache($event->slug);
+
+        foreach (['ar', 'en', 'fr','es','ja','zh','fa','ur','ru','it','de','hi'] as $locale) {
+            $key = 'event_' . strtolower(trim($event->slug)) . '_' . $locale;
+            Cache::tags(['events'])->forget($key);
+        }
+        Cache::tags(['comments'])->flush();
+
 
         return $this->success($interaction, 'Interaction Created Successfully');
     }
@@ -49,7 +55,11 @@ class CommentInteractionController extends Controller
             'type' => 'Exhibitions',
         ]);
 
-        $this->clearEventCache($event->slug);
+        foreach (['ar', 'en', 'fr'] as $locale) {
+            $key = 'event_' . strtolower(trim($event->slug)) . '_' . $locale;
+            Cache::tags(['events'])->forget($key);
+        }
+        Cache::tags(['comments'])->flush();
 
         return $this->success($interaction, 'Interaction Created Successfully');
     }
@@ -68,7 +78,11 @@ class CommentInteractionController extends Controller
             'type' => 'neutral',
         ]);
 
-        $this->clearEventCache($event->slug);
+        foreach (['ar', 'en', 'fr'] as $locale) {
+            $key = 'event_' . strtolower(trim($event->slug)) . '_' . $locale;
+            Cache::tags(['events'])->forget($key);
+        }
+        Cache::tags(['comments'])->flush();
 
         return $this->success($interaction, 'Interaction Created Successfully');
     }
@@ -95,15 +109,4 @@ class CommentInteractionController extends Controller
     /**
      * مسح cache بيانات الحدث الفردية لكل اللغات
      */
-    private function clearEventCache($slug)
-    {
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-
-        foreach ($locales as $locale) {
-            Cache::tags(['events'])->forget("events_single_{$slug}_".$locale);
-        }
-
-        // مسح كاش التعليقات الخاصة بالحدث
-        Cache::tags(['comments'])->flush();
-    }
 }

@@ -107,10 +107,4 @@ class CommentController extends Controller
             return $this->error($th->getMessage());
         }
     }
-
-// ✅ استخدم helper method واحدة للـ key
-    private function eventCacheKey(string $slug): string
-    {
-        return 'event_' . strtolower(trim($slug)) . '_' . app()->getLocale();
-    }
 }

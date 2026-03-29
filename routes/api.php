@@ -75,6 +75,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [CategoriesCreateController::class,  'create'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::post('/edit/{id}/update/edit', [CategoryController::class,  'update'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}/delete/delete', [CategoryController::class,  'delete'])->middleware('auth:sanctum', AdminMiddleware::class);
+        // 18
     });
 
     // SUB CATEGORIES CRUD
@@ -85,6 +86,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [SubCategoriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/update/{id}', [SubCategoryController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/delete/{id}', [SubCategoryController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        //24
     });
 
     // COUNTRIES CRUD
@@ -98,6 +100,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        //33
     });
 
     // CITIES CRUD
@@ -121,6 +124,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{city_id?}/{sub_category_id?}', [EventController::class,  'index']);
         Route::get('/{city}/marker/search', [EventController::class,  'MarkerSearch']);
         Route::get('/{slug}/single/get', [EventController::class,  'single']);
+        //48
 
         // Events CRUD
         Route::post('/create', [EventAdminCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -129,6 +133,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/historic/user', [EventUserCreateController::class,  'historic'])->middleware('auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [EventAdminController::class,  'destroy'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        //54
     });
 
     Route::prefix('users')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -140,11 +145,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
+        //61
 
         // USER COUNTS
         Route::get('/all/count', [UserCountsController::class, 'count']);
         Route::get('/all/last-login', [UserCountsController::class, 'last_login']);
         Route::get('/all/new-users', [UserCountsController::class, 'NewUsers']);
+        //64
     });
 
     Route::prefix('')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -154,15 +161,18 @@ Route::prefix('v1')->group(function () {
         Route::post('/contacts/create', [ContactController::class, 'create']);
         Route::post('/contacts/respond/{id}', [ContactController::class, 'respond']);
         Route::delete('/contacts/delete/{id}', [ContactController::class, 'delete']);
+        //69
 
         // Newsletters
         Route::get('/newsletters', [NewsletterController::class, 'all']);
         Route::post('/newsletters/create', [NewsletterController::class, 'create']);
         Route::post('/newsletters/respond/{id}', [NewsletterController::class, 'respond']);
+        //72
 
         // Footer
         Route::get('/footer', [FooterController::class, 'all']);
         Route::post('/footer/update', [FooterController::class, 'update']);
+        //74
     });
 
     // Event Media
@@ -170,6 +180,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{id}', [EventImageController::class, 'allPerEvent']);
         Route::post('/create/{id}', [EventImageController::class, 'create']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
+        //77
     });
 
     // User Dashboard
@@ -177,11 +188,13 @@ Route::prefix('v1')->group(function () {
         Route::get('/my-events', [UserDashboardController::class, 'myEvents']);
         Route::post('/{slug}', [UserDashboardController::class, 'addMedia']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
+        //80
 
         // Create Event
         Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnEvent::class, 'auth:sanctum');
         Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
+        //83
     });
 
     Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
@@ -189,6 +202,7 @@ Route::prefix('v1')->group(function () {
         // Route::post('/approve/{id}', [MediaRequestController::class, 'approve'])->middleware(AdminMiddleware::class);
         // Route::post('/reject/{id}', [MediaRequestController::class, 'reject'])->middleware(AdminMiddleware::class);
         Route::post('/upload/{id}', [MediaRequestController::class, 'upload']);
+        //87
     });
 
     Route::prefix('requests')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -197,12 +211,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/approve/{request_id}', [RequestController::class, 'approve']);
         Route::post('/decline/{request_id}', [RequestController::class, 'decline']);
         Route::delete('/{id}', [RequestController::class, 'destroy']);
+        //92
     });
 
     Route::prefix('create')->middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [HomeController::class, 'create']);
         Route::post('/{id}', [HomeController::class, 'update']);
         Route::delete('/{id}', [HomeController::class, 'destroy']);
+        //95
     });
 
     Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
@@ -213,21 +229,25 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}/report', [CommentInteractionController::class, 'report']);
         Route::post('{id}/create', [CommentController::class, 'create']);
         Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
+        //102
     });
     Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
         Route::get('/reports/all', [ReportController::class, 'reports'])->middleware(AdminMiddleware::class);
         Route::delete('/reports/{id}/delete', [ReportController::class, 'delete'])->middleware(AdminMiddleware::class);
+        //104
     });
 
     Route::prefix('likes')->middleware('throttle:10,1')->group(function () {
         Route::get('/{id}', [LikesController::class, 'count']);
         Route::post('{id}/create', [LikesController::class, 'create']);
+    //106
     });
 
     Route::prefix('Wishlist')->middleware('auth:sanctum')->group(function () {
         Route::get('/me', [WhisListController::class,'me']);
         Route::post('/{id}', [WhisListController::class,'add']);
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
+    //109
     });
 
     Route::prefix('notify')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
@@ -250,21 +270,22 @@ Route::prefix('v1')->group(function () {
         ->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}', [AdminPlanController::class,'delete'])
         ->middleware('auth:sanctum', AdminMiddleware::class);
+        //118
     });
 
     Route::prefix('benefits')->middleware([AdminMiddleware::class])->group(
         function () {
-            Route::post('/create/{id}', [BenefitsController::class,'create']);
-            Route::post('/update/{id}/plan', [BenefitsController::class,'update']);
-            Route::delete('/delete/{id}/plan', [BenefitsController::class,'delete']);
+        Route::post('/create/{id}', [BenefitsController::class,'create']);
+        Route::post('/update/{id}/plan', [BenefitsController::class,'update']);
+        Route::delete('/delete/{id}/plan', [BenefitsController::class,'delete']);
+        //121
     });
 
     Route::prefix('subscribe')->middleware('auth:sanctum')->group(
         function () {
         Route::post('/{id}', [IncomeController::class,'subscribe']);
+        //122
     });
-
-
-    // 121 Endpoints for the API
+    // 122 Endpoints for the API
 });
 

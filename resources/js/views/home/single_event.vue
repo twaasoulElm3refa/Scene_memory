@@ -20,8 +20,7 @@
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
                 <img v-else src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200"
-                    :alt="event.translation.title"
-                    class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
+                    :alt="event.translation.title" class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
 
                 <div v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.full_url))"
                     class="absolute inset-0 bg-black/30 flex items-center justify-center z-10 pointer-events-none">
@@ -171,7 +170,7 @@
                                     <div v-for="comment in comments" :key="comment.id"
                                         class="comment-box mb-6 bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
 
-                                        <!-- ✅ عرض النص: translation.comment أو comment مباشرة -->
+                                        <!-- عرض النص -->
                                         <p class="text-gray-700 text-sm leading-relaxed mb-3">
                                             {{ comment.translation?.comment || comment.comment }}
                                         </p>
@@ -238,8 +237,10 @@
                                             {{ deleteCommentErrors[comment.id] }}
                                         </p>
 
-                                        <!-- Reactions -->
+                                        <!-- ✅ Reactions مع عرض الـ counts صح -->
                                         <div class="flex items-center gap-2.5 flex-wrap mt-1" dir="rtl">
+
+                                            <!-- 👍 موافق -->
                                             <button @click="setReaction(comment.id, 'support')"
                                                 :disabled="reactionLoading[comment.id]" :class="[
                                                     'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
@@ -256,6 +257,7 @@
                                                 </span>
                                             </button>
 
+                                            <!-- 😐 محايد -->
                                             <button @click="setReaction(comment.id, 'neutral')"
                                                 :disabled="reactionLoading[comment.id]" :class="[
                                                     'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
@@ -272,6 +274,7 @@
                                                 </span>
                                             </button>
 
+                                            <!-- 👎 غير موافق -->
                                             <button @click="setReaction(comment.id, 'exhibitions')"
                                                 :disabled="reactionLoading[comment.id]" :class="[
                                                     'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[110px] justify-center',
@@ -287,6 +290,7 @@
                                                     {{ comment.exhibitions_count ?? 0 }}
                                                 </span>
                                             </button>
+
                                         </div>
 
                                         <p v-if="reactionErrors[comment.id]"
@@ -314,7 +318,7 @@
                                                         :disabled="replyLoading[comment.id] || !replyTexts[comment.id]?.trim()"
                                                         class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                                                         <span v-if="replyLoading[comment.id]">{{ $t('sending') || ''
-                                                            }}</span>
+                                                        }}</span>
                                                         <span v-else>{{ $t('send_reply') || 'إرسال الرد' }}</span>
                                                     </button>
                                                 </div>
@@ -343,6 +347,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -365,7 +370,7 @@
                                         <div class="mt-4 flex justify-end">
                                             <button type="submit" :disabled="commentLoading || !newComment.trim()"
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
-                                                <span v-if="commentLoading">{{ $t('event.sending_comment') || 'جاري الإرسال...' }}</span>
+                                                <span v-if="commentLoading">{{ $t('event.sending_comment') }}</span>
                                                 <span v-else>{{ $t('event.submit_comment') || 'إرسال التعليق' }}</span>
                                             </button>
                                         </div>
@@ -547,8 +552,7 @@
                             </ul>
                         </div>
 
-                        <p v-if="uploadError"
-                            class="mt-4 text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg">
+                        <p v-if="uploadError" class="mt-4 text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg">
                             {{ uploadError }}
                         </p>
                         <p v-if="uploadSuccess"
@@ -568,6 +572,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -656,6 +661,7 @@
         </Transition>
     </Teleport>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -1199,7 +1205,9 @@ onMounted(async () => {
         event.value = response.data?.data || response;
 
         // ✅ نحمّل الكومنتات في ref مستقل عشان التفاعلية تشتغل صح
-        comments.value = Array.isArray(event.value?.comments) ? [...event.value.comments] : [];
+        comments.value = Array.isArray(event.value?.comments)
+            ? event.value.comments.map(c => ({ ...c }))
+            : [];
         commentsCount.value = event.value?.comments_count ?? comments.value.length;
 
         await fetchLikesInfo();

@@ -145,7 +145,11 @@ class EventController extends Controller
                 'images' => fn ($q) => $q->where('is_active', 1),
                 'translation',
                 'comments' => fn ($q) => $q->latest('created_at')
-                    ->take(3)
+                    ->take(5)->withCount([
+                        'interactions as support_count' => fn ($q) => $q->where('type', 'support'),
+                        'interactions as exhibitions_count' => fn ($q) => $q->where('type', 'Exhibitions'),
+                        'interactions as neutral_count' => fn ($q) => $q->where('type', 'neutral'),
+                    ])
                     ->with('user:id,name', 'translation', 'replies', 'replies.user:id,name'),
             ])
             ->withCount('comments')
