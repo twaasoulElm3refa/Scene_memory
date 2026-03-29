@@ -43,11 +43,17 @@ import create_historical from "../views/home/create_historical.vue";
 import all_plans from "../views/admin/Licenses/all_plans.vue";
 import create_plan from "../views/admin/Licenses/create_plan.vue";
 import single_plan from "../views/admin/Licenses/single_plan.vue";
+import show_plan from "../views/home/show_plan.vue";
 
 const routes = [
     {
         path: "/",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/plan/:slug",
+        component: show_plan,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

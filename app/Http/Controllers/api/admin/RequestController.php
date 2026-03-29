@@ -154,4 +154,6 @@ class RequestController extends Controller
            Cache::forget('daily_events_'.$locale);
         }
     }
+
+
 }

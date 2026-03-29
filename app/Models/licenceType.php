@@ -11,7 +11,7 @@ class licenceType extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class , 'licence_type_id');
     }
 
     public function subscription()

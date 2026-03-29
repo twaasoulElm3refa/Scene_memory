@@ -23,15 +23,14 @@ class EventController extends Controller
         $page = request()->get('page', 1);
         $perPage = 8;
 
-        $cacheKey = "events_page_{$page}_per_{$perPage}_".app()->getLocale();
+       $cacheKey = "events_page_{$page}_per_{$perPage}_".app()->getLocale();
 
-        $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            $events = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,preview_url'])->where('is_active', 1)
+        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
+            return Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,preview_url'])
+                ->where('is_active', 1)
                 ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
-
-            return $events;
         });
 
         return $this->success($events, 'All events');
@@ -44,13 +43,13 @@ class EventController extends Controller
 
         $cacheKey = "events_historical_page_{$page}_per_{$perPage}_".app()->getLocale();
 
-        $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            $events = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,url'])->where('is_active', 1)->where('is_historical', 1)
+        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
+            return Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,url'])
+                ->where('is_active', 1)
+                ->where('is_historical', 1)
                 ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate($perPage);
-
-            return $events;
         });
 
         return $this->success($events, 'All events');
@@ -62,20 +61,38 @@ class EventController extends Controller
         $categoryId = $request->sub_category_id;
         $from = $request->query('from');
         $to = $request->query('to');
-        $cacheKey = 'events_from_marker_'.
-            app()->getLocale().'_'.
-            $cityId.'_'.
-            $categoryId.'_'.
-            $from.'_'.
-            $to;
 
-        $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
+        // 🧠 build safe cache key dynamically
+        $cacheKey = collect([
+            'events_from_marker',
+            app()->getLocale(),
+            $cityId ? "city:$cityId" : null,
+            $categoryId ? "cat:$categoryId" : null,
+            $from ? "from:$from" : null,
+            $to ? "to:$to" : null,
+        ])->filter()->implode('_');
+
+        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
             return Events::with('city.translation', 'sub_categorey.translation', 'translation')
                 ->where('is_active', 1)
-                ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
-                ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
-                ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
-                ->when($to, fn ($q) => $q->whereDate('end_date', '<=', $to))
+
+                // ✅ filters always optional
+                ->when($cityId, function ($q) use ($cityId) {
+                    $q->where('city_id', $cityId);
+                })
+
+                ->when($categoryId, function ($q) use ($categoryId) {
+                    $q->where('sub_categorey_id', $categoryId);
+                })
+
+                ->when($from, function ($q) use ($from) {
+                    $q->whereDate('start_date', '>=', $from);
+                })
+
+                ->when($to, function ($q) use ($to) {
+                    $q->whereDate('end_date', '<=', $to);
+                })
+
                 ->orderBy('start_date')
                 ->get();
         });
@@ -92,11 +109,13 @@ class EventController extends Controller
         }
         $city = str_replace(['منطقة', 'مدينة', 'محافظة'], '', $city);
         $city = trim($city);
-        $cacheKey = 'city_events_'.strtolower($city).'_'.app()->getLocale();
-        $events = Cache::remember($cacheKey, now()->addHours(6), function () use ($city) {
+       $cacheKey = 'city_events_'.strtolower($city).'_'.app()->getLocale();
+
+        $events = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($city) {
             $DBCITY = Cities::query()
                 ->where('name', 'LIKE', "%{$city}%")
                 ->first();
+
             if (! $DBCITY) {
                 return null;
             }
@@ -130,9 +149,8 @@ class EventController extends Controller
         }
 
         $cacheKey = "events_single_{$slug}_".app()->getLocale();
-        $cacheTime = now()->addHours(6);
 
-        $event = Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
+        $event = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($slug) {
             return Events::with([
                 'city.translation',
                 'sub_categorey.translation',
@@ -142,10 +160,12 @@ class EventController extends Controller
                 'comments' => fn ($q) => $q->latest('created_at')
                     ->take(3)
                     ->with('user:id,name', 'translation', 'replies', 'replies.user:id,name'),
-
-            ])->withCount('comments')->withCount('likes')->withCount('views')
-                ->where('slug', $slug)
-                ->first();
+            ])
+            ->withCount('comments')
+            ->withCount('likes')
+            ->withCount('views')
+            ->where('slug', $slug)
+            ->first();
         });
         if (! $event) {
             return $this->error('Event not found', 404);
@@ -168,7 +188,8 @@ class EventController extends Controller
     public function count()
     {
         $cacheKey = 'events_count';
-        $count = Cache::remember($cacheKey, $this->cacheTime, function () {
+
+        $count = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () {
             return Events::count();
         });
 
@@ -177,8 +198,9 @@ class EventController extends Controller
 
     public function memories()
     {
-        $cacheKey = 'memories';
-        $memories = Cache::remember($cacheKey, $this->cacheTime, function () {
+       $cacheKey = 'memories';
+
+        $memories = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () {
             return eventsImges::count();
         });
 
@@ -195,8 +217,10 @@ class EventController extends Controller
     {
         $cacheKey = 'daily_events_'.app()->getLocale();
         $today = Carbon::today();
-        $daily = Cache::remember($cacheKey, $this->cacheTime, function () use ($today) {
-            return Events::with('translation:event_id,title,id')->where('is_active', 1)
+
+        $daily = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($today) {
+            return Events::with('translation:event_id,title,id')
+                ->where('is_active', 1)
                 ->where(function ($query) use ($today) {
                     $query->whereDate('start_date', $today)
                         ->orWhereDate('created_at', $today);

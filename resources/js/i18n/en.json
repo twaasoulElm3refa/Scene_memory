@@ -435,6 +435,7 @@
         "price": "Price",
         "features": "Features",
         "Monthly": "Monthly",
+        "cancelAnytime": "Cancel anytime",
         "Yearly": "Yearly",
         "unlimitedEvents": "Unlimited events",
         "addEvents": "Add events"

@@ -28,6 +28,7 @@ use App\Http\Controllers\api\home\CommentReplyController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
+use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
@@ -240,7 +241,7 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('plans')->group(function () {
         Route::get('/all', [PlanController::class,'all']);
-        Route::get('/single/{id}', [PlanController::class,'single']);
+        Route::get('/single/{slug}', [PlanController::class,'single']);
         Route::get('/all/admin', [AdminPlanController::class,'all'])->middleware(AdminMiddleware::class);
         Route::get('/single/admin/{id}', [AdminPlanController::class,'single'])->middleware(AdminMiddleware::class);
         Route::post('/create', [AdminPlanController::class,'create'])
@@ -256,8 +257,14 @@ Route::prefix('v1')->group(function () {
             Route::post('/create/{id}', [BenefitsController::class,'create']);
             Route::post('/update/{id}/plan', [BenefitsController::class,'update']);
             Route::delete('/delete/{id}/plan', [BenefitsController::class,'delete']);
-        });
+    });
 
-    // 111 Endpoints for the API
+    Route::prefix('subscribe')->middleware('auth:sanctum')->group(
+        function () {
+        Route::post('/{id}', [IncomeController::class,'subscribe']);
+    });
+
+
+    // 121 Endpoints for the API
 });
 

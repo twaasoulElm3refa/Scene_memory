@@ -37,6 +37,7 @@ class AuthController extends Controller
                     'date_of_birth' => $data['date_of_birth'] ?? null,
                     'position' => $data['position'] ?? null,
                     'last_login_at' => now(),
+                    'licence_type_id'=>1,
                 ]);
             });
             $token = $user->createToken('rag-token')->plainTextToken;
@@ -89,12 +90,30 @@ class AuthController extends Controller
         if (! $user) {
             return $this->unauthorized('Unauthenticated.');
         }
-        $cacheKey = 'user_profile_'.$user->id;
-        $cachedProfile = Cache::remember($cacheKey, 60, function () use ($user) {
-            return new UserResource($user);
+
+        $cacheKey = 'user_profile_' . $user->id;
+
+        $cachedProfile = Cache::tags(['user_profile'])->remember($cacheKey, 60, function () use ($user) {
+            $user->load('licenceType');
+
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'licenceType' => [
+                'id' => $user->licenceType?->id,
+                'name' => $user->licenceType?->name,
+                'price' => $user->licenceType?->price,
+                'is_active' => $user->licenceType?->is_active,
+                'created_at' => $user->licenceType?->created_at
+                ]
+            ];
         });
 
-        return $this->success(['user' => $cachedProfile], 'Profile fetched successfully.');
+        return $this->success([
+            'user' => $cachedProfile
+        ], 'Profile fetched successfully.');
     }
 
     public function forgotPassword(Request $request)

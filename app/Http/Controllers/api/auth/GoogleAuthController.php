@@ -30,6 +30,7 @@ class GoogleAuthController extends Controller
                     'name' => $googleUser->getName(),
                     'password' => Hash::make('password'),
                     'role' => 'user',
+                    'licence_type_id'=>1,
                 ]
             );
             if($user)

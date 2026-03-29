@@ -426,6 +426,7 @@
         "description": "خططنا المتنوعة",
         "price": "السعر",
         "features": "الميزات",
+        "cancelAnytime": "يلغي الاشتراك في اي وقت",
         "Monthly": "شهري",
         "Yearly": "سنوي",
         "unlimitedEvents": "احداث غير محدودة",

@@ -222,5 +222,6 @@ class EventUserCreateController extends Controller
         // Clear general counts & memories
         Cache::tags(['events'])->forget('events_count');
         Cache::tags(['events'])->forget('memories');
+        Cache::tags(['requests'])->flush();
     }
 }

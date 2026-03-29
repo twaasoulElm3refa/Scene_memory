@@ -22,6 +22,7 @@ class userResource extends JsonResource
             'is_active' => (bool) $this->is_active,
             'memory_enabled' => (bool) $this->memory_enabled,
             'last_login_at' => $this->last_login_at,
+            'licence_type' =>$this->licenceType,
         ];
     }
 }

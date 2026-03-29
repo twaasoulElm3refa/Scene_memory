@@ -436,6 +436,7 @@
         "features": "Fonctionnalités",
         "Monthly": "Mensuel",
         "Yearly": "Annuel",
+        "cancelAnytime": "Annuler tout moment",
         "unlimitedEvents": "Événements illimités",
         "addEvents": "Ajouter des événements"
     },

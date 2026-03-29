@@ -434,6 +434,7 @@
         "description": "हमारी विभिन्न योजनाएँ",
         "price": "कीमत",
         "features": "विशेषताएँ",
+        "cancelAnytime": "किसी भी समय से रद्द करें",
         "Monthly": "मासिक",
         "Yearly": "वार्षिक",
         "unlimitedEvents": "असीमित इवेंट",

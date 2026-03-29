@@ -1,5 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-50">
+
         <div v-if="loading" class="text-center py-40">
             <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 mx-auto mb-8"></div>
             <p class="text-gray-700 text-2xl font-medium">
@@ -20,6 +21,7 @@
                     playsinline />
                 <img v-else src="https://images.unsplash.com/..." :alt="event.translation.title"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
+
                 <div v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.full_url))"
                     class="absolute inset-0 bg-black/30 flex items-center justify-center z-10 pointer-events-none">
                     <div
@@ -79,7 +81,9 @@
                                 {{ event.translation.description }}
                             </p>
 
-                            <!-- Media Gallery -->
+                            <!-- ═══════════════════════════════════════════════════════════════ -->
+                            <!-- Media Gallery — 3 per row grid                                  -->
+                            <!-- ═══════════════════════════════════════════════════════════════ -->
                             <div class="mb-12">
                                 <div class="flex items-center justify-between mb-6">
                                     <h2
@@ -96,22 +100,50 @@
                                     </button>
                                 </div>
 
-                                <div v-for="(media, index) in event.images" :key="media.id || index"
-                                    class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative"
-                                    @click="openLightbox(index)">
+                                <!-- ✅ Grid: 3 columns -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <div v-for="(media, index) in event.images" :key="media.id || index"
+                                        class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative group"
+                                        @click="openLightbox(index)">
 
-                                    <img v-if="!media.video && media.preview_url" :src="getMediaUrl(media.preview_url)"
-                                        class="w-full h-full object-cover" loading="lazy" />
+                                        <!-- Image -->
+                                        <img v-if="!media.video && !isVideoUrl(media.preview_url) && media.preview_url"
+                                            :src="getMediaUrl(media.preview_url)"
+                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            loading="lazy" />
 
-                                    <video
-                                        v-else-if="media.video || (media.preview_url && isVideoUrl(media.preview_url))"
-                                        :src="getMediaUrl(media.video || media.preview_url)"
-                                        class="w-full h-full object-cover" muted loop playsinline preload="metadata">
-                                    </video>
+                                        <!-- Video thumbnail -->
+                                        <video
+                                            v-else-if="media.video || isVideoUrl(media.preview_url || media.full_url)"
+                                            :src="getMediaUrl(media.video || media.preview_url || media.full_url)"
+                                            class="w-full h-full object-cover" muted loop playsinline
+                                            preload="metadata">
+                                        </video>
 
-                                    <div v-else
-                                        class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                        {{ $t('event.no_media') }}
+                                        <!-- Fallback -->
+                                        <div v-else
+                                            class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                            {{ $t('event.no_media') }}
+                                        </div>
+
+                                        <!-- Video overlay icon -->
+                                        <div v-if="media.video || isVideoUrl(media.preview_url || media.full_url)"
+                                            class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center shadow-lg">
+                                                <span class="text-gray-800 text-xl">▶</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Hover overlay for images -->
+                                        <div v-else
+                                            class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+                                            <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-lg"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -144,6 +176,7 @@
                                 <!-- Comment List -->
                                 <div v-for="comment in event.comments" :key="comment.id"
                                     class="comment-box mb-6 bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
+
                                     <p class="text-gray-700 text-sm leading-relaxed mb-3">
                                         {{ comment.translation?.comment || comment.comment }}
                                     </p>
@@ -275,13 +308,10 @@
                                                 class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                                 :placeholder="$t('event.reply_placeholder') || 'اكتب ردك هنا...'"
                                                 required></textarea>
-
-                                            <!-- Reply Error -->
                                             <p v-if="replyErrors[comment.id]"
                                                 class="text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg text-sm">
                                                 {{ replyErrors[comment.id] }}
                                             </p>
-
                                             <div class="flex justify-end gap-3">
                                                 <button type="button" @click="cancelReply(comment.id)"
                                                     class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
@@ -290,7 +320,7 @@
                                                 <button type="submit"
                                                     :disabled="replyLoading[comment.id] || !replyTexts[comment.id]?.trim()"
                                                     class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                                                    <span v-if="replyLoading[comment.id]">{{ $t('sending') || 'جار الإرسال ...' }}</span>
+                                                    <span v-if="replyLoading[comment.id]">{{ $t('sending') || '' }}</span>
                                                     <span v-else>{{ $t('send_reply') || 'إرسال الرد' }}</span>
                                                 </button>
                                             </div>
@@ -335,11 +365,10 @@
                                         <div class="mt-4 flex justify-end">
                                             <button type="submit" :disabled="commentLoading || !newComment.trim()"
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
-                                                <span v-if="commentLoading">{{ $t('event.sending_comment') || 'جاري  الإرسال...' }}</span>
+                                                <span v-if="commentLoading">{{ $t('event.sending_comment') || '' }}</span>
                                                 <span v-else>{{ $t('event.submit_comment') || 'إرسال التعليق' }}</span>
                                             </button>
                                         </div>
-                                        <!-- Comment Error / Success -->
                                         <p v-if="commentError"
                                             class="mt-3 text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg text-sm">
                                             {{ commentError }}
@@ -421,10 +450,9 @@
                                         <template v-else>
                                             ♥
                                             {{ isInWishlist ? $t('event.already_in_wishlist') :
-                                                $t('event.add_to_wishlist') }}
+                                            $t('event.add_to_wishlist') }}
                                         </template>
                                     </button>
-
                                     <p v-if="wishlistError"
                                         class="text-red-600 text-center text-sm mt-2 bg-red-50 border border-red-200 p-3 rounded-lg">
                                         {{ wishlistError }}
@@ -436,23 +464,56 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Lightbox -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- Lightbox — يعرض preview_url أو full_url بشكل صح                -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
             <div v-if="lightboxOpen" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
                 @click="lightboxOpen = false">
-                <div class="relative max-w-[95vw] max-h-[95vh]">
-                    <img v-if="currentMedia && !isVideoUrl(currentMedia.full_url || currentMedia.preview_url)"
-                        :src="getMediaUrl(currentMedia.full_url || currentMedia.preview_url)"
-                        class="max-w-full max-h-[90vh] object-contain" @click.stop />
+
+                <!-- Navigation Prev -->
+                <button v-if="event.images.length > 1" @click.stop="lightboxPrev"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white text-2xl transition">
+                    ‹
+                </button>
+
+                <!-- Media -->
+                <div class="relative max-w-[92vw] max-h-[92vh] flex items-center justify-center" @click.stop>
+
+                    <!-- ✅ Image: use preview_url first, fallback to full_url -->
+                    <img v-if="currentMedia && !isVideoUrl(currentMedia.full_url) && !isVideoUrl(currentMedia.preview_url) && !currentMedia.video"
+                        :src="getMediaUrl(currentMedia.preview_url || currentMedia.full_url)"
+                        class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl" />
+
+                    <!-- ✅ Video: use full_url first (higher quality), fallback to preview_url -->
                     <video v-else-if="currentMedia"
                         :src="getMediaUrl(currentMedia.full_url || currentMedia.video || currentMedia.preview_url)"
-                        class="max-w-full max-h-[90vh]" controls autoplay @click.stop></video>
-                    <button class="absolute top-4 right-4 text-white text-5xl font-bold drop-shadow-lg"
-                        @click="lightboxOpen = false">×</button>
+                        class="max-w-full max-h-[88vh] rounded-lg shadow-2xl" controls autoplay @click.stop>
+                    </video>
+
+                    <!-- Counter -->
+                    <div
+                        class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm px-3 py-1 rounded-full">
+                        {{ lightboxIndex + 1 }} / {{ event.images.length }}
+                    </div>
                 </div>
+
+                <!-- Navigation Next -->
+                <button v-if="event.images.length > 1" @click.stop="lightboxNext"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white text-2xl transition">
+                    ›
+                </button>
+
+                <!-- Close -->
+                <button
+                    class="absolute top-4 right-4 text-white text-4xl font-bold drop-shadow-lg w-10 h-10 flex items-center justify-center hover:text-gray-300 transition"
+                    @click="lightboxOpen = false">
+                    ×
+                </button>
             </div>
 
             <!-- Upload Modal -->
@@ -465,6 +526,7 @@
                         </h3>
                         <p class="text-gray-600 mt-1 text-sm">الحد الأقصى لكل ملف: 100 ميجابايت</p>
                     </div>
+
                     <div class="p-6">
                         <div @dragover.prevent @drop.prevent="handleDrop"
                             class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-500 transition-colors">
@@ -496,12 +558,14 @@
                         </div>
 
                         <p v-if="uploadError" class="mt-4 text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg">
-                            {{
-                                uploadError }}</p>
+                            {{ uploadError }}
+                        </p>
                         <p v-if="uploadSuccess"
-                            class="mt-4 text-green-600 bg-green-50 border border-green-200 p-3 rounded-lg">{{
-                                uploadSuccess }}</p>
+                            class="mt-4 text-green-600 bg-green-50 border border-green-200 p-3 rounded-lg">
+                            {{ uploadSuccess }}
+                        </p>
                     </div>
+
                     <div class="p-6 border-t flex gap-3 justify-end">
                         <button @click="showUploadModal = false"
                             class="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50">إلغاء</button>
@@ -619,42 +683,35 @@ const event = ref(null);
 const loading = ref(true);
 const lightboxOpen = ref(false);
 const lightboxIndex = ref(0);
-
 const newComment = ref("");
 const commentLoading = ref(false);
 const commentError = ref("");
 const commentSuccess = ref(false);
 const currentUserId = ref(null);
-
 const likesCount = ref(0);
 const isLiked = ref(false);
 const likeLoading = ref(false);
 const likeError = ref("");
-
 const wishlistLoading = ref(false);
 const isInWishlist = ref(false);
 const wishlistError = ref("");
 const wishlistSuccess = ref(false);
-
 const isAuthenticated = ref(false);
 const showUploadModal = ref(false);
 const selectedFiles = ref([]);
 const uploading = ref(false);
 const uploadError = ref("");
 const uploadSuccess = ref("");
-
 const replyingTo = ref(null);
 const replyTexts = ref({});
 const replyLoading = ref({});
-const replyErrors = ref({});   // ← أخطاء الرد الحقيقية
-
-// أخطاء حذف التعليق per-comment
+const replyErrors = ref({});
 const deleteCommentErrors = ref({});
 
 // ─── Reactions ────────────────────────────────────────────────────────────────
 const commentReactions = ref({});
 const reactionLoading = ref({});
-const reactionErrors = ref({});   // ← أخطاء الـ reaction الحقيقية
+const reactionErrors = ref({});
 
 const reactionEndpointMap = {
     support: "support",
@@ -672,14 +729,12 @@ const getMediaUrl = (path) => {
 
 const setReaction = async (commentId, type) => {
     if (reactionLoading.value[commentId]) return;
-
     const comment = event.value?.comments?.find((c) => c.id === commentId);
     if (!comment) return;
 
     const previousReaction = commentReactions.value[commentId];
     const isToggle = previousReaction === type;
 
-    // Optimistic update
     const snap = {
         support: comment.support_count ?? 0,
         exhibitions: comment.exhibitions_count ?? 0,
@@ -704,7 +759,6 @@ const setReaction = async (commentId, type) => {
         const endpoint = reactionEndpointMap[type];
         await CommentService.reactToComment(commentId, endpoint);
     } catch (err) {
-        // Rollback
         commentReactions.value[commentId] = previousReaction;
         comment.support_count = snap.support;
         comment.exhibitions_count = snap.exhibitions;
@@ -810,11 +864,13 @@ const addReply = async (commentId) => {
                 created_at: new Date().toISOString(),
                 user: { name: "أنت" },
             };
+
             const comment = event.value.comments.find((c) => c.id === commentId);
             if (comment) {
                 if (!comment.replies) comment.replies = [];
                 comment.replies.push(newReply);
             }
+
             replyTexts.value[commentId] = "";
             replyingTo.value = null;
             if (event.value.comments_count !== undefined) event.value.comments_count++;
@@ -967,6 +1023,7 @@ const addComment = async () => {
                 created_at: new Date().toISOString(),
                 user: { name: "أنت" },
             };
+
             event.value.comments.unshift(newCommentData);
             newComment.value = "";
             commentSuccess.value = true;
@@ -981,6 +1038,7 @@ const addComment = async () => {
 
 const deleteComment = async (commentId) => {
     if (!confirm("هل أنت متأكد من حذف التعليق؟")) return;
+
     deleteCommentErrors.value[commentId] = "";
 
     try {
@@ -1019,6 +1077,7 @@ const addValidFiles = (files) => {
 };
 
 const removeFile = (i) => selectedFiles.value.splice(i, 1);
+
 const formatFileSize = (bytes) => {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
@@ -1107,16 +1166,27 @@ const formatCommentDate = (dateStr) => {
     } catch { return "—"; }
 };
 
+// ─── Lightbox Helpers ─────────────────────────────────────────────────────────
 const openLightbox = (index) => {
     lightboxIndex.value = index;
     lightboxOpen.value = true;
+};
+
+// ✅ Navigation inside lightbox
+const lightboxPrev = () => {
+    const total = event.value?.images?.length ?? 0;
+    lightboxIndex.value = (lightboxIndex.value - 1 + total) % total;
+};
+
+const lightboxNext = () => {
+    const total = event.value?.images?.length ?? 0;
+    lightboxIndex.value = (lightboxIndex.value + 1) % total;
 };
 
 // ─── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(async () => {
     await fetchCurrentUser();
     checkAuth();
-
     if (!slug) { loading.value = false; return; }
 
     loading.value = true;

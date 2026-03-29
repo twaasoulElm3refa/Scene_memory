@@ -94,7 +94,7 @@ class User extends Authenticatable
 
     public function licenceType()
     {
-        return $this->belongsTo(licenceType::class,'user_id');
+        return $this->belongsTo(licenceType::class,'licence_type_id');
     }
 }
 

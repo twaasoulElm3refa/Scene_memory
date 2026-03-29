@@ -210,7 +210,7 @@
         </section>
 
 
-        <section class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <section v-if="licenceName === 'free'" class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
             <!-- Header Section -->
             <div class="text-center mb-10">
                 <div
@@ -293,16 +293,16 @@
                             </li>
                         </ul>
 
-                        <!-- Button -->
-                        <button :class="[
+                        <button @click="$router.push(`/plan/${plan.slug}`)" :class="[
                             'w-full py-2.5 rounded-lg font-semibold text-sm transition-all',
                             plan.name === 'free'
                                 ? 'bg-gray-100 hover:bg-gray-200 text-gray-900 border'
                                 : 'bg-blue-600 hover:bg-blue-700 text-white'
                         ]">
-                            {{ plan.name === 'free'
-                                ? ($t("plans.getStarted") || "ابدأ مجاناً")
-                                : ($t("plans.subscribe") || "اشترك الآن")
+                            {{
+                                plan.name === 'free'
+                                    ? ($t("plans.getStarted") || "ابدأ مجاناً")
+                            : ($t("plans.subscribe") || "اشترك الآن")
                             }}
                         </button>
 
@@ -352,7 +352,8 @@ import api from "@/services/ApiClient";
 const marker = ref({ lat: 30.0444, lng: 31.2357 });
 const fullscreen = ref(false);
 const router = useRouter();
-
+const licenceName = ref("free");
+const isLoggedIn = ref(false);
 const searchQuery = ref("");
 const displayedEvents = ref([]);
 const categories = ref([]);
@@ -564,6 +565,7 @@ watch(
 onMounted(async () => {
     mapService = new MapService(marker);
     mapService.initMap("map", 6);
+    await fetchProfile();
 
     try {
         categories.value = await CategoryService.getAllCategories();
@@ -615,6 +617,60 @@ const loadPlans = async () => {
         plans.value = [];
     } finally {
         loadingPlans.value = false;
+    }
+};
+
+const fetchProfile = async () => {
+    const token = localStorage.getItem("auth_token");
+    if (!token) return;
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    try {
+        const res = await axios.get("/v1/users/profile");
+
+        if (res.data.status === "success") {
+            const userData = res.data.data.user;
+
+            licenceName.value = userData.licence_type?.name || "free";
+
+            localStorage.setItem("licence_name", licenceName.value);
+
+            isLoggedIn.value = true;
+        }
+    } catch (err) {
+        console.log("Failed to fetch profile:", err);
+
+        licenceName.value = "free";
+        isLoggedIn.value = false;
+    }
+};
+
+const subscribe = async (planId) => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        alert("Please login first");
+        return;
+    }
+
+    try {
+        const res = await api.post(`/subscribe/${planId}`, {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (res.data.status === "success") {
+            await fetchProfile(); // يغير licenceName
+            await loadPlans();    // تحديث الخطط
+
+            alert("Subscribed successfully");
+            window.location.reload();
+        }
+    } catch (err) {
+        console.error("Subscribe error:", err);
+        alert("Subscription failed ❌");
     }
 };
 </script>

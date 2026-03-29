@@ -25,11 +25,10 @@ class PlanController extends Controller
 
     public function single()
     {
-        $cacheKey = 'plans_single_' . request('id') . '_' . app()->getLocale();
-
+        $cacheKey = 'plans_single_' . request('slug') . '_' . app()->getLocale();
         $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
             return licenceType::with('translation', 'advantges')
-                ->where('id', request('id'))
+                ->where('slug', request('slug'))
                 ->get();
         });
 

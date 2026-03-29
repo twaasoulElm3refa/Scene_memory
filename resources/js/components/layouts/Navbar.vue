@@ -103,13 +103,16 @@ const userImage = ref(null);
 const currentLanguage = ref("AR");
 const languageDropdownOpen = ref(false);
 
-const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH",'UR'];
+const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH", "UR"];
+
+// New reactive properties for license
+const licenceName = ref("free"); // default
+const userRole = ref(""); // optional extra
 
 const selectLanguage = (lang) => {
     currentLanguage.value = lang;
     localStorage.setItem("language", lang.toLowerCase());
     languageDropdownOpen.value = false;
-
     window.location.reload();
 };
 
@@ -137,14 +140,20 @@ const userInitial = computed(() => {
 });
 
 const links = computed(() => {
-    if (isLoggedIn.value) {
-        return allLinks;
+    let filtered = allLinks;
+
+    if (!isLoggedIn.value) {
+        filtered = allLinks.filter(
+            (link) =>
+                link.active !== "add_event" &&
+                link.active !== "Wishlist" &&
+                link.active !== "historical"
+        );
+    } else {
+
     }
-    return allLinks.filter(
-        (link) =>
-            link.active !== "add_event" &&
-            link.active !== "Wishlist"
-    );
+
+    return filtered;
 });
 
 const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
@@ -152,9 +161,11 @@ const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
 const logout = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user_role");
+    localStorage.removeItem("licence_name"); // optional cleanup
     axios.defaults.headers.common["Authorization"] = "";
     isLoggedIn.value = false;
     userName.value = "المستخدم";
+    licenceName.value = "free";
     dropdownOpen.value = false;
     window.location.href = "/";
 };
@@ -166,16 +177,34 @@ const fetchProfile = async () => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
         const res = await axios.get("/v1/users/profile");
+
         if (res.data.status === "success") {
-            userName.value = res.data.data.user.name || "المستخدم";
-            userImage.value = res.data.data.user.image || null;
-            localStorage.setItem("user_role", res.data.data.user.role);
+            const userData = res.data.data.user;
+
+            userName.value = userData.name || "المستخدم";
+            userImage.value = userData.image || null;
+
+            // Store role
+            userRole.value = userData.role || "";
+            localStorage.setItem("user_role", userData.role);
+
+            // Handle licence
+            if (userData.licence_type && userData.licence_type.name) {
+                licenceName.value = userData.licence_type.name;
+                localStorage.setItem("licence_name", userData.licence_type.name);
+            } else {
+                licenceName.value = "free";
+            }
+
             isLoggedIn.value = true;
         }
     } catch (err) {
         console.log("Failed to fetch profile:", err);
         localStorage.removeItem("auth_token");
+        localStorage.removeItem("user_role");
+        localStorage.removeItem("licence_name");
         isLoggedIn.value = false;
+        licenceName.value = "free";
     }
 };
 
@@ -192,6 +221,12 @@ onMounted(() => {
     const savedTheme = localStorage.getItem("theme") || "dark";
     theme.value = savedTheme;
     applyTheme();
+
+    // Load saved licence if exists (for faster initial render)
+    const savedLicence = localStorage.getItem("licence_name");
+    if (savedLicence) {
+        licenceName.value = savedLicence;
+    }
 
     fetchProfile();
 
@@ -229,16 +264,15 @@ const isActive = (name) => document.body.dataset.route === name;
     color: var(--text-main);
     text-decoration: none;
     font-weight: 500;
-    padding: 5px 8px; /* زيادة شويه padding أفقياً */
+    padding: 5px 8px;
     font-size: 14px;
     position: relative;
     padding-bottom: 4px;
     transition: color 0.3s ease;
-    display: inline-block; /* مهم عشان يبقى inline في RTL و LTR */
-    white-space: nowrap;   /* يمنع الكلمات من الانكسار */
-    text-align: center;    /* ضبط النص في المنتصف */
+    display: inline-block;
+    white-space: nowrap;
+    text-align: center;
 }
-
 
 /* Animated Underline */
 .nav-link::after {

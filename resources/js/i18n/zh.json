@@ -434,6 +434,7 @@
         "description": "我们的多种计划",
         "price": "价格",
         "features": "功能",
+        "cancelAnytime": "随时取消",
         "Monthly": "每月",
         "Yearly": "每年",
         "unlimitedEvents": "无限事件",
