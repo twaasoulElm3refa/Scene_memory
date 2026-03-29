@@ -57,41 +57,28 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $cityId = $request->city_id;
-        $categoryId = $request->sub_category_id;
+        $cityId = $request->city_id !== 'all' ? $request->city_id : null;
+        $categoryId = $request->sub_category_id !== 'all' ? $request->sub_category_id : null;
+
         $from = $request->query('from');
         $to = $request->query('to');
 
-        // 🧠 build safe cache key dynamically
-        $cacheKey = collect([
-            'events_from_marker',
-            app()->getLocale(),
-            $cityId ? "city:$cityId" : null,
-            $categoryId ? "cat:$categoryId" : null,
-            $from ? "from:$from" : null,
-            $to ? "to:$to" : null,
-        ])->filter()->implode('_');
+        $filters = compact('cityId', 'categoryId', 'from', 'to');
+
+        $cacheKey = 'events_' . app()->getLocale() . '_' . md5(json_encode($filters));
 
         $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
+
             return Events::with('city.translation', 'sub_categorey.translation', 'translation')
                 ->where('is_active', 1)
 
-                // ✅ filters always optional
-                ->when($cityId, function ($q) use ($cityId) {
-                    $q->where('city_id', $cityId);
-                })
+                ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
 
-                ->when($categoryId, function ($q) use ($categoryId) {
-                    $q->where('sub_categorey_id', $categoryId);
-                })
+                ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
 
-                ->when($from, function ($q) use ($from) {
-                    $q->whereDate('start_date', '>=', $from);
-                })
+                ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
 
-                ->when($to, function ($q) use ($to) {
-                    $q->whereDate('end_date', '<=', $to);
-                })
+                ->when($to, fn ($q) => $q->whereDate('end_date', '<=', $to))
 
                 ->orderBy('start_date')
                 ->get();

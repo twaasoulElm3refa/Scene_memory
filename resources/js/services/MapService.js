@@ -177,7 +177,7 @@ export default class MapService {
         });
 
         // تكبير الخريطة لتشمل كل الدبابيس لو أكتر من واحد
-        if (validCount > 1 && bounds.isValid()) {
+        if (validCount > 1) {
             targetMap.fitBounds(bounds, { padding: 60, maxZoom: 15 });
         } else if (validCount === 1) {
             targetMap.flyTo({
