@@ -93,10 +93,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('countries')->group(function () {
         Route::get('/', [CountriesController::class,  'index']);
         Route::get('/all/get', [CountriesController::class,  'all']);
-        Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:15,1');
-        Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:15,1');
-        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:15,1');
-        Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:15,1');
+        Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:25,1');
+        Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:25,1');
+        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:25,1');
+        Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:25,1');
         Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -105,9 +105,9 @@ Route::prefix('v1')->group(function () {
 
     // CITIES CRUD
     Route::prefix('cities')->group(function () {
-        Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:15,1');
-        Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:15,1');
-        Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:15,1');
+        Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:25,1');
+        Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:25,1');
+        Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:25,1');
         Route::post('/create', [CitiesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CitiesController::class, 'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CitiesController::class, 'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');

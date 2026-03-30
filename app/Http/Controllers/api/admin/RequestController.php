@@ -25,7 +25,7 @@ class RequestController extends Controller
     {
         try {
             $page = request('page', 1);
-            $perPage = 5;
+            $perPage = 10;
 
             $cacheKey = "requests:page_{$page}:per_{$perPage}";
 
