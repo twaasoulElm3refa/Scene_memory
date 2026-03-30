@@ -15,6 +15,7 @@ export const EventService = {
       const url = `/events/${cityId}/${subCategoryId}`;
 
       const res = await api.get(url, { params });
+      console.log(res.data);
 
       return res.data?.data || res.data || [];
     } catch (err) {

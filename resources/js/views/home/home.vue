@@ -302,7 +302,7 @@
                             {{
                                 plan.name === 'free'
                                     ? ($t("plans.getStarted") || "ابدأ مجاناً")
-                            : ($t("plans.subscribe") || "اشترك الآن")
+                                    : ($t("plans.subscribe") || "اشترك الآن")
                             }}
                         </button>
 
@@ -501,7 +501,9 @@ const search = async (isInitial = false) => {
             start_date: ev.start_date,
             city: ev.city?.translation?.name || "غير محدد",
             category_name: ev.sub_categorey?.translation?.name || "فعالية",
-            image_url: ev.image_url || null,
+            image_url: ev.first_image?.preview_url
+                ? `/storage/${ev.first_image.preview_url}`
+                : null,
             lattitude: ev.lattitude,
             langitude: ev.langitude,
         }));

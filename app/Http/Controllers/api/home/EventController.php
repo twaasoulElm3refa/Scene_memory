@@ -69,7 +69,7 @@ class EventController extends Controller
 
         $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
 
-            return Events::with('city.translation', 'sub_categorey.translation', 'translation')
+            return Events::with('city.translation', 'sub_categorey.translation', 'translation','firstImage:id,event_id,preview_url')
                 ->where('is_active', 1)
 
                 ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
