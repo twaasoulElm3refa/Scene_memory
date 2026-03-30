@@ -60,7 +60,7 @@ class CommentController extends Controller
             // إذا الادمن
             if (auth()->user()->role == 'admin') {
                 $comment->delete();
-
+                Cache::tags(['events'])->flush();
                 return $this->success([], 'Comment deleted successfully');
             }
 

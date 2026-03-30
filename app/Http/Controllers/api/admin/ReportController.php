@@ -19,7 +19,7 @@ class ReportController extends Controller
     public function reports()
     {
         $cache = 'reports_all';
-        $reports = Cache::remember($cache, $this->cacheTime, function () {
+        $reports = Cache::tags(['reports'])->remember('reports_all', $this->cacheTime, function () {
             return CommentReport::with('user', 'comment')->paginate(5);
         });
 
@@ -29,12 +29,13 @@ class ReportController extends Controller
     /**
      * حذف تقرير
      */
-    public function delete()
+    public function delete($id)
     {
         try {
-            $report = CommentReport::findOrFail(request('id'));
+            $report = CommentReport::findOrFail($id);
             $report->delete();
-            $this->clearCache();
+            Cache::tags(['reports'])->flush();
+
 
             return $this->success($report, 'Report deleted successfully');
         } catch (\Exception $e) {
@@ -42,12 +43,4 @@ class ReportController extends Controller
         }
     }
 
-    /**
-     * مسح الكاش
-     */
-    private function clearCache()
-    {
-        // مسح الكاش الرئيسي
-        Cache::forget('reports_all');
-    }
 }
