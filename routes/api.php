@@ -17,6 +17,7 @@ use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
+use App\Http\Controllers\api\auth\AppleAuthController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
 use App\Http\Controllers\api\auth\SocialAuthController;
@@ -57,6 +58,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware('guest');
         Route::get('/facebook-login', [SocialAuthController::class, 'redirectToFacebook']);
         Route::get('/facebook-callback', [SocialAuthController::class, 'handleFacebookCallback']);
+
+        Route::get('/apple-login', [AppleAuthController::class, 'redirectToApple']);
+        Route::get('/apple-callback', [AppleAuthController::class, 'handleAppleCallback']);
 
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {

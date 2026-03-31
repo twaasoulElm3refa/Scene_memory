@@ -6,7 +6,7 @@
                 alt="Site Logo" class="w-24 h-24 rounded-full object-contain" />
             <span class="logo-text mt-2">
                 <i class="fa-solid fa-camera me-2"></i>
-                Scene Memory
+                SceMory
             </span>
         </div>
         <div class="sidebar-spacer my-4"></div>

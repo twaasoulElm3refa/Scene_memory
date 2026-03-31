@@ -16,7 +16,7 @@
             <!-- Hero -->
             <div class="relative">
                 <component :is="heroMediaComponent" v-if="heroMedia"
-                    :src="getMediaUrl(heroMedia.full_url || heroMedia.preview_url)"
+                    :src="getMediaUrl(heroMedia.full_url || heroMedia.full_url)"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
                 <img v-else src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200"
@@ -103,14 +103,14 @@
                                         class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative group"
                                         @click="openLightbox(index)">
 
-                                        <img v-if="!media.video && !isVideoUrl(media.preview_url) && media.preview_url"
-                                            :src="getMediaUrl(media.preview_url)"
+                                        <img v-if="!media.video && !isVideoUrl(media.full_url) && media.full_url"
+                                            :src="getMediaUrl(media.full_url)"
                                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             loading="lazy" />
 
                                         <video
-                                            v-else-if="media.video || isVideoUrl(media.preview_url || media.full_url)"
-                                            :src="getMediaUrl(media.video || media.preview_url || media.full_url)"
+                                            v-else-if="media.video || isVideoUrl(media.full_url || media.full_url)"
+                                            :src="getMediaUrl(media.video || media.full_url || media.full_url)"
                                             class="w-full h-full object-cover" muted loop playsinline
                                             preload="metadata">
                                         </video>
@@ -120,7 +120,7 @@
                                             {{ $t('event.no_media') }}
                                         </div>
 
-                                        <div v-if="media.video || isVideoUrl(media.preview_url || media.full_url)"
+                                        <div v-if="media.video || isVideoUrl(media.full_url || media.full_url)"
                                             class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                             <div
                                                 class="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center shadow-lg">
@@ -484,12 +484,12 @@
                 </button>
 
                 <div class="relative max-w-[92vw] max-h-[92vh] flex items-center justify-center" @click.stop>
-                    <img v-if="currentMedia && !isVideoUrl(currentMedia.full_url) && !isVideoUrl(currentMedia.preview_url) && !currentMedia.video"
-                        :src="getMediaUrl(currentMedia.preview_url || currentMedia.full_url)"
+                    <img v-if="currentMedia && !isVideoUrl(currentMedia.full_url) && !isVideoUrl(currentMedia.full_url) && !currentMedia.video"
+                        :src="getMediaUrl(currentMedia.full_url || currentMedia.full_url)"
                         class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl" />
 
                     <video v-else-if="currentMedia"
-                        :src="getMediaUrl(currentMedia.full_url || currentMedia.video || currentMedia.preview_url)"
+                        :src="getMediaUrl(currentMedia.full_url || currentMedia.video || currentMedia.full_url)"
                         class="max-w-full max-h-[88vh] rounded-lg shadow-2xl" controls autoplay @click.stop>
                     </video>
 

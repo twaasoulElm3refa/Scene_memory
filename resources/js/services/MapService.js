@@ -501,25 +501,19 @@ export default class MapService {
     _createEventMarkerEl() {
         const el = document.createElement("div");
         el.className = "map-event-marker";
-        el.style.cssText = `
-            width: 32px;
-            height: 32px;
-            background: #e53e3e;
-            border: 3px solid #ffffff;
-            transform: rotate(-45deg);
-            border-radius: 50% 50% 50% 0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.4);
-            cursor: pointer;
-            will-change: transform;
-            transition: transform 0.18s ease;
-        `;
 
-        el.addEventListener("mouseenter", () => {
-            el.style.transform = "rotate(-45deg) scale(1.35)";
-        });
-        el.addEventListener("mouseleave", () => {
-            el.style.transform = "rotate(-45deg) scale(1)";
-        });
+        el.style.width = "36px";
+        el.style.height = "36px";
+        el.style.cursor = "pointer";
+
+        el.innerHTML = `
+        <svg viewBox="0 0 24 24" width="36" height="36">
+            <path fill="#1e88e5" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            <circle cx="12" cy="9" r="2.5" fill="white"/>
+        </svg>
+    `;
+
+        el.style.transform = "translate(-50%, -100%)"; // يخليه ثابت فوق النقطة
 
         return el;
     }

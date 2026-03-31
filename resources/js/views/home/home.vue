@@ -501,8 +501,8 @@ const search = async (isInitial = false) => {
             start_date: ev.start_date,
             city: ev.city?.translation?.name || "غير محدد",
             category_name: ev.sub_categorey?.translation?.name || "فعالية",
-            image_url: ev.first_image?.preview_url
-                ? `/storage/${ev.first_image.preview_url}`
+            image_url: ev.first_image?.full_url
+                ? `/storage/${ev.first_image.full_url}`
                 : null,
             lattitude: ev.lattitude,
             langitude: ev.langitude,
