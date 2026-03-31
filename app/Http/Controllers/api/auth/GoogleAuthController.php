@@ -41,10 +41,17 @@ class GoogleAuthController extends Controller
                 }
             $token = $user->createToken('google-auth-token')->plainTextToken;
 
+            $isProfileComplete =
+                !empty($user->phone) &&
+                !empty($user->country) &&
+                !empty($user->position) &&
+                !empty($user->date_of_birth);
+
             return response()->json([
                 'status' => 'success',
                 'token' => $token,
                 'role' => $user->role,
+                'is_profile_complete' => $isProfileComplete,
                 'user' => [
                     'name' => $user->name,
                     'email' => $user->email,

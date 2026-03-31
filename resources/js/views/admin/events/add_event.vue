@@ -329,7 +329,17 @@ import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
+// Fix Leaflet default icon issue in Vue/Vite
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl,
+  shadowUrl: iconShadow,
+});
 const form = ref({
   title: "",
   description: "",

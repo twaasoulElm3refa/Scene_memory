@@ -15,6 +15,9 @@
     "upload_media": "メディアをアップロード",
     "view_all_comments": "すべてのコメントを見る",
     "nav": {
+        "favourites": "お気に入り",
+        "plans": " プラン",
+        "more": " 詳細",
         "terms": "一般的な利用規約",
         "historical": "歴史人物",
         "home": "ホーム",

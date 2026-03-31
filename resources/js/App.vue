@@ -10,10 +10,15 @@
     </div>
 </template>
 
-
 <script>
 export default {
     name: "App",
+
+    data() {
+        return {
+            currentLang: "en",
+        };
+    },
 
     computed: {
         showNavbar() {
@@ -28,6 +33,7 @@ export default {
     methods: {
         setupAxios() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]');
+
             if (csrfToken) {
                 window.axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken.content;
             }
@@ -35,15 +41,23 @@ export default {
             window.axios.defaults.baseURL = "/api";
             window.axios.defaults.withCredentials = true;
 
+            const lang = (this.$route.params.lang || "en").toLowerCase();
+            window.axios.defaults.headers.common["Accept-Language"] = lang;
+
+            if (this.$i18n.locale !== lang) {
+                this.$i18n.locale = lang;
+            }
+
             this.setupAuthInterceptor();
         },
 
         setupAuthInterceptor() {
             window.axios.interceptors.response.use(
-                response => response,
-                error => {
+                (response) => response,
+                (error) => {
                     if (error.response && error.response.status === 401) {
-                        this.$router.push("/auth");
+                        const lang = this.$route.params.lang || "en";
+                        this.$router.push(`/${lang}/auth`);
                     }
                     return Promise.reject(error);
                 }

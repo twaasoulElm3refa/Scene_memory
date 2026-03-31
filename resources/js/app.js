@@ -1,7 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import { createI18n  } from "vue-i18n";
+import { createI18n } from "vue-i18n";
+
+// messages
 import ar from "./i18n/ar.json";
 import en from "./i18n/en.json";
 import fr from "./i18n/fr.json";
@@ -14,7 +16,23 @@ import ja from "./i18n/ja.json";
 import zh from "./i18n/zh.json";
 import fa from "./i18n/fa.json";
 import ur from "./i18n/ur.json";
-import '../css/app.css';
+
+// styles
+import "../css/app.css";
+import "animate.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+// bootstrap (مرة واحدة بس)
+import "./bootstrap";
+
+// components
+import navbarComponent from "./components/layouts/Navbar.vue";
+import footer from "./components/layouts/footer.vue";
+import AdminHeader from "./layouts/AdminHeader.vue";
+import AdminLayout from "./layouts/AdminLayout.vue";
+import AdminSidebar from "./layouts/AdminSidebar.vue";
 
 const messages = {
     ar,
@@ -28,38 +46,65 @@ const messages = {
     ja,
     zh,
     fa,
-    ur
-}
+    ur,
+};
+
+// ✅ ممنوع localStorage هنا نهائيًا
+const DEFAULT_LANG = "en";
+
+// تنظيف اللغة
+const normalizeLang = (lang) => {
+    const supported = Object.keys(messages);
+    lang = (lang || "").toLowerCase();
+    return supported.includes(lang) ? lang : DEFAULT_LANG;
+};
+
 const i18n = createI18n({
     legacy: false,
-    locale: localStorage.getItem('language')?.toLowerCase() || 'ar',
-    fallbackLocale: 'ar',
-    messages
-})
-import "./bootstrap";
-import "animate.css";
-import "../css/app.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
+    locale: DEFAULT_LANG,
+    fallbackLocale: "en",
+    messages,
+});
 
-// My components imports
-import navbarComponent from "./components/layouts/Navbar.vue";
-import footer from "./components/layouts/footer.vue";
-import AdminHeader from "./layouts/AdminHeader.vue";
-import AdminLayout from "./layouts/AdminLayout.vue";
-import AdminSidebar from "./layouts/AdminSidebar.vue";
 const app = createApp(App);
 
+// register components
 app.component("navbar-component", navbarComponent);
 app.component("footer-component", footer);
 app.component("admin-header", AdminHeader);
 app.component("admin-layout", AdminLayout);
 app.component("admin-sidebar", AdminSidebar);
 
-localStorage.setItem('theme', 'light');
-document.documentElement.classList.remove('dark');
+/**
+ * 🔥 أهم جزء: ربط اللغة مع الراوتر + الاتجاه
+ */
+router.afterEach((to) => {
+    const lang = normalizeLang(to.params.lang);
+
+    // i18n
+    i18n.global.locale.value = lang;
+
+    // axios (لو مستخدم)
+    if (window.axios) {
+        window.axios.defaults.headers.common["Accept-Language"] = lang;
+    }
+
+    // HTML attributes
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+});
+
+/**
+ * 🔥 أول تحميل (مهم جدًا)
+ */
+const initialLang = normalizeLang(router.currentRoute.value.params.lang);
+
+i18n.global.locale.value = initialLang;
+
+document.documentElement.lang = initialLang;
+document.documentElement.dir = initialLang === "ar" ? "rtl" : "ltr";
+
 app.use(router);
 app.use(i18n);
+
 app.mount("#app");

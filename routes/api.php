@@ -56,11 +56,11 @@ Route::prefix('v1')->group(function () {
         // Social Auth
         Route::get('/google-login', [GoogleAuthController::class, 'googleLogin'])->middleware('guest');
         Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware('guest');
-        Route::get('/facebook-login', [SocialAuthController::class, 'redirectToFacebook']);
-        Route::get('/facebook-callback', [SocialAuthController::class, 'handleFacebookCallback']);
+        // Route::get('/facebook-login', [SocialAuthController::class, 'redirectToFacebook']);
+        // Route::get('/facebook-callback', [SocialAuthController::class, 'handleFacebookCallback']);
 
-        Route::get('/apple-login', [AppleAuthController::class, 'redirectToApple']);
-        Route::get('/apple-callback', [AppleAuthController::class, 'handleAppleCallback']);
+        // Route::get('/apple-login', [AppleAuthController::class, 'redirectToApple']);
+        // Route::get('/apple-callback', [AppleAuthController::class, 'handleAppleCallback']);
 
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
@@ -118,7 +118,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Events
-    Route::prefix('events')->middleware(['throttle:45,1'])->group(function () {
+    Route::prefix('events')->middleware(['throttle:60,1'])->group(function () {
         // Home Events
         Route::get('/', [EventController::class, 'all']);
         Route::get('/daily', [EventController::class, 'daily']);

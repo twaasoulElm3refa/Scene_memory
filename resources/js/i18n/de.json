@@ -15,6 +15,9 @@
     "upload_media": "Media hochladen",
     "view_all_comments": "Alle Kommentare anzeigen",
     "nav": {
+        "favourites": "Favoriten",
+        "plans": "Pläne",
+        "more": "Mehr",
         "terms": "Allgemeine Gesellschaftsbedingungen",
         "historical": "Historische Personen",
         "home": "Startseite",

@@ -19,8 +19,8 @@
                     :src="getMediaUrl(heroMedia.full_url || heroMedia.full_url)"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
-                <img v-else src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200"
-                    :alt="event.translation.title" class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
+                <img v-else src="https://images.unsplash.com/..." :alt="event.translation.title"
+                    class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
 
                 <div v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.full_url))"
                     class="absolute inset-0 bg-black/30 flex items-center justify-center z-10 pointer-events-none">
@@ -45,10 +45,79 @@
             <!-- Content -->
             <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 -mt-16 relative z-10">
                 <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
 
-                        <!-- Main -->
-                        <div class="lg:col-span-2 p-8 md:p-12 lg:p-16">
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <!-- Media Gallery — FULL WIDTH above the grid                  -->
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <div class="p-8 md:p-12 border-b border-gray-100">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2
+                                class="text-2xl md:text-3xl font-bold text-gray-900 border-b border-gray-200 pb-4 flex-1">
+                                {{ $t('event.media_gallery_title') }}
+                            </h2>
+                            <button v-if="isAuthenticated" @click="showUploadModal = true"
+                                class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-sm ml-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                                {{ $t('upload_media') || 'رفع وسائط' }}
+                            </button>
+                        </div>
+
+                        <!-- Grid: 3 columns, bigger images -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <div v-for="(media, index) in event.images" :key="media.id || index"
+                                class="aspect-[16/10] overflow-hidden rounded-2xl shadow hover:shadow-lg transition-shadow cursor-pointer relative group"
+                                @click="openLightbox(index)">
+
+                                <!-- Image -->
+                                <img v-if="!media.video && !isVideoUrl(media.full_url) && media.full_url"
+                                    :src="getMediaUrl(media.full_url)"
+                                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    loading="lazy" />
+
+                                <!-- Video thumbnail -->
+                                <video v-else-if="media.video || isVideoUrl(media.full_url || media.full_url)"
+                                    :src="getMediaUrl(media.video || media.full_url || media.full_url)"
+                                    class="w-full h-full object-cover" muted loop playsinline preload="metadata">
+                                </video>
+
+                                <!-- Fallback -->
+                                <div v-else
+                                    class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                                    {{ $t('event.no_media') }}
+                                </div>
+
+                                <!-- Video overlay icon -->
+                                <div v-if="media.video || isVideoUrl(media.full_url || media.full_url)"
+                                    class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                    <div
+                                        class="w-14 h-14 rounded-full bg-white/80 flex items-center justify-center shadow-lg">
+                                        <span class="text-gray-800 text-2xl">▶</span>
+                                    </div>
+                                </div>
+
+                                <!-- Hover overlay for images -->
+                                <div v-else
+                                    class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+                                    <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-lg"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <!-- Main + Sidebar Grid                                        -->
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-0">
+
+                        <!-- Main Content (3/4) -->
+                        <div class="lg:col-span-3 p-8 md:p-12 lg:p-16">
 
                             <!-- Title + Like -->
                             <div class="flex items-center justify-between mb-6">
@@ -56,17 +125,17 @@
                                     {{ event.translation.title }}
                                 </h1>
                                 <button @click="toggleLike" :disabled="likeLoading || isLiked"
-                                    class="flex items-center gap-2 px-5 py-2.5 rounded-full transition-all duration-200"
+                                    class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ml-4 shrink-0"
                                     :class="{
                                         'bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100': isLiked,
                                         'bg-gray-100 text-gray-600 hover:bg-pink-50 hover:text-pink-600 border border-gray-300': !isLiked,
                                     }">
-                                    <svg class="w-7 h-7 transition-transform" :class="{ 'scale-110': isLiked }"
+                                    <svg class="w-6 h-6 transition-transform" :class="{ 'scale-110': isLiked }"
                                         fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                             d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                     </svg>
-                                    <span class="text-lg font-semibold">{{ likesCount }}</span>
+                                    <span class="text-base font-semibold">{{ likesCount }}</span>
                                     <span v-if="likeLoading" class="text-sm animate-pulse">...</span>
                                 </button>
                             </div>
@@ -81,65 +150,6 @@
                                 {{ event.translation.description }}
                             </p>
 
-                            <!-- Media Gallery -->
-                            <div class="mb-12">
-                                <div class="flex items-center justify-between mb-6">
-                                    <h2
-                                        class="text-2xl md:text-3xl font-bold text-gray-900 border-b border-gray-200 pb-4">
-                                        {{ $t('event.media_gallery_title') }}
-                                    </h2>
-                                    <button v-if="isAuthenticated" @click="showUploadModal = true"
-                                        class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-sm">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        {{ $t('upload_media') || 'رفع وسائط' }}
-                                    </button>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div v-for="(media, index) in event.images" :key="media.id || index"
-                                        class="aspect-[4/3] overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer relative group"
-                                        @click="openLightbox(index)">
-
-                                        <img v-if="!media.video && !isVideoUrl(media.full_url) && media.full_url"
-                                            :src="getMediaUrl(media.full_url)"
-                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                            loading="lazy" />
-
-                                        <video
-                                            v-else-if="media.video || isVideoUrl(media.full_url || media.full_url)"
-                                            :src="getMediaUrl(media.video || media.full_url || media.full_url)"
-                                            class="w-full h-full object-cover" muted loop playsinline
-                                            preload="metadata">
-                                        </video>
-
-                                        <div v-else
-                                            class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                            {{ $t('event.no_media') }}
-                                        </div>
-
-                                        <div v-if="media.video || isVideoUrl(media.full_url || media.full_url)"
-                                            class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            <div
-                                                class="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center shadow-lg">
-                                                <span class="text-gray-800 text-xl">▶</span>
-                                            </div>
-                                        </div>
-
-                                        <div v-else
-                                            class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
-                                            <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-lg"
-                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- About -->
                             <div class="mb-12">
                                 <h2
@@ -147,7 +157,7 @@
                                     {{ $t('event.about_event_title') }}
                                 </h2>
                                 <p class="text-gray-700 mb-8 text-lg leading-relaxed">
-                                    {{ event.translation.des || event.translation.description }}
+                                    {{ event.translation.des }}
                                 </p>
                             </div>
 
@@ -156,7 +166,7 @@
                                 <h2
                                     class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">
                                     {{ $t('event.comments_title') }}
-                                    ({{ commentsCount }})
+                                    ({{ event.comments_count ?? event.comments?.length ?? 0 }})
                                 </h2>
 
                                 <RouterLink v-if="isAuthenticated"
@@ -166,194 +176,182 @@
                                 </RouterLink>
 
                                 <!-- Comment List -->
-                                <div v-if="comments.length > 0">
-                                    <div v-for="comment in comments" :key="comment.id"
-                                        class="comment-box mb-6 bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
+                                <div v-for="comment in event.comments" :key="comment.id"
+                                    class="comment-box mb-6 bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
 
-                                        <!-- عرض النص -->
-                                        <p class="text-gray-700 text-sm leading-relaxed mb-3">
-                                            {{ comment.translation?.comment || comment.comment }}
-                                        </p>
+                                    <p class="text-gray-700 text-sm leading-relaxed mb-3">
+                                        {{ comment.translation?.comment || comment.comment }}
+                                    </p>
 
-                                        <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
-                                            <div class="flex items-center gap-2">
-                                                <div
-                                                    class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
-                                                    {{ comment.user?.name?.charAt(0)?.toUpperCase() || '?' }}
-                                                </div>
-                                                <div>
-                                                    <p class="font-semibold text-gray-900 text-sm">
-                                                        {{ comment.user?.name || $t('event.visitor') }}
-                                                    </p>
-                                                    <span class="text-xs text-gray-500">
-                                                        {{ formatCommentDate(comment.created_at) }}
-                                                    </span>
-                                                </div>
+                                    <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
+                                                {{ comment.user?.name?.charAt(0)?.toUpperCase() || '?' }}
                                             </div>
-
-                                            <div class="flex items-center gap-2">
-                                                <button v-if="isAuthenticated" @click="toggleReplyForm(comment.id)"
-                                                    class="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-2 py-1 rounded-lg hover:bg-indigo-50">
-                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-                                                    </svg>
-                                                    {{ $t('event.reply') || 'رد' }}
-                                                </button>
-
-                                                <button v-if="comment.user_id === currentUserId"
-                                                    @click="deleteComment(comment.id)"
-                                                    class="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
-                                                    :title="$t('event.delete_comment_title')">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                        stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                    {{ $t('event.delete') || 'حذف' }}
-                                                </button>
-
-                                                <button @click="openReportModal(comment.id)"
-                                                    class="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
-                                                    title="الإبلاغ عن هذا التعليق">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5"
-                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                        stroke-width="2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M3 3h18l-2 9H5L3 3z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M5 12v7h14v-7" />
-                                                    </svg>
-                                                    إبلاغ
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <p v-if="deleteCommentErrors[comment.id]"
-                                            class="mb-2 text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg text-xs">
-                                            {{ deleteCommentErrors[comment.id] }}
-                                        </p>
-
-                                        <!-- ✅ Reactions مع عرض الـ counts صح -->
-                                        <div class="flex items-center gap-2.5 flex-wrap mt-1" dir="rtl">
-
-                                            <!-- 👍 موافق -->
-                                            <button @click="setReaction(comment.id, 'support')"
-                                                :disabled="reactionLoading[comment.id]" :class="[
-                                                    'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-                                                    commentReactions[comment.id] === 'support'
-                                                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
-                                                        : 'bg-white border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-400',
-                                                    reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-                                                ]">
-                                                <span class="text-base">👍</span>
-                                                موافق
-                                                <span
-                                                    class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                    {{ comment.support_count ?? 0 }}
-                                                </span>
-                                            </button>
-
-                                            <!-- 😐 محايد -->
-                                            <button @click="setReaction(comment.id, 'neutral')"
-                                                :disabled="reactionLoading[comment.id]" :class="[
-                                                    'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-                                                    commentReactions[comment.id] === 'neutral'
-                                                        ? 'bg-amber-500 border-amber-500 text-white shadow-sm'
-                                                        : 'bg-white border-gray-300 text-gray-700 hover:bg-amber-50 hover:border-amber-400',
-                                                    reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-                                                ]">
-                                                <span class="text-base">😐</span>
-                                                محايد
-                                                <span
-                                                    class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                    {{ comment.neutral_count ?? 0 }}
-                                                </span>
-                                            </button>
-
-                                            <!-- 👎 غير موافق -->
-                                            <button @click="setReaction(comment.id, 'exhibitions')"
-                                                :disabled="reactionLoading[comment.id]" :class="[
-                                                    'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[110px] justify-center',
-                                                    commentReactions[comment.id] === 'exhibitions'
-                                                        ? 'bg-rose-600 border-rose-600 text-white shadow-sm'
-                                                        : 'bg-white border-gray-300 text-gray-700 hover:bg-rose-50 hover:border-rose-400',
-                                                    reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-                                                ]">
-                                                <span class="text-base">👎</span>
-                                                غير موافق
-                                                <span
-                                                    class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                    {{ comment.exhibitions_count ?? 0 }}
-                                                </span>
-                                            </button>
-
-                                        </div>
-
-                                        <p v-if="reactionErrors[comment.id]"
-                                            class="mt-2 text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg text-xs">
-                                            {{ reactionErrors[comment.id] }}
-                                        </p>
-
-                                        <!-- Reply Form -->
-                                        <div v-if="isAuthenticated && replyingTo === comment.id" class="mt-6 pl-12">
-                                            <form @submit.prevent="addReply(comment.id)" class="space-y-4">
-                                                <textarea v-model="replyTexts[comment.id]" rows="2"
-                                                    class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                                    :placeholder="$t('event.reply_placeholder') || 'اكتب ردك هنا...'"
-                                                    required></textarea>
-                                                <p v-if="replyErrors[comment.id]"
-                                                    class="text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg text-sm">
-                                                    {{ replyErrors[comment.id] }}
+                                            <div>
+                                                <p class="font-semibold text-gray-900 text-sm">
+                                                    {{ comment.user?.name || $t('event.visitor') }}
                                                 </p>
-                                                <div class="flex justify-end gap-3">
-                                                    <button type="button" @click="cancelReply(comment.id)"
-                                                        class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                                                        {{ $t('cancel') || 'إلغاء' }}
-                                                    </button>
-                                                    <button type="submit"
-                                                        :disabled="replyLoading[comment.id] || !replyTexts[comment.id]?.trim()"
-                                                        class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                                                        <span v-if="replyLoading[comment.id]">{{ $t('sending') || ''
-                                                        }}</span>
-                                                        <span v-else>{{ $t('send_reply') || 'إرسال الرد' }}</span>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                        <!-- Replies -->
-                                        <div v-if="comment.replies?.length > 0"
-                                            class="mt-6 pl-12 border-l-2 border-indigo-200 space-y-6">
-                                            <div v-for="reply in comment.replies" :key="reply.id"
-                                                class="bg-white p-4 rounded-lg shadow-sm">
-                                                <div class="flex items-start gap-3">
-                                                    <div
-                                                        class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium text-sm">
-                                                        {{ reply.user?.name?.charAt(0)?.toUpperCase() || '?' }}
-                                                    </div>
-                                                    <div class="flex-1">
-                                                        <div class="flex items-center gap-2 mb-1">
-                                                            <p class="font-medium text-gray-900">{{ reply.user?.name ||
-                                                                $t('event.visitor') }}</p>
-                                                            <span class="text-xs text-gray-500">{{
-                                                                formatCommentDate(reply.created_at) }}</span>
-                                                        </div>
-                                                        <p class="text-gray-700">{{ reply.comment }}</p>
-                                                    </div>
-                                                </div>
+                                                <span class="text-xs text-gray-500">
+                                                    {{ formatCommentDate(comment.created_at) }}
+                                                </span>
                                             </div>
                                         </div>
 
-                                    </div>
-                                </div>
+                                        <div class="flex items-center gap-2">
+                                            <!-- Reply Button -->
+                                            <button v-if="isAuthenticated" @click="toggleReplyForm(comment.id)"
+                                                class="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-2 py-1 rounded-lg hover:bg-indigo-50">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                                </svg>
+                                                {{ $t('event.reply') || 'رد' }}
+                                            </button>
 
-                                <!-- No comments -->
-                                <div v-else class="text-center py-8 text-gray-500">
-                                    لا توجد تعليقات بعد، كن أول من يعلّق!
+                                            <!-- Delete Button -->
+                                            <button v-if="comment.user_id === currentUserId"
+                                                @click="deleteComment(comment.id)"
+                                                class="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
+                                                :title="$t('event.delete_comment_title')">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                                {{ $t('event.delete') || 'حذف' }}
+                                            </button>
+
+                                            <!-- Report Button -->
+                                            <button @click="openReportModal(comment.id)"
+                                                class="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
+                                                title="الإبلاغ عن هذا التعليق">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M3 3h18l-2 9H5L3 3z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M5 12v7h14v-7" />
+                                                </svg>
+                                                إبلاغ
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Delete Comment Error -->
+                                    <p v-if="deleteCommentErrors[comment.id]"
+                                        class="mb-2 text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg text-xs">
+                                        {{ deleteCommentErrors[comment.id] }}
+                                    </p>
+
+                                    <!-- Reactions -->
+                                    <div class="flex items-center gap-2.5 flex-wrap mt-1" dir="rtl">
+                                        <button @click="setReaction(comment.id, 'support')"
+                                            :disabled="reactionLoading[comment.id]" :class="[
+                                                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
+                                                commentReactions[comment.id] === 'support'
+                                                    ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
+                                                    : 'bg-white border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-400',
+                                                reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
+                                            ]">
+                                            <span class="text-base">👍</span>
+                                            موافق
+                                            <span
+                                                class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
+                                                {{ comment.support_count ?? 0 }}
+                                            </span>
+                                        </button>
+
+                                        <button @click="setReaction(comment.id, 'neutral')"
+                                            :disabled="reactionLoading[comment.id]" :class="[
+                                                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
+                                                commentReactions[comment.id] === 'neutral'
+                                                    ? 'bg-amber-500 border-amber-500 text-white shadow-sm'
+                                                    : 'bg-white border-gray-300 text-gray-700 hover:bg-amber-50 hover:border-amber-400',
+                                                reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
+                                            ]">
+                                            <span class="text-base">😐</span>
+                                            محايد
+                                            <span
+                                                class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
+                                                {{ comment.neutral_count ?? 0 }}
+                                            </span>
+                                        </button>
+
+                                        <button @click="setReaction(comment.id, 'exhibitions')"
+                                            :disabled="reactionLoading[comment.id]" :class="[
+                                                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[110px] justify-center',
+                                                commentReactions[comment.id] === 'exhibitions'
+                                                    ? 'bg-rose-600 border-rose-600 text-white shadow-sm'
+                                                    : 'bg-white border-gray-300 text-gray-700 hover:bg-rose-50 hover:border-rose-400',
+                                                reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
+                                            ]">
+                                            <span class="text-base">👎</span>
+                                            غير موافق
+                                            <span
+                                                class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
+                                                {{ comment.exhibitions_count ?? 0 }}
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Reaction Error per comment -->
+                                    <p v-if="reactionErrors[comment.id]"
+                                        class="mt-2 text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg text-xs">
+                                        {{ reactionErrors[comment.id] }}
+                                    </p>
+
+                                    <!-- Reply Form -->
+                                    <div v-if="isAuthenticated && replyingTo === comment.id" class="mt-6 pl-12">
+                                        <form @submit.prevent="addReply(comment.id)" class="space-y-4">
+                                            <textarea v-model="replyTexts[comment.id]" rows="2"
+                                                class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                :placeholder="$t('event.reply_placeholder') || 'اكتب ردك هنا...'"
+                                                required></textarea>
+                                            <p v-if="replyErrors[comment.id]"
+                                                class="text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg text-sm">
+                                                {{ replyErrors[comment.id] }}
+                                            </p>
+                                            <div class="flex justify-end gap-3">
+                                                <button type="button" @click="cancelReply(comment.id)"
+                                                    class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                                                    {{ $t('cancel') || 'إلغاء' }}
+                                                </button>
+                                                <button type="submit"
+                                                    :disabled="replyLoading[comment.id] || !replyTexts[comment.id]?.trim()"
+                                                    class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                                    <span v-if="replyLoading[comment.id]">{{ $t('sending') || ''
+                                                        }}</span>
+                                                    <span v-else>{{ $t('send_reply') || 'إرسال الرد' }}</span>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- Replies -->
+                                    <div v-if="comment.replies?.length > 0"
+                                        class="mt-6 pl-12 border-l-2 border-indigo-200 space-y-6">
+                                        <div v-for="reply in comment.replies" :key="reply.id"
+                                            class="bg-white p-4 rounded-lg shadow-sm">
+                                            <div class="flex items-start gap-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium text-sm">
+                                                    {{ reply.user?.name?.charAt(0)?.toUpperCase() || '?' }}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <p class="font-medium text-gray-900">{{ reply.user?.name ||
+                                                            $t('event.visitor') }}</p>
+                                                        <span class="text-xs text-gray-500">{{
+                                                            formatCommentDate(reply.created_at) }}</span>
+                                                    </div>
+                                                    <p class="text-gray-700">{{ reply.comment }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Add Comment Form -->
@@ -370,7 +368,8 @@
                                         <div class="mt-4 flex justify-end">
                                             <button type="submit" :disabled="commentLoading || !newComment.trim()"
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
-                                                <span v-if="commentLoading">{{ $t('event.sending_comment') }}</span>
+                                                <span v-if="commentLoading">{{ $t('event.sending_comment') || ''
+                                                    }}</span>
                                                 <span v-else>{{ $t('event.submit_comment') || 'إرسال التعليق' }}</span>
                                             </button>
                                         </div>
@@ -398,117 +397,89 @@
                             </div>
                         </div>
 
-                        <!-- Sidebar -->
+                        <!-- Sidebar (1/4) — compact -->
                         <div
-                            class="bg-gray-50/70 p-8 md:p-12 lg:p-16 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
-                            <div class="space-y-10">
+                            class="bg-gray-50/60 p-6 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+                            <div class="space-y-6">
+
+                                <!-- Event Info -->
                                 <div>
-                                    <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                                    <h3 class="text-base font-bold text-gray-900 mb-4">
                                         {{ $t('event.event_info_title') }}
                                     </h3>
-                                    <div class="space-y-3 text-gray-800">
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-3xl">📅</span>
+                                    <div class="space-y-3 text-gray-700 text-sm">
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-xl mt-0.5">📅</span>
                                             <div>
-                                                <p class="font-semibold text-base">{{ $t('event.from_date') }}</p>
-                                                <p class="text-lg">{{ formatDate(event.start_date) }}</p>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.from_date')
+                                                    }}</p>
+                                                <p class="font-medium">{{ formatDate(event.start_date) }}</p>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-3xl">📅</span>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-xl mt-0.5">📅</span>
                                             <div>
-                                                <p class="font-semibold text-base">{{ $t('event.to_date') }}</p>
-                                                <p class="text-lg">{{ formatDate(event.end_date) }}</p>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.to_date') }}
+                                                </p>
+                                                <p class="font-medium">{{ formatDate(event.end_date) }}</p>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-3xl">🕒</span>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-xl mt-0.5">🕒</span>
                                             <div>
-                                                <p class="font-semibold text-base">{{ $t('event.time_label') }}</p>
-                                                <p class="text-lg">{{ event.time || $t('event.time_default') }}</p>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.time_label')
+                                                    }}</p>
+                                                <p class="font-medium">{{ event.time || $t('event.time_default') }}</p>
                                             </div>
                                         </div>
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-3xl">📍</span>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-xl mt-0.5">📍</span>
                                             <div>
-                                                <p class="font-semibold text-base">{{ $t('event.location') }}</p>
-                                                <p class="text-lg">{{ event.city?.translation.name ||
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.location')
+                                                    }}</p>
+                                                <p class="font-medium">{{ event.city?.translation.name ||
                                                     $t('event.city_default') }}</p>
                                             </div>
                                         </div>
-                                        <div v-if="event.user?.name" class="flex items-center gap-2">
-                                            <span class="text-3xl">👤</span>
+                                        <div v-if="event.user?.name" class="flex items-start gap-2">
+                                            <span class="text-xl mt-0.5">👤</span>
                                             <div>
-                                                <p class="font-semibold text-base">{{ $t('event.organizer') }}</p>
-                                                <p class="text-lg">{{ event.user.name }}</p>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
+                                                    }}</p>
+                                                <p class="font-medium">{{ event.user.name }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="pt-8 border-t border-gray-200 space-y-4">
+                                <!-- Wishlist -->
+                                <div class="pt-5 border-t border-gray-200 space-y-3">
                                     <button @click="addToWishlist" :disabled="wishlistLoading || isInWishlist"
-                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg py-4 px-8 rounded transition shadow-lg flex items-center justify-center gap-2"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 px-5 rounded-lg transition shadow flex items-center justify-center gap-2"
                                         :class="{ 'opacity-70 cursor-not-allowed': wishlistLoading || isInWishlist }">
                                         <span v-if="wishlistLoading" class="animate-pulse">{{
                                             $t('event.adding_to_wishlist') }}</span>
                                         <template v-else>
                                             ♥
                                             {{ isInWishlist ? $t('event.already_in_wishlist') :
-                                                $t('event.add_to_wishlist') }}
+                                            $t('event.add_to_wishlist') }}
                                         </template>
                                     </button>
                                     <p v-if="wishlistError"
-                                        class="text-red-600 text-center text-sm mt-2 bg-red-50 border border-red-200 p-3 rounded-lg">
+                                        class="text-red-600 text-center text-xs mt-1 bg-red-50 border border-red-200 p-2 rounded-lg">
                                         {{ wishlistError }}
                                     </p>
                                     <p v-if="wishlistSuccess"
-                                        class="text-green-600 text-center text-sm mt-2 bg-green-50 border border-green-200 p-3 rounded-lg">
+                                        class="text-green-600 text-center text-xs mt-1 bg-green-50 border border-green-200 p-2 rounded-lg">
                                         {{ $t('event.wishlist_success') }}
                                     </p>
                                 </div>
+
                             </div>
                         </div>
 
                     </div>
                 </div>
-            </div>
-
-            <!-- Lightbox -->
-            <div v-if="lightboxOpen" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
-                @click="lightboxOpen = false">
-
-                <button v-if="event.images.length > 1" @click.stop="lightboxPrev"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white text-2xl transition">
-                    ‹
-                </button>
-
-                <div class="relative max-w-[92vw] max-h-[92vh] flex items-center justify-center" @click.stop>
-                    <img v-if="currentMedia && !isVideoUrl(currentMedia.full_url) && !isVideoUrl(currentMedia.full_url) && !currentMedia.video"
-                        :src="getMediaUrl(currentMedia.full_url || currentMedia.full_url)"
-                        class="max-w-full max-h-[88vh] object-contain rounded-lg shadow-2xl" />
-
-                    <video v-else-if="currentMedia"
-                        :src="getMediaUrl(currentMedia.full_url || currentMedia.video || currentMedia.full_url)"
-                        class="max-w-full max-h-[88vh] rounded-lg shadow-2xl" controls autoplay @click.stop>
-                    </video>
-
-                    <div
-                        class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm px-3 py-1 rounded-full">
-                        {{ lightboxIndex + 1 }} / {{ event.images.length }}
-                    </div>
-                </div>
-
-                <button v-if="event.images.length > 1" @click.stop="lightboxNext"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white text-2xl transition">
-                    ›
-                </button>
-
-                <button
-                    class="absolute top-4 right-4 text-white text-4xl font-bold drop-shadow-lg w-10 h-10 flex items-center justify-center hover:text-gray-300 transition"
-                    @click="lightboxOpen = false">
-                    ×
-                </button>
             </div>
 
             <!-- Upload Modal -->
@@ -572,7 +543,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -583,6 +553,7 @@
                 <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="closeReportModal"></div>
                 <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 z-10">
 
+                    <!-- Success -->
                     <div v-if="reportSuccess" class="flex flex-col items-center py-6 gap-3 text-center">
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">✅
                         </div>
@@ -590,6 +561,7 @@
                         <p class="text-sm text-gray-500">شكراً لك، سنراجع هذا التعليق قريباً.</p>
                     </div>
 
+                    <!-- Form -->
                     <template v-else>
                         <div class="flex items-center justify-between mb-5">
                             <div class="flex items-center gap-2">
@@ -662,7 +634,6 @@
     </Teleport>
 </template>
 
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -703,10 +674,6 @@ const replyLoading = ref({});
 const replyErrors = ref({});
 const deleteCommentErrors = ref({});
 
-// ─── ✅ comments و commentsCount كـ ref مستقل ─────────────────────────────────
-const comments = ref([]);
-const commentsCount = ref(0);
-
 // ─── Reactions ────────────────────────────────────────────────────────────────
 const commentReactions = ref({});
 const reactionLoading = ref({});
@@ -728,7 +695,7 @@ const getMediaUrl = (path) => {
 
 const setReaction = async (commentId, type) => {
     if (reactionLoading.value[commentId]) return;
-    const comment = comments.value.find((c) => c.id === commentId);
+    const comment = event.value?.comments?.find((c) => c.id === commentId);
     if (!comment) return;
 
     const previousReaction = commentReactions.value[commentId];
@@ -864,7 +831,7 @@ const addReply = async (commentId) => {
                 user: { name: "أنت" },
             };
 
-            const comment = comments.value.find((c) => c.id === commentId);
+            const comment = event.value.comments.find((c) => c.id === commentId);
             if (comment) {
                 if (!comment.replies) comment.replies = [];
                 comment.replies.push(newReply);
@@ -872,6 +839,7 @@ const addReply = async (commentId) => {
 
             replyTexts.value[commentId] = "";
             replyingTo.value = null;
+            if (event.value.comments_count !== undefined) event.value.comments_count++;
         }
     } catch (err) {
         replyErrors.value[commentId] = extractErrorMessage(err);
@@ -1001,10 +969,9 @@ const addComment = async () => {
     commentSuccess.value = false;
 
     try {
-        const commentText = newComment.value.trim();
         const response = await axios.post(
             `/v1/comments/${event.value.id}/create`,
-            { comment: commentText },
+            { comment: newComment.value.trim() },
             {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
@@ -1013,33 +980,21 @@ const addComment = async () => {
             }
         );
 
-        // ✅ نقبل أي response ناجح حتى لو مفيش data
-        const raw = response.data?.data;
+        if (response.data.status === "success") {
+            const newCommentData = response.data.data || {
+                id: Date.now(),
+                event_id: event.value.id,
+                user_id: currentUserId.value,
+                comment: newComment.value.trim(),
+                created_at: new Date().toISOString(),
+                user: { name: "أنت" },
+            };
 
-        const newCommentData = {
-            id: raw?.id || Date.now(),
-            event_id: event.value.id,
-            user_id: raw?.user_id || currentUserId.value,
-            // ✅ comment field مباشرة زي ما الـ API بيرجع
-            comment: raw?.comment || commentText,
-            // ✅ translation للعرض في الـ template
-            translation: raw?.translation || { comment: commentText },
-            created_at: raw?.created_at || new Date().toISOString(),
-            support_count: 0,
-            neutral_count: 0,
-            exhibitions_count: 0,
-            replies: [],
-            user: raw?.user || { name: "أنت", id: currentUserId.value },
-        };
-
-        // ✅ نضيف للـ comments ref المستقل
-        comments.value.unshift(newCommentData);
-        commentsCount.value += 1;
-
-        newComment.value = "";
-        commentSuccess.value = true;
-        setTimeout(() => (commentSuccess.value = false), 4000);
-
+            event.value.comments.unshift(newCommentData);
+            newComment.value = "";
+            commentSuccess.value = true;
+            setTimeout(() => (commentSuccess.value = false), 4000);
+        }
     } catch (err) {
         commentError.value = extractErrorMessage(err);
     } finally {
@@ -1060,9 +1015,8 @@ const deleteComment = async (commentId) => {
                 Accept: "application/json",
             },
         });
-        // ✅ نحذف من الـ comments ref المستقل
-        comments.value = comments.value.filter((c) => c.id !== commentId);
-        commentsCount.value = Math.max(0, commentsCount.value - 1);
+        event.value.comments = event.value.comments.filter((c) => c.id !== commentId);
+        if (event.value.comments_count !== undefined) event.value.comments_count--;
     } catch (err) {
         deleteCommentErrors.value[commentId] = extractErrorMessage(err);
         setTimeout(() => (deleteCommentErrors.value[commentId] = ""), 5000);
@@ -1139,9 +1093,10 @@ const uploadFiles = async () => {
 };
 
 // ─── Computed ─────────────────────────────────────────────────────────────────
+const hasMedia = computed(() => event.value?.images?.length > 0);
 const heroMedia = computed(() => event.value?.images?.[0] || null);
 const heroMediaComponent = computed(() =>
-    heroMedia.value?.video || isVideoUrl(heroMedia.value?.full_url) ? "video" : "img"
+    heroMedia.value?.video || isVideoUrl(heroMedia.value?.url) ? "video" : "img"
 );
 const currentMedia = computed(() => event.value?.images?.[lightboxIndex.value] || null);
 
@@ -1183,6 +1138,7 @@ const openLightbox = (index) => {
     lightboxOpen.value = true;
 };
 
+// ✅ Navigation inside lightbox
 const lightboxPrev = () => {
     const total = event.value?.images?.length ?? 0;
     lightboxIndex.value = (lightboxIndex.value - 1 + total) % total;
@@ -1203,13 +1159,7 @@ onMounted(async () => {
     try {
         const response = await EventService.getSingleEvent(slug);
         event.value = response.data?.data || response;
-
-        // ✅ نحمّل الكومنتات في ref مستقل عشان التفاعلية تشتغل صح
-        comments.value = Array.isArray(event.value?.comments)
-            ? event.value.comments.map(c => ({ ...c }))
-            : [];
-        commentsCount.value = event.value?.comments_count ?? comments.value.length;
-
+        console.log(event.value);
         await fetchLikesInfo();
     } catch (err) {
         console.error("خطأ في جلب الحدث:", err);

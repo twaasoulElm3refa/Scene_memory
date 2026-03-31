@@ -336,6 +336,48 @@
             </div>
         </section>
     </div>
+    <Transition name="slide-fade">
+        <div v-if="showProfileToast"
+            class="fixed top-4 left-4 z-[9999] w-[280px] bg-white shadow-lg rounded-lg border border-gray-200 overflow-hidden cursor-pointer"
+            @click="goToProfile">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center px-3 py-2 bg-yellow-50 border-b">
+                <!-- <div class="flex items-center gap-1.5">
+                    <span class="text-yellow-500 text-sm">⚠️</span>
+                    <p class="font-semibold text-xs text-gray-800">
+                        Profile Incomplete
+                    </p>
+                </div> -->
+
+                <button @click.stop="closeToast" class="text-gray-400 hover:text-red-500 text-sm transition-colors">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-3 text-xs text-gray-600">
+                Your profile is not complete. Please update:
+                <ul class="mt-1.5 list-disc list-inside text-[11px] text-gray-500">
+                    <li>Phone</li>
+                    <li>Country</li>
+                    <li>Position</li>
+                    <li>Date of birth</li>
+                </ul>
+
+                <p class="mt-2 text-blue-600 font-medium text-[11px]">
+                    Click to complete →
+                </p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="h-1 bg-gray-100">
+                <div class="h-full bg-yellow-500 transition-all duration-100 ease-linear"
+                    :style="{ width: progressWidth }">
+                </div>
+            </div>
+        </div>
+    </Transition>
 </template>
 
 <script setup>
@@ -568,7 +610,7 @@ onMounted(async () => {
     mapService = new MapService(marker);
     mapService.initMap("map", 6);
     await fetchProfile();
-
+    checkProfileWarning();
     try {
         categories.value = await CategoryService.getAllCategories();
         countries.value = await LocationService.getAllCountries();
@@ -648,6 +690,62 @@ const fetchProfile = async () => {
     }
 };
 
+const showProfileToast = ref(false)
+let toastTimer = null
+let progressInterval = null
+const progressWidth = ref('100%')
+const TOAST_DURATION = 7000 // 7 seconds (between 5-10 seconds)
+
+// check profile from localStorage
+const checkProfileWarning = () => {
+  const isFilled = localStorage.getItem("is_profile_filled")
+
+  if (isFilled === "false") {
+    showProfileToast.value = true
+    startProgressBar()
+  }
+}
+
+const startProgressBar = () => {
+  const startTime = Date.now()
+  const endTime = startTime + TOAST_DURATION
+
+  progressInterval = setInterval(() => {
+    const now = Date.now()
+    const remaining = endTime - now
+    const percentage = Math.max(0, (remaining / TOAST_DURATION) * 100)
+    progressWidth.value = `${percentage}%`
+
+    if (percentage <= 0) {
+      clearInterval(progressInterval)
+    }
+  }, 16) // ~60fps
+
+  // auto hide after duration
+  toastTimer = setTimeout(() => {
+    showProfileToast.value = false
+    clearInterval(progressInterval)
+  }, TOAST_DURATION)
+}
+
+
+onMounted(() => {
+  checkProfileWarning()
+})
+
+onUnmounted(() => {
+  if (toastTimer) clearTimeout(toastTimer)
+  if (progressInterval) clearInterval(progressInterval)
+})
+
+const closeToast = () => {
+    showProfileToast.value = false;
+    if (toastTimer) clearTimeout(toastTimer);
+};
+
+const goToProfile = () => {
+    router.push("/profile");
+};
 const subscribe = async (planId) => {
     const token = localStorage.getItem("auth_token");
 
@@ -700,6 +798,24 @@ const subscribe = async (planId) => {
 /* تحسين شكل الـ Tabs */
 button {
     min-width: 44px;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
 }
 
 /* يمكنك إضافة ستايل للـ popup إذا أردت */

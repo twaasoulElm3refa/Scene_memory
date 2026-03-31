@@ -15,6 +15,9 @@
     "upload_media": "تحميل الميديا",
     "view_all_comments": "عرض كل التعليقات",
     "nav": {
+        "favourites": "المفضلة",
+        "plans": "الخطط",
+        "more": "المزيد",
         "terms": "الشروط والاحكام",
         "historical": "اشخاص تاريخيين",
         "home": "الرئيسية",

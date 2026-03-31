@@ -15,6 +15,9 @@
     "upload_media": "Médias",
     "view_all_comments": "Voir tous les commentaires",
     "nav": {
+        "favourites": "Favoris",
+        "plans": " Plans",
+        "more": " Plus",
         "terms": "Conditions génériales",
         "historical": "Personnes historiques",
         "home": "Accueil",

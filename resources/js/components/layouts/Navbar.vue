@@ -1,70 +1,116 @@
 <template>
-    <header class="navbar-wrap shadow-lg" dir="rtl">
+    <header class="navbar-wrap shadow-lg" :dir="isArabic ? 'ltr' : 'rtl'">
         <div class="container d-flex justify-content-between align-items-center p-1">
+
             <div class="user-avatar-wrapper">
                 <img v-if="userImage" :src="userImage" class="user-avatar" alt="User" @error="userImage = null" />
-
-                <!-- Placeholder -->
                 <div v-else class="user-placeholder">
                     {{ userInitial }}
                 </div>
             </div>
 
-            <!-- Links -->
-            <nav class="d-none d-md-flex flex-grow-1 justify-content-center">
-                <a v-for="link in links" :key="link.href" :href="link.href" class="nav-link px-2"
-                    :class="{ active: isActive(link.active) }">
+            <nav class="d-none d-md-flex flex-grow-1 justify-content-center align-items-center gap-2">
+                <RouterLink
+                    v-for="link in links"
+                    :key="link.active"
+                    :to="localizedPath(link.path)"
+                    class="nav-link px-2"
+                    :class="{ active: isActive(link.active) }"
+                >
                     {{ $t(link.labelKey) }}
-                </a>
+                </RouterLink>
+
+                <RouterLink
+                    :to="localizedPath('/plans')"
+                    class="nav-link px-2"
+                    :class="{ active: isActive('plans') }"
+                >
+                    {{ $t('nav.plans') }}
+                </RouterLink>
+
+                <div class="position-relative">
+                    <button class="nav-link px-2 d-flex align-items-center gap-1" @click="moreOpen = !moreOpen">
+                        {{ $t('nav.more') }}
+                        <i class="bi transition" :class="moreOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                    </button>
+
+                    <transition name="fade-slide">
+                        <div
+                            v-if="moreOpen"
+                            class="dropdown-menu show shadow rounded mt-2 p-2"
+                            style="position:absolute; right:0; top:100%; z-index:1000; min-width:220px;"
+                        >
+                            <RouterLink class="dropdown-item" :to="localizedPath('/favourites')">
+                                {{ $t('nav.favourites') }}
+                            </RouterLink>
+
+                            <RouterLink class="dropdown-item" :to="localizedPath('/contact')">
+                                {{ $t('nav.contact') }}
+                            </RouterLink>
+
+                            <RouterLink class="dropdown-item" :to="localizedPath('/terms')">
+                                {{ $t('nav.terms') }}
+                            </RouterLink>
+
+                            <RouterLink class="dropdown-item" :to="localizedPath('/who')">
+                                {{ $t('nav.about') }}
+                            </RouterLink>
+                        </div>
+                    </transition>
+                </div>
             </nav>
 
-            <!-- Hamburger for Mobile -->
             <button class="btn-icon d-md-none" @click="mobileMenu = !mobileMenu">
                 <i class="bi" :class="mobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
             </button>
 
-            <!-- Actions -->
             <div class="d-flex align-items-center gap-2">
                 <div class="position-relative">
-                    <button class="btn-user user-hover fw-bold shadow-gray d-flex align-items-center gap-1"
-                        @click="languageDropdownOpen = !languageDropdownOpen">
+                    <button
+                        class="btn-user user-hover fw-bold shadow-gray d-flex align-items-center gap-1"
+                        @click="languageDropdownOpen = !languageDropdownOpen"
+                    >
                         {{ currentLanguage }}
                         <i class="bi" :class="languageDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </button>
 
-                    <div v-if="languageDropdownOpen" class="dropdown-menu show shadow rounded mt-2" style="
-              position: absolute;
-              right: 0;
-              top: 100%;
-              z-index: 1000;
-              min-width: 120px;
-            ">
-                        <button class="dropdown-item" v-for="lang in languages" :key="lang"
-                            @click="selectLanguage(lang)">
+                    <div
+                        v-if="languageDropdownOpen"
+                        class="dropdown-menu show shadow rounded mt-2"
+                        style="position:absolute; right:0; top:100%; z-index:1000; min-width:120px;"
+                    >
+                        <button
+                            class="dropdown-item"
+                            v-for="lang in languages"
+                            :key="lang"
+                            @click="selectLanguage(lang)"
+                        >
                             {{ $t(`languages.${lang}`) }}
                         </button>
                     </div>
                 </div>
 
-                <!-- Auth Area -->
                 <div class="d-flex gap-2 position-relative">
                     <template v-if="isLoggedIn">
-                        <button class="btn-user user-hover fw-bold d-flex align-items-center gap-2 shadow-gray"
-                            @click="toggleDropdown">
+                        <button
+                            class="btn-user user-hover fw-bold d-flex align-items-center gap-2 shadow-gray"
+                            @click="toggleDropdown"
+                        >
                             {{ userName }}
                             <i class="bi" :class="dropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                         </button>
 
-                        <div v-if="dropdownOpen" class="dropdown-menu show shadow rounded mt-2 dropdown-dark" style="
-                position: absolute;
-                right: 0;
-                top: 100%;
-                margin-top: 8px;
-                z-index: 1000;
-                min-width: 150px;
-              ">
-                            <a class="dropdown-item" href="/profile">{{ $t("nav.profile") }}</a>
+                        <div
+                            v-if="dropdownOpen"
+                            class="dropdown-menu show shadow rounded mt-2 dropdown-dark"
+                            style="position:absolute; right:0; top:100%; margin-top:8px; z-index:1000; min-width:150px;"
+                        >
+                            <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
+                                {{ $t("nav.profile") }}
+                            </RouterLink>
+
                             <hr class="dropdown-divider" />
+
                             <button class="dropdown-item text-danger" @click="logout">
                                 {{ $t("nav.logout") }}
                             </button>
@@ -72,178 +118,206 @@
                     </template>
 
                     <template v-else>
-                        <a href="/auth" class="btn-user user-hover fw-bold shadow-gray text-decoration-none">
+                        <RouterLink
+                            :to="localizedPath('/auth')"
+                            class="btn-user user-hover fw-bold shadow-gray text-decoration-none"
+                        >
                             {{ $t("nav.login") }}
-                        </a>
+                        </RouterLink>
                     </template>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div v-if="mobileMenu" class="d-md-none mt-2 bg-white dark:bg-dark shadow-lg rounded p-3">
-            <a v-for="link in links" :key="link.href" :href="link.href" class="d-block nav-link py-2 px-1"
-                :class="{ active: isActive(link.active) }">
+        <div v-if="mobileMenu" class="d-md-none mt-2 bg-white shadow-lg rounded p-3">
+            <RouterLink
+                v-for="link in links"
+                :key="link.active"
+                :to="localizedPath(link.path)"
+                class="d-block nav-link py-2 px-1"
+                :class="{ active: isActive(link.active) }"
+            >
                 {{ $t(link.labelKey) }}
-            </a>
+            </RouterLink>
+
+            <RouterLink :to="localizedPath('/plans')" class="d-block nav-link py-2 px-1">
+                {{ $t('nav.plans') }}
+            </RouterLink>
+
+            <hr />
+
+            <RouterLink :to="localizedPath('/favourites')" class="d-block nav-link py-2 px-1">
+                {{ $t('nav.favourites') }}
+            </RouterLink>
+
+            <RouterLink :to="localizedPath('/contact')" class="d-block nav-link py-2 px-1">
+                {{ $t('nav.contact') }}
+            </RouterLink>
+
+            <RouterLink :to="localizedPath('/terms')" class="d-block nav-link py-2 px-1">
+                {{ $t('nav.terms') }}
+            </RouterLink>
+
+            <RouterLink :to="localizedPath('/who')" class="d-block nav-link py-2 px-1">
+                {{ $t('nav.about') }}
+            </RouterLink>
         </div>
     </header>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import axios from "axios";
+import { useRouter, useRoute, RouterLink } from "vue-router";
+import { useI18n } from "vue-i18n";
 
-const theme = ref("dark");
+const router = useRouter();
+const route = useRoute();
+const { locale } = useI18n();
+
+/* STATE */
 const isLoggedIn = ref(false);
 const userName = ref("المستخدم");
+const userImage = ref(null);
+
 const dropdownOpen = ref(false);
 const mobileMenu = ref(false);
-const userImage = ref(null);
-const currentLanguage = ref("AR");
+const moreOpen = ref(false);
 const languageDropdownOpen = ref(false);
 
 const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH", "UR"];
 
-// New reactive properties for license
-const licenceName = ref("free"); // default
-const userRole = ref(""); // optional extra
+/* ROUTE LANG */
+const routeLang = computed(() => (route.params.lang || "en").toLowerCase());
 
-const selectLanguage = (lang) => {
-    currentLanguage.value = lang;
-    localStorage.setItem("language", lang.toLowerCase());
-    languageDropdownOpen.value = false;
-    window.location.reload();
+const currentLanguage = computed(() => routeLang.value.toUpperCase());
+
+const isArabic = computed(() => routeLang.value === "ar");
+
+/* sync i18n + axios + localStorage with URL */
+watch(
+    routeLang,
+    (lang) => {
+        locale.value = lang;
+        localStorage.setItem("language", lang);
+        axios.defaults.headers.common["Accept-Language"] = lang;
+
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    },
+    { immediate: true }
+);
+
+const localizedPath = (path) => {
+    const cleanPath = path.startsWith("/") ? path : `/${path}`;
+    return `/${routeLang.value}${cleanPath}`;
 };
 
+const selectLanguage = async (lang) => {
+    const newLang = lang.toLowerCase();
+    languageDropdownOpen.value = false;
+
+    // حافظ على نفس الصفحة الحالية وغير أول segment فقط
+    const currentPath = route.fullPath;
+    const newPath = currentPath.replace(/^\/[a-z]{2}(?=\/|$)/, `/${newLang}`);
+
+    locale.value = newLang;
+    localStorage.setItem("language", newLang);
+    axios.defaults.headers.common["Accept-Language"] = newLang;
+
+    await router.push(newPath);
+    // بدون reload
+};
+
+/* NAV */
 const allLinks = [
-    { labelKey: "nav.home", href: "/", active: "home" },
-    { labelKey: "nav.about", href: "/who", active: "who" },
-    { labelKey: "nav.terms", href: "/terms", active: "terms" },
-    { labelKey: "nav.allEvents", href: "/all_events", active: "all_events" },
-    { labelKey: "nav.contact", href: "/contact", active: "contact" },
-    { labelKey: "nav.addEvent", href: "/add_event", active: "add_event" },
-    { labelKey: "nav.wishlist", href: "/WishList", active: "Wishlist" },
-    { labelKey: "nav.historical", href: "/historical", active: "historical" },
+    { labelKey: "nav.home", path: "/home", active: "home" },
+    { labelKey: "nav.allEvents", path: "/all_events", active: "all_events" },
+    { labelKey: "nav.addEvent", path: "/add_event", active: "add_event" },
+    { labelKey: "nav.historical", path: "/historical", active: "historical" },
 ];
 
+const links = computed(() => {
+    if (!isLoggedIn.value) {
+        return allLinks.filter(
+            (l) =>
+                l.active !== "add_event" &&
+                l.active !== "Wishlist" &&
+                l.active !== "historical"
+        );
+    }
+    return allLinks;
+});
+
+/* USER */
 const userInitial = computed(() => {
     if (!userName.value) return "UU";
-    const nameParts = userName.value.split(" ");
-    let initials = nameParts[0].charAt(0).toUpperCase();
-    if (nameParts.length > 1) {
-        initials += nameParts[1].charAt(0).toUpperCase();
-    } else if (nameParts[0].length > 1) {
-        initials += nameParts[0].charAt(1).toUpperCase();
-    }
+    const parts = userName.value.split(" ");
+    let initials = parts[0].charAt(0).toUpperCase();
+    if (parts[1]) initials += parts[1].charAt(0).toUpperCase();
     return initials;
 });
 
-const links = computed(() => {
-    let filtered = allLinks;
+const isActive = (name) => {
+    return route.name === name || route.path.includes(name);
+};
 
-    if (!isLoggedIn.value) {
-        filtered = allLinks.filter(
-            (link) =>
-                link.active !== "add_event" &&
-                link.active !== "Wishlist" &&
-                link.active !== "historical"
-        );
-    } else {
-
-    }
-
-    return filtered;
-});
-
-const toggleDropdown = () => (dropdownOpen.value = !dropdownOpen.value);
+const toggleDropdown = () => {
+    dropdownOpen.value = !dropdownOpen.value;
+};
 
 const logout = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user_role");
-    localStorage.removeItem("licence_name"); // optional cleanup
-    axios.defaults.headers.common["Authorization"] = "";
+    localStorage.removeItem("licence_name");
+    localStorage.removeItem("is_profile_filled");
+
     isLoggedIn.value = false;
     userName.value = "المستخدم";
-    licenceName.value = "free";
-    dropdownOpen.value = false;
-    window.location.href = "/";
+
+    router.push(localizedPath("/auth"));
 };
 
+/* PROFILE */
 const fetchProfile = async () => {
     const token = localStorage.getItem("auth_token");
     if (!token) return;
 
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
     try {
         const res = await axios.get("/v1/users/profile");
 
         if (res.data.status === "success") {
             const userData = res.data.data.user;
-
             userName.value = userData.name || "المستخدم";
             userImage.value = userData.image || null;
-
-            // Store role
-            userRole.value = userData.role || "";
-            localStorage.setItem("user_role", userData.role);
-
-            // Handle licence
-            if (userData.licence_type && userData.licence_type.name) {
-                licenceName.value = userData.licence_type.name;
-                localStorage.setItem("licence_name", userData.licence_type.name);
-            } else {
-                licenceName.value = "free";
-            }
-
             isLoggedIn.value = true;
         }
     } catch (err) {
-        console.log("Failed to fetch profile:", err);
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("user_role");
-        localStorage.removeItem("licence_name");
+        localStorage.clear();
         isLoggedIn.value = false;
-        licenceName.value = "free";
     }
 };
 
 onMounted(() => {
-    const savedLang = localStorage.getItem("language");
-
-    if (savedLang && ["ar", "en", "fr", "de", "ru", "es", "it", "hi", "ja", "fa", "zh", "ur"].includes(savedLang.toLowerCase())) {
-        currentLanguage.value = savedLang.toUpperCase();
-    } else {
-        currentLanguage.value = "AR";
-        localStorage.setItem("language", "ar");
-    }
-
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    theme.value = savedTheme;
-    applyTheme();
-
-    // Load saved licence if exists (for faster initial render)
-    const savedLicence = localStorage.getItem("licence_name");
-    if (savedLicence) {
-        licenceName.value = savedLicence;
-    }
-
     fetchProfile();
-
-    window.addEventListener("login", () => {
-        fetchProfile();
-    });
+    window.addEventListener("login", fetchProfile);
 });
-
-const applyTheme = () => {
-    document.documentElement.setAttribute("data-theme", theme.value);
-    document.documentElement.setAttribute("data-bs-theme", theme.value);
-};
-
-const isActive = (name) => document.body.dataset.route === name;
 </script>
 
 <style scoped>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+    transition: all 0.2s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
 /* ─────────────────────────────────────────────── */
 .navbar-wrap {
     background: var(--nav-bg);

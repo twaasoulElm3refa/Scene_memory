@@ -44,11 +44,18 @@ import all_plans from "../views/admin/Licenses/all_plans.vue";
 import create_plan from "../views/admin/Licenses/create_plan.vue";
 import single_plan from "../views/admin/Licenses/single_plan.vue";
 import show_plan from "../views/home/show_plan.vue";
+import plans from "../views/home/plans.vue";
 
 const routes = [
     {
-        path: "/",
+        path: "/:lang/home",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/plans",
+        component: plans,
         meta: { hideNavbar: false, hideFooter: false },
     },
     {

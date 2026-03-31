@@ -16,6 +16,10 @@ class AdminPlanController extends Controller
     use ApiResponse;
     private $cacheTime = 60 * 24 * 7;
 
+    private function clearCache()
+    {
+        Cache::tags(['plans'])->flush();
+    }
     public function all()
     {
         $cacheKey = 'plans_admin_'.$this->cacheTime.''.app()->getLocale();
@@ -61,21 +65,17 @@ class AdminPlanController extends Controller
         }
     }
 
-    public function delete()
+    public function delete($id)
     {
         try {
-            $plan = licenceType::find(request('id'));
+            $plan = licenceType::findOrFail($id);
             $plan->delete();
+
             $this->clearCache();
-            return $this->success($plan,'plan Deleted Successfully');
+            return $this->success($plan, 'plan Deleted Successfully');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
-    }
-
-    private function clearCache()
-    {
-        Cache::tags(['plans'])->flush();
     }
 
     public function single()

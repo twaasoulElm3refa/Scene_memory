@@ -15,6 +15,9 @@
     "upload_media": "Carica media",
     "view_all_comments": "Visualizza tutti i commenti",
     "nav": {
+        "favourites": "Preferiti",
+        "plans": " Piani",
+        "more": " Altro",
         "terms": "Termini e condizioni generali",
         "historical": "Personaggi storici",
         "home": "Home",

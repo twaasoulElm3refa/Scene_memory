@@ -15,6 +15,9 @@
     "upload_media": "上传媒体",
     "view_all_comments": "查看所有评论",
     "nav": {
+        "favourites": "收藏",
+        "plans": "计划",
+        "more": "更多",
         "terms": "通用条款和条件",
         "historical": "历史人物",
         "home": "首页",

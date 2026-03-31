@@ -15,24 +15,18 @@ class PlansSeeder extends Seeder
         $plans = [
             [
                 'id' => 1,
-                'price' => 0,
-                'name' => 'free',
-                'slug' => Str::slug('free').'-'.time(),
-            ],
-            [
-                'id' => 2,
                 'price' => 5,
                 'name' => 'basic',
                 'slug' => Str::slug('basic').'-'.time(),
             ],
             [
-                'id' => 3,
+                'id' => 2,
                 'price' => 10,
                 'name' => 'professional',
                 'slug' => Str::slug('professional').'-'.time(),
             ],
             [
-                'id' => 4,
+                'id' => 3,
                 'price' => 20,
                 'name' => 'premium',
                 'slug' => Str::slug('premium').'-'.time(),

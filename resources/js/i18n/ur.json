@@ -15,6 +15,9 @@
     "upload_media": "میڈیا اپ لوڈ کریں",
     "view_all_comments": "تمام تبصرے دیکھیں",
     "nav": {
+        "favourites": "پسندیدہ",
+        "plans": " پلینز",
+        "more": " مزید",
         "terms": "عمومی شرایط و ضوابط",
         "historical": "ہیستوریکل پرسن",
         "home": "ہوم",
