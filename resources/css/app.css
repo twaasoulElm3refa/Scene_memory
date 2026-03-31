@@ -1,20 +1,20 @@
-/* =========================
-   TAILWIND
-========================= */
-@reference "tailwindcss";
+@import 'tailwindcss';
+/* resources/css/app.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Laravel sources */
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-/* =========================
-   THEME VARIABLES
-========================= */
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+/* Light Theme */
+/* ===== THEMES ===== */
 
 :root[data-theme="light"] {
   --bg-main: linear-gradient(185deg, #ffffff, #f8fafc, #e5e7eb);
@@ -24,32 +24,13 @@
   --gold: #d4af37;
 }
 
-/* =========================
-   GLOBAL APP STYLE
-========================= */
-
-html {
-  scroll-behavior: smooth;
-}
-
-html[dir="rtl"] {
-  direction: rtl;
-}
-
-html[dir="ltr"] {
-  direction: ltr;
-}
-
 .app-body {
   background: var(--bg-main);
   color: var(--text-main);
   min-height: 100vh;
 }
 
-/* =========================
-   EVENT MARKERS (MAP)
-========================= */
-
+/* === Custom Event Markers === */
 .custom-event-marker {
   position: relative !important;
   width: 30px !important;
@@ -59,11 +40,11 @@ html[dir="ltr"] {
 
 .custom-event-marker .marker-label {
   position: absolute;
-  bottom: 100%;
+  bottom: 100%;               /* فوق الدبوس */
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.75);
-  color: #fff;
+  color: white;
   padding: 3px 8px;
   border-radius: 4px;
   font-size: 11px;
@@ -74,8 +55,8 @@ html[dir="ltr"] {
   text-overflow: ellipsis;
   pointer-events: none;
   margin-bottom: 4px;
-  z-index: 9999;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  z-index: 9999;              /* مهم جدًا عشان يفضل فوق */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
   line-height: 1.2;
 }
 
@@ -88,61 +69,17 @@ html[dir="ltr"] {
   height: 42px;
 }
 
-/* Leaflet popup */
+/* تحسين الـ popup إذا أردت */
 .leaflet-popup.custom-event-popup .leaflet-popup-content-wrapper {
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
-
-/* =========================
-   STATUS BADGES (TAILWIND HELPERS)
-========================= */
-
 .status-badge {
   @apply inline-block px-2.5 py-0.5 text-xs font-medium rounded-full;
 }
-
 .status-active {
   @apply bg-green-100 text-green-800;
 }
-
 .status-review {
   @apply bg-yellow-100 text-yellow-800;
-}
-
-/* =========================
-   RTL SAFE HELPERS
-========================= */
-
-/* margin auto fixes */
-html[dir="rtl"] .ms-auto {
-  margin-right: auto !important;
-  margin-left: 0 !important;
-}
-
-html[dir="rtl"] .me-auto {
-  margin-left: auto !important;
-  margin-right: 0 !important;
-}
-
-/* text alignment helpers */
-html[dir="rtl"] .text-start {
-  text-align: right !important;
-}
-
-html[dir="rtl"] .text-end {
-  text-align: left !important;
-}
-
-/* flex direction safety */
-html[dir="rtl"] .flex-row {
-  flex-direction: row-reverse;
-}
-
-/* =========================
-   SAFE GLOBAL FIXES
-========================= */
-
-* {
-  box-sizing: border-box;
 }

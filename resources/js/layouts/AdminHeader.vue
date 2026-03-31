@@ -75,7 +75,7 @@ onMounted(() => {
 const logout = () => {
   localStorage.removeItem("auth_token");
   localStorage.removeItem("user_role");
-  router.push("/auth");
+  router.push("/en/auth");
 };
 </script>
 

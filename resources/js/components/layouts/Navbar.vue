@@ -40,7 +40,7 @@
                             class="dropdown-menu show shadow rounded mt-2 p-2"
                             style="position:absolute; right:0; top:100%; z-index:1000; min-width:220px;"
                         >
-                            <RouterLink class="dropdown-item" :to="localizedPath('/favourites')">
+                            <RouterLink class="dropdown-item" :to="localizedPath('/WishList')">
                                 {{ $t('nav.favourites') }}
                             </RouterLink>
 
@@ -146,7 +146,7 @@
 
             <hr />
 
-            <RouterLink :to="localizedPath('/favourites')" class="d-block nav-link py-2 px-1">
+            <RouterLink :to="localizedPath('/WishList')" class="d-block nav-link py-2 px-1">
                 {{ $t('nav.favourites') }}
             </RouterLink>
 
@@ -226,7 +226,7 @@ const selectLanguage = async (lang) => {
     axios.defaults.headers.common["Accept-Language"] = newLang;
 
     await router.push(newPath);
-    // بدون reload
+    window.location.reload();
 };
 
 /* NAV */
@@ -287,7 +287,6 @@ const fetchProfile = async () => {
 
     try {
         const res = await axios.get("/v1/users/profile");
-
         if (res.data.status === "success") {
             const userData = res.data.data.user;
             userName.value = userData.name || "المستخدم";

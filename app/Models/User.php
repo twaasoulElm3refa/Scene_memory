@@ -96,5 +96,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(licenceType::class,'licence_type_id');
     }
+
+    public function cart()
+    {
+        return $this->hsone(Cart::class,'user_id');
+    }
 }
 

@@ -48,101 +48,108 @@ import plans from "../views/home/plans.vue";
 
 const routes = [
     {
+        path: "/",
+        redirect: () => {
+            const lang = localStorage.getItem("lang") || "en";
+            return `/${lang}/home`;
+        },
+    },
+    {
         path: "/:lang/home",
         component: Home,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/plans",
+        path: "/:lang/plans",
         component: plans,
         meta: { hideNavbar: false, hideFooter: false },
     },
     {
-        path: "/plan/:slug",
+        path: "/:lang/plan/:slug",
         component: show_plan,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/historical",
+        path: "/:lang/historical",
         component: historical,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/WishList",
+        path: "/:lang/WishList",
         component: wishlist,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/add_event",
+        path: "/:lang/add_event",
         component: create_event,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/add_event/historical",
+        path: "/:lang/add_event/historical",
         component: create_historical,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/all_events",
+        path: "/:lang/all_events",
         component: all_events,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/single_event/:slug",
+        path: "/:lang/single_event/:slug",
         name: "single_event",
         component: single_event,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/single_event/:slug/comments",
+        path: "/:lang/single_event/:slug/comments",
         name: "all_comments",
         component: all_comments,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/who",
+        path: "/:lang/who",
         component: who,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/terms",
+        path: "/:lang/terms",
         component: terms,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/privacy-policy",
+        path: "/:lang/privacy-policy",
         component: privacy,
         meta: { hideNavbar: false, hideFooter: false },
     },
 
     {
-        path: "/data-protection",
+        path: "/:lang/data-protection",
         component: dataProtction,
         meta: { hideNavbar: false, hideFooter: false },
     },
     {
-        path: "/profile",
+        path: "/:lang/profile",
         component: profile,
     },
     {
-        path: "/contact",
+        path: "/:lang/contact",
         component: contact,
     },
 
     // Auth Routes
     {
-        path: "/auth",
+        path: "/:lang/auth",
         component: Register,
         meta: { hideNavbar: true, hideFooter: true },
     },

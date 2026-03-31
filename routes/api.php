@@ -21,6 +21,7 @@ use App\Http\Controllers\api\auth\AppleAuthController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
 use App\Http\Controllers\api\auth\SocialAuthController;
+use App\Http\Controllers\api\home\CartController;
 use App\Http\Controllers\api\home\CategoryController;
 use App\Http\Controllers\api\home\CitiesController;
 use App\Http\Controllers\api\home\CommentController;
@@ -289,6 +290,12 @@ Route::prefix('v1')->group(function () {
         function () {
         Route::post('/{id}', [IncomeController::class,'subscribe']);
         //122
+    });
+
+    Route::prefix('cart')->middleware('auth:sanctum')->group(
+        function () {
+        Route::post('/addToCart/{id}', [CartController::class,'addToCart']);
+        Route::get('/get', [CartController::class,'cart']);
     });
     // 122 Endpoints for the API
 });

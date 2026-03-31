@@ -19,4 +19,9 @@ class eventsImges extends Model
     {
         return $this->hasMany(MediaRequest::class, 'image_id');
     }
+
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class,'image_id');
+    }
 }
