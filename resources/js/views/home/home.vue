@@ -359,10 +359,9 @@
             <div class="p-3 text-xs text-gray-600">
                 Your profile is not complete. Please update:
                 <ul class="mt-1.5 list-disc list-inside text-[11px] text-gray-500">
-                    <li>Phone</li>
-                    <li>Country</li>
-                    <li>Position</li>
-                    <li>Date of birth</li>
+                    <li v-for="field in missingFieldsList" :key="field">
+                        {{ fieldLabels[field] || field }}
+                    </li>
                 </ul>
 
                 <p class="mt-2 text-blue-600 font-medium text-[11px]">
@@ -675,11 +674,21 @@ const fetchProfile = async () => {
 
         if (res.data.status === "success") {
             const userData = res.data.data.user;
-
-            licenceName.value = userData.licence_type?.name || "free";
-
+            licenceName.value = userData.licenceType?.name || "free";
             localStorage.setItem("licence_name", licenceName.value);
-
+            localStorage.setItem("user_role", userData.role);
+            const requiredFields = {
+                phone: userData.phone,
+                country: userData.country,
+                position: userData.position,
+                date_of_birth: userData.date_of_birth,
+            };
+            const missingFields = Object.entries(requiredFields)
+                .filter(([key, value]) => !value || value === "")
+                .map(([key]) => key);
+            const isFilledProfile = missingFields.length === 0;
+            localStorage.setItem("isFilledProfile", isFilledProfile ? "true" : "false");
+            localStorage.setItem("missingFields", JSON.stringify(missingFields));
             isLoggedIn.value = true;
         }
     } catch (err) {
@@ -698,44 +707,56 @@ const TOAST_DURATION = 7000 // 7 seconds (between 5-10 seconds)
 
 // check profile from localStorage
 const checkProfileWarning = () => {
-  const isFilled = localStorage.getItem("is_profile_filled")
+    const isFilled = localStorage.getItem("isFilledProfile");
 
-  if (isFilled === "false") {
-    showProfileToast.value = true
-    startProgressBar()
-  }
-}
+    if (isFilled === "false") {
+        showProfileToast.value = true;
+        startProgressBar();
+    }
+};
+
+const missingFieldsList = computed(() => {
+    const data = localStorage.getItem("missingFields");
+    return data ? JSON.parse(data) : [];
+});
+
+const fieldLabels = {
+    phone: "Phone",
+    country: "Country",
+    position: "Position",
+    date_of_birth: "Date of birth"
+};
 
 const startProgressBar = () => {
-  const startTime = Date.now()
-  const endTime = startTime + TOAST_DURATION
+    const startTime = Date.now()
+    const endTime = startTime + TOAST_DURATION
 
-  progressInterval = setInterval(() => {
-    const now = Date.now()
-    const remaining = endTime - now
-    const percentage = Math.max(0, (remaining / TOAST_DURATION) * 100)
-    progressWidth.value = `${percentage}%`
+    progressInterval = setInterval(() => {
+        const now = Date.now()
+        const remaining = endTime - now
+        const percentage = Math.max(0, (remaining / TOAST_DURATION) * 100)
+        progressWidth.value = `${percentage}%`
 
-    if (percentage <= 0) {
-      clearInterval(progressInterval)
-    }
-  }, 16) // ~60fps
+        if (percentage <= 0) {
+            clearInterval(progressInterval)
+        }
+    }, 16) // ~60fps
 
-  // auto hide after duration
-  toastTimer = setTimeout(() => {
-    showProfileToast.value = false
-    clearInterval(progressInterval)
-  }, TOAST_DURATION)
+    // auto hide after duration
+    toastTimer = setTimeout(() => {
+        showProfileToast.value = false
+        clearInterval(progressInterval)
+    }, TOAST_DURATION)
 }
 
 
 onMounted(() => {
-  checkProfileWarning()
+    checkProfileWarning()
 })
 
 onUnmounted(() => {
-  if (toastTimer) clearTimeout(toastTimer)
-  if (progressInterval) clearInterval(progressInterval)
+    if (toastTimer) clearTimeout(toastTimer)
+    if (progressInterval) clearInterval(progressInterval)
 })
 
 const closeToast = () => {
@@ -744,8 +765,10 @@ const closeToast = () => {
 };
 
 const goToProfile = () => {
-    router.push("/profile");
+    const lang = localStorage.getItem("lang") || "en";
+    router.push(`/${lang}/profile`);
 };
+
 const subscribe = async (planId) => {
     const token = localStorage.getItem("auth_token");
 
@@ -801,21 +824,21 @@ button {
 }
 
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
 }
 
 .slide-fade-enter-from {
-  transform: translateX(-20px);
-  opacity: 0;
+    transform: translateX(-20px);
+    opacity: 0;
 }
 
 .slide-fade-leave-to {
-  transform: translateX(-20px);
-  opacity: 0;
+    transform: translateX(-20px);
+    opacity: 0;
 }
 
 /* يمكنك إضافة ستايل للـ popup إذا أردت */

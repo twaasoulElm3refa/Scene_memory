@@ -33,7 +33,7 @@ class TranslateEventJob implements ShouldQueue
             return;
         }
 
-        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi'];
+        $locales = ['ar','en','fr','es','zh','de','ru','it','ja','fa','ur','hi','tr'];
 
         try {
 

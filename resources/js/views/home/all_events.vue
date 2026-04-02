@@ -276,8 +276,17 @@ export default {
 
         viewEvent(event) {
             if (!event?.slug) return;
-            this.$router.push({ name: "event-details", params: { slug: event.slug } });
-        },
+
+            const lang = localStorage.getItem("language") || "ar";
+
+            this.$router.push({
+                name: "single_event",
+                params: {
+                    lang,
+                    slug: event.slug,
+                },
+            });
+        }
     },
 };
 </script>

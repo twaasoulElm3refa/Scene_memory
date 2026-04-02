@@ -293,7 +293,6 @@ onMounted(async () => {
     }
 });
 
-// ✅ Login
 const handleLogin = async () => {
     loading.value = true;
     error.value = "";
@@ -304,7 +303,6 @@ const handleLogin = async () => {
         if (res.data.status === "success") {
             const token = res.data.data?.token;
             const role = res.data.data?.user?.role;
-            console.log(token, role);
             saveTokenAndRedirect(token, role);
         } else {
             error.value = res.data.message || "Login failed";
@@ -375,7 +373,6 @@ const handleReset = async () => {
     }
 };
 
-// Google Login
 const handleGoogleLogin = async () => {
     try {
         const res = await axios.get("/v1/users/google-login");

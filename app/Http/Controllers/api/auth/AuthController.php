@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\loginRequest;
 use App\Http\Requests\registerRequest;
 use App\Http\Resources\userResource;
+use App\Models\cart;
+use App\Models\cartItems;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -92,15 +94,27 @@ class AuthController extends Controller
         }
 
         $cacheKey = 'user_profile_' . $user->id;
-
-        $cachedProfile = Cache::tags(['user_profile'])->remember($cacheKey, 60, function () use ($user) {
+        $cart=cart::where('user_id', $user->id)->first();
+        if(! $cart) {
+            $cart=cart::create([
+                "user_id" => $user->id
+            ]);
+        }
+        $items=cartItems::where('cart_id', $cart->id)->count();
+        $cachedProfile = Cache::tags(['user_profile'])->remember($cacheKey, 60, function () use ($user,$items) {
             $user->load('licenceType');
 
             return [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'position' => $user->position,
+                'country' => $user->country,
+                'date_of_birth' => $user->date_of_birth,
+                'phone' => $user->phone,
                 'role' => $user->role,
+                'items' => $items,
+                'last_login_at' => $user->last_login_at,
                 'licenceType' => [
                 'id' => $user->licenceType?->id,
                 'name' => $user->licenceType?->name,
@@ -183,22 +197,24 @@ class AuthController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = $request->user();
+        $user = auth()->user();
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
+            'phone' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'position'=> 'required|string',
+            'date_of_birth'=> 'required|string',
         ]);
 
         $user->update($validated);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Profile updated successfully.',
-            'data' => [
-                'user' => new UserResource($user),
-            ],
-        ]);
+        $cacheKey = 'user_profile_' . $user->id;
+
+        Cache::tags(['user_profile'])->forget($cacheKey);
+
+        return $this->success($user , 'User updated Successfully');
     }
 
     public function updatePassword(Request $request)
@@ -207,7 +223,7 @@ class AuthController extends Controller
 
         $validated = $request->validate([
             'current_password' => 'required|string',
-            'new_password' => ['required', 'string', Password::min(8)->mixedCase()->numbers()],
+            'new_password' => ['required', 'string', Password::min(8)->numbers()],
             'confirm_password' => 'required|string|same:new_password',
         ]);
 

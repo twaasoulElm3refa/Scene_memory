@@ -42,6 +42,7 @@
         "HI": "हिंदी",
         "ZH": "中文",
         "FA": "فارسى",
+        "TR": "Turkish",
         "JA": "日本語",
         "UR": "اردو"
     },
@@ -426,6 +427,8 @@
         "chooseYourPlan": "Choose your plan",
         "getStarted": "Get started for free",
         "perMonth": "per month",
+        "noFeatures": "No features",
+        "mostPopular": "Most popular",
         "prioritySupport": "Priority support",
         "securePayments": "Secure payments",
         "moneyBack": "Money-back guarantee",

@@ -16,6 +16,7 @@ class CartController extends Controller
     private function clearCartCache($userId)
     {
         Cache::tags(['cart', "user_{$userId}"])->flush();
+        Cache::tags('user_profile')->flush();
     }
     public function addToCart()
     {
@@ -49,8 +50,6 @@ class CartController extends Controller
         }
     }
 
-
-
     public function cart()
     {
         try {
@@ -62,29 +61,64 @@ class CartController extends Controller
 
             $cacheKey = "cart_user_{$user->id}";
 
-            $cart = Cache::tags(['cart', "user_{$user->id}"])
+            $images = Cache::tags(['cart', "user_{$user->id}"])
                 ->remember($cacheKey, now()->addMinutes(10), function () use ($user) {
-
-                    $cart = cart::with('cartItems')
+                    $cart = cart::with('cartItems.items')
                         ->where("user_id", $user->id)
                         ->first();
-
+                        if (!$cart) {
+                            $cart = cart::create([
+                                "user_id" => $user->id
+                            ]);
+                            $cart->load('cartItems.items');
+                        }
+                    $cartitems = cartItems::where('cart_id', $cart->id)->pluck('image_id');
+                    $images=eventsImges::whereIn('id', $cartitems)->select(['id', 'full_url','price'])->get();
                     if (!$cart) {
                         $cart = cart::create([
                             "user_id" => $user->id
                         ]);
-
-                        $cart->load('cartItems');
+                        $cart->load('cartItems.items');
                     }
-
-                    return $cart;
+                    return $images;
                 });
 
-            return $this->success($cart, "Cart Fetched Successfully");
+            return $this->success($images, "Cart Fetched Successfully");
 
         } catch (\Exception $e) {
             return $this->error($e->getMessage(), 500);
         }
+    }
+
+    public function deleteFromCart($id)
+    {
+        try {
+            $user = auth()->user();
+            if (!$user) {
+                return $this->error('Unauthorized', 401);
+            }
+            $item = cartItems::where('image_id', $id)->first();
+            if (!$item) {
+                return $this->error('Image not found in cart', 404);
+            }
+            $item->delete();
+            $this->clearCartCache($user->id);
+            return $this->success(null, 'Image deleted from cart successfully');
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
+    }
+
+    public function clearCart()
+    {
+        $user = auth()->user();
+        $cart = cart::where('user_id', $user->id)->first();
+        if (!$cart) {
+            return $this->error('Cart not Found',404);
+        }
+        $cart->cartItems()->delete();
+        $this->clearCartCache($user->id);
+        return $this->success(null, 'Cart cleared successfully');
     }
 
 }

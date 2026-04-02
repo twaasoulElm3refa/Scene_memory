@@ -35,6 +35,7 @@ use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
+use App\Http\Controllers\api\payment\PurchaseController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
@@ -66,7 +67,7 @@ Route::prefix('v1')->group(function () {
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
-            Route::put('/profile', [AuthController::class, 'updateProfile']);
+            Route::post('/update-profile', [AuthController::class, 'updateProfile']);
             Route::put('/password', [AuthController::class, 'updatePassword']);
         });
     });
@@ -296,7 +297,16 @@ Route::prefix('v1')->group(function () {
         function () {
         Route::post('/addToCart/{id}', [CartController::class,'addToCart']);
         Route::get('/get', [CartController::class,'cart']);
+        Route::delete('/delete/{id}', [CartController::class,'deleteFromCart']);
+        Route::delete('/clearCart', [CartController::class,'clearCart']);
+        //126
     });
-    // 122 Endpoints for the API
+
+    Route::prefix('purchase')->middleware('auth:sanctum')->group(
+        function () {
+        Route::post('/', [PurchaseController::class,'purchase']);
+        //127
+    });
+    // 126 Endpoints for the API
 });
 

@@ -2,29 +2,20 @@
     <header class="navbar-wrap shadow-lg" :dir="isArabic ? 'ltr' : 'rtl'">
         <div class="container d-flex justify-content-between align-items-center p-1">
 
-            <div class="user-avatar-wrapper">
-                <img v-if="userImage" :src="userImage" class="user-avatar" alt="User" @error="userImage = null" />
-                <div v-else class="user-placeholder">
-                    {{ userInitial }}
-                </div>
+            <div class="cart-wrapper">
+                <button class="cart-btn" @click="goToCart">
+                    🛒
+                    <span class="cart-badge">{{ count }}</span>
+                </button>
             </div>
 
             <nav class="d-none d-md-flex flex-grow-1 justify-content-center align-items-center gap-2">
-                <RouterLink
-                    v-for="link in links"
-                    :key="link.active"
-                    :to="localizedPath(link.path)"
-                    class="nav-link px-2"
-                    :class="{ active: isActive(link.active) }"
-                >
+                <RouterLink v-for="link in links" :key="link.active" :to="localizedPath(link.path)"
+                    class="nav-link px-2" :class="{ active: isActive(link.active) }">
                     {{ $t(link.labelKey) }}
                 </RouterLink>
 
-                <RouterLink
-                    :to="localizedPath('/plans')"
-                    class="nav-link px-2"
-                    :class="{ active: isActive('plans') }"
-                >
+                <RouterLink :to="localizedPath('/plans')" class="nav-link px-2" :class="{ active: isActive('plans') }">
                     {{ $t('nav.plans') }}
                 </RouterLink>
 
@@ -35,11 +26,8 @@
                     </button>
 
                     <transition name="fade-slide">
-                        <div
-                            v-if="moreOpen"
-                            class="dropdown-menu show shadow rounded mt-2 p-2"
-                            style="position:absolute; right:0; top:100%; z-index:1000; min-width:220px;"
-                        >
+                        <div v-if="moreOpen" class="dropdown-menu show shadow rounded mt-2 p-2"
+                            style="position:absolute; right:0; top:100%; z-index:1000; min-width:220px;">
                             <RouterLink class="dropdown-item" :to="localizedPath('/WishList')">
                                 {{ $t('nav.favourites') }}
                             </RouterLink>
@@ -65,46 +53,34 @@
             </button>
 
             <div class="d-flex align-items-center gap-2">
+                <!-- Language Selector -->
                 <div class="position-relative">
-                    <button
-                        class="btn-user user-hover fw-bold shadow-gray d-flex align-items-center gap-1"
-                        @click="languageDropdownOpen = !languageDropdownOpen"
-                    >
+                    <button class="btn-user user-hover fw-bold shadow-gray d-flex align-items-center gap-1"
+                        @click="languageDropdownOpen = !languageDropdownOpen">
                         {{ currentLanguage }}
                         <i class="bi" :class="languageDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                     </button>
 
-                    <div
-                        v-if="languageDropdownOpen"
-                        class="dropdown-menu show shadow rounded mt-2"
-                        style="position:absolute; right:0; top:100%; z-index:1000; min-width:120px;"
-                    >
-                        <button
-                            class="dropdown-item"
-                            v-for="lang in languages"
-                            :key="lang"
-                            @click="selectLanguage(lang)"
-                        >
+                    <div v-if="languageDropdownOpen" class="dropdown-menu show shadow rounded mt-2"
+                        style="position:absolute; right:0; top:100%; z-index:1000; min-width:140px;">
+                        <button class="dropdown-item" v-for="lang in languages" :key="lang"
+                            @click="selectLanguage(lang)">
                             {{ $t(`languages.${lang}`) }}
                         </button>
                     </div>
                 </div>
 
+                <!-- User / Login -->
                 <div class="d-flex gap-2 position-relative">
                     <template v-if="isLoggedIn">
-                        <button
-                            class="btn-user user-hover fw-bold d-flex align-items-center gap-2 shadow-gray"
-                            @click="toggleDropdown"
-                        >
+                        <button class="btn-user user-hover fw-bold d-flex align-items-center gap-2 shadow-gray"
+                            @click="toggleDropdown">
                             {{ userName }}
                             <i class="bi" :class="dropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                         </button>
 
-                        <div
-                            v-if="dropdownOpen"
-                            class="dropdown-menu show shadow rounded mt-2 dropdown-dark"
-                            style="position:absolute; right:0; top:100%; margin-top:8px; z-index:1000; min-width:150px;"
-                        >
+                        <div v-if="dropdownOpen" class="dropdown-menu show shadow rounded mt-2 dropdown-dark"
+                            style="position:absolute; right:0; top:100%; margin-top:8px; z-index:1000; min-width:150px;">
                             <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
                                 {{ $t("nav.profile") }}
                             </RouterLink>
@@ -118,10 +94,8 @@
                     </template>
 
                     <template v-else>
-                        <RouterLink
-                            :to="localizedPath('/auth')"
-                            class="btn-user user-hover fw-bold shadow-gray text-decoration-none"
-                        >
+                        <RouterLink :to="localizedPath('/auth')"
+                            class="btn-user user-hover fw-bold shadow-gray text-decoration-none">
                             {{ $t("nav.login") }}
                         </RouterLink>
                     </template>
@@ -129,14 +103,10 @@
             </div>
         </div>
 
+        <!-- Mobile Menu -->
         <div v-if="mobileMenu" class="d-md-none mt-2 bg-white shadow-lg rounded p-3">
-            <RouterLink
-                v-for="link in links"
-                :key="link.active"
-                :to="localizedPath(link.path)"
-                class="d-block nav-link py-2 px-1"
-                :class="{ active: isActive(link.active) }"
-            >
+            <RouterLink v-for="link in links" :key="link.active" :to="localizedPath(link.path)"
+                class="d-block nav-link py-2 px-1" :class="{ active: isActive(link.active) }">
                 {{ $t(link.labelKey) }}
             </RouterLink>
 
@@ -177,7 +147,8 @@ const { locale } = useI18n();
 
 /* STATE */
 const isLoggedIn = ref(false);
-const userName = ref("المستخدم");
+const userName = ref("Kullanıcı");
+const count = ref(0);
 const userImage = ref(null);
 
 const dropdownOpen = ref(false);
@@ -185,7 +156,8 @@ const mobileMenu = ref(false);
 const moreOpen = ref(false);
 const languageDropdownOpen = ref(false);
 
-const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH", "UR"];
+/* Languages - Added TR */
+const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH", "UR", "TR"];
 
 /* ROUTE LANG */
 const routeLang = computed(() => (route.params.lang || "en").toLowerCase());
@@ -194,7 +166,7 @@ const currentLanguage = computed(() => routeLang.value.toUpperCase());
 
 const isArabic = computed(() => routeLang.value === "ar");
 
-/* sync i18n + axios + localStorage with URL */
+/* Sync i18n + axios + localStorage with URL */
 watch(
     routeLang,
     (lang) => {
@@ -216,8 +188,6 @@ const localizedPath = (path) => {
 const selectLanguage = async (lang) => {
     const newLang = lang.toLowerCase();
     languageDropdownOpen.value = false;
-
-    // حافظ على نفس الصفحة الحالية وغير أول segment فقط
     const currentPath = route.fullPath;
     const newPath = currentPath.replace(/^\/[a-z]{2}(?=\/|$)/, `/${newLang}`);
 
@@ -273,7 +243,7 @@ const logout = () => {
     localStorage.removeItem("is_profile_filled");
 
     isLoggedIn.value = false;
-    userName.value = "المستخدم";
+    userName.value = "Kullanıcı";
 
     router.push(localizedPath("/auth"));
 };
@@ -289,7 +259,9 @@ const fetchProfile = async () => {
         const res = await axios.get("/v1/users/profile");
         if (res.data.status === "success") {
             const userData = res.data.data.user;
-            userName.value = userData.name || "المستخدم";
+            count.value = userData.items || 0;
+            userName.value = userData.name || "Kullanıcı";
+
             userImage.value = userData.image || null;
             isLoggedIn.value = true;
         }
@@ -303,6 +275,10 @@ onMounted(() => {
     fetchProfile();
     window.addEventListener("login", fetchProfile);
 });
+
+const goToCart = () => {
+    router.push(localizedPath("/cart"));
+};
 </script>
 
 <style scoped>
@@ -361,12 +337,6 @@ onMounted(() => {
 }
 
 /* Light Mode → Cart hover أسود */
-[data-theme="light"] .cart-btn:hover {
-    background: #000000;
-    color: #000000;
-    border-color: #000000;
-    transform: scale(1.08);
-}
 
 [data-theme="dark"] .nav-link:hover,
 [data-theme="dark"] .nav-link.active {
@@ -532,5 +502,44 @@ onMounted(() => {
     color: #ffffff;
     transform: scale(1.06);
     box-shadow: 0 0 16px rgba(17, 24, 39, 0.35);
+}
+
+.cart-wrapper {
+    position: relative;
+}
+
+.cart-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    color: white;
+    font-size: 22px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: 0.2s;
+}
+
+.cart-btn:hover {
+    transform: scale(1.08);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 </style>

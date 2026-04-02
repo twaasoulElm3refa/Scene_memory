@@ -1,4 +1,8 @@
 <template>
+    <div v-if="cartAlert.show" class="fixed top-5 right-5 z-[9999] px-4 py-3 rounded-lg shadow-lg text-white transition"
+        :class="cartAlert.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+        {{ cartAlert.message }}
+    </div>
     <div class="min-h-screen bg-gray-50">
 
         <div v-if="loading" class="text-center py-40">
@@ -49,6 +53,7 @@
                     <!-- ══════════════════════════════════════════════════════════ -->
                     <!-- Media Gallery — FULL WIDTH above the grid                  -->
                     <!-- ══════════════════════════════════════════════════════════ -->
+
                     <div class="p-8 md:p-12 border-b border-gray-100">
                         <div class="flex items-center justify-between mb-6">
                             <h2
@@ -65,47 +70,38 @@
                             </button>
                         </div>
 
-                        <!-- Grid: 3 columns, bigger images -->
+                        <!-- Grid -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                             <div v-for="(media, index) in event.images" :key="media.id || index"
                                 class="aspect-[16/10] overflow-hidden rounded-2xl shadow hover:shadow-lg transition-shadow cursor-pointer relative group"
                                 @click="openLightbox(index)">
 
-                                <!-- Image -->
-                                <img v-if="!media.video && !isVideoUrl(media.full_url) && media.full_url"
+                                <!-- IMAGE -->
+                                <img v-if="!media.video && !isVideoUrl(media.full_url)"
                                     :src="getMediaUrl(media.full_url)"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     loading="lazy" />
 
-                                <!-- Video thumbnail -->
-                                <video v-else-if="media.video || isVideoUrl(media.full_url || media.full_url)"
-                                    :src="getMediaUrl(media.video || media.full_url || media.full_url)"
-                                    class="w-full h-full object-cover" muted loop playsinline preload="metadata">
+                                <!-- VIDEO -->
+                                <video v-else :src="getMediaUrl(media.full_url)" class="w-full h-full object-cover"
+                                    muted loop playsinline preload="metadata">
                                 </video>
 
-                                <!-- Fallback -->
-                                <div v-else
-                                    class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                                    {{ $t('event.no_media') }}
-                                </div>
+                                <!-- DARK OVERLAY -->
+                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition z-10"></div>
 
-                                <!-- Video overlay icon -->
-                                <div v-if="media.video || isVideoUrl(media.full_url || media.full_url)"
-                                    class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                    <div
-                                        class="w-14 h-14 rounded-full bg-white/80 flex items-center justify-center shadow-lg">
-                                        <span class="text-gray-800 text-2xl">▶</span>
+                                <!-- PRICE + CART -->
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 z-20 bg-black/70 text-white p-3 flex items-center justify-between opacity-100 transition">
+                                    <!-- PRICE -->
+                                    <div class="text-sm font-bold">
+                                        💰 {{ media.price ?? 0 }} $
                                     </div>
-                                </div>
-
-                                <!-- Hover overlay for images -->
-                                <div v-else
-                                    class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
-                                    <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-lg"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                                    </svg>
+                                    <!-- ADD TO CART -->
+                                    <button @click.stop="addToCart(media.id)"
+                                        class="bg-gray-500 hover:bg-gray-600 px-3 py-1 rounded text-sm font-semibold transition">
+                                        🛒 Add
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -462,7 +458,7 @@
                                         <template v-else>
                                             ♥
                                             {{ isInWishlist ? $t('event.already_in_wishlist') :
-                                            $t('event.add_to_wishlist') }}
+                                                $t('event.add_to_wishlist') }}
                                         </template>
                                     </button>
                                     <p v-if="wishlistError"
@@ -640,6 +636,9 @@ import { useRoute } from "vue-router";
 import axios from "axios";
 import { EventService } from "@/services/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService";
+import { CartService } from "@/services/CartService";
+
+const cartLoading = ref(false);
 
 const route = useRoute();
 const slug = route.params.slug;
@@ -684,6 +683,26 @@ const reactionEndpointMap = {
     exhibitions: "Exhibitions",
     neutral: "neutral",
 };
+const cartSuccess = ref(false);
+const cartError = ref("");
+
+const cartAlert = ref({
+    show: false,
+    type: "", // success | error
+    message: ""
+});
+
+const showCartAlert = (type, message) => {
+    cartAlert.value = {
+        show: true,
+        type,
+        message
+    };
+
+    setTimeout(() => {
+        cartAlert.value.show = false;
+    }, 3000);
+};
 
 const STORAGE_URL = 'http://localhost:8000/storage/';
 
@@ -691,6 +710,28 @@ const getMediaUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
     return STORAGE_URL + path;
+};
+
+const addToCart = async (mediaId) => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        showCartAlert("error", "يجب تسجيل الدخول أولاً");
+        return;
+    }
+
+    cartLoading.value = true;
+
+    try {
+        await CartService.addToCart(mediaId);
+
+        showCartAlert("success", "تمت الإضافة إلى السلة 🛒 بنجاح");
+        window.location.reload();
+    } catch (err) {
+        showCartAlert("error", err.message || "حدث خطأ أثناء الإضافة");
+    } finally {
+        cartLoading.value = false;
+    }
 };
 
 const setReaction = async (commentId, type) => {
@@ -1159,7 +1200,6 @@ onMounted(async () => {
     try {
         const response = await EventService.getSingleEvent(slug);
         event.value = response.data?.data || response;
-        console.log(event.value);
         await fetchLikesInfo();
     } catch (err) {
         console.error("خطأ في جلب الحدث:", err);

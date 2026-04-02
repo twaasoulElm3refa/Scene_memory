@@ -1,0 +1,445 @@
+{
+    "search": {
+        "placeholder": "Etkinlikleri ara..."
+    },
+    "filters": {
+        "allCategories": "Tüm Kategoriler",
+        "country": "Ülke",
+        "category": "Kategori",
+        "subCategory": "Alt Kategori",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "city": "Şehir",
+        "allSubCategories": "Tüm Alt Kategoriler"
+    },
+    "upload_media": "Medya Yükle",
+    "view_all_comments": "Tüm Yorumları Görüntüle",
+    "nav": {
+        "favourites": "Favoriler",
+        "plans": "Planlar",
+        "more": "Daha Fazla",
+        "terms": "Şartlar ve Koşullar",
+        "historical": "Tarihi Kişiler",
+        "home": "Ana Sayfa",
+        "about": "Hakkımızda",
+        "allEvents": "Tüm Etkinlikler",
+        "contact": "Bize Ulaşın",
+        "addEvent": "Etkinlik Ekle",
+        "wishlist": "Favoriler",
+        "profile": "Profil",
+        "logout": "Çıkış Yap",
+        "login": "Giriş Yap"
+    },
+    "languages": {
+        "AR": "العربية",
+        "EN": "English",
+        "FR": "Français",
+        "DE": "Deutsch",
+        "TR": "Turkish",
+        "RU": "Русский",
+        "ES": "Español",
+        "IT": "Italiano",
+        "HI": "हिंदी",
+        "ZH": "中文",
+        "FA": "فارسى",
+        "JA": "日本語",
+        "UR": "اردو"
+    },
+    "login_to_comment": "Yorum yapmak için lütfen giriş yapın",
+    "event": {
+        "reply": "Yanıtla",
+        "delete": "Sil",
+        "no_media_yet": "Henüz medya yok",
+        "reply_placeholder": "Yanıtınızı buraya yazın...",
+        "loading": "Etkinlik yükleniyor...",
+        "not_found": "Etkinlik bulunamadı veya silinmiş.",
+        "city_default": "Belirtilmemiş",
+        "visitor": "Ziyaretçi",
+        "media_gallery_title": "Etkinlik Medyası",
+        "no_media": "Medya yok",
+        "about_event_title": "Etkinlik Hakkında",
+        "comments_title": "Yorumlar",
+        "add_comment_title": "Yorumunuzu Ekleyin",
+        "comment_placeholder": "Yorumunuzu buraya yazın...",
+        "submit_comment": "Gönder",
+        "sending_comment": "Gönderiliyor...",
+        "comment_login_required": "Lütfen önce giriş yapın",
+        "comment_added_success": "Yorumunuz başarıyla eklendi!",
+        "delete_comment_title": "Yorumu Sil",
+        "event_info_title": "Etkinlik Bilgileri",
+        "from_date": "Başlangıç",
+        "to_date": "Bitiş",
+        "time_label": "Saat",
+        "time_default": "Belirtilmemiş",
+        "location": "Konum",
+        "organizer": "Etkinlik Düzenleyicisi",
+        "add_to_wishlist": "Favorilere Ekle",
+        "already_in_wishlist": "Favorilerde Var",
+        "adding_to_wishlist": "Ekleniyor...",
+        "wishlist_success": "Favorilere başarıyla eklendi!"
+    },
+    "common": {
+        "search": "Ara",
+        "placeholder": "Etkinlikleri ara...",
+        "searching": "Aranıyor...",
+        "details": "Detaylar",
+        "notSpecified": "Belirtilmemiş",
+        "loadingEvents": "Etkinlikler yükleniyor..."
+    },
+    "events": {
+        "add_historical_event": "Tarihi Kişi Ekle",
+        "brand_footer": "Dünyanın her yerindeki en sevdiğiniz etkinlikler",
+        "cities": "Şehir",
+        "categories": "Kategori",
+        "all_memories": "Tüm Etkinlik Anıları",
+        "showing_snapshots": "Dünyanın her yerinden {total} tarihi anı gösteriliyor",
+        "sort_by": "Sırala",
+        "sort": {
+            "newest": "En Yeni Önce",
+            "oldest": "En Eski Önce",
+            "title": "Başlık"
+        },
+        "loading": "Etkinlikler yükleniyor...",
+        "retry": "Tekrar Dene",
+        "page_info": "Sayfa {current} / {last}",
+        "active_memories": "Aktif Etkinlikler",
+        "latestEvents": "En Yeni Etkinlikler",
+        "recentMemories": "Son Etkinlikler",
+        "discoverAroundYou": "Çevrenizde neler olduğunu keşfedin ve en güzel anlara hazırlanın",
+        "noEventsFound": "Etkinlik bulunamadı",
+        "noMatchingEvents": "Arama kriterlerinize veya konumunuza uyan etkinlik bulunamadı",
+        "event": "Etkinlik",
+        "startDate": "Başlangıç Tarihi"
+    },
+    "pagination": {
+        "previous": "Önceki",
+        "next": "Sonraki"
+    },
+    "about": {
+        "title": "Hakkımızda - Scene Memory",
+        "subtitle": "En değerli anlarınızı sahne sahne koruyoruz",
+        "text1": "Scene Memory'de, hayatın en güzel anlarının netlik ve duyguyla saklanmayı hak ettiğine inanıyoruz. Biz sadece bir depolama platformu değiliz – hayat yolculuğunuzun dijital anı albümüyüz.",
+        "features": {
+            "immersiveAlbums": "Fotoğraflar, videolar ve sesli notlar içeren sürükleyici anı albümleri oluşturun",
+            "aiOrganize": "Yapay zeka destekli organizasyon – anılarınızı otomatik olarak sınıflandırır ve etiketler",
+            "privacy": "Tam gizlilik ve güvenlik – anılarınız şifrelenir ve sadece siz erişebilirsiniz"
+        },
+        "startJourney": "Anı yolculuğunuza şimdi başlayın",
+        "highlightMoments": "Hayatınızın öne çıkan anları",
+        "organizedBy": "Sahnelere, kişilere ve mekanlara göre düzenlenmiş",
+        "stats": {
+            "memories": "Kayıtlı Anı",
+            "users": "Mutlu Kullanıcı",
+            "backup": "Güvenli Yedekleme"
+        }
+    },
+    "newsletter": {
+        "title": "Anılarınızla bağlantıda kalın",
+        "description": "Haftalık anı ipuçları, özellik güncellemeleri ve ilham verici hikayeleri e-postanıza alın",
+        "firstName": "Ad",
+        "firstNamePlaceholder": "Adınız",
+        "email": "E-posta",
+        "emailPlaceholder": "siz@example.com",
+        "consent": "Anı ipuçları, güncellemeler ve zaman zaman promosyon teklifleri almak istiyorum. İstediğim zaman aboneliği iptal edebilirim.",
+        "subscribe": "Anı Güncellemelerine Abone Ol",
+        "community": "Topluluğumuzdaki 5.000'den fazla anı koruyucusuna katılın"
+    },
+    "map": {
+        "exploreMap": "Haritayı Keşfet"
+    },
+    "hero": {
+        "title_main": "Anılarınızı Koruyoruz",
+        "title_highlight": "Sonsuza Kadar Canlı Kalsın",
+        "description": "Scene Memory'de her anın korunmayı hak ettiğine inanıyoruz. Hayatınızdaki önemli olayları kaydetmenize, düzenlemenize ve hatırlamanıza yardımcı olmak için buradayız.",
+        "cta_start": "Bizimle Yolculuğunuza Başlayın",
+        "cta_watch": "Tanıtım Videosunu İzle",
+        "feature_organized": "Düzenlenmiş Anılar",
+        "feature_organized_desc": "Her an doğru yerinde",
+        "feature_private": "Garantili Gizlilik",
+        "feature_private_desc": "Anılarınız tam güvende",
+        "feature_reminders": "Akıllı Hatırlatmalar",
+        "feature_reminders_desc": "Hiçbir önemli günü kaçırmayın",
+        "feature_evolving": "Sürekli Gelişim",
+        "feature_evolving_desc": "Deneyiminizi sürekli iyileştiriyoruz"
+    },
+    "our_story": {
+        "badge": "Hikayemiz",
+        "title": "Nasıl Başladık",
+        "intro": "Hikayemiz basit bir fikirle başladı: İnsanlara hayatlarını şekillendiren değerli anıları korumada nasıl yardımcı olabiliriz?",
+        "stage1_title": "Başlangıç",
+        "stage1_desc": "2020 yılında kurucularımız, birçok önemli anın zamanla kaybolduğunu fark etti. Bu anıları korumak için basit ama güçlü bir araç yapmaya karar verdiler.",
+        "stage2_title": "Büyüme",
+        "stage2_desc": "Kullanıcı sayısı arttıkça, akıllı hatırlatmalar, gelişmiş sınıflandırma ve sevdiklerinizle güvenli paylaşım gibi yeni özellikler ekledik.",
+        "stage3_title": "Vizyon",
+        "stage3_desc": "Bugün, gizlilik ve sorunsuz deneyim odaklı olarak dünyanın en iyi anı koruma ve düzenleme platformu olmayı hedefliyoruz."
+    },
+    "mission_vision": {
+        "mission_badge": "Misyonumuz",
+        "mission_title": "Neye İnanıyoruz",
+        "mission_text": "Misyonumuz, her insanın değerli anılarını kolay, güvenli ve düzenli bir şekilde korumasına olanak sağlamaktır. Hayatımızdaki her anın korunmayı ve hatırlanmayı hak ettiğine inanıyoruz.",
+        "value_people_first": "İnsan Önce",
+        "value_people_first_desc": "Kullanıcı deneyimi aldığımız her kararın merkezindedir",
+        "value_privacy": "Gizlilik Kutsaldır",
+        "value_privacy_desc": "Anılarınız sadece size aittir ve kimseyle paylaşmayız",
+        "value_growth": "Sürekli Büyüme",
+        "value_growth_desc": "Kullanıcılarımızın ihtiyaçlarını karşılamak için sürekli gelişiyoruz",
+        "vision_badge": "Vizyonumuz",
+        "vision_title": "Nereye Gidiyoruz",
+        "vision_text": "Dünyanın lider anı koruma ve düzenleme platformu olmayı hedefliyoruz. Herkesin her yerde önemli anlarını kolay ve güvenli bir şekilde saklayabilmesi için.",
+        "goals_2025": "2025 Hedeflerimiz",
+        "goal_users": "Bir milyon kullanıcıya ulaşmak",
+        "goal_languages": "10 yeni dil eklemek",
+        "goal_ai": "Yapay zeka özelliklerini başlatmak"
+    },
+    "team": {
+        "badge": "Ekibimiz",
+        "title": "Scene Memory'nin Arkasındaki Beyinler",
+        "description": "Geliştiriciler, tasarımcılar ve kullanıcı deneyimi uzmanlarından oluşan çeşitli ekibimiz, unutulmaz bir anı koruma deneyimi yaratmak için birlikte çalışıyor."
+    },
+    "values": {
+        "badge": "Değerlerimiz",
+        "title": "Bizi Farklı Kılanlar"
+    },
+    "stats": {
+        "title": "Rakamlar Konuşuyor",
+        "description": "Başlangıcımızdan beri binlerce kişiye milyonlarca değerli anıyı korumada yardımcı olduk"
+    },
+    "cta": {
+        "title": "Scene Memory Ailesine Katılın",
+        "description": "Anılarınızı kaydetme yolculuğunuza bugün başlayın. Ücretsiz, güvenli ve size özel tasarlandı.",
+        "btn_signup": "Ücretsiz Hesap Oluştur",
+        "btn_features": "Özellikleri Keşfet",
+        "trust": "Anılarını korumak için bize güvenen 50.000'den fazla kişiye katıl"
+    },
+    "footer": {
+        "slogan": "Anılarınızı sonsuza kadar canlı tutmak için",
+        "terms": "Şartlar ve Koşullar",
+        "privacy": "Gizlilik Politikası",
+        "contact": "Bize Ulaşın",
+        "copyright": "© 2024 Scene Memory. Tüm hakları saklıdır.",
+        "made_with": "Anılarınızı korumak için yapıldı"
+    },
+    "contact": {
+        "hero": {
+            "title_main": "Buradayız",
+            "title_highlight": "Yardım Etmek İçin",
+            "description": "Scene Memory ekibi tüm sorularınızı yanıtlamak ve her zaman size yardımcı olmak için burada",
+            "stat_24_7": "7/24 Destek",
+            "stat_response_time": "Ortalama Yanıt Süresi",
+            "stat_satisfaction": "Müşteri Memnuniyeti",
+            "stat_happy_users": "Mutlu Kullanıcı"
+        },
+        "tabs": {
+            "form": "Mesaj Gönder",
+            "info": "İletişim Bilgileri"
+        },
+        "form": {
+            "fullName": "Tam Ad",
+            "fullNamePlaceholder": "Adınız buraya",
+            "emailAddress": "E-posta Adresi",
+            "messagePlaceholder": "Mesajınızı buraya yazın...",
+            "emailPlaceholder": "E-posta buraya",
+            "title": "Bize Mesaj Gönderin",
+            "subtitle": "En kısa sürede size döneceğiz. Yardım etmek için buradayız!",
+            "full_name": "Tam Ad",
+            "email": "E-posta",
+            "subject": "Konu",
+            "message": "Mesaj",
+            "message_placeholder": "Mesajınızı buraya yazın...",
+            "newsletter": "Scene Memory bülteni ve tekliflerini almak istiyorum",
+            "submit": "Mesajı Gönder",
+            "submitting": "Gönderiliyor...",
+            "success_title": "Başarıyla Gönderildi!",
+            "success_message": "Bizimle iletişime geçtiğiniz için teşekkürler, en kısa sürede size döneceğiz."
+        },
+        "info": {
+            "title": "İletişim Bilgileri",
+            "address_title": "Merkez Ofis",
+            "address": "Nil Caddesi, Kahire, Mısır",
+            "view_map": "Haritada Göster",
+            "phone_title": "Telefon",
+            "phone1": "+20 123 456 789",
+            "phone2": "+20 987 654 321",
+            "phone_hours": "09:00 - 21:00 arası hizmet veriyoruz",
+            "email_title": "E-posta",
+            "email1": "info@scenememory.com",
+            "email2": "support@scenememory.com",
+            "email_response": "24 saat içinde yanıt",
+            "follow_us": "Bizi Takip Edin",
+            "map_title": "Haritadaki Konumumuz",
+            "map_location": "Kahire, Mısır",
+            "open_map": "Haritayı Aç"
+        },
+        "faq": {
+            "title": "Sık Sorulan Sorular",
+            "subtitle": "En çok sorulan soruların cevapları"
+        },
+        "live_support": {
+            "title": "Canlı Destek",
+            "description": "Anında yardım için ekibimizden biriyle hemen konuşun",
+            "btn_chat": "Canlı Sohbete Başla",
+            "btn_schedule": "Görüşme Planla",
+            "available": "Şu anda 3 destek görevlisi müsait"
+        }
+    },
+    "contacts": {
+        "title": "Bize Ulaşın",
+        "description": "Etkinlik anılarınızla ilgili bir sorunuz mu var? Dünyanın her yerinde her anı korumanızda size yardımcı olmak için buradayız.",
+        "form": {
+            "fullName": "Tam Ad",
+            "fullNamePlaceholder": "Ahmet Yılmaz",
+            "emailAddress": "E-posta Adresi",
+            "emailPlaceholder": "merhaba@example.com",
+            "subject": "Konu",
+            "generalInquiry": "Genel Soru",
+            "support": "Teknik Destek",
+            "feedback": "Geri Bildirim",
+            "other": "Diğer",
+            "message": "Mesaj",
+            "messagePlaceholder": "Size nasıl yardımcı olabileceğimizi anlatın...",
+            "sendMessage": "Mesajı Gönder",
+            "successMessage": "Teşekkürler! Mesajınız başarıyla gönderildi."
+        },
+        "info": {
+            "emailUs": "Bize Yazın",
+            "available": "Ekibimiz haftanın 7 günü 24 saat hizmetinizde",
+            "visitStudio": "Stüdyomuzu Ziyaret Edin",
+            "address": "123 Anı Yolu, Teknoloji Mahallesi\nSan Francisco, California 94103",
+            "followJourney": "Yolculuğu Takip Et"
+        },
+        "map": {
+            "title": "Scene Memory Dünya Haritası",
+            "description": "140'tan fazla ülkede binlerce anıyı hayal edin."
+        }
+    },
+    "faq": {
+        "title": "Sık Sorulan Sorular",
+        "questions": {
+            "0": {
+                "question": "Bir anıyı nasıl eklerim?",
+                "answer": "Sadece fotoğraflarınızı yükleyin ve etkileşimli haritamızda konumu işaretleyin."
+            },
+            "1": {
+                "question": "Verilerim güvende mi?",
+                "answer": "Kurumsal düzeyde şifreleme kullanıyoruz, böylece özel anılarınız özel kalır."
+            },
+            "2": {
+                "question": "Albümleri paylaşabilir miyim?",
+                "answer": "Evet! Güvenli bağlantılar aracılığıyla arkadaşlarınız ve ailenizle işbirlikçi albümler oluşturabilirsiniz."
+            }
+        }
+    },
+    "eventForm": {
+        "chooseFiles": "Fotoğraflar / Videolar Seç",
+        "mediaCount": "Medya Sayısı",
+        "title": "Yeni Etkinlik Ekle",
+        "basicInfo": "Temel Bilgiler",
+        "locationCategory": "Konum ve Kategori",
+        "dates": "Tarihler",
+        "images": "Etkinlik Fotoğrafları",
+        "eventTitle": "Etkinlik Başlığı",
+        "description": "Açıklama",
+        "country": "Ülke",
+        "searchCountry": "Ülke ara...",
+        "selectCountry": "Ülke Seç",
+        "city": "Şehir",
+        "selectCity": "Şehir Seç",
+        "selectCityFirst": "Önce ülkeyi seçin",
+        "mainCategory": "Ana Kategori",
+        "subCategory": "Alt Kategori",
+        "selectSubFirst": "Önce kategoriyi seçin",
+        "selectLocationMap": "Haritada Konum Seç",
+        "selectedCoords": "Seçilen Koordinatlar: Lat: {lat} , Lng: {lng}",
+        "lat": "Enlem",
+        "lng": "Boylam",
+        "pleaseSelectLocation": "Lütfen haritada bir konum seçin",
+        "startDate": "Başlangıç Tarihi",
+        "endDate": "Bitiş Tarihi",
+        "startTime": "Başlangıç Saati",
+        "dragDropHere": "Fotoğrafları buraya tıklayın veya sürükleyin",
+        "formatsMax": "PNG • JPG • WEBP | her fotoğraf için max 5MB",
+        "chooseImages": "Fotoğraf Seç",
+        "addMore": "Daha Fazla Ekle",
+        "imagesCount": "{count} / 8 fotoğraf",
+        "remove": "Kaldır"
+    },
+    "commons": {
+        "required": "Zorunlu",
+        "cancel": "İptal",
+        "saveDraft": "Taslak Olarak Kaydet",
+        "create": "Etkinliği Oluştur",
+        "creating": "Oluşturuluyor...",
+        "choose": "Seç"
+    },
+    "eventss": {
+        "no_title": "Başlıksız Etkinlik",
+        "undefined_city": "Belirtilmemiş",
+        "from_map": "Haritadan"
+    },
+    "wishlist": {
+        "title": "Favori Listesi",
+        "loading": "Yükleniyor...",
+        "empty": {
+            "main": "Favori listenizde şu anda hiçbir öğe yok",
+            "hint": "Favori etkinliklerinizi eklemeye başlayın!"
+        },
+        "fallback_image_alt": "Etkinlik için varsayılan resim",
+        "uncategorized": "Kategorisiz",
+        "no_title": "Başlıksız",
+        "city_label": "Şehir:",
+        "date_label": "Tarih:",
+        "time_label": "Saat:",
+        "not_specified": "Belirtilmemiş",
+        "view_details": "Detayları Görüntüle",
+        "remove": "Favorilerden Kaldır",
+        "deleting": "Siliniyor...",
+        "added_at": "Eklendiği tarih",
+        "pagination": {
+            "previous": "Önceki",
+            "next": "Sonraki",
+            "page_info": "Sayfa {current} / {total}"
+        }
+    },
+    "terms": {
+        "title": "Kullanım Şartları",
+        "last_updated": "Son Güncelleme: 2026",
+        "acceptance_title": "Şartların Kabulü",
+        "acceptance_text": "Bu platformu kullanarak kullanım şartlarını ve geçerli tüm yasa ve yönetmelikleri kabul etmiş sayılırsınız.",
+        "accounts_title": "Kullanıcı Hesapları",
+        "accounts_text": "Kullanıcı, hesabının gizliliğinden ve hesabı üzerinden gerçekleştirilen tüm faaliyetlerden sorumludur.",
+        "content_title": "İçerik Mülkiyeti",
+        "content_text": "Platformdaki tüm içerikler (metinler, resimler, veriler dahil) fikri mülkiyet yasalarıyla korunmaktadır.",
+        "ai_title": "Yapay Zeka Kısıtlamaları",
+        "ai_text": "Platform içeriğinin yapay zeka modellerini eğitmek, makine öğrenimi sistemleri veya veri çıkarma için resmi lisans olmadan kullanılması yasaktır.",
+        "prohibited_title": "Yasaklanmış Kullanımlar",
+        "prohibited_text": "Kullanıcı, platformu kötüye kullanamaz, yetkisiz erişim denemesi yapamaz, veri çıkaramaz veya platformun çalışmasını engelleyemez.",
+        "liability_title": "Sorumluluk Sınırlaması",
+        "liability_text": "Platform, hizmetin kullanımından kaynaklanan herhangi bir dolaylı, tesadüfi veya sonuçsal zarardan sorumlu değildir.",
+        "changes_title": "Şartlarda Değişiklik",
+        "changes_text": "Kullanım şartlarını herhangi bir zamanda değiştirme veya güncelleme hakkını saklı tutarız.",
+        "contact_title": "İletişim",
+        "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
+    },
+    "plans": {
+        "chooseYourPlan": "Planınızı Seçin",
+        "getStarted": "Ücretsiz Başla",
+        "subscribe": "Şimdi Abone Ol",
+        "free": "Ücretsiz",
+        "ourPlans": "Abonelik Planları",
+        "noFeatures": "Ozellik Yok",
+        "mostPopular": "Popüler",
+        "noCreditCard": "Kredi kartı gerekmez",
+        "description": "Çeşitli planlarımız",
+        "price": "Fiyat",
+        "features": "Özellikler",
+        "cancelAnytime": "İstediğiniz zaman iptal edin",
+        "Monthly": "Aylık",
+        "Yearly": "Yıllık",
+        "unlimitedEvents": "Sınırsız etkinlik",
+        "addEvents": "Etkinlik ekleme"
+    },
+    "free": "Ücretsiz",
+    "basic": "Temel",
+    "professional": "Profesyonel",
+    "premium": "Premium"
+}

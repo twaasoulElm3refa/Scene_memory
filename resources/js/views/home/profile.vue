@@ -1,474 +1,549 @@
 <template>
-  <div class="max-w-4xl mx-auto p-4 md:p-8">
-    <div class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">ملفي الشخصي</h1>
-      <p class="text-gray-600">إدارة معلومات حسابك وتحديث كلمة المرور</p>
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">ملفي الشخصي</h1>
+            <p class="text-gray-600">إدارة معلومات حسابك وتحديث كلمة المرور</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+
+            <!-- Profile Header -->
+            <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b">
+                <div class="flex flex-col md:flex-row md:items-center justify-between">
+
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <div
+                            class="w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center text-white text-2xl font-bold mr-4 shadow-md">
+                            {{ getInitials(profile.name) }}
+                        </div>
+
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800">{{ profile.name || '—' }}</h2>
+                            <p class="text-gray-600">{{ profile.email || '—' }}</p>
+
+                            <div class="flex items-center mt-1 gap-2">
+                                <span
+                                    class="px-3 py-1 bg-emerald-100 text-emerald-800 text-sm font-medium rounded-full">
+                                    {{ profile.role || '—' }}
+                                </span>
+                                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                                    {{ profile.licenceType?.name ?? 'No Plan' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-gray-600 text-sm">آخر دخول</p>
+                        <p class="text-gray-800 font-medium">
+                            {{ formatDate(profile.last_login_at) }}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex overflow-x-auto border-b">
+                <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id" :class="[
+                    'flex-1 min-w-[150px] py-4 px-6 font-medium transition-colors',
+                    currentTab === tab.id
+                        ? 'border-b-2 border-emerald-500 text-emerald-600 bg-emerald-50/50'
+                        : 'text-gray-500 hover:text-emerald-500 hover:bg-gray-50'
+                ]">
+                    {{ tab.label }}
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 md:p-8">
+
+                <!-- TAB 1: معلومات المستخدم -->
+                <div v-if="currentTab === 1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Account Info -->
+                        <div class="bg-gray-50 rounded-xl p-6">
+                            <h3 class="text-lg font-bold mb-4">معلومات الحساب</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">الاسم</span>
+                                    <span class="font-medium">{{ profile.name || '—' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">الإيميل</span>
+                                    <span class="font-medium">{{ profile.email || '—' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">الهاتف</span>
+                                    <span class="font-medium">{{ profile.phone ?? 'غير متوفر' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">الدولة</span>
+                                    <span class="font-medium">{{ profile.country ?? 'غير متوفر' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">المنصب</span>
+                                    <span class="font-medium">{{ profile.position ?? 'غير متوفر' }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">تاريخ الميلاد</span>
+                                    <span class="font-medium">{{ profile.date_of_birth ?
+                                        formatDate(profile.date_of_birth) : 'غير متوفر' }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Info -->
+                        <div class="bg-gray-50 rounded-xl p-6">
+                            <h3 class="text-lg font-bold mb-4">معلومات النظام</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">ID</span>
+                                    <span class="font-medium">{{ profile.id || '—' }}</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-600">الدور</span>
+                                    <span class="font-medium">{{ profile.role || '—' }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">الحالة</span>
+                                    <span class="font-medium text-green-600">نشط</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Licence -->
+                    <div class="mt-6 bg-emerald-50 p-6 rounded-xl border border-emerald-200">
+                        <h3 class="font-bold mb-4 text-emerald-800">الباقة الحالية</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">نوع الباقة</span>
+                                <span class="font-bold">{{ profile.licenceType?.name ?? 'غير متوفر' }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">السعر</span>
+                                <span class="font-bold text-emerald-700">
+                                    {{ profile.licenceType?.price ? profile.licenceType.price + ' $' : '—' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: تعديل البيانات -->
+                <div v-if="currentTab === 2">
+                    <div class="max-w-2xl mx-auto">
+                        <h3 class="text-xl font-bold mb-6">تعديل بيانات الحساب</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
+                                <input v-model="editData.name" type="text"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
+                                    placeholder="أدخل اسمك الكامل" />
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                                <input v-model="editData.email" type="email"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
+                                    placeholder="example@email.com" />
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف</label>
+                                <input v-model="editData.phone" type="tel"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
+                                    placeholder="+20 123 456 789" />
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">الدولة</label>
+                                    <input v-model="editData.country" type="text"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
+                                        placeholder="مصر" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">المنصب / الوظيفة</label>
+                                    <input v-model="editData.position" type="text"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
+                                        placeholder="مهندس برمجيات" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الميلاد</label>
+                                <input v-model="editData.date_of_birth" type="date"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition" />
+                            </div>
+                        </div>
+
+                        <div class="mt-8 flex gap-4">
+                            <button @click="updateProfile" :disabled="isUpdatingProfile"
+                                class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 rounded-xl transition disabled:opacity-70">
+                                {{ isUpdatingProfile ? 'جاري الحفظ...' : 'حفظ التغييرات' }}
+                            </button>
+
+                            <button @click="resetEditForm"
+                                class="flex-1 border border-gray-300 hover:bg-gray-50 font-medium py-3.5 rounded-xl transition">
+                                إعادة تعيين
+                            </button>
+                        </div>
+
+                        <!-- Status Message -->
+                        <div v-if="statusMessage" :class="[
+                            'mt-6 p-4 rounded-xl text-center font-medium',
+                            statusMessageType === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+                        ]">
+                            {{ statusMessage }}
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="currentTab === 3">
+                    <div class="max-w-2xl mx-auto">
+                        <h3 class="text-xl font-bold mb-6">تحديث كلمة المرور</h3>
+
+                        <div class="space-y-6">
+
+                            <!-- current password -->
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    كلمة المرور الحالية
+                                </label>
+
+                                <input v-model="passwordData.current_password"
+                                    :type="showPassword ? 'text' : 'password'"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
+
+                                <button type="button" @click="showPassword = !showPassword"
+                                    class="absolute right-3 top-10 text-gray-500">
+                                    {{ showPassword ? '🚫👁️' : '👁️' }}
+                                </button>
+                            </div>
+
+                            <!-- new password -->
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    كلمة المرور الجديدة
+                                </label>
+
+                                <input v-model="passwordData.new_password" :type="showNewPassword ? 'text' : 'password'"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
+
+                                <button type="button" @click="showNewPassword = !showNewPassword"
+                                    class="absolute right-3 top-10 text-gray-500">
+                                    {{ showNewPassword ? '🚫👁️' : '👁️' }}
+                                </button>
+                            </div>
+
+                            <!-- confirm password -->
+                            <div class="relative">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    تأكيد كلمة المرور
+                                </label>
+
+                                <input v-model="passwordData.confirm_password"
+                                    :type="showConfirmPassword ? 'text' : 'password'"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
+
+                                <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                                    class="absolute right-3 top-10 text-gray-500">
+                                    {{ showConfirmPassword ? '🚫👁️' : '👁️' }}
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <!-- buttons -->
+                        <div class="mt-8 flex gap-4">
+                            <button @click="updatePassword" :disabled="isUpdatingPassword"
+                                class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 rounded-xl transition disabled:opacity-70">
+                                {{ isUpdatingPassword ? 'جاري التحديث...' : 'تحديث كلمة المرور' }}
+                            </button>
+                        </div>
+
+                        <!-- status -->
+                        <div v-if="passwordStatusMessage" :class="[
+                            'mt-6 p-4 rounded-xl text-center font-medium',
+                            passwordStatusType === 'success'
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : 'bg-red-100 text-red-700'
+                        ]">
+                            {{ passwordStatusMessage }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-
-    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-
-      <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b">
-        <div class="flex flex-col md:flex-row md:items-center justify-between">
-          <div class="flex items-center mb-4 md:mb-0">
-            <div
-              class="w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center text-white text-2xl font-bold mr-4 shadow-md">
-              {{ getInitials(profile.user.name) }}
-            </div>
-            <div>
-              <h2 class="text-xl font-bold text-gray-800">{{ profile.user.name }}</h2>
-              <p class="text-gray-600">{{ profile.user.email }}</p>
-              <div class="flex items-center mt-1">
-                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-sm font-medium rounded-full mr-2">
-                  {{ profile.user.role }}
-                </span>
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
-                  {{ profile.user.is_active ? 'مفعل' : 'غير مفعل' }}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="text-right">
-            <p class="text-gray-600 text-sm">آخر دخول</p>
-            <p class="text-gray-800 font-medium">{{ profile.user.last_login_at }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex overflow-x-auto border-b">
-        <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id" :class="[
-          'flex-1 min-w-[150px] py-4 px-2 md:px-6 font-medium text-sm md:text-base transition-all duration-300',
-          currentTab === tab.id
-            ? 'border-b-2 border-emerald-500 text-emerald-600 bg-emerald-50/50'
-            : 'text-gray-500 hover:text-emerald-500 hover:bg-gray-50'
-        ]">
-          <div class="flex items-center justify-center">
-            <span class="ml-2">{{ tab.icon }}</span>
-            <span>{{ tab.label }}</span>
-          </div>
-        </button>
-      </div>
-
-      <div class="p-6 md:p-8">
-        <div v-if="currentTab === 1" class="fade-in">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-gray-50 rounded-xl p-6">
-              <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                <span class="ml-2"></span> معلومات الحساب
-              </h3>
-              <div class="space-y-4">
-                <div class="flex justify-between items-center border-b pb-3">
-                  <span class="text-gray-600">الاسم الكامل</span>
-                  <span class="font-medium text-gray-800">{{ profile.user.name }}</span>
-                </div>
-                <div class="flex justify-between items-center border-b pb-3">
-                  <span class="text-gray-600">البريد الإلكتروني</span>
-                  <span class="font-medium text-gray-800">{{ profile.user.email }}</span>
-                </div>
-                <div class="flex justify-between items-center border-b pb-3">
-                  <span class="text-gray-600">الدور</span>
-                  <span class="font-medium text-gray-800">{{ profile.user.role }}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-600">حالة الحساب</span>
-                  <span :class="profile.user.is_active ? 'text-emerald-600 font-medium' : 'text-red-600 font-medium'">
-                    {{ profile.user.is_active ? 'مفعل' : 'غير مفعل' }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-gray-50 rounded-xl p-6">
-              <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                <span class="ml-2"></span> معلومات النظام
-              </h3>
-              <div class="space-y-4">
-                <div class="flex justify-between items-center border-b pb-3">
-                  <span class="text-gray-600">معرف المستخدم</span>
-                  <span class="font-medium text-gray-800">{{ profile.user.id }}</span>
-                </div>
-                <div class="flex justify-between items-center border-b pb-3">
-                  <span class="text-gray-600">آخر دخول</span>
-                  <span class="font-medium text-gray-800">{{ profile.user.last_login_at }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="currentTab === 2" class="fade-in">
-          <div class="max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold text-gray-800 mb-6">تعديل معلومات الحساب</h3>
-            <form @submit.prevent="updateProfile" class="space-y-6">
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <label class="block font-bold text-gray-700 mb-2">الاسم الكامل</label>
-                <input type="text" v-model="editData.name" placeholder="أدخل اسمك الكامل"
-                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                  required />
-                <p class="text-sm text-gray-500 mt-2">الاسم الذي سيظهر في التطبيق</p>
-              </div>
-
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <label class="block font-bold text-gray-700 mb-2">البريد الإلكتروني</label>
-                <input type="email" v-model="editData.email" placeholder="example@domain.com"
-                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                  required />
-                <p class="text-sm text-gray-500 mt-2">سيتم استخدام هذا البريد لتلقي الإشعارات</p>
-              </div>
-
-              <div class="flex justify-end space-x-3 space-x-reverse">
-                <button type="button" @click="resetEditForm"
-                  class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
-                  إلغاء
-                </button>
-                <button type="submit" :disabled="isUpdatingProfile"
-                  class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-lg hover:from-emerald-600 hover:to-teal-600 transition flex items-center disabled:opacity-50">
-                  <span v-if="isUpdatingProfile" class="ml-2">
-                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                      viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                      </path>
-                    </svg>
-                  </span>
-                  <span v-else>💾</span>
-                  <span class="mr-2">{{ isUpdatingProfile ? 'جاري الحفظ...' : 'حفظ التغييرات' }}</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div v-if="currentTab === 3" class="fade-in">
-          <div class="max-w-2xl mx-auto">
-            <h3 class="text-xl font-bold text-gray-800 mb-6">تغيير كلمة المرور</h3>
-            <form @submit.prevent="updatePassword" class="space-y-6">
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <label class="block font-bold text-gray-700 mb-2">كلمة المرور الحالية</label>
-                <div class="relative">
-                  <input :type="showCurrentPassword ? 'text' : 'password'" v-model="passwordData.current_password"
-                    placeholder="أدخل كلمة المرور الحالية"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                    required />
-                  <button type="button" @click="showCurrentPassword = !showCurrentPassword"
-                    class="absolute inset-y-0 right-3 flex items-center text-gray-500">
-                    {{ showCurrentPassword ? '👁️' : '👁️‍🗨️' }}
-                  </button>
-
-                </div>
-              </div>
-
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <label class="block font-bold text-gray-700 mb-2">كلمة المرور الجديدة</label>
-                <div class="relative">
-                  <input :type="showNewPassword ? 'text' : 'password'" v-model="passwordData.new_password"
-                    placeholder="أدخل كلمة المرور الجديدة"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                    required />
-                  <button type="button" @click="showNewPassword = !showNewPassword"
-                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-emerald-600 transition">
-                    {{ showNewPassword ? '👁️' : '👁️‍🗨️' }}
-                  </button>
-                </div>
-                <p class="text-sm text-gray-500 mt-2">يجب أن تحتوي على 8 أحرف على الأقل</p>
-              </div>
-
-              <div class="bg-gray-50 p-6 rounded-xl">
-                <label class="block font-bold text-gray-700 mb-2">تأكيد كلمة المرور الجديدة</label>
-                <div class="relative">
-                  <input :type="showConfirmPassword ? 'text' : 'password'" v-model="passwordData.confirm_password"
-                    placeholder="أعد إدخال كلمة المرور الجديدة"
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
-                    required />
-                  <button type="button" @click="showConfirmPassword = !showConfirmPassword"
-                    class="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-emerald-600 transition">
-                    {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
-                  </button>
-                </div>
-              </div>
-
-              <div class="flex justify-end space-x-3 space-x-reverse">
-                <button type="button" @click="resetPasswordForm"
-                  class="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition">
-                  إلغاء
-                </button>
-                <button type="submit" :disabled="isUpdatingPassword"
-                  class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-lg hover:from-emerald-600 hover:to-teal-600 transition flex items-center disabled:opacity-50">
-                  <span v-if="isUpdatingPassword" class="ml-2">
-                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                      viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                      </path>
-                    </svg>
-                  </span>
-                  <span v-else>🔒</span>
-                  <span class="mr-2">{{ isUpdatingPassword ? 'جاري التحديث...' : 'تحديث كلمة المرور' }}</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="statusMessage" class="mt-6 animate-slide-up">
-      <div :class="[
-        'p-4 rounded-xl border shadow-sm flex items-center',
-        statusMessageType === 'success'
-          ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-          : 'bg-red-50 border-red-200 text-red-800'
-      ]">
-        <span class="ml-3 text-xl">
-          {{ statusMessageType === 'success' ? '✅' : '⚠️' }}
-        </span>
-        <span class="flex-1">{{ statusMessage }}</span>
-        <button @click="clearStatusMessage" class="text-gray-500 hover:text-gray-700">
-          ✕
-        </button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
-import { getProfile, updateProfileAPI, updatePasswordAPI } from "@/services/userService";
-
+import { ref, onMounted } from "vue";
+import { getProfile, updateProfileAPI } from "@/services/userService";
+import { updatePasswordAPI } from "@/services/userService";
 export default {
-  name: "UserProfile",
-  setup() {
-    const showCurrentPassword = ref(false);
-    const showNewPassword = ref(false);
-    const showConfirmPassword = ref(false);
-    const isUpdatingProfile = ref(false);
-    const isUpdatingPassword = ref(false);
+    name: "UserProfile",
 
-    const profile = ref({
-      user: {
-        id: "",
-        name: "",
-        email: "",
-        role: "",
-        is_active: false,
-        memory_enabled: false,
-        last_login_at: "",
-      },
-      created_at: ""
-    });
+    setup() {
+        // Profile Data
+        const profile = ref({
+            id: "",
+            name: "",
+            email: "",
+            phone: null,
+            country: null,
+            position: null,
+            date_of_birth: null,
+            role: "",
+            last_login_at: null,
+            licenceType: null,
+        });
 
-    const tabs = [
-      { id: 1, label: "معلومات المستخدم", icon: ''},
-      { id: 2, label: "تعديل البيانات", icon:'' },
-      { id: 3, label: "تحديث كلمة المرور", icon: "" },
-    ];
+        // Edit Form Data
+        const editData = ref({
+            name: "",
+            email: "",
+            phone: "",
+            country: "",
+            position: "",
+            date_of_birth: "",
+        });
 
-    const currentTab = ref(1);
-    const statusMessage = ref("");
-    const statusMessageType = ref("success");
+        const originalEditData = ref({});
 
-    const editData = ref({
-      name: "",
-      email: "",
-    });
+        const tabs = [
+            { id: 1, label: "معلومات المستخدم" },
+            { id: 2, label: "تعديل البيانات" },
+            { id: 3, label: "تحديث كلمة المرور" },
+        ];
 
-    const originalEditData = ref({
-      name: "",
-      email: "",
-    });
+        const currentTab = ref(1);
+        const isUpdatingProfile = ref(false);
+        const statusMessage = ref("");
+        const statusMessageType = ref("success");
+        const passwordData = ref({
+            current_password: "",
+            new_password: "",
+            confirm_password: "",
+        });
 
-    const passwordData = ref({
-      current_password: "",
-      new_password: "",
-      confirm_password: "",
-    });
+        const isUpdatingPassword = ref(false);
+        const passwordStatusMessage = ref("");
+        const passwordStatusType = ref("success");
 
-    const getInitials = (name) => {
-      if (!name) return "U";
-      return name
-        .split(" ")
-        .map(word => word[0])
-        .join("")
-        .toUpperCase()
-        .substring(0, 2);
-    };
+        const showPassword = ref(false);
+        const showNewPassword = ref(false);
+        const showConfirmPassword = ref(false);
+        const updatePassword = async () => {
+            if (
+                !passwordData.value.current_password ||
+                !passwordData.value.new_password ||
+                !passwordData.value.confirm_password
+            ) {
+                passwordStatusMessage.value = "من فضلك املأ كل الحقول";
+                passwordStatusType.value = "error";
+                return;
+            }
 
-    const formatDate = (dateString) => {
-      console.log(dateString);
-      if (!dateString) return "غير محدد";
+            if (passwordData.value.new_password !== passwordData.value.confirm_password) {
+                passwordStatusMessage.value = "كلمة المرور غير متطابقة";
+                passwordStatusType.value = "error";
+                return;
+            }
 
-      const cleaned = dateString.replace(/\.\d+Z$/, 'Z');
+            isUpdatingPassword.value = true;
 
-      const date = new Date(cleaned);
+            try {
+                const res = await updatePasswordAPI(passwordData.value);
 
-      if (isNaN(date.getTime())) return "غير محدد";
+                passwordStatusMessage.value = res.message || "تم تحديث كلمة المرور بنجاح";
+                passwordStatusType.value = "success";
 
-      return date.toLocaleDateString('ar-EG', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-    };
+                // reset
+                passwordData.value = {
+                    current_password: "",
+                    new_password: "",
+                    confirm_password: "",
+                };
+            } catch (error) {
+                passwordStatusMessage.value =
+                    error.response?.data?.message || "حدث خطأ أثناء تحديث كلمة المرور";
+                passwordStatusType.value = "error";
+            } finally {
+                isUpdatingPassword.value = false;
+            }
+        };
 
-    const fetchProfile = async () => {
-      try {
-        const data = await getProfile();
-        profile.value = data;
-        editData.value.name = data.user.name;
-        editData.value.email = data.user.email;
-        originalEditData.value.name = data.user.name;
-        originalEditData.value.email = data.user.email;
-      } catch (error) {
-        console.error(error);
-        showStatusMessage("غير مصرح لك بالوصول إلى هذه البيانات", "error");
-      }
-    };
+        const getInitials = (name) => {
+            if (!name) return "U";
+            return name
+                .split(" ")
+                .map((word) => word.charAt(0))
+                .join("")
+                .toUpperCase()
+                .substring(0, 2);
+        };
 
-    const updateProfile = async () => {
-      if (editData.value.name === originalEditData.value.name &&
-        editData.value.email === originalEditData.value.email) {
-        showStatusMessage("لم تقم بإجراء أي تغييرات", "error");
-        return;
-      }
+        const fetchProfile = async () => {
+            try {
+                const res = await getProfile();
 
-      isUpdatingProfile.value = true;
-      try {
-        const data = await updateProfileAPI(editData.value);
-        showStatusMessage(data.message || "تم تحديث بياناتك بنجاح", "success");
-        fetchProfile();
-      } catch (error) {
-        console.error(error);
-        showStatusMessage("حدث خطأ أثناء تحديث البيانات", "error");
-      } finally {
-        isUpdatingProfile.value = false;
-      }
-    };
+                let userData = null;
+                if (res?.user) userData = res.user;
+                else if (res?.data?.user) userData = res.data.user;
 
-    const updatePassword = async () => {
-      if (passwordData.value.new_password !== passwordData.value.confirm_password) {
-        showStatusMessage("كلمة المرور الجديدة وتأكيدها غير متطابقين", "error");
-        return;
-      }
+                if (userData) {
+                    profile.value = { ...userData };
+                    editData.value = {
+                        name: userData.name || "",
+                        email: userData.email || "",
+                        phone: userData.phone || "",
+                        country: userData.country || "",
+                        position: userData.position || "",
+                        date_of_birth: userData.date_of_birth || "",
+                    };
 
-      if (passwordData.value.new_password.length < 8) {
-        showStatusMessage("كلمة المرور الجديدة يجب أن تحتوي على 8 أحرف على الأقل", "error");
-        return;
-      }
+                    originalEditData.value = { ...editData.value };
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        };
 
-      isUpdatingPassword.value = true;
-      try {
-        const data = await updatePasswordAPI(passwordData.value);
-        showStatusMessage(data.message || "تم تحديث كلمة المرور بنجاح", "success");
-        resetPasswordForm();
-      } catch (error) {
-        console.error(error);
-        showStatusMessage("حدث خطأ أثناء تحديث كلمة المرور", "error");
-      } finally {
-        isUpdatingPassword.value = false;
-      }
-    };
-    const resetEditForm = () => {
-      editData.value.name = originalEditData.value.name;
-      editData.value.email = originalEditData.value.email;
-    };
+        const formatDate = (dateString) => {
+            if (!dateString) return "غير متوفر";
 
-    const resetPasswordForm = () => {
-      passwordData.value.current_password = "";
-      passwordData.value.new_password = "";
-      passwordData.value.confirm_password = "";
-    };
+            try {
+                const date = new Date(dateString);
 
-    const showStatusMessage = (message, type = "success") => {
-      statusMessage.value = message;
-      statusMessageType.value = type;
-      setTimeout(() => {
-        if (statusMessage.value === message) {
-          statusMessage.value = "";
-        }
-      }, 5000);
-    };
+                if (isNaN(date.getTime())) return "غير متوفر";
 
-    const clearStatusMessage = () => {
-      statusMessage.value = "";
-    };
+                return date.toLocaleDateString("ar-EG", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                });
+            } catch {
+                return "غير متوفر";
+            }
+        };
+        const updateProfile = async () => {
+            if (JSON.stringify(editData.value) === JSON.stringify(originalEditData.value)) {
+                showStatusMessage("لم تقم بإجراء أي تغييرات", "error");
+                return;
+            }
 
-    onMounted(fetchProfile);
+            isUpdatingProfile.value = true;
 
-    return {
-      profile,
-      tabs,
-      currentTab,
-      editData,
-      passwordData,
-      statusMessage,
-      statusMessageType,
-      showCurrentPassword,
-      showNewPassword,
-      showConfirmPassword,
-      isUpdatingProfile,
-      isUpdatingPassword,
-      updateProfile,
-      updatePassword,
-      resetEditForm,
-      resetPasswordForm,
-      clearStatusMessage,
-      getInitials,
-      formatDate,
-    };
-  },
+            try {
+                const payload = { ...editData.value };
+                if (!payload.date_of_birth) payload.date_of_birth = null;
+                const response = await updateProfileAPI(payload);
+                showStatusMessage(response.message || "تم تحديث بياناتك بنجاح", "success");
+                await fetchProfile();
+            } catch (error) {
+                console.error(error);
+                showStatusMessage(error.response?.data?.message || "حدث خطأ أثناء تحديث البيانات", "error");
+            } finally {
+                isUpdatingProfile.value = false;
+            }
+        };
+
+        const resetEditForm = () => {
+            editData.value = { ...originalEditData.value };
+        };
+
+        const showStatusMessage = (message, type = "success") => {
+            statusMessage.value = message;
+            statusMessageType.value = type;
+
+            setTimeout(() => {
+                if (statusMessage.value === message) statusMessage.value = "";
+            }, 5000);
+        };
+
+        onMounted(fetchProfile);
+
+        return {
+            passwordData,
+            profile,
+            tabs,
+            currentTab,
+            editData,
+            isUpdatingProfile,
+            statusMessage,
+            statusMessageType,
+            getInitials,
+            formatDate,
+            showPassword,
+            showNewPassword,
+            showConfirmPassword,
+            updateProfile,
+            resetEditForm,
+            updatePassword,
+        };
+    },
 };
 </script>
 
 <style scoped>
 .fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-slide-up {
-  animation: slideUp 0.3s ease-out;
+    animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* تخصيص شريط التمرير للعلامات */
 ::-webkit-scrollbar {
-  height: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
+    background: #f1f1f1;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 10px;
+    background: #c1c1c1;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
+    background: #a1a1a1;
 }
 </style>

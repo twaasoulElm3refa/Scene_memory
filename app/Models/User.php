@@ -101,5 +101,10 @@ class User extends Authenticatable
     {
         return $this->hsone(Cart::class,'user_id');
     }
+
+    public function purchase()
+    {
+        return $this->hasMany(purchases::class,'user_id');
+    }
 }
 

@@ -19,13 +19,49 @@ class CitiesSeeder extends Seeder
                 'id' => 1,
                 'name' => 'الرياض',
                 'slug' => 'الرياض',
-                'country_id' => 192,
+                'country_id' => 148,
             ],
             [
                 'id'=> 2,
                 'name' => 'القاهرة',
                 'slug' => 'القاهرة',
-                'country_id' => 63,
+                'country_id' => 51,
+            ],
+            [
+                'id'=> 3,
+                'name' => 'الدقهلية',
+                'slug' => 'الدقهلية',
+                'country_id' => 51,
+            ],
+            [
+                'id'=> 4,
+                'name' => 'لندن',
+                'slug' => 'لندن',
+                'country_id' => 181,
+            ],
+            [
+                'id'=> 5,
+                'name' => 'بغداد',
+                'slug' => 'بغداد',
+                'country_id' => 78,
+            ],
+            [
+                'id'=> 6,
+                'name' => 'مدريد',
+                'slug' => 'مدريد',
+                'country_id' => 160,
+            ],
+            [
+                'id'=> 7,
+                'name' => 'باريس',
+                'slug' => 'باريس',
+                'country_id' => 59,
+            ],
+            [
+                'id'=> 8,
+                'name' => 'واشنطن',
+                'slug' => 'واشنطن',
+                'country_id' => 182,
             ],
         ];
 

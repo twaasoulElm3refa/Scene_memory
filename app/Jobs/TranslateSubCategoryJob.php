@@ -32,7 +32,7 @@ class TranslateSubCategoryJob implements ShouldQueue
             return;
         }
 
-        $locales = ['ar','en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
+        $locales = ['ar','en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi','tr'];
 
         foreach ($locales as $locale) {
 

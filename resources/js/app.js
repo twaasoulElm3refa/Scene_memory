@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import { createI18n } from "vue-i18n";
 
-// messages
+// messages Languages
 import ar from "./i18n/ar.json";
 import en from "./i18n/en.json";
 import fr from "./i18n/fr.json";
@@ -16,6 +16,7 @@ import ja from "./i18n/ja.json";
 import zh from "./i18n/zh.json";
 import fa from "./i18n/fa.json";
 import ur from "./i18n/ur.json";
+import tr from "./i18n/tr.json";
 
 // styles
 import "../css/app.css";
@@ -23,8 +24,6 @@ import "animate.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
-// bootstrap (مرة واحدة بس)
 import "./bootstrap";
 
 // components
@@ -47,9 +46,9 @@ const messages = {
     zh,
     fa,
     ur,
+    tr,
 };
 
-// ✅ ممنوع localStorage هنا نهائيًا
 const DEFAULT_LANG = "en";
 
 // تنظيف اللغة

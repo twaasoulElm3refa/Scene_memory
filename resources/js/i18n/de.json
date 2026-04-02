@@ -41,6 +41,7 @@
         "IT": "Italiano",
         "HI": "हिंदी",
         "ZH": "中文",
+        "TR": "Turkish",
         "FA": "فارسى",
         "JA": "日本語",
         "UR": "اردو"
@@ -425,6 +426,8 @@
     "plans": {
         "chooseYourPlan": "Wählen Sie Ihren Plan",
         "getStarted": "Kostenlos starten",
+         "noFeatures": "Keine Funktionen",
+        "mostPopular": "Am beliebtesten",
         "perMonth": "pro Monat",
         "prioritySupport": "Priorisierter Support",
         "securePayments": "Sichere Zahlungen",
