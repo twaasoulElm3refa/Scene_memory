@@ -119,29 +119,15 @@ const fetchDownloads = async () => {
     }
 };
 
+const openFile = (url) => {
+    const fullUrl = getUrl(url);
+    window.open(fullUrl, "_blank");
+};
+
 /* ---------------- DOWNLOAD FILE ---------------- */
-const downloadFile = async (url) => {
-    try {
-        const fullUrl = getUrl(url);
-
-        const response = await fetch(fullUrl);
-        const blob = await response.blob();
-
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-
-        const filename = url.split("/").pop();
-        link.download = filename;
-
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        window.URL.revokeObjectURL(link.href);
-
-    } catch (err) {
-        console.error("Download failed", err);
-    }
+const downloadFile = (url) => {
+    const fullUrl = getUrl(url);
+    window.open(fullUrl, "_blank");
 };
 
 /* ---------------- INIT ---------------- */
