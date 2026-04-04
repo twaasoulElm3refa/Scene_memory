@@ -46,6 +46,7 @@ import single_plan from "../views/admin/Licenses/single_plan.vue";
 import show_plan from "../views/home/show_plan.vue";
 import plans from "../views/home/plans.vue";
 import cart from "../views/home/cart.vue";
+import downloads from "../views/home/download.vue"
 
 const routes = [
     {
@@ -58,6 +59,12 @@ const routes = [
     {
         path: "/:lang/home",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/:lang/downloads",
+        component: downloads,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

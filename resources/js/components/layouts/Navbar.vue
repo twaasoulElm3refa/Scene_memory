@@ -81,8 +81,14 @@
 
                         <div v-if="dropdownOpen" class="dropdown-menu show shadow rounded mt-2 dropdown-dark"
                             style="position:absolute; right:0; top:100%; margin-top:8px; z-index:1000; min-width:150px;">
+
                             <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
                                 {{ $t("nav.profile") }}
+                            </RouterLink>
+
+                            <!-- ✅ NEW BUTTON -->
+                            <RouterLink class="dropdown-item" :to="localizedPath('/downloads')">
+                                {{ $t("nav.downloads") }}
                             </RouterLink>
 
                             <hr class="dropdown-divider" />

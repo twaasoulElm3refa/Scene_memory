@@ -16,6 +16,7 @@
     "view_all_comments": "Alle Kommentare anzeigen",
     "nav": {
         "favourites": "Favoriten",
+        "downloads": "Downloads",
         "plans": "Pläne",
         "more": "Mehr",
         "terms": "Allgemeine Gesellschaftsbedingungen",
@@ -426,7 +427,7 @@
     "plans": {
         "chooseYourPlan": "Wählen Sie Ihren Plan",
         "getStarted": "Kostenlos starten",
-         "noFeatures": "Keine Funktionen",
+        "noFeatures": "Keine Funktionen",
         "mostPopular": "Am beliebtesten",
         "perMonth": "pro Monat",
         "prioritySupport": "Priorisierter Support",

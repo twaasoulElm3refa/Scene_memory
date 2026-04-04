@@ -93,15 +93,17 @@ class AuthController extends Controller
             return $this->unauthorized('Unauthenticated.');
         }
 
-        $cacheKey = 'user_profile_' . $user->id;
         $cart=cart::where('user_id', $user->id)->first();
         if(! $cart) {
             $cart=cart::create([
                 "user_id" => $user->id
             ]);
         }
+
+        $cacheKey = 'user_profile_' . $user->id;
         $items=cartItems::where('cart_id', $cart->id)->count();
-        $cachedProfile = Cache::tags(['user_profile'])->remember($cacheKey, 60, function () use ($user,$items) {
+        $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
+         ->remember($cacheKey, 60, function () use ($user, $items) {
             $user->load('licenceType');
 
             return [
@@ -210,9 +212,7 @@ class AuthController extends Controller
 
         $user->update($validated);
 
-        $cacheKey = 'user_profile_' . $user->id;
-
-        Cache::tags(['user_profile'])->forget($cacheKey);
+        Cache::tags(['user_profile', 'user_'.$user->id])->flush();
 
         return $this->success($user , 'User updated Successfully');
     }
@@ -243,4 +243,7 @@ class AuthController extends Controller
             'message' => 'Password updated successfully.',
         ]);
     }
+
+
+
 }

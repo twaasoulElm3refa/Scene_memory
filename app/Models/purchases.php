@@ -13,4 +13,9 @@ class purchases extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function items()
+    {
+        return $this->hasMany(purchase_items::class,'purchase_id');
+    }
 }

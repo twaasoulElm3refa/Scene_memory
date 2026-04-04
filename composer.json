@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
         "predis/predis": "^3.4",
+        "srmklive/paypal": "~3.0",
         "stichoza/google-translate-php": "^5.3",
         "symfony/intl": "^7.4"
     },

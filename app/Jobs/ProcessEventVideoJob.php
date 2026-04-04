@@ -27,15 +27,18 @@ class ProcessEventVideoJob implements ShouldQueue
 
     public function handle()
     {
+        $event = Events::find($this->eventId);
         $fileContents = Storage::disk('public')->get($this->filePath);
         $finalPath = 'videos/' . basename($this->filePath);
         Storage::disk('public')->put($finalPath, $fileContents);
         eventsImges::create([
             'event_id' => $this->eventId,
-            'url' => $finalPath,
+            'full_url' => $finalPath,
+            'price'=>15,
             'is_active' => 1,
         ]);
-        $this->clearEventsCache(Events::find($this->eventId)->slug);
+        $this->clearEventsCache($this->eventId);
+        $this->clearEventCache($this->eventId);
         Storage::disk('public')->delete($this->filePath);
     }
 
@@ -47,5 +50,12 @@ class ProcessEventVideoJob implements ShouldQueue
             Cache::forget("events_single_{$slug}_".$locale);
         }
         Cache::flush();
+    }
+
+    public function clearEventCache(string $slug): void
+    {
+        Cache::tags(['events'])->forget(
+            'event_' . strtolower(trim($slug)) . '_' . app()->getLocale()
+        );
     }
 }

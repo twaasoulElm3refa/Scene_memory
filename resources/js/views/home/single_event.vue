@@ -84,7 +84,7 @@
 
                                 <!-- VIDEO -->
                                 <video v-else :src="getMediaUrl(media.full_url)" class="w-full h-full object-cover"
-                                    muted loop playsinline preload="metadata">
+                                    autoplay muted loop playsinline preload="metadata">
                                 </video>
 
                                 <!-- DARK OVERLAY -->
@@ -319,7 +319,7 @@
                                                     :disabled="replyLoading[comment.id] || !replyTexts[comment.id]?.trim()"
                                                     class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                                                     <span v-if="replyLoading[comment.id]">{{ $t('sending') || ''
-                                                        }}</span>
+                                                    }}</span>
                                                     <span v-else>{{ $t('send_reply') || 'إرسال الرد' }}</span>
                                                 </button>
                                             </div>
@@ -365,7 +365,7 @@
                                             <button type="submit" :disabled="commentLoading || !newComment.trim()"
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
                                                 <span v-if="commentLoading">{{ $t('event.sending_comment') || ''
-                                                    }}</span>
+                                                }}</span>
                                                 <span v-else>{{ $t('event.submit_comment') || 'إرسال التعليق' }}</span>
                                             </button>
                                         </div>
@@ -408,7 +408,7 @@
                                             <span class="text-xl mt-0.5">📅</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.from_date')
-                                                    }}</p>
+                                                }}</p>
                                                 <p class="font-medium">{{ formatDate(event.start_date) }}</p>
                                             </div>
                                         </div>
@@ -424,7 +424,7 @@
                                             <span class="text-xl mt-0.5">🕒</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.time_label')
-                                                    }}</p>
+                                                }}</p>
                                                 <p class="font-medium">{{ event.time || $t('event.time_default') }}</p>
                                             </div>
                                         </div>
@@ -432,7 +432,7 @@
                                             <span class="text-xl mt-0.5">📍</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.location')
-                                                    }}</p>
+                                                }}</p>
                                                 <p class="font-medium">{{ event.city?.translation.name ||
                                                     $t('event.city_default') }}</p>
                                             </div>
@@ -441,7 +441,7 @@
                                             <span class="text-xl mt-0.5">👤</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
-                                                    }}</p>
+                                                }}</p>
                                                 <p class="font-medium">{{ event.user.name }}</p>
                                             </div>
                                         </div>

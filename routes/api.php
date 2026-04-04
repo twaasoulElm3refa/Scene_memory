@@ -17,10 +17,9 @@ use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
-use App\Http\Controllers\api\auth\AppleAuthController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
-use App\Http\Controllers\api\auth\SocialAuthController;
+use App\Http\Controllers\api\auth\DownloadController;
 use App\Http\Controllers\api\home\CartController;
 use App\Http\Controllers\api\home\CategoryController;
 use App\Http\Controllers\api\home\CitiesController;
@@ -36,6 +35,7 @@ use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\payment\PurchaseController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
@@ -67,6 +67,7 @@ Route::prefix('v1')->group(function () {
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
+            Route::get('/downloads', [DownloadController::class, 'downloads']);
             Route::post('/update-profile', [AuthController::class, 'updateProfile']);
             Route::put('/password', [AuthController::class, 'updatePassword']);
         });
@@ -307,6 +308,10 @@ Route::prefix('v1')->group(function () {
         Route::post('/', [PurchaseController::class,'purchase']);
         //127
     });
-    // 126 Endpoints for the API
+
+    Route::post('/pay', [PaymentController::class, 'pay'])->middleware('auth:sanctum');
+    Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success')->middleware('auth:sanctum');
+    Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel')->middleware('auth:sanctum');
+    // 127 Endpoints for the API
 });
 

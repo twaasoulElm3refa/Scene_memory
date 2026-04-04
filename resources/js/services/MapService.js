@@ -195,16 +195,13 @@ export default class MapService {
                                 },
                             });
                         } else {
-                            // fallback (لو router مش موجود)
                             window.location.href = `/${this._currentLang}/single_event/${event.slug}`;
                         }
-
                         popup.remove();
                         this._activePopup = null;
                     });
                 }
             });
-
             if (isFullscreen) {
                 this.fullEventMarkers.push(marker);
             } else {
@@ -524,7 +521,7 @@ export default class MapService {
         el.style.cursor = "pointer";
         el.innerHTML = `
       <svg viewBox="0 0 24 24" width="36" height="36">
-        <path fill="#1e88e5" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+        <path fill="#000000" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
         <circle cx="12" cy="9" r="2.5" fill="white"/>
       </svg>
     `;

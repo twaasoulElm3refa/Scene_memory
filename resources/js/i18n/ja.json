@@ -27,6 +27,7 @@
         "addEvent": "イベントを追加",
         "wishlist": "お気に入り",
         "profile": "プロフィール",
+        "downloads": "ダウンロード",
         "logout": "ログアウト",
         "login": "ログイン"
     },
