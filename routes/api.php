@@ -29,6 +29,7 @@ use App\Http\Controllers\api\home\CommentReplyController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
+use App\Http\Controllers\api\home\GateController;
 use App\Http\Controllers\api\webhook\WebhookController;
 use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
@@ -317,5 +318,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success');
     Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel');
     Route::post('/paypal/webhook', [WebhookController::class, 'handle'])->name('paypal.webhook');
+
+    Route::prefix('gate')->middleware('auth:sanctum')->group(function () {
+       Route::get('/random', [GateController::class, 'random']);
+       Route::post('/{country}/stats', [GateController::class, 'country']);
+    });
 });
 

@@ -47,6 +47,7 @@ import show_plan from "../views/home/show_plan.vue";
 import plans from "../views/home/plans.vue";
 import cart from "../views/home/cart.vue";
 import downloads from "../views/home/download.vue"
+import gate from "../views/home/gate.vue"
 
 const routes = [
     {
@@ -65,6 +66,12 @@ const routes = [
     {
         path: "/:lang/downloads",
         component: downloads,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/:lang/scemory-gate",
+        component: gate,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

@@ -15,10 +15,34 @@
                     {{ $t(link.labelKey) }}
                 </RouterLink>
 
+
+
                 <RouterLink :to="localizedPath('/plans')" class="nav-link px-2" :class="{ active: isActive('plans') }">
                     {{ $t('nav.plans') }}
                 </RouterLink>
 
+                 <!-- ✅ Events Dropdown -->
+                <div class="position-relative">
+                    <button class="nav-link px-2 d-flex align-items-center gap-1" @click="eventsOpen = !eventsOpen">
+                        {{ $t('nav.events') }}
+                        <i class="bi transition" :class="eventsOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                    </button>
+
+                    <transition name="fade-slide">
+                        <div v-if="eventsOpen" class="dropdown-menu show shadow rounded mt-2 p-2"
+                            style="position:absolute; right:0; top:100%; z-index:1000; min-width:220px;">
+                            <RouterLink class="dropdown-item" :to="localizedPath('/all_events')">
+                                {{ $t('nav.allEvents') }}
+                            </RouterLink>
+                            <RouterLink v-if="isLoggedIn" class="dropdown-item" :to="localizedPath('/add_event')">
+                                {{ $t('nav.addEvent') }}
+                            </RouterLink>
+                            <RouterLink v-if="isLoggedIn" class="dropdown-item" :to="localizedPath('/historical')">
+                                {{ $t('nav.historical') }}
+                            </RouterLink>
+                        </div>
+                    </transition>
+                </div>
                 <div class="position-relative">
                     <button class="nav-link px-2 d-flex align-items-center gap-1" @click="moreOpen = !moreOpen">
                         {{ $t('nav.more') }}
@@ -171,7 +195,7 @@ const routeLang = computed(() => (route.params.lang || "en").toLowerCase());
 const currentLanguage = computed(() => routeLang.value.toUpperCase());
 
 const isArabic = computed(() => routeLang.value === "ar");
-
+const eventsOpen = ref(false);
 /* Sync i18n + axios + localStorage with URL */
 watch(
     routeLang,
@@ -209,8 +233,7 @@ const selectLanguage = async (lang) => {
 const allLinks = [
     { labelKey: "nav.home", path: "/home", active: "home" },
     { labelKey: "nav.allEvents", path: "/all_events", active: "all_events" },
-    { labelKey: "nav.addEvent", path: "/add_event", active: "add_event" },
-    { labelKey: "nav.historical", path: "/historical", active: "historical" },
+    { labelKey: "nav.scemoryGate", path: "/scemory-gate", active: "scemory-gate" },
 ];
 
 const links = computed(() => {
