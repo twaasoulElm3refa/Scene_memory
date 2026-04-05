@@ -18,4 +18,18 @@ class purchases extends Model
     {
         return $this->hasMany(purchase_items::class,'purchase_id');
     }
+
+    protected $casts = [
+        'gateway_response' => 'array',
+        'paid_at'          => 'datetime',
+        'amount'           => 'decimal:2',
+    ];
+
+    public function scopePending($q)   { return $q->where('status', 'pending'); }
+    public function scopeCompleted($q) { return $q->where('status', 'completed'); }
+
+    // ── Helpers ────────────────────────────────────────────────────────────────
+
+    public function isPending(): bool   { return $this->status === 'pending'; }
+    public function isCompleted(): bool { return $this->status === 'completed'; }
 }

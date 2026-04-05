@@ -15,13 +15,19 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class,'user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->decimal('total',8,2)->nullable()->default(0);
-            $table->string('status')->nullable();
-            $table->string('payment_status')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('transaction_id')->nullable();
-            $table->string('currency')->nullable();
-            $table->string('notes')->nullable();
+            $table->string('transaction_id')->nullable()->unique();
+            $table->string('status')->nullable();
+            $table->string('currency',10)->nullable();
+            $table->string('payment_status')->nullable();
+            $table->decimal('amount',8,2)->nullable()->default(0);
+            $table->string('paypal_order_id')->nullable()->unique();
+            $table->string('description')->nullable();
+            $table->string('idempotency_key')->unique();
+            $table->string('payer_email')->nullable();
+            $table->json('gateway_response')->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->index(['status', 'created_at']);
             $table->timestamps();
         });
     }

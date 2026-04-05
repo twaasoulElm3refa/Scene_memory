@@ -30,19 +30,24 @@ class MediaRequestController extends Controller
 
     public function upload(UploadMediaRequest $request, ImageAnalysisService $imageAnalysisService)
     {
-        $event = Events::findOrFail(request('id'));
+        $event = Events::findOrFail($request->id);
         $createdMedia = [];
 
-        $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+        $manager = new \Intervention\Image\ImageManager(
+            new \Intervention\Image\Drivers\Gd\Driver()
+        );
 
         if ($request->hasFile('url')) {
+
             foreach ($request->file('url') as $file) {
 
                 $mime = $file->getMimeType();
 
+                // =======================
+                // 📸 IMAGE
+                // =======================
                 if (str_starts_with($mime, 'image/')) {
 
-                    // 🔥 تحليل الصورة (نفس create function)
                     $analysis = $imageAnalysisService->process($file, $manager);
 
                     $image = $analysis['image'];
@@ -52,70 +57,52 @@ class MediaRequestController extends Controller
                     $plan = $analysis['plan'];
 
                     $filename = uniqid() . '.jpg';
-
                     $fullPath = 'events/full/' . $filename;
-                    $previewPath = 'events/previews/' . $filename;
 
-                    // حفظ الصورة الأصلية
+                    // حفظ الصورة فقط (no preview)
                     \Storage::disk('public')->put(
                         $fullPath,
                         $image->toJpeg(90)
                     );
 
-                    // Preview (blur + watermark)
-                    $preview = $manager->read($file)
-                        ->blur(25)
-                        ->pixelate(10);
-
-                    $watermarkPath = public_path('images/watermark.png');
-
-                    if (file_exists($watermarkPath)) {
-                        $preview->place($watermarkPath, 'bottom-right', 15, 15);
-                    }
-
-                    $preview->text('PREVIEW', 50, 50, function ($font) {
-                        $font->size(40);
-                        $font->color('#ffffff');
-                        $font->angle(-30);
-                    });
-
-                    \Storage::disk('public')->put(
-                        $previewPath,
-                        $preview->toJpeg(80)
-                    );
-
                     $media = eventsImges::create([
-                        'event_id' => $event->id,
-                        'preview_url' => $previewPath,
-                        'full_url' => $fullPath,
-                        'width' => $width,
-                        'height' => $height,
-                        'size' => $width * $height,
-                        'price' => $price,
+                        'event_id'     => $event->id,
+                        'full_url'     => $fullPath,
+                        'width'        => $width,
+                        'height'       => $height,
+                        'size'         => $width * $height,
+                        'price'        => $price,
                         'licence_type' => $plan,
-                        'is_active' => 1
+                        'is_active'    => 1
                     ]);
 
                     $createdMedia[] = $media;
 
-                } elseif (str_starts_with($mime, 'video/')) {
+                }
 
-                    $path = $file->store('videos_temp', 'public');
+                // =======================
+                // 🎥 VIDEO
+                // =======================
+                elseif (str_starts_with($mime, 'video/')) {
 
+                    $path = $file->store('events/videos', 'public');
                     ProcessEventVideoJob::dispatch($event->id, $path);
 
                     $media = eventsImges::create([
-                        'event_id' => $event->id,
-                        'url' => $path,
+                        'event_id'  => $event->id,
+                        'full_url'  => $path, // ✅ بدل url
                         'is_active' => 1
                     ]);
 
                     $createdMedia[] = $media;
                 }
             }
+
             Cache::tags(['events'])->flush();
         }
 
-        return $this->success($createdMedia, 'تم إضافة الوسائط بنجاح');
+        return $this->success([
+            'media' => $createdMedia
+        ], 'تم إضافة الوسائط بنجاح');
     }
 }

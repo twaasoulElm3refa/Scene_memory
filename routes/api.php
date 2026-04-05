@@ -29,19 +29,21 @@ use App\Http\Controllers\api\home\CommentReplyController;
 use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
+use App\Http\Controllers\api\webhook\WebhookController;
 use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\payment\PurchaseController;
-use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\api\payment\PaymentController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnEvent;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::prefix('v1')->group(function () {
 
@@ -309,9 +311,11 @@ Route::prefix('v1')->group(function () {
         //127
     });
 
-    Route::post('/pay', [PaymentController::class, 'pay'])->middleware('auth:sanctum');
-    Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success')->middleware('auth:sanctum');
-    Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel')->middleware('auth:sanctum');
-    // 127 Endpoints for the API
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/pay', [PaymentController::class, 'pay']);
+    });
+    Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success');
+    Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel');
+    Route::post('/paypal/webhook', [WebhookController::class, 'handle'])->name('paypal.webhook');
 });
 
