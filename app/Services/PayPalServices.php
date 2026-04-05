@@ -15,15 +15,10 @@ class PayPalServices implements PaymentInterface
 
     public function __construct()
     {
-        Log::info('PayPalServices: Constructor initialized');
 
         $this->provider = new PayPalClient;
         $this->provider->setApiCredentials(config('paypal'));
-
-        Log::info('PayPalServices: Getting access token...');
         $this->provider->getAccessToken();
-
-        Log::info('PayPalServices: Service ready with access token');
     }
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -32,17 +27,10 @@ class PayPalServices implements PaymentInterface
 
     public function pay(array $data): array
     {
-        Log::info('PayPalServices: pay() method called', [
-            'user_id'         => $data['user_id'] ?? null,
-            'amount'          => $data['amount'],
-            'description'     => $data['description'] ?? null,
-            'idempotency_key' => $data['idempotency_key'] ?? 'generated'
-        ]);
 
         $key = $data['idempotency_key']
             ?? md5(($data['user_id'] ?? 'guest') . '|' . $data['amount'] . '|' . now()->format('Ymd'));
 
-        Log::info('PayPalServices: Using idempotency key', ['idempotency_key' => $key]);
 
         // ── Idempotency check ─────────────────────────────────────────────────
         $existing = purchases::where('idempotency_key', $key)
@@ -50,19 +38,12 @@ class PayPalServices implements PaymentInterface
             ->first();
 
         if ($existing && $existing->paypal_order_id) {
-            Log::info('PayPalServices: Idempotent request detected - returning existing order', [
-                'order_id' => $existing->id,
-                'paypal_order_id' => $existing->paypal_order_id
-            ]);
-
             $approvalUrl = $this->getApprovalUrl($existing->paypal_order_id);
             return ['order' => $existing, 'approval_url' => $approvalUrl];
         }
 
         // ── Atomic: Save pending order first ──────────────────────────────────
         return DB::transaction(function () use ($data, $key) {
-
-            Log::info('PayPalServices: Starting DB transaction for new order creation');
 
             $order = purchases::create([
                 'idempotency_key' => $key,
@@ -72,15 +53,6 @@ class PayPalServices implements PaymentInterface
                 'description'     => $data['description'] ?? 'Order Payment',
                 'status'          => 'pending',
             ]);
-
-            Log::info('PayPalServices: Local order created', [
-                'local_order_id' => $order->id,
-                'amount'         => $order->amount,
-                'user_id'        => $order->user_id
-            ]);
-
-            // ── Call PayPal ───────────────────────────────────────────────────
-            Log::info('PayPalServices: Calling PayPal createOrder API...');
 
             $paypalOrder = $this->provider->createOrder([
                 'intent' => 'CAPTURE',
@@ -98,15 +70,8 @@ class PayPalServices implements PaymentInterface
                 ]],
             ]);
 
-            Log::info('PayPalServices: PayPal createOrder response received', [
-                'paypal_order_id' => $paypalOrder['id'] ?? null,
-                'status'          => $paypalOrder['status'] ?? null,
-            ]);
-
             if (!isset($paypalOrder['id']) || $paypalOrder['status'] !== 'CREATED') {
-                Log::error('PayPalServices: PayPal order creation failed', [
-                    'response' => $paypalOrder
-                ]);
+
                 throw new Exception('PayPal order creation failed: ' . json_encode($paypalOrder));
             }
 
@@ -116,18 +81,9 @@ class PayPalServices implements PaymentInterface
                 'gateway_response' => $paypalOrder,
             ]);
 
-            Log::info('PayPalServices: PayPal order ID saved to local order', [
-                'local_order_id'  => $order->id,
-                'paypal_order_id' => $paypalOrder['id']
-            ]);
-
             $approvalUrl = collect($paypalOrder['links'])
                 ->firstWhere('rel', 'approve')['href']
                 ?? throw new Exception('Approval URL not found in PayPal response.');
-
-            Log::info('PayPalServices: Approval URL extracted successfully', [
-                'approval_url' => $approvalUrl
-            ]);
 
             return ['order' => $order->fresh(), 'approval_url' => $approvalUrl];
         });
@@ -139,41 +95,23 @@ class PayPalServices implements PaymentInterface
 
     public function success(string $token): array
     {
-        Log::info('PayPalServices: success() method called', [
-            'token_preview' => substr($token, 0, 15) . '...'
-        ]);
 
         $order = purchases::where('paypal_order_id', $token)
             ->lockForUpdate()
             ->firstOrFail();
 
-        Log::info('PayPalServices: Order found for success callback', [
-            'order_id' => $order->id,
-            'current_status' => $order->status
-        ]);
 
         if ($order->isCompleted()) {
-            Log::info('PayPalServices: Order already completed - skipping', ['order_id' => $order->id]);
             return ['success' => true, 'message' => 'Already completed.', 'order' => $order];
         }
 
         if (!$order->isPending()) {
-            Log::warning('PayPalServices: Invalid order state for success', [
-                'order_id' => $order->id,
-                'status'   => $order->status
-            ]);
             throw new Exception("Order #{$order->id} is in invalid state: {$order->status}");
         }
 
         DB::transaction(function () use ($order) {
             $order->update(['status' => 'approved']);
-            Log::info('PayPalServices: Order status updated to approved', ['order_id' => $order->id]);
         });
-
-        Log::info('PayPalServices: success() completed successfully', [
-            'order_id' => $order->id,
-            'message'  => 'Awaiting webhook confirmation'
-        ]);
 
         return [
             'success'  => true,
@@ -202,7 +140,6 @@ class PayPalServices implements PaymentInterface
 
    private function onCaptureCompleted(array $resource): void
     {
-        Log::info('PayPalServices: Processing PAYMENT.CAPTURE.COMPLETED');
 
         $referenceId   = $resource['purchase_units'][0]['reference_id'] ?? null;
         $captureId     = $resource['purchase_units'][0]['payments']['captures'][0]['id']
@@ -210,11 +147,6 @@ class PayPalServices implements PaymentInterface
                         ?? null;
         $paypalOrderId = $resource['id'] ?? null;
 
-        Log::info('PayPalServices: Extracted IDs from webhook', [
-            'reference_id'    => $referenceId,
-            'paypal_order_id' => $paypalOrderId,
-            'capture_id'      => $captureId,
-        ]);
 
         $order = null;
 
@@ -254,24 +186,13 @@ class PayPalServices implements PaymentInterface
                 'gateway_response' => $resource,
                 'paid_at'          => now(),
             ]);
-
-            Log::info('PayPalServices: Order updated to completed in transaction', [
-                'order_id'       => $order->id,
-                'transaction_id' => $capture['id'] ?? null,
-            ]);
         });
-
-        Log::info("PayPalServices: Order #{$order->id} successfully completed via webhook", [
-            'transaction_id' => $order->transaction_id,
-            'payer_email'    => $order->payer_email,
-        ]);
 
         // event(new PaymentCompleted($order));
     }
 
     private function onCaptureDeclined(array $resource): void
     {
-        Log::info('PayPalServices: Processing PAYMENT.CAPTURE.DECLINED');
 
         $paypalOrderId = $resource['supplementary_data']['related_ids']['order_id']
                       ?? $resource['id']
@@ -306,7 +227,6 @@ class PayPalServices implements PaymentInterface
 
     public function cancel(): array
     {
-        Log::info('PayPalServices: cancel() method called');
 
         return [
             'success' => false,
@@ -358,8 +278,6 @@ class PayPalServices implements PaymentInterface
         $approvalUrl = collect($details['links'] ?? [])
             ->firstWhere('rel', 'approve')['href']
             ?? throw new Exception("Cannot retrieve approval URL for order: {$paypalOrderId}");
-
-        Log::info('PayPalServices: Approval URL retrieved successfully');
 
         return $approvalUrl;
     }

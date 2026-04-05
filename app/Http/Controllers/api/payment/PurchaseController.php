@@ -27,7 +27,7 @@ class PurchaseController extends Controller
         $cart = cart::where("user_id", $user->id)->first();
         $items = cartItems::where("cart_id", $cart->id)->get();
         $purchase = purchases::create([
-            "user_id" => $user->id,
+            "user_id" => $user,
         ]);
         foreach ($items as $item) {
             $total += $item->price;
