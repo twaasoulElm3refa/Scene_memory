@@ -45,7 +45,7 @@ class PayPalServices implements PaymentInterface
         // ── Atomic: Save pending order first ──────────────────────────────────
         return DB::transaction(function () use ($data, $key) {
 
-            $order = purchases::create([
+            $order = purchases::firstOrCreate([
                 'idempotency_key' => $key,
                 'user_id'         => $data['user_id'] ?? null,
                 'amount'          => $data['amount'],

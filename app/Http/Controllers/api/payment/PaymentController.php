@@ -92,6 +92,9 @@ class PaymentController extends Controller
                     "price" => $item->price,
                 ]);
             }
+
+            cartItems::where('cart_id', $cart->id)->delete();
+
             $this->clearCartCache($user);
 
             return redirect('/en/downloads');
