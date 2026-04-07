@@ -81,6 +81,24 @@ class CitiesSeeder extends Seeder
                 'slug' => 'شانغهاي',
                 'country_id' => 36,
             ],
+            [
+                'id'=> 12,
+                'name' => 'ميلان',
+                'slug' => 'ميلان',
+                'country_id' => 80,
+            ],
+            [
+                'id'=> 13,
+                'name' => 'برلين',
+                'slug' => 'برلين',
+                'country_id' => 63,
+            ],
+            [
+                'id'=> 13,
+                'name' => 'أثينا',
+                'slug' => 'أثينا',
+                'country_id' => 65,
+            ],
         ];
 
         foreach ($cities as $city) {

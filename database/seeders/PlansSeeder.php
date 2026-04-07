@@ -15,19 +15,19 @@ class PlansSeeder extends Seeder
         $plans = [
             [
                 'id' => 1,
-                'price' => 5,
+                'price' => 25,
                 'name' => 'basic',
                 'slug' => Str::slug('basic').'-'.time(),
             ],
             [
                 'id' => 2,
-                'price' => 10,
+                'price' => 50,
                 'name' => 'professional',
                 'slug' => Str::slug('professional').'-'.time(),
             ],
             [
                 'id' => 3,
-                'price' => 20,
+                'price' => 100,
                 'name' => 'premium',
                 'slug' => Str::slug('premium').'-'.time(),
             ],
@@ -35,7 +35,6 @@ class PlansSeeder extends Seeder
 
         foreach ($plans as $plan) {
             $createdPlan = licenceType::create($plan);
-
             PlanTranslations::create([
                 'plan_id' => $createdPlan->id,
                 'locale' => 'en',

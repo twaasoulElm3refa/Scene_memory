@@ -49,7 +49,6 @@ class AdminPlanController extends Controller
         }
     }
 
-
     public function update()
     {
         $data=request()->all();

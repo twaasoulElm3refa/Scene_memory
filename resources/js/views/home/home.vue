@@ -293,7 +293,7 @@
                             </li>
                         </ul>
 
-                        <button @click="$router.push(`/plan/${plan.slug}`)" :class="[
+                        <button @click="$router.push(`/{lang}/plan/${plan.slug}`)" :class="[
                             'w-full py-2.5 rounded-lg font-semibold text-sm transition-all',
                             plan.name === 'free'
                                 ? 'bg-gray-100 hover:bg-gray-200 text-gray-900 border'
@@ -771,6 +771,7 @@ const goToProfile = () => {
 
 const subscribe = async (planId) => {
     const token = localStorage.getItem("auth_token");
+    const lang = localStorage.getItem("language") || "en";
 
     if (!token) {
         alert("Please login first");

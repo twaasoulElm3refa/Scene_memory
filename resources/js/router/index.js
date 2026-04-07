@@ -48,6 +48,7 @@ import plans from "../views/home/plans.vue";
 import cart from "../views/home/cart.vue";
 import downloads from "../views/home/download.vue"
 import gate from "../views/home/gate.vue"
+import country_data from "../views/home/country_data.vue"
 
 const routes = [
     {
@@ -72,6 +73,12 @@ const routes = [
     {
         path: "/:lang/scemory-gate",
         component: gate,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+
+    {
+        path: "/:lang/:code/scemory-gate",
+        component: country_data,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

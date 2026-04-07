@@ -1,232 +1,201 @@
 <template>
-    <div class="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-y-auto">
+    <div class="min-h-screen bg-white overflow-y-auto font-sans">
 
-        <!-- Animated Background Elements -->
-        <div class="fixed inset-0 overflow-hidden pointer-events-none">
-            <div
-                class="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob">
-            </div>
-            <div
-                class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000">
-            </div>
-            <div
-                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000">
+        <!-- Top Bar -->
+        <div class="border-b border-black">
+            <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+                <button @click="$router.back()"
+                    class="flex items-center gap-2 text-sm font-semibold text-black hover:opacity-50 transition-opacity duration-200 tracking-widest uppercase">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back
+                </button>
+                <span class="text-xs tracking-[0.3em] uppercase text-gray-400 font-medium">Subscription</span>
             </div>
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="relative min-h-screen flex items-center justify-center">
-            <div class="text-center">
-                <div class="relative">
-                    <div class="animate-spin rounded-full h-24 w-24 border-t-4 border-b-4 border-purple-500 mx-auto">
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="h-12 w-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-pulse">
-                        </div>
-                    </div>
-                </div>
-                <p class="mt-8 text-white text-xl font-medium">Loading your premium plan...</p>
-                <p class="mt-2 text-purple-200 text-sm">Please wait while we prepare your experience</p>
+        <div v-if="loading" class="flex items-center justify-center min-h-[80vh]">
+            <div class="text-center space-y-4">
+                <div class="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p class="text-sm tracking-widest uppercase text-gray-400">Loading plan...</p>
             </div>
         </div>
 
         <!-- Plan Content -->
-        <div v-else-if="plan" class="relative min-h-screen flex items-center justify-center p-4 md:p-8">
-            <div class="w-full max-w-7xl mx-auto">
+        <div v-else-if="plan" class="max-w-6xl mx-auto px-6 py-12">
 
-                <!-- Back Button - Floating -->
-                <button @click="$router.back()"
-                    class="fixed top-6 left-6 z-20 flex items-center gap-2 bg-white/10 backdrop-blur-lg hover:bg-white/20 text-white px-5 py-3 rounded-full transition-all duration-300 group border border-white/20">
-                    <svg class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    <span>Back to Plans</span>
-                </button>
+            <div class="grid lg:grid-cols-5 gap-0 border border-black">
 
-                <!-- Main Content Grid -->
-                <div class="grid lg:grid-cols-2 gap-8 items-start">
+                <!-- Left Column - Plan Details (3 cols) -->
+                <div class="lg:col-span-3 border-r border-black">
 
-                    <!-- Left Column - Plan Details -->
-                    <div class="space-y-6">
-                        <!-- Plan Card -->
-                        <div
-                            class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden transform hover:scale-[1.02] transition-all duration-500">
-                            <div class="relative overflow-hidden">
-                                <div
-                                    class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-full blur-3xl">
-                                </div>
-                                <div class="relative p-8 md:p-10">
-                                    <div
-                                        class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-blue-500 px-4 py-2 rounded-full mb-6">
-                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <span class="text-white text-sm font-semibold">PREMIUM PLAN</span>
-                                    </div>
-
-                                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
-                                        {{ plan.translation?.name || plan.name }}
-                                    </h1>
-
-                                    <div class="flex items-baseline gap-2 mb-6">
-                                        <span
-                                            class="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                                            ${{ plan.price }}
-                                        </span>
-                                        <span class="text-white/60 text-lg">/ month</span>
-                                    </div>
-
-                                    <div
-                                        class="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-6">
-                                    </div>
-
-                                    <!-- Description -->
-                                    <p class="text-white/70 text-lg leading-relaxed">
-                                        Get access to all premium features and take your experience to the next level.
-                                        Join thousands of satisfied customers who already upgraded.
-                                    </p>
-                                </div>
-                            </div>
+                    <!-- Header Section -->
+                    <div class="p-10 border-b border-black">
+                        <div class="flex items-start justify-between mb-8">
+                            <span class="text-xs tracking-[0.4em] uppercase font-semibold border border-black px-3 py-1">
+                                Premium Plan
+                            </span>
+                            <span class="text-xs text-gray-400 tracking-widest uppercase">
+                                #{{ plan.id.toString().padStart(4, '0') }}
+                            </span>
                         </div>
 
-                        <!-- Features Summary -->
-                        <div class="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6 md:p-8">
-                            <h3 class="text-white text-xl font-semibold mb-6 flex items-center gap-3">
-                                <div
-                                    class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </div>
-                                What's Included
-                            </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div v-for="feature in plan.advantges" :key="feature.id"
-                                    class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 group">
-                                    <div
-                                        class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                    </div>
-                                    <span
-                                        class="text-white/80 group-hover:text-white transition-colors text-sm md:text-base">{{
-                                        feature.feature }}</span>
-                                </div>
-                            </div>
+                        <h1 class="text-5xl md:text-6xl font-black text-black leading-none tracking-tight mb-6">
+                            {{ plan.translation?.name || plan.name }}
+                        </h1>
+
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-7xl font-black text-black leading-none">
+                                ${{ plan.price.split('.')[0] }}
+                            </span>
+                            <span class="text-3xl font-black text-black">.{{ plan.price.split('.')[1] }}</span>
+                            <span class="text-sm text-gray-400 ml-2 tracking-widest uppercase self-end mb-1">/ month</span>
                         </div>
                     </div>
 
-                    <!-- Right Column - Subscription Card -->
-                    <div class="lg:sticky lg:top-8 space-y-6">
-                        <!-- Pricing Card -->
-                        <div
-                            class="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-2xl border border-white/20 p-8">
-                            <div class="text-center mb-8">
+                    <!-- Description -->
+                    <div class="p-10 border-b border-black">
+                        <p class="text-gray-600 leading-relaxed text-lg">
+                            Get instant access to all features included in this plan. No hidden fees, no surprises — just
+                            everything you need to get started right away.
+                        </p>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="p-10">
+                        <h3 class="text-xs tracking-[0.4em] uppercase font-semibold text-gray-400 mb-8">
+                            What's Included
+                        </h3>
+                        <ul class="divide-y divide-gray-100">
+                            <li v-for="feature in plan.advantges" :key="feature.id"
+                                class="flex items-center gap-4 py-5 group">
                                 <div
-                                    class="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 px-4 py-2 rounded-full mb-4">
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd"></path>
+                                    class="flex-shrink-0 w-5 h-5 bg-black rounded-full flex items-center justify-center group-hover:bg-gray-600 transition-colors">
+                                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                            d="M5 13l4 4L19 7" />
                                     </svg>
-                                    <span class="text-yellow-400 text-sm font-semibold">BEST VALUE</span>
                                 </div>
-                                <h2 class="text-3xl font-bold text-white mb-2">Ready to upgrade?</h2>
-                                <p class="text-white/60">Get instant access to all premium features</p>
-                            </div>
-
-                            <button @click="subscribe" :disabled="subscribing"
-                                class="w-full relative group overflow-hidden bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-2xl hover:shadow-purple-500/25">
-                                <span v-if="!subscribing" class="relative z-10 flex items-center justify-center gap-3">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                        </path>
-                                    </svg>
-                                    Subscribe Now
+                                <span class="text-black font-medium text-base">
+                                    {{ feature.translation?.name || feature.feature }}
                                 </span>
-                                <span v-else class="relative z-10 flex items-center justify-center gap-3">
-                                    <svg class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                            stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    Processing...
-                                </span>
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                </div>
-                            </button>
-
-                            <div class="mt-6 space-y-3">
-                                <div class="flex items-center justify-center gap-2 text-white/60 text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 15v2m-6-4h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2zm10-10V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z">
-                                        </path>
-                                    </svg>
-                                    Secure 256-bit SSL encryption
-                                </div>
-                                <div class="flex items-center justify-center gap-2 text-white/60 text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-                                        </path>
-                                    </svg>
-                                    30-day money-back guarantee
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Trust Badges -->
-                        <div class="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-                            <div class="grid grid-cols-3 gap-4 text-center">
-                                <div>
-                                    <div class="text-2xl font-bold text-white">10K+</div>
-                                    <div class="text-xs text-white/50">Active Users</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl font-bold text-white">4.9</div>
-                                    <div class="text-xs text-white/50">Rating</div>
-                                </div>
-                                <div>
-                                    <div class="text-2xl font-bold text-white">24/7</div>
-                                    <div class="text-xs text-white/50">Support</div>
-                                </div>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <!-- FAQ Section -->
-                <div class="mt-12 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-8">
-                    <h3 class="text-2xl font-bold text-white mb-6 text-center">Frequently Asked Questions</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div v-for="(faq, index) in faqs" :key="index" class="space-y-2">
-                            <button @click="toggleFaq(index)"
-                                class="w-full text-left flex justify-between items-center p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all">
-                                <span class="font-semibold text-white">{{ faq.question }}</span>
-                                <svg class="w-5 h-5 text-white transition-transform"
-                                    :class="{ 'rotate-180': openFaqs[index] }" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div v-if="openFaqs[index]" class="p-4 text-white/70 leading-relaxed">
-                                {{ faq.answer }}
+                <!-- Right Column - Subscribe (2 cols) -->
+                <div class="lg:col-span-2 flex flex-col">
+
+                    <!-- Subscribe Block -->
+                    <div class="p-10 border-b border-black">
+                        <h2 class="text-2xl font-black text-black mb-2 leading-tight">
+                            Ready to get started?
+                        </h2>
+                        <p class="text-sm text-gray-500 mb-8 tracking-wide">
+                            Cancel anytime. No questions asked.
+                        </p>
+
+                        <!-- Price Summary -->
+                        <div class="border border-black p-5 mb-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-sm text-gray-500">Plan</span>
+                                <span class="text-sm font-semibold text-black">
+                                    {{ plan.translation?.name || plan.name }}
+                                </span>
                             </div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-sm text-gray-500">Billing</span>
+                                <span class="text-sm font-semibold text-black">Monthly</span>
+                            </div>
+                            <div class="border-t border-black pt-3 flex justify-between items-center">
+                                <span class="text-sm font-bold text-black uppercase tracking-wider">Total</span>
+                                <span class="text-xl font-black text-black">${{ plan.price }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Subscribe Button -->
+                        <button @click="subscribe" :disabled="subscribing"
+                            class="w-full bg-black text-white py-5 text-sm font-bold tracking-[0.2em] uppercase hover:bg-gray-800 transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+                            <svg v-if="subscribing" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4" />
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            <span>{{ subscribing ? 'Processing...' : 'Subscribe Now' }}</span>
+                        </button>
+
+                        <!-- Trust -->
+                        <div class="mt-6 space-y-2">
+                            <div class="flex items-center gap-2 text-xs text-gray-400">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6-4h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2zm10-10V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                                </svg>
+                                Secure 256-bit SSL encryption
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-gray-400">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                30-day money-back guarantee
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 divide-x divide-black border-b border-black">
+                        <div class="p-6 text-center">
+                            <div class="text-2xl font-black text-black">10K+</div>
+                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">Users</div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <div class="text-2xl font-black text-black">4.9</div>
+                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">Rating</div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <div class="text-2xl font-black text-black">24/7</div>
+                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">Support</div>
+                        </div>
+                    </div>
+
+                    <!-- Footer note -->
+                    <div class="flex-1 p-10 flex items-end">
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews
+                            automatically each month.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="border-x border-b border-black">
+                <div class="border-b border-black p-10">
+                    <h3 class="text-xs tracking-[0.4em] uppercase font-semibold text-gray-400">
+                        Frequently Asked Questions
+                    </h3>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    <div v-for="(faq, index) in faqs" :key="index">
+                        <button @click="toggleFaq(index)"
+                            class="w-full text-left flex justify-between items-center p-8 hover:bg-gray-50 transition-colors duration-150">
+                            <span class="font-bold text-black text-base pr-8">{{ faq.question }}</span>
+                            <svg class="w-4 h-4 text-black flex-shrink-0 transition-transform duration-200"
+                                :class="{ 'rotate-180': openFaqs[index] }" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div v-if="openFaqs[index]" class="px-8 pb-8 text-gray-600 leading-relaxed text-sm border-t border-gray-100">
+                            <div class="pt-4">{{ faq.answer }}</div>
                         </div>
                     </div>
                 </div>
@@ -234,45 +203,51 @@
         </div>
 
         <!-- Error State -->
-        <div v-else class="relative min-h-screen flex items-center justify-center">
-            <div class="text-center max-w-md mx-auto p-8">
-                <div
-                    class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-red-500/20 backdrop-blur-lg mb-6">
-                    <svg class="w-12 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div v-else class="flex items-center justify-center min-h-[80vh]">
+            <div class="text-center max-w-sm mx-auto p-8">
+                <div class="w-16 h-16 border-2 border-black flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-3">Plan Not Found</h3>
-                <p class="text-white/60 mb-8">The plan you're looking for doesn't exist or has been removed.</p>
+                <h3 class="text-2xl font-black text-black mb-3">Plan Not Found</h3>
+                <p class="text-gray-500 text-sm mb-8 leading-relaxed">
+                    The plan you're looking for doesn't exist or has been removed.
+                </p>
                 <button @click="$router.push('/plans')"
-                    class="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold transition-all transform hover:scale-105">
+                    class="inline-flex items-center gap-3 bg-black text-white px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-gray-800 transition-colors">
                     Browse All Plans
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                 </button>
             </div>
         </div>
 
         <!-- Toast Notification -->
-        <transition enter-active-class="transition duration-300 transform" enter-from-class="translate-x-full opacity-0"
-            enter-to-class="translate-x-0 opacity-100" leave-active-class="transition duration-300 transform"
-            leave-from-class="translate-x-0 opacity-100" leave-to-class="translate-x-full opacity-0">
+        <transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="translate-y-0 opacity-100"
+            leave-to-class="translate-y-4 opacity-0">
             <div v-if="toast.show" :class="[
-                'fixed bottom-8 right-8 z-50 flex items-center gap-4 px-6 py-4 rounded-xl shadow-2xl backdrop-blur-lg',
-                toast.type === 'success' ? 'bg-green-500/90 text-white' : 'bg-red-500/90 text-white'
+                'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wide border',
+                toast.type === 'success'
+                    ? 'bg-black text-white border-black'
+                    : 'bg-white text-black border-black'
             ]">
-                <svg v-if="toast.type === 'success'" class="w-6 h-6" fill="none" stroke="currentColor"
+                <svg v-if="toast.type === 'success'" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                 </svg>
-                <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
+                <svg v-else class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span class="font-medium">{{ toast.message }}</span>
+                {{ toast.message }}
             </div>
         </transition>
     </div>
@@ -291,7 +266,6 @@ const loading = ref(true);
 const subscribing = ref(false);
 const toast = ref({ show: false, message: '', type: '' });
 
-// FAQ Data
 const openFaqs = ref({});
 const faqs = ref([
     {
@@ -340,13 +314,10 @@ const subscribe = async () => {
     subscribing.value = true;
     try {
         await api.post(`/subscribe/${plan.value.id}`);
-
-        showToast('Successfully subscribed! 🎉', 'success');
-
+        showToast('Successfully subscribed! Welcome aboard.', 'success');
         setTimeout(() => {
             router.push('/');
         }, 2000);
-
     } catch (error) {
         console.error(error);
         showToast('Subscription failed. Please try again.', 'error');
@@ -357,54 +328,3 @@ const subscribe = async () => {
 
 onMounted(fetchPlan);
 </script>
-
-<style scoped>
-@keyframes blob {
-    0% {
-        transform: translate(0px, 0px) scale(1);
-    }
-
-    33% {
-        transform: translate(30px, -50px) scale(1.1);
-    }
-
-    66% {
-        transform: translate(-20px, 20px) scale(0.9);
-    }
-
-    100% {
-        transform: translate(0px, 0px) scale(1);
-    }
-}
-
-.animate-blob {
-    animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-    animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-    animation-delay: 4s;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
-}
-</style>

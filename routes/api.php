@@ -44,7 +44,6 @@ use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnEvent;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 Route::prefix('v1')->group(function () {
 
@@ -321,7 +320,8 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('gate')->middleware('auth:sanctum')->group(function () {
        Route::get('/random', [GateController::class, 'random']);
-       Route::post('/{country}/stats', [GateController::class, 'country']);
+       Route::get('/all', [GateController::class, 'countries']);
+       Route::get('/{code}/stats', [GateController::class, 'country']);
     });
 });
 

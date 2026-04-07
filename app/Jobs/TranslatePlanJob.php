@@ -32,7 +32,7 @@ class TranslatePlanJob implements ShouldQueue
         foreach ($locales as $locale) {
             try {
                 $tr = new GoogleTranslate($locale);
-                $tr->setSource('ar');
+                $tr->setSource('auto');
 
                 $translated = $tr->translate($this->text);
 
