@@ -49,6 +49,8 @@ import cart from "../views/home/cart.vue";
 import downloads from "../views/home/download.vue"
 import gate from "../views/home/gate.vue"
 import country_data from "../views/home/country_data.vue"
+import success from "../views/home/success.vue"
+import failed from "../views/home/failed.vue"
 
 const routes = [
     {
@@ -61,6 +63,16 @@ const routes = [
     {
         path: "/:lang/home",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/success",
+        component: success,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/failed",
+        component: failed,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\api\payment;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentFailMail;
 use App\Models\cart;
 use App\Models\cartItems;
 use App\Services\PayPalServices;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use Exception;
 use App\Http\Controllers\concerns\ApiResponse;
+use App\Mail\PaymentSuccessMail;
 use App\Models\purchase_items;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PaymentController  —  User-facing endpoints
@@ -94,10 +96,17 @@ class PaymentController extends Controller
             }
 
             cartItems::where('cart_id', $cart->id)->delete();
-
-            $this->clearCartCache($user);
-
-            return redirect('/en/downloads');
+            if ($result['order']->status == 'completed') {
+                Mail::to($result['order']->user->email)->send(
+                    new PaymentSuccessMail(
+                        $result['order']->amount,
+                        $result['order']->user->name
+                    )
+                );
+                $this->clearCartCache($user);
+                return redirect('/en/success');
+            }
+            return redirect('/en/failed');
 
 
         } catch (Exception $e) {

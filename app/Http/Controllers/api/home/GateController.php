@@ -20,7 +20,7 @@ class GateController extends Controller
     {
         $events = Cache::remember('random_events', 60*60, function () {
             return Events::with('translation','city.translation','sub_categorey.translation','firstImage:id,full_url,event_id')
-                ->inRandomOrder()
+                ->inRandomOrder()->where('is_active', 1)
                 ->take(8)
                 ->get();
         });

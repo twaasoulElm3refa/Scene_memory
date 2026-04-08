@@ -217,7 +217,7 @@ const total = computed(() =>
 // بيمنع double-payment لو الـ user ضغط checkout مرتين
 const idempotencyKey = computed(() => {
     const ids = [...items.value.map(i => i.id)].sort().join('-');
-    return `cart-${ids}-${total.value.toFixed(2)}`;
+    return `cart-${ids}-${total.value.toFixed(2)}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 });
 
 // ══════════════════════════════════════════════════════════

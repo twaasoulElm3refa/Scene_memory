@@ -25,7 +25,7 @@ class RequestController extends Controller
     {
         try {
             $page = request('page', 1);
-            $perPage = 10;
+            $perPage = 5;
 
             $cacheKey = "requests:page_{$page}:per_{$perPage}";
 
@@ -42,12 +42,18 @@ class RequestController extends Controller
                 ];
             });
 
-            return $this->success([
-                'requests' => $requests,
-                'PendingCounts' => $counts['pending'],
-                'approvedCounts' => $counts['approved'],
-                'rejectedCounts' => $counts['rejected'],
-            ], 'All requests');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'All requests',
+
+                'data' => $requests,
+
+                'counts' => [
+                    'pending' => $counts['pending'],
+                    'approved' => $counts['approved'],
+                    'rejected' => $counts['rejected'],
+                ]
+            ]);
 
         } catch (\Exception $e) {
             return $this->error($e->getMessage());

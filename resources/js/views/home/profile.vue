@@ -108,9 +108,13 @@
                                     <span class="text-gray-600">الدور</span>
                                     <span class="font-medium">{{ profile.role || '—' }}</span>
                                 </div>
-                                <div class="flex justify-between">
+                                <div class="flex justify-between border-b pb-2">
                                     <span class="text-gray-600">الحالة</span>
                                     <span class="font-medium text-green-600">نشط</span>
+                                </div>
+                                 <div class="flex justify-between">
+                                    <span class="text-gray-600">النقاط</span>
+                                    <span class="font-medium text-green-600">{{ profile.points || '—' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -184,15 +188,10 @@
                             </div>
                         </div>
 
-                        <div class="mt-8 flex gap-4">
+                        <div class="mt-8 flex justify-center w-full">
                             <button @click="updateProfile" :disabled="isUpdatingProfile"
-                                class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 rounded-xl transition disabled:opacity-70">
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 px-8 rounded-xl transition disabled:opacity-70">
                                 {{ isUpdatingProfile ? 'جاري الحفظ...' : 'حفظ التغييرات' }}
-                            </button>
-
-                            <button @click="resetEditForm"
-                                class="flex-1 border border-gray-300 hover:bg-gray-50 font-medium py-3.5 rounded-xl transition">
-                                إعادة تعيين
                             </button>
                         </div>
 
@@ -302,6 +301,7 @@ export default {
             phone: null,
             country: null,
             position: null,
+            points: 0,
             date_of_birth: null,
             role: "",
             last_login_at: null,
@@ -410,6 +410,7 @@ export default {
                         country: userData.country || "",
                         position: userData.position || "",
                         date_of_birth: userData.date_of_birth || "",
+                        points: userData.points || 0,
                     };
 
                     originalEditData.value = { ...editData.value };

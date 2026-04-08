@@ -12,50 +12,63 @@ class ImageAnalysisService
         $height = $image->height();
 
         $resolution = $this->getResolutionLabel($width, $height);
+        $resolutionScore = $this->getResolutionScore($resolution);
 
         $qualityScore = $this->analyze($file);
 
-        [$price, $plan] = $this->pricing($resolution, $qualityScore);
+        [$price, $plan] = $this->pricing($resolutionScore, $qualityScore);
+
         return [
             'image' => $image,
             'width' => $width,
             'height' => $height,
             'resolution' => $resolution,
+            'resolution_score' => $resolutionScore,
             'quality_score' => $qualityScore,
             'price' => $price,
             'plan' => $plan,
         ];
     }
 
-    private function pricing($resolution, $qualityScore)
+    /**
+     * 🔥 نظام التسعير الجديد (Dynamic)
+     */
+    private function pricing($resolutionScore, $qualityScore)
     {
-        $base = match ($resolution) {
-            '720p' => 5,
-            '1080p' => 10,
-            '2K' => 15,
-            '4K' => 20,
-            default => 5,
-        };
+        // 🧠 المعادلة الأساسية
+        $price = (
+            ($qualityScore * 0.12) +   // جودة الصورة
+            ($resolutionScore * 2.5)   // الدقة
+        );
 
-        if ($qualityScore < 30) {
-            $multiplier = 0.6;
-        } elseif ($qualityScore < 60) {
-            $multiplier = 0.8;
-        } elseif ($qualityScore < 80) {
-            $multiplier = 1;
-        } else {
-            $multiplier = 1.3;
-        }
+        // 🛡️ حد أدنى وحد أقصى
+        $price = max(2, min($price, 50));
 
-        $price = round($base * $multiplier, 2);
+        $price = round($price, 2);
 
+        // 📦 تحديد الباقة (للعرض فقط)
         $plan = match (true) {
-            $price <= 6 => 'free',
-            $price <= 10 => 'basic',
-            $price <= 18 => 'pro',
+            $price < 5 => 'free',
+            $price < 10 => 'basic',
+            $price < 20 => 'pro',
             default => 'premium',
         };
+
         return [$price, $plan];
+    }
+
+    /**
+     * 🎯 تحويل الدقة إلى score
+     */
+    private function getResolutionScore($resolution)
+    {
+        return match ($resolution) {
+            '720p' => 1,
+            '1080p' => 2,
+            '2K' => 3,
+            '4K' => 4,
+            default => 1,
+        };
     }
 
     private function getResolutionLabel($width, $height)
@@ -70,6 +83,9 @@ class ImageAnalysisService
         };
     }
 
+    /**
+     * 🧠 تحليل الجودة
+     */
     private function analyze($file)
     {
         $realPath = $file->getRealPath();
@@ -84,6 +100,7 @@ class ImageAnalysisService
         $sharpness = $this->sharpness($img);
         $noise = $this->noise($img);
         $upscale = $this->upscale($img);
+
         imagedestroy($img);
 
         return round(
@@ -106,11 +123,11 @@ class ImageAnalysisService
 
         for ($y = 1; $y < $height - 1; $y++) {
             for ($x = 1; $x < $width - 1; $x++) {
-                $c  = $this->grayAt($sample, $x, $y);
-                $l  = $this->grayAt($sample, $x - 1, $y);
-                $r  = $this->grayAt($sample, $x + 1, $y);
-                $u  = $this->grayAt($sample, $x, $y - 1);
-                $d  = $this->grayAt($sample, $x, $y + 1);
+                $c = $this->grayAt($sample, $x, $y);
+                $l = $this->grayAt($sample, $x - 1, $y);
+                $r = $this->grayAt($sample, $x + 1, $y);
+                $u = $this->grayAt($sample, $x, $y - 1);
+                $d = $this->grayAt($sample, $x, $y + 1);
 
                 $laplacian = abs((4 * $c) - $l - $r - $u - $d);
 
@@ -121,9 +138,7 @@ class ImageAnalysisService
 
         imagedestroy($sample);
 
-        if ($count === 0) {
-            return 0;
-        }
+        if ($count === 0) return 0;
 
         $avg = $total / $count;
 
@@ -151,7 +166,7 @@ class ImageAnalysisService
                     $this->grayAt($sample, $x, $y + 1),
                 ];
 
-                $localMean = array_sum($neighbors) / count($neighbors);
+                $localMean = array_sum($neighbors) / 4;
                 $totalDiff += abs($center - $localMean);
                 $count++;
             }
@@ -159,9 +174,7 @@ class ImageAnalysisService
 
         imagedestroy($sample);
 
-        if ($count === 0) {
-            return 0;
-        }
+        if ($count === 0) return 0;
 
         $avgNoise = $totalDiff / $count;
 
@@ -182,7 +195,6 @@ class ImageAnalysisService
             for ($x = 0; $x < $width; $x++) {
                 $a = $this->grayAt($sample, $x, $y - 1);
                 $b = $this->grayAt($sample, $x, $y);
-
                 $blockiness += abs($a - $b);
                 $count++;
             }
@@ -192,7 +204,6 @@ class ImageAnalysisService
             for ($y = 0; $y < $height; $y++) {
                 $a = $this->grayAt($sample, $x - 1, $y);
                 $b = $this->grayAt($sample, $x, $y);
-
                 $blockiness += abs($a - $b);
                 $count++;
             }
@@ -200,9 +211,7 @@ class ImageAnalysisService
 
         imagedestroy($sample);
 
-        if ($count === 0) {
-            return 0;
-        }
+        if ($count === 0) return 0;
 
         $avgBlockiness = $blockiness / $count;
 

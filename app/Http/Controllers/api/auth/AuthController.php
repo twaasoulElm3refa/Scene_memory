@@ -116,6 +116,7 @@ class AuthController extends Controller
                 'phone' => $user->phone,
                 'role' => $user->role,
                 'items' => $items,
+                'points' => $user->points,
                 'last_login_at' => $user->last_login_at,
                 'licenceType' => [
                 'id' => $user->licenceType?->id,

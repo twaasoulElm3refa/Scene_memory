@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\userResource;
 use App\Mail\SubscriptionSuccessMail;
 use App\Models\licenceType;
+use App\Models\Subscriptions;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
@@ -23,22 +24,22 @@ class IncomeController extends Controller
         $user->update([
             "licence_type_id"=>$id,
         ]);
-        $user->load('licenceType');
-        if($license->name == "basic"){
-            $user->update([
-                "points"=>1000,
-            ]);
+
+        Subscriptions::create([
+            "user_id"=>$user->id,
+            "licence_id"=>$id
+        ]);
+
+        if ($license->name == "basic") {
+            $user->increment("points", 1000);
         }
-        else if($license->name == "professional"){
-            $user->update([
-                "points"=>2500,
-            ]);
+        else if ($license->name == "professional") {
+            $user->increment("points", 2500);
         }
-        else if($license->name == "premium"){
-            $user->update([
-                "points"=>5000,
-            ]);
+        else if ($license->name == "premium") {
+            $user->increment("points", 5000);
         }
+
         $this->clearUserProfileCache($user->id);
         Mail::to($user->email)->send(
         new SubscriptionSuccessMail($user, $license)

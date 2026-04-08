@@ -109,7 +109,7 @@ class EventsSeeder extends Seeder
             'langitude' => 44.43577324219572,
             'lattitude' => 33.26248900302403,
             'slug' => 'lkaaa-astyratyjy',
-            'is_active' => 0,
+            'is_active' => 1,
             'created_at' => '2026-04-02 09:35:17',
             'updated_at' => '2026-04-02 09:35:17',
             'deleted_at' => null,
