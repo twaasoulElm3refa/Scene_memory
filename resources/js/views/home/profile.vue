@@ -112,7 +112,7 @@
                                     <span class="text-gray-600">الحالة</span>
                                     <span class="font-medium text-green-600">نشط</span>
                                 </div>
-                                 <div class="flex justify-between">
+                                <div class="flex justify-between">
                                     <span class="text-gray-600">النقاط</span>
                                     <span class="font-medium text-green-600">{{ profile.points || '—' }}</span>
                                 </div>
@@ -280,6 +280,67 @@
                     </div>
                 </div>
 
+                <!-- TAB 4: Wallet -->
+                <div v-if="currentTab === 4">
+                    <div class="max-w-3xl mx-auto">
+
+                        <h3 class="text-xl font-bold mb-6 text-center">المحفظة</h3>
+
+                        <!-- Wallet Card -->
+                        <div
+                            class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg mb-6">
+                            <p class="text-sm opacity-80">الرصيد الحالي</p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ profile.wallet_balance ?? '0.00' }} $
+                            </h2>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <!-- Deposit -->
+                            <button @click="deposit"
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-medium transition">
+                                شحن الرصيد
+                            </button>
+
+                            <!-- Withdraw -->
+                            <button @click="withdraw"
+                                class="bg-gray-800 hover:bg-gray-900 text-white py-3 rounded-xl font-medium transition">
+                                سحب الرصيد
+                            </button>
+
+                        </div>
+
+                        <!-- Transactions -->
+                        <div class="mt-8 bg-gray-50 p-6 rounded-xl">
+                            <h4 class="font-bold mb-4">آخر العمليات</h4>
+
+                            <div v-if="transactions.length">
+                                <div v-for="tx in transactions" :key="tx.id"
+                                    class="flex justify-between items-center border-b py-2">
+
+                                    <div>
+                                        <p class="font-medium">{{ tx.type }}</p>
+                                        <p class="text-sm text-gray-500">{{ formatDate(tx.created_at) }}</p>
+                                    </div>
+
+                                    <span :class="[
+                                        'font-bold',
+                                        tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                                    ]">
+                                        {{ tx.amount }} $
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p v-else class="text-gray-500 text-center">
+                                لا توجد عمليات حتى الآن
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -306,6 +367,7 @@ export default {
             role: "",
             last_login_at: null,
             licenceType: null,
+            transactions: [],
         });
 
         // Edit Form Data
@@ -324,6 +386,7 @@ export default {
             { id: 1, label: "معلومات المستخدم" },
             { id: 2, label: "تعديل البيانات" },
             { id: 3, label: "تحديث كلمة المرور" },
+            { id: 4, label: 'المحفظة' }
         ];
 
         const currentTab = ref(1);

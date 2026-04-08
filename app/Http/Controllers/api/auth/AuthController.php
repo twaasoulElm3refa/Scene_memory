@@ -118,12 +118,13 @@ class AuthController extends Controller
                 'items' => $items,
                 'points' => $user->points,
                 'last_login_at' => $user->last_login_at,
+                'wallet' => $user->wallet,
                 'licenceType' => [
-                'id' => $user->licenceType?->id,
-                'name' => $user->licenceType?->name,
-                'price' => $user->licenceType?->price,
-                'is_active' => $user->licenceType?->is_active,
-                'created_at' => $user->licenceType?->created_at
+                    'id' => $user->licenceType?->id,
+                    'name' => $user->licenceType?->name,
+                    'price' => $user->licenceType?->price,
+                    'is_active' => $user->licenceType?->is_active,
+                    'created_at' => $user->licenceType?->created_at
                 ]
             ];
         });
