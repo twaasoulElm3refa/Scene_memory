@@ -43,7 +43,7 @@ class AuthController extends Controller
                 ]);
             });
             $token = $user->createToken('rag-token')->plainTextToken;
-
+            Cache::forget('users_all_page_'.request('page', 1));
             return $this->success([
                 'token' => $token,
                 'user' => new UserResource($user),
@@ -244,7 +244,6 @@ class AuthController extends Controller
             'message' => 'Password updated successfully.',
         ]);
     }
-
 
 
 }

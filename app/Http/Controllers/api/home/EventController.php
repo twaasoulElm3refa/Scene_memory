@@ -44,7 +44,7 @@ class EventController extends Controller
         $cacheKey = "events_historical_page_{$page}_per_{$perPage}_".app()->getLocale();
 
         $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,url'])
+            return Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url'])
                 ->where('is_active', 1)
                 ->where('is_historical', 1)
                 ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
@@ -56,7 +56,7 @@ class EventController extends Controller
     }
 
     public function index(Request $request)
-    {
+        {
         $cityId = $request->city_id !== 'all' ? $request->city_id : null;
         $categoryId = $request->sub_category_id !== 'all' ? $request->sub_category_id : null;
 
@@ -71,15 +71,10 @@ class EventController extends Controller
 
             return Events::with('city.translation', 'sub_categorey.translation', 'translation','firstImage:id,event_id,full_url')
                 ->where('is_active', 1)
-
                 ->when($cityId, fn ($q) => $q->where('city_id', $cityId))
-
                 ->when($categoryId, fn ($q) => $q->where('sub_categorey_id', $categoryId))
-
                 ->when($from, fn ($q) => $q->whereDate('start_date', '>=', $from))
-
                 ->when($to, fn ($q) => $q->whereDate('end_date', '<=', $to))
-
                 ->orderBy('start_date')
                 ->get();
         });

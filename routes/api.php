@@ -323,5 +323,7 @@ Route::prefix('v1')->group(function () {
        Route::get('/all', [GateController::class, 'countries']);
        Route::get('/{code}/stats', [GateController::class, 'country']);
     });
+
+    // 133 EndPoint till now
 });
 

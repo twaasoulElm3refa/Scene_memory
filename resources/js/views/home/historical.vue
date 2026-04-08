@@ -1,7 +1,6 @@
 <template>
     <div class="events-page">
         <!-- Header Section -->
-        <!-- Header Section -->
         <header class="page-header">
             <div class="header-content">
                 <h1 class="main-title">{{ $t("events.all_memories") }}</h1>
@@ -12,7 +11,7 @@
 
             <div class="header-actions">
                 <!-- زرار RouterLink -->
-                <RouterLink to="/add_event/historical" class="btn btn-primary">
+                <RouterLink :to="`/${lang}/add_event/historical`" class="btn btn-primary">
                     {{ $t("events.add_historical_event") }}
                 </RouterLink>
             </div>
@@ -57,7 +56,7 @@
                     </div>
                     <h3 class="event-title">{{ event.translation.title || "-" }}</h3>
                     <p class="event-category">{{ event.sub_categorey?.translation.name || "-" }}</p>
-                    <router-link :to="{ path: `/single_event/${event.slug}` }" class="btn-view">
+                    <router-link :to="{ path: `/${lang}/single_event/${event.slug}` }" class="btn-view">
                         تفاصيل الحدث
                     </router-link>
                 </div>
@@ -126,6 +125,7 @@ export default {
             apiBaseUrl: "http://127.0.0.1:8000/api/v1",
             uniqueCities: 0,
             uniqueCategories: 0,
+            lang: localStorage.getItem("language") || "ar",
         };
     },
     computed: {
