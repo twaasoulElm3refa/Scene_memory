@@ -177,7 +177,7 @@
                                 <span class="text-gray-600">
                                     {{ event.city || $t("common.notSpecified") }}
                                 </span>
-                                <a :href="`/single_event/${event.slug}`"
+                                <a :href="`/${lang}/single_event/${event.slug}`"
                                     class="text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
                                     {{ $t("common.details") }} →
                                 </a>
@@ -403,7 +403,7 @@ const cities = ref([]);
 const countrySearch = ref("");
 const showDropdown = ref(false);
 const filteredCountries = ref([]);
-
+const lang = localStorage.getItem("language") || "en";
 const selectedCategory = ref("");
 const selectedCountry = ref("");
 const selectedCity = ref("");
@@ -545,6 +545,7 @@ const search = async (isInitial = false) => {
             image_url: ev.first_image?.full_url
                 ? `/storage/${ev.first_image.full_url}`
                 : null,
+
             lattitude: ev.lattitude,
             langitude: ev.langitude,
         }));
@@ -569,7 +570,9 @@ const handleMarkerEvents = (e) => {
         start_date: ev.start_date,
         city: ev.city?.translation?.name || ev.city || 'غير محدد',
         category_name: ev.sub_categorey?.translation?.name || 'فعالية',
-        image_url: ev.image_url || null,
+        image_url: ev.first_image?.full_url
+            ? `/storage/${ev.first_image.full_url}`
+            : null,
         translation: ev.translation,
         lattitude: ev.lattitude,
         langitude: ev.langitude,
@@ -584,7 +587,8 @@ const handleMarkerEvents = (e) => {
 const handleEventMarkerClick = (e) => {
     const { slug } = e.detail;
     if (slug) {
-        router.push(`/single_event/${slug}`);
+        const lang = localStorage.getItem("language") || "ar";
+        router.push(`${lang}/single_event/${slug}`);
     }
 };
 

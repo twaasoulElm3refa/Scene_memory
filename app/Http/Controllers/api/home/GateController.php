@@ -44,11 +44,10 @@ class GateController extends Controller
     public function country($code, Request $request)
     {
         $page    = $request->get('page', 1);
-        $perPage = $request->get('per_page', 15);
         $locale  = app()->getLocale();
         $countryKey = "country:{$code}:{$locale}";
         $citiesKey  = "country:{$code}:cities";
-        $eventsKey  = "country:{$code}:{$locale}:events:page:{$page}:per:{$perPage}";
+        $eventsKey  = "country:{$code}:{$locale}:events:page:{$page}";
         $country = Cache::remember($countryKey, now()->addHours(24), function () use ($code) {
             return Countries::select('id', 'code', 'name')
                 ->with([
@@ -65,7 +64,7 @@ class GateController extends Controller
             return Cities::where('country_id', $country->id)
                 ->pluck('id');
         });
-        $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds, $perPage) {
+        $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds,) {
             return Events::select('id', 'city_id', 'sub_categorey_id', 'start_date', 'slug')
                 ->with([
                     'translation:id,event_id,title,description,locale',
@@ -76,7 +75,7 @@ class GateController extends Controller
                     'firstImage:id,full_url,event_id',
                 ])
                 ->whereIn('city_id', $cityIds)
-                ->paginate($perPage);
+                ->get();
         });
         return $this->success([
             'country' => $country,

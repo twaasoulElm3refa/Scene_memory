@@ -51,8 +51,6 @@ class IncomeController extends Controller
     {
         $cacheKey = 'user_profile_' . $id;
 
-        Cache::tags(['user_profile'])->forget($cacheKey);
-
-        return $this->success([], 'User profile cache cleared for user ' . $id);
+        Cache::tags(['user_profile', 'user_'.$id])->forget($cacheKey);
     }
 }

@@ -415,6 +415,7 @@ export default class MapService {
             .then(res => res.json())
             .then(data => {
                 const events = data?.data || [];
+
                 this.cityEventCache.set(city, events);
                 this._dispatchMarkerEvent(events);
             })

@@ -35,7 +35,8 @@
                     <!-- Header Section -->
                     <div class="p-10 border-b border-black">
                         <div class="flex items-start justify-between mb-8">
-                            <span class="text-xs tracking-[0.4em] uppercase font-semibold border border-black px-3 py-1">
+                            <span
+                                class="text-xs tracking-[0.4em] uppercase font-semibold border border-black px-3 py-1">
                                 Premium Plan
                             </span>
                             <span class="text-xs text-gray-400 tracking-widest uppercase">
@@ -52,14 +53,16 @@
                                 ${{ plan.price.split('.')[0] }}
                             </span>
                             <span class="text-3xl font-black text-black">.{{ plan.price.split('.')[1] }}</span>
-                            <span class="text-sm text-gray-400 ml-2 tracking-widest uppercase self-end mb-1">/ month</span>
+                            <span class="text-sm text-gray-400 ml-2 tracking-widest uppercase self-end mb-1">/
+                                month</span>
                         </div>
                     </div>
 
                     <!-- Description -->
                     <div class="p-10 border-b border-black">
                         <p class="text-gray-600 leading-relaxed text-lg">
-                            Get instant access to all features included in this plan. No hidden fees, no surprises — just
+                            Get instant access to all features included in this plan. No hidden fees, no surprises —
+                            just
                             everything you need to get started right away.
                         </p>
                     </div>
@@ -194,7 +197,8 @@
                                     d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
-                        <div v-if="openFaqs[index]" class="px-8 pb-8 text-gray-600 leading-relaxed text-sm border-t border-gray-100">
+                        <div v-if="openFaqs[index]"
+                            class="px-8 pb-8 text-gray-600 leading-relaxed text-sm border-t border-gray-100">
                             <div class="pt-4">{{ faq.answer }}</div>
                         </div>
                     </div>
@@ -227,13 +231,9 @@
         </div>
 
         <!-- Toast Notification -->
-        <transition
-            enter-active-class="transition duration-300 ease-out"
-            enter-from-class="translate-y-4 opacity-0"
-            enter-to-class="translate-y-0 opacity-100"
-            leave-active-class="transition duration-200 ease-in"
-            leave-from-class="translate-y-0 opacity-100"
-            leave-to-class="translate-y-4 opacity-0">
+        <transition enter-active-class="transition duration-300 ease-out" enter-from-class="translate-y-4 opacity-0"
+            enter-to-class="translate-y-0 opacity-100" leave-active-class="transition duration-200 ease-in"
+            leave-from-class="translate-y-0 opacity-100" leave-to-class="translate-y-4 opacity-0">
             <div v-if="toast.show" :class="[
                 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wide border',
                 toast.type === 'success'
@@ -315,9 +315,11 @@ const subscribe = async () => {
     try {
         await api.post(`/subscribe/${plan.value.id}`);
         showToast('Successfully subscribed! Welcome aboard.', 'success');
+        const lang = localStorage.getItem('language') || 'en';
+
         setTimeout(() => {
-            router.push('/');
-        }, 2000);
+            router.push(`/${lang}/profile`);
+        }, 1200);
     } catch (error) {
         console.error(error);
         showToast('Subscription failed. Please try again.', 'error');

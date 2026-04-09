@@ -106,6 +106,12 @@ class PaymentController extends Controller
                 $this->clearCartCache($user);
                 return redirect('/en/success');
             }
+            Mail::to($result['order']->user->email)->send(
+                new PaymentFailMail(
+                    $result['order']->amount,
+                    $result['order']->user->name
+                )
+            );
             return redirect('/en/failed');
 
 

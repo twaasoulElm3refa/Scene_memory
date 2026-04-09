@@ -103,19 +103,13 @@ class EventController extends Controller
             }
 
             return $DBCITY->events()
-                ->with('city.translation', 'sub_categorey.translation', 'translation')
+                ->with('city.translation', 'sub_categorey.translation', 'translation','firstImage:id,event_id,full_url')
                 ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id','langitude','lattitude')
                 ->where('is_active', 1)
                 ->latest()
-                ->get()
-                ->map(function ($event) {
-                    $event->image_url = $event->image
-                        ? asset('storage/'.ltrim($event->image, '/'))
-                        : null;
-
-                    return $event;
-                });
+                ->get();
         });
+
         if (! $events) {
             return $this->error('City not found in DB', 404);
         }
