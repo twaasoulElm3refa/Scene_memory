@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Intervention\Image\Typography\FontFactory;
+
 class ImageAnalysisService
 {
     public function process($file, $manager)
@@ -18,15 +20,18 @@ class ImageAnalysisService
 
         [$price, $plan] = $this->pricing($resolutionScore, $qualityScore);
 
+        $previewEncoded = $this->makePreview(clone $image);
+
         return [
-            'image' => $image,
-            'width' => $width,
-            'height' => $height,
-            'resolution' => $resolution,
+            'image'            => $image,
+            'preview_encoded'  => $previewEncoded,
+            'width'            => $width,
+            'height'           => $height,
+            'resolution'       => $resolution,
             'resolution_score' => $resolutionScore,
-            'quality_score' => $qualityScore,
-            'price' => $price,
-            'plan' => $plan,
+            'quality_score'    => $qualityScore,
+            'price'            => $price,
+            'plan'             => $plan,
         ];
     }
 
@@ -255,5 +260,21 @@ class ImageAnalysisService
         $b = $rgb & 0xFF;
 
         return (0.299 * $r) + (0.587 * $g) + (0.114 * $b);
+    }
+    private function makePreview($image): \Intervention\Image\EncodedImage
+    {
+        // Blur خفيف
+        $image->blur(6);
+
+        // Watermark نص في المنتصف
+        $image->text('© Protected', $image->width() / 2, $image->height() / 2, function (FontFactory $font) {
+            $font->size(42);
+            $font->color([255, 255, 255, 100]); // أبيض شبه شفاف
+            $font->align('center');
+            $font->valign('middle');
+            $font->angle(30);
+        });
+
+        return $image->toJpeg(75);
     }
 }

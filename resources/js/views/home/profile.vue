@@ -1,6 +1,5 @@
 <template>
     <div class="max-w-4xl mx-auto p-4 md:p-8">
-
         <!-- Header -->
         <div class="mb-8 text-center">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">ملفي الشخصي</h1>
@@ -9,21 +8,17 @@
 
         <!-- Card -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-
             <!-- Profile Header -->
             <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b">
                 <div class="flex flex-col md:flex-row md:items-center justify-between">
-
                     <div class="flex items-center mb-4 md:mb-0">
                         <div
                             class="w-16 h-16 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center text-white text-2xl font-bold mr-4 shadow-md">
                             {{ getInitials(profile.name) }}
                         </div>
-
                         <div>
                             <h2 class="text-xl font-bold text-gray-800">{{ profile.name || '—' }}</h2>
                             <p class="text-gray-600">{{ profile.email || '—' }}</p>
-
                             <div class="flex items-center mt-1 gap-2">
                                 <span
                                     class="px-3 py-1 bg-emerald-100 text-emerald-800 text-sm font-medium rounded-full">
@@ -35,14 +30,12 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="text-right">
                         <p class="text-gray-600 text-sm">آخر دخول</p>
                         <p class="text-gray-800 font-medium">
                             {{ formatDate(profile.last_login_at) }}
                         </p>
                     </div>
-
                 </div>
             </div>
 
@@ -60,7 +53,6 @@
 
             <!-- Content -->
             <div class="p-6 md:p-8">
-
                 <!-- TAB 1: معلومات المستخدم -->
                 <div v-if="currentTab === 1">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -142,7 +134,6 @@
                 <div v-if="currentTab === 2">
                     <div class="max-w-2xl mx-auto">
                         <h3 class="text-xl font-bold mb-6">تعديل بيانات الحساب</h3>
-
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
@@ -150,21 +141,18 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
                                     placeholder="أدخل اسمك الكامل" />
                             </div>
-
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
                                 <input v-model="editData.email" type="email"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
                                     placeholder="example@email.com" />
                             </div>
-
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف</label>
                                 <input v-model="editData.phone" type="tel"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
                                     placeholder="+20 123 456 789" />
                             </div>
-
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">الدولة</label>
@@ -172,7 +160,6 @@
                                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
                                         placeholder="مصر" />
                                 </div>
-
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">المنصب / الوظيفة</label>
                                     <input v-model="editData.position" type="text"
@@ -180,22 +167,18 @@
                                         placeholder="مهندس برمجيات" />
                                 </div>
                             </div>
-
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الميلاد</label>
                                 <input v-model="editData.date_of_birth" type="date"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition" />
                             </div>
                         </div>
-
                         <div class="mt-8 flex justify-center w-full">
                             <button @click="updateProfile" :disabled="isUpdatingProfile"
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 px-8 rounded-xl transition disabled:opacity-70">
                                 {{ isUpdatingProfile ? 'جاري الحفظ...' : 'حفظ التغييرات' }}
                             </button>
                         </div>
-
-                        <!-- Status Message -->
                         <div v-if="statusMessage" :class="[
                             'mt-6 p-4 rounded-xl text-center font-medium',
                             statusMessageType === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
@@ -205,140 +188,110 @@
                     </div>
                 </div>
 
+                <!-- TAB 3: تحديث كلمة المرور -->
                 <div v-if="currentTab === 3">
                     <div class="max-w-2xl mx-auto">
                         <h3 class="text-xl font-bold mb-6">تحديث كلمة المرور</h3>
-
                         <div class="space-y-6">
-
-                            <!-- current password -->
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    كلمة المرور الحالية
-                                </label>
-
+                                <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الحالية</label>
                                 <input v-model="passwordData.current_password"
                                     :type="showPassword ? 'text' : 'password'"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
-
                                 <button type="button" @click="showPassword = !showPassword"
                                     class="absolute right-3 top-10 text-gray-500">
                                     {{ showPassword ? '🚫👁️' : '👁️' }}
                                 </button>
                             </div>
-
-                            <!-- new password -->
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    كلمة المرور الجديدة
-                                </label>
-
+                                <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الجديدة</label>
                                 <input v-model="passwordData.new_password" :type="showNewPassword ? 'text' : 'password'"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
-
                                 <button type="button" @click="showNewPassword = !showNewPassword"
                                     class="absolute right-3 top-10 text-gray-500">
                                     {{ showNewPassword ? '🚫👁️' : '👁️' }}
                                 </button>
                             </div>
-
-                            <!-- confirm password -->
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    تأكيد كلمة المرور
-                                </label>
-
+                                <label class="block text-sm font-medium text-gray-700 mb-1">تأكيد كلمة المرور</label>
                                 <input v-model="passwordData.confirm_password"
                                     :type="showConfirmPassword ? 'text' : 'password'"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
-
                                 <button type="button" @click="showConfirmPassword = !showConfirmPassword"
                                     class="absolute right-3 top-10 text-gray-500">
                                     {{ showConfirmPassword ? '🚫👁️' : '👁️' }}
                                 </button>
                             </div>
-
                         </div>
-
-                        <!-- buttons -->
                         <div class="mt-8 flex gap-4">
                             <button @click="updatePassword" :disabled="isUpdatingPassword"
                                 class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 rounded-xl transition disabled:opacity-70">
                                 {{ isUpdatingPassword ? 'جاري التحديث...' : 'تحديث كلمة المرور' }}
                             </button>
                         </div>
-
-                        <!-- status -->
                         <div v-if="passwordStatusMessage" :class="[
                             'mt-6 p-4 rounded-xl text-center font-medium',
-                            passwordStatusType === 'success'
-                                ? 'bg-emerald-100 text-emerald-700'
-                                : 'bg-red-100 text-red-700'
+                            passwordStatusType === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
                         ]">
                             {{ passwordStatusMessage }}
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 4: Wallet -->
+                <!-- TAB 4: المحفظة (Wallet) - المُحدث -->
                 <div v-if="currentTab === 4">
                     <div class="max-w-3xl mx-auto">
-
                         <h3 class="text-xl font-bold mb-6 text-center">المحفظة</h3>
 
                         <!-- Wallet Card -->
                         <div
-                            class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg mb-6">
-                            <p class="text-sm opacity-80">الرصيد الحالي</p>
-                            <h2 class="text-3xl font-bold mt-2">
-                                {{ profile.wallet_balance ?? '0.00' }} $
-                            </h2>
-                        </div>
-
-                        <!-- Actions -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                            <!-- Deposit -->
-                            <button @click="deposit"
-                                class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-medium transition">
-                                شحن الرصيد
-                            </button>
-
-                            <!-- Withdraw -->
-                            <button @click="withdraw"
-                                class="bg-gray-800 hover:bg-gray-900 text-white py-3 rounded-xl font-medium transition">
-                                سحب الرصيد
-                            </button>
-
-                        </div>
-
-                        <!-- Transactions -->
-                        <div class="mt-8 bg-gray-50 p-6 rounded-xl">
-                            <h4 class="font-bold mb-4">آخر العمليات</h4>
-
-                            <div v-if="transactions.length">
-                                <div v-for="tx in transactions" :key="tx.id"
-                                    class="flex justify-between items-center border-b py-2">
-
-                                    <div>
-                                        <p class="font-medium">{{ tx.type }}</p>
-                                        <p class="text-sm text-gray-500">{{ formatDate(tx.created_at) }}</p>
-                                    </div>
-
-                                    <span :class="[
-                                        'font-bold',
-                                        tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
-                                    ]">
-                                        {{ tx.amount }} $
+                            class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-8 rounded-3xl shadow-lg mb-8">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm opacity-90">الرصيد المتاح</p>
+                                    <h2 class="text-5xl font-bold mt-3">
+                                        {{ walletAmount }} <span class="text-2xl font-normal">$</span>
+                                    </h2>
+                                </div>
+                                <div class="text-right">
+                                    <span
+                                        class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-2xl text-sm font-medium">
+                                        {{ profile.wallet?.currency || 'USD' }}
                                     </span>
                                 </div>
                             </div>
+                        </div>
 
-                            <p v-else class="text-gray-500 text-center">
+                        <!-- Actions -->
+                        <div class="flex justify-center mb-8">
+                            <button @click="deposit"
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white py-6 px-8 rounded font-medium transition flex items-center justify-center gap-2">
+                                <span>شحن الرصيد</span>
+                            </button>
+                        </div>
+
+                        <!-- Transactions -->
+                        <div class="bg-gray-50 p-6 rounded-2xl">
+                            <h4 class="font-bold mb-5 text-lg">آخر العمليات</h4>
+                            <div v-if="transactions.length > 0" class="space-y-3">
+                                <div v-for="tx in transactions" :key="tx.id"
+                                    class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
+                                    <div>
+                                        <p class="font-medium">{{ tx.type === 'deposit' ? 'شحن' : 'سحب' }}</p>
+                                        <p class="text-sm text-gray-500">{{ formatDate(tx.created_at) }}</p>
+                                    </div>
+                                    <span :class="[
+                                        'font-bold text-lg',
+                                        tx.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                                    ]">
+                                        {{ tx.type === 'deposit' ? '+' : '-' }} {{ tx.amount }} $
+                                    </span>
+                                </div>
+                            </div>
+                            <p v-else class="text-gray-500 text-center py-8">
                                 لا توجد عمليات حتى الآن
                             </p>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -347,12 +300,12 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { getProfile, updateProfileAPI } from "@/services/userService";
 import { updatePasswordAPI } from "@/services/userService";
+
 export default {
     name: "UserProfile",
-
     setup() {
         // Profile Data
         const profile = ref({
@@ -367,7 +320,7 @@ export default {
             role: "",
             last_login_at: null,
             licenceType: null,
-            transactions: [],
+            wallet: null,
         });
 
         // Edit Form Data
@@ -393,6 +346,7 @@ export default {
         const isUpdatingProfile = ref(false);
         const statusMessage = ref("");
         const statusMessageType = ref("success");
+
         const passwordData = ref({
             current_password: "",
             new_password: "",
@@ -406,17 +360,22 @@ export default {
         const showPassword = ref(false);
         const showNewPassword = ref(false);
         const showConfirmPassword = ref(false);
+
+        // Wallet & Transactions
+        const transactions = ref([]);
+
+        // Computed Wallet Amount
+        const walletAmount = computed(() => {
+            if (!profile.value.wallet) return "0.00";
+            return parseFloat(profile.value.wallet.amount || 0).toFixed(2);
+        });
+
         const updatePassword = async () => {
-            if (
-                !passwordData.value.current_password ||
-                !passwordData.value.new_password ||
-                !passwordData.value.confirm_password
-            ) {
+            if (!passwordData.value.current_password || !passwordData.value.new_password || !passwordData.value.confirm_password) {
                 passwordStatusMessage.value = "من فضلك املأ كل الحقول";
                 passwordStatusType.value = "error";
                 return;
             }
-
             if (passwordData.value.new_password !== passwordData.value.confirm_password) {
                 passwordStatusMessage.value = "كلمة المرور غير متطابقة";
                 passwordStatusType.value = "error";
@@ -424,22 +383,13 @@ export default {
             }
 
             isUpdatingPassword.value = true;
-
             try {
                 const res = await updatePasswordAPI(passwordData.value);
-
                 passwordStatusMessage.value = res.message || "تم تحديث كلمة المرور بنجاح";
                 passwordStatusType.value = "success";
-
-                // reset
-                passwordData.value = {
-                    current_password: "",
-                    new_password: "",
-                    confirm_password: "",
-                };
+                passwordData.value = { current_password: "", new_password: "", confirm_password: "" };
             } catch (error) {
-                passwordStatusMessage.value =
-                    error.response?.data?.message || "حدث خطأ أثناء تحديث كلمة المرور";
+                passwordStatusMessage.value = error.response?.data?.message || "حدث خطأ أثناء تحديث كلمة المرور";
                 passwordStatusType.value = "error";
             } finally {
                 isUpdatingPassword.value = false;
@@ -459,13 +409,11 @@ export default {
         const fetchProfile = async () => {
             try {
                 const res = await getProfile();
-
-                let userData = null;
-                if (res?.user) userData = res.user;
-                else if (res?.data?.user) userData = res.data.user;
+                let userData = res?.user || res?.data?.user || null;
 
                 if (userData) {
                     profile.value = { ...userData };
+
                     editData.value = {
                         name: userData.name || "",
                         email: userData.email || "",
@@ -473,10 +421,14 @@ export default {
                         country: userData.country || "",
                         position: userData.position || "",
                         date_of_birth: userData.date_of_birth || "",
-                        points: userData.points || 0,
                     };
 
                     originalEditData.value = { ...editData.value };
+
+                    // Initialize transactions if available in future
+                    if (userData.transactions) {
+                        transactions.value = userData.transactions;
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching profile:", error);
@@ -485,12 +437,9 @@ export default {
 
         const formatDate = (dateString) => {
             if (!dateString) return "غير متوفر";
-
             try {
                 const date = new Date(dateString);
-
                 if (isNaN(date.getTime())) return "غير متوفر";
-
                 return date.toLocaleDateString("ar-EG", {
                     year: "numeric",
                     month: "long",
@@ -500,6 +449,7 @@ export default {
                 return "غير متوفر";
             }
         };
+
         const updateProfile = async () => {
             if (JSON.stringify(editData.value) === JSON.stringify(originalEditData.value)) {
                 showStatusMessage("لم تقم بإجراء أي تغييرات", "error");
@@ -507,53 +457,63 @@ export default {
             }
 
             isUpdatingProfile.value = true;
-
             try {
                 const payload = { ...editData.value };
                 if (!payload.date_of_birth) payload.date_of_birth = null;
+
                 const response = await updateProfileAPI(payload);
                 showStatusMessage(response.message || "تم تحديث بياناتك بنجاح", "success");
                 await fetchProfile();
             } catch (error) {
-                console.error(error);
                 showStatusMessage(error.response?.data?.message || "حدث خطأ أثناء تحديث البيانات", "error");
             } finally {
                 isUpdatingProfile.value = false;
             }
         };
 
-        const resetEditForm = () => {
-            editData.value = { ...originalEditData.value };
-        };
-
         const showStatusMessage = (message, type = "success") => {
             statusMessage.value = message;
             statusMessageType.value = type;
-
             setTimeout(() => {
                 if (statusMessage.value === message) statusMessage.value = "";
             }, 5000);
         };
 
+        // Dummy functions for deposit and withdraw (يمكنك ربطها لاحقاً)
+        const deposit = () => {
+            alert("سيتم فتح نافذة شحن الرصيد قريباً");
+        };
+
+        const withdraw = () => {
+            alert("سيتم فتح نافذة سحب الرصيد قريباً");
+        };
+
         onMounted(fetchProfile);
 
         return {
-            passwordData,
             profile,
+            editData,
+            originalEditData,
             tabs,
             currentTab,
-            editData,
             isUpdatingProfile,
             statusMessage,
             statusMessageType,
-            getInitials,
-            formatDate,
+            passwordData,
+            isUpdatingPassword,
+            passwordStatusMessage,
+            passwordStatusType,
             showPassword,
             showNewPassword,
             showConfirmPassword,
+            walletAmount,
+            transactions,
+            getInitials,
+            formatDate,
             updateProfile,
-            resetEditForm,
             updatePassword,
+            deposit,
+            withdraw,
         };
     },
 };

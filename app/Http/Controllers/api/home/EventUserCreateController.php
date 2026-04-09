@@ -24,7 +24,7 @@ class EventUserCreateController extends Controller
 {
     use ApiResponse;
 
-    public function create(EventsRequest $request, ImageAnalysisService $imageAnalysisService): JsonResponse
+    public function create(EventsRequest $request, ImageAnalysisService $imageAnalysisService)
     {
         $data = $request->validated();
         unset($data['urls']);
@@ -58,30 +58,39 @@ class EventUserCreateController extends Controller
 
                             $analysis = $imageAnalysisService->process($file, $manager);
 
-                            $image = $analysis['image'];
-                            $width = $analysis['width'];
-                            $height = $analysis['height'];
-                            $price = $analysis['price'];
-                            $plan = $analysis['plan'];
+                            $image    = $analysis['image'];
+                            $preview  = $analysis['preview_encoded'];
+                            $width    = $analysis['width'];
+                            $height   = $analysis['height'];
+                            $price    = $analysis['price'];
+                            $plan     = $analysis['plan'];
 
-                            $filename = uniqid() . '.jpg';
-                            $fullPath = 'events/full/' . $filename;
+                            $filename    = uniqid() . '.jpg';
+                            $fullPath    = 'events/full/' . $filename;
+                            $previewPath = 'events/preview/' . $filename;
 
-                            // حفظ الصورة الأصلية فقط
+                            // حفظ الصورة الأصلية
                             Storage::disk('public')->put(
                                 $fullPath,
                                 $image->toJpeg(90)
                             );
 
+                            // حفظ الـ preview (blur + watermark)
+                            Storage::disk('public')->put(
+                                $previewPath,
+                                $preview
+                            );
+
                             eventsImges::create([
-                                'event_id' => $event->id,
-                                'full_url' => $fullPath,
-                                'width' => $width,
-                                'height' => $height,
-                                'size' => $width * $height,
-                                'price' => $price,
+                                'event_id'     => $event->id,
+                                'preview_url'  => $previewPath,
+                                'full_url'     => $fullPath,
+                                'width'        => $width,
+                                'height'       => $height,
+                                'size'         => $width * $height,
+                                'price'        => $price,
                                 'licence_type' => $plan,
-                                'is_active' => 1,
+                                'is_active'    => 1,
                             ]);
 
                         } elseif (str_starts_with($mime, 'video/')) {

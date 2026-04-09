@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class,'user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('amount')->nullable();
-            $table->string('currency')->nullable();
+            $table->string('currency')->default('USD')->nullable();
             $table->timestamps();
         });
     }

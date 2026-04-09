@@ -10,6 +10,7 @@ use App\Http\Resources\userResource;
 use App\Models\cart;
 use App\Models\cartItems;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -101,6 +102,13 @@ class AuthController extends Controller
         }
 
         $cacheKey = 'user_profile_' . $user->id;
+        $wallet=$user->wallet;
+        if($wallet == null){
+            Wallet::create([
+                'user_id'=>$user->id,
+                'amount'=>0
+            ]);
+        }
         $items=cartItems::where('cart_id', $cart->id)->count();
         $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
          ->remember($cacheKey, 60, function () use ($user, $items) {

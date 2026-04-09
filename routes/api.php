@@ -36,6 +36,7 @@ use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
+use App\Http\Controllers\api\payment\DepositController;
 use App\Http\Controllers\api\payment\PurchaseController;
 use App\Http\Controllers\api\payment\PaymentController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
@@ -325,6 +326,9 @@ Route::prefix('v1')->group(function () {
        Route::get('/{code}/stats', [GateController::class, 'country']);
     });
 
-    // 133 EndPoint till now
+    Route::prefix('deposit')->middleware(AdminMiddleware::class)->group(function () {
+        Route::post('/create', [DepositController::class, 'create']);
+    });
+    // 134 EndPoint till now
 });
 

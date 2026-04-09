@@ -42,7 +42,6 @@ const checkStatus = async () => {
 };
 
 onMounted(() => {
-
   if (!orderId) {
     router.push("/en/failed");
     return;
@@ -77,7 +76,7 @@ onUnmounted(() => clearInterval(interval));
   width: 56px;
   height: 56px;
   border: 5px solid #e0e0e0;
-  border-top-color: #0070ba; /* PayPal blue */
+  border-top-color: #0070ba;
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
   margin: 0 auto 24px;
