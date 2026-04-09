@@ -73,50 +73,34 @@ class PaymentController extends Controller
         $token = $request->query('token');
 
         if (!$token) {
-
             return response()->json(['success' => false, 'message' => 'Token missing.'], 400);
         }
 
         try {
             $result = $this->paypal->success($token);
-            $user = $result['order']->user_id;
-            $purchase=$result['order']->id;
+            $user     = $result['order']->user_id;
+            $purchase = $result['order']->id;
+
             $cart = cart::where('user_id', $user)->first();
             if (!$cart) {
-                return $this->error('Cart not Found',404);
+                return $this->error('Cart not Found', 404);
             }
-            $items = cartItems::where("cart_id", $cart->id)->get();
 
+            $items = cartItems::where("cart_id", $cart->id)->get();
             foreach ($items as $item) {
                 purchase_items::create([
                     "purchase_id" => $purchase,
-                    "image_id" => $item->image_id,
-                    "price" => $item->price,
+                    "image_id"    => $item->image_id,
+                    "price"       => $item->price,
                 ]);
             }
 
             cartItems::where('cart_id', $cart->id)->delete();
-            if ($result['order']->status == 'completed') {
-                Mail::to($result['order']->user->email)->send(
-                    new PaymentSuccessMail(
-                        $result['order']->amount,
-                        $result['order']->user->name
-                    )
-                );
-                $this->clearCartCache($user);
-                return redirect('/en/success');
-            }
-            Mail::to($result['order']->user->email)->send(
-                new PaymentFailMail(
-                    $result['order']->amount,
-                    $result['order']->user->name
-                )
-            );
-            return redirect('/en/failed');
+            $this->clearCartCache($user);
 
+            return redirect('/en/waiting?order_id=' . $purchase);
 
         } catch (Exception $e) {
-
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
@@ -139,6 +123,33 @@ class PaymentController extends Controller
                 'success' => false,
                 'message' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function orderStatus(Request $request, $id): JsonResponse
+    {
+        $order = \App\Models\purchases::find($id);
+
+        if (!$order) {
+            return response()->json(['status' => 'not_found'], 404);
+        }
+        if($order->status == "completed"){
+            Mail::to($order->user->email)->send(
+                    new PaymentSuccessMail(
+                        $order->amount,
+                        $order->user->name
+                    )
+                );
+            return response()->json(['status' => $order->status]);
+        }
+        else{
+            Mail::to($order->user->email)->send(
+                    new PaymentFailMail(
+                        $order->amount,
+                        $order->user->name
+                    )
+                );
+            return response()->json(['status' => $order->status]);
         }
     }
 }

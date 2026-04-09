@@ -34,8 +34,6 @@ class WebhookController extends Controller
         }
 
         try {
-
-
             $provider = new \Srmklive\PayPal\Services\PayPal;
             $provider->setApiCredentials(config('paypal'));
             $provider->getAccessToken();
@@ -83,11 +81,9 @@ class WebhookController extends Controller
             $eventData = json_decode($body, true);
             $this->paypal->handleWebhook($eventData);
 
-
             return response()->json(['status' => 'ok']);
 
         } catch (\Exception $e) {
-
             return response()->json(['error' => 'webhook failed'], 500);
         }
     }

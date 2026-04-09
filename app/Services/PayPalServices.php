@@ -95,28 +95,31 @@ class PayPalServices implements PaymentInterface
 
     public function success(string $token): array
     {
-
         $order = purchases::where('paypal_order_id', $token)
             ->lockForUpdate()
             ->firstOrFail();
-
 
         if ($order->isCompleted()) {
             return ['success' => true, 'message' => 'Already completed.', 'order' => $order];
         }
 
-        if (!$order->isPending()) {
+        // ✅ لو approved أو pending → كلاهما مقبول، مش exception
+        if (!$order->isPending() && $order->status !== 'approved') {
             throw new Exception("Order #{$order->id} is in invalid state: {$order->status}");
         }
 
-        DB::transaction(function () use ($order) {
-            $order->update(['status' => 'approved']);
-        });
+        // لو لسه pending → حوّله approved
+        if ($order->isPending()) {
+            DB::transaction(function () use ($order) {
+                $order->update(['status' => 'approved']);
+            });
+        }
 
         return [
             'success'  => true,
             'message'  => 'Payment approved. Awaiting webhook confirmation.',
             'order_id' => $order->id,
+            'order'    => $order->fresh(),
         ];
     }
 

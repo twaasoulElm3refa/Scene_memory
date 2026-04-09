@@ -51,6 +51,7 @@ import gate from "../views/home/gate.vue"
 import country_data from "../views/home/country_data.vue"
 import success from "../views/home/success.vue"
 import failed from "../views/home/failed.vue"
+import waiting from "../views/home/Waiting.vue";
 
 const routes = [
     {
@@ -63,6 +64,11 @@ const routes = [
     {
         path: "/:lang/home",
         component: Home,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/waiting",
+        component: waiting,
         meta: { hideNavbar: false, hideFooter: false },
     },
     {
