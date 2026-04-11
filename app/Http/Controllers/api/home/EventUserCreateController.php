@@ -31,7 +31,6 @@ class EventUserCreateController extends Controller
 
         try {
             $event = DB::transaction(function () use ($data, $request, $imageAnalysisService) {
-
                 $data['slug'] = Str::slug($data['title']) . '-' . Str::random(5) . '-' . time();
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
@@ -48,55 +47,99 @@ class EventUserCreateController extends Controller
                     'description' => $data['description'],
                 ]);
 
-                $manager = new ImageManager(new Driver);
+                $manager = new ImageManager(new Driver());
+
+                $supportedImageMimes = [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp',
+                ];
 
                 if ($request->hasFile('urls')) {
-                    foreach ($request->file('urls') as $file) {
-                        $mime = $file->getMimeType();
-
-                        if (str_starts_with($mime, 'image/')) {
-
-                            $analysis = $imageAnalysisService->process($file, $manager);
-
-                            $image    = $analysis['image'];
-                            $preview  = $analysis['preview_encoded'];
-                            $width    = $analysis['width'];
-                            $height   = $analysis['height'];
-                            $price    = $analysis['price'];
-                            $plan     = $analysis['plan'];
-
-                            $filename    = uniqid() . '.jpg';
-                            $fullPath    = 'events/full/' . $filename;
-                            $previewPath = 'events/preview/' . $filename;
-
-                            // حفظ الصورة الأصلية
-                            Storage::disk('public')->put(
-                                $fullPath,
-                                $image->toJpeg(90)
-                            );
-
-                            // حفظ الـ preview (blur + watermark)
-                            Storage::disk('public')->put(
-                                $previewPath,
-                                $preview
-                            );
-
-                            eventsImges::create([
-                                'event_id'     => $event->id,
-                                'preview_url'  => $previewPath,
-                                'full_url'     => $fullPath,
-                                'width'        => $width,
-                                'height'       => $height,
-                                'size'         => $width * $height,
-                                'price'        => $price,
-                                'licence_type' => $plan,
-                                'is_active'    => 1,
+                    foreach ($request->file('urls', []) as $file) {
+                        if (!$file instanceof \Illuminate\Http\UploadedFile) {
+                            \Log::error('Invalid uploaded item in urls', [
+                                'type' => gettype($file),
                             ]);
+                            continue;
+                        }
 
+                        $mime = (string) $file->getMimeType();
+
+                        if (in_array($mime, $supportedImageMimes, true)) {
+                            try {
+                                $manager = new ImageManager(new Driver()); // ✅ جديد لكل صورة
+
+                                $analysis = $imageAnalysisService->process($file, $manager);
+
+                                $image    = $analysis['image'];
+                                $preview  = $analysis['preview_encoded'];
+                                $width    = $analysis['width'];
+                                $height   = $analysis['height'];
+                                $price    = $analysis['price'];
+                                $plan     = $analysis['plan'];
+
+                                $filename    = uniqid('', true) . '.jpg';
+                                $fullPath    = 'events/full/' . $filename;
+                                $previewPath = 'events/preview/' . $filename;
+
+                                Storage::disk('public')->put(
+                                    $fullPath,
+                                    (string) $image->toJpeg(90)
+                                );
+
+                                Storage::disk('public')->put(
+                                    $previewPath,
+                                    (string) $preview
+                                );
+
+                                $payload = [
+                                    'event_id'     => $event->id,
+                                    'preview_url'  => $previewPath,
+                                    'full_url'     => $fullPath,
+                                    'width'        => $width,
+                                    'height'       => $height,
+                                    'size'         => $width * $height,
+                                    'price'        => $price,
+                                    'licence_type' => $plan,
+                                    'is_active'    => 1,
+                                ];
+
+                                \Log::info('eventsImges create payload', $payload);
+
+                                eventsImges::create($payload);
+                            } catch (\Throwable $e) {
+                                \Log::error('Image processing or create failed', [
+                                    'name'    => $file->getClientOriginalName(),
+                                    'mime'    => $mime,
+                                    'message' => $e->getMessage(),
+                                    'file'    => $e->getFile(),
+                                    'line'    => $e->getLine(),
+                                    'trace'   => $e->getTraceAsString(),
+                                ]);
+
+                                throw $e;
+                            }
                         } elseif (str_starts_with($mime, 'video/')) {
+                            try {
+                                $path = $file->store('videos_temp', 'public');
+                                ProcessEventVideoJob::dispatch($event->id, $path);
+                            } catch (\Throwable $e) {
+                                \Log::error('Video processing dispatch failed', [
+                                    'name'    => $file->getClientOriginalName(),
+                                    'mime'    => $mime,
+                                    'message' => $e->getMessage(),
+                                    'file'    => $e->getFile(),
+                                    'line'    => $e->getLine(),
+                                ]);
 
-                            $path = $file->store('videos_temp', 'public');
-                            ProcessEventVideoJob::dispatch($event->id, $path);
+                                throw $e;
+                            }
+                        } else {
+                            \Log::warning('Unsupported upload type skipped', [
+                                'name' => $file->getClientOriginalName(),
+                                'mime' => $mime,
+                            ]);
                         }
                     }
                 }
@@ -116,11 +159,18 @@ class EventUserCreateController extends Controller
                 $event->load('translations', 'photos'),
                 'Event Created Successfully'
             );
-
         } catch (\Throwable $th) {
+            \Log::error('Event create failed', [
+                'message' => $th->getMessage(),
+                'file'    => $th->getFile(),
+                'line'    => $th->getLine(),
+                'trace'   => $th->getTraceAsString(),
+            ]);
+
             return $this->error($th->getMessage());
         }
     }
+
 
     public function historic(EventsRequest $request, ImageAnalysisService $imageAnalysisService): JsonResponse
     {

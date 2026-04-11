@@ -50,8 +50,12 @@ import downloads from "../views/home/download.vue"
 import gate from "../views/home/gate.vue"
 import country_data from "../views/home/country_data.vue"
 import success from "../views/home/success.vue"
+import successDeposit from "../views/home/successDeposit.vue"
 import failed from "../views/home/failed.vue"
+import failedDeposit from "../views/home/failedDeposit.vue"
 import waiting from "../views/home/Waiting.vue";
+import waitingDeposit from "../views/home/WaitingDeposit.vue";
+import WalletDeposit from "../views/home/WalletDeposit.vue";
 
 const routes = [
     {
@@ -72,6 +76,16 @@ const routes = [
         meta: { hideNavbar: false, hideFooter: false },
     },
     {
+        path: "/:lang/Deposit/waiting",
+        component: waitingDeposit,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/Deposit",
+        component: WalletDeposit,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
         path: "/:lang/success",
         component: success,
         meta: { hideNavbar: false, hideFooter: false },
@@ -79,6 +93,16 @@ const routes = [
     {
         path: "/:lang/failed",
         component: failed,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/deposit/success",
+        component: successDeposit,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/deposit/failed",
+        component: failedDeposit,
         meta: { hideNavbar: false, hideFooter: false },
     },
 

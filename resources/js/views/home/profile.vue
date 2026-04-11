@@ -303,10 +303,13 @@
 import { ref, onMounted, computed } from "vue";
 import { getProfile, updateProfileAPI } from "@/services/userService";
 import { updatePasswordAPI } from "@/services/userService";
+import { useRouter, useRoute } from "vue-router";
 
 export default {
     name: "UserProfile",
     setup() {
+        const router = useRouter();
+        const route = useRoute();
         // Profile Data
         const profile = ref({
             id: "",
@@ -479,9 +482,9 @@ export default {
             }, 5000);
         };
 
-        // Dummy functions for deposit and withdraw (يمكنك ربطها لاحقاً)
         const deposit = () => {
-            alert("سيتم فتح نافذة شحن الرصيد قريباً");
+            const lang = route.params.lang || "en";
+            router.push(`/${lang}/Deposit`);
         };
 
         const withdraw = () => {

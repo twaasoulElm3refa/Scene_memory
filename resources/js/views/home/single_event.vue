@@ -20,13 +20,13 @@
             <!-- Hero -->
             <div class="relative">
                 <component :is="heroMediaComponent" v-if="heroMedia"
-                    :src="getMediaUrl(heroMedia.full_url || heroMedia.full_url)"
+                    :src="getMediaUrl(heroMedia.preview_url || heroMedia.preview_url)"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
                 <img v-else src="https://images.unsplash.com/..." :alt="event.translation.title"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
 
-                <div v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.full_url))"
+                <div v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.preview_url))"
                     class="absolute inset-0 bg-black/30 flex items-center justify-center z-10 pointer-events-none">
                     <div
                         class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-2xl">
@@ -77,13 +77,13 @@
                                 @click="openLightbox(index)">
 
                                 <!-- IMAGE -->
-                                <img v-if="!media.video && !isVideoUrl(media.full_url)"
-                                    :src="getMediaUrl(media.full_url)"
+                                <img v-if="!media.video && !isVideoUrl(media.preview_url)"
+                                    :src="getMediaUrl(media.preview_url)"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     loading="lazy" />
 
                                 <!-- VIDEO -->
-                                <video v-else :src="getMediaUrl(media.full_url)" class="w-full h-full object-cover"
+                                <video v-else :src="getMediaUrl(media.preview_url)" class="w-full h-full object-cover"
                                     autoplay muted loop playsinline preload="metadata">
                                 </video>
 

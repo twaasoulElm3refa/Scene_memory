@@ -31,6 +31,7 @@ use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
 use App\Http\Controllers\api\home\GateController;
 use App\Http\Controllers\api\webhook\WebhookController;
+use App\Http\Controllers\api\webhook\WalletWebhookController;
 use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
@@ -326,9 +327,15 @@ Route::prefix('v1')->group(function () {
        Route::get('/{code}/stats', [GateController::class, 'country']);
     });
 
-    Route::prefix('deposit')->middleware(AdminMiddleware::class)->group(function () {
-        Route::post('/create', [DepositController::class, 'create']);
+    Route::prefix('deposit')->middleware('auth:sanctum')->group(function () {
+        Route::post('/pay', [DepositController::class, 'create']);
     });
-    // 134 EndPoint till now
+
+    Route::get('/wallet/success', [DepositController::class, 'success'])->name('wallet.success');
+    Route::get('/wallet/cancel',  [DepositController::class, 'cancel'])->name('wallet.cancel');
+    Route::post('/wallet/webhook', [WalletWebhookController::class, 'handle'])->name('wallet.webhook');
+    Route::get('/wallet/order-status/{id}', [DepositController::class, 'orderStatus']);
+
+    // 139 EndPoint till now
 });
 

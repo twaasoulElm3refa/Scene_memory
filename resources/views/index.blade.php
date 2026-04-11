@@ -6,16 +6,17 @@
     $locale = in_array($segmentLang, $supported) ? $segmentLang : 'en';
 @endphp
 
-<html
-    id="html-root"
-    data-theme="light"
-    lang="en"
->
+<html id="html-root" data-theme="light" lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SceMory</title>
+    <script>
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'light');
+        }
+    </script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

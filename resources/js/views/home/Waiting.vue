@@ -16,7 +16,10 @@ import axios from "axios";
 
 const router = useRouter();
 const route = useRoute();
+
 const orderId = route.query.order_id;
+const lang = localStorage.getItem("lang") || "en";
+
 let interval = null;
 const attempts = ref(0);
 const MAX_ATTEMPTS = 30;
@@ -24,33 +27,55 @@ const MAX_ATTEMPTS = 30;
 const checkStatus = async () => {
   try {
     attempts.value++;
+
     const url = `${import.meta.env.VITE_API_URL}/api/v1/order/status/${orderId}`;
     const { data } = await axios.get(url);
+
     if (data.status === "completed") {
       clearInterval(interval);
-      router.push(`/en/success`);
-    } else if (data.status === "failed") {
+      router.push(`/${lang}/success`);
+      return;
+    }
+
+    if (data.status === "failed") {
       clearInterval(interval);
-      router.push(`/en/failed`);
-    } else if (attempts.value >= MAX_ATTEMPTS) {
+      router.push(`/${lang}/failed`);
+      return;
+    }
+
+    // لو انتهت المحاولات → فشل (مش success ❌)
+    if (attempts.value >= MAX_ATTEMPTS) {
       clearInterval(interval);
-      router.push(`/en/success`);
+      router.push(`/${lang}/failed`);
     }
   } catch (e) {
-    console.error("Polling error:", e.response?.status, e.response?.data, e.message);
+    console.error(
+      "Polling error:",
+      e.response?.status,
+      e.response?.data,
+      e.message
+    );
+
+    if (attempts.value >= MAX_ATTEMPTS) {
+      clearInterval(interval);
+      router.push(`/${lang}/failed`);
+    }
   }
 };
 
 onMounted(() => {
   if (!orderId) {
-    router.push("/en/failed");
+    router.push(`/${lang}/failed`);
     return;
   }
+
   checkStatus();
   interval = setInterval(checkStatus, 5000);
 });
 
-onUnmounted(() => clearInterval(interval));
+onUnmounted(() => {
+  if (interval) clearInterval(interval);
+});
 </script>
 
 <style scoped>

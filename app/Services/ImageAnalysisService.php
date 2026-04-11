@@ -2,20 +2,46 @@
 
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
+use Intervention\Image\ImageManager;
+use Intervention\Image\EncodedImage;
 use Intervention\Image\Typography\FontFactory;
 
 class ImageAnalysisService
 {
-    public function process($file, $manager)
+    public function process(UploadedFile $file, ImageManager $manager): array
     {
-        $image = $manager->read($file);
+        if (!$file->isValid()) {
+            throw new \RuntimeException('Uploaded file is not valid.');
+        }
+
+        $realPath = $file->getRealPath();
+
+        if (!$realPath || !is_string($realPath) || !file_exists($realPath)) {
+            throw new \RuntimeException('Image temp path is invalid.');
+        }
+
+        try {
+            $image = $manager->read($realPath);
+        } catch (\Throwable $e) {
+            \Log::error('Image decode failed', [
+                'original_name' => $file->getClientOriginalName(),
+                'mime'          => $file->getMimeType(),
+                'extension'     => $file->getClientOriginalExtension(),
+                'real_path'     => $realPath,
+                'error'         => $e->getMessage(),
+            ]);
+
+            throw new \RuntimeException(
+                'Unsupported or corrupted image: ' . $file->getClientOriginalName()
+            );
+        }
 
         $width = $image->width();
         $height = $image->height();
 
         $resolution = $this->getResolutionLabel($width, $height);
         $resolutionScore = $this->getResolutionScore($resolution);
-
         $qualityScore = $this->analyze($file);
 
         [$price, $plan] = $this->pricing($resolutionScore, $qualityScore);
@@ -35,23 +61,16 @@ class ImageAnalysisService
         ];
     }
 
-    /**
-     * 🔥 نظام التسعير الجديد (Dynamic)
-     */
-    private function pricing($resolutionScore, $qualityScore)
+    private function pricing($resolutionScore, $qualityScore): array
     {
-        // 🧠 المعادلة الأساسية
         $price = (
-            ($qualityScore * 0.12) +   // جودة الصورة
-            ($resolutionScore * 2.5)   // الدقة
+            ($qualityScore * 0.12) +
+            ($resolutionScore * 2.5)
         );
 
-        // 🛡️ حد أدنى وحد أقصى
         $price = max(2, min($price, 50));
-
         $price = round($price, 2);
 
-        // 📦 تحديد الباقة (للعرض فقط)
         $plan = match (true) {
             $price < 5 => 'free',
             $price < 10 => 'basic',
@@ -62,10 +81,7 @@ class ImageAnalysisService
         return [$price, $plan];
     }
 
-    /**
-     * 🎯 تحويل الدقة إلى score
-     */
-    private function getResolutionScore($resolution)
+    private function getResolutionScore($resolution): int
     {
         return match ($resolution) {
             '720p' => 1,
@@ -76,7 +92,7 @@ class ImageAnalysisService
         };
     }
 
-    private function getResolutionLabel($width, $height)
+    private function getResolutionLabel($width, $height): string
     {
         $pixels = $width * $height;
 
@@ -88,15 +104,20 @@ class ImageAnalysisService
         };
     }
 
-    /**
-     * 🧠 تحليل الجودة
-     */
-    private function analyze($file)
+    private function analyze(UploadedFile $file): float|int
     {
         $realPath = $file->getRealPath();
-        $content = file_get_contents($realPath);
 
-        $img = imagecreatefromstring($content);
+        if (!$realPath || !file_exists($realPath)) {
+            return 50;
+        }
+
+        $content = @file_get_contents($realPath);
+        if ($content === false) {
+            return 50;
+        }
+
+        $img = @imagecreatefromstring($content);
 
         if (!$img) {
             return 50;
@@ -116,7 +137,7 @@ class ImageAnalysisService
         );
     }
 
-    private function sharpness($img)
+    private function sharpness($img): float|int
     {
         $sample = $this->resizeForAnalysis($img, 200, 200);
 
@@ -143,14 +164,16 @@ class ImageAnalysisService
 
         imagedestroy($sample);
 
-        if ($count === 0) return 0;
+        if ($count === 0) {
+            return 0;
+        }
 
         $avg = $total / $count;
 
         return min(100, round(($avg / 40) * 100, 2));
     }
 
-    private function noise($img)
+    private function noise($img): float|int
     {
         $sample = $this->resizeForAnalysis($img, 200, 200);
 
@@ -179,14 +202,16 @@ class ImageAnalysisService
 
         imagedestroy($sample);
 
-        if ($count === 0) return 0;
+        if ($count === 0) {
+            return 0;
+        }
 
         $avgNoise = $totalDiff / $count;
 
         return min(100, round(($avgNoise / 30) * 100, 2));
     }
 
-    private function upscale($img)
+    private function upscale($img): float|int
     {
         $sample = $this->resizeForAnalysis($img, 256, 256);
 
@@ -216,7 +241,9 @@ class ImageAnalysisService
 
         imagedestroy($sample);
 
-        if ($count === 0) return 0;
+        if ($count === 0) {
+            return 0;
+        }
 
         $avgBlockiness = $blockiness / $count;
 
@@ -251,7 +278,7 @@ class ImageAnalysisService
         return $resized;
     }
 
-    private function grayAt($img, $x, $y)
+    private function grayAt($img, $x, $y): float
     {
         $rgb = imagecolorat($img, $x, $y);
 
@@ -261,19 +288,18 @@ class ImageAnalysisService
 
         return (0.299 * $r) + (0.587 * $g) + (0.114 * $b);
     }
-    private function makePreview($image): \Intervention\Image\EncodedImage
-    {
-        // Blur خفيف
-        $image->blur(6);
 
-        // Watermark نص في المنتصف
-        $image->text('© Protected', $image->width() / 2, $image->height() / 2, function (FontFactory $font) {
-            $font->size(42);
-            $font->color([255, 255, 255, 100]); // أبيض شبه شفاف
-            $font->align('center');
-            $font->valign('middle');
-            $font->angle(30);
-        });
+    private function makePreview($image): EncodedImage
+    {
+        $image->blur(12);
+
+        $watermark = ImageManager::gd()->read(public_path('images/watermark.png'));
+
+        $watermark->scale(
+            width: $image->width() * 0.75,
+            height: $image->height() * 0.55
+        );
+        $image->place($watermark, 'center', 0, 0, 40);
 
         return $image->toJpeg(75);
     }
