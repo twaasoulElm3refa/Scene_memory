@@ -226,10 +226,7 @@ class PayPalServices implements PaymentInterface
             // ابعت الإيميل مرة واحدة فقط
             if (!$order->mail_sent) {
                 Mail::to($order->user->email)->queue(
-                    new PaymentSuccessMail(
-                        $order->amount,
-                        $order->user->name
-                    )
+                    new PaymentSuccessMail($order)
                 );
 
                 $order->update([

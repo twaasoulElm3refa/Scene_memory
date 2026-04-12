@@ -19,7 +19,7 @@
         <!-- Body -->
         <div style="padding:30px;color:#333;">
 
-            <h3 style="margin-bottom:10px;">Hello {{ $userName }} 👋</h3>
+            <h3 style="margin-bottom:10px;">Hello {{ $order->user->name }} 👋</h3>
 
             <p style="font-size:15px;line-height:1.6;">
                 Your payment has been completed successfully.
@@ -27,7 +27,7 @@
 
             <!-- Info Box -->
             <div style="background:#f9fafb;padding:15px;border-radius:10px;margin:20px 0;">
-                <p style="margin:5px 0;"><strong>Amount Paid:</strong> ${{ $amount }}</p>
+                <p style="margin:5px 0;"><strong>Amount Paid:</strong> ${{ $order->amount }}</p>
                 <p style="margin:5px 0;"><strong>Payment Method:</strong> PayPal</p>
             </div>
 
