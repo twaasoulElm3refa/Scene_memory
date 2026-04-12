@@ -3,11 +3,14 @@
 namespace App\Services;
 
 use App\Interfaces\PaymentInterface;
+use App\Mail\PaymentFailMail;
+use App\Mail\PaymentSuccessMail;
 use App\Models\purchases;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Exception;
+use Illuminate\Support\Facades\Mail;
 
 class PayPalServices implements PaymentInterface
 {
@@ -25,15 +28,15 @@ class PayPalServices implements PaymentInterface
     // STEP 1 — Create Order (Idempotent)
     // ══════════════════════════════════════════════════════════════════════════
 
-    public function pay(array $data): array
+   public function pay(array $data): array
     {
-
         $key = $data['idempotency_key']
             ?? md5(($data['user_id'] ?? 'guest') . '|' . $data['amount'] . '|' . now()->format('Ymd'));
 
-
-        // ── Idempotency check ─────────────────────────────────────────────────
         $existing = purchases::where('idempotency_key', $key)
+            ->where(function ($q) {
+                $q->whereNull('type')->orWhere('type', 'checkout');
+            })
             ->whereIn('status', ['pending', 'approved'])
             ->first();
 
@@ -42,17 +45,32 @@ class PayPalServices implements PaymentInterface
             return ['order' => $existing, 'approval_url' => $approvalUrl];
         }
 
-        // ── Atomic: Save pending order first ──────────────────────────────────
         return DB::transaction(function () use ($data, $key) {
+            $order = purchases::where('idempotency_key', $key)
+                ->where(function ($q) {
+                    $q->whereNull('type')->orWhere('type', 'checkout');
+                })
+                ->lockForUpdate()
+                ->first();
 
-            $order = purchases::firstOrCreate([
-                'idempotency_key' => $key,
-                'user_id'         => $data['user_id'] ?? null,
-                'amount'          => $data['amount'],
-                'currency'        => config('paypal.currency', 'USD'),
-                'description'     => $data['description'] ?? 'Order Payment',
-                'status'          => 'pending',
-            ]);
+            if (!$order) {
+                $order = purchases::create([
+                    'idempotency_key' => $key,
+                    'user_id'         => $data['user_id'] ?? null,
+                    'amount'          => $data['amount'],
+                    'currency'        => config('paypal.currency', 'USD'),
+                    'description'     => $data['description'] ?? 'Order Payment',
+                    'type'            => 'checkout',
+                    'status'          => 'pending',
+                ]);
+            } elseif (empty($order->type)) {
+                $order->update(['type' => 'checkout']);
+            }
+
+            if ($order->paypal_order_id) {
+                $approvalUrl = $this->getApprovalUrl($order->paypal_order_id);
+                return ['order' => $order->fresh(), 'approval_url' => $approvalUrl];
+            }
 
             $paypalOrder = $this->provider->createOrder([
                 'intent' => 'CAPTURE',
@@ -62,26 +80,25 @@ class PayPalServices implements PaymentInterface
                 ],
                 'purchase_units' => [[
                     'reference_id' => (string) $order->id,
-                    'amount' => [
+                    'custom_id'    => 'checkout:' . $order->id,
+                    'amount'       => [
                         'currency_code' => $order->currency,
                         'value'         => number_format($order->amount, 2, '.', ''),
                     ],
-                    'description' => $order->description,
+                    'description'  => $order->description,
                 ]],
             ]);
 
-            if (!isset($paypalOrder['id']) || $paypalOrder['status'] !== 'CREATED') {
-
+            if (!isset($paypalOrder['id']) || ($paypalOrder['status'] ?? null) !== 'CREATED') {
                 throw new Exception('PayPal order creation failed: ' . json_encode($paypalOrder));
             }
 
-            // ── Persist PayPal order ID ───────────────────────────────────────
             $order->update([
                 'paypal_order_id'  => $paypalOrder['id'],
                 'gateway_response' => $paypalOrder,
             ]);
 
-            $approvalUrl = collect($paypalOrder['links'])
+            $approvalUrl = collect($paypalOrder['links'] ?? [])
                 ->firstWhere('rel', 'approve')['href']
                 ?? throw new Exception('Approval URL not found in PayPal response.');
 
@@ -141,87 +158,165 @@ class PayPalServices implements PaymentInterface
     }
     // ── Private Webhook Handlers ───────────────────────────────────────────────
 
-   private function onCaptureCompleted(array $resource): void
+    private function onCaptureCompleted(array $resource): void
     {
+        DB::transaction(function () use ($resource) {
+            $referenceId = $resource['purchase_units'][0]['reference_id'] ?? null;
 
-        $referenceId   = $resource['purchase_units'][0]['reference_id'] ?? null;
-        $captureId     = $resource['purchase_units'][0]['payments']['captures'][0]['id']
-                        ?? $resource['id']
-                        ?? null;
-        $paypalOrderId = $resource['id'] ?? null;
+            $paypalOrderId = $resource['supplementary_data']['related_ids']['order_id']
+                ?? $resource['supplementary_data']['related_ids']['paypal_order_id']
+                ?? (($resource['purchase_units'][0]['reference_id'] ?? null) ? ($resource['id'] ?? null) : null);
 
+            $captureId = $resource['purchase_units'][0]['payments']['captures'][0]['id']
+                ?? $resource['id']
+                ?? null;
 
-        $order = null;
+            $order = null;
 
-        if ($referenceId) {
-            $order = purchases::find($referenceId);
-        }
+            if ($referenceId) {
+                $order = purchases::whereKey($referenceId)->lockForUpdate()->first();
+            }
 
-        if (!$order && $captureId) {
-            $order = purchases::where('transaction_id', $captureId)->first();
-        }
+            if (!$order && $paypalOrderId) {
+                $order = purchases::where('paypal_order_id', $paypalOrderId)
+                    ->lockForUpdate()
+                    ->first();
+            }
 
-        if (!$order) {
-            $order = purchases::where('paypal_order_id', $paypalOrderId)->first();
-        }
+            if (!$order && $captureId) {
+                $order = purchases::where('transaction_id', $captureId)
+                    ->lockForUpdate()
+                    ->first();
+            }
 
-        if (!$order) {
-            Log::error('PayPalServices: Webhook - Order not found in database', [
-                'reference_id'    => $referenceId,
-                'paypal_order_id' => $paypalOrderId,
-                'capture_id'      => $captureId,
-            ]);
-            return;
-        }
+            if (!$order) {
+                Log::error('PayPalServices: Webhook - Order not found in database', [
+                    'reference_id'    => $referenceId,
+                    'paypal_order_id' => $paypalOrderId,
+                    'capture_id'      => $captureId,
+                ]);
+                return;
+            }
 
-        if ($order->isCompleted()) {
-            Log::info("PayPalServices: Order #{$order->id} already completed - skipping (idempotent)");
-            return;
-        }
+            // حماية إضافية: لو وصل event محفظة هنا تجاهله
+            if ($order->type === 'wallet_deposit') {
+                Log::warning('PayPalServices: Ignoring wallet_deposit inside checkout capture handler', [
+                    'order_id' => $order->id,
+                ]);
+                return;
+            }
 
-        $capture = $resource['purchase_units'][0]['payments']['captures'][0] ?? [];
+            // لو مكتمل بالفعل، بلاش نكرر
+            if ($order->isCompleted()) {
+                Log::info("PayPalServices: Order #{$order->id} already completed - skipping (idempotent)");
+                return;
+            }
 
-        DB::transaction(function () use ($order, $resource, $capture) {
+            $capture = $resource['purchase_units'][0]['payments']['captures'][0] ?? [];
+
             $order->update([
+                'type'             => $order->type ?: 'checkout',
                 'status'           => 'completed',
-                'transaction_id'   => $capture['id'] ?? null,
-                'payer_email'      => $resource['payer']['email_address'] ?? null,
+                'transaction_id'   => $capture['id'] ?? $captureId,
+                'payer_email'      => $resource['payer']['email_address'] ?? $order->payer_email,
                 'gateway_response' => $resource,
                 'paid_at'          => now(),
             ]);
-        });
 
-        // event(new PaymentCompleted($order));
+            // ابعت الإيميل مرة واحدة فقط
+            if (!$order->mail_sent) {
+                Mail::to($order->user->email)->queue(
+                    new PaymentSuccessMail(
+                        $order->amount,
+                        $order->user->name
+                    )
+                );
+
+                $order->update([
+                    'mail_sent' => true,
+                ]);
+
+                Log::info('PayPalServices: Success email queued', [
+                    'order_id' => $order->id,
+                ]);
+            }
+        });
     }
 
     private function onCaptureDeclined(array $resource): void
     {
-
         $paypalOrderId = $resource['supplementary_data']['related_ids']['order_id']
-                      ?? $resource['id']
-                      ?? null;
+            ?? $resource['id']
+            ?? null;
 
-        $order = purchases::where('paypal_order_id', $paypalOrderId)->first();
-
-        if (!$order) {
-            Log::error('PayPalServices: Declined webhook - Order not found', [
-                'paypal_order_id' => $paypalOrderId
+        if (!$paypalOrderId) {
+            Log::error('PayPalServices: Declined webhook - missing paypal order id', [
+                'resource' => $resource,
             ]);
             return;
         }
 
-        DB::transaction(function () use ($order, $resource) {
-            $order->update([
-                'status'           => 'failed',
-                'gateway_response' => $resource,
+        DB::transaction(function () use ($paypalOrderId, $resource) {
+            $order = purchases::where('paypal_order_id', $paypalOrderId)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$order) {
+                Log::error('PayPalServices: Declined webhook - Order not found', [
+                    'paypal_order_id' => $paypalOrderId,
+                ]);
+                return;
+            }
+
+            // حماية إضافية: لو وصل event محفظة هنا تجاهله
+            if ($order->type === 'wallet_deposit') {
+                Log::warning('PayPalServices: Ignoring wallet_deposit inside checkout declined handler', [
+                    'order_id' => $order->id,
+                ]);
+                return;
+            }
+
+            // لو كان completed بالفعل، تجاهل decline المتأخر
+            if ($order->status === 'completed') {
+                Log::warning("PayPalServices: Declined received after completed for order #{$order->id}");
+                return;
+            }
+
+            // حدث الحالة إلى failed
+            if ($order->status !== 'failed') {
+                $order->update([
+                    'type'             => $order->type ?: 'checkout',
+                    'status'           => 'failed',
+                    'gateway_response' => $resource,
+                ]);
+
+                Log::info('PayPalServices: Order status updated to failed', [
+                    'order_id' => $order->id
+                ]);
+            }
+
+            // ابعت الإيميل مرة واحدة فقط
+            if (!$order->mail_sent) {
+                Mail::to($order->user->email)->queue(
+                    new PaymentFailMail(
+                        $order->amount,
+                        $order->user->name
+                    )
+                );
+
+                $order->update([
+                    'mail_sent' => true,
+                ]);
+
+                Log::info('PayPalServices: Fail email queued', [
+                    'order_id' => $order->id,
+                ]);
+            }
+
+            Log::warning("PayPalServices: Order #{$order->id} capture was DECLINED", [
+                'paypal_order_id' => $paypalOrderId
             ]);
-
-            Log::info('PayPalServices: Order status updated to failed', ['order_id' => $order->id]);
         });
-
-        Log::warning("PayPalServices: Order #{$order->id} capture was DECLINED", [
-            'paypal_order_id' => $paypalOrderId
-        ]);
     }
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -250,7 +345,22 @@ class PayPalServices implements PaymentInterface
             return;
         }
 
-        // عمل Capture للفلوس
+        $order = purchases::where('paypal_order_id', $paypalOrderId)->first();
+
+        if (!$order) {
+            Log::warning('PayPalServices: Order not found for approved event', [
+                'paypal_order_id' => $paypalOrderId,
+            ]);
+            return;
+        }
+        if ($order->type === 'wallet_deposit') {
+            Log::warning('PayPalServices: Ignoring wallet order inside checkout service', [
+                'order_id'        => $order->id,
+                'paypal_order_id' => $paypalOrderId,
+            ]);
+            return;
+        }
+
         $capture = $this->provider->capturePaymentOrder($paypalOrderId);
 
         Log::info('PayPalServices: Capture response', [
@@ -258,11 +368,8 @@ class PayPalServices implements PaymentInterface
             'response' => $capture
         ]);
 
-        // لو الـ capture نجح فوراً
         if (($capture['status'] ?? '') === 'COMPLETED') {
-            $captureResource = $capture;
-            // نبني الـ resource بنفس شكل PAYMENT.CAPTURE.COMPLETED
-            $this->onCaptureCompleted($captureResource);
+            $this->onCaptureCompleted($capture);
         }
     }
 

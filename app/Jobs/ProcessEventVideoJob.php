@@ -18,48 +18,92 @@ class ProcessEventVideoJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public int $tries = 3;
+    public int $timeout = 300;
+
     public $eventId;
     public $filePath;
 
     public function __construct($eventId, $filePath)
     {
-        $this->eventId = $eventId;
+        $this->eventId  = $eventId;
         $this->filePath = $filePath;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $event = Events::find($this->eventId);
 
         if (!$event) {
             \Log::warning('ProcessEventVideoJob: Event not found', ['event_id' => $this->eventId]);
+            Storage::disk('public')->delete($this->filePath);
             return;
         }
 
-        $fileContents = Storage::disk('public')->get($this->filePath);
-        $finalPath = 'videos/' . basename($this->filePath);
-        Storage::disk('public')->put($finalPath, $fileContents);
+        $tempAbsPath  = Storage::disk('public')->path($this->filePath);
 
-        $previewPath = $this->makeVideoPreview($finalPath);
+        if (!file_exists($tempAbsPath)) {
+            \Log::error('ProcessEventVideoJob: temp file not found', [
+                'event_id'  => $this->eventId,
+                'file_path' => $this->filePath,
+            ]);
+            return;
+        }
 
-        \Log::info('ProcessEventVideoJob: preview result', [
-            'event_id'     => $this->eventId,
-            'preview_path' => $previewPath,
-            'final_path'   => $finalPath,
-        ]);
+        try {
+            // ✅ بدل ما ننقل الملف في الميموري، بنعمل rename مباشرة على الديسك
+            $finalFilename = 'videos/' . basename($this->filePath);
+            $finalAbsPath  = Storage::disk('public')->path($finalFilename);
 
-        eventsImges::create([
-            'event_id'    => $this->eventId,
-            'preview_url' => $previewPath,
-            'full_url'    => $finalPath,
-            'price'       => 15,
-            'is_active'   => 1,
-        ]);
+            $finalDir = dirname($finalAbsPath);
+            if (!is_dir($finalDir)) {
+                mkdir($finalDir, 0775, true);
+            }
 
-        // حذف الملف المؤقت بعد ما اتنقل
+            rename($tempAbsPath, $finalAbsPath);
+
+            $previewPath = $this->makeVideoPreview($finalFilename);
+
+            \Log::info('ProcessEventVideoJob: preview result', [
+                'event_id'     => $this->eventId,
+                'preview_path' => $previewPath,
+                'final_path'   => $finalFilename,
+            ]);
+
+            eventsImges::create([
+                'event_id'    => $this->eventId,
+                'preview_url' => $previewPath,
+                'full_url'    => $finalFilename,
+                'price'       => 15,
+                'is_active'   => 1,
+            ]);
+
+            $this->clearEventsCache($event->slug);
+
+        } catch (\Throwable $e) {
+            \Log::error('ProcessEventVideoJob: failed', [
+                'event_id'  => $this->eventId,
+                'file_path' => $this->filePath,
+                'message'   => $e->getMessage(),
+                'file'      => $e->getFile(),
+                'line'      => $e->getLine(),
+                'trace'     => $e->getTraceAsString(),
+            ]);
+
+            throw $e;
+        }
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        // امسح الـ temp لو لسه موجود
         Storage::disk('public')->delete($this->filePath);
 
-        $this->clearEventsCache($event->slug);
+        \Log::error('ProcessEventVideoJob: permanently failed', [
+            'event_id'  => $this->eventId,
+            'file_path' => $this->filePath,
+            'message'   => $exception->getMessage(),
+        ]);
     }
 
     private function makeVideoPreview(string $videoPath): ?string

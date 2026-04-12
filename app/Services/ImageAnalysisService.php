@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\ImageManager;
 use Intervention\Image\EncodedImage;
-use Intervention\Image\Typography\FontFactory;
 
 class ImageAnalysisService
 {
@@ -299,7 +298,8 @@ class ImageAnalysisService
             width: $image->width() * 0.75,
             height: $image->height() * 0.55
         );
-        $image->place($watermark, 'center', 0, 0, 40);
+
+        $image->place($watermark, 'center', 0, 0, 50);
 
         return $image->toJpeg(75);
     }

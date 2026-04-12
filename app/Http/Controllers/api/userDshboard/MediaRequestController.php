@@ -58,6 +58,7 @@ class MediaRequestController extends Controller
 
                     $filename = uniqid() . '.jpg';
                     $fullPath = 'events/full/' . $filename;
+                    $previewPath = 'events/preview/' . $filename;
 
                     // حفظ الصورة فقط (no preview)
                     \Storage::disk('public')->put(
@@ -67,6 +68,7 @@ class MediaRequestController extends Controller
 
                     $media = eventsImges::create([
                         'event_id'     => $event->id,
+                        'preview_url'  => $previewPath,
                         'full_url'     => $fullPath,
                         'width'        => $width,
                         'height'       => $height,

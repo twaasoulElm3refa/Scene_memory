@@ -30,6 +30,7 @@ class PayPalWalletServices implements PaymentInterface
             ?? md5(($data['user_id'] ?? 'guest') . '|' . $data['amount'] . '|' . now()->format('Ymd'));
 
         $existing = purchases::where('idempotency_key', $key)
+            ->where('type', 'wallet_deposit')
             ->whereIn('status', ['pending', 'approved'])
             ->first();
 
@@ -43,15 +44,31 @@ class PayPalWalletServices implements PaymentInterface
         }
 
         return DB::transaction(function () use ($data, $key) {
-            $order = purchases::create([
-                'idempotency_key' => $key,
-                'user_id'         => $data['user_id'] ?? null,
-                'amount'          => $data['amount'],
-                'currency'        => config('paypal.currency', 'USD'),
-                'description'     => $data['description'] ?? 'Wallet Deposit',
-                'type'            => 'wallet_deposit',
-                'status'          => 'pending',
-            ]);
+            $order = purchases::where('idempotency_key', $key)
+                ->where('type', 'wallet_deposit')
+                ->lockForUpdate()
+                ->first();
+
+            if (!$order) {
+                $order = purchases::create([
+                    'idempotency_key' => $key,
+                    'user_id'         => $data['user_id'] ?? null,
+                    'amount'          => $data['amount'],
+                    'currency'        => config('paypal.currency', 'USD'),
+                    'description'     => $data['description'] ?? 'Wallet Deposit',
+                    'type'            => 'wallet_deposit',
+                    'status'          => 'pending',
+                ]);
+            }
+
+            if ($order->paypal_order_id) {
+                $approvalUrl = $this->getApprovalUrl($order->paypal_order_id);
+
+                return [
+                    'order'        => $order->fresh(),
+                    'approval_url' => $approvalUrl,
+                ];
+            }
 
             $paypalOrder = $this->provider->createOrder([
                 'intent' => 'CAPTURE',
@@ -61,6 +78,7 @@ class PayPalWalletServices implements PaymentInterface
                 ],
                 'purchase_units' => [[
                     'reference_id' => (string) $order->id,
+                    'custom_id'    => 'wallet_topup:' . $order->id,
                     'amount'       => [
                         'currency_code' => $order->currency,
                         'value'         => number_format($order->amount, 2, '.', ''),
@@ -150,42 +168,56 @@ class PayPalWalletServices implements PaymentInterface
             return;
         }
 
-        Log::info('PayPalWalletServices: Capturing order', ['paypal_order_id' => $paypalOrderId]);
+        $order = purchases::where('paypal_order_id', $paypalOrderId)->first();
+
+        if (!$order) {
+            Log::warning('PayPalWalletServices: onOrderApproved - order not found', [
+                'paypal_order_id' => $paypalOrderId,
+            ]);
+            return;
+        }
+
+        // حماية إضافية: هذه الخدمة للمحفظة فقط
+        if ($order->type !== 'wallet_deposit') {
+            Log::warning('PayPalWalletServices: onOrderApproved - ignoring non-wallet order', [
+                'order_id'        => $order->id,
+                'type'            => $order->type,
+                'paypal_order_id' => $paypalOrderId,
+            ]);
+            return;
+        }
+
+        // لو الطلب اتنفذ بالفعل أو المحفظة اتشحنت، تجاهل
+        if ($order->status === 'completed' || $order->wallet_credited) {
+            Log::info('PayPalWalletServices: onOrderApproved - already completed', [
+                'order_id' => $order->id,
+            ]);
+            return;
+        }
+
+        Log::info('PayPalWalletServices: Capturing approved wallet order', [
+            'order_id'        => $order->id,
+            'paypal_order_id' => $paypalOrderId,
+        ]);
 
         $capture = $this->provider->capturePaymentOrder($paypalOrderId);
 
-        Log::info('PayPalWalletServices: capturePaymentOrder response', [
-            'paypal_order_id' => $paypalOrderId,
-            'status'          => $capture['status'] ?? 'unknown',
+        Log::info('PayPalWalletServices: Capture response', [
+            'order_id' => $order->id,
+            'status'   => $capture['status'] ?? null,
+            'response' => $capture,
         ]);
 
+        // لو PayPal رجّع completion فورًا، كمّل الشحن مباشرة
         if (($capture['status'] ?? '') === 'COMPLETED') {
-            // استخرج الـ capture object من جوا purchase_units
-            $captureData = $capture['purchase_units'][0]['payments']['captures'][0] ?? null;
-
-            if (!$captureData) {
-                Log::error('PayPalWalletServices: No capture data found in order response', [
-                    'paypal_order_id' => $paypalOrderId,
-                    'capture'         => $capture,
-                ]);
-                return;
-            }
-
-            // ضيف الـ paypal_order_id عشان onCaptureCompleted يلاقيه
-            $captureData['supplementary_data']['related_ids']['order_id'] = $paypalOrderId;
-
-            // ضيف بيانات الـ payer من الـ order
-            if (isset($capture['payer'])) {
-                $captureData['payer'] = $capture['payer'];
-            }
-
-            $this->onCaptureCompleted($captureData);
-        } else {
-            Log::warning('PayPalWalletServices: capturePaymentOrder did not complete', [
-                'paypal_order_id' => $paypalOrderId,
-                'response'        => $capture,
-            ]);
+            $this->onCaptureCompleted($capture);
+            return;
         }
+
+        Log::warning('PayPalWalletServices: Capture did not complete immediately', [
+            'order_id' => $order->id,
+            'status'   => $capture['status'] ?? 'unknown',
+        ]);
     }
 
     private function onCaptureCompleted(array $resource): void
@@ -202,7 +234,6 @@ class PayPalWalletServices implements PaymentInterface
         ]);
 
         DB::transaction(function () use ($paypalOrderId, $captureId, $resource) {
-
             $order = null;
 
             if ($paypalOrderId) {
@@ -218,16 +249,28 @@ class PayPalWalletServices implements PaymentInterface
             }
 
             if (!$order) {
-                Log::error('Order not found', [
+                Log::error('PayPalWalletServices: Order not found', [
                     'paypal_order_id' => $paypalOrderId,
                     'capture_id'      => $captureId,
                 ]);
                 return;
             }
 
-            // 🧠 أهم شرط يمنع التكرار
-            if ($order->wallet_credited) {
-                Log::info("Wallet already credited for order #{$order->id}");
+            // دي أهم حماية في الموضوع كله
+            if ($order->type !== 'wallet_deposit') {
+                Log::warning('PayPalWalletServices: Ignoring non-wallet order', [
+                    'order_id'        => $order->id,
+                    'type'            => $order->type,
+                    'paypal_order_id' => $paypalOrderId,
+                ]);
+                return;
+            }
+
+            if ($order->wallet_credited || $order->status === 'completed') {
+                Log::info('PayPalWalletServices: Duplicate capture ignored', [
+                    'order_id'   => $order->id,
+                    'capture_id' => $captureId,
+                ]);
                 return;
             }
 
@@ -247,12 +290,11 @@ class PayPalWalletServices implements PaymentInterface
                 'paid_at'          => now(),
             ]);
 
-            Log::info("Wallet credited successfully", [
+            Log::info('PayPalWalletServices: Wallet credited successfully', [
                 'order_id' => $order->id,
             ]);
 
             if (!$order->mail_sent) {
-
                 Mail::to($order->user->email)->queue(
                     new DepositSuccessMail(
                         $order->amount,
@@ -264,11 +306,10 @@ class PayPalWalletServices implements PaymentInterface
                     'mail_sent' => true
                 ]);
 
-                Log::info("Success email sent", [
+                Log::info('PayPalWalletServices: Success email sent', [
                     'order_id' => $order->id,
                 ]);
             }
-
         });
     }
 

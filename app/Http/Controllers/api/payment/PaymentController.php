@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api\payment;
 
 use App\Http\Controllers\Controller;
-use App\Mail\PaymentFailMail;
 use App\Models\cart;
 use App\Models\cartItems;
 use App\Services\PayPalServices;
@@ -11,10 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use App\Http\Controllers\concerns\ApiResponse;
-use App\Mail\PaymentSuccessMail;
 use App\Models\purchase_items;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PaymentController  —  User-facing endpoints
@@ -133,23 +130,11 @@ class PaymentController extends Controller
         if (!$order) {
             return response()->json(['status' => 'not_found'], 404);
         }
-        if($order->status == "completed"){
-            Mail::to($order->user->email)->send(
-                    new PaymentSuccessMail(
-                        $order->amount,
-                        $order->user->name
-                    )
-                );
-            return response()->json(['status' => $order->status]);
-        }
-        else{
-            Mail::to($order->user->email)->send(
-                    new PaymentFailMail(
-                        $order->amount,
-                        $order->user->name
-                    )
-                );
-            return response()->json(['status' => $order->status]);
-        }
+
+        return response()->json([
+            'status'   => $order->status,
+            'amount'   => $order->amount,
+            'order_id' => $order->id,
+        ]);
     }
 }

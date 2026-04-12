@@ -22,6 +22,5 @@ return [
     'notify_url'     => env('PAYPAL_NOTIFY_URL', ''), // Change this accordingly for your application.
     'locale'         => env('PAYPAL_LOCALE', 'en_US'), // force gateway language  i.e. it_IT, es_ES, en_US ... (for express checkout only)
     'validate_ssl'   => env('PAYPAL_VALIDATE_SSL', true),
-    'webhook_id'     => env('PAYPAL_WEBHOOK_ID', '0SB049434S340663L'),
-    'wallet_webhook_id' => env('PAYPAL_WALLET_WEBHOOK_ID','4YY27213TH702982R'),
+    'webhook_id' => env('PAYPAL_CHECKOUT_WEBHOOK_ID', '0SB049434S340663L'),
 ];

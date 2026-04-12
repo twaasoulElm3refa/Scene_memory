@@ -313,6 +313,12 @@ Route::prefix('v1')->group(function () {
         //127
     });
 
+    Route::prefix('gate')->middleware('auth:sanctum')->group(function () {
+       Route::get('/random', [GateController::class, 'random']);
+       Route::get('/all', [GateController::class, 'countries']);
+       Route::get('/{code}/stats', [GateController::class, 'country']);
+    });
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/pay', [PaymentController::class, 'pay']);
     });
@@ -320,12 +326,6 @@ Route::prefix('v1')->group(function () {
     Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel');
     Route::post('/paypal/webhook', [WebhookController::class, 'handle'])->name('paypal.webhook');
     Route::get('/order/status/{id}', [PaymentController::class, 'orderStatus']);
-
-    Route::prefix('gate')->middleware('auth:sanctum')->group(function () {
-       Route::get('/random', [GateController::class, 'random']);
-       Route::get('/all', [GateController::class, 'countries']);
-       Route::get('/{code}/stats', [GateController::class, 'country']);
-    });
 
     Route::prefix('deposit')->middleware('auth:sanctum')->group(function () {
         Route::post('/pay', [DepositController::class, 'create']);
