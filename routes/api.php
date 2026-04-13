@@ -45,6 +45,7 @@ use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnEvent;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -71,11 +72,18 @@ Route::prefix('v1')->group(function () {
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
+            Route::get('/wallet', [AuthController::class, 'wallet']);
             Route::get('/downloads', [DownloadController::class, 'downloads']);
             Route::post('/update-profile', [AuthController::class, 'updateProfile']);
             Route::put('/password', [AuthController::class, 'updatePassword']);
         });
     });
+
+    Route::get('/download', function (Request $request) {
+        $path = $request->query('path');
+        $fullPath = storage_path('app/public/' . $path);
+        return response()->download($fullPath);
+    })->middleware('auth:sanctum');
 
     // CATEGORIES CRUD
     Route::prefix('categories')->group(function () {
@@ -321,6 +329,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/pay', [PaymentController::class, 'pay']);
+        Route::post('/pay/wallet', [PaymentController::class, 'payWallet']);
     });
     Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success');
     Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel');

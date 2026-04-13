@@ -254,5 +254,9 @@ class AuthController extends Controller
         ]);
     }
 
+    public function wallet()
+    {
+        return $this->success(auth()->user()->wallet, 'Wallet fetched successfully.');
+    }
 
 }

@@ -18,5 +18,17 @@ export const CartService = {
     async clearCart() {
         const res = await api.delete(`/cart/clearCart`);
         return res.data;
-    }
+    },
+
+    async wallet()
+    {
+        const res = await api.get(`users/wallet`);
+        console.log(res.data);
+        return res.data;
+    },
+
+    async payWithWallet(payload) {
+        const res = await api.post(`/pay/wallet`, payload);
+        return res.data;
+    },
 };
