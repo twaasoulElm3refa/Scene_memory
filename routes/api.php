@@ -12,6 +12,7 @@ use App\Http\Controllers\api\admin\EventImageController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
 use App\Http\Controllers\api\admin\NotificationController;
+use App\Http\Controllers\api\admin\PurchasesController;
 use App\Http\Controllers\api\admin\ReportController;
 use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
@@ -79,6 +80,7 @@ Route::prefix('v1')->group(function () {
         });
     });
 
+    // downloads Media
     Route::get('/download', function (Request $request) {
         $path = $request->query('path');
         $fullPath = storage_path('app/public/' . $path);
@@ -94,7 +96,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [CategoriesCreateController::class,  'create'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::post('/edit/{id}/update/edit', [CategoryController::class,  'update'])->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}/delete/delete', [CategoryController::class,  'delete'])->middleware('auth:sanctum', AdminMiddleware::class);
-        // 18
+        // 19
     });
 
     // SUB CATEGORIES CRUD
@@ -105,7 +107,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [SubCategoriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/update/{id}', [SubCategoryController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/delete/{id}', [SubCategoryController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
-        //24
+        //25
     });
 
     // COUNTRIES CRUD
@@ -119,7 +121,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
-        //33
+        //34
     });
 
     // CITIES CRUD
@@ -130,6 +132,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [CitiesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CitiesController::class, 'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CitiesController::class, 'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        //40
     });
 
     // Events
@@ -155,6 +158,17 @@ Route::prefix('v1')->group(function () {
         //54
     });
 
+    // Purchases CRUD
+    Route::prefix('purchases')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        Route::get('/', [PurchasesController::class, 'index']);
+        Route::get('/type/{type}', [PurchasesController::class, 'filter']);
+        Route::get('/status/{status}', [PurchasesController::class, 'status']);
+        Route::get('/show/{id}', [PurchasesController::class, 'show']);
+        Route::post('/update/{id}', [PurchasesController::class, 'update']);
+        Route::delete('/delete/{id}', [PurchasesController::class, 'destroy']);
+        //60
+    });
+
     Route::prefix('users')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         // USERS CRUD
         Route::get('/', [UserController::class, 'index']);
@@ -164,13 +178,13 @@ Route::prefix('v1')->group(function () {
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
-        //61
+        //67
 
         // USER COUNTS
         Route::get('/all/count', [UserCountsController::class, 'count']);
         Route::get('/all/last-login', [UserCountsController::class, 'last_login']);
         Route::get('/all/new-users', [UserCountsController::class, 'NewUsers']);
-        //64
+        //70
     });
 
     Route::prefix('')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -180,18 +194,18 @@ Route::prefix('v1')->group(function () {
         Route::post('/contacts/create', [ContactController::class, 'create']);
         Route::post('/contacts/respond/{id}', [ContactController::class, 'respond']);
         Route::delete('/contacts/delete/{id}', [ContactController::class, 'delete']);
-        //69
+        //75
 
         // Newsletters
         Route::get('/newsletters', [NewsletterController::class, 'all']);
         Route::post('/newsletters/create', [NewsletterController::class, 'create']);
         Route::post('/newsletters/respond/{id}', [NewsletterController::class, 'respond']);
-        //72
+        //78
 
         // Footer
         Route::get('/footer', [FooterController::class, 'all']);
         Route::post('/footer/update', [FooterController::class, 'update']);
-        //74
+        //80
     });
 
     // Event Media
@@ -199,7 +213,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{id}', [EventImageController::class, 'allPerEvent']);
         Route::post('/create/{id}', [EventImageController::class, 'create']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
-        //77
+        //83
     });
 
     // User Dashboard
@@ -207,39 +221,42 @@ Route::prefix('v1')->group(function () {
         Route::get('/my-events', [UserDashboardController::class, 'myEvents']);
         Route::post('/{slug}', [UserDashboardController::class, 'addMedia']);
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
-        //80
+        //86
 
         // Create Event
         Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnEvent::class, 'auth:sanctum');
         Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
-        //83
+        //89
     });
 
+    // Upload Media
     Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}', [MediaRequestController::class, 'all']);
         // Route::post('/approve/{id}', [MediaRequestController::class, 'approve'])->middleware(AdminMiddleware::class);
         // Route::post('/reject/{id}', [MediaRequestController::class, 'reject'])->middleware(AdminMiddleware::class);
         Route::post('/upload/{id}', [MediaRequestController::class, 'upload']);
-        //87
+        //93
     });
 
+    // Event Creation Requests
     Route::prefix('requests')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/all/paginated', [RequestController::class, 'allPaginated']);
         Route::get('/{id}', [RequestController::class, 'show']);
         Route::post('/approve/{request_id}', [RequestController::class, 'approve']);
         Route::post('/decline/{request_id}', [RequestController::class, 'decline']);
         Route::delete('/{id}', [RequestController::class, 'destroy']);
-        //92
+        //98
     });
 
     Route::prefix('create')->middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [HomeController::class, 'create']);
         Route::post('/{id}', [HomeController::class, 'update']);
         Route::delete('/{id}', [HomeController::class, 'destroy']);
-        //95
+        //101
     });
 
+    // Comments
     Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
         Route::get('/{slug}', [CommentController::class, 'allPaginated']);
         Route::post('/{id}/support', [CommentInteractionController::class, 'support']);
@@ -248,36 +265,44 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}/report', [CommentInteractionController::class, 'report']);
         Route::post('{id}/create', [CommentController::class, 'create']);
         Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
-        //102
+        //108
     });
+
+    // Comments
     Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
         Route::get('/reports/all', [ReportController::class, 'reports'])->middleware(AdminMiddleware::class);
         Route::delete('/reports/{id}/delete', [ReportController::class, 'delete'])->middleware(AdminMiddleware::class);
-        //104
+        //110
     });
 
+    // Likes
     Route::prefix('likes')->middleware('throttle:10,1')->group(function () {
         Route::get('/{id}', [LikesController::class, 'count']);
         Route::post('{id}/create', [LikesController::class, 'create']);
-    //106
+        //112
     });
 
+    // Wishlist
     Route::prefix('Wishlist')->middleware('auth:sanctum')->group(function () {
         Route::get('/me', [WhisListController::class,'me']);
         Route::post('/{id}', [WhisListController::class,'add']);
         Route::delete('/{id}/delete', [WhisListController::class,'delete']);
-    //109
+        //114
     });
 
+    // Notifications
     Route::prefix('notify')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
         Route::post('/create', [NotificationController::class, 'create']);
+        //115
     });
 
+    // Replies
     Route::prefix('replies')->middleware(['auth:sanctum',AdminMiddleware::class])->group(function () {
         Route::post('/reply/{id}', [CommentReplyController::class,'create']);
+        //116
     });
 
-
+    // Plans
     Route::prefix('plans')->group(function () {
         Route::get('/all', [PlanController::class,'all']);
         Route::get('/single/{slug}', [PlanController::class,'single']);
@@ -289,62 +314,74 @@ Route::prefix('v1')->group(function () {
         ->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}', [AdminPlanController::class,'delete'])
         ->middleware('auth:sanctum', AdminMiddleware::class);
-        //118
+        //123
     });
 
+    // Benefits
     Route::prefix('benefits')->middleware([AdminMiddleware::class])->group(
         function () {
         Route::post('/create/{id}', [BenefitsController::class,'create']);
         Route::post('/update/{id}/plan', [BenefitsController::class,'update']);
         Route::delete('/delete/{id}/plan', [BenefitsController::class,'delete']);
-        //121
+        //126
     });
 
+    // Subscribe
     Route::prefix('subscribe')->middleware('auth:sanctum')->group(
         function () {
         Route::post('/{id}', [IncomeController::class,'subscribe']);
-        //122
+        //127
     });
 
+    // Cart
     Route::prefix('cart')->middleware('auth:sanctum')->group(
         function () {
         Route::post('/addToCart/{id}', [CartController::class,'addToCart']);
         Route::get('/get', [CartController::class,'cart']);
         Route::delete('/delete/{id}', [CartController::class,'deleteFromCart']);
         Route::delete('/clearCart', [CartController::class,'clearCart']);
-        //126
+        //131
     });
 
+    // Purchase
     Route::prefix('purchase')->middleware('auth:sanctum')->group(
         function () {
         Route::post('/', [PurchaseController::class,'purchase']);
-        //127
+        //132
     });
 
+    // Gate
     Route::prefix('gate')->middleware('auth:sanctum')->group(function () {
        Route::get('/random', [GateController::class, 'random']);
        Route::get('/all', [GateController::class, 'countries']);
        Route::get('/{code}/stats', [GateController::class, 'country']);
+       //135
     });
 
+    // Payment
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/pay', [PaymentController::class, 'pay']);
         Route::post('/pay/wallet', [PaymentController::class, 'payWallet']);
+        //137
     });
+
     Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success');
     Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel');
     Route::post('/paypal/webhook', [WebhookController::class, 'handle'])->name('paypal.webhook');
     Route::get('/order/status/{id}', [PaymentController::class, 'orderStatus']);
+    //141
 
     Route::prefix('deposit')->middleware('auth:sanctum')->group(function () {
         Route::post('/pay', [DepositController::class, 'create']);
+        //142
     });
 
     Route::get('/wallet/success', [DepositController::class, 'success'])->name('wallet.success');
     Route::get('/wallet/cancel',  [DepositController::class, 'cancel'])->name('wallet.cancel');
     Route::post('/wallet/webhook', [WalletWebhookController::class, 'handle'])->name('wallet.webhook');
     Route::get('/wallet/order-status/{id}', [DepositController::class, 'orderStatus']);
+    //146
 
-    // 139 EndPoint till now
+    // 146 EndPoint till now
 });
 

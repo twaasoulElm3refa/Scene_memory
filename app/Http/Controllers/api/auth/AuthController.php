@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\loginRequest;
 use App\Http\Requests\registerRequest;
 use App\Http\Resources\userResource;
+use App\Mail\WelcomeMail;
 use App\Models\cart;
 use App\Models\cartItems;
 use App\Models\User;
@@ -43,6 +44,7 @@ class AuthController extends Controller
                     'licence_type_id'=>1,
                 ]);
             });
+            Mail::to($user->email)->queue(new WelcomeMail($user));
             $token = $user->createToken('rag-token')->plainTextToken;
             Cache::forget('users_all_page_'.request('page', 1));
             return $this->success([

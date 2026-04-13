@@ -34,7 +34,7 @@
             <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': plansActive }"
                 @click="toggle('plans')">
                 <span class="flex items-center gap-3">
-                    <ClipboardDocumentListIcon  class="w-5 h-5" /> <!-- ممكن تغير الأيقونة لأي أيقونة مناسبة -->
+                    <ClipboardDocumentListIcon class="w-5 h-5" />
                     Plans
                 </span>
                 <ChevronIcon class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': open.plans }" />
@@ -43,7 +43,7 @@
                 <div v-if="open.plans" class="dropdown">
                     <RouterLink to="/admin/plans" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/plans' }">
-                        <ClipboardDocumentListIcon  class="w-5 h-5" />
+                        <ClipboardDocumentListIcon class="w-5 h-5" />
                         All Plans
                     </RouterLink>
                     <RouterLink to="/admin/plans/create" class="sidebar-btn dropdown-item"
@@ -51,6 +51,35 @@
                         <PlusIcon class="w-5 h-5" />
                         Create Plan
                     </RouterLink>
+                </div>
+            </Transition>
+        </div>
+
+        <!-- Purchases -->
+        <div class="sidebar-group">
+            <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': purchasesActive }"
+                @click="toggle('purchases')">
+                <span class="flex items-center gap-3">
+                    <CreditCardIcon class="w-5 h-5" />
+                    Purchases
+                </span>
+                <ChevronIcon class="w-5 h-5 transition-transform duration-300" :class="{ 'rotate-180': open.purchases }" />
+            </button>
+            <Transition name="dropdown">
+                <div v-if="open.purchases" class="dropdown">
+                    <RouterLink to="/admin/purchases" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path === '/admin/purchases' }">
+                        <CreditCardIcon class="w-5 h-5" />
+                        All Purchases
+                    </RouterLink>
+                    <!-- يمكنك إضافة روابط إضافية لاحقاً مثل: -->
+                    <!--
+                    <RouterLink to="/admin/purchases/refunds" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path === '/admin/purchases/refunds' }">
+                        <ArrowPathIcon class="w-5 h-5" />
+                        Refunds
+                    </RouterLink>
+                    -->
                 </div>
             </Transition>
         </div>
@@ -240,7 +269,7 @@
 
         <div class="flex-grow"></div>
 
-        <!-- Visit Site Button – at the very bottom -->
+        <!-- Visit Site Button -->
         <RouterLink to="/"
             class="sidebar-btn group item-center justify-center text-decoration-none mt-auto visit-site-btn">
             <span class="flex items-center gap-3 justify-center font-medium">
@@ -260,7 +289,7 @@ import {
     InboxIcon,
     UsersIcon,
     Squares2X2Icon,
-    ClipboardDocumentListIcon ,
+    ClipboardDocumentListIcon,
     GlobeAltIcon,
     BuildingOfficeIcon,
     CalendarIcon,
@@ -271,6 +300,8 @@ import {
     PhoneIcon,
     DocumentIcon,
     ArrowUpRightIcon,
+    // New icon for Purchases
+    CreditCardIcon,
 } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
@@ -282,20 +313,21 @@ const open = reactive({
     brands: route.path.startsWith("/admin/cities"),
     events: route.path.startsWith("/admin/events"),
     settings: route.path.startsWith("/admin/settings"),
+    plans: route.path.startsWith("/admin/plans"),
+    purchases: route.path.startsWith("/admin/purchases"),   // جديد
+    requests: route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media"),
 });
 
 const toggle = (key) => {
     open[key] = !open[key];
 };
 
-open.requests = route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media");
-
+// Computed Properties for Active States
+const plansActive = computed(() => route.path.startsWith("/admin/plans"));
+const purchasesActive = computed(() => route.path.startsWith("/admin/purchases")); // جديد
 const requestsActive = computed(() =>
     route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media")
 );
-open.plans = route.path.startsWith("/admin/plans");
-
-const plansActive = computed(() => route.path.startsWith("/admin/plans"));
 const usersActive = computed(() => route.path.startsWith("/admin/users"));
 const categoriesActive = computed(() => route.path.startsWith("/admin/categories"));
 const productsActive = computed(() => route.path.startsWith("/admin/countries"));

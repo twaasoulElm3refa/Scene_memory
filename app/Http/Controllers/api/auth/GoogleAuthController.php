@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\api\auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
@@ -46,7 +48,7 @@ class GoogleAuthController extends Controller
                 !empty($user->country) &&
                 !empty($user->position) &&
                 !empty($user->date_of_birth);
-
+            Mail::to($user->email)->queue(new WelcomeMail($user));
             return response()->json([
                 'status' => 'success',
                 'token' => $token,

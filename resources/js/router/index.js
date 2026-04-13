@@ -13,6 +13,7 @@ import all_events from "../views/home/all_events.vue";
 import admin from "../views/admin/admin.vue";
 import all_users from "../views/admin/users/all_users.vue";
 import add_user from "../views/admin/users/add_user.vue";
+import all_purchases from "../views/admin/purchase/all_purchases.vue";
 import all_categories from "../views/admin/categories/all_categories.vue";
 import add_categorey from "../views/admin/categories/add_categorey.vue";
 import show_categorey from "../views/admin/categories/show_categorey.vue";
@@ -233,6 +234,11 @@ const routes = [
     {
         path: "/admin",
         component: admin,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/purchases",
+        component: all_purchases,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {
