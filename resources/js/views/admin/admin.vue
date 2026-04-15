@@ -72,13 +72,13 @@
             <span class="text-gray-500"> from last month</span>
           </p>
         </div>
-        <!-- Countries Count -->
+        <!-- purchases Count -->
         <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm text-gray-500 font-medium">Countries</p>
+              <p class="text-sm text-gray-500 font-medium">purchases</p>
               <p class="text-3xl font-bold mt-1">
-                {{ stats.countries.toLocaleString() }}
+                {{ stats.purchases.toLocaleString() }}
               </p>
             </div>
             <div class="bg-rose-100 text-rose-600 p-3 rounded-lg">
@@ -270,7 +270,7 @@ const stats = ref({
   events: 0,
   users: 0,
   memories: 0,
-  countries: 0,
+  purchases: 0,
 });
 
 const recentActivity = ref([]);
@@ -290,18 +290,18 @@ const getLatestUsers = async () => {
 
 async function fetchStats() {
   try {
-    const [eventsRes, usersRes, memoriesRes, countriesRes] = await Promise.all([
+    const [eventsRes, usersRes, memoriesRes, purchasesRes] = await Promise.all([
       axios.get("/v1/events/count"),
       axios.get("/v1/users/all/count"),
       axios.get("/v1/events/memories"),
-      axios.get("/v1/countries/all/count"),
+      axios.get("/v1/purchases/all/count"),
     ]);
 
     stats.value = {
       events: eventsRes.data.status === "success" ? eventsRes.data.data : 0,
       users: usersRes.data.status === "success" ? usersRes.data.data : 0,
       memories: memoriesRes.data.status === "success" ? memoriesRes.data.data : 0,
-      countries: countriesRes.data.status === "success" ? countriesRes.data.data : 0,
+      purchases: purchasesRes.data.status === "success" ? purchasesRes.data.data : 0,
     };
   } catch (err) {
     console.error("Failed to load dashboard stats:", err);

@@ -111,7 +111,7 @@ class PurchasesController extends Controller
     public function show($id)
     {
         try {
-            $purchase = purchases::query()->findOrFail($id);
+            $purchase = purchases::with('user','items')->findOrFail($id);
             return $this->success($purchase, 'Single purchase');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
@@ -140,6 +140,17 @@ class PurchasesController extends Controller
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
+    }
+
+      public function count()
+    {
+        $cacheKey = 'purchases_count';
+
+        $count = Cache::tags(['purchases'])->remember($cacheKey, $this->cacheTime, function () {
+            return purchases::count();
+        });
+
+        return $this->success($count, 'purchases count');
     }
 
     private function clearCache()

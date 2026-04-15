@@ -161,6 +161,7 @@ Route::prefix('v1')->group(function () {
     // Purchases CRUD
     Route::prefix('purchases')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/', [PurchasesController::class, 'index']);
+        Route::get('/all/count', [PurchasesController::class,  'count'])->middleware('throttle:25,1');
         Route::get('/type/{type}', [PurchasesController::class, 'filter']);
         Route::get('/status/{status}', [PurchasesController::class, 'status']);
         Route::get('/show/{id}', [PurchasesController::class, 'show']);
