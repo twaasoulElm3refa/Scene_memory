@@ -65,7 +65,7 @@ class GateController extends Controller
                 ->pluck('id');
         });
         $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds,) {
-            return Events::select('id', 'city_id', 'sub_categorey_id', 'start_date', 'slug')
+            return Events::select('id', 'city_id', 'sub_categorey_id', 'start_date', 'slug','langitude','lattitude')
                 ->with([
                     'translation:id,event_id,title,description,locale',
                     'city:id,country_id',
