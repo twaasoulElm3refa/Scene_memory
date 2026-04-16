@@ -18,6 +18,7 @@ import all_purchases from "../views/admin/purchase/all_purchases.vue";
 import purchases_status from "../views/admin/purchase/purchases_status.vue";
 import purchases_type from "../views/admin/purchase/purchases_type.vue";
 import show_purchase from "../views/admin/purchase/show_purchase.vue";
+import edit_purchase from "../views/admin/purchase/edit_purchase.vue";
 import all_categories from "../views/admin/categories/all_categories.vue";
 import add_categorey from "../views/admin/categories/add_categorey.vue";
 import show_categorey from "../views/admin/categories/show_categorey.vue";
@@ -251,12 +252,18 @@ const routes = [
     // Purchases
     {
         path: "/admin/purchases",
+        name: 'admin-purchases',
         component: all_purchases,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {
         path: "/admin/purchases/:id",
         component: show_purchase ,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/purchases/edit/:id",
+        component: edit_purchase ,
         meta: { hideNavbar: true, hideFooter: true },
     },
     {
