@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ap\payment\WithdrawlController;
 use App\Http\Controllers\api\admin\AdminPlanController;
 use App\Http\Controllers\api\admin\BenefitsController;
 use App\Http\Controllers\api\admin\CategoriesCreateController;
@@ -167,6 +168,19 @@ Route::prefix('v1')->group(function () {
         Route::get('/show/{id}', [PurchasesController::class, 'show']);
         Route::post('/update/{id}', [PurchasesController::class, 'update']);
         Route::delete('/delete/{id}', [PurchasesController::class, 'destroy']);
+        //60
+    });
+
+     // Purchases CRUD
+    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        Route::get('/', [WithdrawlController::class, 'index']);
+        Route::get('/all/count', [WithdrawlController::class,  'count'])->middleware('throttle:25,1');
+        Route::get('/status/{status}', [WithdrawlController::class, 'status']);
+        Route::get('/show/{id}', [WithdrawlController::class, 'show']);
+        Route::post('/update/{id}', [WithdrawlController::class, 'update']);
+        Route::post('/approve/{id}', [WithdrawlController::class, 'approve']);
+        Route::post('/reject/{id}', [WithdrawlController::class, 'reject']);
+        Route::delete('/delete/{id}', [WithdrawlController::class, 'destroy']);
         //60
     });
 

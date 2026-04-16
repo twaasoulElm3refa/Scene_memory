@@ -72,14 +72,13 @@
                         <CreditCardIcon class="w-5 h-5" />
                         All Purchases
                     </RouterLink>
-                    <!-- يمكنك إضافة روابط إضافية لاحقاً مثل: -->
-                    <!--
-                    <RouterLink to="/admin/purchases/refunds" class="sidebar-btn dropdown-item"
-                        :class="{ active: route.path === '/admin/purchases/refunds' }">
+
+                    <RouterLink to="/admin/purchases/Withdrawls" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path === '/admin/purchases/Withdrawls' }">
                         <ArrowPathIcon class="w-5 h-5" />
-                        Refunds
+                        Withdrawls
                     </RouterLink>
-                    -->
+
                 </div>
             </Transition>
         </div>
@@ -300,7 +299,7 @@ import {
     PhoneIcon,
     DocumentIcon,
     ArrowUpRightIcon,
-    // New icon for Purchases
+    ArrowPathIcon,
     CreditCardIcon,
 } from "@heroicons/vue/24/outline";
 

@@ -13,6 +13,7 @@ import all_events from "../views/home/all_events.vue";
 import admin from "../views/admin/admin.vue";
 import all_users from "../views/admin/users/all_users.vue";
 import add_user from "../views/admin/users/add_user.vue";
+import all_withdrawls from "../views/admin/withdraw/all_withdrawls.vue";
 import all_purchases from "../views/admin/purchase/all_purchases.vue";
 import purchases_status from "../views/admin/purchase/purchases_status.vue";
 import purchases_type from "../views/admin/purchase/purchases_type.vue";
@@ -239,6 +240,15 @@ const routes = [
         component: admin,
         meta: { hideNavbar: true, hideFooter: true },
     },
+
+    // Withdrawls
+    {
+        path: "/admin/purchases/withdrawls",
+        component: all_withdrawls,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    // Purchases
     {
         path: "/admin/purchases",
         component: all_purchases,
@@ -259,6 +269,8 @@ const routes = [
         component: purchases_status,
         meta: { hideNavbar: true, hideFooter: true },
     },
+
+    // Reports
     {
         path: "/admin/reports",
         component: all_reports,
@@ -269,6 +281,8 @@ const routes = [
         component: MediaUploadRequest,
         meta: { hideNavbar: true, hideFooter: true },
     },
+
+    // Requests
     {
         path: "/admin/requests",
         component: requests,
@@ -279,6 +293,9 @@ const routes = [
         component: show_request,
         meta: { hideNavbar: true, hideFooter: true },
     },
+
+
+    // Settings
     {
         path: "/admin/contacts",
         component: contacts_admin,
@@ -301,6 +318,7 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    // Users
     {
         path: "/admin/users",
         component: all_users,
@@ -313,6 +331,7 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    // Categories
     {
         path: "/admin/categories",
         component: all_categories,
@@ -336,6 +355,7 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    // Plans
     {
         path: "/admin/plans",
         component: all_plans,
@@ -353,6 +373,7 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    // Countries
     {
         path: "/admin/countries",
         component: all_countries,
@@ -374,24 +395,24 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    // Cities
     {
         path: "/admin/cities",
         component: all_cities,
         meta: { hideNavbar: true, hideFooter: true },
     },
-
     {
         path: "/admin/cities/create",
         component: add_city,
         meta: { hideNavbar: true, hideFooter: true },
     },
-
     {
         path: "/admin/cities/:id",
         component: show_city,
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    // Events
     {
         path: "/admin/events",
         component: all_events_admin,

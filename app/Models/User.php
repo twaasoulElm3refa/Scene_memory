@@ -111,5 +111,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Wallet::class,'user_id');
     }
+
+    public function withdraw()
+    {
+        return $this->hasMany(withdraw::class,'user_id');
+    }
+
+    public function approving()
+    {
+        return $this->hasMany(withdraw::class,'approved_by');
+    }
 }
 

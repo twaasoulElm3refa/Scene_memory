@@ -1,0 +1,178 @@
+<?php
+
+namespace App\Http\Controllers\ap\payment;
+
+use App\Http\Controllers\concerns\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Models\withdraw;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class WithdrawlController extends Controller
+{
+    use ApiResponse;
+    private $cacheTime=60;
+    public function index(Request $request)
+    {
+        try {
+            $version = Cache::get('withdrawls_version', 1);
+
+            $cacheKey = "withdrawls_v{$version}_" . md5(json_encode($request->all()));
+            $withdrawls = Cache::tags(['withdrawls'])->remember(
+                $cacheKey,
+                now()->addMinutes(5),
+                function () {
+                    return withdraw::with('user')->paginate(10);
+                }
+            );
+
+            return $this->success($withdrawls,'withdrawls fetched successfully');
+
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Index Error: ' . $e->getMessage());
+
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function count()
+    {
+        try {
+            $version = Cache::get('withdrawls_version', 1);
+            $cacheKey = "withdrawls_count_v{$version}";
+            $count = Cache::tags(['withdrawls'])->remember(
+                $cacheKey,
+                now()->addMinutes($this->cacheTime),
+                function () {
+                    return withdraw::count();
+                }
+            );
+            return $this->success($count);
+
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Count Error: ' . $e->getMessage());
+
+            // fallback لو الكاش ضرب
+            return $this->success(withdraw::count());
+        }
+    }
+
+    public function status($status)
+    {
+        try {
+            $page = (int) request()->get('page', 1);
+            $cacheKey = 'withdrawls_all_page_' . $page .'_'. $status;
+            $withdrawls = Cache::tags(['withdrawls'])->remember(
+                $cacheKey,
+                now()->addMinutes($this->cacheTime),
+                fn () => withdraw::query()
+                    ->select([
+                        'id',
+                        'user_id',
+                        'approved_by',
+                        'amount',
+                        'fee',
+                        'status',
+                        'reference',
+                        // 'mail_sent',
+                        'processed_at',
+                        'created_at',
+                    ])
+                    ->with(['user','approvedBy'])
+                    ->where('status', $status)
+                    ->paginate(10)
+            );
+            return $this->success($withdrawls);
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Status Error: ' . $e->getMessage());
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            return $this->success(withdraw::find($id));
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Show Error: ' . $e->getMessage());
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $this->clearWithdrawCache();
+            return $this->success(withdraw::find($id)->update($request->all()));
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Update Error: ' . $e->getMessage());
+            return $this->error($e->getMessage());
+        }
+    }
+    public function destroy(Request $request, $id)
+    {
+        try {
+            $this->clearWithdrawCache();
+            return $this->success(withdraw::find($id)->delete());
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Update Error: ' . $e->getMessage());
+            return $this->error($e->getMessage());
+        }
+    }
+
+    public function approve($id)
+    {
+        try {
+            return DB::transaction(function () use ($id) {
+                $withdraw = withdraw::findOrFail($id);
+                if ($withdraw->status === 'approved') {
+                    return $this->error('Withdraw already approved');
+                }
+                $withdraw->update([
+                    'status' => 'approved',
+                    'approved_by' => auth()->id(),
+                    'processed_at' => now(),
+                ]);
+                $this->clearWithdrawCache();
+                return $this->success($withdraw->fresh());
+            });
+
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Approve Error: ' . $e->getMessage());
+            return $this->error('Something went wrong');
+        }
+    }
+
+    public function reject($id)
+    {
+         try {
+            return DB::transaction(function () use ($id) {
+                $withdraw = withdraw::findOrFail($id);
+                if ($withdraw->status === 'rejected') {
+                    return $this->error('Withdraw already rejected');
+                }
+                $withdraw->update([
+                    'status' => 'rejected',
+                    'approved_by' => auth()->id(),
+                    'processed_at' => now(),
+                ]);
+                $this->clearWithdrawCache();
+                return $this->success($withdraw->fresh());
+
+            });
+
+        } catch (\Throwable $e) {
+            Log::error('Withdraw Reject Error: ' . $e->getMessage());
+
+            return $this->error($e->getMessage());
+        }
+    }
+
+    private function clearWithdrawCache()
+    {
+        Cache::increment('withdrawls_version');
+        Cache::tags(['withdrawls'])->flush();
+    }
+}
