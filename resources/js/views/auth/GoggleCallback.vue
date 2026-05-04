@@ -30,7 +30,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
+import { AuthService } from "../../services/AuthService";
 
 const route = useRoute();
 const router = useRouter();
@@ -46,7 +46,7 @@ onMounted(async () => {
   }
 
   try {
-    const response = await axios.get(`/v1/users/google-callback`, { params: { code } });
+    const response = await AuthService.googleCallback(code);
     localStorage.setItem("auth_token", response.data.token);
     window.dispatchEvent(new Event("login"));
     if (response.data.role === "admin") {

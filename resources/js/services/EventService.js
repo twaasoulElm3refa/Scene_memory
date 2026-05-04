@@ -1,6 +1,42 @@
 import api from "@/services/ApiClient";
 
 export const EventService = {
+  getCount() {
+    return api.get("/events/count");
+  },
+
+  getMemories() {
+    return api.get("/events/memories");
+  },
+
+  getAll(page = 1) {
+    return api.get("/events", { params: { page } });
+  },
+
+  getHistorical(page = 1) {
+    return api.get("/events/historical", { params: { page } });
+  },
+
+  getSingleEvent(slug) {
+    return api.get(`/events/${slug}/single/get`);
+  },
+
+  create(formData) {
+    return api.post("/events/create", formData);
+  },
+
+  createUser(formData) {
+    return api.post("/events/create/user", formData);
+  },
+
+  createHistoricUser(formData) {
+    return api.post("/events/historic/user", formData);
+  },
+
+  deleteEventById(id) {
+    return api.delete(`/events/${id}/delete`);
+  },
+
   /**
    * البحث عن الفعاليات باستخدام filters
    */

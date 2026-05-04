@@ -1,14 +1,4 @@
-import axios from 'axios';
-
-// إعداد base URL
-const api = axios.create({
-    baseURL: 'http://localhost:8000/api/v1',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-        'Accept-Language': 'ar',
-    },
-});
+import api from "../../ApiClient";
 
 // Service object
 const PlanService = {

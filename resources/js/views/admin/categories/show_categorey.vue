@@ -519,8 +519,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { CategoryService } from "../../../services/CategoryService";
+import { categoryService } from "../../../services/admin/categories/categoryService";
 
 const route = useRoute();
 const router = useRouter();
@@ -544,7 +545,7 @@ async function fetchCategory() {
   error.value = null;
 
   try {
-    const response = await axios.get(`/v1/categories/${route.params.id}`);
+    const response = await CategoryService.getCategoryById(route.params.id);
 
     if (response.data.status === "success") {
       category.value = response.data.data;
@@ -595,9 +596,11 @@ async function updateSubCategory() {
   editForm.value.errors = {};
 
   try {
-    await axios.post(`/v1/sub_categories/update/${editForm.value.id}`, {
-      name: editForm.value.name.trim(),
-    });
+    const result = await categoryService.updateSubCategory(
+      editForm.value.id,
+      editForm.value.name.trim()
+    );
+    if (!result?.success) throw result?.error || new Error("Update failed");
 
     closeEditModal();
     await fetchCategory();
@@ -622,7 +625,8 @@ async function performDelete() {
   deleteProcessing.value = true;
 
   try {
-    await axios.delete(`/v1/sub_categories/delete/${subToDelete.value.id}`);
+    const result = await categoryService.deleteSubCategory(subToDelete.value.id);
+    if (!result?.success) throw result?.error || new Error("Delete failed");
 
     showDeleteConfirm.value = false;
     await fetchCategory();

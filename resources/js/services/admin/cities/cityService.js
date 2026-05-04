@@ -1,6 +1,6 @@
 import api from './api';
 
-const CITY_ENDPOINT = '/v1/cities';
+const CITY_ENDPOINT = '/cities';
 
 export const cityService = {
   /**
@@ -17,7 +17,7 @@ export const cityService = {
    * @returns {Promise}
    */
   getAllCountries() {
-    return api.get('/api/v1/countries');
+    return api.get('/countries');
   },
 
   /**
@@ -25,7 +25,7 @@ export const cityService = {
    * @returns {Promise}
    */
   getCitiesStatistics() {
-    return api.get('/api/v1/cities/statistics');
+    return api.get('/cities/statistics');
   },
 
   /**
@@ -55,11 +55,4 @@ export const cityService = {
     return api.get(`${CITY_ENDPOINT}/${id}`);
   },
 
-  getAllCountries() {
-    return api.get('/v1/countries');
-  },
-
-  createCity(data) {
-    return api.post(`${CITY_ENDPOINT}/create`, data);
-  },
 };

@@ -216,8 +216,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
-import axios from "axios";
 import UserLayout from "../../layouts/user/UserLayout.vue";
+import { UserDashboardService } from "../../services/UserDashboardService";
 
 const route = useRoute();
 const slug = route.params.slug;
@@ -236,8 +236,6 @@ const uploadError = ref(null);
 const fullscreenMedia = ref(null); // ← جديد: لتخزين الميديا المعروضة بكامل الشاشة
 const deletingEvent = ref(false);
 
-const API_BASE = "/v1";
-
 async function deleteEvent() {
   if (
     !confirm("هل أنت متأكد من حذف هذه الذكرى نهائيًا؟\nهذا الإجراء لا يمكن التراجع عنه.")
@@ -250,7 +248,7 @@ async function deleteEvent() {
   }
   try {
     deletingEvent.value = true;
-    const response = await axios.delete(`/v1/user-dshboard/${event.value.id}/destroy`);
+    const response = await UserDashboardService.deleteEvent(event.value.id);
     if (response.data.status === "success") {
       alert("تم حذف الذكرى بنجاح");
       window.location.href = "/owner";
@@ -318,7 +316,7 @@ function isVideo(url) {
 
 async function fetchEvent() {
   try {
-    const res = await axios.get(`${API_BASE}/events/${slug}/single/get`);
+    const res = await UserDashboardService.getSingleEvent(slug);
     if (res.data.status === "success") {
       event.value = res.data.data;
     } else {
@@ -336,7 +334,7 @@ async function deleteImage(id) {
   if (!confirm("متأكد من حذف الميديا؟")) return;
   try {
     deleting.value = id;
-    await axios.delete(`${API_BASE}/user-dshboard/${id}/delete`);
+    await UserDashboardService.deleteMedia(id);
     event.value.images = event.value.images.filter((i) => i.id !== id);
   } catch (err) {
     alert("فشل الحذف");
@@ -408,11 +406,7 @@ async function uploadImages() {
   });
 
   try {
-    const response = await axios.post(`${API_BASE}/user-dshboard/${slug}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await UserDashboardService.uploadMedia(slug, formData);
 
     if (response.data.status === "success") {
       if (response.data.data?.images) {

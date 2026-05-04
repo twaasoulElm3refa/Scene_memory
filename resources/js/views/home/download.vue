@@ -236,10 +236,6 @@ const getUrl = (path) => {
 };
 
 /* ── Download URL — goes through Laravel to force download ── */
-const getDownloadUrl = (path) => {
-  if (!path) return "";
-  return `https://cageless-unstumbling-chadwick.ngrok-free.dev/api/v1/download?path=${encodeURIComponent(path)}`;
-};
 
 /* ── Type check ── */
 const isImage = (path) => {
@@ -282,15 +278,8 @@ const downloadFile = async (item) => {
 
   try {
     // Option 1: via Laravel endpoint (recommended — avoids CORS)
-    const response = await fetch(getDownloadUrl(item.full_url), {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
-      },
-    });
-
-    if (!response.ok) throw new Error("Network error");
-
-    const blob      = await response.blob();
+    const response = await downloadService.downloadFile(item.full_url);
+    const blob      = response.data;
     const objectUrl = URL.createObjectURL(blob);
     const anchor    = document.createElement("a");
     anchor.href     = objectUrl;

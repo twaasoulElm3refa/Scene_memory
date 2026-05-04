@@ -73,6 +73,14 @@ const CommentService = {
                 throw err;
             });
     },
+
+    createComment(eventId, payload) {
+        return api.post(`/comments/${eventId}/create`, payload);
+    },
+
+    deleteComment(commentId) {
+        return api.delete(`/comments/${commentId}/delete`);
+    },
 };
 
 export default CommentService;

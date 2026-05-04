@@ -96,7 +96,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import api from '@/services/ApiClient';
+import { PlanService } from '@/services/planService';
 import { useRouter } from 'vue-router';
 
 const lang = localStorage.getItem('language') || 'en';
@@ -117,7 +117,7 @@ const fetchPlans = async () => {
     error.value = null;
 
     try {
-        const response = await api.get('/plans/all');
+        const response = await PlanService.getAll();
         console.log(response.data);
         plans.value = response.data.data;
     } catch (err) {

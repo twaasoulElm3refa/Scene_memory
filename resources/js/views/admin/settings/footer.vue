@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import AdminLayout from '../../../layouts/AdminLayout.vue'
-import axios from 'axios'
+import { FooterService } from '../../../services/FooterService'
 
 interface FooterData {
   id: number
@@ -28,8 +28,6 @@ const form = ref({
   app_store: '',
 })
 
-const apiBase = '/v1'
-
 onMounted(async () => {
   await fetchFooter()
 })
@@ -39,7 +37,7 @@ async function fetchFooter() {
   error.value = null
 
   try {
-    const res = await axios.get(`${apiBase}/footer`)
+    const res = await FooterService.get()
     if (res.data.status === 'success') {
       footer.value = res.data.data
 
@@ -67,7 +65,7 @@ async function updateFooter() {
   error.value = null
 
   try {
-    const res = await axios.post(`${apiBase}/footer/update`, form.value)
+    const res = await FooterService.update(form.value)
 
     if (res.data.status === 'success') {
       footer.value = { ...footer.value, ...res.data.data }

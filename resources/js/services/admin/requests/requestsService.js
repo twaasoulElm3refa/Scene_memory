@@ -1,19 +1,21 @@
-import axios from "axios";
-
-const API_BASE = "/v1";
+import api from "../../ApiClient";
 
 export const requestsService = {
   getAllPaginated(page = 1, params = {}) {
-    return axios.get(`${API_BASE}/requests/all/paginated`, {
+    return api.get(`/requests/all/paginated`, {
       params: { page, ...params },
     });
   },
 
   approveRequest(id) {
-    return axios.post(`${API_BASE}/requests/${id}/approve`);
+    return api.post(`/requests/approve/${id}`);
   },
 
   rejectRequest(id) {
-    return axios.post(`${API_BASE}/requests/${id}/reject`);
+    return api.post(`/requests/decline/${id}`);
+  },
+
+  deleteRequest(id) {
+    return api.delete(`/requests/${id}`);
   },
 };

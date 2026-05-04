@@ -1,7 +1,9 @@
 // src/services/categoryService.js
-import axios from 'axios'
+import api from '../../ApiClient'
 
-const BASE_URL = '/v1/categories'
+const BASE_URL = '/categories'
+const BASE = '/categories'
+const SUB_BASE = '/sub_categories'
 
 /**
  * @typedef {Object} Category
@@ -36,7 +38,7 @@ export const categoryService = {
      */
     async getCategories(page = 1) {
         try {
-            const response = await axios.get(`${BASE_URL}/all/paginated`, {
+            const response = await api.get(`${BASE_URL}/all/paginated`, {
                 params: { page }
             })
 
@@ -79,7 +81,7 @@ export const categoryService = {
             const trimmed = (name || '').trim()
             if (!trimmed) throw new Error('اسم التصنيف مطلوب')
 
-            const response = await axios.post(`${BASE_URL}/create`, {
+            const response = await api.post(`${BASE_URL}/create`, {
                 name: trimmed
             })
 
@@ -114,7 +116,7 @@ export const categoryService = {
             if (!trimmed) throw new Error('اسم التصنيف مطلوب')
 
             // ملاحظة: المسار طويل جدًا – يفضل تبسيطه في الـ backend إن أمكن
-            const response = await axios.post(
+            const response = await api.post(
                 `${BASE_URL}/edit/${id}/update/edit`,
                 { name: trimmed }
             )
@@ -146,7 +148,7 @@ export const categoryService = {
     async deleteCategory(id) {
         try {
             // نفس الملاحظة عن طول المسار
-            await axios.delete(`${BASE_URL}/delete/${id}/delete/delete`)
+            await api.delete(`${BASE_URL}/delete/${id}/delete/delete`)
             return { success: true }
         } catch (error) {
             return {
@@ -172,11 +174,7 @@ export const categoryService = {
                 formData.append('cover_image', coverImage)
             }
 
-            const response = await axios.post(`${BASE_URL}/create`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+            const response = await api.post(`${BASE_URL}/create`, formData)
 
             return {
                 success: true,
@@ -221,7 +219,7 @@ export const categoryService = {
 
     async getCategoryWithSubs(id) {
         try {
-            const res = await axios.get(`${BASE}/${id}`)
+            const res = await api.get(`${BASE}/${id}`)
             if (res.data.status === 'success') {
                 return {
                     success: true,
@@ -247,7 +245,7 @@ export const categoryService = {
             const trimmed = (name || '').trim()
             if (!trimmed) throw new Error('اسم التصنيف الفرعي مطلوب')
 
-            const res = await axios.post(`${SUB_BASE}/update/${subId}`, {
+            const res = await api.post(`${SUB_BASE}/update/${subId}`, {
                 name: trimmed
             })
 
@@ -276,7 +274,7 @@ export const categoryService = {
      */
     async deleteSubCategory(subId) {
         try {
-            await axios.delete(`${SUB_BASE}/delete/${subId}`)
+            await api.delete(`${SUB_BASE}/delete/${subId}`)
             return { success: true }
         } catch (err) {
             return {
@@ -292,7 +290,7 @@ export const categoryService = {
             const trimmed = (name || '').trim()
             if (!trimmed) throw new Error('اسم التصنيف الفرعي مطلوب')
 
-            const res = await axios.post(`${SUB_BASE}/create`, {
+            const res = await api.post(`${SUB_BASE}/create`, {
                 category_id: categoryId,
                 name: trimmed
             })
@@ -337,9 +335,7 @@ export const categoryService = {
                 formData.append('image', image)
             }
 
-            const res = await axios.post('/v1/sub_categories/create', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
+            const res = await api.post('/sub_categories/create', formData)
 
             return { success: true, data: res.data }
         } catch (err) {

@@ -102,6 +102,8 @@
 </template>
 
 <script>
+import { EventService } from "../../services/EventService";
+
 export default {
     name: "AllEventsPage",
     data() {
@@ -114,7 +116,6 @@ export default {
             totalEvents: 0,
             perPage: 8,
             sortBy: "newest",
-            apiBaseUrl: "http://127.0.0.1:8000/api/v1",
             uniqueCities: 0,
             uniqueCategories: 0,
         };
@@ -152,21 +153,8 @@ export default {
             this.error = null;
 
             try {
-                const token = localStorage.getItem("auth_token");
-
-                const response = await fetch(`${this.apiBaseUrl}/events?page=${page}`, {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        "Accept-Language": localStorage.getItem("language") || "ar",
-                        "Authorization": `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-                const result = await response.json();
+                const response = await EventService.getAll(page);
+                const result = response.data;
 
                 if (result.status === "success") {
                     this.events = Array.isArray(result.data.data)

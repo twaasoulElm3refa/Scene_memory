@@ -284,8 +284,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { PurchaseService } from "../../../services/PurchaseService";
 
 const route = useRoute();
 const router = useRouter();
@@ -300,7 +300,7 @@ const fetchPurchase = async () => {
 
   try {
     const id = route.params.id;
-    const response = await axios.get(`/v1/purchases/show/${id}`);
+    const response = await PurchaseService.getSingle(id);
     purchase.value = response.data.data || response.data;
   } catch (err) {
     console.error("Error fetching purchase:", err);
@@ -317,7 +317,7 @@ const goToEditPage = () => {
 
 const deletePurchase = () => {
   const id = route.params.id;
-  axios.delete(`/v1/purchases/delete/${id}`).then(() => {
+  PurchaseService.delete(id).then(() => {
     router.push({ name: "admin-purchases" });
   });
 };

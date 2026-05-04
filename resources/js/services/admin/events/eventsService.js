@@ -1,12 +1,10 @@
 // src/services/admin/events/eventsService.js
-import axios from 'axios';
-
-const API_BASE_URL = '/v1';
+import api from '../../ApiClient';
 
 class EventService {
   async getAllEvents(page = 1) {
     try {
-      const response = await axios.get(`${API_BASE_URL}/events`, {
+      const response = await api.get(`/events`, {
         params: { page }
       });
       return response.data;
@@ -18,7 +16,7 @@ class EventService {
 
   async deleteEvent(id) {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/events/${id}/delete`);
+      const response = await api.delete(`/events/${id}/delete`);
       return response.data;
     } catch (error) {
       console.error('Error deleting event:', error);

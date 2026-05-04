@@ -266,8 +266,8 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { PurchaseService } from "../../../services/PurchaseService";
 
 const route = useRoute();
 const router = useRouter();
@@ -334,9 +334,7 @@ const fetchPurchases = async (page = 1) => {
   error.value = null;
 
   try {
-    const response = await axios.get(`/v1/purchases/type/${selectedType.value}`, {
-      params: { page }
-    });
+    const response = await PurchaseService.getByType(selectedType.value, page);
 
     if (response.data.data) {
       purchases.value = response.data.data.data || [];

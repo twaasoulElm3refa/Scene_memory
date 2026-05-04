@@ -67,8 +67,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import { PaymentService } from '../../services/PaymentService'
 
 const idempotencyKey = ref(uuidv4())
 // Props — تمرر البيانات من الصفحة الأب
@@ -107,7 +107,7 @@ async function handlePay() {
     serverError.value = ''
 
     try {
-        const { data } = await axios.post('/v1/deposit/pay', {
+        const { data } = await PaymentService.depositPay({
             amount: Number(form.value.amount).toFixed(2),
             description: form.value.description || 'Wallet Deposit',
             idempotency_key: idempotencyKey.value,   // ← هنا في الـ body

@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { ContactService } from "../../services/ContactService";
 
 export default {
   name: "ContactUs",
@@ -198,7 +198,7 @@ export default {
       };
 
       try {
-        const response = await axios.post("v1/contacts/create", payload);
+        const response = await ContactService.create(payload);
 
         if (response.status === 200 || response.status === 201) {
           this.successMessage =

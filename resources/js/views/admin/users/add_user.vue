@@ -192,8 +192,8 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import axios from 'axios'
 import AdminLayout from '@/layouts/AdminLayout.vue'
+import { userService } from '@/services/admin/user/userService'
 
 const theme = localStorage.getItem('theme') || 'light'
 
@@ -254,12 +254,10 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
-    const response = await axios.post('/v1/users/create', form, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    })
+    const response = await userService.createUser(form)
+    if (!response.success) {
+      throw { response: { status: response.error?.status, data: response.error } }
+    }
 
     successMessage.value = 'User created successfully!'
 

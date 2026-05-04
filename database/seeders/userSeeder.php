@@ -21,9 +21,9 @@ class userSeeder extends Seeder
           ],
           [
             'id'=>2,
-            'name'=> 'Admin User',
-            'email'=> 'admin@gmail.com',
-            'password'=> bcrypt('admin'),
+            'name'=> 'Scemory Admin',
+            'email'=> 'admin@admin.com',
+            'password'=> bcrypt('Scemory@2026'),
           ]
         ];
 

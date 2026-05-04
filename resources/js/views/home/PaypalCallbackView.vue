@@ -16,7 +16,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import { PaymentService } from '../../services/PaymentService'
 
 const route = useRoute()
 const router = useRouter()
@@ -33,9 +33,7 @@ onMounted(async () => {
 
   try {
     // بتكلم الـ API بتاعك
-    const response = await axios.get(`/api/v1/paypal/success`, {
-      params: { token }
-    })
+    const response = await PaymentService.paypalSuccess(token)
 
     if (response.data.success) {
       // polling على الـ order status لحد ما يبقى completed
@@ -56,7 +54,7 @@ async function pollOrderStatus(orderId) {
     attempts++
 
     try {
-      const res = await axios.get(`/api/v1/orders/${orderId}/status`)
+      const res = await PaymentService.orderStatus(orderId)
       const status = res.data.status
 
       if (status === 'completed') {

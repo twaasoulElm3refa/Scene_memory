@@ -292,7 +292,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import axios from "axios";
+import { countryService } from "../../../services/admin/countries/countryService";
 
 const route = useRoute();
 const router = useRouter();
@@ -372,7 +372,7 @@ const fetchCountry = async (page = 1) => {
   error.value = null;
 
   try {
-    const response = await axios.get(`/v1/countries/${route.params.id}?page=${page}`);
+    const response = await countryService.getCountryDetails(route.params.id, page);
 
     if (response.data.status === "success") {
       // تحديث بيانات الـ country

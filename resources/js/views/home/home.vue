@@ -387,8 +387,8 @@ import { CategoryService } from "@/services/CategoryService";
 import { LocationService } from "@/services/LocationService";
 import { EventService } from "@/services/EventService";
 import { PlanService } from "@/services/planService";
+import { AuthService } from "../../services/AuthService";
 import { debounce } from "lodash";
-import api from "@/services/ApiClient";
 
 const marker = ref({ lat: 30.0444, lng: 31.2357 });
 const fullscreen = ref(false);
@@ -500,7 +500,7 @@ const onMainCategoryChange = async () => {
 
     loadingSubCategories.value = true;
     try {
-        const res = await api.get(`/categories/${selectedCategory.value}/sub_categories/get`);
+        const res = await CategoryService.getSubCategoriesByCategory(selectedCategory.value);
         subCategories.value = res.data.data || [];
     } catch (err) {
         console.error("Error loading sub-categories:", err);
@@ -671,10 +671,8 @@ const fetchProfile = async () => {
     const token = localStorage.getItem("auth_token");
     if (!token) return;
 
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
     try {
-        const res = await axios.get("/v1/users/profile");
+        const res = await AuthService.getProfile();
 
         if (res.data.status === "success") {
             const userData = res.data.data.user;
@@ -783,11 +781,7 @@ const subscribe = async (planId) => {
     }
 
     try {
-        const res = await api.post(`/subscribe/${planId}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const res = await PlanService.subscribe(planId);
 
         if (res.data.status === "success") {
             await fetchProfile(); // يغير licenceName

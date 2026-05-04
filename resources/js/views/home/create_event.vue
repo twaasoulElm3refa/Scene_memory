@@ -256,9 +256,11 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
-import axios from "axios";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { LocationService } from "../../services/LocationService";
+import { CategoryService } from "../../services/CategoryService";
+import { EventService } from "../../services/EventService";
 
 const MAX_MEDIA = 8;
 
@@ -289,15 +291,6 @@ const center = ref([30.0444, 31.2357]);
 const mapRef = ref(null);
 const countrySearch = ref("");
 
-axios.interceptors.request.use(
-    (config) => {
-        const lang = localStorage.getItem("language") || "ar";
-        config.headers["Accept-Language"] = lang;
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
-
 onMounted(async () => {
     await Promise.all([fetchCountries(), fetchCategories()]);
     nextTick(() => {
@@ -327,7 +320,7 @@ function onMapClick(e) {
 
 async function fetchCountries() {
     try {
-        const res = await axios.get("/v1/countries");
+        const res = await LocationService.getAllCountries();
         countries.value = res.data.data || [];
     } catch (err) {
         console.error("فشل تحميل الدول", err);
@@ -341,7 +334,7 @@ async function loadCities() {
         return;
     }
     try {
-        const res = await axios.get(`/v1/countries/${selectedCountryId.value}`);
+        const res = await LocationService.getCountryById(selectedCountryId.value);
         cities.value = res.data.data?.country?.cities || [];
         form.value.city_id = "";
 
@@ -356,7 +349,7 @@ async function loadCities() {
 
 async function fetchCategories() {
     try {
-        const res = await axios.get("/v1/categories");
+        const res = await CategoryService.getCategories();
         categories.value = res.data.data || [];
     } catch (err) {
         console.error("فشل تحميل الفئات", err);
@@ -368,7 +361,7 @@ async function loadSubCategories() {
     form.value.sub_categorey_id = "";
     if (!selectedCategoryId.value) return;
     try {
-        const res = await axios.get(`/v1/categories/${selectedCategoryId.value}`);
+        const res = await CategoryService.getCategoryById(selectedCategoryId.value);
         subCategories.value = res.data.data?.sub_categories || [];
     } catch (err) {
         console.error("فشل تحميل التصنيفات الفرعية", err);
@@ -464,9 +457,7 @@ async function createEvent() {
     });
 
     try {
-        await axios.post("/v1/events/create/user", fd, {
-            headers: { "Content-Type": "multipart/form-data" },
-        });
+        await EventService.createUser(fd);
 
         alert("تم إنشاء الحدث بنجاح!");
         window.location.href = "/";

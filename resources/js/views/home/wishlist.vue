@@ -138,7 +138,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { WishlistService } from '../../services/WishlistService'
 
 const wishlists = ref([])
 const pagination = ref({})
@@ -152,12 +152,7 @@ const PLACEHOLDER_IMAGE = 'https://picsum.photos/seed/wishlist/600/400'
 const fetchWishlists = async (page = 1) => {
     loading.value = true
     try {
-        const response = await axios.get(`/v1/Wishlist/me?page=${page}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-                "Accept-Language": localStorage.getItem("language") || "ar",
-            }
-        })
+        const response = await WishlistService.getMyWishlist(page)
 
         if (response.data.status === 'success') {
             wishlists.value = response.data.data.data
@@ -191,11 +186,7 @@ const deleteFromWishlist = async (id) => {
     deletingItemId.value = id
 
     try {
-        const response = await axios.delete(`/v1/Wishlist/${id}/delete`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('auth_token')}`
-            }
-        })
+        const response = await WishlistService.deleteFromWishlist(id)
         if (response.data.status === 'success') {
             wishlists.value = wishlists.value.filter(item => item.id !== id)
             if (wishlists.value.length === 0 && currentPage.value > 1) {

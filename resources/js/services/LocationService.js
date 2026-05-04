@@ -1,6 +1,14 @@
 import api from "./ApiClient";
 
 export const LocationService = {
+  getCountriesAll() {
+    return api.get("/countries/all/get");
+  },
+
+  getCountryById(countryId) {
+    return api.get(`/countries/${countryId}`);
+  },
+
   async getAllCountries() {
     try {
       const res = await api.get("/countries");

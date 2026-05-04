@@ -274,9 +274,7 @@ const deleteRequest = async (request) => {
     if (!confirm(`Delete request #${request.id}?`)) return;
 
     try {
-        await axios.delete(`/api/v1/requests/${request.id}`, {
-            headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` }
-        });
+        await requestsService.deleteRequest(request.id);
         await fetchRequests(currentPage.value);   // refresh بدون reload
     } catch (err) {
         alert(err.response?.data?.message || "Delete failed");

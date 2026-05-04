@@ -1,12 +1,7 @@
 // src/services/userService.js
-import axios from "axios";
+import api from "../../ApiClient";
 
-const BASE_URL = "/v1/users";
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem("auth_token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+const BASE_URL = "/users";
 
 export const userService = {
   /**
@@ -14,9 +9,7 @@ export const userService = {
    */
   async fetchUsers(page = 1) {
     try {
-      const res = await axios.get(`${BASE_URL}/all/get?page=${page}`, {
-        headers: getAuthHeader(),
-      });
+      const res = await api.get(`${BASE_URL}/all/get?page=${page}`);
       return {
         success: true,
         data: res.data.data, // { data: [], current_page, last_page, per_page, total }
@@ -31,9 +24,7 @@ export const userService = {
    */
   async createUser(userData) {
     try {
-      const response = await axios.post(`${BASE_URL}/create`, userData, {
-        headers: getAuthHeader(),
-      });
+      const response = await api.post(`${BASE_URL}/create`, userData);
       return {
         success: true,
         data: response.data.data || response.data,
@@ -48,9 +39,7 @@ export const userService = {
    */
   async updateUser(userId, data) {
     try {
-      const res = await axios.post(`${BASE_URL}/${userId}`, data, {
-        headers: getAuthHeader(),
-      });
+      const res = await api.post(`${BASE_URL}/${userId}`, data);
       return {
         success: true,
         data: res.data,
@@ -65,9 +54,7 @@ export const userService = {
    */
   async deleteUser(userId) {
     try {
-      await axios.delete(`${BASE_URL}/${userId}`, {
-        headers: getAuthHeader(),
-      });
+      await api.delete(`${BASE_URL}/${userId}`);
       return { success: true };
     } catch (error) {
       return handleApiError(error, "فشل حذف المستخدم");

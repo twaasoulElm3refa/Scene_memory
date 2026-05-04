@@ -256,7 +256,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import api from "@/services/ApiClient";
+import { PlanService } from "@/services/planService";
 
 const route = useRoute();
 const router = useRouter();
@@ -300,7 +300,7 @@ const showToast = (message, type = 'success') => {
 const fetchPlan = async () => {
     try {
         const slug = route.params.slug;
-        const res = await api.get(`/plans/single/${slug}`);
+        const res = await PlanService.getSingle(slug);
         plan.value = res.data.data[0];
     } catch (error) {
         console.error(error);
@@ -313,7 +313,7 @@ const fetchPlan = async () => {
 const subscribe = async () => {
     subscribing.value = true;
     try {
-        await api.post(`/subscribe/${plan.value.id}`);
+        await PlanService.subscribe(plan.value.id);
         showToast('Successfully subscribed! Welcome aboard.', 'success');
         const lang = localStorage.getItem('language') || 'en';
 

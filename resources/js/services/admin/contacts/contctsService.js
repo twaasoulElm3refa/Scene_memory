@@ -1,6 +1,4 @@
-import axios from "axios";
-
-const API_BASE = "/v1";
+import api from "../../ApiClient";
 
 export const ContactService = {
   /**
@@ -8,7 +6,7 @@ export const ContactService = {
    * GET /v1/contacts/{id}
    */
   async getContact(id) {
-    const response = await axios.get(`${API_BASE}/contacts/${id}`);
+    const response = await api.get(`/contacts/${id}`);
     return response.data;
   },
 
@@ -19,7 +17,7 @@ export const ContactService = {
    * @param {string} message - respond message
    */
   async respondToContact(id, message) {
-    const response = await axios.post(`${API_BASE}/contacts/respond/${id}`, {
+    const response = await api.post(`/contacts/respond/${id}`, {
       message,
     });
     return response.data;

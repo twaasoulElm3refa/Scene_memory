@@ -1,6 +1,6 @@
-import api from '@/services/admin/cities/api';
+import api from "../../ApiClient";
 
-const COUNTRIES_ENDPOINT = '/v1/countries';
+const COUNTRIES_ENDPOINT = '/countries';
 
 export const countryService = {
   /**
@@ -56,11 +56,7 @@ export const countryService = {
     if (imageFile) {
       formData.append('image', imageFile);
     }
-    return api.post(`${COUNTRIES_ENDPOINT}/create`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    return api.post(`${COUNTRIES_ENDPOINT}/create`, formData);
   },
 
   /**
@@ -79,9 +75,7 @@ export const countryService = {
       formData.append('image', imageFile);
     }
 
-    return api.post(`${COUNTRIES_ENDPOINT}/${id}/update`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    return api.post(`${COUNTRIES_ENDPOINT}/${id}/update`, formData);
   },
 
   /**

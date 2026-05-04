@@ -379,7 +379,8 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import axios from "axios";
+import { EventService } from "../../../services/admin/events/EventService";
+import { EventImageService } from "../../../services/EventImageService";
 
 // ────────────────────────────────────────────────
 // Interfaces
@@ -512,7 +513,7 @@ const confirmDeleteMedia = async (mediaId: number) => {
     }
 
     try {
-        const response = await axios.delete(`/v1/event-images/${mediaId}/delete`);
+        const response = await EventImageService.delete(mediaId);
 
         if (response.data.status === "success") {
             alert("تم حذف الوسائط بنجاح");
@@ -581,20 +582,15 @@ const uploadMedia = async () => {
     formData.append("url", selectedFile.value);
 
     try {
-        const response = await axios.post(
-            `/v1/event-images/create/${event.value.id}`,
-            formData,
-            {
-                headers: { "Content-Type": "multipart/form-data" },
-                onUploadProgress: (progressEvent) => {
-                    if (progressEvent.total) {
-                        uploadProgress.value = Math.round(
-                            (progressEvent.loaded * 100) / progressEvent.total
-                        );
-                    }
-                },
-            }
-        );
+        const response = await EventImageService.create(event.value.id, formData, {
+            onUploadProgress: (progressEvent) => {
+                if (progressEvent.total) {
+                    uploadProgress.value = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                }
+            },
+        });
 
         if (response.data.status === "success") {
             await fetchEvent();
@@ -650,7 +646,7 @@ const editEvent = () => {
 const deleteEvent = async () => {
     if (!confirm("متأكد من حذف الحدث؟")) return;
     try {
-        await axios.delete(`v1/events/${event.value?.slug}/delete`);
+        await EventService.deleteEvent(event.value?.id);
         alert("تم حذف الحدث بنجاح");
         goBack();
     } catch (err) {
@@ -664,7 +660,7 @@ const fetchEvent = async () => {
         loading.value = true;
         error.value = null;
         const slug = route.params.id as string;
-        const res = await axios.get(`v1/events/${slug}/single/get`);
+        const res = await EventService.getSingleEvent(slug);
         if (res.data.status === "success") {
             event.value = res.data.data;
         } else {

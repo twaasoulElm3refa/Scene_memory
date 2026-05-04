@@ -633,10 +633,14 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import axios from "axios";
 import { EventService } from "@/services/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService";
 import { CartService } from "@/services/CartService";
+import { ReplyService } from "../../services/ReplyService";
+import { AuthService } from "../../services/AuthService";
+import { LikeService } from "../../services/LikeService";
+import { WishlistService } from "../../services/WishlistService";
+import { MediaRequestService } from "../../services/MediaRequestService";
 
 const cartLoading = ref(false);
 
@@ -851,16 +855,7 @@ const addReply = async (commentId) => {
 
     try {
         const token = localStorage.getItem("auth_token");
-        const response = await axios.post(
-            `/v1/replies/reply/${commentId}`,
-            { comment: replyText },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                },
-            }
-        );
+        const response = await ReplyService.createReply(commentId, { comment: replyText });
 
         if (response.data.status === "success") {
             const newReply = {
@@ -898,9 +893,7 @@ const fetchCurrentUser = async () => {
     try {
         const token = localStorage.getItem("auth_token");
         if (!token) return;
-        const res = await axios.get("/v1/users/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await AuthService.getProfile();
         currentUserId.value = res.data?.data?.user?.id || res.data?.id;
     } catch (err) {
         console.log("فشل جلب بيانات المستخدم", err);
@@ -912,9 +905,7 @@ const fetchLikesInfo = async () => {
     if (!event.value?.id) return;
     try {
         const token = localStorage.getItem("auth_token") || "";
-        const res = await axios.get(`/v1/likes/${event.value.id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await LikeService.getLikes(event.value.id);
         if (res.data.status === "success" && res.data.data) {
             likesCount.value = res.data.data.count ?? 0;
             isLiked.value = !!res.data.data.liked;
@@ -939,16 +930,7 @@ const toggleLike = async () => {
     likeError.value = "";
 
     try {
-        const res = await axios.post(
-            `/v1/likes/${event.value.id}/create`,
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                },
-            }
-        );
+        const res = await LikeService.createLike(event.value.id);
         if (res.data.status === "success") {
             likesCount.value += 1;
             isLiked.value = true;
@@ -978,16 +960,7 @@ const addToWishlist = async () => {
     wishlistSuccess.value = false;
 
     try {
-        const res = await axios.post(
-            `/v1/Wishlist/${event.value.id}`,
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                },
-            }
-        );
+        const res = await WishlistService.addToWishlist(event.value.id);
         if (res.data.status === "success") {
             isInWishlist.value = true;
             wishlistSuccess.value = true;
@@ -1010,16 +983,9 @@ const addComment = async () => {
     commentSuccess.value = false;
 
     try {
-        const response = await axios.post(
-            `/v1/comments/${event.value.id}/create`,
-            { comment: newComment.value.trim() },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
-                    Accept: "application/json",
-                },
-            }
-        );
+        const response = await CommentService.createComment(event.value.id, {
+            comment: newComment.value.trim(),
+        });
 
         if (response.data.status === "success") {
             const newCommentData = response.data.data || {
@@ -1050,12 +1016,7 @@ const deleteComment = async (commentId) => {
 
     try {
         const token = localStorage.getItem("auth_token");
-        await axios.delete(`/v1/comments/${commentId}/delete`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/json",
-            },
-        });
+        await CommentService.deleteComment(commentId);
         event.value.comments = event.value.comments.filter((c) => c.id !== commentId);
         if (event.value.comments_count !== undefined) event.value.comments_count--;
     } catch (err) {
@@ -1103,16 +1064,7 @@ const uploadFiles = async () => {
     selectedFiles.value.forEach((f) => formData.append("url[]", f));
 
     try {
-        const res = await axios.post(
-            `/v1/media-request/upload/${event.value.id}`,
-            formData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
+        const res = await MediaRequestService.upload(event.value.id, formData);
 
         if (res.data.status === "success") {
             const media = res.data.data?.media;

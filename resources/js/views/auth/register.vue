@@ -202,8 +202,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
+import { AuthService } from "../../services/AuthService";
 
 const route = useRoute();
 const router = useRouter();
@@ -255,8 +255,6 @@ const saveTokenAndRedirect = (token, role) => {
     localStorage.setItem("auth_token", token);
     localStorage.setItem("user_role", normalizedRole);
 
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
     const lang = getLang();
 
     if (normalizedRole === "admin") {
@@ -281,10 +279,8 @@ onMounted(async () => {
         url.search = "";
         window.history.replaceState({}, document.title, url.toString());
         localStorage.setItem("auth_token", token);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
         try {
-            const res = await axios.get("/v1/users/me");
+            const res = await AuthService.getProfile();
             const role = res.data.data?.role || res.data.data?.user?.role || "user";
             saveTokenAndRedirect(token, role);
         } catch {
@@ -298,7 +294,7 @@ const handleLogin = async () => {
     error.value = "";
 
     try {
-        const res = await axios.post("/v1/users/login", loginForm.value);
+        const res = await AuthService.login(loginForm.value);
 
         if (res.data.status === "success") {
             const token = res.data.data?.token;
@@ -328,9 +324,7 @@ const handleRegister = async () => {
             }
         });
 
-        const res = await axios.post("/v1/users/register", formData, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
+        const res = await AuthService.register(formData);
 
         if (res.data.status === "success") {
             const token = res.data.data?.token;
@@ -351,7 +345,7 @@ const handleRegister = async () => {
 const handleForgot = async () => {
     error.value = "";
     try {
-        await axios.post("/v1/users/forgot-password", { email: forgotEmail.value });
+        await AuthService.forgotPassword({ email: forgotEmail.value });
         successMessage.value = "تم إرسال الكود على الإيميل";
         resetForm.value.email = forgotEmail.value;
         tab.value = "reset";
@@ -364,7 +358,7 @@ const handleForgot = async () => {
 const handleReset = async () => {
     error.value = "";
     try {
-        await axios.post("/v1/users/reset-password", resetForm.value);
+        await AuthService.resetPassword(resetForm.value);
         successMessage.value = "تم تغيير كلمة المرور بنجاح";
         tab.value = "login";
         resetForm.value = { email: "", otp: "", password: "", password_confirmation: "" };
@@ -375,7 +369,7 @@ const handleReset = async () => {
 
 const handleGoogleLogin = async () => {
     try {
-        const res = await axios.get("/v1/users/google-login");
+        const res = await AuthService.googleLogin();
         window.location.href = res.data.url;
     } catch (err) {
         error.value = "فشل الاتصال بجوجل";

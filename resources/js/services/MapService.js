@@ -1,5 +1,6 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import api from "./ApiClient";
 
 if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
     maplibregl.setRTLTextPlugin(
@@ -405,14 +406,8 @@ export default class MapService {
             return;
         }
 
-        fetch(`/api/v1/events/${encodeURIComponent(city)}/marker/search`, {
-            headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
-                "Accept-Language": localStorage.getItem("language") || "ar",
-            },
-        })
-            .then(res => res.json())
+        api.get(`/events/${encodeURIComponent(city)}/marker/search`)
+            .then((res) => res.data)
             .then(data => {
                 const events = data?.data || [];
 
@@ -536,24 +531,8 @@ export default class MapService {
 
     async loadDailyEvents() {
         try {
-            const token = localStorage.getItem("auth_token") || "";
-            const lang = localStorage.getItem("language") || "ar";
-
-            const res = await fetch("/api/v1/events/daily", {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${token}`,
-                    "Accept-Language": lang,
-                },
-            });
-
-            if (!res.ok) {
-                console.warn("Daily events fetch failed", res.status);
-                return;
-            }
-
-            const json = await res.json();
-            const events = json?.data || [];
+            const res = await api.get("/events/daily");
+            const events = res?.data?.data || [];
 
             if (events.length > 0 && this.map) {
                 this.addEventMarkers(events, this.map, false);

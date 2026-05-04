@@ -65,12 +65,6 @@ Route::prefix('v1')->group(function () {
         // Social Auth
         Route::get('/google-login', [GoogleAuthController::class, 'googleLogin'])->middleware('guest');
         Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware('guest');
-        // Route::get('/facebook-login', [SocialAuthController::class, 'redirectToFacebook']);
-        // Route::get('/facebook-callback', [SocialAuthController::class, 'handleFacebookCallback']);
-
-        // Route::get('/apple-login', [AppleAuthController::class, 'redirectToApple']);
-        // Route::get('/apple-callback', [AppleAuthController::class, 'handleAppleCallback']);
-
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);

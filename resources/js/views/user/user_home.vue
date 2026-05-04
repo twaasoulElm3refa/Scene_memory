@@ -174,7 +174,7 @@
 <script setup>
 import UserLayout from "../../layouts/user/UserLayout.vue";
 import { ref, computed, onMounted } from "vue";
-import axios from "axios";
+import { UserDashboardService } from "../../services/UserDashboardService";
 
 const events = ref([]);
 const eventsCount = ref(0);
@@ -186,9 +186,9 @@ const uniqueCitiesCount = computed(() => {
   return cities.size;
 });
 
-onMounted(async () => {
-  try {
-    const response = await axios.get("/v1/user-dshboard/my-events");
+  onMounted(async () => {
+    try {
+    const response = await UserDashboardService.getMyEvents();
     if (response.data?.status === "success") {
       events.value = response.data.data.events || [];
       eventsCount.value = response.data.data.count || events.value.length;

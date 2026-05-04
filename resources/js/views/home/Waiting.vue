@@ -12,7 +12,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import axios from "axios";
+import { PaymentService } from "../../services/PaymentService";
 
 const router = useRouter();
 const route = useRoute();
@@ -28,8 +28,7 @@ const checkStatus = async () => {
   try {
     attempts.value++;
 
-    const url = `${import.meta.env.VITE_API_URL}/api/v1/order/status/${orderId}`;
-    const { data } = await axios.get(url);
+    const { data } = await PaymentService.orderStatus(orderId);
 
     if (data.status === "completed") {
       clearInterval(interval);

@@ -325,10 +325,12 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
+import { LocationService } from "../../../services/LocationService";
+import { CategoryService } from "../../../services/CategoryService";
+import { EventService } from "../../../services/EventService";
 import L from "leaflet";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
@@ -409,7 +411,7 @@ onMounted(async () => {
 async function fetchCountries() {
   errors.value.countries = "";
   try {
-    const res = await axios.get("/v1/countries/all/get");
+    const res = await LocationService.getCountriesAll();
     countries.value = res.data.data || [];
   } catch (err) {
     console.error("فشل تحميل الدول", err);
@@ -426,7 +428,7 @@ async function loadCities() {
   if (!selectedCountryId.value) return;
 
   try {
-    const res = await axios.get(`/v1/countries/${selectedCountryId.value}`);
+    const res = await LocationService.getCountryById(selectedCountryId.value);
     cities.value = res.data.data?.country?.cities || [];
   } catch (err) {
     console.error("فشل تحميل المدن", err);
@@ -437,7 +439,7 @@ async function loadCities() {
 async function fetchCategories() {
   errors.value.categories = "";
   try {
-    const res = await axios.get("/v1/categories");
+    const res = await CategoryService.getCategories();
     categories.value = res.data.data || [];
   } catch (err) {
     console.error("فشل تحميل الفئات", err);
@@ -453,7 +455,7 @@ async function loadSubCategories() {
   if (!selectedCategoryId.value) return;
 
   try {
-    const res = await axios.get(`/v1/categories/${selectedCategoryId.value}`);
+    const res = await CategoryService.getCategoryById(selectedCategoryId.value);
     subCategories.value = res.data.data?.sub_categories || [];
   } catch (err) {
     console.error("فشل تحميل التصنيفات الفرعية", err);
@@ -539,9 +541,7 @@ async function createEvent() {
   });
 
   try {
-    await axios.post("/v1/events/create", fd, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    await EventService.create(fd);
     alert("تم إنشاء الحدث بنجاح!");
     window.location.href = "/admin/events";
   } catch (err) {

@@ -1,17 +1,10 @@
 // src/services/statsService.js
-import axios from "axios";
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem("auth_token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
+import api from "../../ApiClient";
 
 export const statsService = {
   async fetchActiveUsersCount() {
     try {
-      const res = await axios.get("/v1/users/all/last-login", {
-        headers: getAuthHeader(),
-      });
+      const res = await api.get("/users/all/last-login");
       return res.data.status === "success" ? res.data.data : 0;
     } catch (err) {
       console.error("Error fetching active users count:", err);
@@ -21,9 +14,7 @@ export const statsService = {
 
   async fetchNewSignups() {
     try {
-      const res = await axios.get("/v1/users/all/new-users", {
-        headers: getAuthHeader(),
-      });
+      const res = await api.get("/users/all/new-users");
       if (res.data.status === "success") {
         return {
           newSignups: res.data.data || 0,

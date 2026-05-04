@@ -264,7 +264,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import AdminLayout from "../../layouts/AdminLayout.vue";
-import axios from "axios";
+import { AdminDashboardService } from "../../services/AdminDashboardService";
+import { NotificationService } from "../../services/NotificationService";
 
 const stats = ref({
   events: 0,
@@ -279,9 +280,9 @@ const notificationMessage = ref("");
 const loading = ref(false);
 const errors = ref({});
 
-const getLatestUsers = async () => {
-  try {
-    const response = await axios.get("/v1/users/latest/get");
+  const getLatestUsers = async () => {
+    try {
+    const response = await AdminDashboardService.getLatestUsers();
     recentActivity.value = response.data.data;
   } catch (error) {
     console.error("Error fetching latest users:", error);
@@ -289,13 +290,13 @@ const getLatestUsers = async () => {
 };
 
 async function fetchStats() {
-  try {
-    const [eventsRes, usersRes, memoriesRes, purchasesRes] = await Promise.all([
-      axios.get("/v1/events/count"),
-      axios.get("/v1/users/all/count"),
-      axios.get("/v1/events/memories"),
-      axios.get("/v1/purchases/all/count"),
-    ]);
+    try {
+      const [eventsRes, usersRes, memoriesRes, purchasesRes] = await Promise.all([
+      AdminDashboardService.getEventsCount(),
+      AdminDashboardService.getUsersCount(),
+      AdminDashboardService.getMemoriesCount(),
+      AdminDashboardService.getPurchasesCount(),
+      ]);
 
     stats.value = {
       events: eventsRes.data.status === "success" ? eventsRes.data.data : 0,
@@ -323,7 +324,7 @@ const sendNotification = async () => {
       // You can add later: title, type, user_ids, roles, etc.
     };
 
-    const response = await axios.post("/v1/notify/create", payload);
+    const response = await NotificationService.create(payload);
 
     if (response.data.status === "success") {
       alert("Notification sent successfully!");

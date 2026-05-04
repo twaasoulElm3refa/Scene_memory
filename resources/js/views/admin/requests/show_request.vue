@@ -223,8 +223,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { RequestService } from "../../../services/RequestService";
 
 const route = useRoute();
 const router = useRouter();
@@ -235,8 +235,6 @@ const actionLoading = ref(false);
 const showRejectReason = ref(false);
 const rejectReason = ref("");
 const rejectReasonError = ref("");
-const baseUrl = "/v1";
-
 const statusClasses = {
   pending: "bg-amber-50 text-amber-800 border-amber-200",
   approved: "bg-green-50 text-green-800 border-green-200",
@@ -261,9 +259,7 @@ const handleImageError = (e) => {
 const fetchRequest = async () => {
   try {
     loading.value = true;
-    const { data } = await axios.get(`${baseUrl}/requests/${route.params.id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` },
-    });
+    const { data } = await RequestService.getSingle(route.params.id);
     apiData.value = {
       request: data.data.request,
       event: data.data.event,
@@ -279,11 +275,7 @@ const approveRequest = async () => {
   if (!confirm("Are you sure you want to APPROVE this event request?")) return;
   try {
     actionLoading.value = true;
-    await axios.post(
-      `${baseUrl}/requests/approve/${route.params.id}`,
-      {},
-      { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
-    );
+    await RequestService.approve(route.params.id);
     apiData.value.request.status = "approved";
     alert("Request approved successfully!");
     window.location.href = "/admin/requests";
@@ -303,11 +295,7 @@ const declineRequest = async () => {
   if (!confirm("Are you sure you want to REJECT this event request?")) return;
   try {
     actionLoading.value = true;
-    await axios.post(
-      `${baseUrl}/requests/decline/${route.params.id}`,
-      { reason },
-      { headers: { Authorization: `Bearer ${localStorage.getItem("auth_token")}` } }
-    );
+    await RequestService.decline(route.params.id, { reason });
     apiData.value.request.status = "rejected";
     alert("Request rejected successfully!");
     window.location.href = "/admin/requests";

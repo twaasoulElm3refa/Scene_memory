@@ -257,9 +257,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-import axios from 'axios'
 import { useRouter, useRoute } from "vue-router";
 import AdminLayout from '../../../layouts/AdminLayout.vue'
+import { PurchaseService } from '../../../services/PurchaseService'
 
 const router = useRouter();
 const route = useRoute();
@@ -354,7 +354,7 @@ const formatDate = (str) => {
 const fetchPurchases = async (page = 1) => {
     loading.value = true; error.value = null
     try {
-        const { data } = await axios.get(`/v1/purchases?page=${page}`)
+        const { data } = await PurchaseService.getAll(page)
         purchases.value = data.data
         currentPage.value = page
     } catch (e) {

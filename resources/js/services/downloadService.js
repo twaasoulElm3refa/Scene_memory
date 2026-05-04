@@ -10,4 +10,11 @@ export default {
       throw error;
     }
   },
+
+  async downloadFile(path) {
+    return api.get("/download", {
+      params: { path },
+      responseType: "blob",
+    });
+  },
 };

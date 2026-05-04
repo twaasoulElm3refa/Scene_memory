@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '../../../layouts/AdminLayout.vue';
 import { ref, onMounted } from 'vue';
-import api from '../../../services/ApiClient';
+import { ReportService } from '../../../services/ReportService';
 
 interface User {
   id: number;
@@ -48,7 +48,7 @@ const showModal = ref(false);
 const fetchReports = async (page = 1) => {
   loading.value = true;
   try {
-    const response = await api.get(`/comments/reports/all?page=${page}`);
+    const response = await ReportService.getReports(page);
     const { data: pageData, ...meta } = response.data.data;
     reports.value = pageData;
     pagination.value = meta;
@@ -78,10 +78,10 @@ const deleteReport = async (reportId: number, isFromModal = false) => {
 
   try {
     if (isDeletingComment) {
-      await api.delete(`/comments/${targetId}/delete`);
+      await ReportService.deleteComment(targetId);
       reports.value = reports.value.filter(r => r.id !== reportId);
     } else {
-      await api.delete(`/comments/reports/${reportId}/delete`);
+      await ReportService.deleteReport(reportId);
       reports.value = reports.value.filter(r => r.id !== reportId);
     }
   } catch (error) {

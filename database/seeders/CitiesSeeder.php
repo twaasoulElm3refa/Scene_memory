@@ -94,7 +94,7 @@ class CitiesSeeder extends Seeder
                 'country_id' => 63,
             ],
             [
-                'id'=> 13,
+                'id'=> 14,
                 'name' => 'أثينا',
                 'slug' => 'أثينا',
                 'country_id' => 65,

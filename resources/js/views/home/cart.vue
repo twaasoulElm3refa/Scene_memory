@@ -302,6 +302,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import { CartService } from "@/services/CartService";
+import { PaymentService } from "../../services/PaymentService";
 
 // ══════════════════════════════════════════════════════════
 // STATE
@@ -457,23 +458,13 @@ const handleCheckout = async () => {
     checkoutLoading.value = true;
 
     try {
-        const res = await fetch("http://localhost:8000/api/v1/pay", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("auth_token") || ""}`,
-            },
-            body: JSON.stringify({
-                amount: total.value,
-                description: `Cart (${items.value.length} items)`,
-                idempotency_key: idempotencyKey.value,
-            }),
+        const { data } = await PaymentService.pay({
+            amount: total.value,
+            description: `Cart (${items.value.length} items)`,
+            idempotency_key: idempotencyKey.value,
         });
 
-        const data = await res.json();
-
-        if (!res.ok || !data.success) {
+        if (!data.success) {
             throw new Error(data.message || "Payment initiation failed");
         }
 

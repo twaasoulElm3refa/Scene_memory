@@ -295,8 +295,10 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import UserLayout from "../../layouts/user/UserLayout.vue";
+import { LocationService } from "../../services/LocationService";
+import { CategoryService } from "../../services/CategoryService";
+import { UserDashboardService } from "../../services/UserDashboardService";
 const form = ref({
   title: "",
   description: "",
@@ -325,7 +327,7 @@ onMounted(async () => {
 
 async function fetchCountries() {
   try {
-    const res = await axios.get("/v1/countries");
+    const res = await LocationService.getAllCountries();
     countries.value = res.data.data || [];
   } catch (err) {
     console.error("فشل تحميل الدول", err);
@@ -339,7 +341,7 @@ async function loadCities() {
   if (!selectedCountryId.value) return;
 
   try {
-    const res = await axios.get(`/v1/countries/${selectedCountryId.value}`);
+    const res = await LocationService.getCountryById(selectedCountryId.value);
     cities.value = res.data.data?.countries?.cities || [];
   } catch (err) {
     console.error("فشل تحميل المدن", err);
@@ -348,7 +350,7 @@ async function loadCities() {
 
 async function fetchCategories() {
   try {
-    const res = await axios.get("/v1/categories");
+    const res = await CategoryService.getCategories();
     categories.value = res.data.data || [];
   } catch (err) {
     console.error("فشل تحميل الفئات", err);
@@ -362,7 +364,7 @@ async function loadSubCategories() {
   if (!selectedCategoryId.value) return;
 
   try {
-    const res = await axios.get(`/v1/categories/${selectedCategoryId.value}`);
+    const res = await CategoryService.getCategoryById(selectedCategoryId.value);
     subCategories.value = res.data.data?.sub_categories || [];
   } catch (err) {
     console.error("فشل تحميل التصنيفات الفرعية", err);
@@ -421,13 +423,7 @@ async function createEvent() {
   if (form.value.image) fd.append("image", form.value.image);
 
   try {
-    await axios.post("/v1/user-dshboard/create/Event", fd, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        Accept: "application/json",
-      },
-    });
+    await UserDashboardService.createEvent(fd);
     window.location.href = "/admin/events";
     alert("تم إنشاء الحدث بنجاح!");
   } catch (err) {
