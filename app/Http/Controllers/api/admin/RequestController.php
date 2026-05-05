@@ -6,8 +6,8 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Mail\ApproveMail;
 use App\Mail\RejectMail;
-use App\Models\EventRequestCreate;
-use App\Models\Events;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -17,6 +17,12 @@ class RequestController extends Controller
     use ApiResponse;
 
     private $cacheTime = 60 * 60;
+
+    public function __construct(
+        private readonly RequestRepositoryInterface $requestRepository,
+        private readonly EventRepositoryInterface $eventRepository
+    ) {
+    }
 
     /**
      * عرض كل الـ requests مع pagination + counts
@@ -30,16 +36,12 @@ class RequestController extends Controller
             $cacheKey = "requests:page_{$page}:per_{$perPage}";
 
             $requests = Cache::tags(['requests'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-                return EventRequestCreate::with('events:id,title')->latest()->paginate($perPage);
+                return $this->requestRepository->paginatedWithEvent($perPage);
             });
 
             $countsKey = 'requests:counts';
             $counts = Cache::tags(['requests'])->remember($countsKey, $this->cacheTime, function () {
-                return [
-                    'pending' => EventRequestCreate::where('status', 'pending')->count(),
-                    'approved' => EventRequestCreate::where('status', 'approved')->count(),
-                    'rejected' => EventRequestCreate::where('status', 'rejected')->count(),
-                ];
+                return $this->requestRepository->counts();
             });
 
             return response()->json([
@@ -66,13 +68,12 @@ class RequestController extends Controller
     public function show($id)
     {
         try {
-            $request = EventRequestCreate::select('id', 'event_id', 'status')->find($id);
+            $request = $this->requestRepository->find((int) $id);
             if (! $request) {
                 return $this->error('Request not found', 404);
             }
 
-            $event = Events::with('city:id,name', 'sub_categorey:id,name', 'user:id,name', 'firstImage', 'adminTranslation')
-                ->find($request->event_id);
+            $event = $this->eventRepository->findWithAdminRelationsById((int) $request->event_id);
 
             return $this->success(['request' => $request, 'event' => $event], 'Request retrieved');
 
@@ -87,11 +88,11 @@ class RequestController extends Controller
     public function approve($request_id)
     {
         try {
-            $request = EventRequestCreate::findOrFail($request_id);
+            $request = $this->requestRepository->findOrFail((int) $request_id);
             $request->status = 'approved';
             $request->save();
 
-            $event = Events::findOrFail($request->event_id);
+            $event = $this->eventRepository->findByIdOrFail((int) $request->event_id);
             $event->is_active = 1;
             $event->save();
 
@@ -111,11 +112,11 @@ class RequestController extends Controller
     public function decline(Request $req, $request_id)
     {
         try {
-            $request = EventRequestCreate::findOrFail($request_id);
+            $request = $this->requestRepository->findOrFail((int) $request_id);
             $request->status = 'rejected';
             $request->save();
 
-            $event = Events::findOrFail($request->event_id);
+            $event = $this->eventRepository->findByIdOrFail((int) $request->event_id);
 
             $this->clearEventsCache();
 
@@ -134,8 +135,8 @@ class RequestController extends Controller
     public function destroy($id)
     {
         try {
-            $request = EventRequestCreate::findOrFail($id);
-            $event = Events::findOrFail($request->event_id);
+            $request = $this->requestRepository->findOrFail((int) $id);
+            $event = $this->eventRepository->findByIdOrFail((int) $request->event_id);
 
             $event->delete();
             $request->delete();

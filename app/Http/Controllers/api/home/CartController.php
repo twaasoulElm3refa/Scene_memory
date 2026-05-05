@@ -4,14 +4,19 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\cart;
-use App\Models\cartItems;
-use App\Models\eventsImges;
+use App\Repositories\Contracts\Carts\CartRepositoryInterface;
+use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 
 class CartController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly EventImageRepositoryInterface $eventImageRepository
+    ) {
+    }
 
     private function clearCartCache($userId)
     {
@@ -30,14 +35,12 @@ class CartController extends Controller
             if (!$id) {
                 return $this->error('Image ID is required', 400);
             }
-            $cart = cart::firstOrCreate([
-                'user_id' => $user->id
-            ]);
-            $image = eventsImges::find($id);
+            $cart = $this->cartRepository->firstOrCreateByUserId($user->id);
+            $image = $this->eventImageRepository->findById((int) $id);
             if (!$image) {
                 return $this->error('Image not found', 404);
             }
-            $item = cartItems::firstOrCreate([
+            $item = $this->cartRepository->firstOrCreateItem([
                 'cart_id'  => $cart->id,
                 'image_id' => $image->id,
                 'price'    => $image->price,
@@ -63,23 +66,12 @@ class CartController extends Controller
 
             $images = Cache::tags(['cart', "user_{$user->id}"])
                 ->remember($cacheKey, now()->addMinutes(10), function () use ($user) {
-                    $cart = cart::with('cartItems.items')
-                        ->where("user_id", $user->id)
-                        ->first();
+                    $cart = $this->cartRepository->findWithItemsByUserId($user->id);
                         if (!$cart) {
-                            $cart = cart::create([
-                                "user_id" => $user->id
-                            ]);
-                            $cart->load('cartItems.items');
+                            $cart = $this->cartRepository->firstOrCreateByUserId($user->id);
                         }
-                    $cartitems = cartItems::where('cart_id', $cart->id)->pluck('image_id');
-                    $images=eventsImges::whereIn('id', $cartitems)->select(['id', 'full_url','price'])->get();
-                    if (!$cart) {
-                        $cart = cart::create([
-                            "user_id" => $user->id
-                        ]);
-                        $cart->load('cartItems.items');
-                    }
+                    $cartitems = $this->cartRepository->pluckImageIdsByCartId($cart->id);
+                    $images = $this->eventImageRepository->whereInIds($cartitems)->select(['id', 'full_url', 'price'])->get();
                     return $images;
                 });
 
@@ -97,7 +89,7 @@ class CartController extends Controller
             if (!$user) {
                 return $this->error('Unauthorized', 401);
             }
-            $item = cartItems::where('image_id', $id)->first();
+            $item = $this->cartRepository->findItemByImageId((int) $id);
             if (!$item) {
                 return $this->error('Image not found in cart', 404);
             }
@@ -112,11 +104,11 @@ class CartController extends Controller
     public function clearCart()
     {
         $user = auth()->user();
-        $cart = cart::where('user_id', $user->id)->first();
+        $cart = $this->cartRepository->findByUserId($user->id);
         if (!$cart) {
             return $this->error('Cart not Found',404);
         }
-        $cart->cartItems()->delete();
+        $this->cartRepository->deleteItemsByCartId($cart->id);
         $this->clearCartCache($user->id);
         return $this->success(null, 'Cart cleared successfully');
     }

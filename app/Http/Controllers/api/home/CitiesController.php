@@ -4,8 +4,8 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Cities;
-use App\Models\Countries;
+use App\Repositories\Contracts\Cities\CityRepositoryInterface;
+use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -13,17 +13,20 @@ class CitiesController extends Controller
 {
     use ApiResponse;
 
-    private $cacheTime = 600; // 10 دقائق
+    private $cacheTime = 600;
 
-    /**
-     * كل المدن بدون pagination
-     */
+    public function __construct(
+        private readonly CityRepositoryInterface $cityRepository,
+        private readonly CountryRepositoryInterface $countryRepository
+    ) {
+    }
+
     public function index()
     {
         $cacheKey = 'cities_index_paginated_'.app()->getLocale();
 
         $cities = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () {
-            return Cities::with('translation')->paginate(10);
+            return $this->cityRepository->paginatedWithTranslation(10);
         });
 
         if ($cities->isEmpty()) {
@@ -33,9 +36,6 @@ class CitiesController extends Controller
         return $this->success($cities, 'All cities');
     }
 
-    /**
-     * كل المدن مع pagination
-     */
     public function paginated()
     {
         $page = request('page', 1);
@@ -43,18 +43,15 @@ class CitiesController extends Controller
         $cacheKey = "cities_paginated_page_{$page}_per_{$perPage}_".app()->getLocale();
 
         $cities = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Cities::select('id', 'name', 'country_id')
-                ->with('countries:id,name', 'translation')
-                ->withCount('events')
-                ->paginate($perPage);
+            return $this->cityRepository->paginatedWithRelations($perPage);
         });
 
         $countCities = Cache::tags(['cities'])->remember('cities_count', $this->cacheTime, function () {
-            return Cities::count();
+            return $this->cityRepository->count();
         });
 
         $countCountries = Cache::tags(['cities'])->remember('countries_count', $this->cacheTime, function () {
-            return Countries::count();
+            return $this->countryRepository->count();
         });
 
         if ($cities->isEmpty()) {
@@ -68,16 +65,13 @@ class CitiesController extends Controller
         ], 'All cities');
     }
 
-    /**
-     * بيانات مدينة واحدة
-     */
     public function single()
     {
         $cityId = request('id');
         $cacheKey = "cities_single_{$cityId}_".app()->getLocale();
 
         $city = Cache::tags(['cities'])->remember($cacheKey, $this->cacheTime, function () use ($cityId) {
-            return Cities::with('events', 'translation')->find($cityId);
+            return $this->cityRepository->findWithEventsAndTranslation((int) $cityId);
         });
 
         if (! $city) {
@@ -87,15 +81,12 @@ class CitiesController extends Controller
         return $this->success($city, 'City data');
     }
 
-    /**
-     * تحديث مدينة
-     */
     public function update(Request $request)
     {
         $data = $request->all();
         try {
             $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
-            $city = Cities::findOrFail(request('id'));
+            $city = $this->cityRepository->findOrFail((int) request('id'));
             $city->update($data);
 
             $this->clearCache();
@@ -106,13 +97,10 @@ class CitiesController extends Controller
         }
     }
 
-    /**
-     * حذف مدينة
-     */
     public function delete()
     {
         try {
-            $city = Cities::findOrFail(request('id'));
+            $city = $this->cityRepository->findOrFail((int) request('id'));
             $city->delete();
 
             $this->clearCache();
@@ -123,9 +111,6 @@ class CitiesController extends Controller
         }
     }
 
-    /**
-     * مسح كل الكاش المتعلق بالمدن
-     */
     private function clearCache()
     {
         Cache::tags(['cities'])->flush();

@@ -267,7 +267,7 @@
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import { PurchaseService } from "../../../services/PurchaseService";
+import { PurchaseService } from "../../../services/PurchaseService/PurchaseService";
 
 const route = useRoute();
 const router = useRouter();

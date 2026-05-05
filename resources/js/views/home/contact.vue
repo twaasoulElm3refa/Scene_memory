@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import { ContactService } from "../../services/ContactService";
+import { ContactService } from "../../services/ContactService/ContactService";
 
 export default {
   name: "ContactUs",

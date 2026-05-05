@@ -208,7 +208,7 @@
 
 <script setup>
 import { ref, onMounted, reactive } from "vue";
-import downloadService from "@/services/downloadService";
+import downloadService from "@/services/downloadService/downloadService";
 
 const downloads     = ref([]);
 const loading       = ref(true);

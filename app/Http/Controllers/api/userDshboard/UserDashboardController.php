@@ -6,8 +6,8 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsMediaRequest;
 use App\Http\Requests\EventsRequest;
-use App\Models\Events;
-use App\Models\eventsImges;
+use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -19,26 +19,22 @@ class UserDashboardController extends Controller
 
     private $cacheTime = 1 * 3600 * 24;
 
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventImageRepositoryInterface $eventImageRepository
+    ) {
+    }
+
     public function myEvents()
     {
         $userId = auth()->id();
         $cacheKey = 'my_events_user_id_'.$userId;
 
         $events = Cache::remember($cacheKey, $this->cacheTime, function () use ($userId) {
-            return Events::with('city:id,name', 'sub_categorey:id,name', 'firstImage')
-                ->where('is_active', 1)
-                ->where('user_id', $userId)
-                ->select([
-                    'id', 'user_id', 'title', 'slug',
-                    'start_date',
-                    'city_id', 'sub_categorey_id',
-                ])
-                ->withCount('images')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            return $this->eventRepository->dashboardEvents($userId);
         });
         $totalImages = $events->sum('images_count');
-        $count = Events::where('user_id', $userId)->count();
+        $count = $this->eventRepository->countByUserId($userId);
 
         return $this->success([
             'events' => $events,
@@ -51,14 +47,14 @@ class UserDashboardController extends Controller
     {
         $validated = $request->validated();
 
-        $event = Events::where('slug', $slug)->firstOrFail();
+        $event = $this->eventRepository->findBySlugOrFail((string) $slug);
 
         $createdMedia = [];
 
         if ($request->hasFile('url')) {
             foreach ($request->file('url') as $file) {
                 $path = $file->store('EventMedia', 'public');
-                $media = eventsImges::create([
+                $media = $this->eventImageRepository->create([
                     'event_id' => $event->id,
                     'url' => $path,
 
@@ -82,7 +78,7 @@ class UserDashboardController extends Controller
                 $data['image'] = $image->store('events', 'public');
             }
             $data['user_id'] = auth()->user()->id;
-            $event = Events::create($data);
+            $event = $this->eventRepository->create($data);
             $this->clearEventsCache();
             $this->clearCache($event->user_id);
 
@@ -95,7 +91,7 @@ class UserDashboardController extends Controller
     public function delete()
     {
         try {
-            $event = Events::findOrFail(request('id'));
+            $event = $this->eventRepository->findByIdOrFail((int) request('id'));
             $this->clearCache($event->user_id, $event->slug);
             $this->clearEventsCache();
             $event->delete();
@@ -110,7 +106,7 @@ class UserDashboardController extends Controller
     {
         $data = $request->all();
         try {
-            $event = Events::where('slug', request('slug'))->first();
+            $event = $this->eventRepository->findBySlug((string) request('slug'));
             $oldSlug = $event->slug;
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 

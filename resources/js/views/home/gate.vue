@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import GateService from '@/services/GateService';
+import GateService from '@/services/GateService/GateService';
 
 export default {
   name: 'GatePage',

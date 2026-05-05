@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\api\payment;
 
 use App\Http\Controllers\Controller;
-use App\Models\cart;
-use App\Models\cartItems;
+use App\Repositories\Contracts\Carts\CartRepositoryInterface;
+use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
+use App\Repositories\Contracts\Wallets\WalletRepositoryInterface;
 use App\Services\PayPalServices;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Mail\PaymentSuccessMail;
-use App\Models\purchase_items;
-use App\Models\purchases;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -31,7 +30,12 @@ class PaymentController extends Controller
         Cache::tags('user_profile')->flush();
     }
 
-    public function __construct(protected PayPalServices $paypal) {}
+    public function __construct(
+        protected PayPalServices $paypal,
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly PurchaseRepositoryInterface $purchaseRepository,
+        private readonly WalletRepositoryInterface $walletRepository
+    ) {}
 
     public function pay(Request $request): JsonResponse
     {
@@ -82,21 +86,21 @@ class PaymentController extends Controller
             $user     = $result['order']->user_id;
             $purchase = $result['order']->id;
 
-            $cart = cart::where('user_id', $user)->first();
+            $cart = $this->cartRepository->findByUserId((int) $user);
             if (!$cart) {
                 return $this->error('Cart not Found', 404);
             }
 
-            $items = cartItems::where("cart_id", $cart->id)->get();
+            $items = $this->cartRepository->getItemsByCartId($cart->id);
             foreach ($items as $item) {
-                purchase_items::create([
+                $this->purchaseRepository->createItem([
                     "purchase_id" => $purchase,
                     "image_id"    => $item->image_id,
                     "price"       => $item->price,
                 ]);
             }
 
-            cartItems::where('cart_id', $cart->id)->delete();
+            $this->cartRepository->deleteItemsByCartId($cart->id);
             $this->clearCartCache($user);
 
             return redirect('/en/waiting?order_id=' . $purchase);
@@ -129,7 +133,7 @@ class PaymentController extends Controller
 
     public function orderStatus(Request $request, $id): JsonResponse
     {
-        $order = \App\Models\purchases::find($id);
+        $order = $this->purchaseRepository->findById((int) $id);
 
         if (!$order) {
             return response()->json(['status' => 'not_found'], 404);
@@ -147,23 +151,21 @@ class PaymentController extends Controller
     {
         return DB::transaction(function () {
             $user = auth()->user();
-            $wallet = \App\Models\Wallet::where('user_id', $user->id)
-                ->lockForUpdate()
-                ->first();
+            $wallet = $this->walletRepository->findByUserIdForUpdate($user->id);
             if (!$wallet) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Wallet not found',
                 ], 404);
             }
-            $cart = cart::where('user_id', $user->id)->first();
+            $cart = $this->cartRepository->findByUserId($user->id);
             if (!$cart) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cart not found',
                 ], 404);
             }
-            $items = cartItems::where("cart_id", $cart->id)->get();
+            $items = $this->cartRepository->getItemsByCartId($cart->id);
             if ($items->isEmpty()) {
                 return response()->json([
                     'success' => false,
@@ -178,7 +180,7 @@ class PaymentController extends Controller
                 ], 422);
             }
             $wallet->decrement('amount', $total);
-            $purchase = purchases::create([
+            $purchase = $this->purchaseRepository->create([
                 "user_id" => $user->id,
                 'type'    => 'wallet',
                 'amount'  => $total,
@@ -191,13 +193,13 @@ class PaymentController extends Controller
                 'mail_sent' => false,
             ]);
             foreach ($items as $item) {
-                purchase_items::create([
+                $this->purchaseRepository->createItem([
                     "purchase_id" => $purchase->id,
                     "image_id"    => $item->image_id,
                     "price"       => $item->price,
                 ]);
             }
-            cartItems::where('cart_id', $cart->id)->delete();
+            $this->cartRepository->deleteItemsByCartId($cart->id);
             $this->clearCartCache($user->id);
                 Mail::to($purchase->user->email)->queue(
                     new PaymentSuccessMail($purchase)

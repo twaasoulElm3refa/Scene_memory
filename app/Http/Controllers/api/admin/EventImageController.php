@@ -4,8 +4,8 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Events;
-use App\Models\eventsImges;
+use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -16,6 +16,12 @@ class EventImageController extends Controller
 
     private $cacheTime = 600;
 
+    public function __construct(
+        private readonly EventImageRepositoryInterface $eventImageRepository,
+        private readonly EventRepositoryInterface $eventRepository
+    ) {
+    }
+
     /**
      * عرض كل الصور الخاصة بحدث محدد
      */
@@ -25,7 +31,7 @@ class EventImageController extends Controller
         $cacheKey = "event_image_event_{$eventId}";
 
         $eventImages = Cache::remember($cacheKey, $this->cacheTime, function () use ($eventId) {
-            return eventsImges::where('event_id', $eventId)->get();
+            return $this->eventImageRepository->findByEventId((int) $eventId);
         });
 
         return $this->success($eventImages, 'Event images fetched successfully');
@@ -47,9 +53,9 @@ class EventImageController extends Controller
                 $data['video'] = $request->file('video')->store('eventVideos', 'public');
             }
 
-            $eventImage = eventsImges::create($data);
+            $eventImage = $this->eventImageRepository->create($data);
 
-            $event = Events::findOrFail($data['event_id']);
+            $event = $this->eventRepository->findByIdOrFail((int) $data['event_id']);
             $this->clearCache($event->id, $event->slug);
 
             return $this->success($eventImage, 'Event media added successfully');
@@ -64,8 +70,8 @@ class EventImageController extends Controller
     public function delete()
     {
         try {
-            $eventImage = eventsImges::findOrFail(request('id'));
-            $event = Events::findOrFail($eventImage->event_id);
+            $eventImage = $this->eventImageRepository->findOrFail((int) request('id'));
+            $event = $this->eventRepository->findByIdOrFail((int) $eventImage->event_id);
 
             $eventImage->delete();
             $this->clearCache($event->id, $event->slug);

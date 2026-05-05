@@ -301,8 +301,8 @@
 
 <script>
 import { ref, onMounted, computed } from "vue";
-import { getProfile, updateProfileAPI } from "@/services/userService";
-import { updatePasswordAPI } from "@/services/userService";
+import { getProfile, updateProfileAPI } from "@/services/userService/userService";
+import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
 
 export default {

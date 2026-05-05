@@ -380,7 +380,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { EventService } from "../../../services/admin/events/EventService";
-import { EventImageService } from "../../../services/EventImageService";
+import { EventImageService } from "../../../services/EventImageService/EventImageService";
 
 // ────────────────────────────────────────────────
 // Interfaces

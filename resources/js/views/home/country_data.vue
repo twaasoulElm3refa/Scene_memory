@@ -234,7 +234,7 @@
 </template>
 
 <script>
-import CountryService from '@/services/CountryService';
+import CountryService from '@/services/CountryService/CountryService';
 
 export default {
     name: 'CountryData',

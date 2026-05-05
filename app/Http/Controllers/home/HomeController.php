@@ -6,9 +6,9 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsRequest;
 use App\Mail\EventRequest;
-use App\Models\EventRequestCreate;
-use App\Models\Events;
-use App\Models\eventsImges;
+use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -18,6 +18,13 @@ class HomeController extends Controller
 {
     use ApiResponse;
 
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventImageRepositoryInterface $eventImageRepository,
+        private readonly RequestRepositoryInterface $requestRepository
+    ) {
+    }
+
     public function create(EventsRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -26,18 +33,18 @@ class HomeController extends Controller
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
             $data['is_active'] = 0;
             $data['user_id'] = auth()->user()->id;
-            $event = Events::create($data);
+            $event = $this->eventRepository->create($data);
             if ($request->hasFile('urls')) {
                 foreach ($request->file('urls') as $file) {
                     $path = $file->store('Photos', 'public');
-                    $media = eventsImges::create([
+                    $media = $this->eventImageRepository->create([
                         'event_id' => $event->id,
                         'url' => $path,
 
                     ]);
                 }
             }
-            EventRequestCreate::create([
+            $this->requestRepository->createEventRequest([
                 'event_id' => $event->id,
                 'status' => 'pending',
             ]);

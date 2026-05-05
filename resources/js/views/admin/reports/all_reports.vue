@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '../../../layouts/AdminLayout.vue';
 import { ref, onMounted } from 'vue';
-import { ReportService } from '../../../services/ReportService';
+import { ReportService } from '../../../services/ReportService/ReportService';
 
 interface User {
   id: number;

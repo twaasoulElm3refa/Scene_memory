@@ -12,7 +12,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { PaymentService } from "../../services/PaymentService";
+import { PaymentService } from "../../services/PaymentService/PaymentService";
 
 const router = useRouter();
 const route = useRoute();

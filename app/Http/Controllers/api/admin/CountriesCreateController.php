@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CountriesRequest;
+use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -14,6 +15,10 @@ class CountriesCreateController extends Controller
 {
     use ApiResponse;
 
+    public function __construct(private readonly CountryRepositoryInterface $countryRepository)
+    {
+    }
+
     public function create(CountriesRequest $request)
     {
         $data = $request->validated();
@@ -22,7 +27,7 @@ class CountriesCreateController extends Controller
             $country = DB::transaction(function () use ($data, $request) {
                 $code = strtoupper($data['code']);
 
-                $country = \App\Models\Countries::create([
+                $country = $this->countryRepository->create([
                     'code' => $code ?? '',
                     'slug' => Str::slug($code).'-'.time(),
                 ]);

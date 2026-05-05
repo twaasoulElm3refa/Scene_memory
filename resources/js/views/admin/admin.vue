@@ -264,8 +264,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import AdminLayout from "../../layouts/AdminLayout.vue";
-import { AdminDashboardService } from "../../services/AdminDashboardService";
-import { NotificationService } from "../../services/NotificationService";
+import { AdminDashboardService } from "../../services/AdminDashboardService/AdminDashboardService";
+import { NotificationService } from "../../services/NotificationService/NotificationService";
 
 const stats = ref({
   events: 0,

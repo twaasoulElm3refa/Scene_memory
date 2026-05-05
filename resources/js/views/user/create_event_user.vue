@@ -296,9 +296,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import UserLayout from "../../layouts/user/UserLayout.vue";
-import { LocationService } from "../../services/LocationService";
-import { CategoryService } from "../../services/CategoryService";
-import { UserDashboardService } from "../../services/UserDashboardService";
+import { LocationService } from "../../services/LocationService/LocationService";
+import { CategoryService } from "../../services/CategoryService/CategoryService";
+import { UserDashboardService } from "../../services/UserDashboardService/UserDashboardService";
 const form = ref({
   title: "",
   description: "",

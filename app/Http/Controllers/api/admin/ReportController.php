@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\CommentReport;
+use App\Repositories\Contracts\Reports\ReportRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 
 class ReportController extends Controller
@@ -13,6 +13,10 @@ class ReportController extends Controller
 
     private $cacheTime = 600;
 
+    public function __construct(private readonly ReportRepositoryInterface $reportRepository)
+    {
+    }
+
     /**
      * جلب جميع التقارير مع pagination
      */
@@ -20,7 +24,7 @@ class ReportController extends Controller
     {
         $cache = 'reports_all';
         $reports = Cache::tags(['reports'])->remember('reports_all', $this->cacheTime, function () {
-            return CommentReport::with('user', 'comment')->paginate(5);
+            return $this->reportRepository->paginated(5);
         });
 
         return $this->success($reports, 'All reports fetched successfully');
@@ -32,7 +36,7 @@ class ReportController extends Controller
     public function delete($id)
     {
         try {
-            $report = CommentReport::findOrFail($id);
+            $report = $this->reportRepository->findOrFail((int) $id);
             $report->delete();
             Cache::tags(['reports'])->flush();
 

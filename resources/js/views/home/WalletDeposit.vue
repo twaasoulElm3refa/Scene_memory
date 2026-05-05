@@ -68,7 +68,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import { PaymentService } from '../../services/PaymentService'
+import { PaymentService } from '../../services/PaymentService/PaymentService'
 
 const idempotencyKey = ref(uuidv4())
 // Props — تمرر البيانات من الصفحة الأب

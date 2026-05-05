@@ -5,8 +5,7 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
-use App\Models\contactResponds;
-use App\Models\contacts;
+use App\Repositories\Contracts\Contacts\ContactRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,6 +15,10 @@ class ContactController extends Controller
 
     protected $cacheTime = 600;
 
+    public function __construct(private readonly ContactRepositoryInterface $contactRepository)
+    {
+    }
+
     public function all()
     {
         $page = request()->get('page', 1);
@@ -24,21 +27,11 @@ class ContactController extends Controller
         $cacheKey = "contacts:paginated:p{$page}:pp{$perPage}";
 
         $paginated = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return contacts::with('contactResponds')
-                ->latest()
-                ->paginate($perPage);
+            return $this->contactRepository->paginatedWithResponses($perPage);
         });
         $statsCacheKey = 'contacts:stats:quick';
         $stats = Cache::remember($statsCacheKey, now()->addMinutes(10), function () {
-            $allContacts = contacts::query()
-                ->select('id', 'created_at')
-                ->withCount('contactResponds')
-                ->with(['contactResponds' => function ($q) {
-                    $q->select('contact_id', 'created_at')
-                        ->orderBy('created_at')
-                        ->limit(1);
-                }])
-                ->get();
+            $allContacts = $this->contactRepository->contactsStats();
 
             $total = $allContacts->count();
             $unread = $allContacts->where('contact_responds_count', 0)->count();
@@ -82,13 +75,13 @@ class ContactController extends Controller
 
     public function single()
     {
-        return $this->success(contacts::with('contactResponds')->find(request('id')), 'Contact');
+        return $this->success($this->contactRepository->findWithResponses((int) request('id')), 'Contact');
     }
 
     public function create(ContactRequest $request)
     {
         $data = $request->validated();
-        $contact = contacts::create($data);
+        $contact = $this->contactRepository->create($data);
         $this->clearCache(1, 5);
 
         return $this->success($contact, 'Contact Created Successfully');
@@ -98,7 +91,7 @@ class ContactController extends Controller
     {
         $data = $request->all();
         $data['contact_id'] = request('id');
-        $respond = contactResponds::create($data);
+        $respond = $this->contactRepository->createResponse($data);
         $this->clearCache(1, 5);
 
         return $this->success($respond, 'Respond Created Successfully');
@@ -125,7 +118,7 @@ class ContactController extends Controller
 
     public function delete()
     {
-        $contact = contacts::findOrFail(request('id'));
+        $contact = $this->contactRepository->findOrFail((int) request('id'));
         $contact->delete();
         $this->clearCache(1, 5);
 

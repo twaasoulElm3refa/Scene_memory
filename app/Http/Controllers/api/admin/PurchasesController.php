@@ -4,13 +4,18 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\purchases;
+use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 
 class PurchasesController extends Controller
 {
     use ApiResponse;
     private $cacheTime = 60;
+
+    public function __construct(private readonly PurchaseRepositoryInterface $purchaseRepository)
+    {
+    }
+
     public function index()
     {
         try {
@@ -21,22 +26,7 @@ class PurchasesController extends Controller
             $purchases = Cache::tags(['purchases'])->remember(
                 $cacheKey,
                 now()->addMinutes($this->cacheTime),
-                fn () => purchases::query()
-                    ->select([
-                        'id',
-                        'user_id',
-                        'amount',
-                        'status',
-                        'type',
-                        'mail_sent',
-                        'paid_at',
-                        'created_at',
-                    ])
-                    ->with([
-                        'user:id,name,email',
-                    ])
-                    ->latest('id')
-                    ->paginate(10)
+                fn () => $this->purchaseRepository->paginateAll(10)
             );
             return $this->success($purchases, 'All Purchases');
         } catch (\Throwable $th) {
@@ -52,23 +42,7 @@ class PurchasesController extends Controller
             $purchases = Cache::tags(['purchases'])->remember(
                 $cacheKey,
                 now()->addMinutes($this->cacheTime),
-                fn () => purchases::query()
-                    ->select([
-                        'id',
-                        'user_id',
-                        'amount',
-                        'status',
-                        'type',
-                        'mail_sent',
-                        'paid_at',
-                        'created_at',
-                    ])
-                    ->with([
-                        'user:id,name,email',
-                    ])
-                    ->where('type', $type)
-                    ->latest('id')
-                    ->paginate(10)
+                fn () => $this->purchaseRepository->paginateByType($type, 10)
             );
             return $this->success($purchases, 'All Purchases');
         } catch (\Throwable $th) {
@@ -84,23 +58,7 @@ class PurchasesController extends Controller
             $purchases = Cache::tags(['purchases'])->remember(
                 $cacheKey,
                 now()->addMinutes($this->cacheTime),
-                fn () => purchases::query()
-                    ->select([
-                        'id',
-                        'user_id',
-                        'amount',
-                        'status',
-                        'type',
-                        'mail_sent',
-                        'paid_at',
-                        'created_at',
-                    ])
-                    ->with([
-                        'user:id,name,email',
-                    ])
-                    ->where('status', $status)
-                    ->latest('id')
-                    ->paginate(10)
+                fn () => $this->purchaseRepository->paginateByStatus($status, 10)
             );
             return $this->success($purchases, 'All Purchases');
         } catch (\Throwable $th) {
@@ -111,7 +69,7 @@ class PurchasesController extends Controller
     public function show($id)
     {
         try {
-            $purchase = purchases::with('user','items')->findOrFail($id);
+            $purchase = $this->purchaseRepository->findWithUserAndItemsOrFail((int) $id);
             return $this->success($purchase, 'Single purchase');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
@@ -121,7 +79,7 @@ class PurchasesController extends Controller
     public function update($id)
     {
         try {
-            $purchase = purchases::query()->findOrFail($id);
+            $purchase = $this->purchaseRepository->findOrFail((int) $id);
             $purchase->update(request()->all());
             $this->clearCache();
             return $this->success($purchase, 'purchase updated');
@@ -133,7 +91,7 @@ class PurchasesController extends Controller
     public function destroy($id)
     {
         try {
-            $purchase = purchases::query()->findOrFail($id);
+            $purchase = $this->purchaseRepository->findOrFail((int) $id);
             $purchase->delete();
             $this->clearCache();
             return $this->success($purchase, 'purchase deleted');
@@ -147,7 +105,7 @@ class PurchasesController extends Controller
         $cacheKey = 'purchases_count';
 
         $count = Cache::tags(['purchases'])->remember($cacheKey, $this->cacheTime, function () {
-            return purchases::count();
+            return $this->purchaseRepository->count();
         });
 
         return $this->success($count, 'purchases count');

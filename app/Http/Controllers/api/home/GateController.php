@@ -4,9 +4,9 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Cities;
-use App\Models\Countries;
-use App\Models\Events;
+use App\Repositories\Contracts\Cities\CityRepositoryInterface;
+use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,14 +15,18 @@ class GateController extends Controller
 {
     use ApiResponse;
 
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly CountryRepositoryInterface $countryRepository,
+        private readonly CityRepositoryInterface $cityRepository
+    ) {
+    }
+
 
     public function random()
     {
         $events = Cache::remember('random_events', 60*60, function () {
-            return Events::with('translation','city.translation','sub_categorey.translation','firstImage:id,full_url,event_id')
-                ->inRandomOrder()->where('is_active', 1)
-                ->take(8)
-                ->get();
+            return $this->eventRepository->randomActive(8);
         });
 
         return $this->success($events, 'Get Random Events');
@@ -31,11 +35,7 @@ class GateController extends Controller
     public function countries()
     {
         $countries = Cache::remember('countries_'.app()->getLocale(), now()->addHours(24), function () {
-            return Countries::select('id', 'code', 'name')
-                ->with([
-                    'translation:id,country_id,name,locale',
-                ])
-                ->get();
+            return $this->countryRepository->allForGate();
         });
 
         return $this->success($countries, 'Get all Countries');
@@ -49,33 +49,16 @@ class GateController extends Controller
         $citiesKey  = "country:{$code}:cities";
         $eventsKey  = "country:{$code}:{$locale}:events:page:{$page}";
         $country = Cache::remember($countryKey, now()->addHours(24), function () use ($code) {
-            return Countries::select('id', 'code', 'name')
-                ->with([
-                    'translation:id,country_id,name,locale',
-                    'cities.translation:id,city_id,name,locale',
-                ])->withcount('cities')
-                ->where('code', $code)
-                ->first();
+            return $this->countryRepository->findByCode($code);
         });
         if (!$country) {
             return $this->error('Country not found', 404);
         }
         $cityIds = Cache::remember($citiesKey, now()->addHours(24), function () use ($country) {
-            return Cities::where('country_id', $country->id)
-                ->pluck('id');
+            return $this->cityRepository->byCountryId((int) $country->id)->pluck('id');
         });
         $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds,) {
-            return Events::select('id', 'city_id', 'sub_categorey_id', 'start_date', 'slug','langitude','lattitude')
-                ->with([
-                    'translation:id,event_id,title,description,locale',
-                    'city:id,country_id',
-                    'city.translation:id,city_id,name,locale',
-                    'sub_categorey:id',
-                    'sub_categorey.translation:id,category_id,name,locale',
-                    'firstImage:id,full_url,event_id',
-                ])
-                ->whereIn('city_id', $cityIds)
-                ->get();
+            return $this->eventRepository->gateEventsByCityIds($cityIds);
         });
         return $this->success([
             'country' => $country,

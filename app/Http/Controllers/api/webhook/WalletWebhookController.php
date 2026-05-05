@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\api\webhook;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
 use App\Services\PayPalWalletServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class WalletWebhookController extends Controller
 {
-    public function __construct(protected PayPalWalletServices $paypal) {}
+    public function __construct(
+        protected PayPalWalletServices $paypal,
+        private readonly PurchaseRepositoryInterface $purchaseRepository
+    ) {}
 
     public function handle(Request $request)
     {
@@ -74,7 +78,7 @@ class WalletWebhookController extends Controller
             return response()->json(['status' => 'ignored']);
         }
 
-        $order = \App\Models\purchases::where('paypal_order_id', $paypalOrderId)->first();
+        $order = $this->purchaseRepository->findByPaypalOrderId($paypalOrderId);
 
         if (!$order) {
             Log::warning('WalletWebhook: Order not found for webhook', [

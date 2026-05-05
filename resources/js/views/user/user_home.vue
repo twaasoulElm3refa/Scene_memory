@@ -174,7 +174,7 @@
 <script setup>
 import UserLayout from "../../layouts/user/UserLayout.vue";
 import { ref, computed, onMounted } from "vue";
-import { UserDashboardService } from "../../services/UserDashboardService";
+import { UserDashboardService } from "../../services/UserDashboardService/UserDashboardService";
 
 const events = ref([]);
 const eventsCount = ref(0);

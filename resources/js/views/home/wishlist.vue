@@ -138,7 +138,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { WishlistService } from '../../services/WishlistService'
+import { WishlistService } from '../../services/WishlistService/WishlistService'
 
 const wishlists = ref([])
 const pagination = ref({})

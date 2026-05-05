@@ -6,8 +6,8 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadMediaRequest;
 use App\Jobs\ProcessEventVideoJob;
-use App\Models\Events;
-use App\Models\eventsImges;
+use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Services\ImageAnalysisService;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,12 +17,17 @@ class MediaRequestController extends Controller
 
     private $cacheTime = 600;
 
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventImageRepositoryInterface $eventImageRepository
+    ) {
+    }
+
     public function all()
     {
         $cacheKey = 'mediaRequest_'.request()->input('page', 1);
         $mediaRequest = Cache::remember($cacheKey, $this->cacheTime, function () {
-             $eventimges =eventsImges::where('event_id', request('id'))->where('is_active', 0)->orderBy('created_at','desc')->paginate(10);
-            return $eventimges;
+             return $this->eventImageRepository->findActiveByEventIdPaginated((int) request('id'), 10);
         });
 
         return $this->success($mediaRequest, 'get media request successfully');
@@ -30,7 +35,7 @@ class MediaRequestController extends Controller
 
     public function upload(UploadMediaRequest $request, ImageAnalysisService $imageAnalysisService)
     {
-        $event = Events::findOrFail($request->id);
+        $event = $this->eventRepository->findByIdOrFail((int) $request->id);
         $createdMedia = [];
 
         $manager = new \Intervention\Image\ImageManager(
@@ -38,16 +43,10 @@ class MediaRequestController extends Controller
         );
 
         if ($request->hasFile('url')) {
-
             foreach ($request->file('url') as $file) {
-
                 $mime = $file->getMimeType();
 
-                // =======================
-                // 📸 IMAGE
-                // =======================
                 if (str_starts_with($mime, 'image/')) {
-
                     $analysis = $imageAnalysisService->process($file, $manager);
 
                     $image = $analysis['image'];
@@ -60,13 +59,12 @@ class MediaRequestController extends Controller
                     $fullPath = 'events/full/' . $filename;
                     $previewPath = 'events/preview/' . $filename;
 
-                    // حفظ الصورة فقط (no preview)
                     \Storage::disk('public')->put(
                         $fullPath,
                         $image->toJpeg(90)
                     );
 
-                    $media = eventsImges::create([
+                    $media = $this->eventImageRepository->create([
                         'event_id'     => $event->id,
                         'preview_url'  => $previewPath,
                         'full_url'     => $fullPath,
@@ -79,20 +77,13 @@ class MediaRequestController extends Controller
                     ]);
 
                     $createdMedia[] = $media;
-
-                }
-
-                // =======================
-                // 🎥 VIDEO
-                // =======================
-                elseif (str_starts_with($mime, 'video/')) {
-
+                } elseif (str_starts_with($mime, 'video/')) {
                     $path = $file->store('events/videos', 'public');
                     ProcessEventVideoJob::dispatch($event->id, $path);
 
-                    $media = eventsImges::create([
+                    $media = $this->eventImageRepository->create([
                         'event_id'  => $event->id,
-                        'full_url'  => $path, // ✅ بدل url
+                        'full_url'  => $path,
                         'is_active' => 1
                     ]);
 
@@ -105,6 +96,6 @@ class MediaRequestController extends Controller
 
         return $this->success([
             'media' => $createdMedia
-        ], 'تم إضافة الوسائط بنجاح');
+        ], '?? ????? ??????? ?????');
     }
 }

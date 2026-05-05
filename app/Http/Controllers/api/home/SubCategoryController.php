@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api\home;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\categoreyRequest;
-use App\Models\subCategorey;
+use App\Repositories\Contracts\SubCategories\SubCategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,11 +15,15 @@ class SubCategoryController extends Controller
 
     protected $cacheTime = 3600;
 
+    public function __construct(private readonly SubCategoryRepositoryInterface $subCategoryRepository)
+    {
+    }
+
     public function index()
     {
         $cacheKey = 'categories_index';
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return subCategorey::get(['id', 'name']);
+            return $this->subCategoryRepository->allBasic();
         });
         if ($categories->isEmpty()) {
             return $this->error('No More categories', 404);
@@ -38,9 +42,7 @@ class SubCategoryController extends Controller
         $cacheKey = "categories_v{$version}_page_{$page}_per_{$perPage}";
 
         $categories = Cache::remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return subCategorey::select('id', 'name', 'image')
-                ->withCount('events')
-                ->paginate($perPage);
+            return $this->subCategoryRepository->paginatedWithEventsCount($perPage);
         });
 
         if ($categories->isEmpty()) {
@@ -55,7 +57,7 @@ class SubCategoryController extends Controller
         $categoreyId = request('id');
         $cacheKey = "categorey_single_{$categoreyId}";
         $categorey = Cache::remember($cacheKey, $this->cacheTime, function () {
-            return subCategorey::with('events')->find(request('id'));
+            return $this->subCategoryRepository->findWithEvents((int) request('id'));
         });
         if (! $categorey) {
             return $this->error('No More categories', 404);
@@ -71,7 +73,7 @@ class SubCategoryController extends Controller
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
-        $categorey = subCategorey::create($data);
+        $categorey = $this->subCategoryRepository->create($data);
         Cache::increment('categories_cache_version');
         return $this->success($categorey, 'category Created Successfully');
     }
@@ -83,7 +85,7 @@ class SubCategoryController extends Controller
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
-        $categorey = subCategorey::findOrFail($id);
+        $categorey = $this->subCategoryRepository->findOrFail((int) $id);
         $categorey->update($data);
         Cache::increment('categories_cache_version');
         return $this->success($categorey, 'category Updated Successfully');
@@ -91,7 +93,7 @@ class SubCategoryController extends Controller
 
     public function delete($id)
     {
-        $categorey = subCategorey::findOrFail($id);
+        $categorey = $this->subCategoryRepository->findOrFail((int) $id);
         $categorey->delete();
         Cache::increment('categories_cache_version');
         return $this->success($categorey, 'category Deleted Successfully');

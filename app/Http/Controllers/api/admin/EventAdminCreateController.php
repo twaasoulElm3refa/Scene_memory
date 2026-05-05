@@ -6,8 +6,8 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsRequest;
 use App\Jobs\TranslateEventJob;
-use App\Models\Events;
-use App\Models\eventsImges;
+use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -17,6 +17,12 @@ use Illuminate\Support\Str;
 class EventAdminCreateController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventImageRepositoryInterface $eventImageRepository
+    ) {
+    }
 
     public function create(EventsRequest $request): JsonResponse
     {
@@ -29,12 +35,12 @@ class EventAdminCreateController extends Controller
                                 .'-'.Str::random(5)
                                 .'-'.time();
                 $data['user_id'] = auth()->id();
-                $event = Events::create($data);
+                $event = $this->eventRepository->create($data);
 
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $path = $file->store('Photos', 'public');
-                        eventsImges::create([
+                        $this->eventImageRepository->create([
                             'event_id' => $event->id,
                             'url' => $path,
                         ]);
@@ -74,12 +80,12 @@ class EventAdminCreateController extends Controller
                                 .'-'.time();
                 $data['user_id'] = auth()->id();
                 $data['is_historical'] = 1;
-                $event = Events::create($data);
+                $event = $this->eventRepository->create($data);
 
                 if ($request->hasFile('urls')) {
                     foreach ($request->file('urls') as $file) {
                         $path = $file->store('Photos', 'public');
-                        eventsImges::create([
+                        $this->eventImageRepository->create([
                             'event_id' => $event->id,
                             'url' => $path,
                         ]);

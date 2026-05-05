@@ -633,14 +633,14 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { EventService } from "@/services/singleEventService";
-import CommentService, { extractErrorMessage } from "../../services/CommentService";
-import { CartService } from "@/services/CartService";
-import { ReplyService } from "../../services/ReplyService";
-import { AuthService } from "../../services/AuthService";
-import { LikeService } from "../../services/LikeService";
-import { WishlistService } from "../../services/WishlistService";
-import { MediaRequestService } from "../../services/MediaRequestService";
+import { EventService } from "@/services/singleEventService/singleEventService";
+import CommentService, { extractErrorMessage } from "../../services/CommentService/CommentService";
+import { CartService } from "@/services/CartService/CartService";
+import { ReplyService } from "../../services/ReplyService/ReplyService";
+import { AuthService } from "../../services/AuthService/AuthService";
+import { LikeService } from "../../services/LikeService/LikeService";
+import { WishlistService } from "../../services/WishlistService/WishlistService";
+import { MediaRequestService } from "../../services/MediaRequestService/MediaRequestService";
 
 const cartLoading = ref(false);
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Events;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -14,11 +14,15 @@ class EventAdminController extends Controller
 {
     use ApiResponse;
 
+    public function __construct(private readonly EventRepositoryInterface $eventRepository)
+    {
+    }
+
     public function update(Request $request): JsonResponse
     {
         $data = $request->all();
         try {
-            $event = Events::where('slug', $request->input('id'))->firstOrFail();
+            $event = $this->eventRepository->findBySlugOrFail((string) $request->input('id'));
             $oldSlug = $event->slug;
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 
@@ -41,7 +45,7 @@ class EventAdminController extends Controller
     public function destroy(): JsonResponse
     {
         $slug = request('id');
-        $event = Events::where('slug', $slug)->firstOrFail();
+        $event = $this->eventRepository->findBySlugOrFail((string) $slug);
         $event->delete();
 
         // مسح كل كاشات هذا الحدث بعد الحذف

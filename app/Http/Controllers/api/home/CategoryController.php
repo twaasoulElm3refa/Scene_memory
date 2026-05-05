@@ -5,8 +5,8 @@ namespace App\Http\Controllers\api\home;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\categoreyRequest;
-use App\Models\Categories;
-use App\Models\subCategorey;
+use App\Repositories\Contracts\Categories\CategoryRepositoryInterface;
+use App\Repositories\Contracts\SubCategories\SubCategoryRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,6 +16,12 @@ class CategoryController extends Controller
 
     protected $cacheTime = 600;
 
+    public function __construct(
+        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly SubCategoryRepositoryInterface $subCategoryRepository
+    ) {
+    }
+
     public function index(): JsonResponse
     {
         $locale = app()->getLocale();
@@ -23,7 +29,7 @@ class CategoryController extends Controller
         $cacheKey = "categories:index:all:{$locale}:v{$version}";
 
         $categories = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () {
-            return Categories::with('translation')->orderBy('created_at', 'desc')->get();
+            return $this->categoryRepository->allWithTranslations();
         });
 
         if ($categories->isEmpty()) {
@@ -41,11 +47,7 @@ class CategoryController extends Controller
         $cacheKey = "categories:paginated:v{$version}:p{$page}:pp{$perPage}";
 
         $categories = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return Categories::query()
-                ->latest()
-                ->select('id', 'name', 'image', 'created_at')
-                ->withCount('subCategories')
-                ->paginate($perPage);
+            return $this->categoryRepository->paginatedWithSubCategoriesCount($perPage);
         });
 
         if ($categories->isEmpty()) {
@@ -59,7 +61,7 @@ class CategoryController extends Controller
     {
         $cacheKey = "categories:single:{$id}";
         $category = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () use ($id) {
-            return Categories::with('subCategories.translation')->find($id);
+            return $this->categoryRepository->findWithSubCategories((int) $id);
         });
 
         if (! $category) {
@@ -75,8 +77,7 @@ class CategoryController extends Controller
         $cacheKey = "categories:sub:{$id}_{$locale}";
 
         $subCategories = Cache::tags(['categories', 'subCategories'])->remember($cacheKey, $this->cacheTime, function () use ($id) {
-            return subCategorey::with('translation')->where('category_id', $id)
-                ->get(['id', 'name']);
+            return $this->subCategoryRepository->byCategoryWithTranslation((int) $id);
         });
 
         if ($subCategories->isEmpty()) {
@@ -96,7 +97,7 @@ class CategoryController extends Controller
 
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
 
-        $category = Categories::create($data);
+        $category = $this->categoryRepository->create($data);
 
         $this->clearAllCategoriesCache();
 
@@ -105,7 +106,7 @@ class CategoryController extends Controller
 
     public function update(categoreyRequest $request, $id): JsonResponse
     {
-        $category = Categories::find($id);
+        $category = $this->categoryRepository->find((int) $id);
         if (! $category) {
             return $this->error('Category not found', 404);
         }
@@ -127,7 +128,7 @@ class CategoryController extends Controller
 
     public function delete($id): JsonResponse
     {
-        $category = Categories::find($id);
+        $category = $this->categoryRepository->find((int) $id);
         if (! $category) {
             return $this->error('Category not found', 404);
         }

@@ -8,10 +8,7 @@ use App\Http\Requests\loginRequest;
 use App\Http\Requests\registerRequest;
 use App\Http\Resources\userResource;
 use App\Mail\WelcomeMail;
-use App\Models\cart;
-use App\Models\cartItems;
-use App\Models\User;
-use App\Models\Wallet;
+use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +21,17 @@ class AuthController extends Controller
 {
     use authApiResponse;
 
+    public function __construct(private readonly AuthRepositoryInterface $authRepository)
+    {
+    }
+
     public function register(registerRequest $request)
     {
         try {
             $user = DB::transaction(function () use ($request) {
                 $data = $request->validated();
 
-                return User::create([
+                return $this->authRepository->createUser([
                     'name' => $data['name'] ?? null,
                     'email' => $data['email'] ?? null,
                     'password' => Hash::make($data['password']),
@@ -68,7 +69,7 @@ class AuthController extends Controller
     {
         $request->validated();
 
-        $user = User::where('email', $request->email)->first();
+        $user = $this->authRepository->findUserByEmail($request->email);
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return $this->unauthorized('Invalid credentials.');
@@ -78,7 +79,7 @@ class AuthController extends Controller
             return $this->forbidden('Account is disabled.');
         }
 
-        $user->update(['last_login_at' => now()]);
+        $this->authRepository->updateUserLastLogin($user);
 
         $token = $user->createToken('rag-token')->plainTextToken;
 
@@ -96,22 +97,14 @@ class AuthController extends Controller
             return $this->unauthorized('Unauthenticated.');
         }
 
-        $cart=cart::where('user_id', $user->id)->first();
-        if(! $cart) {
-            $cart=cart::create([
-                "user_id" => $user->id
-            ]);
-        }
+        $cart = $this->authRepository->findOrCreateCartByUserId($user->id);
 
         $cacheKey = 'user_profile_' . $user->id;
         $wallet=$user->wallet;
-        if($wallet == null){
-            Wallet::create([
-                'user_id'=>$user->id,
-                'amount'=>0
-            ]);
+        if ($wallet == null) {
+            $this->authRepository->createWalletIfMissing($user->id);
         }
-        $items=cartItems::where('cart_id', $cart->id)->count();
+        $items = $this->authRepository->countCartItems($cart->id);
         $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
          ->remember($cacheKey, 60, function () use ($user, $items) {
             $user->load('licenceType');
@@ -150,7 +143,7 @@ class AuthController extends Controller
             'email' => 'required|email',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = $this->authRepository->findUserByEmail($request->email);
 
         if (! $user) {
             return response()->json([
@@ -160,13 +153,7 @@ class AuthController extends Controller
 
         $otp = rand(100000, 999999);
 
-        DB::table('password_reset_tokens')->updateOrInsert(
-            ['email' => $user->email],
-            [
-                'token' => Hash::make($otp),
-                'created_at' => now(),
-            ]
-        );
+        $this->authRepository->upsertPasswordResetToken($user->email, Hash::make($otp));
 
         Mail::raw("كود استرجاع كلمة المرور هو: $otp", function ($message) use ($user) {
             $message->to($user->email)
@@ -186,9 +173,7 @@ class AuthController extends Controller
             'password' => 'required|confirmed|min:8',
         ]);
 
-        $record = DB::table('password_reset_tokens')
-            ->where('email', $request->email)
-            ->first();
+        $record = $this->authRepository->getPasswordResetToken($request->email);
 
         if (! $record || ! Hash::check($request->otp, $record->token)) {
             return response()->json([
@@ -196,13 +181,9 @@ class AuthController extends Controller
             ], 400);
         }
 
-        User::where('email', $request->email)->update([
-            'password' => Hash::make($request->password),
-        ]);
+        $this->authRepository->updateUserPasswordByEmail($request->email, Hash::make($request->password));
 
-        DB::table('password_reset_tokens')
-            ->where('email', $request->email)
-            ->delete();
+        $this->authRepository->deletePasswordResetToken($request->email);
 
         return response()->json([
             'message' => 'تم تغيير كلمة المرور بنجاح',

@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { EventService } from "../../services/EventService";
+import { EventService } from "../../services/EventService/EventService";
 
 export default {
     name: "AllEventsPage",

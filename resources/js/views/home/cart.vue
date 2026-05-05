@@ -301,8 +301,8 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
-import { CartService } from "@/services/CartService";
-import { PaymentService } from "../../services/PaymentService";
+import { CartService } from "@/services/CartService/CartService";
+import { PaymentService } from "../../services/PaymentService/PaymentService";
 
 // ══════════════════════════════════════════════════════════
 // STATE

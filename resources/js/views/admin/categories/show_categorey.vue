@@ -520,7 +520,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import { CategoryService } from "../../../services/CategoryService";
+import { CategoryService } from "../../../services/CategoryService/CategoryService";
 import { categoryService } from "../../../services/admin/categories/categoryService";
 
 const route = useRoute();

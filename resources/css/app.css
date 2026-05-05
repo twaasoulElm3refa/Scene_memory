@@ -83,3 +83,28 @@
 .status-review {
   @apply bg-yellow-100 text-yellow-800;
 }
+
+#toast-container > div {
+    opacity: 1 !important;
+}
+
+.toast {
+    color: #fff !important;
+}
+
+.toast-message {
+    color: #fff !important;
+}
+
+.toast-success {
+    background-color: #28a745 !important;
+}
+
+.toast-error {
+    background-color: #dc3545 !important;
+}
+
+.toast-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}

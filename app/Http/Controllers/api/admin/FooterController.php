@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\footer;
+use App\Repositories\Contracts\Footers\FooterRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -16,11 +16,15 @@ class FooterController extends Controller
 
     private $cacheTime = 600;
 
+    public function __construct(private readonly FooterRepositoryInterface $footerRepository)
+    {
+    }
+
     public function all()
     {
         $cache = 'footer';
         $footer = Cache::remember($cache, $this->cacheTime, function () {
-            return footer::find(1);
+            return $this->footerRepository->first();
         });
 
         return $this->success($footer, 'footer data');
@@ -28,7 +32,7 @@ class FooterController extends Controller
 
     public function update(Request $request)
     {
-        $footer = footer::findOrFail(1);
+        $footer = $this->footerRepository->findOrFail(1);
         $data = $request->except(['_token']);
         if ($request->hasFile('logo')) {
             if ($footer->logo && Storage::disk('public')->exists($footer->logo)) {

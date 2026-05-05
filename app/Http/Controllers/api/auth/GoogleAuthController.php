@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api\auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\WelcomeMail;
-use App\Models\User;
+use App\Repositories\Contracts\Users\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -12,6 +12,10 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
+    public function __construct(private readonly UserRepositoryInterface $userRepository)
+    {
+    }
+
     public function googleLogin()
     {
         $url = Socialite::driver('google')->stateless()->redirect()->getTargetUrl();
@@ -26,8 +30,8 @@ class GoogleAuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
-            $user = User::firstOrCreate(
-                ['email' => $googleUser->getEmail()],
+            $user = $this->userRepository->firstOrCreateByEmail(
+                $googleUser->getEmail(),
                 [
                     'name' => $googleUser->getName(),
                     'password' => Hash::make('password'),
@@ -37,9 +41,7 @@ class GoogleAuthController extends Controller
             );
             if($user)
                 {
-                    $user->update([
-                        'last_login_at' => now(),
-                    ]);
+                    $user->update(['last_login_at' => now()]);
                 }
             $token = $user->createToken('google-auth-token')->plainTextToken;
 

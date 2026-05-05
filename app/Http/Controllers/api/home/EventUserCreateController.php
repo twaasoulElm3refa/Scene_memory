@@ -8,8 +8,8 @@ use App\Http\Requests\EventsRequest;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\ProcessEventVideoJob;
 use App\Jobs\TranslateEventJob;
-use App\Models\EventRequestCreate;
-use App\Models\Events;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,6 +17,12 @@ use Illuminate\Support\Str;
 class EventUserCreateController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly RequestRepositoryInterface $requestRepository
+    ) {
+    }
 
     public function create(EventsRequest $request)
     {
@@ -30,9 +36,9 @@ class EventUserCreateController extends Controller
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
 
-                $event = Events::create($data);
+                $event = $this->eventRepository->create($data);
 
-                EventRequestCreate::create(['event_id' => $event->id]);
+                $this->requestRepository->createEventRequest(['event_id' => $event->id]);
 
                 $event->translations()->create([
                     'locale'      => 'ar',
@@ -116,9 +122,9 @@ class EventUserCreateController extends Controller
                 $data['is_active'] = 0;
                 $data['is_historical'] = 1;
 
-                $event = Events::create($data);
+                $event = $this->eventRepository->create($data);
 
-                EventRequestCreate::create(['event_id' => $event->id]);
+                $this->requestRepository->createEventRequest(['event_id' => $event->id]);
 
                 $event->translations()->create([
                     'locale'      => 'ar',

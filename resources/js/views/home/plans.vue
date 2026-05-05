@@ -96,7 +96,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { PlanService } from '@/services/planService';
+import { PlanService } from '@/services/planService/planService';
 import { useRouter } from 'vue-router';
 
 const lang = localStorage.getItem('language') || 'en';

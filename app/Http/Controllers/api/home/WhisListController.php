@@ -4,14 +4,20 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Events;
-use App\Models\Wishlist;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Repositories\Contracts\Wishlists\WishlistRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class WhisListController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(
+        private readonly WishlistRepositoryInterface $wishlistRepository,
+        private readonly EventRepositoryInterface $eventRepository
+    ) {
+    }
 
     public function me()
     {
@@ -20,30 +26,8 @@ class WhisListController extends Controller
 
             $events = Cache::tags(['wishlist', 'wishlist_user_' . $userId])
                 ->remember("wishlist_user_{$userId}", 60 * 10, function () use ($userId) {
-
-                    $whishlists = Wishlist::where('user_id', $userId)->pluck('event_id');
-                    return Events::with([
-                            'city.translation',
-                            'sub_categorey.translation',
-                            'translation',
-                            'firstImage:id,event_id,preview_url'
-                        ])
-                        ->whereIn('id', $whishlists)
-                        ->select([
-                            'id',
-                            'user_id',
-                            'city_id',
-                            'title',
-                            'description',
-                            'start_date',
-                            'end_date',
-                            'time',
-                            'sub_categorey_id',
-                            'image',
-                            'slug',
-                            'created_at',
-                        ])
-                        ->paginate(5);
+                    $whishlists = $this->wishlistRepository->eventIdsByUserId($userId);
+                    return $this->eventRepository->wishlistEventsPaginated($whishlists, 5);
                 });
 
             return $this->success($events, 'My wishLists');
@@ -59,13 +43,12 @@ class WhisListController extends Controller
             $userId = auth()->id();
 
             $wishlist = DB::transaction(function () use ($userId) {
-                return Wishlist::firstOrCreate([
+                return $this->wishlistRepository->firstOrCreate([
                     'user_id' => $userId,
                     'event_id' => request('id'),
                 ]);
             });
 
-            // 🔥 Clear Cache
             Cache::tags(['wishlist', 'wishlist_user_' . $userId])->flush();
 
             return $this->success($wishlist, 'Wishlist processed successfully');
@@ -78,18 +61,19 @@ class WhisListController extends Controller
     public function delete($id)
     {
         try {
-            $event=Events::findOrFail($id);
-            $wishlist = Wishlist::where('event_id', $event->id)->where('user_id', auth()->id())->firstOrFail();
+            $userId = auth()->id();
+            $event = $this->eventRepository->findByIdOrFail((int) $id);
+            $wishlist = $this->wishlistRepository->findByEventAndUserOrFail((int) $event->id, (int) $userId);
             if (auth()->id() !== $wishlist->user_id) {
-                return $this->unauthorized('غير مسموح لك بحذف هذه القائمة');
+                return $this->unauthorized('??? ????? ?? ???? ??? ???????');
             }
             $wishlist->delete();
             Cache::tags(['wishlist', 'wishlist_user_' . $userId])->flush();
-            return $this->success([], 'تم حذف العنصر من المفضلة بنجاح');
+            return $this->success([], '?? ??? ?????? ?? ??????? ?????');
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return $this->error('العنصر غير موجود', 404);
+            return $this->error('?????? ??? ?????', 404);
         } catch (\Throwable $th) {
-            return $this->error('حدث خطأ أثناء الحذف: '.$th->getMessage(), 500);
+            return $this->error('??? ??? ????? ?????: '.$th->getMessage(), 500);
         }
     }
 }

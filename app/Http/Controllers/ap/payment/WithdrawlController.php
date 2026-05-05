@@ -4,7 +4,7 @@ namespace App\Http\Controllers\ap\payment;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\withdraw;
+use App\Repositories\Contracts\Withdrawals\WithdrawalRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +14,11 @@ class WithdrawlController extends Controller
 {
     use ApiResponse;
     private $cacheTime=60;
+
+    public function __construct(private readonly WithdrawalRepositoryInterface $withdrawalRepository)
+    {
+    }
+
     public function index(Request $request)
     {
         try {
@@ -24,7 +29,7 @@ class WithdrawlController extends Controller
                 $cacheKey,
                 now()->addMinutes(5),
                 function () {
-                    return withdraw::with('user')->paginate(10);
+                    return $this->withdrawalRepository->paginated(10);
                 }
             );
 
@@ -46,7 +51,7 @@ class WithdrawlController extends Controller
                 $cacheKey,
                 now()->addMinutes($this->cacheTime),
                 function () {
-                    return withdraw::count();
+                    return $this->withdrawalRepository->count();
                 }
             );
             return $this->success($count);
@@ -55,7 +60,7 @@ class WithdrawlController extends Controller
             Log::error('Withdraw Count Error: ' . $e->getMessage());
 
             // fallback لو الكاش ضرب
-            return $this->success(withdraw::count());
+            return $this->success($this->withdrawalRepository->count());
         }
     }
 
@@ -67,22 +72,7 @@ class WithdrawlController extends Controller
             $withdrawls = Cache::tags(['withdrawls'])->remember(
                 $cacheKey,
                 now()->addMinutes($this->cacheTime),
-                fn () => withdraw::query()
-                    ->select([
-                        'id',
-                        'user_id',
-                        'approved_by',
-                        'amount',
-                        'fee',
-                        'status',
-                        'reference',
-                        // 'mail_sent',
-                        'processed_at',
-                        'created_at',
-                    ])
-                    ->with(['user','approvedBy'])
-                    ->where('status', $status)
-                    ->paginate(10)
+                fn () => $this->withdrawalRepository->paginatedByStatus($status, 10)
             );
             return $this->success($withdrawls);
         } catch (\Throwable $e) {
@@ -94,7 +84,7 @@ class WithdrawlController extends Controller
     public function show($id)
     {
         try {
-            return $this->success(withdraw::find($id));
+            return $this->success($this->withdrawalRepository->find((int) $id));
         } catch (\Throwable $e) {
             Log::error('Withdraw Show Error: ' . $e->getMessage());
             return $this->error($e->getMessage());
@@ -105,7 +95,7 @@ class WithdrawlController extends Controller
     {
         try {
             $this->clearWithdrawCache();
-            return $this->success(withdraw::find($id)->update($request->all()));
+            return $this->success($this->withdrawalRepository->find((int) $id)->update($request->all()));
         } catch (\Throwable $e) {
             Log::error('Withdraw Update Error: ' . $e->getMessage());
             return $this->error($e->getMessage());
@@ -115,7 +105,7 @@ class WithdrawlController extends Controller
     {
         try {
             $this->clearWithdrawCache();
-            return $this->success(withdraw::find($id)->delete());
+            return $this->success($this->withdrawalRepository->find((int) $id)->delete());
         } catch (\Throwable $e) {
             Log::error('Withdraw Update Error: ' . $e->getMessage());
             return $this->error($e->getMessage());
@@ -126,7 +116,7 @@ class WithdrawlController extends Controller
     {
         try {
             return DB::transaction(function () use ($id) {
-                $withdraw = withdraw::findOrFail($id);
+                $withdraw = $this->withdrawalRepository->findOrFail((int) $id);
                 if ($withdraw->status === 'approved') {
                     return $this->error('Withdraw already approved');
                 }
@@ -149,7 +139,7 @@ class WithdrawlController extends Controller
     {
          try {
             return DB::transaction(function () use ($id) {
-                $withdraw = withdraw::findOrFail($id);
+                $withdraw = $this->withdrawalRepository->findOrFail((int) $id);
                 if ($withdraw->status === 'rejected') {
                     return $this->error('Withdraw already rejected');
                 }

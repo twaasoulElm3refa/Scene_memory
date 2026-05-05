@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\payment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\concerns\ApiResponse;
+use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
 use App\Services\PayPalWalletServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,10 @@ class DepositController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(protected PayPalWalletServices $paypal) {}
+    public function __construct(
+        protected PayPalWalletServices $paypal,
+        private readonly PurchaseRepositoryInterface $purchaseRepository
+    ) {}
 
     // POST /api/v1/deposit/pay
     public function create(Request $request): JsonResponse
@@ -92,7 +96,7 @@ class DepositController extends Controller
     // GET /api/v1/wallet/order-status/{id}
     public function orderStatus(Request $request, $id): JsonResponse
     {
-        $order = \App\Models\purchases::find($id);
+        $order = $this->purchaseRepository->findById((int) $id);
 
         if (!$order) {
             return response()->json([

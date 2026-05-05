@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import AdminLayout from '../../../layouts/AdminLayout.vue'
-import { FooterService } from '../../../services/FooterService'
+import { FooterService } from '../../../services/FooterService/FooterService'
 
 interface FooterData {
   id: number

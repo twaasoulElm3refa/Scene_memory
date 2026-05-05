@@ -258,9 +258,9 @@
 import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { LocationService } from "../../services/LocationService";
-import { CategoryService } from "../../services/CategoryService";
-import { EventService } from "../../services/EventService";
+import { LocationService } from "../../services/LocationService/LocationService";
+import { CategoryService } from "../../services/CategoryService/CategoryService";
+import { EventService } from "../../services/EventService/EventService";
 
 const MAX_MEDIA = 8;
 

@@ -62,6 +62,9 @@ import failedDeposit from "../views/home/failedDeposit.vue"
 import waiting from "../views/home/Waiting.vue";
 import waitingDeposit from "../views/home/WaitingDeposit.vue";
 import WalletDeposit from "../views/home/WalletDeposit.vue";
+import CreatorLayout from "../layouts/creator/CreatorLayout.vue";
+import CreatorEvents from "../views/creator/CreatorEvents.vue";
+import CreatorEventShow from "../views/creator/CreatorEventShow.vue";
 
 const routes = [
     {
@@ -75,6 +78,33 @@ const routes = [
         path: "/:lang/home",
         component: Home,
         meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/creator",
+        component: CreatorLayout,
+        meta: { hideNavbar: true, hideFooter: true },
+        children: [
+            {
+                path: "",
+                redirect: { name: "creator-events" },
+            },
+            {
+                path: "events",
+                name: "creator-events",
+                component: CreatorEvents,
+            },
+            {
+                path: "events/:slug",
+                name: "creator-event-show",
+                component: CreatorEventShow,
+                props: true,
+            },
+            {
+                path: "wallet",
+                name: "creator-wallet",
+                component: WalletDeposit,
+            },
+        ],
     },
     {
         path: "/:lang/waiting",

@@ -382,12 +382,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed, watch } from "vue";
 import { useRouter } from 'vue-router';
-import MapService from "@/services/MapService.js";
-import { CategoryService } from "@/services/CategoryService";
-import { LocationService } from "@/services/LocationService";
-import { EventService } from "@/services/EventService";
-import { PlanService } from "@/services/planService";
-import { AuthService } from "../../services/AuthService";
+import MapService from "@/services/MapService/MapService.js";
+import { CategoryService } from "@/services/CategoryService/CategoryService";
+import { LocationService } from "@/services/LocationService/LocationService";
+import { EventService } from "@/services/EventService/EventService";
+import { PlanService } from "@/services/planService/planService";
+import { AuthService } from "../../services/AuthService/AuthService";
 import { debounce } from "lodash";
 
 const marker = ref({ lat: 30.0444, lng: 31.2357 });

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import CommentService from '../../services/CommentService';
+import CommentService from '../../services/CommentService/CommentService';
 
 const route = useRoute();
 const comments = ref([]);

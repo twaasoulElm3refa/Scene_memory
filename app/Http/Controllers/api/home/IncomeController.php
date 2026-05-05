@@ -6,8 +6,8 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\userResource;
 use App\Mail\SubscriptionSuccessMail;
-use App\Models\licenceType;
-use App\Models\Subscriptions;
+use App\Repositories\Contracts\Plans\PlanRepositoryInterface;
+use App\Repositories\Contracts\Subscriptions\SubscriptionRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
@@ -15,17 +15,23 @@ class IncomeController extends Controller
 {
     use ApiResponse;
 
+    public function __construct(
+        private readonly PlanRepositoryInterface $planRepository,
+        private readonly SubscriptionRepositoryInterface $subscriptionRepository
+    ) {
+    }
+
     public function subscribe()
     {
         $id= request("id");
-        $license = licenceType::where("id",$id)->first();
+        $license = $this->planRepository->find((int) $id);
         $user= auth()->user();
 
         $user->update([
             "licence_type_id"=>$id,
         ]);
 
-        Subscriptions::create([
+        $this->subscriptionRepository->create([
             "user_id"=>$user->id,
             "licence_id"=>$id
         ]);

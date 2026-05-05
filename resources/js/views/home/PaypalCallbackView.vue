@@ -16,7 +16,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PaymentService } from '../../services/PaymentService'
+import { PaymentService } from '../../services/PaymentService/PaymentService'
 
 const route = useRoute()
 const router = useRouter()

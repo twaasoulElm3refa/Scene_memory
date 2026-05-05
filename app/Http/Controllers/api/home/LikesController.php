@@ -4,17 +4,21 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Likes;
+use App\Repositories\Contracts\Likes\LikeRepositoryInterface;
 
 class LikesController extends Controller
 {
     use ApiResponse;
 
+    public function __construct(private readonly LikeRepositoryInterface $likeRepository)
+    {
+    }
+
     public function count()
     {
         try {
-            $count = Likes::where('event_id', request('id'))->count();
-            $liked = Likes::where('user_id', auth()->user()->id)->where('event_id', request('id'))->count();
+            $count = $this->likeRepository->countByEventId((int) request('id'));
+            $liked = $this->likeRepository->countByUserAndEvent((int) auth()->user()->id, (int) request('id'));
             if($liked>0){
                 return $this->success(['liked' => true, 'count' => $count], 'Likes Number for Event');
             }
@@ -31,7 +35,7 @@ class LikesController extends Controller
             $data = [];
             $data['user_id'] = auth()->user()->id;
             $data['event_id'] = request('id');
-            $like = Likes::create($data);
+            $like = $this->likeRepository->create($data);
 
             return $this->success($like, 'Like Created Successfully');
         } catch (\Throwable $th) {

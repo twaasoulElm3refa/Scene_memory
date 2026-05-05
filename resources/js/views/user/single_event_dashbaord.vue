@@ -217,7 +217,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import UserLayout from "../../layouts/user/UserLayout.vue";
-import { UserDashboardService } from "../../services/UserDashboardService";
+import { UserDashboardService } from "../../services/UserDashboardService/UserDashboardService";
 
 const route = useRoute();
 const slug = route.params.slug;

@@ -6,7 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanRequest;
 use App\Jobs\TranslatePlanJob;
-use App\Models\licenceType;
+use App\Repositories\Contracts\Plans\PlanRepositoryInterface;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -16,6 +16,10 @@ class AdminPlanController extends Controller
     use ApiResponse;
     private $cacheTime = 60 * 24 * 7;
 
+    public function __construct(private readonly PlanRepositoryInterface $planRepository)
+    {
+    }
+
     private function clearCache()
     {
         Cache::tags(['plans'])->flush();
@@ -24,12 +28,7 @@ class AdminPlanController extends Controller
     {
         $cacheKey = 'plans_admin_'.$this->cacheTime.''.app()->getLocale();
         $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
-           return licenceType::select('id','name','price')
-    ->with([
-        'translation:id,plan_id,name',
-        'advantges:id,plan_id,feature'
-    ])
-    ->get();
+           return $this->planRepository->allForAdmin();
         });
 
         return $this->success($plans, 'All plans');
@@ -40,7 +39,7 @@ class AdminPlanController extends Controller
         $data=$request->validated();
         try {
             $data['slug'] = Str::slug($data['name']).'-'.Str::random(5).'-'.time();
-            $plan = licenceType::firstOrCreate($data);
+            $plan = $this->planRepository->firstOrCreate($data);
             TranslatePlanJob::dispatch($plan->id, $data['name']);
             $this->clearCache();
             return $this->success($plan,'plan Created Successfully');
@@ -54,7 +53,7 @@ class AdminPlanController extends Controller
         $data=request()->all();
         try {
             $data['slug'] = Str::slug($data['name']).'-'.Str::random(5).'-'.time();
-            $plan = licenceType::find(request('id'));
+            $plan = $this->planRepository->find((int) request('id'));
             $plan->update(request()->all());
             TranslatePlanJob::dispatch($plan->id, $plan->name);
             $this->clearCache();
@@ -67,7 +66,7 @@ class AdminPlanController extends Controller
     public function delete($id)
     {
         try {
-            $plan = licenceType::findOrFail($id);
+            $plan = $this->planRepository->findOrFail((int) $id);
             $plan->delete();
 
             $this->clearCache();
@@ -83,9 +82,7 @@ class AdminPlanController extends Controller
             $cacheKey = 'plans_single_admin_' . request('id') . '_' . app()->getLocale();
 
             $plans = Cache::tags(['plans'])->remember($cacheKey, $this->cacheTime, function () {
-                return licenceType::with('advantges')
-                    ->where('id', request('id'))
-                    ->get();
+                return $this->planRepository->byIdWithBenefits((int) request('id'));
             });
 
             return $this->success($plans, 'Single plan');

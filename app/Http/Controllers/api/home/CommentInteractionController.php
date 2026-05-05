@@ -4,52 +4,47 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Models\CommentInteractions;
-use App\Models\CommentReport;
-use App\Models\comments;
-use App\Models\Events;
+use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class CommentInteractionController extends Controller
 {
     use ApiResponse;
 
-    /**
-     * دعم التعليق
-     */
+    public function __construct(
+        private readonly CommentRepositoryInterface $commentRepository,
+        private readonly EventRepositoryInterface $eventRepository
+    ) {
+    }
+
     public function support()
     {
-        $comment = comments::findOrFail(request('id'));
-        $event = Events::findOrFail($comment->event_id);
+        $comment = $this->commentRepository->findOrFail((int) request('id'));
+        $event = $this->eventRepository->findByIdOrFail((int) $comment->event_id);
 
-        $interaction = CommentInteractions::firstOrCreate([
+        $interaction = $this->commentRepository->firstOrCreateInteraction([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'type' => 'support',
         ]);
 
-
-        foreach (['ar', 'en', 'fr','es','ja','zh','fa','ur','ru','it','de','hi'] as $locale) {
+        foreach (['ar', 'en', 'fr', 'es', 'ja', 'zh', 'fa', 'ur', 'ru', 'it', 'de', 'hi'] as $locale) {
             $key = 'event_' . strtolower(trim($event->slug)) . '_' . $locale;
             Cache::tags(['events'])->forget($key);
         }
         Cache::tags(['comments'])->flush();
 
-
         return $this->success($interaction, 'Interaction Created Successfully');
     }
 
-    /**
-     * معرض التعليق
-     */
     public function exhibitions()
     {
-        $comment = comments::findOrFail(request('id'));
-        $event = Events::findOrFail($comment->event_id);
+        $comment = $this->commentRepository->findOrFail((int) request('id'));
+        $event = $this->eventRepository->findByIdOrFail((int) $comment->event_id);
 
-        $interaction = CommentInteractions::firstOrCreate([
+        $interaction = $this->commentRepository->firstOrCreateInteraction([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'type' => 'Exhibitions',
@@ -64,15 +59,12 @@ class CommentInteractionController extends Controller
         return $this->success($interaction, 'Interaction Created Successfully');
     }
 
-    /**
-     * التعليقات المحايدة
-     */
     public function neutral()
     {
-        $comment = comments::findOrFail(request('id'));
-        $event = Events::findOrFail($comment->event_id);
+        $comment = $this->commentRepository->findOrFail((int) request('id'));
+        $event = $this->eventRepository->findByIdOrFail((int) $comment->event_id);
 
-        $interaction = CommentInteractions::firstOrCreate([
+        $interaction = $this->commentRepository->firstOrCreateInteraction([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'type' => 'neutral',
@@ -87,26 +79,18 @@ class CommentInteractionController extends Controller
         return $this->success($interaction, 'Interaction Created Successfully');
     }
 
-    /**
-     * الإبلاغ عن التعليق
-     */
     public function report(Request $request)
     {
-        $comment = comments::findOrFail(request('id'));
+        $comment = $this->commentRepository->findOrFail((int) request('id'));
 
-        $interaction = CommentReport::firstOrCreate([
+        $interaction = $this->commentRepository->firstOrCreateReport([
             'comment_id' => $comment->id,
             'user_id' => auth()->user()->id ?? null,
             'reason' => $request->reason,
         ]);
 
-        // مسح cache كل التقارير
         Cache::tags(['reports'])->flush();
 
         return $this->success($interaction, 'Report Created Successfully');
     }
-
-    /**
-     * مسح cache بيانات الحدث الفردية لكل اللغات
-     */
 }

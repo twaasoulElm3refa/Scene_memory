@@ -256,7 +256,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { PlanService } from "@/services/planService";
+import { PlanService } from "@/services/planService/planService";
 
 const route = useRoute();
 const router = useRouter();

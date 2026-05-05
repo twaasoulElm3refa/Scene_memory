@@ -39,6 +39,7 @@ use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
+use App\Http\Controllers\api\owner\CreatorController;
 use App\Http\Controllers\api\payment\DepositController;
 use App\Http\Controllers\api\payment\PurchaseController;
 use App\Http\Controllers\api\payment\PaymentController;
@@ -391,6 +392,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/wallet/order-status/{id}', [DepositController::class, 'orderStatus']);
     //146
 
-    // 146 EndPoint till now
+    Route::prefix('creator')->middleware('auth:sanctum')->group(function () {
+        Route::get('/all', [CreatorController::class, 'all']);
+        Route::get('/show/{slug}', [CreatorController::class, 'show']);
+        Route::post('/create', [CreatorController::class, 'create']);
+    });
+    // 149 EndPoint till now
 });
 

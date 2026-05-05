@@ -18,12 +18,15 @@ class userSeeder extends Seeder
             'name'=> 'Mohamed Maher',
             'email'=> 'm7mdellham77@gmail.com',
             'password'=> bcrypt('password'),
+            'slug'=> 'mohamed-maher',
           ],
           [
             'id'=>2,
             'name'=> 'Scemory Admin',
-            'email'=> 'admin@admin.com',
+            'email'=> 'scemorygmail@gmail.com',
+            'role'=> 'admin',
             'password'=> bcrypt('Scemory@2026'),
+            'slug'=> 'scemory-admin',
           ]
         ];
 

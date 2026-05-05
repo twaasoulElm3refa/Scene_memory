@@ -224,7 +224,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
-import { RequestService } from "../../../services/RequestService";
+import { RequestService } from "../../../services/RequestService/RequestService";
 
 const route = useRoute();
 const router = useRouter();
