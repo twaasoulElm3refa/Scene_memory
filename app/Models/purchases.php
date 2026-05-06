@@ -25,6 +25,10 @@ class purchases extends Model
         'amount'           => 'decimal:2',
     ];
 
+    public function walletTransactions()
+    {
+        return $this->hasMany(WalletTransactions::class,'purchase_id');
+    }
     public function scopePending($q)   { return $q->where('status', 'pending'); }
     public function scopeCompleted($q) { return $q->where('status', 'completed'); }
 

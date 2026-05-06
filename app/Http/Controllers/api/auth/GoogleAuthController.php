@@ -16,14 +16,19 @@ class GoogleAuthController extends Controller
     {
     }
 
-    public function googleLogin()
+    public function googleLogin(Request $request)
     {
+        $lang = $this->resolveLang($request);
         $url = Socialite::driver('google')->stateless()->redirect()->getTargetUrl();
 
-        return response()->json([
-            'status' => 'success',
-            'url' => $url,
-        ]);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'url' => $url,
+            ]);
+        }
+
+        return redirect()->away($url)->withCookie(cookie('oauth_lang', $lang, 10, '/'));
     }
 
     public function googleCallback(Request $request)
@@ -51,7 +56,8 @@ class GoogleAuthController extends Controller
                 !empty($user->position) &&
                 !empty($user->date_of_birth);
             Mail::to($user->email)->queue(new WelcomeMail($user));
-            return response()->json([
+
+            $payload = [
                 'status' => 'success',
                 'token' => $token,
                 'role' => $user->role,
@@ -60,13 +66,46 @@ class GoogleAuthController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                 ],
+            ];
+
+            if ($request->expectsJson()) {
+                return response()->json($payload);
+            }
+
+            $lang = $this->resolveLang($request);
+            $frontendUrl = rtrim((string) config('app.frontend_url', env('FRONTEND_URL', 'http://127.0.0.1:8000')), '/');
+            $query = http_build_query([
+                'token' => $token,
+                'role' => $user->role,
+                'is_profile_complete' => $isProfileComplete ? 'true' : 'false',
             ]);
 
+            return redirect()
+                ->away("{$frontendUrl}/{$lang}/auth/google-callback?{$query}")
+                ->withoutCookie('oauth_lang');
+
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 400);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 400);
+            }
+
+            $lang = $this->resolveLang($request);
+            $frontendUrl = rtrim((string) config('app.frontend_url', env('FRONTEND_URL', 'http://127.0.0.1:8000')), '/');
+            $error = urlencode($e->getMessage());
+
+            return redirect()
+                ->away("{$frontendUrl}/{$lang}/auth/google-callback?error={$error}")
+                ->withoutCookie('oauth_lang');
         }
+    }
+
+    private function resolveLang(Request $request): string
+    {
+        $lang = strtolower((string) ($request->query('lang') ?: $request->cookie('oauth_lang') ?: app()->getLocale() ?: 'en'));
+        $supported = ['ar', 'en', 'ru', 'fr', 'zh','es', 'de', 'it', 'hi', 'ja', 'fa', 'ur', 'tr'];
+        return in_array($lang, $supported, true) ? $lang : 'en';
     }
 }

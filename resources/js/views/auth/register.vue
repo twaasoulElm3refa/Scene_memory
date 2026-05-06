@@ -367,13 +367,12 @@ const handleReset = async () => {
     }
 };
 
-const handleGoogleLogin = async () => {
-    try {
-        const res = await AuthService.googleLogin();
-        window.location.href = res.data.url;
-    } catch (err) {
-        error.value = "فشل الاتصال بجوجل";
-    }
+const handleGoogleLogin = () => {
+    const currentLang = String(getLang() || "en").toLowerCase();
+    localStorage.setItem("lang", currentLang);
+    localStorage.setItem("language", currentLang);
+    document.cookie = `oauth_lang=${encodeURIComponent(currentLang)}; path=/; max-age=600`;
+    window.location.href = `/api/v1/users/google-login?lang=${encodeURIComponent(currentLang)}`;
 };
 </script>
 
@@ -687,3 +686,4 @@ const handleGoogleLogin = async () => {
     font-weight: 600;
 }
 </style>
+

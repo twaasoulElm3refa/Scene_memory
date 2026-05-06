@@ -32,13 +32,15 @@ class EventUserCreateController extends Controller
         try {
             $event = DB::transaction(function () use ($data, $request) {
                 // لاحظ: مش محتاجين $imageAnalysisService جوه الـ transaction دلوقتي
-                $data['slug']    = Str::slug($data['title']) . '-' . Str::random(5) . '-' . time();
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
 
                 $event = $this->eventRepository->create($data);
 
+
                 $this->requestRepository->createEventRequest(['event_id' => $event->id]);
+                $event->update(['slug' => 'event' . '-' . Str::slug($data['title']) . $event->id]);
+
 
                 $event->translations()->create([
                     'locale'      => 'ar',
@@ -117,7 +119,6 @@ class EventUserCreateController extends Controller
         try {
             $event = DB::transaction(function () use ($data, $request) {
                 // لاحظ: مش محتاجين $imageAnalysisService جوه الـ transaction دلوقتي
-                $data['slug']    = Str::slug($data['title']) . '-' . Str::random(5) . '-' . time();
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
                 $data['is_historical'] = 1;
@@ -125,7 +126,7 @@ class EventUserCreateController extends Controller
                 $event = $this->eventRepository->create($data);
 
                 $this->requestRepository->createEventRequest(['event_id' => $event->id]);
-
+                $event->update(['slug' => 'event' . '-' . Str::slug($data['title']) .'-'. $event->id]);
                 $event->translations()->create([
                     'locale'      => 'ar',
                     'title'       => $data['title'],

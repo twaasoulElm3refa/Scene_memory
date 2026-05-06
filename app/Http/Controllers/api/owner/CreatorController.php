@@ -49,4 +49,9 @@ class CreatorController extends Controller
         }
     }
 
+    public function total()
+    {
+
+    }
+
 }

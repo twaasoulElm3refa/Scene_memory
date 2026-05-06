@@ -119,6 +119,11 @@
                                 {{ $t("nav.downloads") }}
                             </RouterLink>
 
+                            <RouterLink v-if="eventCount > 0" class="dropdown-item"
+                                :to="localizedPath('/creator/events')">
+                                  {{ $t("nav.dashboard") }}
+                            </RouterLink>
+
                             <hr class="dropdown-divider" />
 
                             <button class="dropdown-item text-danger" @click="logout">
@@ -184,6 +189,7 @@ const isLoggedIn = ref(false);
 const userName = ref("Kullanıcı");
 const count = ref(0);
 const userImage = ref(null);
+const eventCount = ref(0);
 
 const dropdownOpen = ref(false);
 const mobileMenu = ref(false);
@@ -277,6 +283,7 @@ const logout = () => {
 
     isLoggedIn.value = false;
     userName.value = "Kullanıcı";
+    eventCount.value = 0;
 
     router.push(localizedPath("/auth"));
 };
@@ -292,15 +299,18 @@ const fetchProfile = async () => {
         const res = await axios.get("/v1/users/profile");
         if (res.data.status === "success") {
             const userData = res.data.data.user;
+
             count.value = userData.items || 0;
             userName.value = userData.name || "Kullanıcı";
-
             userImage.value = userData.image || null;
+            eventCount.value = Number(userData.event_count || 0);
+
             isLoggedIn.value = true;
         }
     } catch (err) {
         localStorage.clear();
         isLoggedIn.value = false;
+        eventCount.value = 0;
     }
 };
 

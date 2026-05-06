@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class PayPalServices implements PaymentInterface
@@ -18,7 +19,6 @@ class PayPalServices implements PaymentInterface
 
     public function __construct()
     {
-
         $this->provider = new PayPalClient;
         $this->provider->setApiCredentials(config('paypal'));
         $this->provider->getAccessToken();
@@ -188,7 +188,14 @@ class PayPalServices implements PaymentInterface
                     ->lockForUpdate()
                     ->first();
             }
-
+            $items = $order->items()->first();
+            $event = $items->events();
+            $owner= $event->user();
+            $wallet = $owner->wallet();
+            $wallet->update([
+                'balance' => $wallet->balance + $order->amount
+            ]);
+            $this->forgetUserProfileCache($owner->id);
             if (!$order) {
                 Log::error('PayPalServices: Webhook - Order not found in database', [
                     'reference_id'    => $referenceId,
@@ -387,5 +394,11 @@ class PayPalServices implements PaymentInterface
             ?? throw new Exception("Cannot retrieve approval URL for order: {$paypalOrderId}");
 
         return $approvalUrl;
+    }
+
+    private function forgetUserProfileCache(int $userId): void
+    {
+        Cache::tags(['user_profile', 'user_'.$userId])
+            ->forget('user_profile_' . $userId);
     }
 }

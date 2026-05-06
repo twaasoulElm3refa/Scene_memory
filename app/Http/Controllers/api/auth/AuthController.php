@@ -8,6 +8,7 @@ use App\Http\Requests\loginRequest;
 use App\Http\Requests\registerRequest;
 use App\Http\Resources\userResource;
 use App\Mail\WelcomeMail;
+use App\Models\Events;
 use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -105,10 +106,10 @@ class AuthController extends Controller
             $this->authRepository->createWalletIfMissing($user->id);
         }
         $items = $this->authRepository->countCartItems($cart->id);
+        $EventCount=Events::where('user_id', $user->id)->count();
         $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
-         ->remember($cacheKey, 60, function () use ($user, $items) {
+         ->remember($cacheKey, 60, function () use ($user, $items , $EventCount) {
             $user->load('licenceType');
-
             return [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -117,6 +118,7 @@ class AuthController extends Controller
                 'country' => $user->country,
                 'date_of_birth' => $user->date_of_birth,
                 'phone' => $user->phone,
+                'event_count' => $EventCount,
                 'role' => $user->role,
                 'items' => $items,
                 'points' => $user->points,

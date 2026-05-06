@@ -259,9 +259,10 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
     {
-        path: '/v1/users/google-callback',
-        name: 'GoogleCallback',
+        path: "/:lang/auth/google-callback",
+        name: "google-callback",
         component: GoggleCallback,
+        meta: { hideNavbar: true, hideFooter: true },
     },
 
 

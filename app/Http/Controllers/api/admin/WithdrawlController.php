@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\ap\payment;
+namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;

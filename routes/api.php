@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ap\payment\WithdrawlController;
 use App\Http\Controllers\api\admin\AdminPlanController;
 use App\Http\Controllers\api\admin\BenefitsController;
 use App\Http\Controllers\api\admin\CategoriesCreateController;
@@ -19,6 +18,7 @@ use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
+use App\Http\Controllers\api\admin\WithdrawlController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
 use App\Http\Controllers\api\auth\DownloadController;
@@ -40,6 +40,7 @@ use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\owner\CreatorController;
+use App\Http\Controllers\api\owner\UserWithdrawlController;
 use App\Http\Controllers\api\payment\DepositController;
 use App\Http\Controllers\api\payment\PurchaseController;
 use App\Http\Controllers\api\payment\PaymentController;
@@ -395,7 +396,15 @@ Route::prefix('v1')->group(function () {
     Route::prefix('creator')->middleware('auth:sanctum')->group(function () {
         Route::get('/all', [CreatorController::class, 'all']);
         Route::get('/show/{slug}', [CreatorController::class, 'show']);
-        Route::post('/create', [CreatorController::class, 'create']);
+        Route::get('/total',[CreatorController::class,'total']);
+    });
+
+    Route::prefix('withdraw')->middleware('auth:sanctum')->group(function () {
+        Route::get('/myWithdrawals', [UserWithdrawlController::class, 'myWithdrawals']);
+        Route::post('/showWithdrawals', [UserWithdrawlController::class, 'showWithdrawals']);
+        Route::post('/requestWithdrawals/{id}', [UserWithdrawlController::class, 'requestWithdrawals']);
+        Route::post('/updateWithdrawals/{id}', [UserWithdrawlController::class, 'updateWithdrawals']);
+        Route::delete('/deleteWithdrawals', [UserWithdrawlController::class, 'deleteWithdrawals']);
     });
     // 149 EndPoint till now
 });
