@@ -9,7 +9,7 @@ class WithdrawalRepository implements WithdrawalRepositoryInterface
 {
     public function paginated(int $perPage = 10)
     {
-        return withdraw::with('user')->paginate($perPage);
+        return withdraw::with('user.wallet')->paginate($perPage);
     }
 
     public function count(): int

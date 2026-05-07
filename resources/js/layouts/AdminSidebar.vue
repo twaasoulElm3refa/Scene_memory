@@ -73,8 +73,8 @@
                         All Purchases
                     </RouterLink>
 
-                    <RouterLink to="/admin/purchases/Withdrawls" class="sidebar-btn dropdown-item"
-                        :class="{ active: route.path === '/admin/purchases/Withdrawls' }">
+                    <RouterLink to="/admin/purchases/withdrawls" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path.startsWith('/admin/purchases/withdrawls') }">
                         <ArrowPathIcon class="w-5 h-5" />
                         Withdrawls
                     </RouterLink>

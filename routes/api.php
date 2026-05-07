@@ -167,10 +167,10 @@ Route::prefix('v1')->group(function () {
         //60
     });
 
-     // Purchases CRUD
-    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+     // withdrawals
+    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class,'throttle:90,1'])->group(function () {
         Route::get('/', [WithdrawlController::class, 'index']);
-        Route::get('/all/count', [WithdrawlController::class,  'count'])->middleware('throttle:25,1');
+        Route::get('/all/count', [WithdrawlController::class,  'count']);
         Route::get('/status/{status}', [WithdrawlController::class, 'status']);
         Route::get('/show/{id}', [WithdrawlController::class, 'show']);
         Route::post('/update/{id}', [WithdrawlController::class, 'update']);

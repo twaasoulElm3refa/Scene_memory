@@ -1,4 +1,3 @@
-```vue
 <template>
     <section class="mx-auto w-full max-w-7xl space-y-6">
         <header class="flex flex-wrap items-center justify-between gap-3">
@@ -155,19 +154,16 @@
                             <article v-for="media in images" :key="media?.id || media?.preview_url || media?.full_url"
                                 class="overflow-hidden rounded-xl border border-slate-200 bg-white">
                                 <div class="aspect-[16/10] bg-slate-100">
-                                    <!-- Video -->
                                     <video v-if="isVideo(media)"
                                         :src="storageUrl(media?.full_url || media?.preview_url)"
                                         class="h-full w-full object-cover" controls preload="metadata">
                                         Your browser does not support the video tag.
                                     </video>
 
-                                    <!-- Image -->
                                     <img v-else-if="storageUrl(media?.preview_url || media?.full_url)"
                                         :src="storageUrl(media?.preview_url || media?.full_url)"
                                         alt="Event media preview" class="h-full w-full object-cover" />
 
-                                    <!-- Empty -->
                                     <div v-else class="flex h-full items-center justify-center text-sm text-slate-500">
                                         No media preview
                                     </div>
@@ -477,12 +473,6 @@ const totalViews = computed(() => {
     return views.value.reduce((sum, item) => sum + Number(item?.count || 0), 0);
 });
 
-const likeUserIds = computed(() => {
-    return likes.value
-        .map((item) => item?.user_id ?? item?.id)
-        .filter((id) => id !== null && id !== undefined);
-});
-
 const firstImageMeta = computed(() => images.value[0] || null);
 
 const heroImage = computed(() => {
@@ -533,4 +523,3 @@ const fetchEvent = async () => {
 watch(() => route.params.slug, fetchEvent);
 onMounted(fetchEvent);
 </script>
-```

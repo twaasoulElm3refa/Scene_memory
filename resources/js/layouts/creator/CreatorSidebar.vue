@@ -67,6 +67,42 @@
                     </div>
                 </Transition>
             </div>
+
+            <!-- Withdrawals Dropdown -->
+            <div class="sidebar-group">
+                <button type="button" class="sidebar-btn group" :class="{ 'active-parent': withdrawalsActive }"
+                    @click="toggle('withdrawals')">
+                    <span class="flex items-center gap-3">
+                        <CreditCardIcon class="w-5 h-5" />
+                        Withdrawals
+                    </span>
+
+                    <ChevronIcon class="w-5 h-5 transition-transform duration-300"
+                        :class="{ 'rotate-180': open.withdrawals }" />
+                </button>
+
+                <Transition name="dropdown">
+                    <div v-if="open.withdrawals" class="dropdown">
+                        <RouterLink :to="{ name: 'creator-withdrawals', params: { lang: currentLang } }"
+                            class="sidebar-btn dropdown-item text-decoration-none"
+                            :class="{ active: route.name === 'creator-withdrawals' || route.name === 'creator-withdrawals-show' || route.name === 'creator-withdrawals-edit' }"
+                            :aria-current="route.name === 'creator-withdrawals' || route.name === 'creator-withdrawals-show' || route.name === 'creator-withdrawals-edit' ? 'page' : undefined"
+                            @click="emit('close')">
+                            <CreditCardIcon class="w-5 h-5" />
+                            All Withdrawals
+                        </RouterLink>
+
+                        <RouterLink :to="{ name: 'creator-withdrawals-request', params: { lang: currentLang } }"
+                            class="sidebar-btn dropdown-item text-decoration-none"
+                            :class="{ active: route.name === 'creator-withdrawals-request' }"
+                            :aria-current="route.name === 'creator-withdrawals-request' ? 'page' : undefined"
+                            @click="emit('close')">
+                            <CreditCardIcon class="w-5 h-5" />
+                            Request Withdrawal
+                        </RouterLink>
+                    </div>
+                </Transition>
+            </div>
         </nav>
 
         <div class="flex-grow"></div>
@@ -97,6 +133,7 @@ import { useRoute, useRouter } from "vue-router";
 import {
     CalendarIcon,
     WalletIcon,
+    CreditCardIcon,
     ArrowUpRightIcon,
     ArrowLeftOnRectangleIcon,
     ChevronDownIcon as ChevronIcon,
@@ -124,6 +161,12 @@ const visitSitePath = computed(() => `/${currentLang.value}/home`);
 const open = reactive({
     events: route.name === "creator-events" || route.name === "creator-event-show",
     wallet: route.name === "creator-wallet",
+    withdrawals: [
+        "creator-withdrawals",
+        "creator-withdrawals-request",
+        "creator-withdrawals-show",
+        "creator-withdrawals-edit",
+    ].includes(route.name),
 });
 
 const toggle = (key) => {
@@ -134,6 +177,14 @@ const eventsActive = computed(() =>
     route.name === "creator-events" || route.name === "creator-event-show"
 );
 const walletActive = computed(() => route.name === "creator-wallet");
+const withdrawalsActive = computed(() =>
+    [
+        "creator-withdrawals",
+        "creator-withdrawals-request",
+        "creator-withdrawals-show",
+        "creator-withdrawals-edit",
+    ].includes(route.name)
+);
 
 const logout = async () => {
     localStorage.removeItem("auth_token");

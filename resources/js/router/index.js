@@ -14,6 +14,9 @@ import admin from "../views/admin/admin.vue";
 import all_users from "../views/admin/users/all_users.vue";
 import add_user from "../views/admin/users/add_user.vue";
 import all_withdrawls from "../views/admin/withdraw/all_withdrawls.vue";
+import single_withdraw from "../views/admin/withdraw/single_withdraw.vue";
+import update_withdrwal from "../views/admin/withdraw/update_withdrwal.vue";
+import withdrawl_status from "../views/admin/withdraw/withdrawl_status.vue";
 import all_purchases from "../views/admin/purchase/all_purchases.vue";
 import purchases_status from "../views/admin/purchase/purchases_status.vue";
 import purchases_type from "../views/admin/purchase/purchases_type.vue";
@@ -65,6 +68,10 @@ import WalletDeposit from "../views/home/WalletDeposit.vue";
 import CreatorLayout from "../layouts/creator/CreatorLayout.vue";
 import CreatorEvents from "../views/creator/CreatorEvents.vue";
 import CreatorEventShow from "../views/creator/CreatorEventShow.vue";
+import CreatorWithdrawals from "../views/creator/CreatorWithdrawals.vue";
+import CreatorWithdrawalShow from "../views/creator/CreatorWithdrawalShow.vue";
+import CreatorWithdrawalRequest from "../views/creator/CreatorWithdrawalRequest.vue";
+import CreatorWithdrawalUpdate from "../views/creator/CreatorWithdrawalUpdate.vue";
 
 const routes = [
     {
@@ -103,6 +110,28 @@ const routes = [
                 path: "wallet",
                 name: "creator-wallet",
                 component: WalletDeposit,
+            },
+            {
+                path: "withdrawals",
+                name: "creator-withdrawals",
+                component: CreatorWithdrawals,
+            },
+            {
+                path: "withdrawals/request",
+                name: "creator-withdrawals-request",
+                component: CreatorWithdrawalRequest,
+            },
+            {
+                path: "withdrawals/:id",
+                name: "creator-withdrawals-show",
+                component: CreatorWithdrawalShow,
+                props: true,
+            },
+            {
+                path: "withdrawals/:id/edit",
+                name: "creator-withdrawals-edit",
+                component: CreatorWithdrawalUpdate,
+                props: true,
             },
         ],
     },
@@ -277,6 +306,21 @@ const routes = [
     {
         path: "/admin/purchases/withdrawls",
         component: all_withdrawls,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/purchases/withdrawls/:id",
+        component: single_withdraw,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/purchases/withdrawls/:id/edit",
+        component: update_withdrwal,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/purchases/withdrawls/:status/status",
+        component: withdrawl_status,
         meta: { hideNavbar: true, hideFooter: true },
     },
 

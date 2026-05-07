@@ -12,27 +12,46 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('withdraws', function (Blueprint $table) {
+        Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class,'user_id')
+
+            $table->foreignIdFor(User::class, 'user_id')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->foreignIdFor(User::class,'approved_by')
+
+            $table->foreignIdFor(User::class, 'approved_by')
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
-            $table->decimal('amount',10,2)->default(0);
-            $table->decimal('fee',10,2)->default(0);
+
+            $table->decimal('amount', 10, 2)->default(0);
+            $table->decimal('fee', 10, 2)->default(0);
+            $table->decimal('net_amount', 10, 2)->default(0);
+
             $table->string('currency', 10)->default('EGP');
-            $table->enum('status', ['pending', 'approved', 'rejected', 'processing', 'paid'])
-                ->default('pending');
+
+            $table->enum('status', [
+                'pending',
+                'processing',
+                'completed',
+                'rejected',
+                'cancelled'
+            ])->default('pending');
+
             $table->string('method')->nullable();
+
             $table->json('payment_details')->nullable();
+
             $table->string('reference')->nullable();
-            $table->boolean('mail_sent')->default(false)->nullable();
+            $table->string('transaction_id')->nullable();
+
+            $table->boolean('mail_sent')->default(false);
+
             $table->text('admin_note')->nullable();
+
             $table->timestamp('processed_at')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });
