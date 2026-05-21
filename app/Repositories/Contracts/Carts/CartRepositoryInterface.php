@@ -2,13 +2,13 @@
 
 namespace App\Repositories\Contracts\Carts;
 
-use App\Models\cart;
+use App\Models\Cart;
 
 interface CartRepositoryInterface
 {
-    public function firstOrCreateByUserId(int $userId): cart;
-    public function findByUserId(int $userId): ?cart;
-    public function findWithItemsByUserId(int $userId): ?cart;
+    public function firstOrCreateByUserId(int $userId): Cart;
+    public function findByUserId(int $userId): ?Cart;
+    public function findWithItemsByUserId(int $userId): ?Cart;
     public function getItemsByCartId(int $cartId);
     public function createItem(array $data);
     public function firstOrCreateItem(array $attributes);

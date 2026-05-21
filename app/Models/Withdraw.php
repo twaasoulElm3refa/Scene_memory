@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class withdraw extends Model
+class Withdraw extends Model
 {
     protected $table = 'withdrawals';
 

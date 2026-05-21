@@ -24,12 +24,12 @@ class Countries extends Model
 
     public function translations()
     {
-        return $this->hasMany(country_translations::class, 'country_id');
+        return $this->hasMany(CountryTranslations::class, 'country_id');
     }
 
     public function translation()
     {
-        return $this->hasOne(country_translations::class, 'country_id')
+        return $this->hasOne(CountryTranslations::class, 'country_id')
             ->where('locale', app()->getLocale());
     }
 }

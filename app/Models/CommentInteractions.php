@@ -16,6 +16,6 @@ class CommentInteractions extends Model
 
     public function comments()
     {
-        return $this->belongsTo(comments::class,'comment_id');
+        return $this->belongsTo(Comments::class,'comment_id');
     }
 }

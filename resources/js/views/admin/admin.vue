@@ -1,6 +1,13 @@
 <template>
   <AdminLayout>
     <div class="p-6 space-y-8">
+      <div v-if="statsLoading" class="rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+        Loading dashboard stats...
+      </div>
+      <div v-if="statsError" class="rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {{ statsError }}
+      </div>
+
       <!-- Stats Cards Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Events -->
@@ -8,7 +15,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-500 font-medium">Total Events</p>
-              <p class="text-3xl font-bold mt-1">{{ stats.events.toLocaleString() }}</p>
+              <p class="text-3xl font-bold mt-1">{{ formatNumber(stats.total_events.value) }}</p>
             </div>
             <div class="bg-blue-100 text-blue-600 p-3 rounded-lg">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,8 +29,10 @@
             </div>
           </div>
           <p class="mt-4 text-sm">
-            <span class="text-green-600 font-medium">+12%</span>
-            <span class="text-gray-500"> from last month</span>
+            <span class="font-medium" :class="trendClass(stats.total_events)">
+              {{ formatPercentage(stats.total_events) }}
+            </span>
+            <span class="text-gray-500"> {{ stats.total_events.label || "from last month" }}</span>
           </p>
         </div>
         <!-- Active Users -->
@@ -31,7 +40,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-500 font-medium">Active Users</p>
-              <p class="text-3xl font-bold mt-1">{{ formatNumber(stats.users) }}</p>
+              <p class="text-3xl font-bold mt-1">{{ formatNumber(stats.active_users.value) }}</p>
             </div>
             <div class="bg-purple-100 text-purple-600 p-3 rounded-lg">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,8 +54,10 @@
             </div>
           </div>
           <p class="mt-4 text-sm">
-            <span class="text-green-600 font-medium">+5.4%</span>
-            <span class="text-gray-500"> from last month</span>
+            <span class="font-medium" :class="trendClass(stats.active_users)">
+              {{ formatPercentage(stats.active_users) }}
+            </span>
+            <span class="text-gray-500"> {{ stats.active_users.label || "from last month" }}</span>
           </p>
         </div>
         <!-- Total Memories -->
@@ -54,7 +65,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-500 font-medium">Total Memories</p>
-              <p class="text-3xl font-bold mt-1">{{ formatNumber(stats.memories) }}</p>
+              <p class="text-3xl font-bold mt-1">{{ formatNumber(stats.total_memories.value) }}</p>
             </div>
             <div class="bg-amber-100 text-amber-600 p-3 rounded-lg">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,8 +79,10 @@
             </div>
           </div>
           <p class="mt-4 text-sm">
-            <span class="text-green-600 font-medium">+22%</span>
-            <span class="text-gray-500"> from last month</span>
+            <span class="font-medium" :class="trendClass(stats.total_memories)">
+              {{ formatPercentage(stats.total_memories) }}
+            </span>
+            <span class="text-gray-500"> {{ stats.total_memories.label || "from last month" }}</span>
           </p>
         </div>
         <!-- purchases Count -->
@@ -78,7 +91,7 @@
             <div>
               <p class="text-sm text-gray-500 font-medium">purchases</p>
               <p class="text-3xl font-bold mt-1">
-                {{ stats.purchases.toLocaleString() }}
+                {{ formatNumber(stats.purchases.value) }}
               </p>
             </div>
             <div class="bg-rose-100 text-rose-600 p-3 rounded-lg">
@@ -93,8 +106,8 @@
             </div>
           </div>
           <p class="mt-4 text-sm">
-            <span class="text-rose-600 font-medium">24</span>
-            <span class="text-gray-500"> items need attention</span>
+            <span class="text-rose-600 font-medium">{{ stats.purchases.attention_count || 0 }}</span>
+            <span class="text-gray-500"> {{ stats.purchases.label || "items need attention" }}</span>
           </p>
         </div>
       </div>
@@ -249,10 +262,10 @@
           </button>
           <button
             @click="sendNotification"
-            :disabled="loading || !notificationMessage.trim()"
+            :disabled="notificationLoading || !notificationMessage.trim()"
             class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
-            <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+            <span v-if="notificationLoading" class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
             Send
           </button>
         </div>
@@ -266,18 +279,42 @@ import { ref, onMounted } from "vue";
 import AdminLayout from "../../layouts/AdminLayout.vue";
 import { AdminDashboardService } from "../../services/AdminDashboardService/AdminDashboardService";
 import { NotificationService } from "../../services/NotificationService/NotificationService";
+import { getAdminDashboardStats } from "../../services/admin/dashboard/dashboardServices";
 
-const stats = ref({
-  events: 0,
-  users: 0,
-  memories: 0,
-  purchases: 0,
+const getDefaultStats = () => ({
+  total_events: {
+    value: 0,
+    percentage: 0,
+    trend: "neutral",
+    label: "from last month",
+  },
+  active_users: {
+    value: 0,
+    percentage: 0,
+    trend: "neutral",
+    label: "from last month",
+  },
+  total_memories: {
+    value: 0,
+    percentage: 0,
+    trend: "neutral",
+    label: "from last month",
+  },
+  purchases: {
+    value: 0,
+    attention_count: 0,
+    label: "items need attention",
+  },
 });
+
+const stats = ref(getDefaultStats());
+const statsLoading = ref(false);
+const statsError = ref("");
 
 const recentActivity = ref([]);
 const showNotificationModal = ref(false);
 const notificationMessage = ref("");
-const loading = ref(false);
+const notificationLoading = ref(false);
 const errors = ref({});
 
   const getLatestUsers = async () => {
@@ -290,22 +327,18 @@ const errors = ref({});
 };
 
 async function fetchStats() {
-    try {
-      const [eventsRes, usersRes, memoriesRes, purchasesRes] = await Promise.all([
-      AdminDashboardService.getEventsCount(),
-      AdminDashboardService.getUsersCount(),
-      AdminDashboardService.getMemoriesCount(),
-      AdminDashboardService.getPurchasesCount(),
-      ]);
+  statsLoading.value = true;
+  statsError.value = "";
 
-    stats.value = {
-      events: eventsRes.data.status === "success" ? eventsRes.data.data : 0,
-      users: usersRes.data.status === "success" ? usersRes.data.data : 0,
-      memories: memoriesRes.data.status === "success" ? memoriesRes.data.data : 0,
-      purchases: purchasesRes.data.status === "success" ? purchasesRes.data.data : 0,
-    };
+  try {
+    const result = await getAdminDashboardStats();
+    stats.value = normalizeStats(result?.data);
   } catch (err) {
     console.error("Failed to load dashboard stats:", err);
+    statsError.value = "Could not load dashboard stats. Showing fallback values.";
+    stats.value = getDefaultStats();
+  } finally {
+    statsLoading.value = false;
   }
 }
 
@@ -316,7 +349,7 @@ const sendNotification = async () => {
     return;
   }
 
-  loading.value = true;
+  notificationLoading.value = true;
 
   try {
     const payload = {
@@ -344,7 +377,7 @@ const sendNotification = async () => {
       alert("Failed to send notification. Please try again.");
     }
   } finally {
-    loading.value = false;
+    notificationLoading.value = false;
   }
 };
 
@@ -354,8 +387,36 @@ onMounted(() => {
 });
 
 function formatNumber(num) {
-  if (num >= 100000) return (num / 1000).toFixed(1) + "k";
-  if (num >= 10000) return (num / 1000).toFixed(1) + "k";
-  return num.toLocaleString();
+  const value = Number(num || 0);
+  if (value >= 100000) return (value / 1000).toFixed(1) + "k";
+  if (value >= 10000) return (value / 1000).toFixed(1) + "k";
+  return value.toLocaleString();
 }
+
+function normalizeStats(apiStats = {}) {
+  const fallback = getDefaultStats();
+  return {
+    total_events: { ...fallback.total_events, ...(apiStats.total_events || {}) },
+    active_users: { ...fallback.active_users, ...(apiStats.active_users || {}) },
+    total_memories: { ...fallback.total_memories, ...(apiStats.total_memories || {}) },
+    purchases: { ...fallback.purchases, ...(apiStats.purchases || {}) },
+  };
+}
+
+function formatPercentage(stat) {
+  if (!stat) return "0%";
+
+  const percentage = Math.abs(Number(stat.percentage || 0));
+  if (stat.trend === "neutral") return `${percentage}%`;
+
+  const sign = stat.trend === "down" ? "-" : "+";
+  return `${sign}${percentage}%`;
+}
+
+function trendClass(stat) {
+  if (!stat || stat.trend === "neutral") return "text-gray-500";
+  if (stat.trend === "down") return "text-red-600";
+  return "text-green-600";
+}
+
 </script>

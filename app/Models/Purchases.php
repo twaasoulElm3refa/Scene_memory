@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class purchases extends Model
+class Purchases extends Model
 {
     protected $table = 'purchases';
     protected $guarded = [];
@@ -16,7 +16,7 @@ class purchases extends Model
 
     public function items()
     {
-        return $this->hasMany(purchase_items::class,'purchase_id');
+        return $this->hasMany(PurchaseItems::class,'purchase_id');
     }
 
     protected $casts = [

@@ -31,12 +31,12 @@ class Events extends Model
 
     public function images()
     {
-        return $this->hasMany(eventsImges::class, 'event_id');
+        return $this->hasMany(EventsImges::class, 'event_id');
     }
 
     public function sub_categorey()
     {
-        return $this->belongsTo(subCategorey::class, 'sub_categorey_id');
+        return $this->belongsTo(SubCategorey::class, 'sub_categorey_id');
     }
 
     public function requests()
@@ -56,12 +56,12 @@ class Events extends Model
 
     public function firstImage()
     {
-        return $this->hasOne(eventsImges::class,'event_id');
+        return $this->hasOne(EventsImges::class,'event_id');
     }
 
     public function comments()
     {
-        return $this->hasMany(comments::class,'event_id');
+        return $this->hasMany(Comments::class,'event_id');
     }
 
     public function likes()
@@ -89,6 +89,11 @@ class Events extends Model
     public function views()
     {
         return $this->hasMany(EventViews::class,'event_id');
+    }
+
+    public function interactions()
+    {
+        return $this->hasMany(UserInteractions::class,'event_id');
     }
 
 }

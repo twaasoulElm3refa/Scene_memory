@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class subCategorey extends Model
+class SubCategorey extends Model
 {
     protected $table = "sub_categoreys";
     protected $guarded = [];
@@ -29,4 +29,3 @@ class subCategorey extends Model
             ->where('locale', app()->getLocale());
     }
 }
-    

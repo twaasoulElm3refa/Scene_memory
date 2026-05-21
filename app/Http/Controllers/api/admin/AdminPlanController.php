@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanRequest;
 use App\Jobs\TranslatePlanJob;
 use App\Repositories\Contracts\Plans\PlanRepositoryInterface;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 

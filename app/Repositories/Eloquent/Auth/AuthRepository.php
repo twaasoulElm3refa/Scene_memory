@@ -4,8 +4,8 @@ namespace App\Repositories\Eloquent\Auth;
 
 use App\Models\User;
 use App\Models\Wallet;
-use App\Models\cart;
-use App\Models\cartItems;
+use App\Models\Cart;
+use App\Models\CartItems;
 use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
@@ -26,14 +26,14 @@ class AuthRepository implements AuthRepositoryInterface
         $user->update(['last_login_at' => now()]);
     }
 
-    public function findOrCreateCartByUserId(int $userId): cart
+    public function findOrCreateCartByUserId(int $userId): Cart
     {
-        return cart::firstOrCreate(['user_id' => $userId]);
+        return Cart::firstOrCreate(['user_id' => $userId]);
     }
 
     public function countCartItems(int $cartId): int
     {
-        return cartItems::where('cart_id', $cartId)->count();
+        return CartItems::where('cart_id', $cartId)->count();
     }
 
     public function createWalletIfMissing(int $userId): void

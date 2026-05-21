@@ -37,6 +37,7 @@ export default class MapService {
         this._styleCache = {};
         this._styleFetchPromise = null;
         this._geocodeTimer = null;
+        this._dailyEventsLoaded = false;
 
         // قراءة اللغة من الـ URL
         this._currentLang = this._getLangFromUrl() || (localStorage.getItem("language") || "ar");
@@ -86,31 +87,85 @@ export default class MapService {
         }
     }
 
-    initMap(mapId, zoom = 10) {
-        this._buildMap(mapId, zoom).then(map => {
-            this.map = map;
-            this.map.addControl(new maplibregl.NavigationControl());
-            this._addDraggableMarker(this.map, false);
-            this.loadDailyEvents();
-        });
+    async initMap(mapIdOrElement, zoom = 10) {
+        if (this.map) {
+            this.refreshMap();
+            return this.map;
+        }
+
+        const map = await this._buildMap(mapIdOrElement, zoom);
+        this.map = map;
+        this.map.addControl(new maplibregl.NavigationControl());
+        this._addDraggableMarker(this.map, false);
+        this.refreshMap();
+
+        if (!this._dailyEventsLoaded) {
+            await this.loadDailyEvents();
+            this._dailyEventsLoaded = true;
+        }
+
+        return this.map;
     }
 
-    openFullscreen(mapId, zoom = 12) {
-        this._buildMap(mapId, zoom).then(map => {
-            this.fullMap = map;
-            this.fullMap.addControl(new maplibregl.NavigationControl());
-            this._addDraggableMarker(this.fullMap, true);
-        });
+    async openFullscreen(mapIdOrElement, zoom = 12) {
+        if (this.fullMap) {
+            this.refreshFullscreenMap();
+            return this.fullMap;
+        }
+
+        const map = await this._buildMap(mapIdOrElement, zoom);
+        this.fullMap = map;
+        this.fullMap.addControl(new maplibregl.NavigationControl());
+        this._addDraggableMarker(this.fullMap, true);
+        this.refreshFullscreenMap();
+
+        return this.fullMap;
     }
 
     closeFullscreen() {
         if (this.fullMap) {
-            this.fullEventMarkers.forEach(m => m.remove());
-            this.fullEventMarkers = [];
+            this.refreshFullscreenMap();
+        }
+    }
+
+    refreshMap() {
+        if (!this.map) return;
+        this.map.resize();
+        requestAnimationFrame(() => this.map?.resize());
+    }
+
+    refreshFullscreenMap() {
+        if (!this.fullMap) return;
+        this.fullMap.resize();
+        requestAnimationFrame(() => this.fullMap?.resize());
+    }
+
+    destroy() {
+        clearTimeout(this._geocodeTimer);
+        this._geocodeTimer = null;
+
+        if (this._activePopup) {
+            this._activePopup.remove();
+            this._activePopup = null;
+        }
+
+        this.eventMarkers.forEach(m => m.remove());
+        this.eventMarkers = [];
+        this.fullEventMarkers.forEach(m => m.remove());
+        this.fullEventMarkers = [];
+
+        if (this.map) {
+            this.map.remove();
+            this.map = null;
+        }
+
+        if (this.fullMap) {
             this.fullMap.remove();
             this.fullMap = null;
-            this.fullMarker = null;
         }
+
+        this.marker = null;
+        this.fullMarker = null;
     }
 
     setLocation(lat, lng) {
@@ -185,19 +240,7 @@ export default class MapService {
                     btn.addEventListener("click", (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-
-                        // 🔥 Vue Router navigation
-                        if (window.router) {
-                            window.router.push({
-                                name: "single_event",
-                                params: {
-                                    lang: this._currentLang,
-                                    slug: event.slug,
-                                },
-                            });
-                        } else {
-                            window.location.href = `/${this._currentLang}/single_event/${event.slug}`;
-                        }
+                        this._dispatchEventMarkerClick(event.slug);
                         popup.remove();
                         this._activePopup = null;
                     });
@@ -296,15 +339,34 @@ export default class MapService {
         style.glyphs = "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf";
     }
 
-    async _buildMap(containerId, zoom) {
+    _resolveContainer(containerOrId) {
+        if (typeof containerOrId === "string") {
+            const el = document.getElementById(containerOrId);
+            if (!el) {
+                throw new Error(`[MapService] Container not found: ${containerOrId}`);
+            }
+            return el;
+        }
+        return containerOrId;
+    }
+
+    async _buildMap(containerIdOrElement, zoom) {
+        const container = this._resolveContainer(containerIdOrElement);
         const style = await this._getOrFetchStyle(this._currentLang);
         const map = new maplibregl.Map({
-            container: containerId,
+            container,
             style,
             center: [this.markerRef.value.lng, this.markerRef.value.lat],
             zoom,
             fadeDuration: 0,
             trackResize: true,
+            dragPan: true,
+            scrollZoom: true,
+            boxZoom: true,
+            dragRotate: true,
+            keyboard: true,
+            doubleClickZoom: true,
+            touchZoomRotate: true,
         });
         return new Promise(resolve => map.on("load", () => resolve(map)));
     }
@@ -420,6 +482,13 @@ export default class MapService {
     _dispatchMarkerEvent(eventsArray) {
         document.dispatchEvent(
             new CustomEvent("marker-events-loaded", { detail: { events: eventsArray } })
+        );
+    }
+
+    _dispatchEventMarkerClick(slug) {
+        if (!slug) return;
+        document.dispatchEvent(
+            new CustomEvent("event-marker-clicked", { detail: { slug } })
         );
     }
 

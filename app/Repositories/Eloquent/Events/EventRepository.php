@@ -4,7 +4,7 @@ namespace App\Repositories\Eloquent\Events;
 
 use App\Models\EventViews;
 use App\Models\Events;
-use App\Models\eventsImges;
+use App\Models\EventsImges;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 
 class EventRepository implements EventRepositoryInterface
@@ -187,7 +187,7 @@ class EventRepository implements EventRepositoryInterface
 
     public function memoriesQuery()
     {
-        return eventsImges::count();
+        return EventsImges::count();
     }
 
     public function creatorEvents(int $userId)

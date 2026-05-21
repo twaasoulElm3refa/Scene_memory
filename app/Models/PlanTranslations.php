@@ -12,6 +12,6 @@ class PlanTranslations extends Model
 
    public function licence()
    {
-    return $this->belongsTo(licenceType::class,'plan_id');
+    return $this->belongsTo(LicenceType::class,'plan_id');
    }
 }

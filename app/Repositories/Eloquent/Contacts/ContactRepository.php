@@ -2,20 +2,20 @@
 
 namespace App\Repositories\Eloquent\Contacts;
 
-use App\Models\contactResponds;
-use App\Models\contacts;
+use App\Models\ContactResponds;
+use App\Models\Contacts;
 use App\Repositories\Contracts\Contacts\ContactRepositoryInterface;
 
 class ContactRepository implements ContactRepositoryInterface
 {
     public function paginatedWithResponses(int $perPage)
     {
-        return contacts::with('contactResponds')->latest()->paginate($perPage);
+        return Contacts::with('contactResponds')->latest()->paginate($perPage);
     }
 
     public function contactsStats()
     {
-        return contacts::query()
+        return Contacts::query()
             ->select('id', 'created_at')
             ->withCount('contactResponds')
             ->with(['contactResponds' => function ($q) {
@@ -26,21 +26,21 @@ class ContactRepository implements ContactRepositoryInterface
 
     public function findWithResponses(int $id)
     {
-        return contacts::with('contactResponds')->find($id);
+        return Contacts::with('contactResponds')->find($id);
     }
 
     public function create(array $data)
     {
-        return contacts::create($data);
+        return Contacts::create($data);
     }
 
     public function createResponse(array $data)
     {
-        return contactResponds::create($data);
+        return ContactResponds::create($data);
     }
 
     public function findOrFail(int $id)
     {
-        return contacts::findOrFail($id);
+        return Contacts::findOrFail($id);
     }
 }

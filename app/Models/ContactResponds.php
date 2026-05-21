@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class contactResponds extends Model
+class ContactResponds extends Model
 {
     protected $guarded = [];
 
     public function contacts()
     {
-        return $this->belongsTo(contacts::class,'contact_id');
+        return $this->belongsTo(Contacts::class,'contact_id');
     }
 }

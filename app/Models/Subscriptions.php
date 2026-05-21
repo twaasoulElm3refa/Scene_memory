@@ -17,6 +17,6 @@ class Subscriptions extends Model
 
     public function licence()
     {
-        return $this->belongsTo(licenceType::class,'licence_id');
+        return $this->belongsTo(LicenceType::class,'licence_id');
     }
 }

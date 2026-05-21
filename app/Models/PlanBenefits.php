@@ -11,7 +11,7 @@ class PlanBenefits extends Model
 
     public function plan()
     {
-        return $this->belongsTo(licenceType::class, 'plan_id');
+        return $this->belongsTo(LicenceType::class, 'plan_id');
     }
 
       public function translations()

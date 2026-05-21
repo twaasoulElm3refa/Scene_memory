@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class user_interactions extends Model
+class UserInteractions extends Model
 {
     /** @use HasFactory<\Database\Factories\UserInteractionsFactory> */
     use HasFactory;

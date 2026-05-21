@@ -2,43 +2,43 @@
 
 namespace App\Repositories\Eloquent\EventImages;
 
-use App\Models\eventsImges;
+use App\Models\EventsImges;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 
 class EventImageRepository implements EventImageRepositoryInterface
 {
     public function findById(int $id)
     {
-        return eventsImges::find($id);
+        return EventsImges::find($id);
     }
 
     public function findOrFail(int $id)
     {
-        return eventsImges::findOrFail($id);
+        return EventsImges::findOrFail($id);
     }
 
     public function findByEventId(int $eventId)
     {
-        return eventsImges::where('event_id', $eventId)->get();
+        return EventsImges::where('event_id', $eventId)->get();
     }
 
     public function findActiveByEventIdPaginated(int $eventId, int $perPage = 10)
     {
-        return eventsImges::where('event_id', $eventId)->where('is_active', 0)->orderBy('created_at', 'desc')->paginate($perPage);
+        return EventsImges::where('event_id', $eventId)->where('is_active', 0)->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     public function create(array $data)
     {
-        return eventsImges::create($data);
+        return EventsImges::create($data);
     }
 
     public function count(): int
     {
-        return eventsImges::count();
+        return EventsImges::count();
     }
 
     public function whereInIds($ids)
     {
-        return eventsImges::whereIn('id', $ids);
+        return EventsImges::whereIn('id', $ids);
     }
 }

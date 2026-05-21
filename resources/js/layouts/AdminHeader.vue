@@ -42,7 +42,8 @@ const toggleTheme = () => {
 
 const fetchProfile = async () => {
   try {
-    const token = localStorage.getItem("auth_token");
+    const token =
+      localStorage.getItem("admin_token") || localStorage.getItem("auth_token");
 
     const res = await fetch("/api/v1/users/profile", {
       headers: {
@@ -75,6 +76,8 @@ onMounted(() => {
 const logout = () => {
   localStorage.removeItem("auth_token");
   localStorage.removeItem("user_role");
+  localStorage.removeItem("admin_token");
+  localStorage.removeItem("admin_user");
   router.push("/en/auth");
 };
 </script>

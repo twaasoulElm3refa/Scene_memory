@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class purchase_items extends Model
+class PurchaseItems extends Model
 {
     protected $table='purchase_items';
 
@@ -12,6 +12,6 @@ class purchase_items extends Model
 
     public function purchases()
     {
-        return $this->belongsTo(purchases::class,'purchase_id');
+        return $this->belongsTo(Purchases::class,'purchase_id');
     }
 }

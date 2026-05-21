@@ -11,6 +11,6 @@ class SubCategoreyTranslations extends Model
 
     public function category()
     {
-        return $this->belongsTo(subCategorey::class, 'category_id');
+        return $this->belongsTo(SubCategorey::class, 'category_id');
     }
 }

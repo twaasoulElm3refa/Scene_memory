@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class licenceType extends Model
+class LicenceType extends Model
 {
     protected $table ='licence_types';
     protected $guarded = [];

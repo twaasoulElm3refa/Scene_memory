@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Events;
-use App\Models\eventsImges;
+use App\Models\EventsImges;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('media_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class,'user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(eventsImges::class,'image_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(EventsImges::class,'image_id')->nullable()->constrained()->cascadeOnDelete();
             $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->timestamps();
         });

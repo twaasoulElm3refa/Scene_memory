@@ -11,7 +11,7 @@ class CommentReplies extends Model
 
     public function comment()
     {
-        return $this->belongsTo(comments::class,'comment_id');
+        return $this->belongsTo(Comments::class,'comment_id');
     }
 
     public function user()

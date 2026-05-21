@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class contacts extends Model
+class Contacts extends Model
 {
     protected $table = "contacts";
     protected $guarded = [];
@@ -16,6 +16,6 @@ class contacts extends Model
 
     public function contactResponds()
     {
-        return $this->hasMany(contactResponds::class,'contact_id');
+        return $this->hasMany(ContactResponds::class,'contact_id');
     }
 }

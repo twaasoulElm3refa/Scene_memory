@@ -5,24 +5,24 @@ namespace App\Repositories\Eloquent\Comments;
 use App\Models\CommentInteractions;
 use App\Models\CommentReplies;
 use App\Models\CommentReport;
-use App\Models\comments;
+use App\Models\Comments;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 
 class CommentRepository implements CommentRepositoryInterface
 {
     public function create(array $data)
     {
-        return comments::create($data);
+        return Comments::create($data);
     }
 
     public function findOrFail(int $id)
     {
-        return comments::findOrFail($id);
+        return Comments::findOrFail($id);
     }
 
     public function paginatedByEventId(int $eventId, int $perPage = 5)
     {
-        return comments::with([
+        return Comments::with([
             'translation:id,comment_id,locale,comment,created_at',
             'user:id,name',
         ])

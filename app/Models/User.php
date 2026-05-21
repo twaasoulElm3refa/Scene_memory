@@ -59,7 +59,7 @@ class User extends Authenticatable
 
     public function user_interactions()
     {
-        return $this->hasMany(user_interactions::class,'user_id');
+        return $this->hasMany(UserInteractions::class,'user_id');
     }
 
     public function whishlist()
@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function contacts()
     {
-        return $this->hasMany(contacts::class,'user_id');
+        return $this->hasMany(Contacts::class,'user_id');
     }
 
     public function MediaRequest()
@@ -79,7 +79,7 @@ class User extends Authenticatable
 
     public function comment()
     {
-        return $this->hasMany(comments::class,'user_id');
+        return $this->hasMany(Comments::class,'user_id');
     }
 
     public function likes()
@@ -94,7 +94,7 @@ class User extends Authenticatable
 
     public function licenceType()
     {
-        return $this->belongsTo(licenceType::class,'licence_type_id');
+        return $this->belongsTo(LicenceType::class,'licence_type_id');
     }
 
     public function cart()
@@ -104,7 +104,7 @@ class User extends Authenticatable
 
     public function purchase()
     {
-        return $this->hasMany(purchases::class,'user_id');
+        return $this->hasMany(Purchases::class,'user_id');
     }
 
     public function wallet()
@@ -114,12 +114,12 @@ class User extends Authenticatable
 
     public function withdraw()
     {
-        return $this->hasMany(withdraw::class,'user_id');
+        return $this->hasMany(Withdraw::class,'user_id');
     }
 
     public function approving()
     {
-        return $this->hasMany(withdraw::class,'approved_by');
+        return $this->hasMany(Withdraw::class,'approved_by');
     }
 
     public function walletTransactions()
