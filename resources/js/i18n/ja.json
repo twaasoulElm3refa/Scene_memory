@@ -80,7 +80,16 @@
         "add_to_wishlist": "お気に入りに追加",
         "already_in_wishlist": "既にお気に入りに入っています",
         "adding_to_wishlist": "追加中...",
-        "wishlist_success": "お気に入りに正常に追加されました！"
+        "wishlist_success": "お気に入りに正常に追加されました!",
+        "buy_collection_title": "完全なコレクションを購入",
+        "total_images": "Total Images",
+        "save_discount": "10%割引",
+        "you_save": "節約できます",
+        "add_collection_to_cart": "🎁 完全なコレクションをカートに追加",
+        "collection_benefit_1": "✓ すべての画像を一度に購入",
+        "collection_benefit_2": "自動10%割引",
+        "collection_benefit_3": "✓ 時間とお金を節約",
+        "collection_benefit_4": "✓ すべてのイベントの思い出を即座に取得"
     },
     "common": {
         "search": "検索",

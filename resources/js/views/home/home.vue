@@ -116,7 +116,10 @@ const PlansSection = defineAsyncComponent(() => import("./components/PlansSectio
 const router = useRouter();
 const lang = localStorage.getItem("language") || "en";
 
-const marker = ref({ lat: 30.0444, lng: 31.2357 });
+const DEFAULT_LOCATION = { lat: 30.0444, lng: 31.2357 };
+const marker = ref({ ...DEFAULT_LOCATION });
+const hasTriedUserLocation = ref(false);
+
 const fullscreen = ref(false);
 const isMapReady = ref(false);
 const isMapLoading = ref(false);
@@ -154,7 +157,7 @@ const loadingPlans = ref(false);
 const itemsPerPage = 8;
 const maxVisible = 5;
 const fallbackImage =
-  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800";
+  "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
 
 const showProfileToast = ref(false);
 const progressWidth = ref("100%");
@@ -306,6 +309,45 @@ const renderMarkersOnMaps = (events) => {
   }
 };
 
+const setCurrentLocationFromDevice = () => {
+  return new Promise((resolve) => {
+    if (hasTriedUserLocation.value) {
+      resolve(false);
+      return;
+    }
+
+    hasTriedUserLocation.value = true;
+
+    if (!navigator.geolocation) {
+      console.warn("Geolocation is not supported by this browser.");
+      resolve(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        marker.value = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        resolve(true);
+      },
+      (error) => {
+        console.warn("User location error:", error.message);
+
+        marker.value = { ...DEFAULT_LOCATION };
+        resolve(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 8000,
+        maximumAge: 60000,
+      }
+    );
+  });
+};
+
 const ensureMapInitialized = async () => {
   if (isMapReady.value || isMapLoading.value) return;
 
@@ -315,6 +357,8 @@ const ensureMapInitialized = async () => {
   isMapLoading.value = true;
 
   try {
+    await setCurrentLocationFromDevice();
+
     await nextTick();
     await waitForNextPaint();
     const mapContainer = await waitForContainerReady("map-main");
@@ -394,6 +438,7 @@ const search = async (isInitial = false) => {
       toDate: toDate.value || null,
       searchQuery: searchQuery.value?.trim() || null,
     });
+    console.log("Search results:", result);
 
     displayedEvents.value = (Array.isArray(result) ? result : []).map(normalizeEvent);
     currentPage.value = 1;

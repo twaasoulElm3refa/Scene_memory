@@ -89,11 +89,6 @@ const processCallback = async () => {
         return;
     }
 
-    if (!isProfileComplete) {
-        await router.replace(`/${currentLang.value}/profile`);
-        return;
-    }
-
     await router.replace(`/${currentLang.value}/home`);
 };
 

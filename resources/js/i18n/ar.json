@@ -80,7 +80,16 @@
         "add_to_wishlist": "أضف إلى المفضلة",
         "already_in_wishlist": "موجود في المفضلة",
         "adding_to_wishlist": "جاري الإضافة...",
-        "wishlist_success": "تمت الإضافة إلى المفضلة بنجاح!"
+        "wishlist_success": "تمت الإضافة إلى المفضلة بنجاح!",
+        "buy_collection_title": "شراء المجموعة كاملة",
+        "total_images": "إجمالي الصور",
+        "save_discount": "خصم 10%",
+        "you_save": "توفير",
+        "add_collection_to_cart": "🎁 أضف المجموعة كاملة إلى السلة",
+        "collection_benefit_1": "شراء كل الصور مرة واحدة",
+        "collection_benefit_2": "تطبيق خصم 10% تلقائيًا",
+        "collection_benefit_3": "وصول سهل في التنزيلات",
+        "collection_benefit_4": "نفس تجربة الدفع الآمنة"
     },
     "common": {
         "search": "بحث",

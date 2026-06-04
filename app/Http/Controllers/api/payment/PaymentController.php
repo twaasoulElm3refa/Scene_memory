@@ -93,11 +93,7 @@ class PaymentController extends Controller
 
             $items = $this->cartRepository->getItemsByCartId($cart->id);
             foreach ($items as $item) {
-                $this->purchaseRepository->createItem([
-                    "purchase_id" => $purchase,
-                    "image_id"    => $item->image_id,
-                    "price"       => $item->price,
-                ]);
+                $this->createPurchaseItemsFromCartItem($purchase, $item);
             }
 
             $this->cartRepository->deleteItemsByCartId($cart->id);
@@ -172,7 +168,7 @@ class PaymentController extends Controller
                     'message' => 'Cart is empty',
                 ], 400);
             }
-            $total = $items->sum('price');
+            $total = $items->sum(fn ($item) => $this->cartItemTotal($item));
             if ($wallet->amount < $total) {
                 return response()->json([
                     'success' => false,
@@ -193,11 +189,7 @@ class PaymentController extends Controller
                 'mail_sent' => false,
             ]);
             foreach ($items as $item) {
-                $this->purchaseRepository->createItem([
-                    "purchase_id" => $purchase->id,
-                    "image_id"    => $item->image_id,
-                    "price"       => $item->price,
-                ]);
+                $this->createPurchaseItemsFromCartItem($purchase->id, $item);
             }
             $this->cartRepository->deleteItemsByCartId($cart->id);
             $this->clearCartCache($user->id);
@@ -212,5 +204,36 @@ class PaymentController extends Controller
             ], 200);
 
         });
+    }
+
+    private function cartItemTotal($item): float
+    {
+        if ($item->type === 'collection') {
+            return max((float) $item->price - (float) $item->discount, 0);
+        }
+
+        return (float) $item->price;
+    }
+
+    private function createPurchaseItemsFromCartItem(int $purchaseId, $item): void
+    {
+        if ($item->type === 'collection') {
+            foreach ($item->collection_images_array as $image) {
+                $this->purchaseRepository->createItem([
+                    "purchase_id" => $purchaseId,
+                    "image_id"    => $image['id'] ?? null,
+                    "price"       => $image['price'] ?? 0,
+                    "purchased_type" => "collection",
+                ]);
+            }
+
+            return;
+        }
+
+        $this->purchaseRepository->createItem([
+            "purchase_id" => $purchaseId,
+            "image_id"    => $item->image_id,
+            "price"       => $item->price,
+        ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Events;
 use App\Repositories\Contracts\Cities\CityRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
@@ -53,25 +54,36 @@ class EventController extends Controller
     }
 
     public function index(Request $request)
-        {
+    {
         $cityId = $request->city_id !== 'all' ? $request->city_id : null;
         $categoryId = $request->sub_category_id !== 'all' ? $request->sub_category_id : null;
 
         $from = $request->query('from');
         $to = $request->query('to');
 
-        $filters = compact('cityId', 'categoryId', 'from', 'to');
+        $q = $request->query('q', '*');
+        $perPage = $request->query('per_page', 15);
 
-        $cacheKey = 'events_' . app()->getLocale() . '_' . md5(json_encode($filters));
+        $filters = [
+            'is_active:=true',
+        ];
 
-        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($cityId, $categoryId, $from, $to) {
-            return $this->eventRepository->filteredActive([
-                'cityId' => $cityId,
-                'categoryId' => $categoryId,
-                'from' => $from,
-                'to' => $to,
-            ]);
-        });
+        if ($cityId) {
+            $filters[] = 'city_id:=' . (int) $cityId;
+        }
+
+        if ($categoryId) {
+            $filters[] = 'sub_category_id:=' . (int) $categoryId;
+        }
+
+        if ($from) {
+            $filters[] = 'start_date:>=' . Carbon::parse($from)->timestamp;
+        }
+
+        if ($to) {
+            $filters[] = 'end_date:<=' . Carbon::parse($to)->timestamp;
+        }
+        $events = $this->eventRepository->filteredActive($filters);
 
         return $this->success($events, 'Events');
     }

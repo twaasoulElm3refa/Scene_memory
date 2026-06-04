@@ -80,7 +80,16 @@
         "add_to_wishlist": "Добавить в избранное",
         "already_in_wishlist": "Уже в избранном",
         "adding_to_wishlist": "Добавление...",
-        "wishlist_success": "Успешно добавлено в избранное!"
+        "wishlist_success": "Успешно добавлено в избранное!",
+        "buy_collection_title": "Купить полную коллекцию",
+        "total_images": "Total Images",
+        "save_discount": "СКИДКА 10%",
+        "you_save": "Вы экономите",
+        "add_collection_to_cart": "🎁 Добавить полную коллекцию в корзину",
+        "collection_benefit_1": "✓ Купите все изображения сразу",
+        "collection_benefit_2": "Автоматическая скидка 10%",
+        "collection_benefit_3": "✓ Экономьте время и деньги",
+        "collection_benefit_4": "✓ Получите все воспоминания о событии мгновенно"
     },
     "common": {
         "search": "Поиск",

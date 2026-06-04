@@ -80,7 +80,16 @@
         "add_to_wishlist": "添加到收藏夹",
         "already_in_wishlist": "已在收藏夹中",
         "adding_to_wishlist": "正在添加...",
-        "wishlist_success": "已成功添加到收藏夹！"
+        "wishlist_success": "已成功添加到收藏夹!",
+        "buy_collection_title": "购买完整收藏",
+        "total_images": "Total Images",
+        "save_discount": "10%折扣",
+        "you_save": "您省钱",
+        "add_collection_to_cart": "🎁 将完整收藏添加到购物车",
+        "collection_benefit_1": "✓ 一次购买所有图像",
+        "collection_benefit_2": "自动10%折扣",
+        "collection_benefit_3": "✓ 节省时间和金钱",
+        "collection_benefit_4": "✓ 立即获取所有活动回忆"
     },
     "common": {
         "search": "搜索",

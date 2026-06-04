@@ -186,7 +186,7 @@ const { locale } = useI18n();
 
 /* STATE */
 const isLoggedIn = ref(false);
-const userName = ref("Kullanıcı");
+const userName = ref("UserName");
 const count = ref(0);
 const userImage = ref(null);
 const eventCount = ref(0);
@@ -301,7 +301,7 @@ const fetchProfile = async () => {
             const userData = res.data.data.user;
 
             count.value = userData.items || 0;
-            userName.value = userData.name || "Kullanıcı";
+            userName.value = userData.name || "UserName";
             userImage.value = userData.image || null;
             eventCount.value = Number(userData.event_count || 0);
 

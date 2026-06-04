@@ -101,19 +101,39 @@
                 <div v-else>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div v-for="item in items" :key="item.id"
+                        <div v-for="item in items" :key="getCartItemId(item)"
                             class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden">
 
                             <!-- MEDIA -->
                             <div class="relative h-56 bg-gray-100 overflow-hidden">
+                                <div v-if="item.type === 'collection'"
+                                    class="w-full h-full p-4 bg-gray-50 flex flex-col justify-center">
+                                    <div v-if="getCollectionImages(item).length" class="grid grid-cols-2 gap-2">
+                                        <img v-for="(image, index) in getCollectionImages(item).slice(0, 4)"
+                                            :key="image.id || index" :src="getStorageUrl(image)"
+                                            :alt="image.title || image.name || 'Collection image'"
+                                            class="w-full h-24 object-cover rounded-lg bg-gray-100"
+                                            @error="event => event.target.src = placeholderImage" />
+                                    </div>
+                                    <div v-if="getCollectionImages(item).length > 4"
+                                        class="text-xs text-gray-500 mt-1">
+                                        +{{ getCollectionImages(item).length - 4 }} more
+                                    </div>
+                                    <div v-if="item.type === 'collection' && getCollectionImages(item).length === 0"
+                                        class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm">
+                                        No images
+                                    </div>
+                                </div>
 
-                                <img v-if="!isVideo(item.full_url)" :src="getMediaUrl(item.full_url)"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                <img v-else-if="!isVideo(getSingleMediaPath(item))"
+                                    :src="getStorageUrl(getSingleMediaPath(item))"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                    @error="onImageError" />
 
                                 <div v-else class="relative w-full h-56 bg-black overflow-hidden">
                                     <video :data-id="item.id" class="w-full h-full object-cover" playsinline
                                         preload="metadata" @timeupdate="onTimeUpdate(item.id, $event)">
-                                        <source :src="getMediaUrl(item.full_url)" />
+                                        <source :src="getStorageUrl(getSingleMediaPath(item))" />
                                     </video>
 
                                     <div class="absolute inset-0 flex items-center justify-center">
@@ -139,27 +159,48 @@
 
                                 <div
                                     class="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded-lg text-sm font-semibold">
-                                    In Stock
+                                    {{ isCollectionItem(item) ? 'Collection' : 'In Stock' }}
                                 </div>
                             </div>
 
                             <!-- DETAILS -->
                             <div class="p-5">
-                                <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-1">
-                                    {{ item.name || 'Product' }}
-                                </h3>
+                                <template v-if="isCollectionItem(item)">
+                                    <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-1">
+                                        {{ item.name || 'Full Collection' }}
+                                    </h3>
+                                    <p class="text-sm text-gray-500">
+                                        {{ getCollectionImages(item).length }} images
+                                    </p>
+                                    <p v-if="item.event_id" class="text-sm text-gray-500">
+                                        Event ID: {{ item.event_id }}
+                                    </p>
+                                </template>
+
+                                <template v-else>
+                                    <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-1">
+                                        {{ item.name || 'Product' }}
+                                    </h3>
+                                </template>
 
                                 <div class="flex justify-between items-center mt-4">
                                     <div>
-                                        <span v-if="item.old_price" class="text-sm text-gray-500 line-through">
-                                            {{ item.old_price }} $
+                                        <span v-if="isCollectionItem(item)" class="text-sm text-gray-500 line-through">
+                                            {{ formatPrice(item.price) }} $
+                                        </span>
+                                        <span v-else-if="item.old_price" class="text-sm text-gray-500 line-through">
+                                            {{ formatPrice(item.old_price) }} $
                                         </span>
                                         <p class="text-2xl font-bold text-green-600">
-                                            {{ item.price || 0 }} $
+                                            {{ formatPrice(getItemFinalPrice(item)) }} $
+                                        </p>
+                                        <p v-if="isCollectionItem(item) && toNumber(item.discount) > 0"
+                                            class="text-xs text-red-500 mt-1">
+                                            Discount: {{ formatPrice(item.discount) }} $
                                         </p>
                                     </div>
 
-                                    <button @click="removeItem(item.id)"
+                                    <button @click="removeItem(getCartItemId(item))"
                                         class="p-2 text-red-500 hover:bg-red-50 rounded-full transition">
                                         🗑️
                                     </button>
@@ -320,6 +361,7 @@ const toast = reactive({ show: false, message: '', type: 'success' });
 // Video state
 const playing = reactive({});
 const progress = reactive({});
+const placeholderImage = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
 
 // ══════════════════════════════════════════════════════════
 // TOAST
@@ -337,7 +379,7 @@ const showToast = (message, type = 'success', duration = 3000) => {
 // ══════════════════════════════════════════════════════════
 
 const total = computed(() =>
-    items.value.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0)
+    items.value.reduce((sum, item) => sum + getItemFinalPrice(item), 0)
 );
 
 const idempotencyKey = computed(() => {
@@ -349,14 +391,144 @@ const idempotencyKey = computed(() => {
 // MEDIA HELPERS
 // ══════════════════════════════════════════════════════════
 
-const getMediaUrl = (path) => {
-    if (!path) return "";
-    return `http://localhost:8000/storage/${path}`;
+const toNumber = (value) => {
+    if (value === null || value === undefined || value === '') return 0;
+
+    if (typeof value === 'number') {
+        return Number.isFinite(value) ? value : 0;
+    }
+
+    if (typeof value === 'string') {
+        const cleaned = value.replace(/[^0-9.-]/g, '');
+        const number = parseFloat(cleaned);
+        return Number.isFinite(number) ? number : 0;
+    }
+
+    return 0;
+};
+
+const formatPrice = (value) => {
+    return toNumber(value).toFixed(2);
+};
+
+const isCollectionItem = (item) => {
+    return item?.type === 'collection';
+};
+
+const getCartItemId = (item) => {
+    return item?.cart_item?.id || item?.cart_item_id || item?.id;
+};
+
+const getCollectionImages = (item) => {
+    const images = item?.collection_images || item?.collectionImages || [];
+
+    if (Array.isArray(images)) {
+        return images;
+    }
+
+    if (typeof images === 'string') {
+        try {
+            const parsed = JSON.parse(images);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    }
+
+    return [];
+};
+
+const getItemFinalPrice = (item) => {
+    if (!isCollectionItem(item)) {
+        return toNumber(item?.final_price ?? item?.price);
+    }
+
+    if (item?.final_price !== null && item?.final_price !== undefined && item?.final_price !== '') {
+        return toNumber(item.final_price);
+    }
+
+    return Math.max(toNumber(item?.price) - toNumber(item?.discount), 0);
+};
+
+const getMediaRawPath = (mediaOrPath) => {
+    if (!mediaOrPath) return '';
+
+    if (typeof mediaOrPath === 'string') {
+        return mediaOrPath;
+    }
+
+    return (
+        mediaOrPath.image_url ||
+        mediaOrPath.preview_url ||
+        mediaOrPath.url ||
+        mediaOrPath.full_url ||
+        mediaOrPath.path ||
+        mediaOrPath.image ||
+        mediaOrPath.file_path ||
+        mediaOrPath.file ||
+        mediaOrPath.src ||
+        ''
+    );
+};
+
+const getStorageUrl = (mediaOrPath) => {
+    const rawPath = getMediaRawPath(mediaOrPath);
+
+    if (!rawPath || typeof rawPath !== 'string') {
+        return placeholderImage;
+    }
+
+    const path = rawPath.replace(/\\/g, '/').trim();
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        try {
+            const url = new URL(path);
+            if (url.pathname.startsWith('/storage/') || url.pathname.startsWith('/uploads/')) {
+                return `${url.pathname}${url.search}`;
+            }
+        } catch {
+            return path;
+        }
+
+        return path;
+    }
+
+    if (path.startsWith('/storage/')) {
+        return path;
+    }
+
+    if (path.startsWith('storage/')) {
+        return `/${path}`;
+    }
+
+    if (path.startsWith('public/')) {
+        return `/storage/${path.replace(/^public\//, '')}`;
+    }
+
+    if (path.startsWith('/uploads/')) {
+        return path;
+    }
+
+    if (path.startsWith('uploads/')) {
+        return `/${path}`;
+    }
+
+    return `/storage/${path.replace(/^\/+/, '')}`;
+};
+
+const getSingleMediaPath = (item) => {
+    return item?.image_url || item?.full_url || item?.url || item?.preview_url || '';
+};
+
+const onImageError = (event) => {
+    event.target.src = placeholderImage;
 };
 
 const isVideo = (path) => {
-    if (!path) return false;
-    return /\.(mp4|webm|ogg)$/i.test(path);
+    const rawPath = getMediaRawPath(path);
+    if (!rawPath || typeof rawPath !== 'string') return false;
+
+    return /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(rawPath);
 };
 
 // ══════════════════════════════════════════════════════════
@@ -429,7 +601,7 @@ const fetchWallet = async () => {
 const removeItem = async (id) => {
     try {
         await CartService.deleteFromCart(id);
-        items.value = items.value.filter(i => i.id !== id);
+        items.value = items.value.filter(i => getCartItemId(i) !== id);
         showToast('Item removed ✅');
     } catch (e) {
         console.error(e);

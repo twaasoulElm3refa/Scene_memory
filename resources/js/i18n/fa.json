@@ -80,7 +80,16 @@
         "add_to_wishlist": "افزودن به علاقه‌مندی‌ها",
         "already_in_wishlist": "در علاقه‌مندی‌ها موجود است",
         "adding_to_wishlist": "در حال افزودن...",
-        "wishlist_success": "با موفقیت به علاقه‌مندی‌ها اضافه شد!"
+        "wishlist_success": "با موفقیت به علاقه‌مندی‌ها اضافه شد!",
+        "buy_collection_title": "خرید مجموعه کامل",
+        "total_images": "کل تصاویر",
+        "save_discount": "تخفیف 10%",
+        "you_save": "شما صرفه‌جویی می‌کنید",
+        "add_collection_to_cart": "🎁 افزودن مجموعه کامل به سبد",
+        "collection_benefit_1": "✓ خرید تمام تصاویر یکجا",
+        "collection_benefit_2": "تخفیف خودکار 10%",
+        "collection_benefit_3": "✓ صرفه‌جویی در وقت و پول",
+        "collection_benefit_4": "✓ دریافت فوری تمام خاطرات رویداد"
     },
     "common": {
         "search": "جستجو",

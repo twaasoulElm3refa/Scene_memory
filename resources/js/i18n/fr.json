@@ -80,7 +80,16 @@
         "add_to_wishlist": "Ajouter aux favoris",
         "already_in_wishlist": "Déjà dans les favoris",
         "adding_to_wishlist": "Ajout en cours...",
-        "wishlist_success": "Ajouté aux favoris avec succès !"
+        "wishlist_success": "Ajouté aux favoris avec succès !",
+        "buy_collection_title": "Acheter la collection complète",
+        "total_images": "Total Images",
+        "save_discount": "10% DE RÉDUCTION",
+        "you_save": "Vous économisez",
+        "add_collection_to_cart": "🎁 Ajouter la collection complète au panier",
+        "collection_benefit_1": "✓ Achetez toutes les images à la fois",
+        "collection_benefit_2": "Réduction automatique de 10%",
+        "collection_benefit_3": "✓ Économisez du temps et de l'argent",
+        "collection_benefit_4": "✓ Obtenez tous les souvenirs de l'événement instantanément"
     },
     "common": {
         "search": "Rechercher",

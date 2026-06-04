@@ -85,12 +85,57 @@ class EventRepository implements EventRepositoryInterface
 
     public function filteredActive(array $filters)
     {
-        return Events::with('city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url')
-            ->where('is_active', 1)
-            ->when($filters['cityId'] ?? null, fn ($q, $cityId) => $q->where('city_id', $cityId))
-            ->when($filters['categoryId'] ?? null, fn ($q, $categoryId) => $q->where('sub_categorey_id', $categoryId))
-            ->when($filters['from'] ?? null, fn ($q, $from) => $q->whereDate('start_date', '>=', $from))
-            ->when($filters['to'] ?? null, fn ($q, $to) => $q->whereDate('end_date', '<=', $to))
+        $parsedFilters = [];
+
+        foreach ($filters as $key => $filter) {
+            if (!is_numeric($key)) {
+                $parsedFilters[$key] = $filter;
+                continue;
+            }
+            if (!is_string($filter) || !str_contains($filter, ':=')) {
+                continue;
+            }
+
+            [$field, $value] = explode(':=', $filter, 2);
+
+            $field = trim($field);
+            $value = trim($value);
+
+            if ($value === 'true') {
+                $value = 1;
+            } elseif ($value === 'false') {
+                $value = 0;
+            } elseif (is_numeric($value)) {
+                $value = (int) $value;
+            }
+
+            $parsedFilters[$field] = $value;
+        }
+
+        return Events::with(
+                'city.translation',
+                'sub_categorey.translation',
+                'translation',
+                'firstImage:id,event_id,full_url'
+            )
+            ->where('is_active', $parsedFilters['is_active'] ?? 1)
+
+            ->when($parsedFilters['city_id'] ?? $parsedFilters['cityId'] ?? null, function ($q, $cityId) {
+                $q->where('city_id', $cityId);
+            })
+
+            ->when($parsedFilters['sub_category_id'] ?? $parsedFilters['subCategoryId'] ?? $parsedFilters['categoryId'] ?? null, function ($q, $subCategoryId) {
+                $q->where('sub_categorey_id', $subCategoryId);
+            })
+
+            ->when($parsedFilters['from'] ?? $parsedFilters['fromDate'] ?? null, function ($q, $from) {
+                $q->whereDate('start_date', '>=', $from);
+            })
+
+            ->when($parsedFilters['to'] ?? $parsedFilters['toDate'] ?? null, function ($q, $to) {
+                $q->whereDate('end_date', '<=', $to);
+            })
+
             ->orderBy('start_date')
             ->get();
     }

@@ -50,6 +50,7 @@ class MediaRequestController extends Controller
                     $analysis = $imageAnalysisService->process($file, $manager);
 
                     $image = $analysis['image'];
+                    $preview = $analysis['preview_encoded'];
                     $width = $analysis['width'];
                     $height = $analysis['height'];
                     $price = $analysis['price'];
@@ -59,9 +60,15 @@ class MediaRequestController extends Controller
                     $fullPath = 'events/full/' . $filename;
                     $previewPath = 'events/preview/' . $filename;
 
+                    // Save both full and preview images
                     \Storage::disk('public')->put(
                         $fullPath,
                         $image->toJpeg(90)
+                    );
+
+                    \Storage::disk('public')->put(
+                        $previewPath,
+                        (string) $preview
                     );
 
                     $media = $this->eventImageRepository->create([

@@ -4,16 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Events extends Model
 {
     /** @use HasFactory<\Database\Factories\EventsFactory> */
-    use HasFactory;
+    use HasFactory , Searchable;
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'city_id' => (int) $this->city_id,
+            'sub_category_id' => (int) $this->sub_category_id,
+            'start_date' => $this->start_date?->timestamp,
+            'end_date' => $this->end_date?->timestamp,
+            'is_active' => (bool) $this->is_active,
+        ];
+    }
 
     protected $table = 'events';
 
     protected $guarded = [];
 
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'is_active' => 'boolean',
+    ];
     public function city()
     {
         return $this->belongsTo(Cities::class, 'city_id');

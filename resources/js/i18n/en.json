@@ -80,7 +80,16 @@
         "add_to_wishlist": "Add to Favorites",
         "already_in_wishlist": "Already in Favorites",
         "adding_to_wishlist": "Adding...",
-        "wishlist_success": "Added to favorites successfully!"
+        "wishlist_success": "Added to favorites successfully!",
+        "buy_collection_title": "Buy Full Collection",
+        "total_images": "Total Images",
+        "save_discount": "10% OFF",
+        "you_save": "You Save",
+        "add_collection_to_cart": "🎁 Add Full Collection to Cart",
+        "collection_benefit_1": "Buy all images at once",
+        "collection_benefit_2": "Automatic 10% discount applied",
+        "collection_benefit_3": "Easy access in your downloads",
+        "collection_benefit_4": "Same secure checkout"
     },
     "common": {
         "search": "Search",

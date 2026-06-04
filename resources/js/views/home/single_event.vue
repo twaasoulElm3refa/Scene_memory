@@ -19,14 +19,13 @@
         <div v-else>
             <!-- Hero -->
             <div class="relative">
-                <component :is="heroMediaComponent" v-if="heroMedia"
-                    :src="getMediaUrl(heroMedia.preview_url || heroMedia.preview_url)"
+                <component :is="heroMediaComponent" v-if="heroMedia" :src="getMediaUrl(heroMedia)"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
-                <img v-else src="https://images.unsplash.com/..." :alt="event.translation.title"
+                <img v-else :src="placeholderImage" :alt="event.translation.title"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
 
-                <div v-if="heroMedia && (heroMedia.video || isVideoUrl(heroMedia.preview_url))"
+                <div v-if="heroMedia && isMediaVideo(heroMedia)"
                     class="absolute inset-0 bg-black/30 flex items-center justify-center z-10 pointer-events-none">
                     <div
                         class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-2xl">
@@ -72,18 +71,18 @@
 
                         <!-- Grid -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                            <div v-for="(media, index) in event.images" :key="media.id || index"
+                            <div v-for="(media, index) in eventImages" :key="media.id || index"
                                 class="aspect-[16/10] overflow-hidden rounded-2xl shadow hover:shadow-lg transition-shadow cursor-pointer relative group"
                                 @click="openLightbox(index)">
 
                                 <!-- IMAGE -->
-                                <img v-if="!media.video && !isVideoUrl(media.preview_url)"
-                                    :src="getMediaUrl(media.preview_url)"
+                                <img v-if="!isMediaVideo(media)" :src="getMediaUrl(media) || placeholderImage"
+                                    :alt="media.title || media.name || 'Event media'" @error="onMediaImageError"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     loading="lazy" />
 
                                 <!-- VIDEO -->
-                                <video v-else :src="getMediaUrl(media.preview_url)" class="w-full h-full object-cover"
+                                <video v-else :src="getMediaUrl(media)" class="w-full h-full object-cover"
                                     autoplay muted loop playsinline preload="metadata">
                                 </video>
 
@@ -95,13 +94,121 @@
                                     class="absolute bottom-0 left-0 right-0 z-20 bg-black/70 text-white p-3 flex items-center justify-between opacity-100 transition">
                                     <!-- PRICE -->
                                     <div class="text-sm font-bold">
-                                        💰 {{ media.price ?? 0 }} $
+                                        💰 {{ formatPrice(getImagePrice(media)) }} $
                                     </div>
                                     <!-- ADD TO CART -->
                                     <button @click.stop="addToCart(media.id)"
                                         class="bg-gray-500 hover:bg-gray-600 px-3 py-1 rounded text-sm font-semibold transition">
                                         🛒 Add
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <!-- COLLECTION PURCHASE SECTION                                -->
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <div v-if="eventImages.length > 0"
+                        class="p-8 md:p-12 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <div class="max-w-2xl mx-auto">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                </svg>
+                                {{ $t('event.buy_collection_title') || 'Buy Full Collection' }}
+                            </h3>
+
+                            <!-- Collection Info -->
+                            <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                    <!-- Total Images -->
+                                    <div class="text-center">
+                                        <div class="text-3xl font-bold text-indigo-600 mb-2">{{ eventImages.length }}
+                                        </div>
+                                        <div class="text-sm text-gray-600">{{ $t('event.total_images') || 'Total Images'
+                                        }}</div>
+                                    </div>
+
+                                    <!-- Price Info -->
+                                    <div class="text-center border-l border-r border-gray-200">
+                                        <div class="text-sm text-gray-500 line-through mb-2">
+                                            ${{ formatPrice(collectionTotalPrice) }}
+                                        </div>
+
+                                        <div class="text-3xl font-bold text-green-600 mb-2">
+                                            ${{ formatPrice(collectionDiscountedPrice) }}
+                                        </div>
+                                        <div class="text-sm text-green-600 font-semibold">{{ $t('event.save_discount')
+                                            || '10% OFF' }}</div>
+                                    </div>
+
+                                    <!-- Savings -->
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-red-600 mb-2">${{
+                                            formatPrice(collectionDiscountAmount) }}</div>
+                                        <div class="text-sm text-gray-600">{{ $t('event.you_save') || 'You Save' }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Add to Cart Button -->
+                                <button @click="addCollectionToCart" :disabled="collectionLoading || eventImages.length === 0"
+                                    class="w-full py-3 px-6 rounded-xl font-bold text-white text-lg transition-all duration-200 flex items-center justify-center gap-2"
+                                    :class="{
+                                        'bg-green-600 hover:bg-green-700': !collectionLoading && eventImages.length > 0,
+                                        'bg-gray-400 cursor-not-allowed': collectionLoading || eventImages.length === 0,
+                                    }">
+                                    <svg v-if="!collectionLoading" class="w-5 h-5" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    <span v-if="collectionLoading">{{ $t('common.loading') || 'Loading...' }}</span>
+                                    <span v-else>{{ $t('event.add_collection_to_cart') || '🎁 Add Full Collection toCart' }}</span>
+                                </button>
+
+                                <!-- Alert Message -->
+                                <p v-if="collectionAlert.show" class="mt-4 p-3 rounded-lg text-sm" :class="{
+                                    'bg-green-50 text-green-700 border border-green-200': collectionAlert.type === 'success',
+                                    'bg-red-50 text-red-700 border border-red-200': collectionAlert.type === 'error',
+                                }">
+                                    {{ collectionAlert.message }}
+                                </p>
+                            </div>
+
+                            <!-- Additional Info -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="flex gap-3 text-gray-600">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    <span>{{ $t('event.collection_benefit_1') || '✓ Buy all images at once' }}</span>
+                                </div>
+                                <div class="flex gap-3 text-gray-600">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    <span>{{ $t('event.collection_benefit_2') || 'Automatic 10% discount applied'
+                                    }}</span>
+                                </div>
+                                <div class="flex gap-3 text-gray-600">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    <span>{{ $t('event.collection_benefit_3') || 'Easy access in your downloads'
+                                    }}</span>
+                                </div>
+                                <div class="flex gap-3 text-gray-600">
+                                    <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                    </svg>
+                                    <span>{{ $t('event.collection_benefit_4') || 'Same secure PayPal checkout' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -643,6 +750,12 @@ import { WishlistService } from "../../services/WishlistService/WishlistService"
 import { MediaRequestService } from "../../services/MediaRequestService/MediaRequestService";
 
 const cartLoading = ref(false);
+const collectionLoading = ref(false);
+const collectionAlert = ref({
+    show: false,
+    type: '', // success | error
+    message: ''
+});
 
 const route = useRoute();
 const slug = route.params.slug;
@@ -677,6 +790,41 @@ const replyLoading = ref({});
 const replyErrors = ref({});
 const deleteCommentErrors = ref({});
 
+const refreshEvent = async () => {
+    const response = await EventService.getSingleEvent(slug);
+    event.value = response.data?.data || response;
+};
+
+const ensureEventImagesArray = () => {
+    if (!event.value) return;
+
+    if (!Array.isArray(event.value.images)) {
+        event.value.images = [];
+    }
+};
+
+const normalizeUploadedMedia = (payload) => {
+    const data = payload?.data?.data || payload?.data || payload;
+
+    const media =
+        data?.media ||
+        data?.images ||
+        data?.image ||
+        data?.files ||
+        data?.uploaded_media ||
+        [];
+
+    if (Array.isArray(media)) {
+        return media;
+    }
+
+    if (media) {
+        return [media];
+    }
+
+    return [];
+};
+
 // ─── Reactions ────────────────────────────────────────────────────────────────
 const commentReactions = ref({});
 const reactionLoading = ref({});
@@ -708,12 +856,85 @@ const showCartAlert = (type, message) => {
     }, 3000);
 };
 
-const STORAGE_URL = 'http://localhost:8000/storage/';
+const placeholderImage = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
 
-const getMediaUrl = (path) => {
-    if (!path) return '';
-    if (path.startsWith('http')) return path;
-    return STORAGE_URL + path;
+const getBackendOrigin = () => {
+    const apiUrl =
+        import.meta.env.VITE_API_URL ||
+        import.meta.env.VITE_API_BASE_URL ||
+        '';
+
+    if (!apiUrl) {
+        return window.location.origin;
+    }
+
+    try {
+        return new URL(apiUrl).origin;
+    } catch {
+        return window.location.origin;
+    }
+};
+
+const getMediaRawPath = (mediaOrPath) => {
+    if (!mediaOrPath) return '';
+
+    if (typeof mediaOrPath === 'string') {
+        return mediaOrPath;
+    }
+
+    return (
+        mediaOrPath.image_url ||
+        mediaOrPath.preview_url ||
+        mediaOrPath.url ||
+        mediaOrPath.path ||
+        mediaOrPath.image ||
+        mediaOrPath.file_path ||
+        mediaOrPath.file ||
+        mediaOrPath.src ||
+        ''
+    );
+};
+
+const getMediaUrl = (mediaOrPath) => {
+    const rawPath = getMediaRawPath(mediaOrPath);
+
+    if (!rawPath || typeof rawPath !== 'string') {
+        return '';
+    }
+
+    const path = rawPath.replace(/\\/g, '/').trim();
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+    }
+
+    const backendOrigin = getBackendOrigin();
+
+    if (path.startsWith('/storage/')) {
+        return `${backendOrigin}${path}`;
+    }
+
+    if (path.startsWith('storage/')) {
+        return `${backendOrigin}/${path}`;
+    }
+
+    if (path.startsWith('public/')) {
+        return `${backendOrigin}/storage/${path.replace(/^public\//, '')}`;
+    }
+
+    if (path.startsWith('/uploads/')) {
+        return `${backendOrigin}${path}`;
+    }
+
+    if (path.startsWith('uploads/')) {
+        return `${backendOrigin}/${path}`;
+    }
+
+    return `${backendOrigin}/storage/${path.replace(/^\/+/, '')}`;
+};
+
+const onMediaImageError = (e) => {
+    e.target.src = placeholderImage;
 };
 
 const addToCart = async (mediaId) => {
@@ -730,11 +951,76 @@ const addToCart = async (mediaId) => {
         await CartService.addToCart(mediaId);
 
         showCartAlert("success", "تمت الإضافة إلى السلة 🛒 بنجاح");
-        window.location.reload();
     } catch (err) {
         showCartAlert("error", err.message || "حدث خطأ أثناء الإضافة");
     } finally {
         cartLoading.value = false;
+    }
+};
+
+// ─── Add Collection to Cart ────────────────────────────────────────────────────
+const addCollectionToCart = async () => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!token) {
+        collectionAlert.value = {
+            show: true,
+            type: 'error',
+            message: 'يجب تسجيل الدخول أولاً'
+        };
+        return;
+    }
+
+    if (eventImages.value.length === 0) {
+        collectionAlert.value = {
+            show: true,
+            type: 'error',
+            message: 'لا توجد صور في هذا الحدث'
+        };
+        return;
+    }
+
+    collectionLoading.value = true;
+    collectionAlert.value.show = false;
+
+    try {
+        const response = await fetch(`/api/v1/collections/${event.value.id}/add-to-cart`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'حدث خطأ أثناء إضافة المجموعة');
+        }
+
+        const totalImages = data.total_images || eventImages.value.length;
+
+        collectionAlert.value = {
+            show: true,
+            type: 'success',
+            message: `✅ تم إضافة ${totalImages} صورة إلى السلة بخصم 10%!`
+        };
+
+        setTimeout(() => {
+            collectionAlert.value.show = false;
+        }, 4000);
+
+    } catch (err) {
+        console.error('Collection Error:', err);
+        collectionAlert.value = {
+            show: true,
+            type: 'error',
+            message: err.message || 'فشل في إضافة المجموعة إلى السلة'
+        };
+    } finally {
+        collectionLoading.value = false;
     }
 };
 
@@ -781,6 +1067,39 @@ const setReaction = async (commentId, type) => {
     }
 };
 
+const toNumber = (value) => {
+    if (value === null || value === undefined || value === '') {
+        return 0;
+    }
+
+    if (typeof value === 'number') {
+        return Number.isFinite(value) ? value : 0;
+    }
+
+    if (typeof value === 'string') {
+        const cleaned = value.replace(/[^0-9.-]/g, '');
+        const number = parseFloat(cleaned);
+        return Number.isFinite(number) ? number : 0;
+    }
+
+    return 0;
+};
+
+const formatPrice = (value) => {
+    return toNumber(value).toFixed(2);
+};
+
+const getImagePrice = (img) => {
+    return toNumber(
+        img?.price ??
+        img?.amount ??
+        img?.media_price ??
+        img?.image_price ??
+        img?.pivot?.price ??
+        img?.original_price ??
+        0
+    );
+};
 // ─── Report ───────────────────────────────────────────────────────────────────
 const reportModal = ref(false);
 const reportCommentId = ref(null);
@@ -1067,16 +1386,22 @@ const uploadFiles = async () => {
         const res = await MediaRequestService.upload(event.value.id, formData);
 
         if (res.data.status === "success") {
-            const media = res.data.data?.media;
-            if (Array.isArray(media)) media.forEach((m) => event.value.images.push(m));
-            else if (media) event.value.images.push(media);
+            ensureEventImagesArray();
+
+            const uploadedMedia = normalizeUploadedMedia(res);
+
+            if (uploadedMedia.length > 0) {
+                event.value.images.push(...uploadedMedia);
+            } else {
+                await refreshEvent();
+            }
 
             uploadSuccess.value = "تم رفع الملفات بنجاح!";
             selectedFiles.value = [];
             setTimeout(() => {
                 showUploadModal.value = false;
                 uploadSuccess.value = "";
-            }, 2200);
+            }, 1500);
         }
     } catch (err) {
         uploadError.value = extractErrorMessage(err);
@@ -1086,16 +1411,65 @@ const uploadFiles = async () => {
 };
 
 // ─── Computed ─────────────────────────────────────────────────────────────────
-const hasMedia = computed(() => event.value?.images?.length > 0);
-const heroMedia = computed(() => event.value?.images?.[0] || null);
+const eventImages = computed(() => {
+    const images =
+        event.value?.images ||
+        event.value?.media ||
+        event.value?.event_images ||
+        [];
+
+    return Array.isArray(images) ? images : [];
+});
+
+const hasMedia = computed(() => eventImages.value.length > 0);
+
+const collectionTotalPrice = computed(() => {
+    return eventImages.value.reduce((sum, img) => {
+        return sum + getImagePrice(img);
+    }, 0);
+});
+
+const collectionDiscountAmount = computed(() => {
+    return collectionTotalPrice.value * 0.10;
+});
+
+const collectionDiscountedPrice = computed(() => {
+    return Math.max(
+        collectionTotalPrice.value - collectionDiscountAmount.value,
+        0
+    );
+});
+
+const heroMedia = computed(() => {
+    return (
+        eventImages.value.find((item) => {
+            return item && !isMediaVideo(item) && getMediaUrl(item);
+        }) || null
+    );
+});
 const heroMediaComponent = computed(() =>
-    heroMedia.value?.video || isVideoUrl(heroMedia.value?.url) ? "video" : "img"
+    isMediaVideo(heroMedia.value) ? "video" : "img"
 );
-const currentMedia = computed(() => event.value?.images?.[lightboxIndex.value] || null);
+const currentMedia = computed(() => eventImages.value[lightboxIndex.value] || null);
 
 const isVideoUrl = (url) => {
-    if (!url) return false;
-    return [".mp4", ".webm", ".ogg", ".mov"].some((ext) => url.toLowerCase().endsWith(ext));
+    if (!url || typeof url !== 'string') return false;
+
+    const cleanUrl = url.split('?')[0].toLowerCase();
+
+    return ['.mp4', '.webm', '.ogg', '.mov', '.m4v'].some((ext) =>
+        cleanUrl.endsWith(ext)
+    );
+};
+
+const isMediaVideo = (media) => {
+    if (!media) return false;
+
+    if (media.video === true || media.type === 'video') {
+        return true;
+    }
+
+    return isVideoUrl(getMediaRawPath(media));
 };
 
 // ─── Date Helpers ─────────────────────────────────────────────────────────────
@@ -1133,12 +1507,14 @@ const openLightbox = (index) => {
 
 // ✅ Navigation inside lightbox
 const lightboxPrev = () => {
-    const total = event.value?.images?.length ?? 0;
+    const total = eventImages.value.length;
+    if (!total) return;
     lightboxIndex.value = (lightboxIndex.value - 1 + total) % total;
 };
 
 const lightboxNext = () => {
-    const total = event.value?.images?.length ?? 0;
+    const total = eventImages.value.length;
+    if (!total) return;
     lightboxIndex.value = (lightboxIndex.value + 1) % total;
 };
 
@@ -1150,8 +1526,7 @@ onMounted(async () => {
 
     loading.value = true;
     try {
-        const response = await EventService.getSingleEvent(slug);
-        event.value = response.data?.data || response;
+        await refreshEvent();
         await fetchLikesInfo();
     } catch (err) {
         console.error("خطأ في جلب الحدث:", err);

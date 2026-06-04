@@ -80,7 +80,16 @@
         "add_to_wishlist": "Favorilere Ekle",
         "already_in_wishlist": "Favorilerde Var",
         "adding_to_wishlist": "Ekleniyor...",
-        "wishlist_success": "Favorilere başarıyla eklendi!"
+        "wishlist_success": "Favorilere başarıyla eklendi!",
+        "collection_benefit_4": "Same secure checkout",
+        "collection_benefit_3": "Easy access in your downloads",
+        "collection_benefit_2": "Automatic 10% discount applied",
+        "collection_benefit_1": "Buy all images at once",
+        "add_collection_to_cart": "🎁 Add Full Collection to Cart",
+        "you_save": "You Save",
+        "save_discount": "10% OFF",
+        "total_images": "Total Images",
+        "buy_collection_title": "Buy Full Collection"
     },
     "common": {
         "search": "Ara",

@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Events;
+use App\Models\EventsImges;
+use App\Models\Purchases;
+use App\Models\User;
+use App\Observers\AdminDashboardStatsObserver;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\PaymentInterface;
 use App\Services\PayPalServices;
@@ -23,5 +28,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         URL::forceScheme('https');
+
+        User::observe(AdminDashboardStatsObserver::class);
+        Events::observe(AdminDashboardStatsObserver::class);
+        Purchases::observe(AdminDashboardStatsObserver::class);
+        EventsImges::observe(AdminDashboardStatsObserver::class);
     }
 }

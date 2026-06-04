@@ -12,11 +12,36 @@ use Illuminate\Support\Facades\Schema;
 
 class AdminDashboardStatsService
 {
+    private const CACHE_KEY = 'admin_dashboard_stats';
+    private const CACHE_TAGS = ['admin_dashboard', 'dashboard_stats'];
+
     public function getStats(): array
     {
-        return Cache::remember('admin_dashboard_stats', now()->addMinutes(10), function () {
-            return $this->buildStats();
-        });
+        try {
+            return Cache::tags(self::CACHE_TAGS)->remember(
+                self::CACHE_KEY,
+                now()->addMinutes(10),
+                fn () => $this->buildStats()
+            );
+        } catch (\Throwable $e) {
+            return Cache::remember(
+                self::CACHE_KEY,
+                now()->addMinutes(10),
+                fn () => $this->buildStats()
+            );
+        }
+    }
+
+    public function clearStatsCache(): void
+    {
+        try {
+            Cache::tags(self::CACHE_TAGS)->flush();
+        } catch (\Throwable $e) {
+            Cache::forget(self::CACHE_KEY);
+            return;
+        }
+
+        Cache::forget(self::CACHE_KEY);
     }
 
     private function buildStats(): array

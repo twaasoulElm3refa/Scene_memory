@@ -8,6 +8,7 @@
                     {{ $t("events.showing_snapshots", { total: totalEvents }) }}
                 </p>
             </div>
+
             <div class="sort-control">
                 <label>{{ $t("events.sort_by") }}:</label>
                 <select v-model="sortBy" @change="sortEvents" class="sort-select">
@@ -27,28 +28,61 @@
         <!-- Error State -->
         <div v-else-if="error" class="error-container">
             <p>{{ error }}</p>
-            <button @click="fetchEvents" class="retry-btn">{{ $t("events.retry") }}</button>
+            <button @click="fetchEvents" class="retry-btn">
+                {{ $t("events.retry") }}
+            </button>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else-if="events.length === 0" class="error-container">
+            <p>لا توجد فعاليات متاحة حاليًا.</p>
         </div>
 
         <!-- Events Grid -->
         <div v-else class="events-grid">
-            <div v-for="event in events" :key="event.id" class="event-card" @click="viewEvent(event)">
+            <div
+                v-for="event in events"
+                :key="event.id"
+                class="event-card"
+                @click="viewEvent(event)"
+            >
                 <div class="event-image">
-                    <img :src="event.images?.length > 0 ? event.images[0].url : getPlaceholderImage(event)
-                        " :alt="event.translation.title" />
-                    <span class="event-date">{{ formatDate(event.start_date) }}</span>
+                    <img
+                        :src="getEventImageUrl(event)"
+                        :alt="event.translation?.title || event.title || 'Event image'"
+                        loading="lazy"
+                        @error="onImageError"
+                    />
+
+                    <span class="event-date">
+                        {{ formatDate(event.start_date) }}
+                    </span>
                 </div>
+
                 <div class="event-content">
                     <div class="event-location">
                         <svg class="location-icon" viewBox="0 0 24 24" fill="currentColor">
                             <path
-                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                            />
                         </svg>
-                        <span>{{ event.city?.translation.name || "-" }}</span>
+
+                        <span>{{ event.city?.translation?.name || event.city?.name || "-" }}</span>
                     </div>
-                    <h3 class="event-title">{{ event.translation.title || "-" }}</h3>
-                    <p class="event-category">{{ event.sub_categorey?.translation.name || "-" }}</p>
-                    <router-link :to="{ path: `/single_event/${event.slug}` }" class="btn-view">
+
+                    <h3 class="event-title">
+                        {{ event.translation?.title || event.title || "-" }}
+                    </h3>
+
+                    <p class="event-category">
+                        {{ event.sub_categorey?.translation?.name || event.sub_categorey?.name || "-" }}
+                    </p>
+
+                    <router-link
+                        :to="getEventRoute(event)"
+                        class="btn-view"
+                        @click.stop
+                    >
                         تفاصيل الحدث
                     </router-link>
                 </div>
@@ -56,19 +90,32 @@
         </div>
 
         <!-- Pagination -->
-        <div v-if="!loading && !error" class="pagination">
-            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="page-btn">
+        <div v-if="!loading && !error && lastPage > 1" class="pagination">
+            <button
+                @click="goToPage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="page-btn"
+            >
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                 </svg>
             </button>
 
-            <button v-for="page in visiblePages" :key="page" @click="goToPage(page)"
-                :class="['page-number', { active: page === currentPage }]">
+            <button
+                v-for="(page, index) in visiblePages"
+                :key="`${page}-${index}`"
+                @click="goToPage(page)"
+                :class="['page-number', { active: page === currentPage }]"
+                :disabled="page === '...'"
+            >
                 {{ page }}
             </button>
 
-            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === lastPage" class="page-btn">
+            <button
+                @click="goToPage(currentPage + 1)"
+                :disabled="currentPage === lastPage"
+                class="page-btn"
+            >
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                 </svg>
@@ -85,10 +132,12 @@
                 <div class="stat-number">{{ formatNumber(totalEvents) }}</div>
                 <div class="stat-label">{{ $t("events.active_memories") }}</div>
             </div>
+
             <div class="stat-item">
                 <div class="stat-number">{{ uniqueCities }}</div>
                 <div class="stat-label">{{ $t("events.cities") }}</div>
             </div>
+
             <div class="stat-item">
                 <div class="stat-number">{{ uniqueCategories }}</div>
                 <div class="stat-label">{{ $t("events.categories") }}</div>
@@ -104,8 +153,12 @@
 <script>
 import { EventService } from "../../services/EventService/EventService";
 
+const FALLBACK_IMAGE =
+    "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
+
 export default {
     name: "AllEventsPage",
+
     data() {
         return {
             events: [],
@@ -118,36 +171,232 @@ export default {
             sortBy: "newest",
             uniqueCities: 0,
             uniqueCategories: 0,
+            fallbackImage: FALLBACK_IMAGE,
+            placeholderImage: FALLBACK_IMAGE,
         };
     },
+
     computed: {
         visiblePages() {
             const pages = [];
             const maxVisible = 5;
 
             if (this.lastPage <= maxVisible) {
-                for (let i = 1; i <= this.lastPage; i++) pages.push(i);
-            } else {
-                pages.push(1);
-                if (this.currentPage > 3) pages.push("...");
-                for (
-                    let i = Math.max(2, this.currentPage - 1);
-                    i <= Math.min(this.lastPage - 1, this.currentPage + 1);
-                    i++
-                ) {
-                    if (!pages.includes(i)) pages.push(i);
+                for (let i = 1; i <= this.lastPage; i += 1) {
+                    pages.push(i);
                 }
-                if (this.currentPage < this.lastPage - 2) pages.push("...");
-                if (!pages.includes(this.lastPage)) pages.push(this.lastPage);
+
+                return pages;
+            }
+
+            pages.push(1);
+
+            if (this.currentPage > 3) {
+                pages.push("...");
+            }
+
+            for (
+                let i = Math.max(2, this.currentPage - 1);
+                i <= Math.min(this.lastPage - 1, this.currentPage + 1);
+                i += 1
+            ) {
+                if (!pages.includes(i)) {
+                    pages.push(i);
+                }
+            }
+
+            if (this.currentPage < this.lastPage - 2) {
+                pages.push("...");
+            }
+
+            if (!pages.includes(this.lastPage)) {
+                pages.push(this.lastPage);
             }
 
             return pages;
         },
     },
+
     mounted() {
         this.fetchEvents();
     },
+
     methods: {
+        getBackendOrigin() {
+            const apiUrl =
+                import.meta.env.VITE_API_URL ||
+                import.meta.env.VITE_API_BASE_URL ||
+                import.meta.env.VITE_BACKEND_URL ||
+                "";
+
+            if (apiUrl) {
+                try {
+                    return new URL(apiUrl, window.location.origin).origin;
+                } catch {
+                    return String(apiUrl).replace(/\/+$/, "");
+                }
+            }
+
+            /*
+             * لو Vue شغال على Vite مثل localhost:5173
+             * وLaravel شغال على localhost:8000
+             * لازم الصور تيجي من 8000 مش 5173.
+             */
+            if (
+                window.location.hostname === "localhost" ||
+                window.location.hostname === "127.0.0.1"
+            ) {
+                if (window.location.port && window.location.port !== "8000") {
+                    return `${window.location.protocol}//${window.location.hostname}:8000`;
+                }
+            }
+
+            return window.location.origin;
+        },
+
+        getMediaRawPath(mediaOrPath) {
+            if (!mediaOrPath) {
+                return "";
+            }
+
+            if (typeof mediaOrPath === "string") {
+                return mediaOrPath;
+            }
+
+            return (
+                mediaOrPath.preview_url ||
+                mediaOrPath.previewUrl ||
+                mediaOrPath.image_url ||
+                mediaOrPath.imageUrl ||
+                mediaOrPath.webp_url ||
+                mediaOrPath.webpUrl ||
+                mediaOrPath.full_url ||
+                mediaOrPath.fullUrl ||
+                mediaOrPath.full_url_webp ||
+                mediaOrPath.fullUrlWebp ||
+                mediaOrPath.url ||
+                mediaOrPath.path ||
+                mediaOrPath.image ||
+                mediaOrPath.file_path ||
+                mediaOrPath.filePath ||
+                mediaOrPath.file ||
+                mediaOrPath.src ||
+                ""
+            );
+        },
+
+        getStorageUrl(mediaOrPath) {
+            const rawPath = this.getMediaRawPath(mediaOrPath);
+
+            if (!rawPath || typeof rawPath !== "string") {
+                return this.fallbackImage;
+            }
+
+            const path = rawPath.replace(/\\/g, "/").trim();
+
+            if (!path) {
+                return this.fallbackImage;
+            }
+
+            if (path.startsWith("http://") || path.startsWith("https://")) {
+                return path;
+            }
+
+            if (path.startsWith("//")) {
+                return `${window.location.protocol}${path}`;
+            }
+
+            const backendOrigin = this.getBackendOrigin();
+
+            if (path.startsWith("/storage/")) {
+                return `${backendOrigin}${path}`;
+            }
+
+            if (path.startsWith("storage/")) {
+                return `${backendOrigin}/${path}`;
+            }
+
+            if (path.startsWith("public/")) {
+                return `${backendOrigin}/storage/${path.replace(/^public\//, "")}`;
+            }
+
+            if (path.startsWith("/uploads/")) {
+                return `${backendOrigin}${path}`;
+            }
+
+            if (path.startsWith("uploads/")) {
+                return `${backendOrigin}/${path}`;
+            }
+
+            /*
+             * الريسبونس عندك بيرجع:
+             * first_image.preview_url = events/preview/image.jpg
+             *
+             * إذن الرابط الصحيح:
+             * http://localhost:8000/storage/events/preview/image.jpg
+             */
+            return `${backendOrigin}/storage/${path.replace(/^\/+/, "")}`;
+        },
+
+        getEventImageCandidate(event) {
+            return (
+                event?.first_image?.preview_url ||
+                event?.first_image?.previewUrl ||
+                event?.first_image?.webp_url ||
+                event?.first_image?.webpUrl ||
+                event?.first_image?.full_url ||
+                event?.first_image?.fullUrl ||
+                event?.first_image?.url ||
+                event?.first_image?.image ||
+
+                event?.firstImage?.preview_url ||
+                event?.firstImage?.previewUrl ||
+                event?.firstImage?.webp_url ||
+                event?.firstImage?.webpUrl ||
+                event?.firstImage?.full_url ||
+                event?.firstImage?.fullUrl ||
+                event?.firstImage?.url ||
+                event?.firstImage?.image ||
+
+                event?.image_webp_url ||
+                event?.imageWebpUrl ||
+                event?.image_url ||
+                event?.imageUrl ||
+
+                event?.images?.[0]?.preview_url ||
+                event?.images?.[0]?.previewUrl ||
+                event?.images?.[0]?.webp_url ||
+                event?.images?.[0]?.webpUrl ||
+                event?.images?.[0]?.full_url ||
+                event?.images?.[0]?.fullUrl ||
+                event?.images?.[0]?.url ||
+                event?.images?.[0]?.image ||
+
+                event?.image ||
+                ""
+            );
+        },
+
+        getEventImageUrl(event) {
+            return this.getStorageUrl(this.getEventImageCandidate(event));
+        },
+
+        onImageError(event) {
+            const target = event?.target;
+            const fallback = this.fallbackImage || this.placeholderImage || FALLBACK_IMAGE;
+
+            if (!target) {
+                return;
+            }
+
+            if (target.dataset.fallbackApplied === "1") {
+                return;
+            }
+
+            target.dataset.fallbackApplied = "1";
+            target.src = fallback;
+        },
+
         async fetchEvents(page = 1) {
             this.loading = true;
             this.error = null;
@@ -156,21 +405,31 @@ export default {
                 const response = await EventService.getAll(page);
                 const result = response.data;
 
-                if (result.status === "success") {
-                    this.events = Array.isArray(result.data.data)
-                        ? result.data.data
-                        : result.data.data
-                            ? [result.data.data]
+                if (result.status !== "success") {
+                    throw new Error(result.message || "Failed to fetch events");
+                }
+
+                const payload = result.data;
+
+                this.events = Array.isArray(payload?.data)
+                    ? payload.data
+                    : payload?.data
+                        ? [payload.data]
+                        : Array.isArray(payload)
+                            ? payload
                             : [];
 
-                    this.currentPage = result.data.current_page || 1;
-                    this.lastPage = result.data.last_page || 1;
-                    this.totalEvents = result.data.total || this.events.length;
-                    this.perPage = result.data.per_page || 8;
+                this.currentPage = Number(payload?.current_page) || 1;
+                this.lastPage = Number(payload?.last_page) || 1;
+                this.totalEvents = Number(payload?.total) || this.events.length;
+                this.perPage = Number(payload?.per_page) || 8;
 
-                    this.calculateStats();
-                } else {
-                    throw new Error(result.message || "Failed to fetch events");
+                this.calculateStats();
+
+                if (import.meta.env.DEV && this.events.length > 0) {
+                    console.log("AllEvents first event:", this.events[0]);
+                    console.log("AllEvents image candidate:", this.getEventImageCandidate(this.events[0]));
+                    console.log("AllEvents final image url:", this.getEventImageUrl(this.events[0]));
                 }
             } catch (err) {
                 console.error("Error fetching events:", err);
@@ -185,9 +444,14 @@ export default {
             const cities = new Set();
             const categories = new Set();
 
-            this.events.forEach((e) => {
-                if (e?.city?.id) cities.add(e.city.id);
-                if (e?.sub_categorey?.id) categories.add(e.sub_categorey.id);
+            this.events.forEach((event) => {
+                if (event?.city?.id) {
+                    cities.add(event.city.id);
+                }
+
+                if (event?.sub_categorey?.id) {
+                    categories.add(event.sub_categorey.id);
+                }
             });
 
             this.uniqueCities = cities.size;
@@ -195,8 +459,18 @@ export default {
         },
 
         goToPage(page) {
-            if (page >= 1 && page <= this.lastPage && page !== this.currentPage) {
-                this.fetchEvents(page);
+            if (page === "...") {
+                return;
+            }
+
+            const pageNumber = Number(page);
+
+            if (
+                pageNumber >= 1 &&
+                pageNumber <= this.lastPage &&
+                pageNumber !== this.currentPage
+            ) {
+                this.fetchEvents(pageNumber);
                 window.scrollTo({ top: 0, behavior: "smooth" });
             }
         },
@@ -208,11 +482,21 @@ export default {
                 case "newest":
                     sorted.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
                     break;
+
                 case "oldest":
                     sorted.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
                     break;
+
                 case "title":
-                    sorted.sort((a, b) => a.title.localeCompare(b.title, "ar"));
+                    sorted.sort((a, b) => {
+                        const titleA = a.translation?.title || a.title || "";
+                        const titleB = b.translation?.title || b.title || "";
+
+                        return titleA.localeCompare(titleB, "ar");
+                    });
+                    break;
+
+                default:
                     break;
             }
 
@@ -220,64 +504,105 @@ export default {
         },
 
         formatDate(dateString) {
-            if (!dateString) return "-";
+            if (!dateString) {
+                return "-";
+            }
 
             const date = new Date(dateString);
+
+            if (Number.isNaN(date.getTime())) {
+                return "-";
+            }
 
             const lang = (localStorage.getItem("language") || "ar").toLowerCase();
 
             const months = {
                 ar: [
-                    "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-                    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+                    "يناير",
+                    "فبراير",
+                    "مارس",
+                    "أبريل",
+                    "مايو",
+                    "يونيو",
+                    "يوليو",
+                    "أغسطس",
+                    "سبتمبر",
+                    "أكتوبر",
+                    "نوفمبر",
+                    "ديسمبر",
                 ],
                 en: [
-                    "January", "February", "March", "April", "May", "June",
-                    "July", "August", "September", "October", "November", "December"
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
                 ],
                 fr: [
-                    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-                    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-                ]
+                    "Janvier",
+                    "Février",
+                    "Mars",
+                    "Avril",
+                    "Mai",
+                    "Juin",
+                    "Juillet",
+                    "Août",
+                    "Septembre",
+                    "Octobre",
+                    "Novembre",
+                    "Décembre",
+                ],
             };
 
-            const monthNames = months[lang] || months["ar"]; // fallback للعربية
+            const monthNames = months[lang] || months.ar;
 
             return `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
         },
 
         formatNumber(num) {
-            return num >= 1000 ? (num / 1000).toFixed(0) + "k" : num;
+            const number = Number(num) || 0;
+
+            return number >= 1000 ? `${(number / 1000).toFixed(0)}k` : number;
         },
 
-        getPlaceholderImage(event) {
-            const colors = ["#1e3a5f", "#2d5a3d", "#5a3d2d", "#3d2d5a", "#2d4d5a"];
-            const color = colors[event?.id % colors.length] || "#1e3a5f";
-            const subName = event?.sub_categorey?.translation.name || "حدث";
-
-            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='${encodeURIComponent(
-                color
-            )}' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-size='20'%3E${encodeURIComponent(
-                subName
-            )}%3C/text%3E%3C/svg%3E`;
+        getPlaceholderImage() {
+            return this.fallbackImage;
         },
 
-        viewEvent(event) {
-            if (!event?.slug) return;
+        getEventRoute(event) {
+            if (!event?.slug) {
+                return "#";
+            }
 
             const lang = localStorage.getItem("language") || "ar";
 
-            this.$router.push({
+            return {
                 name: "single_event",
                 params: {
                     lang,
                     slug: event.slug,
                 },
-            });
-        }
+            };
+        },
+
+        viewEvent(event) {
+            if (!event?.slug) {
+                return;
+            }
+
+            this.$router.push(this.getEventRoute(event));
+        },
     },
 };
 </script>
+
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap");

@@ -46,6 +46,7 @@ use App\Http\Controllers\api\owner\UserWithdrawlController;
 use App\Http\Controllers\api\payment\DepositController;
 use App\Http\Controllers\api\payment\PurchaseController;
 use App\Http\Controllers\api\payment\PaymentController;
+use App\Http\Controllers\api\payment\CollectionController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
@@ -416,5 +417,12 @@ Route::prefix('v1')->group(function () {
         Route::post('/updateWithdrawals/{id}', [UserWithdrawlController::class, 'updateWithdrawals']);
         Route::delete('/deleteWithdrawals', [UserWithdrawlController::class, 'deleteWithdrawals']);
     });
+
+    // Collections
+    Route::prefix('collections')->group(function () {
+        Route::get('/{event_id}', [CollectionController::class, 'getCollectionDetails']);
+        Route::post('/{event_id}/add-to-cart', [CollectionController::class, 'addCollectionToCart'])->middleware('auth:sanctum');
+    });
+
     // 162 EndPoint till now
 });

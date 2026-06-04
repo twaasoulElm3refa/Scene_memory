@@ -80,7 +80,16 @@
         "add_to_wishlist": "पसंदीदा में जोड़ें",
         "already_in_wishlist": "पहले से पसंदीदा में",
         "adding_to_wishlist": "जोड़ रहा है...",
-        "wishlist_success": "पसंदीदा में सफलतापूर्वक जोड़ा गया!"
+        "wishlist_success": "पसंदीदा में सफलतापूर्वक जोड़ा गया!",
+        "buy_collection_title": "पूरा संग्रह खरीदें",
+        "total_images": "कुल चित्र",
+        "save_discount": "10% छूट",
+        "you_save": "आप बचाते हैं",
+        "add_collection_to_cart": "🎁 पूरा संग्रह कार्ट में जोड़ें",
+        "collection_benefit_1": "✓ एक बार में सभी चित्र खरीदें",
+        "collection_benefit_2": "स्वचालित 10% छूट",
+        "collection_benefit_3": "✓ समय और पैसे बचाएं",
+        "collection_benefit_4": "✓ तुरंत सभी इवेंट यादें प्राप्त करें"
     },
     "common": {
         "search": "खोजें",

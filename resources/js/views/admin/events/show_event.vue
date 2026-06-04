@@ -207,7 +207,7 @@
                         class="gallery-item relative rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-gray-900"
                         @click="openModal(media, index)">
                         <!-- الصورة / الـ thumbnail -->
-                        <img :src="media.url?.trim() || fallbackImage" :alt="event.title"
+                        <img :src="!isVideo(media.url) ? media.url?.trim() || fallbackImage : fallbackImage" :alt="event.title"
                             class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
                             loading="lazy" />
 
@@ -445,7 +445,7 @@ const isModalOpen = ref(false);
 const selectedMedia = ref<EventImage | null>(null);
 const selectedIndex = ref(-1);
 
-const fallbackImage = "https://spotme.com/wp-content/uploads/2020/07/Hero-1.jpg";
+const fallbackImage = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
 
 // Add Media Modal state
 const isAddMediaModalOpen = ref(false);
@@ -546,10 +546,14 @@ const closeAddMediaModal = () => {
 };
 
 const getMainImage = () => {
-    if (!event.value?.images || event.value.images.length === 0) {
+    const image = event.value?.images?.[0];
+    if (!image?.url) {
         return null;
     }
-    return event.value.images[0].url?.trim() || null;
+    if (isVideo(image.url)) {
+        return null;
+    }
+    return image.url.trim() || null;
 };
 
 const clearSelectedFile = () => {
