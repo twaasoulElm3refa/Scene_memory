@@ -33,4 +33,9 @@ class Cities extends Model
         return $this->hasOne(CityTranslations::class, 'city_id')
             ->where('locale', app()->getLocale());
     }
+
+    public function nominations()
+    {
+        return $this->hasMany(CityNomination::class, 'city_id');
+    }
 }

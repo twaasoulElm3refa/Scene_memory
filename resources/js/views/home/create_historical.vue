@@ -115,6 +115,14 @@
                                     style="height: 350px; border-radius: 12px; border: 1px solid #dee2e6">
                                 </div>
 
+                                <div class="mt-2 small text-muted" v-if="locatingUser">
+                                    جاري تحديد موقعك الحالي...
+                                </div>
+
+                                <div class="mt-2 small text-warning" v-if="locationError">
+                                    {{ locationError }}
+                                </div>
+
                                 <div class="mt-2 small text-muted" v-if="form.latitude && form.longitude">
                                     {{ $t('eventForm.selectedCoords') }}
                                     <strong>{{ $t('eventForm.lat') }}: {{ form.latitude.toFixed(6) }}</strong> ,
@@ -286,19 +294,9 @@ const selectedCountryId = ref("");
 const selectedCategoryId = ref("");
 const loading = ref(false);
 const fileInput = ref(null);
-const zoom = ref(6);
-const center = ref([30.0444, 31.2357]);
-const mapRef = ref(null);
 const countrySearch = ref("");
-
-onMounted(async () => {
-    await Promise.all([fetchCountries(), fetchCategories()]);
-    nextTick(() => {
-        if (mapRef.value?.leafletObject) {
-            mapRef.value.leafletObject.invalidateSize();
-        }
-    });
-});
+const locatingUser = ref(false);
+const locationError = ref(null);
 
 const filteredCountries = computed(() => {
     if (!countrySearch.value) return countries.value;
@@ -306,17 +304,6 @@ const filteredCountries = computed(() => {
         c.translation.name.toLowerCase().includes(countrySearch.value.toLowerCase())
     );
 });
-
-onUnmounted(() => {
-    if (mapRef.value?.leafletObject) {
-        mapRef.value.leafletObject.remove();
-    }
-});
-
-function onMapClick(e) {
-    form.value.latitude = e.latlng.lat;
-    form.value.longitude = e.latlng.lng;
-}
 
 async function fetchCountries() {
     try {
@@ -475,18 +462,37 @@ let marker = null;
 
 const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
 
-onMounted(() => {
+onMounted(async () => {
+    await Promise.all([fetchCountries(), fetchCategories()]);
+    await nextTick();
+
     initMap();
 });
 
+onUnmounted(() => {
+    if (marker) {
+        marker.remove();
+        marker = null;
+    }
+
+    if (map) {
+        map.remove();
+        map = null;
+    }
+});
+
 function initMap() {
+    if (map || !mapContainer.value) return;
+
     const lang = localStorage.getItem("language") || "ar";
     const isAr = lang === "ar";
+    const defaultLng = 31.2357;
+    const defaultLat = 30.0444;
 
     map = new maplibregl.Map({
         container: mapContainer.value,
         style: STYLE_URL,
-        center: [31.2357, 30.0444],
+        center: [defaultLng, defaultLat],
         zoom: 6,
     });
 
@@ -494,22 +500,68 @@ function initMap() {
 
     map.on("load", () => {
         patchLanguage(map, isAr);
+        locateUserOnMap();
+        map.resize();
     });
 
     map.on("click", (e) => {
         const { lat, lng } = e.lngLat;
-
-        form.value.latitude = lat;
-        form.value.longitude = lng;
-
-        if (!marker) {
-            marker = new maplibregl.Marker({ color: "#e53e3e" })
-                .setLngLat([lng, lat])
-                .addTo(map);
-        } else {
-            marker.setLngLat([lng, lat]);
-        }
+        setSelectedLocation(lat, lng, false);
     });
+}
+
+function setSelectedLocation(lat, lng, shouldFly = true) {
+    form.value.latitude = lat;
+    form.value.longitude = lng;
+
+    if (!map) return;
+
+    if (!marker) {
+        marker = new maplibregl.Marker({ color: "#e53e3e" })
+            .setLngLat([lng, lat])
+            .addTo(map);
+    } else {
+        marker.setLngLat([lng, lat]);
+    }
+
+    if (shouldFly) {
+        map.flyTo({
+            center: [lng, lat],
+            zoom: 14,
+            essential: true,
+        });
+    }
+}
+
+function locateUserOnMap() {
+    if (!navigator.geolocation) {
+        locationError.value = "المتصفح لا يدعم تحديد الموقع";
+        return;
+    }
+
+    locatingUser.value = true;
+    locationError.value = null;
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            setSelectedLocation(lat, lng, true);
+            locatingUser.value = false;
+        },
+        (error) => {
+            console.warn("Geolocation error:", error);
+
+            locationError.value = "تعذر تحديد موقعك الحالي، يمكنك اختيار الموقع يدويًا من الخريطة";
+            locatingUser.value = false;
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000,
+        }
+    );
 }
 
 function patchLanguage(map, isAr) {

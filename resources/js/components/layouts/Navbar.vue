@@ -277,6 +277,8 @@ const toggleDropdown = () => {
 
 const logout = () => {
     localStorage.removeItem("auth_token");
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("admin_user");
     localStorage.removeItem("user_role");
     localStorage.removeItem("licence_name");
     localStorage.removeItem("is_profile_filled");

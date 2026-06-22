@@ -151,6 +151,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/historical', [EventController::class, 'historical']);
         Route::get('/count', [EventController::class, 'count']);
         Route::get('/memories', [EventController::class, 'memories']);
+        Route::post('/marker/search-by-place', [EventController::class, 'searchMarkerByPlace']);
         Route::get('/{city_id?}/{sub_category_id?}', [EventController::class,  'index']);
         Route::get('/{city}/marker/search', [EventController::class,  'MarkerSearch']);
         Route::get('/{slug}/single/get', [EventController::class,  'single']);

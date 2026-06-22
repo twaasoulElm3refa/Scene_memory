@@ -6,7 +6,7 @@
             <!-- Left branding side -->
             <div class="d-none d-lg-flex col-lg-5 align-items-center justify-content-center p-5 position-relative">
                 <div class="text-center">
-                    <img src="/images/event_logo.png" alt="NEXTLEVEL Logo" class="height-auto logo-glow" />
+                    <img src="/images/logo.png" alt="NEXTLEVEL Logo" class="height-auto logo-glow" />
                     <h1 class="display-5 fw-black mb-3">Scene Memory</h1>
                     <p class="lead fs-3 fw-medium opacity-90">Share your memories with the world</p>
                 </div>

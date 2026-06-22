@@ -4,13 +4,20 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Models\CityNomination;
 use App\Models\Events;
 use App\Repositories\Contracts\Cities\CityRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class EventController extends Controller
 {
@@ -121,6 +128,65 @@ class EventController extends Controller
         return $this->success($events, 'City is found');
     }
 
+    public function searchMarkerByPlace(Request $request)
+    {
+        $place = $request->validate([
+            'lat' => ['required', 'numeric', 'between:-90,90'],
+            'lng' => ['required', 'numeric', 'between:-180,180'],
+            'city' => ['nullable', 'string'],
+            'state' => ['nullable', 'string'],
+            'country_code' => ['nullable', 'string', 'max:5'],
+            'osm_id' => [
+                'nullable',
+                function (string $attribute, mixed $value, $fail) {
+                    if (! is_string($value) && ! is_int($value)) {
+                        $fail("The {$attribute} field must be a string or integer.");
+                    }
+                },
+            ],
+            'osm_type' => ['nullable', 'string'],
+            'boundingbox' => ['nullable', 'array', 'size:4'],
+            'boundingbox.*' => ['nullable', 'numeric'],
+            'display_name' => ['nullable', 'string'],
+        ]);
+
+        $place['osm_id'] = isset($place['osm_id']) ? (string) $place['osm_id'] : null;
+        $place['osm_type'] = $this->normalizeOsmType($place['osm_type'] ?? null);
+        $place['country_code'] = isset($place['country_code'])
+            ? strtolower($place['country_code'])
+            : null;
+
+        Log::info('Marker search by place request', $place);
+
+        $nomination = $this->resolveCityNomination($place);
+        $method = $nomination && $this->nominationHasBoundingBox($nomination)
+            ? 'bbox'
+            : 'radius';
+
+        $events = $method === 'bbox'
+            ? $this->eventsInsideNomination($nomination)
+            : $this->eventsWithinRadius((float) $place['lat'], (float) $place['lng']);
+
+        Log::info('City nomination resolved', [
+            'nomination_id' => $nomination?->id,
+            'osm_id' => $nomination?->osm_id,
+            'osm_type' => $nomination?->osm_type,
+            'method' => $method,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $events,
+            'meta' => [
+                'source' => $nomination ? 'city_nominations' : 'fallback',
+                'method' => $method,
+                'nomination_id' => $nomination?->id,
+                'osm_id' => $nomination?->osm_id,
+                'osm_type' => $nomination?->osm_type,
+            ],
+        ]);
+    }
+
     public function single()
     {
         $slug = request('slug');
@@ -191,5 +257,304 @@ class EventController extends Controller
     private function eventCacheKey(string $slug): string
     {
         return 'event_' . strtolower(trim($slug)) . '_' . app()->getLocale();
+    }
+
+    private function resolveCityNomination(array $place): ?CityNomination
+    {
+        $osmId = $place['osm_id'] ?? null;
+        $osmType = $place['osm_type'] ?? null;
+
+        if ($osmId && $osmType) {
+            $nomination = CityNomination::firstOrCreate(
+                [
+                    'osm_id' => $osmId,
+                    'osm_type' => $osmType,
+                ],
+                [
+                    'center_lat' => $place['lat'],
+                    'center_lng' => $place['lng'],
+                ]
+            );
+
+            if ($this->nominationNeedsBoundary($nomination)) {
+                $result = $this->lookupNominatimPlace($osmId, $osmType)
+                    ?? $this->searchNominatimPlace($place);
+
+                if ($result) {
+                    $this->hydrateNomination($nomination, $result);
+                }
+            }
+
+            return $nomination->refresh();
+        }
+
+        $nomination = $this->findNominationContainingPoint(
+            (float) $place['lat'],
+            (float) $place['lng']
+        );
+
+        if ($nomination) {
+            return $nomination;
+        }
+
+        $result = $this->searchNominatimPlace($place);
+        if (! $result) {
+            return null;
+        }
+
+        $resultOsmId = isset($result['osm_id']) ? (string) $result['osm_id'] : null;
+        $resultOsmType = $this->normalizeOsmType($result['osm_type'] ?? null);
+
+        if (! $resultOsmId || ! $resultOsmType) {
+            return null;
+        }
+
+        $nomination = CityNomination::firstOrCreate(
+            [
+                'osm_id' => $resultOsmId,
+                'osm_type' => $resultOsmType,
+            ],
+            [
+                'center_lat' => $result['lat'] ?? $place['lat'],
+                'center_lng' => $result['lon'] ?? $place['lng'],
+            ]
+        );
+
+        if ($this->nominationNeedsBoundary($nomination)) {
+            $this->hydrateNomination($nomination, $result);
+        }
+
+        return $nomination->refresh();
+    }
+
+    private function findNominationContainingPoint(float $lat, float $lng): ?CityNomination
+    {
+        return CityNomination::query()
+            ->whereNotNull('bbox_min_lat')
+            ->whereNotNull('bbox_max_lat')
+            ->whereNotNull('bbox_min_lng')
+            ->whereNotNull('bbox_max_lng')
+            ->where('bbox_min_lat', '<=', $lat)
+            ->where('bbox_max_lat', '>=', $lat)
+            ->where('bbox_min_lng', '<=', $lng)
+            ->where('bbox_max_lng', '>=', $lng)
+            ->orderByRaw(
+                '(bbox_max_lat - bbox_min_lat) * (bbox_max_lng - bbox_min_lng) ASC'
+            )
+            ->first();
+    }
+
+    private function lookupNominatimPlace(string $osmId, string $osmType): ?array
+    {
+        $response = $this->nominatimGet('/lookup', [
+            'format' => 'jsonv2',
+            'osm_ids' => $osmType.$osmId,
+            'addressdetails' => 1,
+            'polygon_geojson' => 1,
+        ]);
+
+        return $response[0] ?? null;
+    }
+
+    private function searchNominatimPlace(array $place): ?array
+    {
+        $query = trim(collect([
+            $place['city'] ?? null,
+            $place['state'] ?? null,
+            $place['country_code'] ?? null,
+        ])->filter()->implode(', '));
+
+        if ($query === '') {
+            return null;
+        }
+
+        $response = $this->nominatimGet('/search', [
+            'format' => 'jsonv2',
+            'q' => $query,
+            'addressdetails' => 1,
+            'polygon_geojson' => 1,
+            'limit' => 1,
+        ]);
+
+        return $response[0] ?? null;
+    }
+
+    private function nominatimGet(string $path, array $query): array
+    {
+        try {
+            $response = Http::acceptJson()
+                ->withUserAgent(config('services.nominatim.user_agent'))
+                ->timeout(10)
+                ->get(rtrim(config('services.nominatim.url'), '/').$path, $query);
+
+            if (! $response->successful()) {
+                Log::warning('Nominatim request failed', [
+                    'path' => $path,
+                    'status' => $response->status(),
+                ]);
+
+                return [];
+            }
+
+            $data = $response->json();
+
+            return is_array($data) ? $data : [];
+        } catch (Throwable $exception) {
+            Log::warning('Nominatim request failed', [
+                'path' => $path,
+                'message' => $exception->getMessage(),
+            ]);
+
+            return [];
+        }
+    }
+
+    private function hydrateNomination(CityNomination $nomination, array $result): void
+    {
+        $bbox = $result['boundingbox'] ?? null;
+        $hasBoundingBox = is_array($bbox)
+            && count($bbox) === 4
+            && collect($bbox)->every(fn ($value) => is_numeric($value));
+
+        $nomination->forceFill([
+            'center_lat' => is_numeric($result['lat'] ?? null)
+                ? (float) $result['lat']
+                : $nomination->center_lat,
+            'center_lng' => is_numeric($result['lon'] ?? null)
+                ? (float) $result['lon']
+                : $nomination->center_lng,
+            'bbox_min_lat' => $hasBoundingBox ? (float) $bbox[0] : $nomination->bbox_min_lat,
+            'bbox_max_lat' => $hasBoundingBox ? (float) $bbox[1] : $nomination->bbox_max_lat,
+            'bbox_min_lng' => $hasBoundingBox ? (float) $bbox[2] : $nomination->bbox_min_lng,
+            'bbox_max_lng' => $hasBoundingBox ? (float) $bbox[3] : $nomination->bbox_max_lng,
+            'polygon_geojson' => isset($result['geojson'])
+                ? json_encode($result['geojson'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                : $nomination->polygon_geojson,
+        ])->save();
+    }
+
+    private function nominationNeedsBoundary(CityNomination $nomination): bool
+    {
+        return ! $nomination->polygon_geojson || ! $this->nominationHasBoundingBox($nomination);
+    }
+
+    private function nominationHasBoundingBox(CityNomination $nomination): bool
+    {
+        return $nomination->bbox_min_lat !== null
+            && $nomination->bbox_max_lat !== null
+            && $nomination->bbox_min_lng !== null
+            && $nomination->bbox_max_lng !== null;
+    }
+
+    private function eventsInsideNomination(CityNomination $nomination): Collection
+    {
+        return $this->markerEventQuery()
+            ->whereRaw(
+                'CAST(lattitude AS DECIMAL(10, 7)) BETWEEN ? AND ?',
+                [$nomination->bbox_min_lat, $nomination->bbox_max_lat]
+            )
+            ->whereRaw(
+                'CAST(langitude AS DECIMAL(10, 7)) BETWEEN ? AND ?',
+                [$nomination->bbox_min_lng, $nomination->bbox_max_lng]
+            )
+            ->latest()
+            ->get();
+    }
+
+    private function eventsWithinRadius(float $lat, float $lng, float $radiusKm = 25): Collection
+    {
+        if (DB::connection()->getDriverName() === 'mysql') {
+            $radiusMeters = $radiusKm * 1000;
+
+            return $this->markerEventQuery()
+                ->selectRaw(
+                    'ST_Distance_Sphere(POINT(langitude, lattitude), POINT(?, ?)) AS distance_meters',
+                    [$lng, $lat]
+                )
+                ->whereRaw(
+                    'ST_Distance_Sphere(POINT(langitude, lattitude), POINT(?, ?)) <= ?',
+                    [$lng, $lat, $radiusMeters]
+                )
+                ->orderBy('distance_meters')
+                ->get();
+        }
+
+        $latDelta = $radiusKm / 111.32;
+        $cosLatitude = max(abs(cos(deg2rad($lat))), 0.01);
+        $lngDelta = $radiusKm / (111.32 * $cosLatitude);
+
+        return $this->markerEventQuery()
+            ->whereRaw(
+                'CAST(lattitude AS DECIMAL(10, 7)) BETWEEN ? AND ?',
+                [$lat - $latDelta, $lat + $latDelta]
+            )
+            ->whereRaw(
+                'CAST(langitude AS DECIMAL(10, 7)) BETWEEN ? AND ?',
+                [$lng - $lngDelta, $lng + $lngDelta]
+            )
+            ->get()
+            ->map(function (Events $event) use ($lat, $lng) {
+                $event->distance_meters = $this->distanceInMeters(
+                    $lat,
+                    $lng,
+                    (float) $event->lattitude,
+                    (float) $event->langitude
+                );
+
+                return $event;
+            })
+            ->filter(fn (Events $event) => $event->distance_meters <= $radiusKm * 1000)
+            ->sortBy('distance_meters')
+            ->values();
+    }
+
+    private function markerEventQuery(): Builder
+    {
+        return Events::query()
+            ->with(
+                'city.translation',
+                'sub_categorey.translation',
+                'translation',
+                'firstImage:id,event_id,full_url'
+            )
+            ->select(
+                'id',
+                'slug',
+                'title',
+                'image',
+                'start_date',
+                'sub_categorey_id',
+                'city_id',
+                'langitude',
+                'lattitude'
+            )
+            ->where('is_active', 1);
+    }
+
+    private function normalizeOsmType(?string $osmType): ?string
+    {
+        return match (strtolower(trim((string) $osmType))) {
+            'n', 'node' => 'N',
+            'w', 'way' => 'W',
+            'r', 'relation' => 'R',
+            default => null,
+        };
+    }
+
+    private function distanceInMeters(
+        float $fromLat,
+        float $fromLng,
+        float $toLat,
+        float $toLng
+    ): float {
+        $earthRadius = 6371000;
+        $latDelta = deg2rad($toLat - $fromLat);
+        $lngDelta = deg2rad($toLng - $fromLng);
+        $a = sin($latDelta / 2) ** 2
+            + cos(deg2rad($fromLat))
+            * cos(deg2rad($toLat))
+            * sin($lngDelta / 2) ** 2;
+
+        return $earthRadius * 2 * atan2(sqrt($a), sqrt(1 - $a));
     }
 }

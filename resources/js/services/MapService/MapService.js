@@ -419,14 +419,14 @@ export default class MapService {
     _reverseGeocode(lat, lng) {
         const key = `${lat.toFixed(5)},${lng.toFixed(5)}`;
         if (this.reverseGeocodeCache.has(key)) {
-            const { city, state } = this.reverseGeocodeCache.get(key);
-            this._setCityState(city, state);
-            state ? this._sendCityToBackend(state) : this._dispatchMarkerEvent([]);
+            const place = this.reverseGeocodeCache.get(key);
+            this._setCityState(place.city, place.state);
+            this._sendPlaceToBackend(place);
             return;
         }
 
         const fetchLang = lang => fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1&accept-language=${lang}`,
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1&accept-language=${lang}`,
             { headers: { "User-Agent": "SceneMemoryApp/1.0" } }
         ).then(r => r.json());
 
@@ -434,10 +434,28 @@ export default class MapService {
             .then(([arData, enData]) => {
                 const city = this._extractCity(arData) || this._extractCity(enData);
                 const state = this._extractState(arData) || this._extractState(enData);
+                const countryCode = this._extractCountryCode(enData) || this._extractCountryCode(arData);
 
-                this.reverseGeocodeCache.set(key, { city, state });
+                const place = {
+                    lat,
+                    lng,
+                    city,
+                    state,
+                    country_code: countryCode,
+                    osm_id: enData?.osm_id || arData?.osm_id || null,
+                    osm_type: enData?.osm_type || arData?.osm_type || null,
+                    boundingbox: enData?.boundingbox || arData?.boundingbox || null,
+                    display_name: enData?.display_name || arData?.display_name || null,
+                };
+
+                this.reverseGeocodeCache.set(key, place);
                 this._setCityState(city, state);
-                state ? this._sendCityToBackend(state) : this._dispatchMarkerEvent([]);
+
+                if (place.city || place.state || place.osm_id || place.country_code) {
+                    this._sendPlaceToBackend(place);
+                } else {
+                    this._dispatchMarkerEvent([]);
+                }
             })
             .catch(() => {
                 this._setCityState(null, null);
@@ -457,9 +475,37 @@ export default class MapService {
         return a.state || a.region || a.province || a.county || a.state_district || null;
     }
 
+    _extractCountryCode(data) {
+        if (!data || data.error) return null;
+        return data.address?.country_code || null;
+    }
+
     _setCityState(city, state) {
         this.markerRef.value.city = city;
         this.markerRef.value.state = state;
+    }
+
+    _sendPlaceToBackend(place) {
+        const cacheKey = place.osm_id && place.osm_type
+            ? `${place.osm_type}:${place.osm_id}`
+            : `${place.country_code || "unknown"}:${place.city || place.state || "unknown"}:${Number(place.lat).toFixed(3)}:${Number(place.lng).toFixed(3)}`;
+
+        if (this.cityEventCache.has(cacheKey)) {
+            this._dispatchMarkerEvent(this.cityEventCache.get(cacheKey));
+            return;
+        }
+
+        api.post("/events/marker/search-by-place", place)
+            .then((res) => res.data)
+            .then((data) => {
+                const events = data?.data || [];
+                this.cityEventCache.set(cacheKey, events);
+                this._dispatchMarkerEvent(events);
+            })
+            .catch((error) => {
+                console.error("[MapService] search-by-place failed:", error);
+                this._dispatchMarkerEvent([]);
+            });
     }
 
     _sendCityToBackend(city) {
