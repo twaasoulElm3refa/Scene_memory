@@ -23,6 +23,7 @@ use App\Repositories\Contracts\Reports\ReportRepositoryInterface;
 use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
 use App\Repositories\Contracts\SubCategories\SubCategoryRepositoryInterface;
 use App\Repositories\Contracts\Subscriptions\SubscriptionRepositoryInterface;
+use App\Repositories\Contracts\Tags\TagRepositoryInterface;
 use App\Repositories\Contracts\Users\UserRepositoryInterface;
 use App\Repositories\Contracts\Withdrawals\WithdrawalRepositoryInterface;
 use App\Repositories\Contracts\Wallets\WalletRepositoryInterface;
@@ -48,6 +49,7 @@ use App\Repositories\Eloquent\Reports\ReportRepository;
 use App\Repositories\Eloquent\Requests\RequestRepository;
 use App\Repositories\Eloquent\SubCategories\SubCategoryRepository;
 use App\Repositories\Eloquent\Subscriptions\SubscriptionRepository;
+use App\Repositories\Eloquent\Tags\TagsRespository;
 use App\Repositories\Eloquent\Users\UserRepository;
 use App\Repositories\Eloquent\Withdrawals\WithdrawalRepository;
 use App\Repositories\Eloquent\Wallets\WalletRepository;
@@ -101,6 +103,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RequestRepositoryInterface::class, RequestRepository::class);
 
         $this->app->bind(AdminAuthRepositoryInterface::class, AdminAuthRepository::class);
+
+        $this->app->bind(TagRepositoryInterface::class, TagsRespository::class);
     }
 
     public function boot(): void

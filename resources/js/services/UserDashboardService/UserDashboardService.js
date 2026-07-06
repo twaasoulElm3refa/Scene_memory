@@ -1,31 +1,33 @@
 import api from "../ApiClient";
 
 export const UserDashboardService = {
-  getMyEvents() {
-    return api.get("/user-dshboard/my-events");
-  },
+    getMyEvents() {
+        return api.get("/user-dshboard/my-events");
+    },
 
-  getSingleEvent(slug) {
-    return api.get(`/events/${slug}/single/get`);
-  },
+    getSingleEvent(slug) {
+        console.log(slug);
+        return api.get(`/events/${slug}/single/get`);
+    },
 
-  createEvent(formData) {
-    return api.post("/user-dshboard/create/Event", formData);
-  },
 
-  updateEvent(slug, formData) {
-    return api.post(`/user-dshboard/${slug}/update/Event`, formData);
-  },
+    createEvent(formData) {
+        return api.post("/user-dshboard/create/Event", formData);
+    },
 
-  deleteEvent(id) {
-    return api.delete(`/user-dshboard/${id}/destroy`);
-  },
+    updateEvent(slug, formData) {
+        return api.post(`/user-dshboard/${slug}/update/Event`, formData);
+    },
 
-  deleteMedia(id) {
-    return api.delete(`/user-dshboard/${id}/delete`);
-  },
+    deleteEvent(id) {
+        return api.delete(`/user-dshboard/${id}/destroy`);
+    },
 
-  uploadMedia(slug, formData) {
-    return api.post(`/user-dshboard/${slug}`, formData);
-  },
+    deleteMedia(id) {
+        return api.delete(`/user-dshboard/${id}/delete`);
+    },
+
+    uploadMedia(slug, formData) {
+        return api.post(`/user-dshboard/${slug}`, formData);
+    },
 };

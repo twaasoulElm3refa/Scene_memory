@@ -345,6 +345,16 @@ const goToCart = () => {
     transition: all 0.4s ease;
 }
 
+.navbar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    width: 100%;
+    background: var(--nav-bg, #ffffff);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
 /* Logo */
 .logo {
     width: 140px;

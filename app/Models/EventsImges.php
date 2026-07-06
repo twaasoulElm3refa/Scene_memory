@@ -24,4 +24,9 @@ class EventsImges extends Model
     {
         return $this->belongsTo(Cart::class,'image_id');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tags::class, 'images_tags', 'events_imges_id', 'tags_id');
+    }
 }

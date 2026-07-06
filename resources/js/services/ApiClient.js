@@ -17,6 +17,32 @@ toastr.options = {
     timeOut: "3000",
 };
 
+export function normalizeErrorMessage(message, fallback = "حدث خطأ غير معروف.") {
+    if (!message || typeof message !== "string") {
+        return fallback;
+    }
+
+    const cleaned = message.trim();
+
+    const looksBrokenArabic =
+        cleaned.includes("???") ||
+        /^[?\s]+$/.test(cleaned);
+
+    if (looksBrokenArabic) {
+        return fallback;
+    }
+
+    return cleaned;
+}
+
+export function showSafeToast(type = "error", message, fallback = "حدث خطأ غير معروف.") {
+    const safeType = typeof toastr[type] === "function" ? type : "error";
+    const safeMessage = normalizeErrorMessage(message, fallback);
+
+    console.log("Toast message:", safeMessage);
+    toastr[safeType](safeMessage);
+}
+
 const api = axios.create({
     baseURL: "/api/v1",
     headers: {
@@ -64,18 +90,40 @@ api.interceptors.response.use(
     (error) => {
         const status = error.response?.status;
 
+        console.group("Axios Global Error");
+        console.error("Full error:", error);
+        console.error("Status:", status);
+        console.error("Response data:", error?.response?.data);
+        console.groupEnd();
+
+        if (error.config?.suppressGlobalErrorToast) {
+            return Promise.reject(error);
+        }
+
         if (!error.response) {
-            toastr.error("?? ????? ?? ??????? ????????");
+            showSafeToast(
+                "error",
+                error.message,
+                "تعذر الاتصال بالخادم. تحقق من اتصال الشبكة وحاول مرة أخرى."
+            );
             return Promise.reject(error);
         }
 
         switch (status) {
             case 400:
-                toastr.warning("??? ??? ????");
+                showSafeToast(
+                    "warning",
+                    error.response?.data?.message,
+                    "الطلب غير صحيح. راجع البيانات المرسلة."
+                );
                 break;
 
             case 401:
-                toastr.error("??? ????? ??????");
+                showSafeToast(
+                    "error",
+                    error.response?.data?.message,
+                    "انتهت الجلسة. من فضلك سجل الدخول مرة أخرى."
+                );
 
                 localStorage.removeItem("auth_token");
 
@@ -85,11 +133,19 @@ api.interceptors.response.use(
                 break;
 
             case 403:
-                toastr.error("??? ????? ?? ???????");
+                showSafeToast(
+                    "error",
+                    error.response?.data?.message,
+                    "ليس لديك صلاحية لتنفيذ هذا الإجراء."
+                );
                 break;
 
             case 404:
-                toastr.error("?????? ??? ?????");
+                showSafeToast(
+                    "error",
+                    error.response?.data?.message,
+                    "العنصر المطلوب غير موجود."
+                );
                 break;
 
             case 422: {
@@ -97,31 +153,56 @@ api.interceptors.response.use(
 
                 if (errors) {
                     Object.values(errors).forEach((fieldErrors) => {
-                        fieldErrors.forEach((msg) => toastr.error(msg));
+                        const messages = Array.isArray(fieldErrors) ? fieldErrors : [fieldErrors];
+                        messages.forEach((msg) => showSafeToast(
+                            "error",
+                            msg,
+                            "من فضلك راجع الحقول المطلوبة."
+                        ));
                     });
                 } else {
-                    toastr.error("?????? ??? ?????");
+                    showSafeToast(
+                        "error",
+                        error.response?.data?.message,
+                        "من فضلك راجع الحقول المطلوبة."
+                    );
                 }
 
                 break;
             }
 
             case 429:
-                toastr.warning("??? ??????? ????? ???? ??????");
+                showSafeToast(
+                    "warning",
+                    error.response?.data?.message,
+                    "تم إرسال طلبات كثيرة. حاول مرة أخرى بعد قليل."
+                );
                 break;
 
             case 500:
-                toastr.error("??? ?? ???????");
+                showSafeToast(
+                    "error",
+                    error.response?.data?.message,
+                    "حدث خطأ في الخادم. راجع Console و Laravel log لمعرفة التفاصيل."
+                );
                 break;
 
             case 502:
             case 503:
             case 504:
-                toastr.error("??????? ??? ???? ??????");
+                showSafeToast(
+                    "error",
+                    error.response?.data?.message,
+                    "الخدمة غير متاحة حاليًا. حاول مرة أخرى بعد قليل."
+                );
                 break;
 
             default:
-                toastr.error("??? ??? ??? ?????");
+                showSafeToast(
+                    "error",
+                    error.response?.data?.message || error.message,
+                    "حدث خطأ غير معروف."
+                );
         }
 
         return Promise.reject(error);

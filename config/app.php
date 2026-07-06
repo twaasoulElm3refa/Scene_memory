@@ -13,7 +13,7 @@ return [
     |
     */
     'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
-    'name' => env('APP_NAMEe', 'Scene Memory'),
+    'name' => env('APP_NAME', 'SceMory'),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,4 +123,20 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Autoloaded Service Providers
+    |--------------------------------------------------------------------------
+    */
+
+    'providers' => Illuminate\Support\ServiceProvider::defaultProviders()->merge([
+        /*
+        * Package Service Providers...
+        */
+
+        /*
+        * Application Service Providers...
+        */
+        App\Providers\AppServiceProvider::class,
+    ])->toArray(),
 ];

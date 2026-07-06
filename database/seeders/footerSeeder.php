@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\footer;
+use App\Models\Footer;
 use Illuminate\Database\Seeder;
 
 class footerSeeder extends Seeder
@@ -12,7 +12,7 @@ class footerSeeder extends Seeder
      */
     public function run(): void
     {
-       footer::create([
+       Footer::create([
         "logo"=> "https://i.vimeocdn.com/video/1740246597-34ae317d74de8f1305f45420b5644a746e26a6dc10cb96abfbf2875d4f3c8546-d",
         "twitter"=> "x.com",
         'instagram'=>'insta.com',

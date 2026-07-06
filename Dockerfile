@@ -7,8 +7,14 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     ffmpeg \
+    imagemagick \
     libpng-dev \
     libjpeg-dev \
+    libwebp-dev \
+    libavif-dev \
+    libheif-dev \
+    libtiff-dev \
+    libmagickwand-dev \
     libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
@@ -17,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     libicu-dev \
     g++ \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp --with-avif \
     && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_mysql \
@@ -28,8 +34,8 @@ RUN apt-get update && apt-get install -y \
         zip \
         intl \
         gd \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
+    && pecl install redis imagick \
+    && docker-php-ext-enable redis imagick \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \

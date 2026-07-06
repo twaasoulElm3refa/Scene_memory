@@ -154,11 +154,45 @@
                                     placeholder="+20 123 456 789" />
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">الدولة</label>
-                                    <input v-model="editData.country" type="text"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
-                                        placeholder="مصر" />
+                                <div class="relative" ref="countryDropdownRef" dir="rtl">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        الدولة
+                                    </label>
+
+                                    <div class="relative">
+                                        <input v-model="countrySearch" type="text"
+                                            class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
+                                            placeholder="ابحث عن الدولة" autocomplete="off"
+                                            @focus="isCountryDropdownOpen = true"
+                                            @input="isCountryDropdownOpen = true" />
+
+                                        <button type="button"
+                                            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-600"
+                                            @click.stop="isCountryDropdownOpen = !isCountryDropdownOpen">
+                                            ▼
+                                        </button>
+                                    </div>
+
+                                    <div v-if="isCountryDropdownOpen"
+                                        class="absolute z-50 mt-2 w-full max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-xl">
+                                        <button v-for="country in filteredCountries" :key="country.id" type="button"
+                                            class="w-full px-4 py-3 text-right hover:bg-emerald-50 flex items-center justify-between gap-3 border-b last:border-b-0"
+                                            @click="selectCountry(country)">
+                                            <span class="font-medium text-gray-800">
+                                                {{ country.name }}
+                                            </span>
+
+                                            <span
+                                                class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full">
+                                                {{ country.code }}
+                                            </span>
+                                        </button>
+
+                                        <div v-if="filteredCountries.length === 0"
+                                            class="px-4 py-4 text-center text-gray-500">
+                                            لا توجد نتائج مطابقة
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">المنصب / الوظيفة</label>
@@ -300,7 +334,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { getProfile, updateProfileAPI } from "@/services/userService/userService";
 import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
@@ -334,6 +368,240 @@ export default {
             country: "",
             position: "",
             date_of_birth: "",
+        });
+
+        const countries = ref([
+            { id: 1, name: 'Afghanistan', code: 'AF', slug: 'afghanistan' },
+            { id: 2, name: 'Albania', code: 'AL', slug: 'albania' },
+            { id: 3, name: 'Algeria', code: 'DZ', slug: 'algeria' },
+            { id: 4, name: 'Andorra', code: 'AD', slug: 'andorra' },
+            { id: 5, name: 'Angola', code: 'AO', slug: 'angola' },
+            { id: 6, name: 'Antigua and Barbuda', code: 'AG', slug: 'antigua-and-barbuda' },
+            { id: 7, name: 'Argentina', code: 'AR', slug: 'argentina' },
+            { id: 8, name: 'Armenia', code: 'AM', slug: 'armenia' },
+            { id: 9, name: 'Australia', code: 'AU', slug: 'australia' },
+            { id: 10, name: 'Austria', code: 'AT', slug: 'austria' },
+            { id: 11, name: 'Azerbaijan', code: 'AZ', slug: 'azerbaijan' },
+            { id: 12, name: 'Bahamas', code: 'BS', slug: 'bahamas' },
+            { id: 13, name: 'Bahrain', code: 'BH', slug: 'bahrain' },
+            { id: 14, name: 'Bangladesh', code: 'BD', slug: 'bangladesh' },
+            { id: 15, name: 'Barbados', code: 'BB', slug: 'barbados' },
+            { id: 16, name: 'Belarus', code: 'BY', slug: 'belarus' },
+            { id: 17, name: 'Belgium', code: 'BE', slug: 'belgium' },
+            { id: 18, name: 'Belize', code: 'BZ', slug: 'belize' },
+            { id: 19, name: 'Benin', code: 'BJ', slug: 'benin' },
+            { id: 20, name: 'Bhutan', code: 'BT', slug: 'bhutan' },
+            { id: 21, name: 'Bolivia', code: 'BO', slug: 'bolivia' },
+            { id: 22, name: 'Bosnia and Herzegovina', code: 'BA', slug: 'bosnia-and-herzegovina' },
+            { id: 23, name: 'Botswana', code: 'BW', slug: 'botswana' },
+            { id: 24, name: 'Brazil', code: 'BR', slug: 'brazil' },
+            { id: 25, name: 'Brunei', code: 'BN', slug: 'brunei' },
+            { id: 26, name: 'Bulgaria', code: 'BG', slug: 'bulgaria' },
+            { id: 27, name: 'Burkina Faso', code: 'BF', slug: 'burkina-faso' },
+            { id: 28, name: 'Burundi', code: 'BI', slug: 'burundi' },
+            { id: 29, name: 'Cabo Verde', code: 'CV', slug: 'cabo-verde' },
+            { id: 30, name: 'Cambodia', code: 'KH', slug: 'cambodia' },
+            { id: 31, name: 'Cameroon', code: 'CM', slug: 'cameroon' },
+            { id: 32, name: 'Canada', code: 'CA', slug: 'canada' },
+            { id: 33, name: 'Central African Republic', code: 'CF', slug: 'central-african-republic' },
+            { id: 34, name: 'Chad', code: 'TD', slug: 'chad' },
+            { id: 35, name: 'Chile', code: 'CL', slug: 'chile' },
+            { id: 36, name: 'China', code: 'CN', slug: 'china' },
+            { id: 37, name: 'Colombia', code: 'CO', slug: 'colombia' },
+            { id: 38, name: 'Comoros', code: 'KM', slug: 'comoros' },
+            { id: 39, name: 'Congo', code: 'CG', slug: 'congo' },
+            { id: 40, name: 'Democratic Republic of the Congo', code: 'CD', slug: 'democratic-republic-of-the-congo' },
+            { id: 41, name: 'Costa Rica', code: 'CR', slug: 'costa-rica' },
+            { id: 42, name: 'Croatia', code: 'HR', slug: 'croatia' },
+            { id: 43, name: 'Cuba', code: 'CU', slug: 'cuba' },
+            { id: 44, name: 'Cyprus', code: 'CY', slug: 'cyprus' },
+            { id: 45, name: 'Czech Republic', code: 'CZ', slug: 'czech-republic' },
+            { id: 46, name: 'Denmark', code: 'DK', slug: 'denmark' },
+            { id: 47, name: 'Djibouti', code: 'DJ', slug: 'djibouti' },
+            { id: 48, name: 'Dominica', code: 'DM', slug: 'dominica' },
+            { id: 49, name: 'Dominican Republic', code: 'DO', slug: 'dominican-republic' },
+            { id: 50, name: 'Ecuador', code: 'EC', slug: 'ecuador' },
+            { id: 51, name: 'Egypt', code: 'EG', slug: 'egypt' },
+            { id: 52, name: 'El Salvador', code: 'SV', slug: 'el-salvador' },
+            { id: 53, name: 'Equatorial Guinea', code: 'GQ', slug: 'equatorial-guinea' },
+            { id: 54, name: 'Eritrea', code: 'ER', slug: 'eritrea' },
+            { id: 55, name: 'Estonia', code: 'EE', slug: 'estonia' },
+            { id: 56, name: 'Ethiopia', code: 'ET', slug: 'ethiopia' },
+            { id: 57, name: 'Fiji', code: 'FJ', slug: 'fiji' },
+            { id: 58, name: 'Finland', code: 'FI', slug: 'finland' },
+            { id: 59, name: 'France', code: 'FR', slug: 'france' },
+            { id: 60, name: 'Gabon', code: 'GA', slug: 'gabon' },
+            { id: 61, name: 'Gambia', code: 'GM', slug: 'gambia' },
+            { id: 62, name: 'Georgia', code: 'GE', slug: 'georgia' },
+            { id: 63, name: 'Germany', code: 'DE', slug: 'germany' },
+            { id: 64, name: 'Ghana', code: 'GH', slug: 'ghana' },
+            { id: 65, name: 'Greece', code: 'GR', slug: 'greece' },
+            { id: 66, name: 'Grenada', code: 'GD', slug: 'grenada' },
+            { id: 67, name: 'Guatemala', code: 'GT', slug: 'guatemala' },
+            { id: 68, name: 'Guinea', code: 'GN', slug: 'guinea' },
+            { id: 69, name: 'Guinea-Bissau', code: 'GW', slug: 'guinea-bissau' },
+            { id: 70, name: 'Guyana', code: 'GY', slug: 'guyana' },
+            { id: 71, name: 'Haiti', code: 'HT', slug: 'haiti' },
+            { id: 72, name: 'Honduras', code: 'HN', slug: 'honduras' },
+            { id: 73, name: 'Hungary', code: 'HU', slug: 'hungary' },
+            { id: 74, name: 'Iceland', code: 'IS', slug: 'iceland' },
+            { id: 75, name: 'India', code: 'IN', slug: 'india' },
+            { id: 76, name: 'Indonesia', code: 'ID', slug: 'indonesia' },
+            { id: 77, name: 'Iran', code: 'IR', slug: 'iran' },
+            { id: 78, name: 'Iraq', code: 'IQ', slug: 'iraq' },
+            { id: 79, name: 'Ireland', code: 'IE', slug: 'ireland' },
+            { id: 80, name: 'Italy', code: 'IT', slug: 'italy' },
+            { id: 81, name: 'Jamaica', code: 'JM', slug: 'jamaica' },
+            { id: 82, name: 'Japan', code: 'JP', slug: 'japan' },
+            { id: 83, name: 'Jordan', code: 'JO', slug: 'jordan' },
+            { id: 84, name: 'Kazakhstan', code: 'KZ', slug: 'kazakhstan' },
+            { id: 85, name: 'Kenya', code: 'KE', slug: 'kenya' },
+            { id: 86, name: 'North Korea', code: 'KP', slug: 'north-korea' },
+            { id: 87, name: 'South Korea', code: 'KR', slug: 'south-korea' },
+            { id: 88, name: 'Kuwait', code: 'KW', slug: 'kuwait' },
+            { id: 89, name: 'Kyrgyzstan', code: 'KG', slug: 'kyrgyzstan' },
+            { id: 90, name: 'Laos', code: 'LA', slug: 'laos' },
+            { id: 91, name: 'Latvia', code: 'LV', slug: 'latvia' },
+            { id: 92, name: 'Lebanon', code: 'LB', slug: 'lebanon' },
+            { id: 93, name: 'Lesotho', code: 'LS', slug: 'lesotho' },
+            { id: 94, name: 'Liberia', code: 'LR', slug: 'liberia' },
+            { id: 95, name: 'Libya', code: 'LY', slug: 'libya' },
+            { id: 96, name: 'Liechtenstein', code: 'LI', slug: 'liechtenstein' },
+            { id: 97, name: 'Lithuania', code: 'LT', slug: 'lithuania' },
+            { id: 98, name: 'Luxembourg', code: 'LU', slug: 'luxembourg' },
+            { id: 99, name: 'Madagascar', code: 'MG', slug: 'madagascar' },
+            { id: 100, name: 'Malawi', code: 'MW', slug: 'malawi' },
+            { id: 101, name: 'Malaysia', code: 'MY', slug: 'malaysia' },
+            { id: 102, name: 'Maldives', code: 'MV', slug: 'maldives' },
+            { id: 103, name: 'Mali', code: 'ML', slug: 'mali' },
+            { id: 104, name: 'Malta', code: 'MT', slug: 'malta' },
+            { id: 105, name: 'Marshall Islands', code: 'MH', slug: 'marshall-islands' },
+            { id: 106, name: 'Mauritania', code: 'MR', slug: 'mauritania' },
+            { id: 107, name: 'Mauritius', code: 'MU', slug: 'mauritius' },
+            { id: 108, name: 'Mexico', code: 'MX', slug: 'mexico' },
+            { id: 109, name: 'Micronesia', code: 'FM', slug: 'micronesia' },
+            { id: 110, name: 'Moldova', code: 'MD', slug: 'moldova' },
+            { id: 111, name: 'Monaco', code: 'MC', slug: 'monaco' },
+            { id: 112, name: 'Mongolia', code: 'MN', slug: 'mongolia' },
+            { id: 113, name: 'Montenegro', code: 'ME', slug: 'montenegro' },
+            { id: 114, name: 'Morocco', code: 'MA', slug: 'morocco' },
+            { id: 115, name: 'Mozambique', code: 'MZ', slug: 'mozambique' },
+            { id: 116, name: 'Myanmar', code: 'MM', slug: 'myanmar' },
+            { id: 117, name: 'Namibia', code: 'NA', slug: 'namibia' },
+            { id: 118, name: 'Nauru', code: 'NR', slug: 'nauru' },
+            { id: 119, name: 'Nepal', code: 'NP', slug: 'nepal' },
+            { id: 120, name: 'Netherlands', code: 'NL', slug: 'netherlands' },
+            { id: 121, name: 'New Zealand', code: 'NZ', slug: 'new-zealand' },
+            { id: 122, name: 'Nicaragua', code: 'NI', slug: 'nicaragua' },
+            { id: 123, name: 'Niger', code: 'NE', slug: 'niger' },
+            { id: 124, name: 'Nigeria', code: 'NG', slug: 'nigeria' },
+            { id: 125, name: 'North Macedonia', code: 'MK', slug: 'north-macedonia' },
+            { id: 126, name: 'Norway', code: 'NO', slug: 'norway' },
+            { id: 127, name: 'Oman', code: 'OM', slug: 'oman' },
+            { id: 128, name: 'Pakistan', code: 'PK', slug: 'pakistan' },
+            { id: 129, name: 'Palau', code: 'PW', slug: 'palau' },
+            { id: 130, name: 'Palestine', code: 'PS', slug: 'palestine' },
+            { id: 131, name: 'Panama', code: 'PA', slug: 'panama' },
+            { id: 132, name: 'Papua New Guinea', code: 'PG', slug: 'papua-new-guinea' },
+            { id: 133, name: 'Paraguay', code: 'PY', slug: 'paraguay' },
+            { id: 134, name: 'Peru', code: 'PE', slug: 'peru' },
+            { id: 135, name: 'Philippines', code: 'PH', slug: 'philippines' },
+            { id: 136, name: 'Poland', code: 'PL', slug: 'poland' },
+            { id: 137, name: 'Portugal', code: 'PT', slug: 'portugal' },
+            { id: 138, name: 'Qatar', code: 'QA', slug: 'qatar' },
+            { id: 139, name: 'Romania', code: 'RO', slug: 'romania' },
+            { id: 140, name: 'Russia', code: 'RU', slug: 'russia' },
+            { id: 141, name: 'Rwanda', code: 'RW', slug: 'rwanda' },
+            { id: 142, name: 'Saint Kitts and Nevis', code: 'KN', slug: 'saint-kitts-and-nevis' },
+            { id: 143, name: 'Saint Lucia', code: 'LC', slug: 'saint-lucia' },
+            { id: 144, name: 'Saint Vincent and the Grenadines', code: 'VC', slug: 'saint-vincent-and-the-grenadines' },
+            { id: 145, name: 'Samoa', code: 'WS', slug: 'samoa' },
+            { id: 146, name: 'San Marino', code: 'SM', slug: 'san-marino' },
+            { id: 147, name: 'Sao Tome and Principe', code: 'ST', slug: 'sao-tome-and-principe' },
+            { id: 148, name: 'Saudi Arabia', code: 'SA', slug: 'saudi-arabia' },
+            { id: 149, name: 'Senegal', code: 'SN', slug: 'senegal' },
+            { id: 150, name: 'Serbia', code: 'RS', slug: 'serbia' },
+            { id: 151, name: 'Seychelles', code: 'SC', slug: 'seychelles' },
+            { id: 152, name: 'Sierra Leone', code: 'SL', slug: 'sierra-leone' },
+            { id: 153, name: 'Singapore', code: 'SG', slug: 'singapore' },
+            { id: 154, name: 'Slovakia', code: 'SK', slug: 'slovakia' },
+            { id: 155, name: 'Slovenia', code: 'SI', slug: 'slovenia' },
+            { id: 156, name: 'Solomon Islands', code: 'SB', slug: 'solomon-islands' },
+            { id: 157, name: 'Somalia', code: 'SO', slug: 'somalia' },
+            { id: 158, name: 'South Africa', code: 'ZA', slug: 'south-africa' },
+            { id: 159, name: 'South Sudan', code: 'SS', slug: 'south-sudan' },
+            { id: 160, name: 'Spain', code: 'ES', slug: 'spain' },
+            { id: 161, name: 'Sri Lanka', code: 'LK', slug: 'sri-lanka' },
+            { id: 162, name: 'Sudan', code: 'SD', slug: 'sudan' },
+            { id: 163, name: 'Suriname', code: 'SR', slug: 'suriname' },
+            { id: 164, name: 'Sweden', code: 'SE', slug: 'sweden' },
+            { id: 165, name: 'Switzerland', code: 'CH', slug: 'switzerland' },
+            { id: 166, name: 'Syria', code: 'SY', slug: 'syria' },
+            { id: 167, name: 'Tajikistan', code: 'TJ', slug: 'tajikistan' },
+            { id: 168, name: 'Tanzania', code: 'TZ', slug: 'tanzania' },
+            { id: 169, name: 'Thailand', code: 'TH', slug: 'thailand' },
+            { id: 170, name: 'Timor-Leste', code: 'TL', slug: 'timor-leste' },
+            { id: 171, name: 'Togo', code: 'TG', slug: 'togo' },
+            { id: 172, name: 'Tonga', code: 'TO', slug: 'tonga' },
+            { id: 173, name: 'Trinidad and Tobago', code: 'TT', slug: 'trinidad-and-tobago' },
+            { id: 174, name: 'Tunisia', code: 'TN', slug: 'tunisia' },
+            { id: 175, name: 'Turkey', code: 'TR', slug: 'turkey' },
+            { id: 176, name: 'Turkmenistan', code: 'TM', slug: 'turkmenistan' },
+            { id: 177, name: 'Tuvalu', code: 'TV', slug: 'tuvalu' },
+            { id: 178, name: 'Uganda', code: 'UG', slug: 'uganda' },
+            { id: 179, name: 'Ukraine', code: 'UA', slug: 'ukraine' },
+            { id: 180, name: 'United Arab Emirates', code: 'AE', slug: 'united-arab-emirates' },
+            { id: 181, name: 'United Kingdom', code: 'GB', slug: 'united-kingdom' },
+            { id: 182, name: 'United States of America', code: 'US', slug: 'united-states-of-america' },
+            { id: 183, name: 'Uruguay', code: 'UY', slug: 'uruguay' },
+            { id: 184, name: 'Uzbekistan', code: 'UZ', slug: 'uzbekistan' },
+            { id: 185, name: 'Vanuatu', code: 'VU', slug: 'vanuatu' },
+            { id: 186, name: 'Venezuela', code: 'VE', slug: 'venezuela' },
+            { id: 187, name: 'Vietnam', code: 'VN', slug: 'vietnam' },
+            { id: 188, name: 'Yemen', code: 'YE', slug: 'yemen' },
+            { id: 189, name: 'Zambia', code: 'ZM', slug: 'zambia' },
+            { id: 190, name: 'Zimbabwe', code: 'ZW', slug: 'zimbabwe' },
+            { id: 191, name: 'Vatican City', code: 'VA', slug: 'vatican-city' },
+            { id: 192, name: 'Eswatini', code: 'SZ', slug: 'eswatini' },
+        ]);
+        const countrySearch = ref("");
+        const isCountryDropdownOpen = ref(false);
+        const countryDropdownRef = ref(null);
+
+        const filteredCountries = computed(() => {
+            const search = String(countrySearch.value || "").trim().toLowerCase();
+
+            if (!search) return countries.value;
+
+            return countries.value.filter((country) => {
+                return (
+                    country.name.toLowerCase().includes(search) ||
+                    country.code.toLowerCase().includes(search) ||
+                    country.slug.toLowerCase().includes(search)
+                );
+            });
+        });
+
+        const selectCountry = (country) => {
+            editData.value.country = country.name;
+            countrySearch.value = country.name;
+            isCountryDropdownOpen.value = false;
+        };
+
+        const handleClickOutsideCountry = (event) => {
+            if (!countryDropdownRef.value) return;
+
+            if (!countryDropdownRef.value.contains(event.target)) {
+                isCountryDropdownOpen.value = false;
+            }
+        };
+
+        watch(countrySearch, (value) => {
+            const selectedCountry = countries.value.find(
+                (country) => country.name.toLowerCase() === String(value || "").toLowerCase()
+            );
+
+            editData.value.country = selectedCountry ? selectedCountry.name : "";
         });
 
         const originalEditData = ref({});
@@ -425,6 +693,7 @@ export default {
                         position: userData.position || "",
                         date_of_birth: userData.date_of_birth || "",
                     };
+                    countrySearch.value = userData.country || "";
 
                     originalEditData.value = { ...editData.value };
 
@@ -454,6 +723,15 @@ export default {
         };
 
         const updateProfile = async () => {
+            const selectedCountry = countries.value.find(
+                (country) => country.name === editData.value.country
+            );
+
+            if (!selectedCountry && countrySearch.value) {
+                showStatusMessage("من فضلك اختر الدولة من القائمة", "error");
+                return;
+            }
+
             if (JSON.stringify(editData.value) === JSON.stringify(originalEditData.value)) {
                 showStatusMessage("لم تقم بإجراء أي تغييرات", "error");
                 return;
@@ -491,12 +769,24 @@ export default {
             alert("سيتم فتح نافذة سحب الرصيد قريباً");
         };
 
-        onMounted(fetchProfile);
+        onMounted(() => {
+            fetchProfile();
+            document.addEventListener("click", handleClickOutsideCountry);
+        });
+
+        onUnmounted(() => {
+            document.removeEventListener("click", handleClickOutsideCountry);
+        });
 
         return {
             profile,
             editData,
             originalEditData,
+            countries,
+            countrySearch,
+            isCountryDropdownOpen,
+            countryDropdownRef,
+            filteredCountries,
             tabs,
             currentTab,
             isUpdatingProfile,
@@ -513,6 +803,7 @@ export default {
             transactions,
             getInitials,
             formatDate,
+            selectCountry,
             updateProfile,
             updatePassword,
             deposit,

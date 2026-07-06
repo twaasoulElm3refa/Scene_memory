@@ -16,7 +16,12 @@ export const EventService = {
    * @param {FormData} formData
    */
   async updateEvent(id, formData) {
-    const response = await api.post(`/events/${id}/update`, formData);
+    const response = await api.post(`/events/${id}/update`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      suppressGlobalErrorToast: true,
+    });
     return response.data;
   },
 

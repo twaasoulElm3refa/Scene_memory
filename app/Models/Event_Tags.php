@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event_Tags extends Model
 {
     /** @use HasFactory<\Database\Factories\EventTagsFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table='event__tags';
     protected $guarded = [];

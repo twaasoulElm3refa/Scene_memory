@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\country_translations;
+use App\Models\CountryTranslations;
 use Illuminate\Database\Seeder;
 use Symfony\Component\Intl\Countries;
 
@@ -226,7 +226,7 @@ class CountriesSeeder extends Seeder
                     $translatedName = $data['name'];
                 }
 
-                country_translations::create([
+                CountryTranslations::create([
                     'country_id' => $country->id,
                     'locale'     => $locale,
                     'name'       => $translatedName,

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent\Events;
 
+use App\Models\Event_Tags;
 use App\Models\EventViews;
 use App\Models\Events;
 use App\Models\EventsImges;
@@ -12,6 +13,25 @@ class EventRepository implements EventRepositoryInterface
     public function create(array $data)
     {
         return Events::create($data);
+    }
+
+    public function trendingEvents()
+    {
+        return Events::select([
+                'id',
+                'user_id',
+                'city_id',
+                'title',
+                'start_date',
+                'slug',
+            ])
+            ->with(['user:id,name', 'firstImage:id,event_id,full_url', 'translation:id,event_id,title,locale,description'])
+            ->withCount(['likes', 'views'])
+            ->where('is_active', 1)
+            ->where('is_trending', 1)
+            ->orderByDesc('views_count')
+            ->limit(4)
+            ->get();
     }
 
     public function show($slug)
@@ -83,7 +103,7 @@ class EventRepository implements EventRepositoryInterface
             ->paginate($perPage);
     }
 
-    public function filteredActive(array $filters)
+   public function filteredActive(array $filters)
     {
         $parsedFilters = [];
 
@@ -92,7 +112,24 @@ class EventRepository implements EventRepositoryInterface
                 $parsedFilters[$key] = $filter;
                 continue;
             }
-            if (!is_string($filter) || !str_contains($filter, ':=')) {
+
+            if (!is_string($filter)) {
+                continue;
+            }
+
+            if (str_contains($filter, ':>=')) {
+                [$field, $value] = explode(':>=', $filter, 2);
+                $parsedFilters[trim($field) . '_from'] = trim($value);
+                continue;
+            }
+
+            if (str_contains($filter, ':<=')) {
+                [$field, $value] = explode(':<=', $filter, 2);
+                $parsedFilters[trim($field) . '_to'] = trim($value);
+                continue;
+            }
+
+            if (!str_contains($filter, ':=')) {
                 continue;
             }
 
@@ -112,32 +149,183 @@ class EventRepository implements EventRepositoryInterface
             $parsedFilters[$field] = $value;
         }
 
-        return Events::with(
-                'city.translation',
-                'sub_categorey.translation',
-                'translation',
-                'firstImage:id,event_id,full_url'
-            )
-            ->where('is_active', $parsedFilters['is_active'] ?? 1)
+        $tagsArray = [];
 
-            ->when($parsedFilters['city_id'] ?? $parsedFilters['cityId'] ?? null, function ($q, $cityId) {
-                $q->where('city_id', $cityId);
-            })
+        if (!empty($parsedFilters['tags_id'])) {
+            $tagsValue = $parsedFilters['tags_id'];
 
-            ->when($parsedFilters['sub_category_id'] ?? $parsedFilters['subCategoryId'] ?? $parsedFilters['categoryId'] ?? null, function ($q, $subCategoryId) {
-                $q->where('sub_categorey_id', $subCategoryId);
-            })
+            if (is_array($tagsValue)) {
+                $tagsArray = $tagsValue;
+            } else {
+                $tagsArray = json_decode($tagsValue, true);
 
-            ->when($parsedFilters['from'] ?? $parsedFilters['fromDate'] ?? null, function ($q, $from) {
-                $q->whereDate('start_date', '>=', $from);
-            })
+                if (!is_array($tagsArray)) {
+                    $tagsArray = explode(',', trim($tagsValue, '[]'));
+                }
+            }
 
-            ->when($parsedFilters['to'] ?? $parsedFilters['toDate'] ?? null, function ($q, $to) {
-                $q->whereDate('end_date', '<=', $to);
-            })
+            $tagsArray = collect($tagsArray)
+                ->map(fn ($tag) => (int) $tag)
+                ->filter(fn ($tag) => $tag > 0)
+                ->unique()
+                ->values()
+                ->all();
+        }
 
-            ->orderBy('start_date')
-            ->get();
+        $cityId = $parsedFilters['city_id'] ?? $parsedFilters['cityId'] ?? null;
+
+        $subCategoryId = $parsedFilters['sub_category_id']
+            ?? $parsedFilters['subCategoryId']
+            ?? $parsedFilters['categoryId']
+            ?? null;
+
+        $from = $parsedFilters['from']
+            ?? $parsedFilters['fromDate']
+            ?? $parsedFilters['start_date_from']
+            ?? null;
+
+        $to = $parsedFilters['to']
+            ?? $parsedFilters['toDate']
+            ?? $parsedFilters['end_date_to']
+            ?? null;
+
+        $hasNormalFilters = !empty($cityId)
+            || !empty($subCategoryId)
+            || !empty($from)
+            || !empty($to);
+
+        $active = $parsedFilters['is_active'] ?? 1;
+
+        $normalizeDate = function ($value) {
+            if (!$value) {
+                return null;
+            }
+
+            if (is_numeric($value)) {
+                return \Carbon\Carbon::createFromTimestamp((int) $value)->toDateString();
+            }
+
+            return \Carbon\Carbon::parse($value)->toDateString();
+        };
+
+        $buildBaseQuery = function () use ($active) {
+            return Events::query()
+                ->select([
+                    'id',
+                    'user_id',
+                    'city_id',
+                    'title',
+                    'start_date',
+                    'langitude',
+                    'lattitude',
+                    'slug',
+                    'sub_categorey_id',
+                ])
+                ->with([
+                    'city' => function ($q) {
+                        $q->select([
+                            'id',
+                            'country_id',
+                            'name',
+                        ]);
+                    },
+
+                    'city.translation' => function ($q) {
+                        $q->select([
+                            'id',
+                            'city_id',
+                            'locale',
+                            'name',
+                        ]);
+                    },
+
+                    'sub_categorey' => function ($q) {
+                        $q->select([
+                            'id',
+                            'category_id',
+                            'name',
+                        ]);
+                    },
+
+                    'sub_categorey.translation' => function ($q) {
+                        $q->select([
+                            'id',
+                            'category_id',
+                            'locale',
+                            'name',
+                        ]);
+                    },
+
+                    'translation' => function ($q) {
+                        $q->select([
+                            'id',
+                            'event_id',
+                            'locale',
+                            'title',
+                        ]);
+                    },
+
+                    'firstImage' => function ($q) {
+                        $q->select([
+                            'id',
+                            'event_id',
+                            'full_url',
+                        ]);
+                    },
+                ])
+                ->where('is_active', $active);
+        };
+
+        $filteredEvents = collect();
+
+        if ($hasNormalFilters || empty($tagsArray)) {
+            $normalQuery = $buildBaseQuery();
+
+            if ($cityId) {
+                $normalQuery->where('city_id', (int) $cityId);
+            }
+
+            if ($subCategoryId) {
+                $normalQuery->where('sub_categorey_id', (int) $subCategoryId);
+            }
+
+            if ($from) {
+                $normalQuery->whereDate('start_date', '>=', $normalizeDate($from));
+            }
+
+            if ($to) {
+                $normalQuery->whereDate('end_date', '<=', $normalizeDate($to));
+            }
+
+            $filteredEvents = $normalQuery
+                ->orderBy('start_date')
+                ->get();
+        }
+
+        $tagsEvents = collect();
+
+        if (!empty($tagsArray)) {
+            $eventIdsByTags = Event_Tags::query()
+                ->whereIn('tag_id', $tagsArray)
+                ->pluck('event_id')
+                ->unique()
+                ->values()
+                ->all();
+
+            if (!empty($eventIdsByTags)) {
+                $tagsEvents = $buildBaseQuery()
+                    ->whereIn('id', $eventIdsByTags)
+                    ->orderBy('start_date')
+                    ->get();
+            }
+        }
+
+        return $filteredEvents
+            ->merge($tagsEvents)
+            ->unique('id')
+            ->sortBy('start_date')
+            ->values()
+            ->toArray();
     }
 
     public function randomActive(int $take = 8)

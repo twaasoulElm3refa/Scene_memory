@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Jobs\TranslatePlanJob;
-use App\Models\licenceType;
+use App\Models\LicenceType;
 use App\Models\PlanTranslations;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -34,7 +34,7 @@ class PlansSeeder extends Seeder
         ];
 
         foreach ($plans as $plan) {
-            $createdPlan = licenceType::create($plan);
+            $createdPlan = LicenceType::create($plan);
             PlanTranslations::create([
                 'plan_id' => $createdPlan->id,
                 'locale' => 'en',

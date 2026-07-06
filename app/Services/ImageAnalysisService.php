@@ -14,25 +14,39 @@ class ImageAnalysisService
             throw new \RuntimeException('Uploaded file is not valid.');
         }
 
-        $realPath = $file->getRealPath();
-
-        if (!$realPath || !is_string($realPath) || !file_exists($realPath)) {
-            throw new \RuntimeException('Image temp path is invalid.');
-        }
-
         try {
-            $image = $manager->read($realPath);
+            $path = $file->getRealPath();
+
+            if (!$path || !is_file($path)) {
+                throw new \RuntimeException('Image file path not found');
+            }
+
+            try {
+                $image = $manager->read($path);
+            } catch (\Throwable $firstError) {
+                $contents = file_get_contents($path);
+
+                if ($contents === false || $contents === '') {
+                    throw $firstError;
+                }
+
+                $image = $manager->read($contents);
+            }
         } catch (\Throwable $e) {
-            \Log::error('Image decode failed', [
-                'original_name' => $file->getClientOriginalName(),
-                'mime'          => $file->getMimeType(),
-                'extension'     => $file->getClientOriginalExtension(),
-                'real_path'     => $realPath,
-                'error'         => $e->getMessage(),
+            \Log::error('ImageAnalysisService: unsupported or corrupted image', [
+                'name' => method_exists($file, 'getClientOriginalName') ? $file->getClientOriginalName() : $file->getFilename(),
+                'mime' => method_exists($file, 'getMimeType') ? $file->getMimeType() : null,
+                'extension' => method_exists($file, 'getClientOriginalExtension') ? $file->getClientOriginalExtension() : null,
+                'path' => $file->getRealPath(),
+                'message' => $e->getMessage(),
             ]);
 
             throw new \RuntimeException(
-                'Unsupported or corrupted image: ' . $file->getClientOriginalName()
+                'Unsupported or corrupted image: ' . (
+                    method_exists($file, 'getClientOriginalName')
+                        ? $file->getClientOriginalName()
+                        : $file->getFilename()
+                )
             );
         }
 
@@ -45,7 +59,7 @@ class ImageAnalysisService
 
         [$price, $plan] = $this->pricing($resolutionScore, $qualityScore);
 
-        $previewEncoded = $this->makePreview(clone $image);
+        $previewEncoded = $this->makePreview(clone $image, $manager);
 
         return [
             'image'            => $image,
@@ -288,11 +302,11 @@ class ImageAnalysisService
         return (0.299 * $r) + (0.587 * $g) + (0.114 * $b);
     }
 
-    private function makePreview($image): EncodedImage
+    private function makePreview($image, ImageManager $manager): EncodedImage
     {
         $image->blur(12);
 
-        $watermark = ImageManager::gd()->read(public_path('images/watermark.png'));
+        $watermark = $manager->read(public_path('images/watermark.png'));
 
         $watermark->scale(
             width: $image->width() * 0.75,

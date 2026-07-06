@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\SubCategorey;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->foreignIdFor(SubCategorey::class,'sub_categorey_id')->nullable()->constrained()->cascadeOnDelete();
+            if (! Schema::hasColumn('events', 'is_trending')) {
+                $table->boolean('is_trending')->default(false);
+            }
         });
     }
 
@@ -23,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            //
+            if (Schema::hasColumn('events', 'is_trending')) {
+                $table->dropColumn('is_trending');
+            }
         });
     }
 };

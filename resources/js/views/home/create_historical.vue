@@ -104,6 +104,53 @@
                                         </option>
                                     </select>
                                 </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-medium d-flex align-items-center justify-content-between">
+                                        <span>Tags <span class="text-danger">*</span></span>
+                                        <small class="text-muted">{{ selectedTags.length }} / 4</small>
+                                    </label>
+
+                                    <div class="position-relative">
+                                        <button type="button"
+                                            class="form-control form-control-md rounded-3 text-start d-flex flex-wrap align-items-center gap-2"
+                                            :disabled="loadingTags" @click="showTagsDropdown = !showTagsDropdown">
+                                            <span v-if="loadingTags" class="text-muted">Loading tags...</span>
+                                            <template v-else-if="selectedTags.length">
+                                                <span v-for="tagId in selectedTags" :key="tagId"
+                                                    class="badge rounded-pill text-bg-primary">
+                                                    #{{ getTagName(tagId) }}
+                                                </span>
+                                            </template>
+                                            <span v-else class="text-muted">Select tags</span>
+                                        </button>
+
+                                        <div v-if="showTagsDropdown && !loadingTags"
+                                            class="position-absolute z-3 w-100 mt-1 bg-white border rounded-3 shadow p-2"
+                                            style="max-height: 260px; overflow-y: auto;">
+                                            <input v-model="tagSearch" type="text"
+                                                class="form-control form-control-sm rounded-3 mb-2"
+                                                placeholder="Search tags" />
+
+                                            <button v-if="selectedTags.length" type="button"
+                                                class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
+                                                @click="clearTags">
+                                                Clear selected tags
+                                            </button>
+
+                                            <label v-for="tag in filteredTags" :key="tag.id"
+                                                class="d-flex align-items-center gap-2 px-2 py-2 rounded-3"
+                                                style="cursor: pointer;">
+                                                <input class="form-check-input m-0" type="checkbox"
+                                                    :checked="isTagSelected(tag.id)" @change="toggleTag(tag.id)" />
+                                                <span>#{{ tag.name }}</span>
+                                            </label>
+
+                                            <div v-if="filteredTags.length === 0" class="text-muted small px-2 py-2">
+                                                No tags found
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mt-3">
@@ -123,7 +170,7 @@
                                     {{ locationError }}
                                 </div>
 
-                                <div class="mt-2 small text-muted" v-if="form.latitude && form.longitude">
+                                <div class="mt-2 small text-muted" v-if="hasSelectedLocation">
                                     {{ $t('eventForm.selectedCoords') }}
                                     <strong>{{ $t('eventForm.lat') }}: {{ form.latitude.toFixed(6) }}</strong> ,
                                     <strong>{{ $t('eventForm.lng') }}: {{ form.longitude.toFixed(6) }}</strong>
@@ -182,7 +229,7 @@
                                     hidden @change="handleMediaSelect" />
 
                                 <!-- حالة بدون ملفات -->
-                                <div v-if="form.media_previews.length === 0" class="py-4">
+                                <div v-if="form.media_items.length === 0" class="py-4">
                                     <div class="mx-auto mb-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center"
                                         style="width: 70px; height: 70px">
                                         <svg class="text-primary" width="36" height="36" fill="none"
@@ -205,14 +252,16 @@
                                 <!-- عرض الملفات بعد الرفع -->
                                 <div v-else class="py-3">
                                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 mb-3">
-                                        <div v-for="(preview, index) in form.media_previews" :key="index" class="col">
+                                        <div v-for="(item, index) in form.media_items" :key="item.preview || index"
+                                            class="col">
                                             <div class="position-relative">
                                                 <!-- صورة -->
-                                                <img v-if="isImage(preview)" :src="preview" :alt="'media ' + index"
+                                                <img v-if="item.type === 'image'" :src="item.preview"
+                                                    :alt="'media ' + index"
                                                     class="img-fluid rounded-3 shadow"
                                                     style="height: 140px; object-fit: cover; width: 100%" />
                                                 <!-- فيديو -->
-                                                <video v-else :src="preview" class="rounded-3 shadow w-100"
+                                                <video v-else :src="item.preview" class="rounded-3 shadow w-100"
                                                     style="height: 140px; object-fit: cover;" controls muted></video>
 
                                                 <button type="button" @click="removeMedia(index)"
@@ -223,22 +272,40 @@
                                                 </button>
 
                                                 <!-- علامة فيديو -->
-                                                <span v-if="!isImage(preview)"
+                                                <span v-if="item.type === 'video'"
                                                     class="position-absolute bottom-0 start-50 translate-middle-x bg-dark text-white px-2 py-1 rounded-top small fw-bold"
                                                     style="font-size: 0.75rem;">
                                                     فيديو
                                                 </span>
                                             </div>
+
+                                            <div v-if="item.type === 'image'" class="mt-2 text-start">
+                                                <div class="small text-muted">
+                                                    {{ item.width }} × {{ item.height }}
+                                                </div>
+
+                                                <div class="small text-primary fw-semibold">
+                                                    Suggested Price: ${{ item.suggested_price }}
+                                                </div>
+
+                                                <label class="form-label small mb-1 mt-1">
+                                                    Your Price
+                                                </label>
+
+                                                <input v-model.number="item.custom_price" type="number" min="1"
+                                                    step="1" class="form-control form-control-sm rounded-3"
+                                                    placeholder="Enter your price" />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <button v-if="form.media_files.length < MAX_MEDIA" type="button"
+                                    <button v-if="form.media_items.length < MAX_MEDIA" type="button"
                                         @click="$refs.fileInput.click()" class="btn btn-outline-primary btn-sm px-4">
                                         {{ $t('eventForm.addMore') }}
                                     </button>
 
                                     <small class="text-muted d-block mt-2">
-                                        {{ $t('eventForm.mediaCount', { count: form.media_files.length }) }} / {{
+                                        {{ $t('eventForm.mediaCount', { count: form.media_items.length }) }} / {{
                                             MAX_MEDIA }}
                                     </small>
                                 </div>
@@ -252,7 +319,7 @@
                     <button type="button" class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill">
                         {{ $t('commons.cancel') }}
                     </button>
-                    <button type="submit" :disabled="loading || !form.latitude || !form.longitude"
+                    <button type="submit" :disabled="loading || !hasSelectedLocation"
                         class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow">
                         {{ loading ? $t('commons.creating') : $t('commons.create') }}
                     </button>
@@ -269,6 +336,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { LocationService } from "../../services/LocationService/LocationService";
 import { CategoryService } from "../../services/CategoryService/CategoryService";
 import { EventService } from "../../services/EventService/EventService";
+import { TagService } from "../../services/TagService/TagService";
 
 const MAX_MEDIA = 8;
 
@@ -282,6 +350,7 @@ const form = ref({
     time: "",
     media_files: [],
     media_previews: [],
+    media_items: [],
     latitude: null,
     longitude: null,
 });
@@ -297,6 +366,11 @@ const fileInput = ref(null);
 const countrySearch = ref("");
 const locatingUser = ref(false);
 const locationError = ref(null);
+const tags = ref([]);
+const selectedTags = ref([]);
+const loadingTags = ref(false);
+const tagSearch = ref("");
+const showTagsDropdown = ref(false);
 
 const filteredCountries = computed(() => {
     if (!countrySearch.value) return countries.value;
@@ -305,10 +379,25 @@ const filteredCountries = computed(() => {
     );
 });
 
+const hasSelectedLocation = computed(() =>
+    Number.isFinite(form.value.latitude) && Number.isFinite(form.value.longitude)
+);
+
+const filteredTags = computed(() => {
+    const search = tagSearch.value.trim().toLowerCase();
+
+    if (!search) return tags.value;
+
+    return tags.value.filter((tag) =>
+        String(tag.name || "").toLowerCase().includes(search)
+    );
+});
+
 async function fetchCountries() {
     try {
         const res = await LocationService.getAllCountries();
-        countries.value = res.data.data || [];
+        countries.value = res || [];
+        console.log("Loaded countries:", countries.value);
     } catch (err) {
         console.error("فشل تحميل الدول", err);
     }
@@ -343,6 +432,20 @@ async function fetchCategories() {
     }
 }
 
+async function fetchTags() {
+    loadingTags.value = true;
+
+    try {
+        const res = await TagService.getTags();
+        tags.value = res?.data?.data || res?.data || [];
+    } catch (err) {
+        console.error("Failed to load tags", err);
+        tags.value = [];
+    } finally {
+        loadingTags.value = false;
+    }
+}
+
 async function loadSubCategories() {
     subCategories.value = [];
     form.value.sub_categorey_id = "";
@@ -355,18 +458,97 @@ async function loadSubCategories() {
     }
 }
 
-function handleMediaSelect(e) {
+const isTagSelected = (tagId) => {
+    return selectedTags.value.map(String).includes(String(tagId));
+};
+
+const toggleTag = (tagId) => {
+    const normalizedId = String(tagId);
+
+    if (isTagSelected(tagId)) {
+        selectedTags.value = selectedTags.value.filter((id) => String(id) !== normalizedId);
+        return;
+    }
+
+    if (selectedTags.value.length >= 4) {
+        alert("You can select up to 4 tags only");
+        return;
+    }
+
+    selectedTags.value = [...selectedTags.value, tagId];
+};
+
+const clearTags = () => {
+    selectedTags.value = [];
+    tagSearch.value = "";
+};
+
+const getTagName = (tagId) => {
+    return tags.value.find((tag) => String(tag.id) === String(tagId))?.name || tagId;
+};
+
+async function handleMediaSelect(e) {
     const files = Array.from(e.target.files || []);
-    processMedia(files);
+    await processMedia(files);
 }
 
-function handleMediaDrop(e) {
+async function handleMediaDrop(e) {
     const files = Array.from(e.dataTransfer.files || []);
-    processMedia(files);
+    await processMedia(files);
 }
 
-function processMedia(newFiles) {
-    const currentCount = form.value.media_files.length;
+function getImageDimensions(file) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        const url = URL.createObjectURL(file);
+
+        image.onload = () => {
+            const dimensions = {
+                width: image.naturalWidth,
+                height: image.naturalHeight,
+            };
+
+            URL.revokeObjectURL(url);
+            resolve(dimensions);
+        };
+
+        image.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("Unable to read image dimensions"));
+        };
+
+        image.src = url;
+    });
+}
+
+function calculateSuggestedPrice(width, height) {
+    const megapixels = (width * height) / 1000000;
+
+    if (megapixels >= 12) return 50;
+    if (megapixels >= 8) return 35;
+    if (megapixels >= 4) return 25;
+    if (megapixels >= 2) return 15;
+
+    return 10;
+}
+
+function readFilePreview(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (ev) => resolve(ev.target.result);
+        reader.onerror = () => reject(new Error("Unable to read file preview"));
+        reader.readAsDataURL(file);
+    });
+}
+
+function syncMediaArrays() {
+    form.value.media_files = form.value.media_items.map((item) => item.file);
+    form.value.media_previews = form.value.media_items.map((item) => item.preview);
+}
+
+async function processMedia(newFiles) {
+    const currentCount = form.value.media_items.length;
     const canAdd = MAX_MEDIA - currentCount;
 
     if (newFiles.length > canAdd) {
@@ -374,38 +556,69 @@ function processMedia(newFiles) {
         newFiles = newFiles.slice(0, canAdd);
     }
 
-    newFiles.forEach((file) => {
+    for (const file of newFiles) {
         if (file.size > 20 * 1024 * 1024) {
             alert(`حجم الملف ${file.name} يتجاوز 5 ميجا`);
-            return;
+            continue;
         }
+
         const allowedTypes = [
             "image/png", "image/jpeg", "image/webp",
             "video/mp4", "video/webm", "video/ogg"
         ];
+
         if (!allowedTypes.includes(file.type)) {
             alert(`نوع الملف ${file.name} غير مدعوم`);
-            return;
+            continue;
         }
 
-        form.value.media_files.push(file);
+        try {
+            const preview = await readFilePreview(file);
 
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            form.value.media_previews.push(ev.target.result);
-        };
-        reader.readAsDataURL(file);
-    });
+            if (file.type.startsWith("image/")) {
+                const { width, height } = await getImageDimensions(file);
+
+                if (width < 720 || height < 720) {
+                    alert(`Image ${file.name} quality is too low. Minimum resolution is 720px width and height.`);
+                    continue;
+                }
+
+                const suggestedPrice = calculateSuggestedPrice(width, height);
+
+                form.value.media_items.push({
+                    file,
+                    preview,
+                    type: "image",
+                    width,
+                    height,
+                    suggested_price: suggestedPrice,
+                    custom_price: suggestedPrice,
+                });
+            } else {
+                form.value.media_items.push({
+                    file,
+                    preview,
+                    type: "video",
+                    width: null,
+                    height: null,
+                    suggested_price: null,
+                    custom_price: null,
+                });
+            }
+
+            syncMediaArrays();
+        } catch (err) {
+            console.error("Failed to process media", err);
+            alert(`تعذر قراءة الملف ${file.name}`);
+        }
+    }
+
     if (fileInput.value) fileInput.value.value = "";
 }
 
 function removeMedia(index) {
-    form.value.media_files.splice(index, 1);
-    form.value.media_previews.splice(index, 1);
-}
-
-function isImage(previewUrl) {
-    return previewUrl.startsWith("data:image/");
+    form.value.media_items.splice(index, 1);
+    syncMediaArrays();
 }
 
 async function createEvent() {
@@ -415,14 +628,29 @@ async function createEvent() {
         !form.value.city_id ||
         !form.value.sub_categorey_id ||
         !form.value.start_date ||
-        !form.value.latitude ||
-        !form.value.longitude
+        !hasSelectedLocation.value
     ) {
         return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
     }
 
-    if (form.value.media_files.length === 0) {
+    if (selectedTags.value.length === 0) {
+        return alert("Please select at least one tag");
+    }
+
+    if (selectedTags.value.length > 4) {
+        return alert("You can select up to 4 tags only");
+    }
+
+    if (form.value.media_items.length === 0) {
         return alert("يرجى رفع صورة أو فيديو واحد على الأقل");
+    }
+
+    const invalidPrice = form.value.media_items.some((item) =>
+        item.type === "image" && (!item.custom_price || Number(item.custom_price) <= 0)
+    );
+
+    if (invalidPrice) {
+        return alert("Please add a valid price for all images");
     }
 
     loading.value = true;
@@ -439,8 +667,23 @@ async function createEvent() {
 
     fd.append("lattitude", form.value.latitude);
     fd.append("langitude", form.value.longitude);
-    form.value.media_files.forEach((file) => {
-        fd.append("urls[]", file);
+
+    selectedTags.value.forEach((tagId) => {
+        fd.append("tags_id[]", tagId);
+    });
+
+    form.value.media_items.forEach((item) => {
+        fd.append("urls[]", item.file);
+
+        if (item.type === "image") {
+            fd.append("media_prices[]", item.custom_price || item.suggested_price || 0);
+            fd.append("media_widths[]", item.width);
+            fd.append("media_heights[]", item.height);
+        } else {
+            fd.append("media_prices[]", "");
+            fd.append("media_widths[]", "");
+            fd.append("media_heights[]", "");
+        }
     });
 
     try {
@@ -463,7 +706,7 @@ let marker = null;
 const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
 
 onMounted(async () => {
-    await Promise.all([fetchCountries(), fetchCategories()]);
+    await Promise.all([fetchCountries(), fetchCategories(), fetchTags()]);
     await nextTick();
 
     initMap();
@@ -513,6 +756,7 @@ function initMap() {
 function setSelectedLocation(lat, lng, shouldFly = true) {
     form.value.latitude = lat;
     form.value.longitude = lng;
+    locationError.value = null;
 
     if (!map) return;
 

@@ -1,307 +1,437 @@
 <template>
   <AdminLayout>
-    <!-- Loading State -->
-    <div v-if="loading" class="loading-wrapper">
-      <div class="spinner"></div>
-      <p>جاري تحميل البيانات...</p>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="fetchError" class="error-banner">
-      <span>⚠️ {{ fetchError }}</span>
-    </div>
-
-    <!-- Main Form -->
-    <div v-else class="edit-page">
-      <div class="page-header">
-        <h1 class="page-title">Edit Event Details</h1>
-        <p class="page-subtitle">
-          Update the information for your upcoming event and manage its visibility.
-        </p>
-      </div>
-
-      <form @submit.prevent="handleSubmit" class="event-form" novalidate>
-        <!-- Event Title -->
-        <div class="form-row">
-          <div class="form-label-col">
-            <label class="field-label">Event Title</label>
-            <p class="field-hint">The primary name for the event.</p>
-          </div>
-          <div class="form-input-col">
-            <input
-              v-model="form.title"
-              type="text"
-              class="input-field"
-              :class="{ 'input-error': errors.title }"
-              placeholder="e.g. Golden Hour Photography Workshop"
-            />
-            <span v-if="errors.title" class="error-text">{{ errors.title }}</span>
-          </div>
+    <div class="edit-event-page">
+      <Transition name="toast">
+        <div v-if="successMessage" class="toast toast-success" role="status">
+          {{ successMessage }}
         </div>
+      </Transition>
 
-        <!-- Description -->
-        <div class="form-row">
-          <div class="form-label-col">
-            <label class="field-label">Description</label>
-            <p class="field-hint">A brief overview of what to expect.</p>
-          </div>
-          <div class="form-input-col">
-            <textarea
-              v-model="form.description"
-              class="input-field textarea-field"
-              :class="{ 'input-error': errors.description }"
-              rows="5"
-              placeholder="Describe your event..."
-            ></textarea>
-            <span v-if="errors.description" class="error-text">{{
-              errors.description
-            }}</span>
-          </div>
+      <Transition name="toast">
+        <div v-if="submitError" class="toast toast-error" role="alert">
+          {{ submitError }}
         </div>
+      </Transition>
 
-        <!-- Event Cover Image -->
-        <div class="form-row">
-          <div class="form-label-col">
-            <label class="field-label">Event Cover Image</label>
-            <p class="field-hint">Recommended size: 1200×600px</p>
-          </div>
-          <div class="form-input-col">
-            <!-- Drop Zone -->
-            <div
-              class="drop-zone"
-              :class="{ 'drop-zone-active': isDragging }"
-              @click="triggerFileInput"
-              @dragover.prevent="isDragging = true"
-              @dragleave.prevent="isDragging = false"
-              @drop.prevent="handleDrop"
-            >
-              <div class="drop-zone-icon">
-                <svg
-                  width="40"
-                  height="40"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <polyline points="16 16 12 12 8 16"></polyline>
-                  <line x1="12" y1="12" x2="12" y2="21"></line>
-                  <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
-                </svg>
-              </div>
-              <p class="drop-text">
-                Drag and drop or
-                <span class="drop-link">click to upload</span>
-              </p>
-              <p class="drop-hint">PNG, JPG up to 10MB</p>
-              <input
-                ref="fileInput"
-                type="file"
-                accept="image/png, image/jpeg"
-                class="hidden-input"
-                @change="handleFileChange"
-              />
-            </div>
-
-            <!-- Preview of new image -->
-            <div v-if="imagePreview" class="image-preview-card">
-              <img :src="imagePreview" class="preview-thumb" alt="preview" />
-              <div class="preview-info">
-                <span class="preview-name">{{ selectedFile?.name }}</span>
-                <span class="preview-meta">New image selected</span>
-              </div>
-              <button
-                type="button"
-                class="remove-btn"
-                @click="removeNewImage"
-                title="Remove"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path>
-                  <path d="M10 11v6M14 11v6"></path>
-                  <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path>
-                </svg>
-              </button>
-            </div>
-
-            <!-- Current active image -->
-            <div v-else-if="currentImageName" class="image-preview-card current-image">
-              <div class="preview-thumb-placeholder">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
-                </svg>
-              </div>
-              <div class="preview-info">
-                <span class="preview-name">{{ currentImageName }}</span>
-                <span class="preview-meta">Current active image</span>
-              </div>
-            </div>
-          </div>
+      <section v-if="loading" class="loading-panel">
+        <div class="loader"></div>
+        <div>
+          <p class="loading-title">Loading event</p>
+          <p class="loading-copy">Preparing the editor workspace.</p>
         </div>
+      </section>
 
-        <!-- Schedule -->
-        <div class="form-row">
-          <div class="form-label-col">
-            <label class="field-label">Schedule</label>
-            <p class="field-hint">Define the date and time range.</p>
-          </div>
-          <div class="form-input-col">
-            <div class="date-grid">
-              <div class="date-field">
-                <label class="sub-label">START DATE</label>
-                <div class="input-icon-wrap">
-                  <svg
-                    class="input-icon"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <input
-                    v-model="form.start_date"
-                    type="date"
-                    class="input-field date-input"
-                    :class="{ 'input-error': errors.start_date }"
-                  />
-                </div>
-                <span v-if="errors.start_date" class="error-text">{{
-                  errors.start_date
-                }}</span>
-              </div>
-
-              <div class="date-field">
-                <label class="sub-label">END DATE</label>
-                <div class="input-icon-wrap">
-                  <svg
-                    class="input-icon"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <input
-                    v-model="form.end_date"
-                    type="date"
-                    class="input-field date-input"
-                    :class="{ 'input-error': errors.end_date }"
-                  />
-                </div>
-                <span v-if="errors.end_date" class="error-text">{{
-                  errors.end_date
-                }}</span>
-              </div>
-            </div>
-
-            <div class="time-field">
-              <label class="sub-label">SESSION TIME</label>
-              <div class="input-icon-wrap">
-                <svg
-                  class="input-icon"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <input v-model="form.time" type="time" class="input-field time-input" />
-              </div>
-            </div>
-          </div>
+      <section v-else-if="fetchError" class="empty-panel">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 9v4m0 4h.01M10.3 3.9 2.3 18a2 2 0 0 0 1.7 3h16a2 2 0 0 0 1.7-3l-8-14.1a2 2 0 0 0-3.4 0Z" />
+          </svg>
         </div>
-
-        <!-- Success Message -->
-        <Transition name="fade">
-          <div v-if="successMessage" class="success-banner">✅ {{ successMessage }}</div>
-        </Transition>
-
-        <!-- Submit Error -->
-        <Transition name="fade">
-          <div v-if="submitError" class="error-banner">⚠️ {{ submitError }}</div>
-        </Transition>
-
-        <!-- Actions -->
-        <div class="form-actions">
-          <button type="button" class="btn-cancel" @click="handleCancel">Cancel</button>
-          <button type="submit" class="btn-save" :disabled="submitting">
-            <span v-if="submitting" class="btn-spinner"></span>
-            <svg
-              v-else
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-            >
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            {{ submitting ? "Saving..." : "Save Changes" }}
+        <h2>Could not load this event</h2>
+        <p>{{ fetchError }}</p>
+        <div class="empty-actions">
+          <button type="button" class="secondary-button" @click="handleBack">
+            Back
+          </button>
+          <button type="button" class="primary-button" @click="fetchEvent()">
+            Retry
           </button>
         </div>
-      </form>
+      </section>
+
+      <template v-else>
+        <header class="edit-header">
+          <div class="header-main">
+            <button
+              type="button"
+              class="icon-button"
+              aria-label="Back to events"
+              @click="handleBack"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19 12H5m7 7-7-7 7-7" />
+              </svg>
+            </button>
+
+            <div class="header-copy">
+              <p class="eyebrow">Admin event editor</p>
+              <h1>{{ headerTitle }}</h1>
+              <div class="header-meta">
+                <span>{{ cityName }}</span>
+                <span>{{ categoryName }}</span>
+                <span>ID {{ event?.id }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <label class="quick-toggle">
+              <input v-model="form.is_trending" type="checkbox" />
+              <span class="switch" aria-hidden="true"></span>
+              <span>Trending</span>
+            </label>
+
+            <span class="save-state">{{ saveState }}</span>
+
+            <button
+              type="button"
+              class="primary-button"
+              :disabled="submitting || uploading"
+              @click="handleSubmit"
+            >
+              <span v-if="submitting" class="mini-loader"></span>
+              <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              {{ submitting ? "Saving" : "Save" }}
+            </button>
+          </div>
+        </header>
+
+        <form class="edit-grid" novalidate @submit.prevent="handleSubmit">
+          <main class="content-panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Content</p>
+                <h2>Event details</h2>
+              </div>
+              <span class="status-pill" :class="{ active: form.is_trending }">
+                {{ form.is_trending ? "Trending" : "Standard" }}
+              </span>
+            </div>
+
+            <div class="field-group">
+              <label for="event-title">Title</label>
+              <input
+                id="event-title"
+                v-model="form.title"
+                class="text-input"
+                :class="{ invalid: errors.title }"
+                type="text"
+                autocomplete="off"
+                placeholder="Event title"
+              />
+              <p v-if="errors.title" class="field-error">{{ errors.title }}</p>
+            </div>
+
+            <div class="field-group">
+              <label for="event-description">Description</label>
+              <textarea
+                id="event-description"
+                v-model="form.description"
+                class="text-input textarea-input"
+                :class="{ invalid: errors.description }"
+                rows="7"
+                placeholder="Event description"
+              ></textarea>
+              <p v-if="errors.description" class="field-error">
+                {{ errors.description }}
+              </p>
+            </div>
+
+            <div class="schedule-grid">
+              <div class="field-group">
+                <label for="start-date">Start date</label>
+                <input
+                  id="start-date"
+                  v-model="form.start_date"
+                  class="text-input"
+                  :class="{ invalid: errors.start_date }"
+                  type="date"
+                />
+                <p v-if="errors.start_date" class="field-error">
+                  {{ errors.start_date }}
+                </p>
+              </div>
+
+              <div class="field-group">
+                <label for="end-date">End date</label>
+                <input
+                  id="end-date"
+                  v-model="form.end_date"
+                  class="text-input"
+                  :class="{ invalid: errors.end_date }"
+                  type="date"
+                />
+                <p v-if="errors.end_date" class="field-error">
+                  {{ errors.end_date }}
+                </p>
+              </div>
+
+              <div class="field-group">
+                <label for="event-time">Time</label>
+                <input
+                  id="event-time"
+                  v-model="form.time"
+                  class="text-input"
+                  type="time"
+                />
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-item likes">
+                <span>Likes</span>
+                <strong>{{ statValue("likes") }}</strong>
+              </div>
+              <div class="stat-item comments">
+                <span>Comments</span>
+                <strong>{{ statValue("comments") }}</strong>
+              </div>
+              <div class="stat-item views">
+                <span>Views</span>
+                <strong>{{ statValue("views") }}</strong>
+              </div>
+            </div>
+
+            <div class="metadata-grid">
+              <div>
+                <span>City</span>
+                <strong>{{ cityName }}</strong>
+              </div>
+              <div>
+                <span>Sub category</span>
+                <strong>{{ categoryName }}</strong>
+              </div>
+              <div>
+                <span>Slug</span>
+                <strong>{{ event?.slug || "Not set" }}</strong>
+              </div>
+            </div>
+          </main>
+
+          <aside class="side-stack">
+            <section class="side-panel">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Media</p>
+                  <h2>Cover and gallery</h2>
+                </div>
+                <span class="count-pill">{{ mediaFiles.length }} files</span>
+              </div>
+
+              <div class="cover-block">
+                <div class="cover-preview">
+                  <img :src="coverImage" alt="Current event cover" @error="useFallbackImage" />
+                </div>
+                <div class="cover-info">
+                  <span>Cover image</span>
+                  <strong>{{ coverLabel }}</strong>
+                  <div class="cover-actions">
+                    <input
+                      ref="coverInput"
+                      class="file-input"
+                      type="file"
+                      accept="image/*"
+                      @change="handleCoverChange"
+                    />
+                    <button type="button" class="secondary-button small" @click="triggerCoverInput">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 5v14m7-7H5" />
+                      </svg>
+                      Replace
+                    </button>
+                    <button
+                      v-if="coverPreview"
+                      type="button"
+                      class="ghost-button small"
+                      @click="clearCoverSelection"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="mediaFiles.length" class="media-grid">
+                <article v-for="media in mediaFiles" :key="media.id" class="media-tile">
+                  <button
+                    type="button"
+                    class="media-thumb"
+                    :aria-label="`Preview media ${media.id}`"
+                    @click="openPreview(media)"
+                  >
+                    <video
+                      v-if="isMediaVideo(media)"
+                      :src="mediaUrl(media)"
+                      muted
+                      playsinline
+                      preload="metadata"
+                    ></video>
+                    <img
+                      v-else
+                      :src="mediaUrl(media)"
+                      :alt="`Event media ${media.id}`"
+                      @error="useFallbackImage"
+                    />
+                    <span v-if="isMediaVideo(media)" class="play-badge">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 5v14l11-7Z" />
+                      </svg>
+                    </span>
+                  </button>
+                  <div class="media-actions">
+                    <button type="button" class="ghost-button small" @click="openPreview(media)">
+                      View
+                    </button>
+                    <button
+                      type="button"
+                      class="danger-button small"
+                      :disabled="deletingMediaId === media.id"
+                      @click="deleteMedia(media)"
+                    >
+                      {{ deletingMediaId === media.id ? "Deleting" : "Delete" }}
+                    </button>
+                  </div>
+                </article>
+              </div>
+
+              <div v-else class="media-empty">
+                <span>No media files yet</span>
+              </div>
+
+              <div
+                class="upload-zone"
+                :class="{ dragging: isDragging, selected: selectedFile }"
+                @click="triggerMediaInput"
+                @dragover.prevent="isDragging = true"
+                @dragleave.prevent="isDragging = false"
+                @drop.prevent="handleMediaDrop"
+              >
+                <input
+                  ref="mediaInput"
+                  class="file-input"
+                  type="file"
+                  accept="image/*,video/mp4,video/webm,video/quicktime"
+                  @change="handleMediaFileChange"
+                />
+
+                <template v-if="!selectedFile">
+                  <svg class="upload-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 16V4m0 0 5 5m-5-5L7 9M20 16.5V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2.5" />
+                  </svg>
+                  <strong>Drop media here</strong>
+                  <span>Images or video, click to choose a file</span>
+                </template>
+
+                <div v-else class="selected-media" @click.stop>
+                  <div class="selected-preview">
+                    <video
+                      v-if="selectedFile.type.startsWith('video/')"
+                      :src="mediaPreview"
+                      muted
+                      playsinline
+                    ></video>
+                    <img v-else :src="mediaPreview" alt="Selected upload preview" />
+                  </div>
+                  <div>
+                    <strong>{{ selectedFile.name }}</strong>
+                    <span>{{ fileSize(selectedFile.size) }}</span>
+                  </div>
+                  <button type="button" class="ghost-button small" @click="clearMediaSelection">
+                    Remove
+                  </button>
+                </div>
+              </div>
+
+              <div v-if="uploading" class="progress-track" aria-label="Upload progress">
+                <span :style="{ width: `${uploadProgress}%` }"></span>
+              </div>
+
+              <p v-if="uploadError" class="field-error">{{ uploadError }}</p>
+
+              <button
+                type="button"
+                class="secondary-button upload-button"
+                :disabled="!selectedFile || uploading || !event?.id"
+                @click="uploadSelectedMedia"
+              >
+                <span v-if="uploading" class="mini-loader dark"></span>
+                <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5v14m7-7H5" />
+                </svg>
+                {{ uploading ? `Uploading ${uploadProgress}%` : "Upload media" }}
+              </button>
+            </section>
+
+            <section class="side-panel settings-panel">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">Settings</p>
+                  <h2>Visibility</h2>
+                </div>
+              </div>
+
+              <label class="settings-toggle">
+                <input v-model="form.is_trending" type="checkbox" />
+                <span class="switch" aria-hidden="true"></span>
+                <span>
+                  <strong>Trending event</strong>
+                  <small>Highlight this event in trending areas.</small>
+                </span>
+              </label>
+            </section>
+          </aside>
+        </form>
+
+        <div v-if="previewMedia" class="preview-modal" @click="closePreview">
+          <button type="button" class="modal-close" @click.stop="closePreview">
+            Close
+          </button>
+          <video
+            v-if="isMediaVideo(previewMedia)"
+            :src="mediaUrl(previewMedia)"
+            controls
+            autoplay
+            class="modal-media"
+            @click.stop
+          ></video>
+          <img
+            v-else
+            :src="mediaUrl(previewMedia)"
+            alt="Event media preview"
+            class="modal-media"
+            @click.stop
+          />
+        </div>
+      </template>
     </div>
   </AdminLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
+import { EventImageService } from "../../../services/EventImageService/EventImageService";
+import { normalizeErrorMessage, showSafeToast } from "../../../services/ApiClient";
 import { EventService } from "../../../services/admin/events/EventService";
 
-// ─── Router ────────────────────────────────────────────────────────────────
 const route = useRoute();
 const router = useRouter();
 
-// ─── State ─────────────────────────────────────────────────────────────────
+const fallbackImage = "/images/logo.png";
+
+const event = ref(null);
 const loading = ref(true);
 const fetchError = ref(null);
 const submitting = ref(false);
 const submitError = ref(null);
 const successMessage = ref(null);
 
-const isDragging = ref(false);
-const fileInput = ref(null);
+const mediaFiles = ref([]);
+const mediaInput = ref(null);
+const coverInput = ref(null);
 const selectedFile = ref(null);
-const imagePreview = ref(null);
-const currentImageName = ref(null);
-
-const eventId = ref(null);
+const mediaPreview = ref(null);
+const coverFile = ref(null);
+const coverPreview = ref(null);
+const uploadProgress = ref(0);
+const uploading = ref(false);
+const uploadError = ref(null);
+const isDragging = ref(false);
+const deletingMediaId = ref(null);
+const previewMedia = ref(null);
 
 const form = ref({
   title: "",
@@ -309,474 +439,1286 @@ const form = ref({
   start_date: "",
   end_date: "",
   time: "",
+  is_trending: false,
 });
 
 const errors = ref({});
 
-// ─── Fetch on mount ────────────────────────────────────────────────────────
-onMounted(async () => {
-  const id = route.params.id;
+const headerTitle = computed(() => {
+  return form.value.title || event.value?.translation?.title || event.value?.title || "Edit event";
+});
+
+const cityName = computed(() => {
+  return displayName(event.value?.city, "No city");
+});
+
+const categoryName = computed(() => {
+  return displayName(event.value?.sub_categorey, "No sub category");
+});
+
+const coverImage = computed(() => {
+  return coverPreview.value || toAssetUrl(event.value?.image) || mediaUrl(mediaFiles.value[0]) || fallbackImage;
+});
+
+const coverLabel = computed(() => {
+  if (coverFile.value?.name) return coverFile.value.name;
+  if (event.value?.image) return fileNameFromPath(event.value.image);
+  return "Current media image";
+});
+
+const saveState = computed(() => {
+  if (submitting.value) return "Saving changes";
+  if (uploading.value) return "Uploading media";
+  return "Ready";
+});
+
+onMounted(() => {
+  fetchEvent();
+});
+
+onBeforeUnmount(() => {
+  revokeObjectUrl(mediaPreview.value);
+  revokeObjectUrl(coverPreview.value);
+});
+
+async function fetchEvent(slug = route.params.id, options = {}) {
+  const silent = Boolean(options.silent);
+
+  if (!silent) {
+    loading.value = true;
+  }
+
+  fetchError.value = null;
+
   try {
-    const res = await EventService.getSingleEvent(id);
-    const data = res.data;
+    const response = await EventService.getSingleEvent(slug);
+    const payload = normalizeResponse(response);
 
-    eventId.value = data.slug;
+    event.value = payload;
+    hydrateForm(payload);
+    mediaFiles.value = normalizeMediaList(payload?.images || []);
 
-    form.value = {
-      title: data.title ?? "",
-      description: data.description ?? "",
-      start_date: data.start_date ?? "",
-      end_date: data.end_date ?? "",
-      time: data.time ?? "",
-    };
-
-    if (data.image) {
-      currentImageName.value = data.image.split("/").pop();
-    } else if (data.images && data.images.length > 0) {
-      currentImageName.value = data.images[0].split("/").pop();
+    if (payload?.id) {
+      await fetchEventMedia(payload.id);
     }
   } catch (err) {
-    fetchError.value = err?.response?.data?.message ?? "Failed to load event data.";
+    fetchError.value = getErrorMessage(err, "Failed to load event data.");
   } finally {
     loading.value = false;
   }
-});
-
-// ─── File Handling ─────────────────────────────────────────────────────────
-function triggerFileInput() {
-  fileInput.value?.click();
 }
 
-function handleFileChange(e) {
-  const file = e.target.files[0];
-  if (file) applyFile(file);
-}
+async function fetchEventMedia(eventId) {
+  try {
+    const response = await EventImageService.all(eventId);
+    const payload = normalizeResponse(response);
 
-function handleDrop(e) {
-  isDragging.value = false;
-  const file = e.dataTransfer.files[0];
-  if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
-    applyFile(file);
+    if (Array.isArray(payload)) {
+      mediaFiles.value = normalizeMediaList(payload);
+    }
+  } catch (err) {
+    uploadError.value = getErrorMessage(err, "Could not refresh media files.");
   }
 }
 
-function applyFile(file) {
-  selectedFile.value = file;
-  imagePreview.value = URL.createObjectURL(file);
+function hydrateForm(payload) {
+  form.value = {
+    title: payload?.translation?.title || payload?.title || "",
+    description: payload?.translation?.description || payload?.description || "",
+    start_date: toDateInput(payload?.start_date),
+    end_date: toDateInput(payload?.end_date),
+    time: normalizeTime(payload?.time),
+    is_trending: toBoolean(payload?.is_trending),
+  };
 }
 
-function removeNewImage() {
-  selectedFile.value = null;
-  imagePreview.value = null;
-  if (fileInput.value) fileInput.value.value = "";
-}
-
-// ─── Validation ────────────────────────────────────────────────────────────
 function validate() {
-  const e = {};
-  if (!form.value.title.trim()) e.title = "Title is required.";
-  if (!form.value.description.trim()) e.description = "Description is required.";
-  if (!form.value.start_date) e.start_date = "Start date is required.";
-  if (!form.value.end_date) e.end_date = "End date is required.";
+  const nextErrors = {};
+
+  if (!form.value.title.trim()) {
+    nextErrors.title = "Title is required.";
+  }
+
+  if (!form.value.description.trim()) {
+    nextErrors.description = "Description is required.";
+  }
+
+  if (!form.value.start_date) {
+    nextErrors.start_date = "Start date is required.";
+  }
+
+  if (!form.value.end_date) {
+    nextErrors.end_date = "End date is required.";
+  }
+
   if (form.value.start_date && form.value.end_date) {
-    if (new Date(form.value.end_date) < new Date(form.value.start_date)) {
-      e.end_date = "End date must be after start date.";
+    const start = new Date(form.value.start_date);
+    const end = new Date(form.value.end_date);
+
+    if (end < start) {
+      nextErrors.end_date = "End date must be after start date.";
     }
   }
-  errors.value = e;
-  return Object.keys(e).length === 0;
+
+  if (typeof form.value.is_trending !== "boolean") {
+    nextErrors.is_trending = "Trending value must be true or false.";
+  }
+
+  errors.value = nextErrors;
+  return Object.keys(nextErrors).length === 0;
 }
 
-// ─── Submit ────────────────────────────────────────────────────────────────
 async function handleSubmit() {
   submitError.value = null;
   successMessage.value = null;
 
-  if (!validate()) return;
+  if (!validate()) {
+    submitError.value = "Please fix the highlighted fields.";
+    showToast("error", submitError.value);
+    return;
+  }
 
   const formData = new FormData();
-  formData.append("title", form.value.title);
-  formData.append("description", form.value.description);
+  formData.append("title", form.value.title.trim());
+  formData.append("description", form.value.description.trim());
   formData.append("start_date", form.value.start_date);
   formData.append("end_date", form.value.end_date);
-  if (form.value.time) formData.append("time", form.value.time);
-  if (selectedFile.value) formData.append("image", selectedFile.value);
-  formData.append("_method", "post");
+  formData.append("time", form.value.time || "");
+  formData.append("is_trending", form.value.is_trending ? "1" : "0");
+
+  if (coverFile.value) {
+    formData.append("image", coverFile.value);
+  }
+
+  const currentKey = event.value?.slug || route.params.id;
+
+  console.group("Update Event Request");
+  console.log("Event ID/Slug:", currentKey);
+  console.log("Event object:", event.value);
+  console.log("Form state:", form.value);
+
+  for (const pair of formData.entries()) {
+    console.log("FormData:", pair[0], pair[1]);
+  }
+
+  console.groupEnd();
+
+  if (!currentKey) {
+    const message = "لا يمكن حفظ الحدث لأن رقم أو slug الحدث غير موجود.";
+    submitError.value = message;
+    showToast("error", message);
+    return;
+  }
 
   submitting.value = true;
+
   try {
-    await EventService.updateEvent(eventId.value, formData);
-    successMessage.value = "Event updated successfully!";
-    setTimeout(() => (successMessage.value = null), 4000);
-    window.location.href = "/admin/events";
+    const response = await EventService.updateEvent(currentKey, formData);
+    const updated = normalizeResponse(response);
+    const nextSlug = updated?.slug || currentKey;
+
+    successMessage.value = "Event saved successfully.";
+    showToast("success", "تم حفظ الحدث بنجاح.");
+    clearCoverSelection();
+
+    if (nextSlug && nextSlug !== route.params.id) {
+      await router.replace(`/admin/events/${nextSlug}/edit`);
+    }
+
+    await fetchEvent(nextSlug, { silent: true });
+    hideSuccessLater();
   } catch (err) {
-    submitError.value =
-      err?.response?.data?.message ?? "Something went wrong. Please try again.";
+    console.group("Update Event Save Error");
+    console.error("Full error:", err);
+    console.error("Status:", err?.response?.status);
+    console.error("Response data:", err?.response?.data);
+    console.error("Message:", err?.response?.data?.message);
+    console.error("Errors:", err?.response?.data?.errors);
+    console.groupEnd();
+
+    const responseMessage = normalizeErrorMessage(
+      err?.response?.data?.message || err?.message,
+      "حدث خطأ أثناء الحفظ. راجع تفاصيل الخطأ في Console و Laravel logs."
+    );
+
+    if (err?.response?.data?.errors) {
+      errors.value = Object.fromEntries(
+        Object.entries(err.response.data.errors).map(([key, value]) => [
+          key,
+          Array.isArray(value) ? normalizeErrorMessage(value[0], responseMessage) : normalizeErrorMessage(value, responseMessage),
+        ])
+      );
+    }
+
+    submitError.value = responseMessage;
+    showToast("error", responseMessage);
   } finally {
     submitting.value = false;
   }
 }
 
-function handleCancel() {
-  router.back();
+function triggerCoverInput() {
+  coverInput.value?.click();
+}
+
+function handleCoverChange(eventTarget) {
+  const file = eventTarget.target.files?.[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    submitError.value = "Cover must be an image file.";
+    eventTarget.target.value = "";
+    return;
+  }
+
+  revokeObjectUrl(coverPreview.value);
+  coverFile.value = file;
+  coverPreview.value = URL.createObjectURL(file);
+}
+
+function clearCoverSelection() {
+  revokeObjectUrl(coverPreview.value);
+  coverFile.value = null;
+  coverPreview.value = null;
+
+  if (coverInput.value) {
+    coverInput.value.value = "";
+  }
+}
+
+function triggerMediaInput() {
+  mediaInput.value?.click();
+}
+
+function handleMediaFileChange(eventTarget) {
+  const file = eventTarget.target.files?.[0];
+  applyMediaFile(file);
+}
+
+function handleMediaDrop(eventTarget) {
+  isDragging.value = false;
+  const file = eventTarget.dataTransfer.files?.[0];
+  applyMediaFile(file);
+}
+
+function applyMediaFile(file) {
+  uploadError.value = null;
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+    uploadError.value = "Choose an image or video file.";
+    return;
+  }
+
+  revokeObjectUrl(mediaPreview.value);
+  selectedFile.value = file;
+  mediaPreview.value = URL.createObjectURL(file);
+  uploadProgress.value = 0;
+}
+
+function clearMediaSelection() {
+  revokeObjectUrl(mediaPreview.value);
+  selectedFile.value = null;
+  mediaPreview.value = null;
+  uploadProgress.value = 0;
+  uploadError.value = null;
+
+  if (mediaInput.value) {
+    mediaInput.value.value = "";
+  }
+}
+
+async function uploadSelectedMedia() {
+  if (!selectedFile.value || !event.value?.id) return;
+
+  uploadError.value = null;
+  uploading.value = true;
+  uploadProgress.value = 0;
+
+  const formData = new FormData();
+  formData.append("url", selectedFile.value);
+
+  try {
+    await EventImageService.create(event.value.id, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress(progressEvent) {
+        if (!progressEvent.total) return;
+        uploadProgress.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      },
+    });
+
+    successMessage.value = "Media uploaded successfully.";
+    clearMediaSelection();
+    await fetchEvent(event.value.slug || route.params.id, { silent: true });
+    hideSuccessLater();
+  } catch (err) {
+    uploadError.value = getErrorMessage(err, "Upload failed.");
+    showToast("error", uploadError.value);
+  } finally {
+    uploading.value = false;
+  }
+}
+
+async function deleteMedia(media) {
+  if (!media?.id) return;
+  if (!confirm("Delete this media file?")) return;
+
+  deletingMediaId.value = media.id;
+  submitError.value = null;
+
+  try {
+    await EventImageService.delete(media.id);
+    mediaFiles.value = mediaFiles.value.filter((item) => item.id !== media.id);
+    successMessage.value = "Media deleted successfully.";
+    await fetchEvent(event.value?.slug || route.params.id, { silent: true });
+    hideSuccessLater();
+  } catch (err) {
+    submitError.value = getErrorMessage(err, "Could not delete this media file.");
+    showToast("error", submitError.value);
+  } finally {
+    deletingMediaId.value = null;
+  }
+}
+
+function openPreview(media) {
+  previewMedia.value = media;
+}
+
+function closePreview() {
+  previewMedia.value = null;
+}
+
+function handleBack() {
+  router.push("/admin/events");
+}
+
+function statValue(type) {
+  if (!event.value) return 0;
+
+  if (type === "likes") {
+    return event.value.likes_count ?? event.value.likes?.length ?? 0;
+  }
+
+  if (type === "comments") {
+    return event.value.comments_count ?? event.value.comments?.length ?? 0;
+  }
+
+  return event.value.views_count ?? event.value.views?.length ?? 0;
+}
+
+function normalizeResponse(response) {
+  return response?.data?.data || response?.data || response;
+}
+
+function normalizeMediaList(list) {
+  if (!Array.isArray(list)) return [];
+  return list.filter(Boolean);
+}
+
+function displayName(entity, fallback) {
+  return (
+    entity?.translation?.name ||
+    entity?.admin_translation?.name ||
+    entity?.name ||
+    entity?.translation?.title ||
+    fallback
+  );
+}
+
+function toDateInput(value) {
+  if (!value) return "";
+  const text = String(value);
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+    return text;
+  }
+
+  if (text.includes("T")) {
+    return text.split("T")[0];
+  }
+
+  if (text.includes(" ")) {
+    return text.split(" ")[0];
+  }
+
+  const date = new Date(text);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+}
+
+function normalizeTime(value) {
+  if (!value) return "";
+  const text = String(value);
+  return text.length >= 5 ? text.slice(0, 5) : text;
+}
+
+function toBoolean(value) {
+  return value === true || value === 1 || value === "1" || value === "true";
+}
+
+function mediaUrl(media) {
+  if (!media) return "";
+  const raw = media.url || media.preview_url || media.full_url || media.video;
+  return toAssetUrl(raw) || fallbackImage;
+}
+
+function toAssetUrl(path) {
+  if (!path || typeof path !== "string") return "";
+
+  if (
+    path.startsWith("http://") ||
+    path.startsWith("https://") ||
+    path.startsWith("data:") ||
+    path.startsWith("blob:") ||
+    path.startsWith("/")
+  ) {
+    return path;
+  }
+
+  const cleaned = path
+    .replace(/^public\//, "")
+    .replace(/^storage\//, "")
+    .replace(/^\/?storage\//, "");
+
+  return `/storage/${cleaned}`;
+}
+
+function isMediaVideo(media) {
+  if (!media) return false;
+  if (media.type === "video" || media.video === true) return true;
+
+  const url = mediaUrl(media).split("?")[0].toLowerCase();
+  return [".mp4", ".mov", ".webm", ".avi", ".mkv"].some((extension) =>
+    url.endsWith(extension)
+  );
+}
+
+function fileNameFromPath(path) {
+  if (!path || typeof path !== "string") return "Media";
+  return decodeURIComponent(path.split("?")[0].split("/").filter(Boolean).pop() || "Media");
+}
+
+function fileSize(bytes) {
+  if (!bytes) return "0 KB";
+  const mb = bytes / 1024 / 1024;
+  if (mb >= 1) return `${mb.toFixed(2)} MB`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
+function useFallbackImage(eventTarget) {
+  eventTarget.target.src = fallbackImage;
+}
+
+function getErrorMessage(err, fallback) {
+  return normalizeErrorMessage(err?.response?.data?.message || err?.message, fallback);
+}
+
+function showToast(type, message) {
+  const fallback =
+    type === "success"
+      ? "تمت العملية بنجاح."
+      : "حدث خطأ غير معروف. راجع Console و Laravel log.";
+
+  showSafeToast(type, message, fallback);
+}
+
+function hideSuccessLater() {
+  window.setTimeout(() => {
+    successMessage.value = null;
+  }, 3500);
+}
+
+function revokeObjectUrl(url) {
+  if (url?.startsWith("blob:")) {
+    URL.revokeObjectURL(url);
+  }
 }
 </script>
 
 <style scoped>
-/* ── Base ──────────────────────────────────────────────────── */
-.edit-page {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 32px 24px 60px;
-  font-family: "Segoe UI", system-ui, sans-serif;
-}
-
-/* ── Header ───────────────────────────────────────────────── */
-.page-title {
-  font-size: 28px;
-  font-weight: 800;
+.edit-event-page {
+  min-height: 100vh;
+  background: #f8fafc;
   color: #0f172a;
-  margin: 0 0 6px;
-  letter-spacing: -0.5px;
-}
-.page-subtitle {
-  font-size: 14px;
-  color: #64748b;
-  margin: 0 0 32px;
+  padding: 24px;
 }
 
-/* ── Form card ────────────────────────────────────────────── */
-.event-form {
-  background: #fff;
+.edit-header {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 1440px;
+  margin: 0 auto 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.96);
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 0 0 8px;
-  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(12px);
 }
 
-/* ── Form row ─────────────────────────────────────────────── */
-.form-row {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 24px;
-  padding: 28px 32px;
-  border-bottom: 1px solid #f1f5f9;
-  align-items: flex-start;
-}
-.form-row:last-of-type {
-  border-bottom: none;
-}
-
-.form-label-col {
-  padding-top: 4px;
-}
-.field-label {
-  display: block;
-  font-weight: 700;
-  font-size: 14px;
-  color: #1e293b;
-  margin-bottom: 4px;
-}
-.field-hint {
-  font-size: 12.5px;
-  color: #94a3b8;
-  margin: 0;
-  line-height: 1.5;
+.header-main,
+.header-actions,
+.header-meta,
+.empty-actions,
+.cover-actions,
+.media-actions,
+.selected-media,
+.settings-toggle,
+.quick-toggle {
+  display: flex;
+  align-items: center;
 }
 
-/* ── Inputs ───────────────────────────────────────────────── */
-.input-field {
-  width: 100%;
-  padding: 11px 14px;
-  font-size: 14px;
-  color: #1e293b;
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
-}
-.input-field:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-  background: #fff;
-}
-.input-field.input-error {
-  border-color: #ef4444;
-  background: #fff5f5;
-}
-.textarea-field {
-  resize: vertical;
-  min-height: 110px;
-  line-height: 1.6;
-}
-.error-text {
-  display: block;
-  font-size: 12px;
-  color: #ef4444;
-  margin-top: 5px;
+.header-main {
+  gap: 14px;
+  min-width: 0;
 }
 
-/* ── Drop Zone ────────────────────────────────────────────── */
-.drop-zone {
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 36px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  background: #f8fafc;
+.header-copy {
+  min-width: 0;
 }
-.drop-zone:hover,
-.drop-zone-active {
-  border-color: #3b82f6;
-  background: #eff6ff;
-}
-.drop-zone-icon {
-  color: #94a3b8;
-  margin-bottom: 10px;
-}
-.drop-text {
-  font-size: 14px;
-  color: #475569;
+
+.eyebrow {
   margin: 0 0 4px;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
-.drop-link {
-  color: #3b82f6;
-  font-weight: 600;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.drop-hint {
-  font-size: 12px;
-  color: #94a3b8;
+
+.header-copy h1,
+.section-heading h2,
+.empty-panel h2 {
   margin: 0;
+  color: #0f172a;
 }
-.hidden-input {
+
+.header-copy h1 {
+  max-width: 680px;
+  overflow: hidden;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-meta {
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.header-meta span,
+.count-pill,
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-state {
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.edit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 18px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.content-panel,
+.side-panel,
+.loading-panel,
+.empty-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.content-panel,
+.side-panel {
+  padding: 18px;
+}
+
+.side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.section-heading.compact {
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.status-pill {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.status-pill.active {
+  background: #dcfce7;
+  color: #047857;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.field-group label {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.text-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #0f172a;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  padding: 11px 12px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.text-input:focus {
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.text-input.invalid {
+  border-color: #dc2626;
+  background: #fff7f7;
+}
+
+.textarea-input {
+  min-height: 188px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.field-error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stats-grid,
+.metadata-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.stats-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metadata-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.stat-item,
+.metadata-grid div {
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.stat-item span,
+.metadata-grid span,
+.cover-info span,
+.selected-media span,
+.upload-zone span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stat-item strong,
+.metadata-grid strong,
+.cover-info strong,
+.selected-media strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #0f172a;
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+.stat-item.likes {
+  background: #fff1f2;
+  border-color: #fecdd3;
+}
+
+.stat-item.comments {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.stat-item.views {
+  background: #ecfdf5;
+  border-color: #bbf7d0;
+}
+
+.cover-block {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cover-preview {
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f1f5f9;
+}
+
+.cover-preview img,
+.media-thumb img,
+.media-thumb video,
+.selected-preview img,
+.selected-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover-info {
+  min-width: 0;
+}
+
+.cover-actions {
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.file-input {
   display: none;
 }
 
-/* ── Image Preview Card ───────────────────────────────────── */
-.image-preview-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-top: 12px;
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
-.preview-thumb {
-  width: 48px;
-  height: 48px;
+
+.media-tile {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  object-fit: cover;
-  border: 1px solid #e2e8f0;
+  background: #ffffff;
 }
-.preview-thumb-placeholder {
-  width: 48px;
-  height: 48px;
+
+.media-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 0;
+  padding: 0;
+  background: #0f172a;
+  cursor: pointer;
+}
+
+.play-badge {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.22);
+  color: #ffffff;
+}
+
+.play-badge svg {
+  width: 38px;
+  height: 38px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.media-actions {
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+}
+
+.media-empty {
+  display: grid;
+  place-items: center;
+  min-height: 100px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.upload-zone {
+  display: grid;
+  place-items: center;
+  gap: 7px;
+  min-height: 150px;
+  margin-top: 14px;
+  border: 1.5px dashed #94a3b8;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+  cursor: pointer;
+  padding: 14px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.upload-zone.dragging,
+.upload-zone:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.upload-zone.selected {
+  place-items: stretch;
+}
+
+.upload-icon {
+  width: 34px;
+  height: 34px;
+  color: #2563eb;
+}
+
+.selected-media {
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
+}
+
+.selected-preview {
+  width: 72px;
+  height: 58px;
+  overflow: hidden;
   border-radius: 8px;
   background: #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
-.preview-info {
-  flex: 1;
-  min-width: 0;
-}
-.preview-name {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1e293b;
-  white-space: nowrap;
+
+.progress-track {
+  height: 8px;
+  margin-top: 12px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  border-radius: 999px;
+  background: #e2e8f0;
 }
-.preview-meta {
+
+.progress-track span {
   display: block;
-  font-size: 12px;
-  color: #94a3b8;
-  margin-top: 2px;
-}
-.remove-btn {
-  background: #fee2e2;
-  border: none;
-  border-radius: 7px;
-  padding: 7px;
-  cursor: pointer;
-  color: #ef4444;
-  display: flex;
-  align-items: center;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-.remove-btn:hover {
-  background: #fecaca;
+  height: 100%;
+  border-radius: inherit;
+  background: #10b981;
+  transition: width 0.2s;
 }
 
-/* ── Date / Time Grid ─────────────────────────────────────── */
-.date-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-.date-field,
-.time-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.sub-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  color: #94a3b8;
-  text-transform: uppercase;
-}
-.input-icon-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.input-icon {
-  position: absolute;
-  left: 12px;
-  color: #94a3b8;
-  pointer-events: none;
-  z-index: 1;
-}
-.date-input,
-.time-input {
-  padding-left: 38px;
+.upload-button {
+  width: 100%;
+  justify-content: center;
+  margin-top: 12px;
 }
 
-/* ── Banners ──────────────────────────────────────────────── */
-.success-banner {
-  margin: 0 32px;
-  padding: 12px 16px;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  border-radius: 10px;
-  font-size: 14px;
-  color: #15803d;
-}
-.error-banner {
-  margin: 0 32px;
-  padding: 12px 16px;
-  background: #fff5f5;
-  border: 1px solid #fecaca;
-  border-radius: 10px;
-  font-size: 14px;
-  color: #dc2626;
+.settings-panel {
+  padding-bottom: 16px;
 }
 
-/* ── Actions ──────────────────────────────────────────────── */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
+.settings-toggle {
   gap: 12px;
-  padding: 20px 32px 24px;
+  align-items: flex-start;
 }
-.btn-cancel {
-  padding: 11px 22px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #475569;
-  background: transparent;
-  border: none;
-  border-radius: 10px;
+
+.settings-toggle small {
+  display: block;
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.quick-toggle,
+.settings-toggle {
   cursor: pointer;
+}
+
+.quick-toggle input,
+.settings-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  flex: 0 0 auto;
   transition: background 0.2s;
 }
-.btn-cancel:hover {
-  background: #f1f5f9;
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25);
+  transition: transform 0.2s;
 }
-.btn-save {
+
+.quick-toggle input:checked + .switch,
+.settings-toggle input:checked + .switch {
+  background: #10b981;
+}
+
+.quick-toggle input:checked + .switch::after,
+.settings-toggle input:checked + .switch::after {
+  transform: translateX(18px);
+}
+
+.quick-toggle span:last-child {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.icon-button,
+.primary-button,
+.secondary-button,
+.ghost-button,
+.danger-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 11px 24px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  background: #2563eb;
-  border: none;
-  border-radius: 10px;
+  min-height: 38px;
+  border-radius: 8px;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: background 0.2s, opacity 0.2s;
-}
-.btn-save:hover:not(:disabled) {
-  background: #1d4ed8;
-}
-.btn-save:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 9px 14px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
 
-/* ── Spinner ──────────────────────────────────────────────── */
-.btn-spinner {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  display: inline-block;
+.icon-button {
+  width: 40px;
+  padding: 0;
+  background: #eff6ff;
+  color: #2563eb;
 }
+
+.primary-button {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.secondary-button {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.secondary-button:hover:not(:disabled) {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.ghost-button {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.danger-button {
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.danger-button:hover:not(:disabled) {
+  background: #ffe4e6;
+}
+
+.small {
+  min-height: 32px;
+  padding: 6px 9px;
+  font-size: 12px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.loader,
+.mini-loader {
+  border-radius: 50%;
+  border-style: solid;
+  animation: spin 0.75s linear infinite;
+}
+
+.loader {
+  width: 34px;
+  height: 34px;
+  border-width: 3px;
+  border-color: #cbd5e1;
+  border-top-color: #2563eb;
+}
+
+.mini-loader {
+  width: 15px;
+  height: 15px;
+  border-width: 2px;
+  border-color: rgba(255, 255, 255, 0.45);
+  border-top-color: #ffffff;
+}
+
+.mini-loader.dark {
+  border-color: rgba(15, 23, 42, 0.2);
+  border-top-color: #2563eb;
+}
+
+.loading-panel,
+.empty-panel {
+  max-width: 760px;
+  margin: 70px auto;
+  padding: 28px;
+}
+
+.loading-panel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.loading-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.loading-copy,
+.empty-panel p {
+  margin: 4px 0 0;
+  color: #64748b;
+}
+
+.empty-panel {
+  text-align: center;
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.empty-actions {
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.toast {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 60;
+  max-width: min(380px, calc(100vw - 32px));
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  font-size: 14px;
+  font-weight: 800;
+  padding: 12px 14px;
+}
+
+.toast-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+
+.toast-error {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 6, 23, 0.88);
+  padding: 24px;
+}
+
+.modal-media {
+  max-width: min(1100px, 94vw);
+  max-height: 86vh;
+  border-radius: 8px;
+  object-fit: contain;
+  background: #020617;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.modal-close {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 9px 12px;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* ── Loading ──────────────────────────────────────────────── */
-.loading-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 0;
-  gap: 16px;
-  color: #64748b;
-}
-.spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid #e2e8f0;
-  border-top-color: #3b82f6;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-/* ── Transition ───────────────────────────────────────────── */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* ── Responsive ───────────────────────────────────────────── */
-@media (max-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr;
-    padding: 20px 18px;
-  }
-  .date-grid {
+@media (max-width: 1180px) {
+  .edit-grid {
     grid-template-columns: 1fr;
   }
-  .form-actions {
-    padding: 16px 18px 20px;
+}
+
+@media (max-width: 760px) {
+  .edit-event-page {
+    padding: 14px;
+  }
+
+  .edit-header {
+    position: static;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .header-copy h1 {
+    white-space: normal;
+  }
+
+  .schedule-grid,
+  .stats-grid,
+  .metadata-grid,
+  .cover-block,
+  .media-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .selected-media {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 </style>

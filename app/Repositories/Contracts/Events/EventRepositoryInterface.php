@@ -5,6 +5,7 @@ namespace App\Repositories\Contracts\Events;
 interface EventRepositoryInterface
 {
     public function create(array $data);
+    public function trendingEvents();
     public function show($slug);
     public function findBySlug(string $slug);
     public function findBySlugOrFail(string $slug);

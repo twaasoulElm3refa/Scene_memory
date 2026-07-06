@@ -665,8 +665,9 @@ const fetchEvent = async () => {
         error.value = null;
         const slug = route.params.id as string;
         const res = await EventService.getSingleEvent(slug);
-        if (res.data.status === "success") {
-            event.value = res.data.data;
+        console.log("API Response:", res);
+        if (res.status === "success") {
+            event.value = res.data;
         } else {
             error.value = "فشل تحميل بيانات الحدث";
         }

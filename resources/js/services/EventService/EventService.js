@@ -9,6 +9,10 @@ export const EventService = {
     return api.get("/events/memories");
   },
 
+  getTrending() {
+    return api.get("/events/trending");
+  },
+
   getAll(page = 1) {
     return api.get("/events", { params: { page } });
   },
@@ -44,13 +48,38 @@ export const EventService = {
     try {
       const cityId = filters.cityId || "all";
       const subCategoryId = filters.subCategoryId || "all";
+
+      const tagsIds = Array.isArray(filters.tagsIds)
+        ? filters.tagsIds.filter(Boolean)
+        : [];
+
       const params = {};
+
       if (filters.fromDate) params.from = filters.fromDate;
       if (filters.toDate) params.to = filters.toDate;
-      if (filters.searchQuery?.trim()) params.search = filters.searchQuery.trim();
+
+      if (filters.searchQuery?.trim()) {
+        params.search = filters.searchQuery.trim();
+        params.q = filters.searchQuery.trim();
+      }
+
+      if (tagsIds.length) {
+        params.tags_id = tagsIds;
+      }
+
       const url = `/events/${cityId}/${subCategoryId}`;
 
-      const res = await api.get(url, { params });
+      console.log("FILTER REQUEST", {
+        url,
+        params,
+      });
+
+      const res = await api.get(url, {
+        params,
+        paramsSerializer: {
+          indexes: false,
+        },
+      });
 
       return res.data?.data || res.data || [];
     } catch (err) {

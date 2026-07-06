@@ -29,12 +29,16 @@ class EventsRequest extends FormRequest
             'city_id' => 'required|exists:cities,id',
             'sub_categorey_id' => 'required|exists:sub_categoreys,id',
             'urls' => 'required|array|min:1',
-            'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,mp4|max:20460',
+            'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
             'start_date' => 'required',
             'lattitude' => 'nullable',
             'langitude' => 'nullable',
             'end_date' => 'required',
             'time' => 'nullable',
+            'tags_id' => ['nullable', 'array', 'max:4'],
+            'tags_id.*' => ['nullable', 'integer', 'exists:tags,id'],
+            'new_tags' => ['nullable', 'array', 'max:4'],
+            'new_tags.*' => ['nullable', 'string', 'max:50'],
         ];
     }
 

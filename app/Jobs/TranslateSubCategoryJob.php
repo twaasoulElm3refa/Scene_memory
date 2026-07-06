@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\subCategorey;
+use App\Models\SubCategorey;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,7 +26,7 @@ class TranslateSubCategoryJob implements ShouldQueue
     public function handle(): void
     {
 
-        $subCategory = subCategorey::find($this->subCategoryId);
+        $subCategory = SubCategorey::find($this->subCategoryId);
 
         if (! $subCategory) {
             return;

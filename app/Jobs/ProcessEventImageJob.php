@@ -10,8 +10,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class ProcessEventImageJob implements ShouldQueue
 {
@@ -22,15 +23,33 @@ class ProcessEventImageJob implements ShouldQueue
 
     public int    $eventId;
     public string $tempPath;
+    public float  $manualPrice = 0;
 
-    public function __construct(int $eventId, string $tempPath)
+    public function __construct(int $eventId, string $tempPath, float|int|string|null $manualPrice = 0)
     {
-        $this->eventId  = $eventId;
-        $this->tempPath = $tempPath;
+        $this->eventId     = $eventId;
+        $this->tempPath    = $tempPath;
+        $this->manualPrice = is_numeric($manualPrice) && (float) $manualPrice > 0
+            ? (float) $manualPrice
+            : 0;
     }
 
     public function handle(ImageAnalysisService $imageAnalysisService): void
     {
+        \Log::info('ProcessEventImageJob started', [
+            'event_id' => $this->eventId,
+            'temp_path' => $this->tempPath,
+            'manual_price' => $this->manualPrice,
+        ]);
+
+        if (trim($this->tempPath) === '') {
+            \Log::error('ProcessEventImageJob: empty temp path', [
+                'event_id' => $this->eventId,
+                'temp_path' => $this->tempPath,
+            ]);
+            return;
+        }
+
         if (!Storage::disk('public')->exists($this->tempPath)) {
             \Log::error('ProcessEventImageJob: temp file not found', [
                 'event_id'  => $this->eventId,
@@ -40,6 +59,15 @@ class ProcessEventImageJob implements ShouldQueue
         }
 
         $absolutePath = Storage::disk('public')->path($this->tempPath);
+
+        if (!is_file($absolutePath)) {
+            \Log::error('ProcessEventImageJob: temp path is not a file', [
+                'event_id' => $this->eventId,
+                'temp_path' => $this->tempPath,
+                'absolute_path' => $absolutePath,
+            ]);
+            return;
+        }
 
         try {
             $file = new \Illuminate\Http\File($absolutePath);
@@ -52,15 +80,15 @@ class ProcessEventImageJob implements ShouldQueue
                 true
             );
 
-            $manager  = new ImageManager(new Driver());
+            $manager  = $this->makeImageManager();
             $analysis = $imageAnalysisService->process($uploadedFile, $manager);
 
             $image   = $analysis['image'];
             $preview = $analysis['preview_encoded'];
             $width   = $analysis['width'];
             $height  = $analysis['height'];
-            $price   = $analysis['price'];
             $plan    = $analysis['plan'];
+            $price   = $this->manualPrice;
 
             $filename    = uniqid('', true) . '.jpg';
             $fullPath    = 'events/full/' . $filename;
@@ -100,12 +128,23 @@ class ProcessEventImageJob implements ShouldQueue
 
     public function failed(\Throwable $exception): void
     {
-        Storage::disk('public')->delete($this->tempPath);
+        if (trim($this->tempPath) !== '') {
+            Storage::disk('public')->delete($this->tempPath);
+        }
 
         \Log::error('ProcessEventImageJob: permanently failed', [
             'event_id'  => $this->eventId,
             'temp_path' => $this->tempPath,
             'message'   => $exception->getMessage(),
         ]);
+    }
+
+    private function makeImageManager(): ImageManager
+    {
+        if (extension_loaded('imagick')) {
+            return new ImageManager(new ImagickDriver());
+        }
+
+        return new ImageManager(new GdDriver());
     }
 }

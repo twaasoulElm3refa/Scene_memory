@@ -40,6 +40,7 @@ use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\SubCategoryController;
+use App\Http\Controllers\api\home\TagsController;
 use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\owner\CreatorController;
 use App\Http\Controllers\api\owner\UserWithdrawlController;
@@ -118,6 +119,11 @@ Route::prefix('v1')->group(function () {
         //25
     });
 
+    // Tags
+    Route::prefix('tags')->group(function () {
+        Route::get('/', [TagsController::class,  'index']);
+    });
+
     // COUNTRIES CRUD
     Route::prefix('countries')->group(function () {
         Route::get('/', [CountriesController::class,  'index']);
@@ -147,6 +153,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('events')->middleware(['throttle:60,1'])->group(function () {
         // Home Events
         Route::get('/', [EventController::class, 'all']);
+        Route::get('/trending', [EventController::class, 'trending']);
         Route::get('/daily', [EventController::class, 'daily']);
         Route::get('/historical', [EventController::class, 'historical']);
         Route::get('/count', [EventController::class, 'count']);

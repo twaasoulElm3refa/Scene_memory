@@ -7,14 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class EventImageController extends Controller
 {
     use ApiResponse;
 
-    private $cacheTime = 600;
+    private int $cacheTime = 600;
 
     public function __construct(
         private readonly EventImageRepositoryInterface $eventImageRepository,
@@ -22,9 +23,6 @@ class EventImageController extends Controller
     ) {
     }
 
-    /**
-     * عرض كل الصور الخاصة بحدث محدد
-     */
     public function allPerEvent()
     {
         $eventId = request('id');
@@ -34,39 +32,59 @@ class EventImageController extends Controller
             return $this->eventImageRepository->findByEventId((int) $eventId);
         });
 
-        return $this->success($eventImages, 'Event images fetched successfully');
+        return $this->success(
+            $this->normalizeMediaCollection($eventImages),
+            'Event images fetched successfully'
+        );
     }
 
-    /**
-     * إضافة صورة أو فيديو للحدث
-     */
     public function create(Request $request)
     {
-        try {
-            $data = ['event_id' => request('id')];
+        $request->validate([
+            'url' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4,webm,mov', 'max:51200'],
+            'video' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:51200'],
+        ]);
 
-            if ($request->hasFile('url')) {
-                $data['url'] = $request->file('url')->store('eventImages', 'public');
+        try {
+            $file = $request->file('url') ?: $request->file('video');
+
+            if (! $file) {
+                return $this->error('No media file was uploaded', 422);
             }
 
-            if ($request->hasFile('video')) {
-                $data['video'] = $request->file('video')->store('eventVideos', 'public');
+            $event = $this->eventRepository->findByIdOrFail((int) request('id'));
+            $type = str_starts_with((string) $file->getMimeType(), 'video/') ? 'video' : 'image';
+            $path = $file->store($type === 'video' ? 'eventVideos' : 'eventImages', 'public');
+
+            $data = [
+                'event_id' => $event->id,
+                'preview_url' => $path,
+                'full_url' => $path,
+                'type' => $type,
+                'is_active' => 1,
+                'size' => (string) $file->getSize(),
+            ];
+
+            if (Schema::hasColumn('events_imges', 'url')) {
+                $data['url'] = $path;
+            }
+
+            if ($type === 'video' && Schema::hasColumn('events_imges', 'video')) {
+                $data['video'] = $path;
             }
 
             $eventImage = $this->eventImageRepository->create($data);
-
-            $event = $this->eventRepository->findByIdOrFail((int) $data['event_id']);
             $this->clearCache($event->id, $event->slug);
 
-            return $this->success($eventImage, 'Event media added successfully');
+            return $this->success(
+                $this->normalizeMedia($eventImage),
+                'Event media added successfully'
+            );
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
     }
 
-    /**
-     * حذف صورة أو فيديو
-     */
     public function delete()
     {
         try {
@@ -82,22 +100,71 @@ class EventImageController extends Controller
         }
     }
 
-    /**
-     * مسح الكاش الخاص بالحدث والصور
-     */
-    private function clearCache($eventId = null, $slug = null)
+    private function clearCache($eventId = null, $slug = null): void
     {
-        // مسح كاش الصور للحدث
         if ($eventId) {
             Cache::forget("event_image_event_{$eventId}");
         }
 
-        // مسح كاش single event لكل اللغات
-        if ($slug) {
-            $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-            foreach ($locales as $locale) {
-                Cache::forget("events_single_{$slug}_{$locale}");
-            }
+        if (! $slug) {
+            return;
+        }
+
+        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi', 'tr'];
+
+        foreach ($locales as $locale) {
+            Cache::forget("events_single_{$slug}_{$locale}");
+            $this->forgetEventsCache('event_' . strtolower(trim($slug)) . "_{$locale}");
+        }
+    }
+
+    private function normalizeMediaCollection($media)
+    {
+        return $media->map(fn ($item) => $this->normalizeMedia($item));
+    }
+
+    private function normalizeMedia($media)
+    {
+        $rawUrl = $media->url ?? $media->preview_url ?? $media->full_url ?? $media->video ?? null;
+
+        $media->url = $this->storageUrl($rawUrl);
+        $media->preview_url = $this->storageUrl($media->preview_url ?? $rawUrl);
+        $media->full_url = $this->storageUrl($media->full_url ?? $rawUrl);
+        $media->type = $media->type ?: ($this->isVideoPath($rawUrl) ? 'video' : 'image');
+
+        return $media;
+    }
+
+    private function storageUrl(?string $path): ?string
+    {
+        if (! $path) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        return Storage::url($path);
+    }
+
+    private function isVideoPath(?string $path): bool
+    {
+        if (! $path) {
+            return false;
+        }
+
+        $extension = strtolower(pathinfo(parse_url($path, PHP_URL_PATH) ?: $path, PATHINFO_EXTENSION));
+
+        return in_array($extension, ['mp4', 'mov', 'webm', 'avi', 'mkv'], true);
+    }
+
+    private function forgetEventsCache(string $key): void
+    {
+        try {
+            Cache::tags(['events'])->forget($key);
+        } catch (\Throwable) {
+            Cache::forget($key);
         }
     }
 }

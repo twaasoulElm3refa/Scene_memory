@@ -11,7 +11,7 @@ trait ApiResponse
             'status' => 'success',
             'message' => $message,
             'data' => $data,
-        ], 200);
+        ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function unauthorized($message = 'Unauthorized Request'): JsonResponse
@@ -19,7 +19,7 @@ trait ApiResponse
         return response()->json([
             'status' => 'error',
             'message' => $message,
-        ], 401);
+        ], 401, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function notFound($message = 'not found'): JsonResponse
@@ -27,7 +27,7 @@ trait ApiResponse
         return response()->json([
             'status' => 'error',
             'message' => $message,
-        ], 404);
+        ], 404, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function tooManyRequests(string $message = 'Too many requests. Please try again later.'): JsonResponse
@@ -35,7 +35,7 @@ trait ApiResponse
         return response()->json([
             'status' => 'error',
             'message' => $message,
-        ], 429);
+        ], 429, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function error(string $message = 'An error occurred', int $statusCode = 500, $errors = null): JsonResponse
@@ -44,7 +44,7 @@ trait ApiResponse
             'status' => 'error',
             'message' => $message,
             'errors' => $errors,
-        ], $statusCode);
+        ], $statusCode, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function validationError($errors, string $message = 'Validation failed'): JsonResponse
@@ -57,6 +57,6 @@ trait ApiResponse
         return response()->json([
             'status' => 'error',
             'message' => $message,
-        ], 403);
+        ], 403, [], JSON_UNESCAPED_UNICODE);
     }
 }

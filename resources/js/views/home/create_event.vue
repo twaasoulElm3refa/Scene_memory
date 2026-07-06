@@ -104,6 +104,78 @@
                                         </option>
                                     </select>
                                 </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-medium d-flex align-items-center justify-content-between">
+                                        <span>Tags <span class="text-danger">*</span></span>
+                                        <small class="text-muted">{{ selectedTags.length }} / 4</small>
+                                    </label>
+
+                                    <div class="position-relative">
+                                        <button type="button"
+                                            class="form-control form-control-md rounded-3 text-start d-flex flex-wrap align-items-center gap-2"
+                                            :disabled="loadingTags" @click="showTagsDropdown = !showTagsDropdown">
+                                            <span v-if="loadingTags" class="text-muted">
+                                                Loading tags...
+                                            </span>
+
+                                            <template v-else-if="selectedTags.length">
+                                                <span v-for="tag in selectedTags" :key="tag.id"
+                                                    class="badge rounded-pill d-inline-flex align-items-center gap-1"
+                                                    :class="tag.isNew ? 'text-bg-success' : 'text-bg-primary'">
+                                                    #{{ tag.name }}
+
+                                                    <span role="button" class="ms-1"
+                                                        @click.stop="removeSelectedTag(tag)">
+                                                        ×
+                                                    </span>
+                                                </span>
+                                            </template>
+
+                                            <span v-else class="text-muted">
+                                                Select or create tags
+                                            </span>
+                                        </button>
+
+                                        <div v-if="showTagsDropdown && !loadingTags"
+                                            class="position-absolute z-3 w-100 mt-1 bg-white border rounded-3 shadow p-2"
+                                            style="max-height: 280px; overflow-y: auto;">
+                                            <input v-model="tagSearch" type="text"
+                                                class="form-control form-control-sm rounded-3 mb-2"
+                                                placeholder="Search or type new tag"
+                                                @keydown.enter.prevent="canAddNewTag && addNewTag()" />
+
+                                            <button v-if="canAddNewTag" type="button"
+                                                class="btn btn-outline-success btn-sm w-100 mb-2 text-start"
+                                                @click="addNewTag">
+                                                + Add "{{ normalizeTagName(tagSearch) }}"
+                                            </button>
+
+                                            <button v-if="selectedTags.length" type="button"
+                                                class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
+                                                @click="clearTags">
+                                                Clear selected tags
+                                            </button>
+
+                                            <label v-for="tag in filteredTags" :key="tag.id"
+                                                class="d-flex align-items-center gap-2 px-2 py-2 rounded-3"
+                                                style="cursor: pointer;">
+                                                <input class="form-check-input m-0" type="checkbox"
+                                                    :checked="isTagSelected(tag.id)" @change="toggleTag(tag)" />
+
+                                                <span>#{{ tag.name }}</span>
+                                            </label>
+
+                                            <div v-if="filteredTags.length === 0 && !canAddNewTag"
+                                                class="text-muted small px-2 py-2">
+                                                No tags found
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <small class="text-muted d-block mt-1">
+                                        You can select existing tags or create new ones. Maximum 4 tags.
+                                    </small>
+                                </div>
                             </div>
 
                             <div class="mt-3">
@@ -182,7 +254,7 @@
                                     hidden @change="handleMediaSelect" />
 
                                 <!-- حالة بدون ملفات -->
-                                <div v-if="form.media_previews.length === 0" class="py-4">
+                                <div v-if="form.media_items.length === 0" class="py-4">
                                     <div class="mx-auto mb-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center"
                                         style="width: 70px; height: 70px">
                                         <svg class="text-primary" width="36" height="36" fill="none"
@@ -205,14 +277,16 @@
                                 <!-- عرض الملفات بعد الرفع -->
                                 <div v-else class="py-3">
                                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 mb-3">
-                                        <div v-for="(preview, index) in form.media_previews" :key="index" class="col">
+                                        <div v-for="(item, index) in form.media_items" :key="item.preview || index"
+                                            class="col">
                                             <div class="position-relative">
                                                 <!-- صورة -->
-                                                <img v-if="isImage(preview)" :src="preview" :alt="'media ' + index"
+                                                <img v-if="item.type === 'image'" :src="item.preview"
+                                                    :alt="'media ' + index"
                                                     class="img-fluid rounded-3 shadow"
                                                     style="height: 140px; object-fit: cover; width: 100%" />
                                                 <!-- فيديو -->
-                                                <video v-else :src="preview" class="rounded-3 shadow w-100"
+                                                <video v-else :src="item.preview" class="rounded-3 shadow w-100"
                                                     style="height: 140px; object-fit: cover;" controls muted></video>
 
                                                 <button type="button" @click="removeMedia(index)"
@@ -223,22 +297,51 @@
                                                 </button>
 
                                                 <!-- علامة فيديو -->
-                                                <span v-if="!isImage(preview)"
+                                                <span v-if="item.type === 'video'"
                                                     class="position-absolute bottom-0 start-50 translate-middle-x bg-dark text-white px-2 py-1 rounded-top small fw-bold"
                                                     style="font-size: 0.75rem;">
                                                     فيديو
                                                 </span>
                                             </div>
+
+                                            <div v-if="item.type === 'image'" class="mt-2 text-start">
+                                                <!-- <div class="small text-muted">
+                                                    {{ item.width }} × {{ item.height }} — {{ item.megapixels }}MP —
+                                                    {{ item.file_size_mb }}MB
+                                                </div>
+
+                                                <div class="small text-success fw-semibold">
+                                                    Quality Score: {{ item.quality_score }}%
+                                                </div>
+
+                                                <div class="small text-muted">
+                                                    Sharpness: {{ item.sharpness_score }}% · Contrast:
+                                                    {{ item.contrast_score }}% · Brightness:
+                                                    {{ item.brightness_score }}%
+                                                </div> -->
+
+                                                <div class="small text-primary fw-semibold">
+                                                    Suggested Price: ${{ item.suggested_price }}
+                                                </div>
+
+                                                <label class="form-label small mb-1 mt-1">
+                                                    Your Price
+                                                </label>
+
+                                                <input v-model.number="item.custom_price" type="number" min="1"
+                                                    step="1" class="form-control form-control-sm rounded-3"
+                                                    placeholder="Enter your price" />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <button v-if="form.media_files.length < MAX_MEDIA" type="button"
+                                    <button v-if="form.media_items.length < MAX_MEDIA" type="button"
                                         @click="$refs.fileInput.click()" class="btn btn-outline-primary btn-sm px-4">
                                         {{ $t('eventForm.addMore') }}
                                     </button>
 
                                     <small class="text-muted d-block mt-2">
-                                        {{ $t('eventForm.mediaCount', { count: form.media_files.length }) }} / {{
+                                        {{ $t('eventForm.mediaCount', { count: form.media_items.length }) }} / {{
                                             MAX_MEDIA }}
                                     </small>
                                 </div>
@@ -269,6 +372,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { LocationService } from "../../services/LocationService/LocationService";
 import { CategoryService } from "../../services/CategoryService/CategoryService";
 import { EventService } from "../../services/EventService/EventService";
+import { TagService } from "../../services/TagService/TagService";
 
 const MAX_MEDIA = 8;
 
@@ -282,6 +386,7 @@ const form = ref({
     time: "",
     media_files: [],
     media_previews: [],
+    media_items: [],
     latitude: null,
     longitude: null,
 });
@@ -297,6 +402,11 @@ const fileInput = ref(null);
 const countrySearch = ref("");
 const locatingUser = ref(false);
 const locationError = ref(null);
+const tags = ref([]);
+const selectedTags = ref([]);
+const loadingTags = ref(false);
+const tagSearch = ref("");
+const showTagsDropdown = ref(false);
 
 const filteredCountries = computed(() => {
     if (!countrySearch.value) return countries.value;
@@ -308,6 +418,45 @@ const filteredCountries = computed(() => {
 const hasSelectedLocation = computed(() =>
     Number.isFinite(form.value.latitude) && Number.isFinite(form.value.longitude)
 );
+
+function normalizeTagName(name) {
+    return String(name || "")
+        .trim()
+        .replace(/\s+/g, " ");
+}
+
+const canAddNewTag = computed(() => {
+    const name = normalizeTagName(tagSearch.value);
+
+    if (!name) return false;
+
+    const existsInAllTags = tags.value.some((tag) =>
+        String(tag.name || "").toLowerCase() === name.toLowerCase()
+    );
+
+    const existsInSelected = selectedTags.value.some((tag) =>
+        String(tag.name || "").toLowerCase() === name.toLowerCase()
+    );
+
+    return !existsInAllTags && !existsInSelected;
+});
+
+const filteredTags = computed(() => {
+    const search = tagSearch.value.trim().toLowerCase();
+
+    return tags.value
+        .filter((tag) => {
+            const alreadySelected = selectedTags.value.some(
+                (selected) => !selected.isNew && String(selected.id) === String(tag.id)
+            );
+
+            if (alreadySelected) return false;
+
+            if (!search) return true;
+
+            return String(tag.name || "").toLowerCase().includes(search);
+        });
+});
 
 async function fetchCountries() {
     try {
@@ -348,6 +497,20 @@ async function fetchCategories() {
     }
 }
 
+async function fetchTags() {
+    loadingTags.value = true;
+
+    try {
+        const res = await TagService.getTags();
+        tags.value = res?.data?.data || res?.data || [];
+    } catch (err) {
+        console.error("Failed to load tags", err);
+        tags.value = [];
+    } finally {
+        loadingTags.value = false;
+    }
+}
+
 async function loadSubCategories() {
     subCategories.value = [];
     form.value.sub_categorey_id = "";
@@ -360,18 +523,277 @@ async function loadSubCategories() {
     }
 }
 
-function handleMediaSelect(e) {
+const isTagSelected = (tagId) => {
+    return selectedTags.value.some(
+        (tag) => !tag.isNew && String(tag.id) === String(tagId)
+    );
+};
+
+const toggleTag = (tag) => {
+    const exists = selectedTags.value.some(
+        (selected) => !selected.isNew && String(selected.id) === String(tag.id)
+    );
+
+    if (exists) {
+        selectedTags.value = selectedTags.value.filter(
+            (selected) => selected.isNew || String(selected.id) !== String(tag.id)
+        );
+        return;
+    }
+
+    if (selectedTags.value.length >= 4) {
+        alert("You can select up to 4 tags only");
+        return;
+    }
+
+    selectedTags.value = [
+        ...selectedTags.value,
+        {
+            id: tag.id,
+            name: tag.name,
+            isNew: false,
+        },
+    ];
+};
+
+const addNewTag = () => {
+    const name = normalizeTagName(tagSearch.value);
+
+    if (!name) return;
+
+    const exists = selectedTags.value.some(
+        (tag) => String(tag.name || "").toLowerCase() === name.toLowerCase()
+    );
+
+    if (exists) {
+        alert("This tag is already selected");
+        return;
+    }
+
+    if (selectedTags.value.length >= 4) {
+        alert("You can select up to 4 tags only");
+        return;
+    }
+
+    selectedTags.value = [
+        ...selectedTags.value,
+        {
+            id: `new-${Date.now()}`,
+            name,
+            isNew: true,
+        },
+    ];
+
+    tagSearch.value = "";
+};
+
+const removeSelectedTag = (tag) => {
+    selectedTags.value = selectedTags.value.filter(
+        (selected) => String(selected.id) !== String(tag.id)
+    );
+};
+
+const clearTags = () => {
+    selectedTags.value = [];
+    tagSearch.value = "";
+};
+
+async function handleMediaSelect(e) {
     const files = Array.from(e.target.files || []);
-    processMedia(files);
+    await processMedia(files);
 }
 
-function handleMediaDrop(e) {
+async function handleMediaDrop(e) {
     const files = Array.from(e.dataTransfer.files || []);
-    processMedia(files);
+    await processMedia(files);
 }
 
-function processMedia(newFiles) {
-    const currentCount = form.value.media_files.length;
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+function normalize(value, min, max) {
+    if (max === min) return 0;
+    return clamp((value - min) / (max - min), 0, 1);
+}
+
+function getImageQualityMetrics(file, maxAnalyzeSize = 512) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        const url = URL.createObjectURL(file);
+
+        image.onload = () => {
+            try {
+                const originalWidth = image.naturalWidth;
+                const originalHeight = image.naturalHeight;
+                const megapixels = (originalWidth * originalHeight) / 1000000;
+                const fileSizeMB = file.size / (1024 * 1024);
+
+                const scale = Math.min(
+                    1,
+                    maxAnalyzeSize / Math.max(originalWidth, originalHeight)
+                );
+
+                const width = Math.max(1, Math.round(originalWidth * scale));
+                const height = Math.max(1, Math.round(originalHeight * scale));
+
+                const canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext("2d", { willReadFrequently: true });
+                ctx.drawImage(image, 0, 0, width, height);
+
+                const { data } = ctx.getImageData(0, 0, width, height);
+
+                const grayscale = new Float32Array(width * height);
+                let brightnessSum = 0;
+
+                for (let i = 0, p = 0; i < data.length; i += 4, p += 1) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+
+                    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                    grayscale[p] = gray;
+                    brightnessSum += gray;
+                }
+
+                const pixelCount = width * height;
+                const brightness = brightnessSum / pixelCount;
+
+                let contrastSum = 0;
+                for (let i = 0; i < grayscale.length; i += 1) {
+                    const diff = grayscale[i] - brightness;
+                    contrastSum += diff * diff;
+                }
+
+                const contrast = Math.sqrt(contrastSum / pixelCount);
+
+                let laplacianCount = 0;
+                let sharpnessMean = 0;
+                const laplacianValues = [];
+
+                for (let y = 1; y < height - 1; y += 1) {
+                    for (let x = 1; x < width - 1; x += 1) {
+                        const idx = y * width + x;
+
+                        const center = grayscale[idx] * 4;
+                        const left = grayscale[idx - 1];
+                        const right = grayscale[idx + 1];
+                        const top = grayscale[idx - width];
+                        const bottom = grayscale[idx + width];
+
+                        const laplacian = Math.abs(center - left - right - top - bottom);
+                        laplacianValues.push(laplacian);
+                        sharpnessMean += laplacian;
+                        laplacianCount += 1;
+                    }
+                }
+
+                sharpnessMean = laplacianCount ? sharpnessMean / laplacianCount : 0;
+
+                let sharpnessVariance = 0;
+                for (const value of laplacianValues) {
+                    const diff = value - sharpnessMean;
+                    sharpnessVariance += diff * diff;
+                }
+
+                sharpnessVariance = laplacianCount ? sharpnessVariance / laplacianCount : 0;
+
+                const resolutionScore = normalize(megapixels, 0.5, 12);
+                const sharpnessScore = normalize(sharpnessVariance, 40, 1200);
+                const contrastScore = normalize(contrast, 20, 75);
+
+                const brightnessScore = 1 - Math.abs(brightness - 128) / 128;
+                const normalizedBrightnessScore = clamp(brightnessScore, 0, 1);
+
+                const density = fileSizeMB / Math.max(megapixels, 0.1);
+                const densityScore = normalize(density, 0.15, 2.5);
+
+                const qualityScore =
+                    resolutionScore * 0.30 +
+                    sharpnessScore * 0.30 +
+                    contrastScore * 0.15 +
+                    normalizedBrightnessScore * 0.15 +
+                    densityScore * 0.10;
+
+                URL.revokeObjectURL(url);
+
+                resolve({
+                    width: originalWidth,
+                    height: originalHeight,
+                    megapixels: Number(megapixels.toFixed(2)),
+                    fileSizeMB: Number(fileSizeMB.toFixed(2)),
+                    brightness: Number(brightness.toFixed(2)),
+                    contrast: Number(contrast.toFixed(2)),
+                    sharpness: Number(sharpnessVariance.toFixed(2)),
+                    resolutionScore: Math.round(resolutionScore * 100),
+                    sharpnessScore: Math.round(sharpnessScore * 100),
+                    contrastScore: Math.round(contrastScore * 100),
+                    brightnessScore: Math.round(normalizedBrightnessScore * 100),
+                    densityScore: Math.round(densityScore * 100),
+                    qualityScore: Math.round(qualityScore * 100),
+                });
+            } catch (error) {
+                URL.revokeObjectURL(url);
+                reject(error);
+            }
+        };
+
+        image.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("Unable to analyze image quality"));
+        };
+
+        image.src = url;
+    });
+}
+
+function calculateSuggestedPriceFromQuality(metrics) {
+    const score = metrics.qualityScore;
+    const megapixels = metrics.megapixels;
+
+    let price = 10;
+
+    if (score >= 90) {
+        price = 80;
+    } else if (score >= 80) {
+        price = 60;
+    } else if (score >= 70) {
+        price = 45;
+    } else if (score >= 60) {
+        price = 30;
+    } else if (score >= 50) {
+        price = 20;
+    } else {
+        price = 10;
+    }
+
+    if (megapixels >= 12) price += 15;
+    else if (megapixels >= 8) price += 10;
+    else if (megapixels >= 4) price += 5;
+
+    return Math.max(10, Math.round(price));
+}
+
+function readFilePreview(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (ev) => resolve(ev.target.result);
+        reader.onerror = () => reject(new Error("Unable to read file preview"));
+        reader.readAsDataURL(file);
+    });
+}
+
+function syncMediaArrays() {
+    form.value.media_files = form.value.media_items.map((item) => item.file);
+    form.value.media_previews = form.value.media_items.map((item) => item.preview);
+}
+
+async function processMedia(newFiles) {
+    const currentCount = form.value.media_items.length;
     const canAdd = MAX_MEDIA - currentCount;
 
     if (newFiles.length > canAdd) {
@@ -379,38 +801,80 @@ function processMedia(newFiles) {
         newFiles = newFiles.slice(0, canAdd);
     }
 
-    newFiles.forEach((file) => {
+    for (const file of newFiles) {
         if (file.size > 20 * 1024 * 1024) {
             alert(`حجم الملف ${file.name} يتجاوز 5 ميجا`);
-            return;
+            continue;
         }
+
         const allowedTypes = [
             "image/png", "image/jpeg", "image/webp",
             "video/mp4", "video/webm", "video/ogg"
         ];
+
         if (!allowedTypes.includes(file.type)) {
             alert(`نوع الملف ${file.name} غير مدعوم`);
-            return;
+            continue;
         }
 
-        form.value.media_files.push(file);
+        try {
+            const preview = await readFilePreview(file);
 
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            form.value.media_previews.push(ev.target.result);
-        };
-        reader.readAsDataURL(file);
-    });
+            if (file.type.startsWith("image/")) {
+                const metrics = await getImageQualityMetrics(file);
+
+                if (metrics.width < 720 || metrics.height < 720) {
+                    alert(`Image ${file.name} quality is too low. Minimum resolution is 720px width and height.`);
+                    continue;
+                }
+
+                const suggestedPrice = calculateSuggestedPriceFromQuality(metrics);
+
+                form.value.media_items.push({
+                    file,
+                    preview,
+                    type: "image",
+                    width: metrics.width,
+                    height: metrics.height,
+                    suggested_price: suggestedPrice,
+                    custom_price: suggestedPrice,
+                    quality_score: metrics.qualityScore,
+                    sharpness_score: metrics.sharpnessScore,
+                    contrast_score: metrics.contrastScore,
+                    brightness_score: metrics.brightnessScore,
+                    resolution_score: metrics.resolutionScore,
+                    density_score: metrics.densityScore,
+                    megapixels: metrics.megapixels,
+                    file_size_mb: metrics.fileSizeMB,
+                    sharpness: metrics.sharpness,
+                    contrast: metrics.contrast,
+                    brightness: metrics.brightness,
+                });
+            } else {
+                form.value.media_items.push({
+                    file,
+                    preview,
+                    type: "video",
+                    width: null,
+                    height: null,
+                    suggested_price: null,
+                    custom_price: null,
+                });
+            }
+
+            syncMediaArrays();
+        } catch (err) {
+            console.error("Failed to process media", err);
+            alert(`تعذر قراءة الملف ${file.name}`);
+        }
+    }
+
     if (fileInput.value) fileInput.value.value = "";
 }
 
 function removeMedia(index) {
-    form.value.media_files.splice(index, 1);
-    form.value.media_previews.splice(index, 1);
-}
-
-function isImage(previewUrl) {
-    return previewUrl.startsWith("data:image/");
+    form.value.media_items.splice(index, 1);
+    syncMediaArrays();
 }
 
 async function createEvent() {
@@ -425,8 +889,24 @@ async function createEvent() {
         return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
     }
 
-    if (form.value.media_files.length === 0) {
+    if (selectedTags.value.length === 0) {
+        return alert("Please select or create at least one tag");
+    }
+
+    if (selectedTags.value.length > 4) {
+        return alert("You can select up to 4 tags only");
+    }
+
+    if (form.value.media_items.length === 0) {
         return alert("يرجى رفع صورة أو فيديو واحد على الأقل");
+    }
+
+    const invalidPrice = form.value.media_items.some((item) =>
+        item.type === "image" && (!item.custom_price || Number(item.custom_price) <= 0)
+    );
+
+    if (invalidPrice) {
+        return alert("Please add a valid price for all images");
     }
 
     loading.value = true;
@@ -443,8 +923,37 @@ async function createEvent() {
 
     fd.append("lattitude", form.value.latitude);
     fd.append("langitude", form.value.longitude);
-    form.value.media_files.forEach((file) => {
-        fd.append("urls[]", file);
+
+    selectedTags.value.forEach((tag) => {
+        if (tag.isNew) {
+            fd.append("new_tags[]", tag.name);
+        } else {
+            fd.append("tags_id[]", tag.id);
+        }
+    });
+
+    form.value.media_items.forEach((item) => {
+        fd.append("urls[]", item.file);
+
+        if (item.type === "image") {
+            fd.append("media_prices[]", item.custom_price || item.suggested_price || 0);
+            fd.append("media_widths[]", item.width);
+            fd.append("media_heights[]", item.height);
+            fd.append("media_quality_scores[]", item.quality_score || "");
+            fd.append("media_sharpness_scores[]", item.sharpness_score || "");
+            fd.append("media_contrast_scores[]", item.contrast_score || "");
+            fd.append("media_brightness_scores[]", item.brightness_score || "");
+            fd.append("media_file_sizes_mb[]", item.file_size_mb || "");
+        } else {
+            fd.append("media_prices[]", "");
+            fd.append("media_widths[]", "");
+            fd.append("media_heights[]", "");
+            fd.append("media_quality_scores[]", "");
+            fd.append("media_sharpness_scores[]", "");
+            fd.append("media_contrast_scores[]", "");
+            fd.append("media_brightness_scores[]", "");
+            fd.append("media_file_sizes_mb[]", "");
+        }
     });
 
     try {
@@ -467,7 +976,7 @@ let marker = null;
 const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
 
 onMounted(async () => {
-    await Promise.all([fetchCountries(), fetchCategories()]);
+    await Promise.all([fetchCountries(), fetchCategories(), fetchTags()]);
     await nextTick();
 
     initMap();

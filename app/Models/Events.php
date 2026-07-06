@@ -33,6 +33,7 @@ class Events extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'is_active' => 'boolean',
+        'is_trending' => 'boolean',
     ];
     public function city()
     {

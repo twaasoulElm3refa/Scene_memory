@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class EventController extends Controller
@@ -46,6 +47,17 @@ class EventController extends Controller
         return $this->success($events, 'All events');
     }
 
+    public function trending()
+    {
+        $cacheKey = "events_trending_".app()->getLocale();
+
+        $events = Cache::tags(['events'])->remember($cacheKey, 60, function () {
+            return $this->eventRepository->trendingEvents();
+        });
+
+        return $this->success($events, 'Trending events');
+    }
+
     public function historical()
     {
         $page = request()->get('page', 1);
@@ -65,15 +77,32 @@ class EventController extends Controller
         $cityId = $request->city_id !== 'all' ? $request->city_id : null;
         $categoryId = $request->sub_category_id !== 'all' ? $request->sub_category_id : null;
 
+        $tagsIds = $request->query('tags_id', []);
+
+        if (!is_array($tagsIds)) {
+            $tagsIds = [$tagsIds];
+        }
+
+        $tagsIds = collect($tagsIds)
+            ->filter(fn ($id) => $id !== null && $id !== '' && $id !== 'all')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->values()
+            ->all();
+
         $from = $request->query('from');
         $to = $request->query('to');
 
-        $q = $request->query('q', '*');
+        $q = $request->query('q', $request->query('search', '*'));
         $perPage = $request->query('per_page', 15);
 
         $filters = [
             'is_active:=true',
         ];
+
+        if (!empty($tagsIds)) {
+            $filters[] = 'tags_id:=[' . implode(',', $tagsIds) . ']';
+        }
 
         if ($cityId) {
             $filters[] = 'city_id:=' . (int) $cityId;
@@ -90,6 +119,7 @@ class EventController extends Controller
         if ($to) {
             $filters[] = 'end_date:<=' . Carbon::parse($to)->timestamp;
         }
+
         $events = $this->eventRepository->filteredActive($filters);
 
         return $this->success($events, 'Events');
@@ -203,13 +233,7 @@ class EventController extends Controller
             return $this->error('Event not found', 404);
         }
         $this->eventRepository->firstOrCreateView($event->id, (string) request()->getClientIp());
-        if ($event->images && $event->images->isNotEmpty()) {
-            foreach ($event->images as $image) {
-                if ($image->url) {
-                    $image->url = \Storage::url($image->url) ?: null;
-                }
-            }
-        }
+        $this->normalizeEventMedia($event);
 
         return $this->success($event, 'Event data');
     }
@@ -257,6 +281,53 @@ class EventController extends Controller
     private function eventCacheKey(string $slug): string
     {
         return 'event_' . strtolower(trim($slug)) . '_' . app()->getLocale();
+    }
+
+    private function normalizeEventMedia($event): void
+    {
+        if ($event->images && $event->images->isNotEmpty()) {
+            foreach ($event->images as $image) {
+                $this->normalizeMedia($image);
+            }
+        }
+
+        if ($event->firstImage) {
+            $this->normalizeMedia($event->firstImage);
+        }
+    }
+
+    private function normalizeMedia($media): void
+    {
+        $rawUrl = $media->url ?? $media->preview_url ?? $media->full_url ?? $media->video ?? null;
+
+        $media->url = $this->storageUrl($rawUrl);
+        $media->preview_url = $this->storageUrl($media->preview_url ?? $rawUrl);
+        $media->full_url = $this->storageUrl($media->full_url ?? $rawUrl);
+        $media->type = $media->type ?: ($this->isVideoPath($rawUrl) ? 'video' : 'image');
+    }
+
+    private function storageUrl(?string $path): ?string
+    {
+        if (! $path) {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        return Storage::url($path);
+    }
+
+    private function isVideoPath(?string $path): bool
+    {
+        if (! $path) {
+            return false;
+        }
+
+        $extension = strtolower(pathinfo(parse_url($path, PHP_URL_PATH) ?: $path, PATHINFO_EXTENSION));
+
+        return in_array($extension, ['mp4', 'mov', 'webm', 'avi', 'mkv'], true);
     }
 
     private function resolveCityNomination(array $place): ?CityNomination
