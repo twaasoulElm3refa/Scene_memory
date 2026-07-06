@@ -46,6 +46,7 @@ export const EventService = {
    */
   async searchEvents(filters = {}) {
     try {
+      const countryId = filters.countryId || filters.country_id || null;
       const cityId = filters.cityId || "all";
       const subCategoryId = filters.subCategoryId || "all";
 
@@ -55,6 +56,7 @@ export const EventService = {
 
       const params = {};
 
+      if (countryId) params.country_id = countryId;
       if (filters.fromDate) params.from = filters.fromDate;
       if (filters.toDate) params.to = filters.toDate;
 
@@ -68,11 +70,6 @@ export const EventService = {
       }
 
       const url = `/events/${cityId}/${subCategoryId}`;
-
-      console.log("FILTER REQUEST", {
-        url,
-        params,
-      });
 
       const res = await api.get(url, {
         params,

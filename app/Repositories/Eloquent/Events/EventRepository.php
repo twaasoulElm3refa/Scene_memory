@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Eloquent\Events;
 
-use App\Models\Event_Tags;
 use App\Models\EventViews;
 use App\Models\Events;
 use App\Models\EventsImges;
@@ -173,6 +172,7 @@ class EventRepository implements EventRepositoryInterface
         }
 
         $cityId = $parsedFilters['city_id'] ?? $parsedFilters['cityId'] ?? null;
+        $countryId = $parsedFilters['country_id'] ?? $parsedFilters['countryId'] ?? null;
 
         $subCategoryId = $parsedFilters['sub_category_id']
             ?? $parsedFilters['subCategoryId']
@@ -186,13 +186,15 @@ class EventRepository implements EventRepositoryInterface
 
         $to = $parsedFilters['to']
             ?? $parsedFilters['toDate']
+            ?? $parsedFilters['start_date_to']
             ?? $parsedFilters['end_date_to']
             ?? null;
 
-        $hasNormalFilters = !empty($cityId)
-            || !empty($subCategoryId)
-            || !empty($from)
-            || !empty($to);
+        $searchQuery = trim((string) ($parsedFilters['search_query']
+            ?? $parsedFilters['searchQuery']
+            ?? $parsedFilters['q']
+            ?? $parsedFilters['search']
+            ?? ''));
 
         $active = $parsedFilters['is_active'] ?? 1;
 
@@ -276,55 +278,53 @@ class EventRepository implements EventRepositoryInterface
                 ->where('is_active', $active);
         };
 
-        $filteredEvents = collect();
+        $query = $buildBaseQuery();
 
-        if ($hasNormalFilters || empty($tagsArray)) {
-            $normalQuery = $buildBaseQuery();
-
-            if ($cityId) {
-                $normalQuery->where('city_id', (int) $cityId);
-            }
-
-            if ($subCategoryId) {
-                $normalQuery->where('sub_categorey_id', (int) $subCategoryId);
-            }
-
-            if ($from) {
-                $normalQuery->whereDate('start_date', '>=', $normalizeDate($from));
-            }
-
-            if ($to) {
-                $normalQuery->whereDate('end_date', '<=', $normalizeDate($to));
-            }
-
-            $filteredEvents = $normalQuery
-                ->orderBy('start_date')
-                ->get();
+        if ($countryId) {
+            $query->whereHas('city', function ($q) use ($countryId) {
+                $q->where('country_id', (int) $countryId);
+            });
         }
 
-        $tagsEvents = collect();
+        if ($cityId) {
+            $query->where('city_id', (int) $cityId);
+        }
+
+        if ($subCategoryId) {
+            $query->where('sub_categorey_id', (int) $subCategoryId);
+        }
 
         if (!empty($tagsArray)) {
-            $eventIdsByTags = Event_Tags::query()
-                ->whereIn('tag_id', $tagsArray)
-                ->pluck('event_id')
-                ->unique()
-                ->values()
-                ->all();
-
-            if (!empty($eventIdsByTags)) {
-                $tagsEvents = $buildBaseQuery()
-                    ->whereIn('id', $eventIdsByTags)
-                    ->orderBy('start_date')
-                    ->get();
-            }
+            $query->whereHas('event_tags', function ($q) use ($tagsArray) {
+                $q->whereIn('tag_id', $tagsArray);
+            });
         }
 
-        return $filteredEvents
-            ->merge($tagsEvents)
-            ->unique('id')
-            ->sortBy('start_date')
-            ->values()
+        if ($from) {
+            $query->whereDate('start_date', '>=', $normalizeDate($from));
+        }
+
+        if ($to) {
+            $query->whereDate('start_date', '<=', $normalizeDate($to));
+        }
+
+        if ($searchQuery !== '') {
+            $likeSearch = '%' . str_replace(['%', '_'], ['\%', '\_'], $searchQuery) . '%';
+
+            $query->where(function ($q) use ($likeSearch) {
+                $q->where('title', 'like', $likeSearch)
+                    ->orWhere('description', 'like', $likeSearch)
+                    ->orWhereHas('translation', function ($translationQuery) use ($likeSearch) {
+                        $translationQuery
+                            ->where('title', 'like', $likeSearch)
+                            ->orWhere('description', 'like', $likeSearch);
+                    });
+            });
+        }
+
+        return $query
+            ->orderBy('start_date')
+            ->get()
             ->toArray();
     }
 

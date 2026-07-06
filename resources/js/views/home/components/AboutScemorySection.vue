@@ -35,7 +35,7 @@
 
           <button
             type="button"
-            class="mt-8 rounded-full bg-[#0D4D97] px-7 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-[#1E5FB8]"
+            class="mt-8 rounded bg-[#0D4D97] px-7 py-3 mt-2 text-sm font-bold text-white shadow-lg transition hover:bg-[#1E5FB8]"
           >
             Learn more
           </button>

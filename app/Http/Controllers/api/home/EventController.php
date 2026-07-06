@@ -76,6 +76,11 @@ class EventController extends Controller
     {
         $cityId = $request->city_id !== 'all' ? $request->city_id : null;
         $categoryId = $request->sub_category_id !== 'all' ? $request->sub_category_id : null;
+        $countryId = $request->query('country_id');
+
+        if ($countryId === 'all' || $countryId === '') {
+            $countryId = null;
+        }
 
         $tagsIds = $request->query('tags_id', []);
 
@@ -93,12 +98,15 @@ class EventController extends Controller
         $from = $request->query('from');
         $to = $request->query('to');
 
-        $q = $request->query('q', $request->query('search', '*'));
-        $perPage = $request->query('per_page', 15);
+        $searchQuery = trim((string) $request->query('q', $request->query('search', '')));
 
         $filters = [
             'is_active:=true',
         ];
+
+        if ($countryId) {
+            $filters[] = 'country_id:=' . (int) $countryId;
+        }
 
         if (!empty($tagsIds)) {
             $filters[] = 'tags_id:=[' . implode(',', $tagsIds) . ']';
@@ -117,7 +125,11 @@ class EventController extends Controller
         }
 
         if ($to) {
-            $filters[] = 'end_date:<=' . Carbon::parse($to)->timestamp;
+            $filters[] = 'start_date:<=' . Carbon::parse($to)->timestamp;
+        }
+
+        if ($searchQuery !== '') {
+            $filters['search_query'] = $searchQuery;
         }
 
         $events = $this->eventRepository->filteredActive($filters);

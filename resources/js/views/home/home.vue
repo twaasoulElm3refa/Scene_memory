@@ -50,6 +50,9 @@
                 <div class="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start">
                         <div class="space-y-8">
+                            <TagsSearchBar :tags="tags" :selected-tags="selectedTags" :loading="loadingTags"
+                                @update:selected-tags="handleTagsUpdate" />
+
                             <MapSection :fullscreen="fullscreen" :is-map-ready="isMapReady"
                                 :is-map-loading="isMapLoading" :map-error="mapError" :can-init-map="canInitMap"
                                 @map-viewport-enter="handleMapViewportEnter" @load-map="handleManualMapLoad"
@@ -58,14 +61,11 @@
                             <section id="filters-section" ref="filtersSectionRef">
                                 <FiltersSection :categories="categories" :selected-category="selectedCategory"
                                     :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
-                                    :loading-sub-categories="loadingSubCategories" :tags="tags"
-                                    :selected-tags="selectedTags" :loading-tags="loadingTags"
-                                    :country-search="countrySearch" :show-dropdown="showDropdown"
+                                    :loading-sub-categories="loadingSubCategories" :country-search="countrySearch" :show-dropdown="showDropdown"
                                     :filtered-countries="filteredCountries" :selected-country="selectedCountry"
                                     :cities="cities" :selected-city="selectedCity" :from-date="fromDate" :to-date="toDate"
                                     @update:selected-category="handleCategoryUpdate"
                                     @update:selected-sub-category="handleSubCategoryUpdate"
-                                    @update:selected-tags="handleTagsUpdate"
                                     @update:country-search="countrySearch = $event"
                                     @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
                                     @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
@@ -161,6 +161,7 @@ import { PlanService } from "@/services/planService/planService";
 import { AuthService } from "@/services/AuthService/AuthService";
 
 const MapSection = defineAsyncComponent(() => import("./components/MapSection.vue"));
+const TagsSearchBar = defineAsyncComponent(() => import("./components/TagsSearchBar.vue"));
 const FiltersSection = defineAsyncComponent(() => import("./components/FiltersSection.vue"));
 const EventsSection = defineAsyncComponent(() => import("./components/EventsSection.vue"));
 const PlansSection = defineAsyncComponent(() => import("./components/PlansSection.vue"));
@@ -374,6 +375,11 @@ const onCountryFocus = () => {
 };
 
 const selectCountry = (country) => {
+    if (String(selectedCountry.value) !== String(country.id)) {
+        selectedCity.value = "";
+        cities.value = [];
+    }
+
     selectedCountry.value = country.id;
     countrySearch.value = country.translation?.name || "";
     showDropdown.value = false;
@@ -605,6 +611,7 @@ const search = async (isInitial = false) => {
 
     try {
         const result = await EventService.searchEvents({
+            countryId: selectedCountry.value || null,
             cityId: selectedCity.value || null,
             subCategoryId: selectedSubCategory.value || null,
             tagsIds: selectedTags.value,
@@ -843,7 +850,15 @@ const debouncedSearch = debounce(() => {
     void search();
 }, 450);
 
-watch(countrySearch, filterCountries);
+watch(countrySearch, (value) => {
+    filterCountries();
+
+    if (!String(value || "").trim()) {
+        selectedCountry.value = "";
+        selectedCity.value = "";
+        cities.value = [];
+    }
+});
 
 watch(selectedCountry, () => {
     void loadCities();
