@@ -22,7 +22,7 @@
                 <component :is="heroMediaComponent" v-if="heroMedia" :src="getMediaUrl(heroMedia)"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
                     playsinline />
-                <img v-else :src="placeholderImage" :alt="event.translation.title"
+                <img v-else :src="placeholderImage" :alt="event?.translation?.title || ''"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
 
                 <div v-if="heroMedia && isMediaVideo(heroMedia)"
@@ -36,9 +36,9 @@
                 <div class="absolute top-6 left-6 md:left-10 flex flex-wrap gap-3 z-20">
                     <span
                         class="bg-blue-100/90 backdrop-blur-sm text-blue-900 px-5 py-2 rounded-full text-base font-bold shadow-lg uppercase tracking-wider">
-                        {{ event.city?.translation.name || $t('event.city_default') }}
+                        {{ event?.city?.translation?.name || $t('event.city_default') }}
                     </span>
-                    <span v-if="event.sub_categorey?.translation.name"
+                    <span v-if="event?.sub_categorey?.translation?.name"
                         class="bg-green-100/90 backdrop-blur-sm text-green-900 px-5 py-2 rounded-full text-base font-bold shadow-lg uppercase tracking-wider">
                         {{ event.sub_categorey.translation.name }}
                     </span>
@@ -71,13 +71,13 @@
 
                         <!-- Grid -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                            <div v-for="(media, index) in eventImages" :key="media.id || index"
+                            <div v-for="(media, index) in eventImages" :key="media?.id || index"
                                 class="aspect-[16/10] overflow-hidden rounded-2xl shadow hover:shadow-lg transition-shadow cursor-pointer relative group"
                                 @click="openLightbox(index)">
 
                                 <!-- IMAGE -->
                                 <img v-if="!isMediaVideo(media)" :src="getMediaUrl(media) || placeholderImage"
-                                    :alt="media.title || media.name || 'Event media'" @error="onMediaImageError"
+                                    :alt="media?.title || media?.name || 'Event media'" @error="onMediaImageError"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     loading="lazy" />
 
@@ -97,7 +97,7 @@
                                         💰 {{ formatPrice(getImagePrice(media)) }} $
                                     </div>
                                     <!-- ADD TO CART -->
-                                    <button @click.stop="addToCart(media.id)"
+                                    <button @click.stop="addToCart(media?.id)"
                                         class="bg-gray-500 hover:bg-gray-600 px-3 py-1 rounded text-sm font-semibold transition">
                                         🛒 Add
                                     </button>
@@ -225,7 +225,7 @@
                             <!-- Title + Like -->
                             <div class="flex items-center justify-between mb-6">
                                 <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                                    {{ event.translation.title }}
+                                    {{ event?.translation?.title || '' }}
                                 </h1>
                                 <button @click="toggleLike" :disabled="likeLoading || isLiked"
                                     class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ml-4 shrink-0"
@@ -250,7 +250,7 @@
                             </p>
 
                             <p class="text-lg md:text-xl text-gray-700 mb-10 leading-relaxed">
-                                {{ event.translation.description }}
+                                {{ event?.translation?.description || '' }}
                             </p>
 
                             <!-- About -->
@@ -260,7 +260,7 @@
                                     {{ $t('event.about_event_title') }}
                                 </h2>
                                 <p class="text-gray-700 mb-8 text-lg leading-relaxed">
-                                    {{ event.translation.des }}
+                                    {{ event?.translation?.des || '' }}
                                 </p>
                             </div>
 
@@ -269,42 +269,42 @@
                                 <h2
                                     class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">
                                     {{ $t('event.comments_title') }}
-                                    ({{ event.comments_count ?? event.comments?.length ?? 0 }})
+                                    ({{ event?.comments_count ?? event?.comments?.length ?? 0 }})
                                 </h2>
 
                                 <RouterLink v-if="isAuthenticated"
-                                    :to="{ name: 'all_comments', params: { slug: event.slug } }"
+                                    :to="{ name: 'all_comments', params: { slug: event?.slug } }"
                                     class="inline-block mb-6 text-indigo-600 hover:text-indigo-800 font-medium">
                                     {{ $t('view_all_comments') }}
                                 </RouterLink>
 
                                 <!-- Comment List -->
-                                <div v-for="comment in event.comments" :key="comment.id"
+                                <div v-for="comment in (event?.comments || [])" :key="comment?.id"
                                     class="comment-box mb-6 bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
 
                                     <p class="text-gray-700 text-sm leading-relaxed mb-3">
-                                        {{ comment.translation?.comment || comment.comment }}
+                                        {{ comment?.translation?.comment || comment?.comment || '' }}
                                     </p>
 
                                     <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
                                         <div class="flex items-center gap-2">
                                             <div
                                                 class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
-                                                {{ comment.user?.name?.charAt(0)?.toUpperCase() || '?' }}
+                                                {{ comment?.user?.name?.charAt(0)?.toUpperCase() || '?' }}
                                             </div>
                                             <div>
                                                 <p class="font-semibold text-gray-900 text-sm">
-                                                    {{ comment.user?.name || $t('event.visitor') }}
+                                                    {{ comment?.user?.name || $t('event.visitor') }}
                                                 </p>
                                                 <span class="text-xs text-gray-500">
-                                                    {{ formatCommentDate(comment.created_at) }}
+                                                    {{ formatCommentDate(comment?.created_at) }}
                                                 </span>
                                             </div>
                                         </div>
 
                                         <div class="flex items-center gap-2">
                                             <!-- Reply Button -->
-                                            <button v-if="isAuthenticated" @click="toggleReplyForm(comment.id)"
+                                            <button v-if="isAuthenticated" @click="toggleReplyForm(comment?.id)"
                                                 class="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-2 py-1 rounded-lg hover:bg-indigo-50">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -315,8 +315,8 @@
                                             </button>
 
                                             <!-- Delete Button -->
-                                            <button v-if="comment.user_id === currentUserId"
-                                                @click="deleteComment(comment.id)"
+                                            <button v-if="comment?.user_id === currentUserId"
+                                                @click="deleteComment(comment?.id)"
                                                 class="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
                                                 :title="$t('event.delete_comment_title')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none"
@@ -328,7 +328,7 @@
                                             </button>
 
                                             <!-- Report Button -->
-                                            <button @click="openReportModal(comment.id)"
+                                            <button @click="openReportModal(comment?.id)"
                                                 class="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
                                                 title="الإبلاغ عن هذا التعليق">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none"
@@ -344,70 +344,70 @@
                                     </div>
 
                                     <!-- Delete Comment Error -->
-                                    <p v-if="deleteCommentErrors[comment.id]"
+                                    <p v-if="comment && deleteCommentErrors[comment.id]"
                                         class="mb-2 text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg text-xs">
                                         {{ deleteCommentErrors[comment.id] }}
                                     </p>
 
                                     <!-- Reactions -->
                                     <div class="flex items-center gap-2.5 flex-wrap mt-1" dir="rtl">
-                                        <button @click="setReaction(comment.id, 'support')"
-                                            :disabled="reactionLoading[comment.id]" :class="[
+                                        <button @click="setReaction(comment?.id, 'support')"
+                                            :disabled="comment && reactionLoading[comment.id]" :class="[
                                                 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-                                                commentReactions[comment.id] === 'support'
+                                                comment && commentReactions[comment.id] === 'support'
                                                     ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
                                                     : 'bg-white border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-400',
-                                                reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
+                                                comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
                                             <span class="text-base">👍</span>
                                             موافق
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                {{ comment.support_count ?? 0 }}
+                                                {{ comment?.support_count ?? 0 }}
                                             </span>
                                         </button>
 
-                                        <button @click="setReaction(comment.id, 'neutral')"
-                                            :disabled="reactionLoading[comment.id]" :class="[
+                                        <button @click="setReaction(comment?.id, 'neutral')"
+                                            :disabled="comment && reactionLoading[comment.id]" :class="[
                                                 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-                                                commentReactions[comment.id] === 'neutral'
+                                                comment && commentReactions[comment.id] === 'neutral'
                                                     ? 'bg-amber-500 border-amber-500 text-white shadow-sm'
                                                     : 'bg-white border-gray-300 text-gray-700 hover:bg-amber-50 hover:border-amber-400',
-                                                reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
+                                                comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
                                             <span class="text-base">😐</span>
                                             محايد
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                {{ comment.neutral_count ?? 0 }}
+                                                {{ comment?.neutral_count ?? 0 }}
                                             </span>
                                         </button>
 
-                                        <button @click="setReaction(comment.id, 'exhibitions')"
-                                            :disabled="reactionLoading[comment.id]" :class="[
+                                        <button @click="setReaction(comment?.id, 'exhibitions')"
+                                            :disabled="comment && reactionLoading[comment.id]" :class="[
                                                 'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[110px] justify-center',
-                                                commentReactions[comment.id] === 'exhibitions'
+                                                comment && commentReactions[comment.id] === 'exhibitions'
                                                     ? 'bg-rose-600 border-rose-600 text-white shadow-sm'
                                                     : 'bg-white border-gray-300 text-gray-700 hover:bg-rose-50 hover:border-rose-400',
-                                                reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
+                                                comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
                                             <span class="text-base">👎</span>
                                             غير موافق
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                {{ comment.exhibitions_count ?? 0 }}
+                                                {{ comment?.exhibitions_count ?? 0 }}
                                             </span>
                                         </button>
                                     </div>
 
                                     <!-- Reaction Error per comment -->
-                                    <p v-if="reactionErrors[comment.id]"
+                                    <p v-if="comment && reactionErrors[comment.id]"
                                         class="mt-2 text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg text-xs">
                                         {{ reactionErrors[comment.id] }}
                                     </p>
 
                                     <!-- Reply Form -->
-                                    <div v-if="isAuthenticated && replyingTo === comment.id" class="mt-6 pl-12">
+                                    <div v-if="isAuthenticated && comment && replyingTo === comment.id" class="mt-6 pl-12">
                                         <form @submit.prevent="addReply(comment.id)" class="space-y-4">
                                             <textarea v-model="replyTexts[comment.id]" rows="2"
                                                 class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -434,23 +434,23 @@
                                     </div>
 
                                     <!-- Replies -->
-                                    <div v-if="comment.replies?.length > 0"
+                                    <div v-if="comment?.replies?.length > 0"
                                         class="mt-6 pl-12 border-l-2 border-indigo-200 space-y-6">
-                                        <div v-for="reply in comment.replies" :key="reply.id"
+                                        <div v-for="reply in comment.replies" :key="reply?.id"
                                             class="bg-white p-4 rounded-lg shadow-sm">
                                             <div class="flex items-start gap-3">
                                                 <div
                                                     class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium text-sm">
-                                                    {{ reply.user?.name?.charAt(0)?.toUpperCase() || '?' }}
+                                                    {{ reply?.user?.name?.charAt(0)?.toUpperCase() || '?' }}
                                                 </div>
                                                 <div class="flex-1">
                                                     <div class="flex items-center gap-2 mb-1">
-                                                        <p class="font-medium text-gray-900">{{ reply.user?.name ||
+                                                        <p class="font-medium text-gray-900">{{ reply?.user?.name ||
                                                             $t('event.visitor') }}</p>
                                                         <span class="text-xs text-gray-500">{{
-                                                            formatCommentDate(reply.created_at) }}</span>
+                                                            formatCommentDate(reply?.created_at) }}</span>
                                                     </div>
-                                                    <p class="text-gray-700">{{ reply.comment }}</p>
+                                                    <p class="text-gray-700">{{ reply?.comment || '' }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -516,7 +516,7 @@
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.from_date')
                                                 }}</p>
-                                                <p class="font-medium">{{ formatDate(event.start_date) }}</p>
+                                                <p class="font-medium">{{ formatDate(event?.start_date) }}</p>
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
@@ -524,7 +524,7 @@
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.to_date') }}
                                                 </p>
-                                                <p class="font-medium">{{ formatDate(event.end_date) }}</p>
+                                                <p class="font-medium">{{ formatDate(event?.end_date) }}</p>
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
@@ -532,7 +532,7 @@
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.time_label')
                                                 }}</p>
-                                                <p class="font-medium">{{ event.time || $t('event.time_default') }}</p>
+                                                <p class="font-medium">{{ event?.time || $t('event.time_default') }}</p>
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
@@ -540,11 +540,11 @@
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.location')
                                                 }}</p>
-                                                <p class="font-medium">{{ event.city?.translation.name ||
+                                                <p class="font-medium">{{ event?.city?.translation?.name ||
                                                     $t('event.city_default') }}</p>
                                             </div>
                                         </div>
-                                        <div v-if="event.user?.name" class="flex items-start gap-2">
+                                        <div v-if="event?.user?.name" class="flex items-start gap-2">
                                             <span class="text-xl mt-0.5">👤</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
@@ -617,8 +617,8 @@
                                 <li v-for="(file, idx) in selectedFiles" :key="idx"
                                     class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                                     <div class="flex items-center gap-3 truncate">
-                                        <span class="text-gray-600">{{ file.name }}</span>
-                                        <span class="text-xs text-gray-500">({{ formatFileSize(file.size) }})</span>
+                                        <span class="text-gray-600">{{ file?.name }}</span>
+                                        <span class="text-xs text-gray-500">({{ formatFileSize(file?.size) }})</span>
                                     </div>
                                     <button @click="removeFile(idx)"
                                         class="text-red-600 hover:text-red-800 text-sm">حذف</button>
@@ -758,7 +758,7 @@ const collectionAlert = ref({
 });
 
 const route = useRoute();
-const slug = route.params.slug;
+const slug = route.params?.slug;
 
 // ─── State ────────────────────────────────────────────────────────────────────
 const event = ref(null);
@@ -792,7 +792,7 @@ const deleteCommentErrors = ref({});
 
 const refreshEvent = async () => {
     const response = await EventService.getSingleEvent(slug);
-    event.value = response.data?.data || response;
+    event.value = response?.data?.data || response || null;
 };
 
 const ensureEventImagesArray = () => {
@@ -800,6 +800,14 @@ const ensureEventImagesArray = () => {
 
     if (!Array.isArray(event.value.images)) {
         event.value.images = [];
+    }
+};
+
+const ensureEventCommentsArray = () => {
+    if (!event.value) return;
+
+    if (!Array.isArray(event.value.comments)) {
+        event.value.comments = [];
     }
 };
 
@@ -860,8 +868,8 @@ const placeholderImage = 'https://developers.elementor.com/docs/assets/img/eleme
 
 const getBackendOrigin = () => {
     const apiUrl =
-        import.meta.env.VITE_API_URL ||
-        import.meta.env.VITE_API_BASE_URL ||
+        import.meta.env?.VITE_API_URL ||
+        import.meta.env?.VITE_API_BASE_URL ||
         '';
 
     if (!apiUrl) {
@@ -934,10 +942,17 @@ const getMediaUrl = (mediaOrPath) => {
 };
 
 const onMediaImageError = (e) => {
-    e.target.src = placeholderImage;
+    if (e?.target) {
+        e.target.src = placeholderImage;
+    }
 };
 
 const addToCart = async (mediaId) => {
+    if (!mediaId) {
+        showCartAlert("error", "لا يمكن تحديد هذا العنصر");
+        return;
+    }
+
     const token = localStorage.getItem("auth_token");
 
     if (!token) {
@@ -952,7 +967,7 @@ const addToCart = async (mediaId) => {
 
         showCartAlert("success", "تمت الإضافة إلى السلة 🛒 بنجاح");
     } catch (err) {
-        showCartAlert("error", err.message || "حدث خطأ أثناء الإضافة");
+        showCartAlert("error", err?.message || "حدث خطأ أثناء الإضافة");
     } finally {
         cartLoading.value = false;
     }
@@ -971,7 +986,7 @@ const addCollectionToCart = async () => {
         return;
     }
 
-    if (eventImages.value.length === 0) {
+    if (!event.value?.id || eventImages.value.length === 0) {
         collectionAlert.value = {
             show: true,
             type: 'error',
@@ -994,13 +1009,13 @@ const addCollectionToCart = async () => {
             },
         });
 
-        const data = await response.json();
+        const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-            throw new Error(data.message || 'حدث خطأ أثناء إضافة المجموعة');
+            throw new Error(data?.message || 'حدث خطأ أثناء إضافة المجموعة');
         }
 
-        const totalImages = data.total_images || eventImages.value.length;
+        const totalImages = data?.total_images || eventImages.value.length;
 
         collectionAlert.value = {
             show: true,
@@ -1017,7 +1032,7 @@ const addCollectionToCart = async () => {
         collectionAlert.value = {
             show: true,
             type: 'error',
-            message: err.message || 'فشل في إضافة المجموعة إلى السلة'
+            message: err?.message || 'فشل في إضافة المجموعة إلى السلة'
         };
     } finally {
         collectionLoading.value = false;
@@ -1025,8 +1040,8 @@ const addCollectionToCart = async () => {
 };
 
 const setReaction = async (commentId, type) => {
-    if (reactionLoading.value[commentId]) return;
-    const comment = event.value?.comments?.find((c) => c.id === commentId);
+    if (!commentId || reactionLoading.value[commentId]) return;
+    const comment = event.value?.comments?.find((c) => c?.id === commentId);
     if (!comment) return;
 
     const previousReaction = commentReactions.value[commentId];
@@ -1154,6 +1169,7 @@ const submitReport = async () => {
 
 // ─── Reply ────────────────────────────────────────────────────────────────────
 const toggleReplyForm = (commentId) => {
+    if (!commentId) return;
     replyingTo.value = replyingTo.value === commentId ? null : commentId;
     if (!replyTexts.value[commentId]) replyTexts.value[commentId] = "";
     replyErrors.value[commentId] = "";
@@ -1161,11 +1177,14 @@ const toggleReplyForm = (commentId) => {
 
 const cancelReply = (commentId) => {
     replyingTo.value = null;
-    replyTexts.value[commentId] = "";
-    replyErrors.value[commentId] = "";
+    if (commentId) {
+        replyTexts.value[commentId] = "";
+        replyErrors.value[commentId] = "";
+    }
 };
 
 const addReply = async (commentId) => {
+    if (!commentId) return;
     const replyText = replyTexts.value[commentId]?.trim();
     if (!replyText) return;
 
@@ -1173,12 +1192,11 @@ const addReply = async (commentId) => {
     replyErrors.value[commentId] = "";
 
     try {
-        const token = localStorage.getItem("auth_token");
         const response = await ReplyService.createReply(commentId, { comment: replyText });
 
-        if (response.data.status === "success") {
+        if (response?.data?.status === "success") {
             const newReply = {
-                id: response.data.data?.id || Date.now(),
+                id: response.data?.data?.id || Date.now(),
                 comment: replyText,
                 comment_id: commentId,
                 user_id: currentUserId.value,
@@ -1186,7 +1204,8 @@ const addReply = async (commentId) => {
                 user: { name: "أنت" },
             };
 
-            const comment = event.value.comments.find((c) => c.id === commentId);
+            ensureEventCommentsArray();
+            const comment = event.value?.comments?.find((c) => c?.id === commentId);
             if (comment) {
                 if (!comment.replies) comment.replies = [];
                 comment.replies.push(newReply);
@@ -1194,7 +1213,7 @@ const addReply = async (commentId) => {
 
             replyTexts.value[commentId] = "";
             replyingTo.value = null;
-            if (event.value.comments_count !== undefined) event.value.comments_count++;
+            if (event.value && event.value.comments_count !== undefined) event.value.comments_count++;
         }
     } catch (err) {
         replyErrors.value[commentId] = extractErrorMessage(err);
@@ -1213,7 +1232,7 @@ const fetchCurrentUser = async () => {
         const token = localStorage.getItem("auth_token");
         if (!token) return;
         const res = await AuthService.getProfile();
-        currentUserId.value = res.data?.data?.user?.id || res.data?.id;
+        currentUserId.value = res?.data?.data?.user?.id || res?.data?.id || null;
     } catch (err) {
         console.log("فشل جلب بيانات المستخدم", err);
     }
@@ -1223,9 +1242,8 @@ const fetchCurrentUser = async () => {
 const fetchLikesInfo = async () => {
     if (!event.value?.id) return;
     try {
-        const token = localStorage.getItem("auth_token") || "";
         const res = await LikeService.getLikes(event.value.id);
-        if (res.data.status === "success" && res.data.data) {
+        if (res?.data?.status === "success" && res?.data?.data) {
             likesCount.value = res.data.data.count ?? 0;
             isLiked.value = !!res.data.data.liked;
         }
@@ -1250,7 +1268,7 @@ const toggleLike = async () => {
 
     try {
         const res = await LikeService.createLike(event.value.id);
-        if (res.data.status === "success") {
+        if (res?.data?.status === "success") {
             likesCount.value += 1;
             isLiked.value = true;
         }
@@ -1280,7 +1298,7 @@ const addToWishlist = async () => {
 
     try {
         const res = await WishlistService.addToWishlist(event.value.id);
-        if (res.data.status === "success") {
+        if (res?.data?.status === "success") {
             isInWishlist.value = true;
             wishlistSuccess.value = true;
             setTimeout(() => (wishlistSuccess.value = false), 4000);
@@ -1295,7 +1313,7 @@ const addToWishlist = async () => {
 
 // ─── Comments ─────────────────────────────────────────────────────────────────
 const addComment = async () => {
-    if (!newComment.value.trim()) return;
+    if (!newComment.value.trim() || !event.value?.id) return;
 
     commentLoading.value = true;
     commentError.value = "";
@@ -1306,8 +1324,8 @@ const addComment = async () => {
             comment: newComment.value.trim(),
         });
 
-        if (response.data.status === "success") {
-            const newCommentData = response.data.data || {
+        if (response?.data?.status === "success") {
+            const newCommentData = response.data?.data || {
                 id: Date.now(),
                 event_id: event.value.id,
                 user_id: currentUserId.value,
@@ -1316,6 +1334,7 @@ const addComment = async () => {
                 user: { name: "أنت" },
             };
 
+            ensureEventCommentsArray();
             event.value.comments.unshift(newCommentData);
             newComment.value = "";
             commentSuccess.value = true;
@@ -1329,15 +1348,15 @@ const addComment = async () => {
 };
 
 const deleteComment = async (commentId) => {
+    if (!commentId) return;
     if (!confirm("هل أنت متأكد من حذف التعليق؟")) return;
 
     deleteCommentErrors.value[commentId] = "";
 
     try {
-        const token = localStorage.getItem("auth_token");
         await CommentService.deleteComment(commentId);
-        event.value.comments = event.value.comments.filter((c) => c.id !== commentId);
-        if (event.value.comments_count !== undefined) event.value.comments_count--;
+        event.value.comments = (event.value?.comments || []).filter((c) => c?.id !== commentId);
+        if (event.value && event.value.comments_count !== undefined) event.value.comments_count--;
     } catch (err) {
         deleteCommentErrors.value[commentId] = extractErrorMessage(err);
         setTimeout(() => (deleteCommentErrors.value[commentId] = ""), 5000);
@@ -1345,17 +1364,18 @@ const deleteComment = async (commentId) => {
 };
 
 // ─── Media Upload ─────────────────────────────────────────────────────────────
-const handleFileChange = (e) => addValidFiles(Array.from(e.target.files));
-const handleDrop = (e) => addValidFiles(Array.from(e.dataTransfer.files));
+const handleFileChange = (e) => addValidFiles(Array.from(e?.target?.files || []));
+const handleDrop = (e) => addValidFiles(Array.from(e?.dataTransfer?.files || []));
 
 const addValidFiles = (files) => {
     const MAX = 100 * 1024 * 1024;
-    files.forEach((file) => {
+    (files || []).forEach((file) => {
+        if (!file) return;
         if (file.size > MAX) {
             uploadError.value = `الملف "${file.name}" أكبر من 100 ميجا`;
             return;
         }
-        if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+        if (!file.type?.startsWith("image/") && !file.type?.startsWith("video/")) {
             uploadError.value = `نوع الملف "${file.name}" غير مدعوم`;
             return;
         }
@@ -1366,9 +1386,10 @@ const addValidFiles = (files) => {
 const removeFile = (i) => selectedFiles.value.splice(i, 1);
 
 const formatFileSize = (bytes) => {
-    if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    const size = toNumber(bytes);
+    if (size < 1024) return size + " B";
+    if (size < 1024 * 1024) return (size / 1024).toFixed(1) + " KB";
+    return (size / (1024 * 1024)).toFixed(1) + " MB";
 };
 
 const uploadFiles = async () => {
@@ -1378,14 +1399,13 @@ const uploadFiles = async () => {
     uploadError.value = "";
     uploadSuccess.value = "";
 
-    const token = localStorage.getItem("auth_token");
     const formData = new FormData();
     selectedFiles.value.forEach((f) => formData.append("url[]", f));
 
     try {
         const res = await MediaRequestService.upload(event.value.id, formData);
 
-        if (res.data.status === "success") {
+        if (res?.data?.status === "success") {
             ensureEventImagesArray();
 
             const uploadedMedia = normalizeUploadedMedia(res);
