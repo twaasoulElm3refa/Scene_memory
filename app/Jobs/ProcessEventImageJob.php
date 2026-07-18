@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\eventsImges;
+use App\Models\Tags;
 use App\Services\ImageAnalysisService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class ProcessEventImageJob implements ShouldQueue
 {
@@ -20,18 +22,24 @@ class ProcessEventImageJob implements ShouldQueue
 
     public int $tries = 3;
     public int $timeout = 120;
-
     public int    $eventId;
     public string $tempPath;
     public float  $manualPrice = 0;
+    public array  $metadata = [];
 
-    public function __construct(int $eventId, string $tempPath, float|int|string|null $manualPrice = 0)
+    public function __construct(
+        int $eventId,
+        string $tempPath,
+        float|int|string|null $manualPrice = 0,
+        array $metadata = []
+    )
     {
         $this->eventId     = $eventId;
         $this->tempPath    = $tempPath;
         $this->manualPrice = is_numeric($manualPrice) && (float) $manualPrice > 0
             ? (float) $manualPrice
             : 0;
+        $this->metadata = $metadata;
     }
 
     public function handle(ImageAnalysisService $imageAnalysisService): void
@@ -97,7 +105,7 @@ class ProcessEventImageJob implements ShouldQueue
             Storage::disk('public')->put($fullPath,    (string) $image->toJpeg(90));
             Storage::disk('public')->put($previewPath, (string) $preview);
 
-            eventsImges::create([
+            $eventImage = eventsImges::create([
                 'event_id'     => $this->eventId,
                 'preview_url'  => $previewPath,
                 'full_url'     => $fullPath,
@@ -107,7 +115,60 @@ class ProcessEventImageJob implements ShouldQueue
                 'price'        => $price,
                 'licence_type' => $plan,
                 'is_active'    => 1,
+                'description' => $this->metadata['description'] ?? null,
+                'tags_json' => $this->metadata['tags_json'] ?? null,
+                'quality_score' => $this->metadata['quality_score'] ?? null,
+                'sharpness_score' => $this->metadata['sharpness_score'] ?? null,
+                'blur_score' => $this->metadata['blur_score'] ?? null,
+                'megapixels' => $this->metadata['megapixels'] ?? null,
+                'file_size_mb' => $this->metadata['file_size_mb'] ?? null,
+                'validation_status' => $this->metadata['validation_status'] ?? null,
+                'validation_message' => $this->metadata['validation_message'] ?? null,
             ]);
+
+            $photoTagsJson = $this->metadata['tags_json'] ?? null;
+
+            $decodedTags = [];
+
+            if (is_string($photoTagsJson) && $photoTagsJson !== '') {
+                $decodedTags = json_decode($photoTagsJson, true) ?: [];
+            } elseif (is_array($photoTagsJson)) {
+                $decodedTags = $photoTagsJson;
+            }
+
+            $existingTagIds = collect($decodedTags['tags_id'] ?? [])
+                ->filter(fn ($id) => $id !== null && $id !== '' && is_numeric($id))
+                ->map(fn ($id) => (int) $id)
+                ->filter(fn ($id) => $id > 0)
+                ->unique()
+                ->values()
+                ->all();
+
+            $newTagIds = [];
+
+            foreach (($decodedTags['new_tags'] ?? []) as $tagName) {
+                $tagName = trim((string) $tagName);
+
+                if ($tagName === '') {
+                    continue;
+                }
+
+                $tag = Tags::firstOrCreate([
+                    'name' => $tagName,
+                    'slug' => Str::slug($tagName) . '-' . md5(mb_strtolower($tagName)),
+                ]);
+
+                $newTagIds[] = $tag->id;
+            }
+
+            $tagIds = collect([...$existingTagIds, ...$newTagIds])
+                ->unique()
+                ->values()
+                ->all();
+
+            if (! empty($tagIds)) {
+                $eventImage->tags()->syncWithoutDetaching($tagIds);
+            }
 
         } catch (\Throwable $e) {
             \Log::error('ProcessEventImageJob: failed', [

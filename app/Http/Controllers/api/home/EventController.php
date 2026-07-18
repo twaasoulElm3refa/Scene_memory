@@ -74,13 +74,23 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $cityId = $request->city_id !== 'all' ? $request->city_id : null;
-        $categoryId = $request->sub_category_id !== 'all' ? $request->sub_category_id : null;
-        $countryId = $request->query('country_id');
+        $normalizeFilterId = static function ($value): ?int {
+            if ($value === null || $value === '' || $value === 'all') {
+                return null;
+            }
 
-        if ($countryId === 'all' || $countryId === '') {
-            $countryId = null;
-        }
+            $id = (int) $value;
+
+            return $id > 0 ? $id : null;
+        };
+
+        $cityId = $normalizeFilterId(
+            $request->query('city_id', $request->route('city_id'))
+        );
+        $categoryId = $normalizeFilterId(
+            $request->query('sub_category_id', $request->route('sub_category_id'))
+        );
+        $countryId = $normalizeFilterId($request->query('country_id'));
 
         $tagsIds = $request->query('tags_id', []);
 
@@ -92,6 +102,7 @@ class EventController extends Controller
             ->filter(fn ($id) => $id !== null && $id !== '' && $id !== 'all')
             ->map(fn ($id) => (int) $id)
             ->filter(fn ($id) => $id > 0)
+            ->unique()
             ->values()
             ->all();
 
@@ -100,12 +111,18 @@ class EventController extends Controller
 
         $searchQuery = trim((string) $request->query('q', $request->query('search', '')));
 
+        $perPage = (int) $request->query('per_page', 20);
+        $page = (int) $request->query('page', 1);
+
+        $perPage = max(1, min($perPage, 50));
+        $page = max(1, $page);
+
         $filters = [
             'is_active:=true',
         ];
 
         if ($countryId) {
-            $filters[] = 'country_id:=' . (int) $countryId;
+            $filters[] = 'country_id:=' . $countryId;
         }
 
         if (!empty($tagsIds)) {
@@ -113,26 +130,30 @@ class EventController extends Controller
         }
 
         if ($cityId) {
-            $filters[] = 'city_id:=' . (int) $cityId;
+            $filters[] = 'city_id:=' . $cityId;
         }
 
         if ($categoryId) {
-            $filters[] = 'sub_category_id:=' . (int) $categoryId;
+            $filters[] = 'sub_category_id:=' . $categoryId;
         }
 
         if ($from) {
-            $filters[] = 'start_date:>=' . Carbon::parse($from)->timestamp;
+            $filters[] = 'start_date:>=' . Carbon::parse($from)->toDateString();
         }
 
         if ($to) {
-            $filters[] = 'start_date:<=' . Carbon::parse($to)->timestamp;
+            $filters[] = 'start_date:<=' . Carbon::parse($to)->toDateString();
         }
 
         if ($searchQuery !== '') {
             $filters['search_query'] = $searchQuery;
         }
 
-        $events = $this->eventRepository->filteredActive($filters);
+        $events = $this->eventRepository->filteredActive(
+            filters: $filters,
+            perPage: $perPage,
+            page: $page
+        );
 
         return $this->success($events, 'Events');
     }

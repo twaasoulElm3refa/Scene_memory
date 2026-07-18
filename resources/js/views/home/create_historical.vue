@@ -1,328 +1,388 @@
 <template>
     <div class="min-vh-100 bg-light py-4">
         <div class="container px-3 px-md-4">
-            <!-- العنوان -->
             <div class="mb-4">
-                <h1 class="display-6 fw-bold text-dark">{{ $t('eventForm.title') }}</h1>
+                <h1 class="display-6 fw-bold text-dark">{{ tr("eventForm.title", "Create historical event") }}</h1>
             </div>
+
             <form @submit.prevent="createEvent" class="row g-3 g-md-4">
-                <!-- 1. المعلومات الأساسية -->
                 <div class="col-12">
                     <div class="card shadow border-0 rounded-3">
-                        <div class="card-body p-4">
-                            <h2 class="card-title h4 fw-bold mb-3 d-flex align-items-center gap-2">
-                                <span class="text-primary fs-3 fw-bolder">①</span>
-                                {{ $t('eventForm.basicInfo') }}
-                            </h2>
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.eventTitle') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <input v-model="form.title" type="text"
-                                        class="form-control form-control-md rounded-3"
-                                        :placeholder="$t('eventForm.eventTitle') + ' ' + $t('commons.choose')"
-                                        required />
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.description') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <textarea v-model="form.description" class="form-control rounded-3" rows="5"
-                                        :placeholder="$t('eventForm.description') + '، ' + $t('eventForm.basicInfo').toLowerCase() + '، ' + $t('eventForm.locationCategory').toLowerCase() + '...'"
-                                        required style="min-height: 120px"></textarea>
+                        <div class="card-body p-3 p-md-4">
+                            <div class="row g-2">
+                                <div v-for="step in wizardSteps" :key="step.id" class="col-12 col-md-4">
+                                    <button
+                                        type="button"
+                                        class="btn w-100 text-start rounded-3 border d-flex align-items-center gap-3 p-3"
+                                        :class="stepButtonClass(step.id)"
+                                        :disabled="!canOpenStep(step.id)"
+                                        @click="openStep(step.id)"
+                                    >
+                                        <span
+                                            class="rounded-circle d-inline-flex align-items-center justify-content-center fw-bold"
+                                            style="width: 34px; height: 34px"
+                                            :class="stepNumberClass(step.id)"
+                                        >
+                                            {{ step.id }}
+                                        </span>
+                                        <span>
+                                            <span class="d-block fw-semibold">{{ step.label }}</span>
+                                            <small class="text-muted">{{ step.description }}</small>
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. الموقع والتصنيف + الخريطة -->
-                <div class="col-12">
+                <div v-show="currentPhase === 1" class="col-12">
                     <div class="card shadow border-0 rounded-3">
                         <div class="card-body p-4">
-                            <h2 class="card-title h4 fw-bold mb-3 d-flex align-items-center gap-2">
-                                <span class="text-primary fs-3 fw-bolder">②</span>
-                                {{ $t('eventForm.locationCategory') }}
-                            </h2>
-                            <div class="row g-3 mb-4">
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.country') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <input v-model="countrySearch" type="text"
-                                        class="form-control form-control-md rounded-3 mb-2"
-                                        :placeholder="$t('eventForm.searchCountry')" />
-                                    <select v-model="selectedCountryId" @change="loadCities"
-                                        class="form-select form-select-md rounded-3" required>
-                                        <option value="" disabled>{{ $t('eventForm.selectCountry') }}</option>
-                                        <option v-for="c in filteredCountries" :key="c.id" :value="c.id">
-                                            {{ c.translation.name }}
-                                        </option>
-                                    </select>
+                            <h2 class="card-title h4 fw-bold mb-3">Photography Type</h2>
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <button
+                                        type="button"
+                                        class="btn w-100 text-start border rounded-3 p-4 h-100"
+                                        :class="photographyCardClass('professional')"
+                                        @click="selectPhotographyType('professional')"
+                                    >
+                                        <span class="d-block h5 fw-bold mb-2">Professional photography</span>
+                                        <span class="text-muted">
+                                            Requires backend quality approval, minimum 1080px width and height, and sharpness checks.
+                                        </span>
+                                    </button>
                                 </div>
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.city') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <select v-model="form.city_id" :disabled="!selectedCountryId || cities.length === 0"
-                                        class="form-select form-select-md rounded-3" required>
-                                        <option value="" disabled>
-                                            {{ selectedCountryId ? $t('eventForm.selectCity') :
-                                                $t('eventForm.selectCityFirst') }}
-                                        </option>
-                                        <option v-for="city in cities" :key="city.id" :value="city.id">
-                                            {{ city.translation.name }}
-                                        </option>
-                                    </select>
+
+                                <div class="col-12 col-md-6">
+                                    <button
+                                        type="button"
+                                        class="btn w-100 text-start border rounded-3 p-4 h-100"
+                                        :class="photographyCardClass('normal')"
+                                        @click="selectPhotographyType('normal')"
+                                    >
+                                        <span class="d-block h5 fw-bold mb-2">Normal photography</span>
+                                        <span class="text-muted">
+                                            Valid images are accepted without professional resolution or sharpness constraints.
+                                        </span>
+                                    </button>
                                 </div>
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.mainCategory') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <select v-model="selectedCategoryId" @change="loadSubCategories"
-                                        class="form-select form-select-md rounded-3" required>
-                                        <option value="" disabled>{{ $t('commons.choose') }}</option>
-                                        <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                                            {{ cat.translation.name }}
-                                        </option>
-                                    </select>
+                            </div>
+
+                            <div v-if="!isPhotographyPhaseValid" class="text-danger small mt-3">
+                                Please select a photography type before continuing.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="currentPhase === 2" class="col-12">
+                    <div class="row g-3 g-md-4">
+                        <div class="col-12">
+                            <div class="card shadow border-0 rounded-3">
+                                <div class="card-body p-4">
+                                    <h2 class="card-title h4 fw-bold mb-3">
+                                        {{ tr("eventForm.basicInfo", "Basic information") }}
+                                    </h2>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.eventTitle", "Event title") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                v-model="form.title"
+                                                type="text"
+                                                class="form-control form-control-md rounded-3"
+                                                :placeholder="tr('eventForm.eventTitle', 'Event title')"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.description", "Description") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea
+                                                v-model="form.description"
+                                                class="form-control rounded-3"
+                                                rows="5"
+                                                :placeholder="tr('eventForm.description', 'Description')"
+                                                required
+                                                style="min-height: 120px"
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-12 col-sm-6 col-lg-3">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.subCategory') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <select v-model="form.sub_categorey_id"
-                                        :disabled="!selectedCategoryId || subCategories.length === 0"
-                                        class="form-select form-select-md rounded-3" required>
-                                        <option value="" disabled>
-                                            {{ selectedCategoryId ? $t('eventForm.selectSubFirst') :
-                                                $t('eventForm.selectSubFirst') }}
-                                        </option>
-                                        <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
-                                            {{ sub.translation.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-medium d-flex align-items-center justify-content-between">
-                                        <span>Tags <span class="text-danger">*</span></span>
-                                        <small class="text-muted">{{ selectedTags.length }} / 4</small>
-                                    </label>
+                            </div>
+                        </div>
 
-                                    <div class="position-relative">
-                                        <button type="button"
-                                            class="form-control form-control-md rounded-3 text-start d-flex flex-wrap align-items-center gap-2"
-                                            :disabled="loadingTags" @click="showTagsDropdown = !showTagsDropdown">
-                                            <span v-if="loadingTags" class="text-muted">Loading tags...</span>
-                                            <template v-else-if="selectedTags.length">
-                                                <span v-for="tagId in selectedTags" :key="tagId"
-                                                    class="badge rounded-pill text-bg-primary">
-                                                    #{{ getTagName(tagId) }}
-                                                </span>
-                                            </template>
-                                            <span v-else class="text-muted">Select tags</span>
-                                        </button>
+                        <div class="col-12">
+                            <div class="card shadow border-0 rounded-3">
+                                <div class="card-body p-4">
+                                    <h2 class="card-title h4 fw-bold mb-3">
+                                        {{ tr("eventForm.locationCategory", "Location and category") }}
+                                    </h2>
 
-                                        <div v-if="showTagsDropdown && !loadingTags"
-                                            class="position-absolute z-3 w-100 mt-1 bg-white border rounded-3 shadow p-2"
-                                            style="max-height: 260px; overflow-y: auto;">
-                                            <input v-model="tagSearch" type="text"
-                                                class="form-control form-control-sm rounded-3 mb-2"
-                                                placeholder="Search tags" />
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-12 col-sm-6 col-lg-3">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.country", "Country") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                v-model="countrySearch"
+                                                type="text"
+                                                class="form-control form-control-md rounded-3 mb-2"
+                                                :placeholder="tr('eventForm.searchCountry', 'Search country')"
+                                            />
+                                            <select
+                                                v-model="selectedCountryId"
+                                                class="form-select form-select-md rounded-3"
+                                                required
+                                                @change="loadCities"
+                                            >
+                                                <option value="" disabled>{{ tr("eventForm.selectCountry", "Select country") }}</option>
+                                                <option v-for="country in filteredCountries" :key="country.id" :value="country.id">
+                                                    {{ translatedName(country) }}
+                                                </option>
+                                            </select>
+                                        </div>
 
-                                            <button v-if="selectedTags.length" type="button"
-                                                class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
-                                                @click="clearTags">
-                                                Clear selected tags
-                                            </button>
+                                        <div class="col-12 col-sm-6 col-lg-3">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.city", "City") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select
+                                                v-model="form.city_id"
+                                                :disabled="!selectedCountryId || cities.length === 0"
+                                                class="form-select form-select-md rounded-3"
+                                                required
+                                            >
+                                                <option value="" disabled>
+                                                    {{ selectedCountryId ? tr("eventForm.selectCity", "Select city") : tr("eventForm.selectCityFirst", "Select country first") }}
+                                                </option>
+                                                <option v-for="city in cities" :key="city.id" :value="city.id">
+                                                    {{ translatedName(city) }}
+                                                </option>
+                                            </select>
+                                        </div>
 
-                                            <label v-for="tag in filteredTags" :key="tag.id"
-                                                class="d-flex align-items-center gap-2 px-2 py-2 rounded-3"
-                                                style="cursor: pointer;">
-                                                <input class="form-check-input m-0" type="checkbox"
-                                                    :checked="isTagSelected(tag.id)" @change="toggleTag(tag.id)" />
-                                                <span>#{{ tag.name }}</span>
+                                        <div class="col-12 col-sm-6 col-lg-3">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.mainCategory", "Main category") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select
+                                                v-model="selectedCategoryId"
+                                                class="form-select form-select-md rounded-3"
+                                                required
+                                                @change="loadSubCategories"
+                                            >
+                                                <option value="" disabled>{{ tr("commons.choose", "Choose") }}</option>
+                                                <option v-for="category in categories" :key="category.id" :value="category.id">
+                                                    {{ translatedName(category) }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-sm-6 col-lg-3">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.subCategory", "Sub category") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select
+                                                v-model="form.sub_categorey_id"
+                                                :disabled="!selectedCategoryId || subCategories.length === 0"
+                                                class="form-select form-select-md rounded-3"
+                                                required
+                                            >
+                                                <option value="" disabled>{{ tr("eventForm.selectSubFirst", "Select sub category") }}</option>
+                                                <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
+                                                    {{ translatedName(sub) }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label fw-medium d-flex align-items-center justify-content-between">
+                                                <span>Tags <span class="text-danger">*</span></span>
+                                                <small class="text-muted">{{ selectedTags.length }} / 4</small>
                                             </label>
 
-                                            <div v-if="filteredTags.length === 0" class="text-muted small px-2 py-2">
-                                                No tags found
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-3">
-                                <label class="form-label fw-medium d-block mb-2">
-                                    {{ $t('eventForm.selectLocationMap') }} <span class="text-danger">*</span>
-                                </label>
-
-                                <div ref="mapContainer"
-                                    style="height: 350px; border-radius: 12px; border: 1px solid #dee2e6">
-                                </div>
-
-                                <div class="mt-2 small text-muted" v-if="locatingUser">
-                                    جاري تحديد موقعك الحالي...
-                                </div>
-
-                                <div class="mt-2 small text-warning" v-if="locationError">
-                                    {{ locationError }}
-                                </div>
-
-                                <div class="mt-2 small text-muted" v-if="hasSelectedLocation">
-                                    {{ $t('eventForm.selectedCoords') }}
-                                    <strong>{{ $t('eventForm.lat') }}: {{ form.latitude.toFixed(6) }}</strong> ,
-                                    <strong>{{ $t('eventForm.lng') }}: {{ form.longitude.toFixed(6) }}</strong>
-                                </div>
-
-                                <div v-else class="mt-2 small text-danger">
-                                    {{ $t('eventForm.pleaseSelectLocation') }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. المواعيد -->
-                <div class="col-12">
-                    <div class="card shadow border-0 rounded-3">
-                        <div class="card-body p-4">
-                            <h2 class="card-title h4 fw-bold mb-3 d-flex align-items-center gap-2">
-                                <span class="text-primary fs-3 fw-bolder">③</span>
-                                {{ $t('eventForm.dates') }}
-                            </h2>
-                            <div class="row g-3">
-                                <div class="col-12 col-sm-4">
-                                    <label class="form-label fw-medium">
-                                        {{ $t('eventForm.startDate') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <input v-model="form.start_date" type="date" class="form-control rounded-3"
-                                        required />
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    <label class="form-label fw-medium">{{ $t('eventForm.endDate') }}</label>
-                                    <input v-model="form.end_date" type="date" class="form-control rounded-3" />
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    <label class="form-label fw-medium">{{ $t('eventForm.startTime') }}</label>
-                                    <input v-model="form.time" type="time" class="form-control rounded-3" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. صور وفيديوهات الحدث -->
-                <div class="col-12">
-                    <div class="card shadow border-0 rounded-3">
-                        <div class="card-body p-4">
-                            <h2 class="card-title h4 fw-bold mb-3 d-flex align-items-center gap-2">
-                                <span class="text-primary fs-3 fw-bolder">④</span>
-                                {{ $t('eventForm.media') || 'صور وفيديوهات الحدث' }}
-                            </h2>
-                            <div @dragover.prevent @drop.prevent="handleMediaDrop"
-                                class="border border-2 border-dashed border-secondary-subtle rounded-3 p-4 text-center bg-body-tertiary"
-                                style="min-height: 220px">
-                                <input ref="fileInput" type="file"
-                                    accept="image/png,image/jpeg,image/webp,video/mp4,video/webm,video/ogg" multiple
-                                    hidden @change="handleMediaSelect" />
-
-                                <!-- حالة بدون ملفات -->
-                                <div v-if="form.media_items.length === 0" class="py-4">
-                                    <div class="mx-auto mb-3 bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width: 70px; height: 70px">
-                                        <svg class="text-primary" width="36" height="36" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                        </svg>
-                                    </div>
-                                    <p class="fs-5 fw-medium text-secondary mb-2">{{ $t('eventForm.dragDropHere') }}</p>
-                                    <p class="text-muted small mb-3">
-                                        {{ $t('eventForm.formatsMax') }}<br>
-                                        <strong>PNG, JPG, WEBP, MP4, WEBM, OGG</strong> – الحد الأقصى 8 ملفات
-                                    </p>
-                                    <button type="button" @click="$refs.fileInput.click()"
-                                        class="btn btn-primary btn-md px-4 py-2 rounded-pill">
-                                        {{ $t('eventForm.chooseFiles') || 'اختر صور / فيديوهات' }}
-                                    </button>
-                                </div>
-
-                                <!-- عرض الملفات بعد الرفع -->
-                                <div v-else class="py-3">
-                                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 mb-3">
-                                        <div v-for="(item, index) in form.media_items" :key="item.preview || index"
-                                            class="col">
                                             <div class="position-relative">
-                                                <!-- صورة -->
-                                                <img v-if="item.type === 'image'" :src="item.preview"
-                                                    :alt="'media ' + index"
-                                                    class="img-fluid rounded-3 shadow"
-                                                    style="height: 140px; object-fit: cover; width: 100%" />
-                                                <!-- فيديو -->
-                                                <video v-else :src="item.preview" class="rounded-3 shadow w-100"
-                                                    style="height: 140px; object-fit: cover;" controls muted></video>
+                                                <button
+                                                    type="button"
+                                                    class="form-control form-control-md rounded-3 text-start d-flex flex-wrap align-items-center gap-2"
+                                                    :disabled="loadingTags"
+                                                    @click="showTagsDropdown = !showTagsDropdown"
+                                                >
+                                                    <span v-if="loadingTags" class="text-muted">Loading tags...</span>
 
-                                                <button type="button" @click="removeMedia(index)"
-                                                    class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle shadow-sm"
-                                                    :title="$t('eventForm.remove')"
-                                                    style="width: 28px; height: 28px; line-height: 1; font-size: 1.1rem; padding: 0;">
-                                                    ×
+                                                    <template v-else-if="selectedTags.length">
+                                                        <span
+                                                            v-for="tagId in selectedTags"
+                                                            :key="tagId"
+                                                            class="badge rounded-pill text-bg-primary"
+                                                        >
+                                                            #{{ getTagName(tagId) }}
+                                                        </span>
+                                                    </template>
+
+                                                    <span v-else class="text-muted">Select tags</span>
                                                 </button>
 
-                                                <!-- علامة فيديو -->
-                                                <span v-if="item.type === 'video'"
-                                                    class="position-absolute bottom-0 start-50 translate-middle-x bg-dark text-white px-2 py-1 rounded-top small fw-bold"
-                                                    style="font-size: 0.75rem;">
-                                                    فيديو
-                                                </span>
-                                            </div>
+                                                <div
+                                                    v-if="showTagsDropdown && !loadingTags"
+                                                    class="position-absolute z-3 w-100 mt-1 bg-white border rounded-3 shadow p-2"
+                                                    style="max-height: 260px; overflow-y: auto"
+                                                >
+                                                    <input
+                                                        v-model="tagSearch"
+                                                        type="text"
+                                                        class="form-control form-control-sm rounded-3 mb-2"
+                                                        placeholder="Search tags"
+                                                    />
 
-                                            <div v-if="item.type === 'image'" class="mt-2 text-start">
-                                                <div class="small text-muted">
-                                                    {{ item.width }} × {{ item.height }}
+                                                    <button
+                                                        v-if="selectedTags.length"
+                                                        type="button"
+                                                        class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
+                                                        @click="clearTags"
+                                                    >
+                                                        Clear selected tags
+                                                    </button>
+
+                                                    <label
+                                                        v-for="tag in filteredTags"
+                                                        :key="tag.id"
+                                                        class="d-flex align-items-center gap-2 px-2 py-2 rounded-3"
+                                                        style="cursor: pointer"
+                                                    >
+                                                        <input
+                                                            class="form-check-input m-0"
+                                                            type="checkbox"
+                                                            :checked="isTagSelected(tag.id)"
+                                                            @change="toggleTag(tag.id)"
+                                                        />
+                                                        <span>#{{ tag.name }}</span>
+                                                    </label>
+
+                                                    <div v-if="filteredTags.length === 0" class="text-muted small px-2 py-2">
+                                                        No tags found
+                                                    </div>
                                                 </div>
-
-                                                <div class="small text-primary fw-semibold">
-                                                    Suggested Price: ${{ item.suggested_price }}
-                                                </div>
-
-                                                <label class="form-label small mb-1 mt-1">
-                                                    Your Price
-                                                </label>
-
-                                                <input v-model.number="item.custom_price" type="number" min="1"
-                                                    step="1" class="form-control form-control-sm rounded-3"
-                                                    placeholder="Enter your price" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button v-if="form.media_items.length < MAX_MEDIA" type="button"
-                                        @click="$refs.fileInput.click()" class="btn btn-outline-primary btn-sm px-4">
-                                        {{ $t('eventForm.addMore') }}
-                                    </button>
+                                    <div class="mt-3">
+                                        <label class="form-label fw-medium d-block mb-2">
+                                            {{ tr("eventForm.selectLocationMap", "Select location on map") }}
+                                            <span class="text-danger">*</span>
+                                        </label>
 
-                                    <small class="text-muted d-block mt-2">
-                                        {{ $t('eventForm.mediaCount', { count: form.media_items.length }) }} / {{
-                                            MAX_MEDIA }}
-                                    </small>
+                                        <div
+                                            ref="mapContainer"
+                                            style="height: 350px; border-radius: 12px; border: 1px solid #dee2e6"
+                                        ></div>
+
+                                        <div class="mt-2 small text-muted" v-if="locatingUser">
+                                            Detecting your current location...
+                                        </div>
+
+                                        <div class="mt-2 small text-warning" v-if="locationError">
+                                            {{ locationError }}
+                                        </div>
+
+                                        <div class="mt-2 small text-muted" v-if="hasSelectedLocation">
+                                            {{ tr("eventForm.selectedCoords", "Selected coordinates") }}
+                                            <strong>{{ tr("eventForm.lat", "Lat") }}: {{ form.latitude.toFixed(6) }}</strong>,
+                                            <strong>{{ tr("eventForm.lng", "Lng") }}: {{ form.longitude.toFixed(6) }}</strong>
+                                        </div>
+
+                                        <div v-else class="mt-2 small text-danger">
+                                            {{ tr("eventForm.pleaseSelectLocation", "Please select a location") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card shadow border-0 rounded-3">
+                                <div class="card-body p-4">
+                                    <h2 class="card-title h4 fw-bold mb-3">
+                                        {{ tr("eventForm.dates", "Dates") }}
+                                    </h2>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-sm-4">
+                                            <label class="form-label fw-medium">
+                                                {{ tr("eventForm.startDate", "Start date") }}
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input v-model="form.start_date" type="date" class="form-control rounded-3" required />
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <label class="form-label fw-medium">{{ tr("eventForm.endDate", "End date") }}</label>
+                                            <input v-model="form.end_date" type="date" class="form-control rounded-3" />
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <label class="form-label fw-medium">{{ tr("eventForm.startTime", "Start time") }}</label>
+                                            <input v-model="form.time" type="time" class="form-control rounded-3" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- الأزرار -->
-                <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 pt-3 pb-4">
-                    <button type="button" class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill">
-                        {{ $t('commons.cancel') }}
+                <div v-show="currentPhase === 3" class="col-12">
+                    <PhotoUploadWizard
+                        v-model="form.media_items"
+                        :photography-type="form.photography_type"
+                        :max-photos="MAX_MEDIA"
+                    />
+
+                    <div v-if="photosBlockingMessage" class="alert alert-warning mt-3 mb-0">
+                        {{ photosBlockingMessage }}
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex flex-column flex-sm-row justify-content-between gap-2 pt-3 pb-4">
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary btn-md px-4 py-2 rounded-pill"
+                        :disabled="currentPhase === 1 || loading"
+                        @click="previousPhase"
+                    >
+                        Previous
                     </button>
-                    <button type="submit" :disabled="loading || !hasSelectedLocation"
-                        class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow">
-                        {{ loading ? $t('commons.creating') : $t('commons.create') }}
-                    </button>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 ms-sm-auto">
+                        <button
+                            v-if="currentPhase < 3"
+                            type="button"
+                            class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow"
+                            :disabled="!currentPhaseValid"
+                            @click="goNext"
+                        >
+                            Next
+                        </button>
+
+                        <button
+                            v-else
+                            type="submit"
+                            :disabled="loading || !canSubmit"
+                            class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow"
+                        >
+                            {{ loading ? tr("commons.creating", "Creating...") : tr("commons.create", "Create") }}
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -330,9 +390,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import PhotoUploadWizard from "../../components/media/PhotoUploadWizard.vue";
+import { useFormWizard } from "../../composables/useFormWizard";
 import { LocationService } from "../../services/LocationService/LocationService";
 import { CategoryService } from "../../services/CategoryService/CategoryService";
 import { EventService } from "../../services/EventService/EventService";
@@ -340,7 +403,11 @@ import { TagService } from "../../services/TagService/TagService";
 
 const MAX_MEDIA = 8;
 
+const { t, te } = useI18n();
+const tr = (key, fallback) => (te(key) ? t(key) : fallback);
+
 const form = ref({
+    photography_type: "",
     title: "",
     description: "",
     city_id: "",
@@ -348,8 +415,6 @@ const form = ref({
     start_date: "",
     end_date: "",
     time: "",
-    media_files: [],
-    media_previews: [],
     media_items: [],
     latitude: null,
     longitude: null,
@@ -362,7 +427,6 @@ const subCategories = ref([]);
 const selectedCountryId = ref("");
 const selectedCategoryId = ref("");
 const loading = ref(false);
-const fileInput = ref(null);
 const countrySearch = ref("");
 const locatingUser = ref(false);
 const locationError = ref(null);
@@ -372,10 +436,28 @@ const loadingTags = ref(false);
 const tagSearch = ref("");
 const showTagsDropdown = ref(false);
 
+const wizardSteps = [
+    { id: 1, label: "Photography Type", description: "Choose mode" },
+    { id: 2, label: "Details", description: "Main form data" },
+    { id: 3, label: "Photos", description: "Upload and tag" },
+];
+
+const { currentPhase, goToPhase, nextPhase, previousPhase } = useFormWizard({
+    totalPhases: 3,
+    afterPhaseChange: (phase) => {
+        if (phase === 2) {
+            resizeMapForDetailsPhase();
+        }
+    },
+});
+
 const filteredCountries = computed(() => {
-    if (!countrySearch.value) return countries.value;
-    return countries.value.filter(c =>
-        c.translation.name.toLowerCase().includes(countrySearch.value.toLowerCase())
+    const search = countrySearch.value.trim().toLowerCase();
+
+    if (!search) return countries.value;
+
+    return countries.value.filter((country) =>
+        translatedName(country).toLowerCase().includes(search)
     );
 });
 
@@ -393,13 +475,119 @@ const filteredTags = computed(() => {
     );
 });
 
+const isPhotographyPhaseValid = computed(() =>
+    ["professional", "normal"].includes(form.value.photography_type)
+);
+
+const isDetailsPhaseValid = computed(() =>
+    Boolean(
+        form.value.title?.trim() &&
+        form.value.description?.trim() &&
+        form.value.city_id &&
+        form.value.sub_categorey_id &&
+        form.value.start_date &&
+        hasSelectedLocation.value &&
+        selectedTags.value.length > 0 &&
+        selectedTags.value.length <= 4
+    )
+);
+
+const photosBlockingMessage = computed(() => {
+    const photos = form.value.media_items;
+
+    if (photos.length === 0) return "Please upload at least one photo.";
+
+    if (photos.some((item) => !item.description?.trim())) {
+        return "Every photo must have a description.";
+    }
+
+    if (photos.some((item) => !Array.isArray(item.tags) || item.tags.length === 0)) {
+        return "Every photo must have at least one tag.";
+    }
+
+    if (photos.some((item) => !item.custom_price || Number(item.custom_price) <= 0)) {
+        return "Please add a valid price for every photo.";
+    }
+
+    if (photos.some((item) => item.status === "checking")) {
+        return "Please wait until all photo checks finish.";
+    }
+
+    const rejected = photos.find((item) => item.status === "rejected");
+
+    if (rejected) {
+        return rejected.errors?.length
+            ? rejected.errors.join("; ")
+            : "Rejected photos must be fixed before creating the historical event.";
+    }
+
+    if (form.value.photography_type === "professional" && photos.some((item) => item.status !== "accepted")) {
+        return "All professional photos must be accepted by backend validation.";
+    }
+
+    return "";
+});
+
+const isPhotosPhaseValid = computed(() => photosBlockingMessage.value === "");
+
+const currentPhaseValid = computed(() => {
+    if (currentPhase.value === 1) return isPhotographyPhaseValid.value;
+    if (currentPhase.value === 2) return isDetailsPhaseValid.value;
+    return isPhotosPhaseValid.value;
+});
+
+const canSubmit = computed(() =>
+    isPhotographyPhaseValid.value &&
+    isDetailsPhaseValid.value &&
+    isPhotosPhaseValid.value
+);
+
+async function goNext() {
+    if (!currentPhaseValid.value) return;
+    await nextPhase();
+}
+
+function selectPhotographyType(type) {
+    form.value.photography_type = type;
+}
+
+function photographyCardClass(type) {
+    return form.value.photography_type === type
+        ? "border-primary bg-primary-subtle shadow-sm"
+        : "bg-white";
+}
+
+function canOpenStep(stepId) {
+    if (stepId <= currentPhase.value) return true;
+    if (stepId === 2) return isPhotographyPhaseValid.value;
+    if (stepId === 3) return isPhotographyPhaseValid.value && isDetailsPhaseValid.value;
+    return false;
+}
+
+async function openStep(stepId) {
+    if (canOpenStep(stepId)) {
+        await goToPhase(stepId);
+    }
+}
+
+function stepButtonClass(stepId) {
+    if (stepId === currentPhase.value) return "border-primary bg-primary-subtle";
+    if (stepId < currentPhase.value) return "border-success bg-white";
+    return "bg-white";
+}
+
+function stepNumberClass(stepId) {
+    if (stepId === currentPhase.value) return "bg-primary text-white";
+    if (stepId < currentPhase.value) return "bg-success text-white";
+    return "bg-light text-muted";
+}
+
 async function fetchCountries() {
     try {
         const res = await LocationService.getAllCountries();
         countries.value = res || [];
-        console.log("Loaded countries:", countries.value);
     } catch (err) {
-        console.error("فشل تحميل الدول", err);
+        console.error("Failed to load countries", err);
     }
 }
 
@@ -409,17 +597,15 @@ async function loadCities() {
         form.value.city_id = "";
         return;
     }
+
     try {
         const res = await LocationService.getCountryById(selectedCountryId.value);
         cities.value = res.data.data?.country?.cities || [];
         form.value.city_id = "";
-
     } catch (err) {
-        console.error("فشل تحميل المدن", err);
+        console.error("Failed to load cities", err);
         cities.value = [];
-        alert("حدث خطأ أثناء تحميل المدن");
-    } finally {
-        loading.value = false;
+        alert("An error occurred while loading cities.");
     }
 }
 
@@ -428,7 +614,7 @@ async function fetchCategories() {
         const res = await CategoryService.getCategories();
         categories.value = res.data.data || [];
     } catch (err) {
-        console.error("فشل تحميل الفئات", err);
+        console.error("Failed to load categories", err);
     }
 }
 
@@ -449,20 +635,26 @@ async function fetchTags() {
 async function loadSubCategories() {
     subCategories.value = [];
     form.value.sub_categorey_id = "";
+
     if (!selectedCategoryId.value) return;
+
     try {
         const res = await CategoryService.getCategoryById(selectedCategoryId.value);
         subCategories.value = res.data.data?.sub_categories || [];
     } catch (err) {
-        console.error("فشل تحميل التصنيفات الفرعية", err);
+        console.error("Failed to load sub categories", err);
     }
 }
 
-const isTagSelected = (tagId) => {
-    return selectedTags.value.map(String).includes(String(tagId));
-};
+function translatedName(item) {
+    return item?.translation?.name || item?.name || "";
+}
 
-const toggleTag = (tagId) => {
+function isTagSelected(tagId) {
+    return selectedTags.value.map(String).includes(String(tagId));
+}
+
+function toggleTag(tagId) {
     const normalizedId = String(tagId);
 
     if (isTagSelected(tagId)) {
@@ -476,186 +668,53 @@ const toggleTag = (tagId) => {
     }
 
     selectedTags.value = [...selectedTags.value, tagId];
-};
+}
 
-const clearTags = () => {
+function clearTags() {
     selectedTags.value = [];
     tagSearch.value = "";
-};
+}
 
-const getTagName = (tagId) => {
+function getTagName(tagId) {
     return tags.value.find((tag) => String(tag.id) === String(tagId))?.name || tagId;
-};
-
-async function handleMediaSelect(e) {
-    const files = Array.from(e.target.files || []);
-    await processMedia(files);
 }
 
-async function handleMediaDrop(e) {
-    const files = Array.from(e.dataTransfer.files || []);
-    await processMedia(files);
-}
+function appendPhotoFields(fd, item) {
+    const metrics = item.metrics || {};
+    const validationMessage = item.errors?.length
+        ? item.errors.join("; ")
+        : item.validationMessage || "";
 
-function getImageDimensions(file) {
-    return new Promise((resolve, reject) => {
-        const image = new Image();
-        const url = URL.createObjectURL(file);
+    fd.append("urls[]", item.file);
+    fd.append("photo_descriptions[]", item.description.trim());
+    fd.append("photo_tags_json[]", JSON.stringify(item.tags || []));
+    fd.append("photo_widths[]", metrics.width ?? "");
+    fd.append("photo_heights[]", metrics.height ?? "");
+    fd.append("photo_quality_scores[]", metrics.quality_score ?? "");
+    fd.append("photo_sharpness_scores[]", metrics.sharpness_score ?? "");
+    fd.append("photo_blur_scores[]", metrics.blur_score ?? "");
+    fd.append("photo_validation_statuses[]", item.status || "");
+    fd.append("photo_validation_messages[]", validationMessage);
 
-        image.onload = () => {
-            const dimensions = {
-                width: image.naturalWidth,
-                height: image.naturalHeight,
-            };
-
-            URL.revokeObjectURL(url);
-            resolve(dimensions);
-        };
-
-        image.onerror = () => {
-            URL.revokeObjectURL(url);
-            reject(new Error("Unable to read image dimensions"));
-        };
-
-        image.src = url;
-    });
-}
-
-function calculateSuggestedPrice(width, height) {
-    const megapixels = (width * height) / 1000000;
-
-    if (megapixels >= 12) return 50;
-    if (megapixels >= 8) return 35;
-    if (megapixels >= 4) return 25;
-    if (megapixels >= 2) return 15;
-
-    return 10;
-}
-
-function readFilePreview(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = (ev) => resolve(ev.target.result);
-        reader.onerror = () => reject(new Error("Unable to read file preview"));
-        reader.readAsDataURL(file);
-    });
-}
-
-function syncMediaArrays() {
-    form.value.media_files = form.value.media_items.map((item) => item.file);
-    form.value.media_previews = form.value.media_items.map((item) => item.preview);
-}
-
-async function processMedia(newFiles) {
-    const currentCount = form.value.media_items.length;
-    const canAdd = MAX_MEDIA - currentCount;
-
-    if (newFiles.length > canAdd) {
-        alert(`يمكنك إضافة ${canAdd} ملف${canAdd === 1 ? "" : "ات"} فقط`);
-        newFiles = newFiles.slice(0, canAdd);
-    }
-
-    for (const file of newFiles) {
-        if (file.size > 20 * 1024 * 1024) {
-            alert(`حجم الملف ${file.name} يتجاوز 5 ميجا`);
-            continue;
-        }
-
-        const allowedTypes = [
-            "image/png", "image/jpeg", "image/webp",
-            "video/mp4", "video/webm", "video/ogg"
-        ];
-
-        if (!allowedTypes.includes(file.type)) {
-            alert(`نوع الملف ${file.name} غير مدعوم`);
-            continue;
-        }
-
-        try {
-            const preview = await readFilePreview(file);
-
-            if (file.type.startsWith("image/")) {
-                const { width, height } = await getImageDimensions(file);
-
-                if (width < 720 || height < 720) {
-                    alert(`Image ${file.name} quality is too low. Minimum resolution is 720px width and height.`);
-                    continue;
-                }
-
-                const suggestedPrice = calculateSuggestedPrice(width, height);
-
-                form.value.media_items.push({
-                    file,
-                    preview,
-                    type: "image",
-                    width,
-                    height,
-                    suggested_price: suggestedPrice,
-                    custom_price: suggestedPrice,
-                });
-            } else {
-                form.value.media_items.push({
-                    file,
-                    preview,
-                    type: "video",
-                    width: null,
-                    height: null,
-                    suggested_price: null,
-                    custom_price: null,
-                });
-            }
-
-            syncMediaArrays();
-        } catch (err) {
-            console.error("Failed to process media", err);
-            alert(`تعذر قراءة الملف ${file.name}`);
-        }
-    }
-
-    if (fileInput.value) fileInput.value.value = "";
-}
-
-function removeMedia(index) {
-    form.value.media_items.splice(index, 1);
-    syncMediaArrays();
+    fd.append("media_prices[]", item.custom_price || item.suggested_price || 0);
+    fd.append("media_widths[]", metrics.width ?? "");
+    fd.append("media_heights[]", metrics.height ?? "");
+    fd.append("media_quality_scores[]", metrics.quality_score ?? "");
+    fd.append("media_sharpness_scores[]", metrics.sharpness_score ?? "");
+    fd.append("media_contrast_scores[]", "");
+    fd.append("media_brightness_scores[]", "");
+    fd.append("media_file_sizes_mb[]", metrics.file_size_mb ?? "");
 }
 
 async function createEvent() {
-    if (
-        !form.value.title?.trim() ||
-        !form.value.description?.trim() ||
-        !form.value.city_id ||
-        !form.value.sub_categorey_id ||
-        !form.value.start_date ||
-        !hasSelectedLocation.value
-    ) {
-        return alert("برجاء ملء جميع الحقول المطلوبة (بما فيها الموقع على الخريطة)");
-    }
-
-    if (selectedTags.value.length === 0) {
-        return alert("Please select at least one tag");
-    }
-
-    if (selectedTags.value.length > 4) {
-        return alert("You can select up to 4 tags only");
-    }
-
-    if (form.value.media_items.length === 0) {
-        return alert("يرجى رفع صورة أو فيديو واحد على الأقل");
-    }
-
-    const invalidPrice = form.value.media_items.some((item) =>
-        item.type === "image" && (!item.custom_price || Number(item.custom_price) <= 0)
-    );
-
-    if (invalidPrice) {
-        return alert("Please add a valid price for all images");
+    if (!canSubmit.value) {
+        return alert(photosBlockingMessage.value || "Please complete all required fields.");
     }
 
     loading.value = true;
     const fd = new FormData();
 
+    fd.append("photography_type", form.value.photography_type);
     fd.append("title", form.value.title);
     fd.append("description", form.value.description);
     fd.append("city_id", form.value.city_id);
@@ -672,28 +731,16 @@ async function createEvent() {
         fd.append("tags_id[]", tagId);
     });
 
-    form.value.media_items.forEach((item) => {
-        fd.append("urls[]", item.file);
-
-        if (item.type === "image") {
-            fd.append("media_prices[]", item.custom_price || item.suggested_price || 0);
-            fd.append("media_widths[]", item.width);
-            fd.append("media_heights[]", item.height);
-        } else {
-            fd.append("media_prices[]", "");
-            fd.append("media_widths[]", "");
-            fd.append("media_heights[]", "");
-        }
-    });
+    form.value.media_items.forEach((item) => appendPhotoFields(fd, item));
 
     try {
         await EventService.createHistoricUser(fd);
 
-        alert("تم إنشاء الحدث بنجاح!");
+        alert("Historical event created successfully!");
         window.location.href = "/";
     } catch (err) {
         console.error(err);
-        alert("فشل إنشاء الحدث: " + (err.response?.data?.message || "خطأ غير معروف"));
+        alert("Failed to create historical event: " + (err.response?.data?.message || "Unknown error"));
     } finally {
         loading.value = false;
     }
@@ -707,9 +754,6 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
 
 onMounted(async () => {
     await Promise.all([fetchCountries(), fetchCategories(), fetchTags()]);
-    await nextTick();
-
-    initMap();
 });
 
 onUnmounted(() => {
@@ -724,8 +768,19 @@ onUnmounted(() => {
     }
 });
 
+function resizeMapForDetailsPhase() {
+    nextTick(() => {
+        if (!map) {
+            initMap();
+            return;
+        }
+
+        requestAnimationFrame(() => map?.resize());
+    });
+}
+
 function initMap() {
-    if (map || !mapContainer.value) return;
+    if (!mapContainer.value || map) return;
 
     const lang = localStorage.getItem("language") || "ar";
     const isAr = lang === "ar";
@@ -779,7 +834,7 @@ function setSelectedLocation(lat, lng, shouldFly = true) {
 
 function locateUserOnMap() {
     if (!navigator.geolocation) {
-        locationError.value = "المتصفح لا يدعم تحديد الموقع";
+        locationError.value = "Your browser does not support geolocation.";
         return;
     }
 
@@ -797,7 +852,7 @@ function locateUserOnMap() {
         (error) => {
             console.warn("Geolocation error:", error);
 
-            locationError.value = "تعذر تحديد موقعك الحالي، يمكنك اختيار الموقع يدويًا من الخريطة";
+            locationError.value = "Unable to detect your current location. You can select the location manually on the map.";
             locatingUser.value = false;
         },
         {
@@ -808,21 +863,22 @@ function locateUserOnMap() {
     );
 }
 
-function patchLanguage(map, isAr) {
-    const style = map.getStyle();
+function patchLanguage(activeMap, isAr) {
+    const style = activeMap.getStyle();
+
     if (!style?.layers) return;
 
     const langField = isAr ? "name:ar" : "name:en";
     const nameExpr = ["coalesce", ["get", langField], ["get", "name"]];
 
-    style.layers.forEach(layer => {
+    style.layers.forEach((layer) => {
         if (layer.type !== "symbol") return;
         if (!layer.layout?.["text-field"]) return;
 
-        map.setLayoutProperty(layer.id, "text-field", nameExpr);
+        activeMap.setLayoutProperty(layer.id, "text-field", nameExpr);
 
         if (isAr) {
-            map.setLayoutProperty(layer.id, "text-writing-mode", ["horizontal"]);
+            activeMap.setLayoutProperty(layer.id, "text-writing-mode", ["horizontal"]);
         }
     });
 }

@@ -50,8 +50,10 @@
                 <div class="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start">
                         <div class="space-y-8">
-                            <TagsSearchBar :tags="tags" :selected-tags="selectedTags" :loading="loadingTags"
-                                @update:selected-tags="handleTagsUpdate" />
+                            <UnifiedSearchBar v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
+                                :loading="loadingTags" :tag-suggestions="tagSuggestions"
+                                :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
+                                @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
 
                             <MapSection :fullscreen="fullscreen" :is-map-ready="isMapReady"
                                 :is-map-loading="isMapLoading" :map-error="mapError" :can-init-map="canInitMap"
@@ -61,9 +63,10 @@
                             <section id="filters-section" ref="filtersSectionRef">
                                 <FiltersSection :categories="categories" :selected-category="selectedCategory"
                                     :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
-                                    :loading-sub-categories="loadingSubCategories" :country-search="countrySearch" :show-dropdown="showDropdown"
-                                    :filtered-countries="filteredCountries" :selected-country="selectedCountry"
-                                    :cities="cities" :selected-city="selectedCity" :from-date="fromDate" :to-date="toDate"
+                                    :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
+                                    :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
+                                    :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
+                                    :from-date="fromDate" :to-date="toDate"
                                     @update:selected-category="handleCategoryUpdate"
                                     @update:selected-sub-category="handleSubCategoryUpdate"
                                     @update:country-search="countrySearch = $event"
@@ -84,12 +87,13 @@
             </section>
 
             <!-- EVENTS RESULTS -->
-            <section class="bg-white py-10">
+            <section id="events-results" class="bg-white py-10">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <EventsSection :searched="searched" :loading="loading" :displayed-events="displayedEvents"
                         :paginated-events="paginatedEvents" :visible-pages="visiblePages" :current-page="currentPage"
-                        :total-pages="totalPages" :fallback-image="fallbackImage" :format-date="formatDate" :lang="lang"
-                        @update:current-page="currentPage = $event" />
+                        :total-pages="totalPages" :total-results="totalResults" :result-from="resultFrom"
+                        :result-to="resultTo" :per-page="perPage" :fallback-image="fallbackImage"
+                        :format-date="formatDate" :lang="lang" @update:current-page="handlePageChange" />
                 </div>
             </section>
 
@@ -109,13 +113,19 @@
             <NewsletterSection />
         </main>
 
-        <Transition name="slide-fade">
+        <Transition name="slide-fade" class="mt-15">
             <div v-if="showProfileToast"
                 class="fixed top-4 left-4 z-[9999] w-[280px] cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg"
                 @click="goToProfile">
-                <div class="flex items-center justify-end border-b bg-yellow-50 px-3 py-2">
-                    <button @click.stop="closeToast" class="text-sm text-gray-400 transition-colors hover:text-red-500">
-                        x
+                <div class="flex items-center justify-between border-b bg-yellow-50 px-3 py-2">
+                    <span class="text-sm font-semibold text-yellow-800">
+                        Not Completed Profile
+                    </span>
+
+                    <button type="button" @click.stop="closeToast"
+                        class="text-4xl font-bold leading-none text-gray-400 transition-colors hover:text-red-500"
+                        aria-label="Close">
+                        ×
                     </button>
                 </div>
 
@@ -161,7 +171,7 @@ import { PlanService } from "@/services/planService/planService";
 import { AuthService } from "@/services/AuthService/AuthService";
 
 const MapSection = defineAsyncComponent(() => import("./components/MapSection.vue"));
-const TagsSearchBar = defineAsyncComponent(() => import("./components/TagsSearchBar.vue"));
+const UnifiedSearchBar = defineAsyncComponent(() => import("./components/UnifiedSearchBar.vue"));
 const FiltersSection = defineAsyncComponent(() => import("./components/FiltersSection.vue"));
 const EventsSection = defineAsyncComponent(() => import("./components/EventsSection.vue"));
 const PlansSection = defineAsyncComponent(() => import("./components/PlansSection.vue"));
@@ -194,6 +204,7 @@ const cities = shallowRef([]);
 const filteredCountries = shallowRef([]);
 const subCategories = shallowRef([]);
 const tags = shallowRef([]);
+const tagSuggestions = shallowRef([]);
 const plans = shallowRef([]);
 const trendingEvents = shallowRef([]);
 
@@ -209,14 +220,19 @@ const selectedTags = ref([]);
 
 const loadingSubCategories = ref(false);
 const loadingTags = ref(false);
+const loadingTagSuggestions = ref(false);
 const loading = ref(false);
 const searched = ref(false);
 const currentPage = ref(1);
+const perPage = ref(8);
+const totalPages = ref(1);
+const totalResults = ref(0);
+const resultFrom = ref(null);
+const resultTo = ref(null);
 const loadingPlans = ref(false);
 const loadingTrendingEvents = ref(false);
 const trendingEventsError = ref("");
 
-const itemsPerPage = 8;
 const maxVisible = 5;
 const fallbackImage = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
 
@@ -230,11 +246,11 @@ let progressInterval = null;
 let hasMapErrorListener = false;
 const scheduledTasks = [];
 
-const totalPages = computed(() => Math.ceil(displayedEvents.value.length / itemsPerPage));
-
 const visiblePages = computed(() => {
-    const total = totalPages.value;
-    let start = Math.max(currentPage.value - Math.floor(maxVisible / 2), 1);
+    const total = Number(totalPages.value) || 1;
+    const current = Number(currentPage.value) || 1;
+
+    let start = Math.max(current - Math.floor(maxVisible / 2), 1);
     let end = start + maxVisible - 1;
 
     if (end > total) {
@@ -248,8 +264,7 @@ const visiblePages = computed(() => {
 });
 
 const paginatedEvents = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage;
-    return displayedEvents.value.slice(start, start + itemsPerPage);
+    return displayedEvents.value;
 });
 
 const missingFieldsList = computed(() => {
@@ -316,6 +331,70 @@ const normalizeTrendingEvent = (ev = {}) => {
     };
 };
 
+const buildPaginationPayload = (paginator) => {
+    const events = Array.isArray(paginator?.data) ? paginator.data : [];
+
+    return {
+        events,
+        currentPage: Number(paginator?.current_page ?? 1),
+        lastPage: Number(paginator?.last_page ?? 1),
+        perPage: Number(paginator?.per_page ?? perPage.value),
+        total: Number(paginator?.total ?? events.length),
+        from: paginator?.from ?? (events.length ? 1 : null),
+        to: paginator?.to ?? events.length,
+    };
+};
+
+const buildArrayPaginationPayload = (events) => ({
+    events,
+    currentPage: 1,
+    lastPage: 1,
+    perPage: events.length,
+    total: events.length,
+    from: events.length ? 1 : null,
+    to: events.length,
+});
+
+function normalizePaginatedResponse(response) {
+    const candidates = [
+        response?.data?.data,
+        response?.data,
+        response,
+    ];
+
+    let arrayFallback = null;
+
+    for (const candidate of candidates) {
+        if (!candidate) continue;
+
+        if (candidate?.data && Array.isArray(candidate.data)) {
+            return buildPaginationPayload(candidate);
+        }
+
+        if (candidate?.data?.data && Array.isArray(candidate.data.data)) {
+            return buildPaginationPayload(candidate.data);
+        }
+
+        if (Array.isArray(candidate) && !arrayFallback) {
+            arrayFallback = candidate;
+        }
+    }
+
+    if (arrayFallback) {
+        return buildArrayPaginationPayload(arrayFallback);
+    }
+
+    return buildPaginationPayload(null);
+}
+
+const resetPaginationMeta = () => {
+    currentPage.value = 1;
+    totalPages.value = 1;
+    totalResults.value = 0;
+    resultFrom.value = null;
+    resultTo.value = null;
+};
+
 const loadTrendingEvents = async () => {
     loadingTrendingEvents.value = true;
     trendingEventsError.value = "";
@@ -339,22 +418,44 @@ const loadTags = async () => {
     loadingTags.value = true;
 
     try {
-        const response = await TagService.getTags();
+        const response = await TagService.searchTags({ q: "", limit: 5 });
         const payload = response?.data?.data ?? response?.data ?? response;
         const loadedTags = Array.isArray(payload) ? payload : [];
 
         tags.value = loadedTags;
+        tagSuggestions.value = loadedTags;
 
         return loadedTags;
     } catch (error) {
         console.error("Error loading tags:", error);
         tags.value = [];
+        tagSuggestions.value = [];
 
         return [];
     } finally {
         loadingTags.value = false;
     }
 };
+
+const fetchTagSuggestions = debounce(async (term = "") => {
+    loadingTagSuggestions.value = true;
+
+    try {
+        const query = String(term || "").trim();
+        const response = await TagService.searchTags({
+            q: query,
+            limit: query ? 10 : 5,
+        });
+        const payload = response?.data?.data ?? response?.data ?? response;
+
+        tagSuggestions.value = Array.isArray(payload) ? payload : [];
+    } catch (error) {
+        console.error("Error loading tag suggestions:", error);
+        tagSuggestions.value = [];
+    } finally {
+        loadingTagSuggestions.value = false;
+    }
+}, 250);
 
 const filterCountries = () => {
     const search = countrySearch.value.toLowerCase().trim();
@@ -426,7 +527,8 @@ const handleMainCategoryChange = async () => {
 
 const handleSearchClick = () => {
     closeCountryDropdown();
-    search(true);
+    currentPage.value = 1;
+    search(true, 1);
 };
 
 const handleClickOutsideFilters = (event) => {
@@ -604,13 +706,14 @@ const handleManualMapLoad = () => {
     void ensureMapInitialized();
 };
 
-const search = async (isInitial = false) => {
+const search = async (isInitial = false, page = currentPage.value) => {
     if (!searched.value && !isInitial) return;
 
     loading.value = true;
 
     try {
-        const result = await EventService.searchEvents({
+        const requestedPage = Number(page) || 1;
+        const response = await EventService.searchEvents({
             countryId: selectedCountry.value || null,
             cityId: selectedCity.value || null,
             subCategoryId: selectedSubCategory.value || null,
@@ -618,10 +721,17 @@ const search = async (isInitial = false) => {
             fromDate: fromDate.value || null,
             toDate: toDate.value || null,
             searchQuery: searchQuery.value?.trim() || null,
+            page: requestedPage,
+            perPage: perPage.value,
         });
+        const paginator = normalizePaginatedResponse(response);
 
-        displayedEvents.value = (Array.isArray(result) ? result : []).map(normalizeEvent);
-        currentPage.value = 1;
+        displayedEvents.value = paginator.events.map(normalizeEvent);
+        currentPage.value = paginator.currentPage;
+        totalPages.value = paginator.lastPage;
+        totalResults.value = paginator.total;
+        resultFrom.value = paginator.from;
+        resultTo.value = paginator.to;
 
         await nextTick();
 
@@ -629,10 +739,28 @@ const search = async (isInitial = false) => {
     } catch (error) {
         console.error("Search error:", error);
         displayedEvents.value = [];
+        resetPaginationMeta();
+        renderMarkersOnMaps([]);
     } finally {
         loading.value = false;
         searched.value = true;
     }
+};
+
+const handlePageChange = async (page) => {
+    const nextPage = Number(page);
+
+    if (!nextPage || nextPage < 1 || nextPage > totalPages.value) return;
+    if (nextPage === currentPage.value) return;
+
+    currentPage.value = nextPage;
+    await search(true, nextPage);
+
+    await nextTick();
+
+    document
+        .querySelector("#events-results")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 const handleMarkerEvents = (event) => {
@@ -643,6 +771,10 @@ const handleMarkerEvents = (event) => {
     renderMarkersOnMaps(displayedEvents.value);
 
     currentPage.value = 1;
+    totalPages.value = 1;
+    totalResults.value = displayedEvents.value.length;
+    resultFrom.value = displayedEvents.value.length ? 1 : null;
+    resultTo.value = displayedEvents.value.length;
     searched.value = true;
     loading.value = false;
 };
@@ -847,7 +979,8 @@ const clearScheduledTasks = () => {
 const debouncedSearch = debounce(() => {
     if (!searched.value) return;
 
-    void search();
+    currentPage.value = 1;
+    void search(true, 1);
 }, 450);
 
 watch(countrySearch, (value) => {
@@ -927,6 +1060,7 @@ onUnmounted(() => {
     }
 
     debouncedSearch.cancel();
+    fetchTagSuggestions.cancel();
     clearScheduledTasks();
 
     if (mapService) {
@@ -936,23 +1070,3 @@ onUnmounted(() => {
     }
 });
 </script>
-
-<style scoped>
-.slide-fade-enter-active {
-    transition: all 0.3s ease-out;
-}
-
-.slide-fade-leave-active {
-    transition: all 0.2s ease-in;
-}
-
-.slide-fade-enter-from {
-    transform: translateX(-20px);
-    opacity: 0;
-}
-
-.slide-fade-leave-to {
-    transform: translateX(-20px);
-    opacity: 0;
-}
-</style>

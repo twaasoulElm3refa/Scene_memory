@@ -17,16 +17,19 @@
           {{ $t("events.recentMemories") }}
         </h2>
         <p class="text-gray-500 text-base md:text-lg max-w-xl">
-          {{ $t("events.discoverAroundYou") }}
+          <!-- {{ $t("events.discoverAroundYou") }} -->
+        </p>
+        <p v-if="totalResults > 0" class="mt-2 text-sm font-medium text-gray-500">
+          Showing {{ resultFrom || 0 }} - {{ resultTo || 0 }} of {{ totalResults || 0 }} events
         </p>
       </div>
     </div>
 
     <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
       <div
-        v-for="i in 8"
+        v-for="i in Number(perPage) || 8"
         :key="`event-skeleton-${i}`"
-        class="bg-white rounded-2xl overflow-hidden shadow-lg animate-pulse"
+        class="bg-white rounded overflow-hidden shadow-lg animate-pulse"
       >
         <div class="aspect-[4/3] bg-gray-200"></div>
         <div class="p-5 space-y-3">
@@ -101,11 +104,11 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap justify-center mt-12 gap-2">
+      <div v-if="totalPages > 1" class="flex flex-wrap justify-center mt-12 gap-2">
         <button
-          @click="$emit('update:currentPage', Math.max(1, currentPage - 1))"
-          :disabled="currentPage === 1"
-          class="px-4 py-2 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-blue-50 disabled:opacity-50"
+          @click="emitPageChange(Math.max(1, currentPage - 1))"
+          :disabled="currentPage <= 1 || loading"
+          class="px-4 py-2 rounded text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {{ $t("pagination.previous") }}
         </button>
@@ -113,9 +116,10 @@
         <button
           v-for="page in visiblePages"
           :key="page"
-          @click="$emit('update:currentPage', page)"
+          @click="emitPageChange(page)"
+          :disabled="loading || page === currentPage"
           :class="[
-            'px-4 py-2 rounded-full text-sm font-medium min-w-[40px]',
+            'px-4 py-2 rounded text-sm font-medium min-w-[40px] disabled:cursor-not-allowed',
             currentPage === page
               ? 'bg-blue-600 text-white shadow'
               : 'bg-white border border-gray-200 text-gray-700 hover:bg-blue-50'
@@ -125,9 +129,9 @@
         </button>
 
         <button
-          @click="$emit('update:currentPage', Math.min(totalPages, currentPage + 1))"
-          :disabled="currentPage === totalPages || totalPages === 0"
-          class="px-4 py-2 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-blue-50 disabled:opacity-50"
+          @click="emitPageChange(Math.min(totalPages, currentPage + 1))"
+          :disabled="currentPage >= totalPages || loading"
+          class="px-4 py-2 rounded text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {{ $t("pagination.next") }}
         </button>
@@ -164,7 +168,23 @@ defineProps({
   },
   totalPages: {
     type: Number,
+    default: 1,
+  },
+  totalResults: {
+    type: Number,
     default: 0,
+  },
+  resultFrom: {
+    type: Number,
+    default: null,
+  },
+  resultTo: {
+    type: Number,
+    default: null,
+  },
+  perPage: {
+    type: Number,
+    default: 8,
   },
   fallbackImage: {
     type: String,
@@ -180,5 +200,9 @@ defineProps({
   },
 });
 
-defineEmits(["update:currentPage"]);
+const emit = defineEmits(["update:current-page"]);
+
+const emitPageChange = (page) => {
+  emit("update:current-page", page);
+};
 </script>

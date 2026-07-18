@@ -34,6 +34,7 @@ use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
 use App\Http\Controllers\api\home\GateController;
+use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\webhook\WebhookController;
 use App\Http\Controllers\api\webhook\WalletWebhookController;
 use App\Http\Controllers\api\home\IncomeController;
@@ -121,6 +122,7 @@ Route::prefix('v1')->group(function () {
 
     // Tags
     Route::prefix('tags')->group(function () {
+        Route::get('/search', [TagsController::class,  'search'])->middleware('throttle:60,1');
         Route::get('/', [TagsController::class,  'index']);
     });
 
@@ -174,6 +176,10 @@ Route::prefix('v1')->group(function () {
         //54
     });
 
+    Route::prefix('media')->middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
+        Route::post('/validate-photo', [MediaValidationController::class, 'validatePhoto']);
+    });
+
     // Purchases CRUD
     Route::prefix('purchases')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/', [PurchasesController::class, 'index']);
@@ -185,7 +191,6 @@ Route::prefix('v1')->group(function () {
         Route::delete('/delete/{id}', [PurchasesController::class, 'destroy']);
         //61
     });
-
      // withdrawals
     Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class,'throttle:90,1'])->group(function () {
         Route::get('/', [WithdrawlController::class, 'index']);

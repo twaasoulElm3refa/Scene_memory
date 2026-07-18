@@ -30,9 +30,9 @@
           </div>
           <p class="mt-4 text-sm">
             <span class="font-medium" :class="trendClass(stats.total_events)">
-              {{ formatPercentage(stats.total_events) }}
+               {{ formatPercentage(stats.total_events) }}
             </span>
-            <span class="text-gray-500"> {{ stats.total_events.label || "from last month" }}</span>
+            <span class="text-gray-500"> {{ stats.total_events.label || " from last month" }}</span>
           </p>
         </div>
         <!-- Active Users -->
@@ -57,7 +57,7 @@
             <span class="font-medium" :class="trendClass(stats.active_users)">
               {{ formatPercentage(stats.active_users) }}
             </span>
-            <span class="text-gray-500"> {{ stats.active_users.label || "from last month" }}</span>
+            <span class="text-gray-500"> {{ stats.active_users.label || " from last month" }}</span>
           </p>
         </div>
         <!-- Total Memories -->
@@ -82,7 +82,7 @@
             <span class="font-medium" :class="trendClass(stats.total_memories)">
               {{ formatPercentage(stats.total_memories) }}
             </span>
-            <span class="text-gray-500"> {{ stats.total_memories.label || "from last month" }}</span>
+            <span class="text-gray-500"> {{ stats.total_memories.label || " from last month" }}</span>
           </p>
         </div>
         <!-- purchases Count -->
@@ -285,25 +285,25 @@ const getDefaultStats = () => ({
   total_events: {
     value: 0,
     percentage: 0,
-    trend: "neutral",
-    label: "from last month",
+    trend: " neutral",
+    label: " from last month",
   },
   active_users: {
     value: 0,
     percentage: 0,
-    trend: "neutral",
-    label: "from last month",
+    trend: " neutral",
+    label: " from last month",
   },
   total_memories: {
     value: 0,
     percentage: 0,
-    trend: "neutral",
-    label: "from last month",
+    trend: " neutral",
+    label: " from last month",
   },
   purchases: {
     value: 0,
     attention_count: 0,
-    label: "items need attention",
+    label: " items need attention",
   },
 });
 

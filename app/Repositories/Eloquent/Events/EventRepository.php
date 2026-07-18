@@ -6,6 +6,7 @@ use App\Models\EventViews;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class EventRepository implements EventRepositoryInterface
 {
@@ -102,8 +103,11 @@ class EventRepository implements EventRepositoryInterface
             ->paginate($perPage);
     }
 
-   public function filteredActive(array $filters)
+    public function filteredActive(array $filters, int $perPage = 20, int $page = 1)
     {
+        $perPage = max(1, min($perPage, 50));
+        $page = max(1, $page);
+
         $parsedFilters = [];
 
         foreach ($filters as $key => $filter) {
@@ -190,11 +194,13 @@ class EventRepository implements EventRepositoryInterface
             ?? $parsedFilters['end_date_to']
             ?? null;
 
-        $searchQuery = trim((string) ($parsedFilters['search_query']
+        $searchQuery = trim((string) (
+            $parsedFilters['search_query']
             ?? $parsedFilters['searchQuery']
             ?? $parsedFilters['q']
             ?? $parsedFilters['search']
-            ?? ''));
+            ?? ''
+        ));
 
         $active = $parsedFilters['is_active'] ?? 1;
 
@@ -210,75 +216,75 @@ class EventRepository implements EventRepositoryInterface
             return \Carbon\Carbon::parse($value)->toDateString();
         };
 
-        $buildBaseQuery = function () use ($active) {
-            return Events::query()
-                ->select([
-                    'id',
-                    'user_id',
-                    'city_id',
-                    'title',
-                    'start_date',
-                    'langitude',
-                    'lattitude',
-                    'slug',
-                    'sub_categorey_id',
-                ])
-                ->with([
-                    'city' => function ($q) {
-                        $q->select([
-                            'id',
-                            'country_id',
-                            'name',
-                        ]);
-                    },
+        $query = Events::query()
+            ->select([
+                'id',
+                'user_id',
+                'city_id',
+                'title',
+                'description',
+                'start_date',
+                'langitude',
+                'lattitude',
+                'slug',
+                'photography_type',
+                'sub_categorey_id',
+                'is_active',
+            ])
+            ->with([
+                'city' => function ($q) {
+                    $q->select([
+                        'id',
+                        'country_id',
+                        'name',
+                    ]);
+                },
 
-                    'city.translation' => function ($q) {
-                        $q->select([
-                            'id',
-                            'city_id',
-                            'locale',
-                            'name',
-                        ]);
-                    },
+                'city.translation' => function ($q) {
+                    $q->select([
+                        'id',
+                        'city_id',
+                        'locale',
+                        'name',
+                    ]);
+                },
 
-                    'sub_categorey' => function ($q) {
-                        $q->select([
-                            'id',
-                            'category_id',
-                            'name',
-                        ]);
-                    },
+                'sub_categorey' => function ($q) {
+                    $q->select([
+                        'id',
+                        'category_id',
+                        'name',
+                    ]);
+                },
 
-                    'sub_categorey.translation' => function ($q) {
-                        $q->select([
-                            'id',
-                            'category_id',
-                            'locale',
-                            'name',
-                        ]);
-                    },
+                'sub_categorey.translation' => function ($q) {
+                    $q->select([
+                        'id',
+                        'category_id',
+                        'locale',
+                        'name',
+                    ]);
+                },
 
-                    'translation' => function ($q) {
-                        $q->select([
-                            'id',
-                            'event_id',
-                            'locale',
-                            'title',
-                        ]);
-                    },
+                'translation' => function ($q) {
+                    $q->select([
+                        'id',
+                        'event_id',
+                        'locale',
+                        'title',
+                        'description',
+                    ]);
+                },
 
-                    'firstImage' => function ($q) {
-                        $q->select([
-                            'id',
-                            'event_id',
-                            'full_url',
-                        ]);
-                    },
-                ])
-                ->where('is_active', $active);
-        };
-
-        $query = $buildBaseQuery();
+                'firstImage' => function ($q) {
+                    $q->select([
+                        'id',
+                        'event_id',
+                        'full_url',
+                    ]);
+                },
+            ])
+            ->where('is_active', $active);
 
         if ($countryId) {
             $query->whereHas('city', function ($q) use ($countryId) {
@@ -295,17 +301,35 @@ class EventRepository implements EventRepositoryInterface
         }
 
         if (!empty($tagsArray)) {
-            $query->whereHas('event_tags', function ($q) use ($tagsArray) {
-                $q->whereIn('tag_id', $tagsArray);
+            $query->where(function ($tagQuery) use ($tagsArray) {
+                $tagQuery->whereExists(function ($subQuery) use ($tagsArray) {
+                    $subQuery->selectRaw('1')
+                        ->from('event__tags')
+                        ->whereColumn('event__tags.event_id', 'events.id')
+                        ->whereIn('event__tags.tag_id', $tagsArray);
+                });
+
+                $tagQuery->orWhereExists(function ($subQuery) use ($tagsArray) {
+                    $subQuery->selectRaw('1')
+                        ->from('events_imges')
+                        ->join(
+                            'images_tags',
+                            'images_tags.events_imges_id',
+                            '=',
+                            'events_imges.id'
+                        )
+                        ->whereColumn('events_imges.event_id', 'events.id')
+                        ->whereIn('images_tags.tags_id', $tagsArray);
+                });
             });
         }
 
         if ($from) {
-            $query->whereDate('start_date', '>=', $normalizeDate($from));
+            $query->where('start_date', '>=', $normalizeDate($from));
         }
 
         if ($to) {
-            $query->whereDate('start_date', '<=', $normalizeDate($to));
+            $query->where('start_date', '<=', $normalizeDate($to));
         }
 
         if ($searchQuery !== '') {
@@ -323,9 +347,17 @@ class EventRepository implements EventRepositoryInterface
         }
 
         return $query
-            ->orderBy('start_date')
-            ->get()
-            ->toArray();
+            ->orderByRaw("
+                CASE
+                    WHEN photography_type = 'professional' THEN 0
+                    WHEN photography_type = 'normal' THEN 1
+                    ELSE 2
+                END
+            ")
+            ->orderByRaw('start_date IS NULL ASC')
+            ->orderByDesc('start_date')
+            ->orderByDesc('id')
+            ->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function randomActive(int $take = 8)
