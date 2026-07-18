@@ -12,9 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
-    public function __construct(private readonly UserRepositoryInterface $userRepository)
-    {
-    }
+    public function __construct(private readonly UserRepositoryInterface $userRepository) {}
 
     public function googleLogin(Request $request)
     {
@@ -41,20 +39,19 @@ class GoogleAuthController extends Controller
                     'name' => $googleUser->getName(),
                     'password' => Hash::make('password'),
                     'role' => 'user',
-                    'licence_type_id'=>1,
+                    'licence_type_id' => 1,
                 ]
             );
-            if($user)
-                {
-                    $user->update(['last_login_at' => now()]);
-                }
+            if ($user) {
+                $user->update(['last_login_at' => now()]);
+            }
             $token = $user->createToken('google-auth-token')->plainTextToken;
 
             $isProfileComplete =
-                !empty($user->phone) &&
-                !empty($user->country) &&
-                !empty($user->position) &&
-                !empty($user->date_of_birth);
+                ! empty($user->phone) &&
+                ! empty($user->country) &&
+                ! empty($user->position) &&
+                ! empty($user->date_of_birth);
             Mail::to($user->email)->queue(new WelcomeMail($user));
 
             $payload = [
@@ -73,7 +70,7 @@ class GoogleAuthController extends Controller
             }
 
             $lang = $this->resolveLang($request);
-            $frontendUrl = rtrim((string) config('app.frontend_url', env('FRONTEND_URL', 'http://127.0.0.1:8000')), '/');
+            $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
             $query = http_build_query([
                 'token' => $token,
                 'role' => $user->role,
@@ -93,7 +90,7 @@ class GoogleAuthController extends Controller
             }
 
             $lang = $this->resolveLang($request);
-            $frontendUrl = rtrim((string) config('app.frontend_url', env('FRONTEND_URL', 'http://127.0.0.1:8000')), '/');
+            $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
             $error = urlencode($e->getMessage());
 
             return redirect()
@@ -105,7 +102,8 @@ class GoogleAuthController extends Controller
     private function resolveLang(Request $request): string
     {
         $lang = strtolower((string) ($request->query('lang') ?: $request->cookie('oauth_lang') ?: app()->getLocale() ?: 'en'));
-        $supported = ['ar', 'en', 'ru', 'fr', 'zh','es', 'de', 'it', 'hi', 'ja', 'fa', 'ur', 'tr'];
+        $supported = ['ar', 'en', 'ru', 'fr', 'zh', 'es', 'de', 'it', 'hi', 'ja', 'fa', 'ur', 'tr'];
+
         return in_array($lang, $supported, true) ? $lang : 'en';
     }
 }

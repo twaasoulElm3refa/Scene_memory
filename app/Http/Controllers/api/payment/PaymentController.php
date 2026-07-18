@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\api\payment;
 
+use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentSuccessMail;
 use App\Repositories\Contracts\Carts\CartRepositoryInterface;
 use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
 use App\Repositories\Contracts\Wallets\WalletRepositoryInterface;
 use App\Services\PayPalServices;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Exception;
-use App\Http\Controllers\concerns\ApiResponse;
-use App\Mail\PaymentSuccessMail;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -42,8 +42,8 @@ class PaymentController extends Controller
 
         // Validation
         $validated = $request->validate([
-            'amount'          => 'required|numeric|min:0.01',
-            'description'     => 'nullable|string|max:255',
+            'amount' => 'nullable|numeric|min:0.01',
+            'description' => 'nullable|string|max:255',
             'idempotency_key' => 'nullable|string|max:64',
         ]);
 
@@ -52,10 +52,9 @@ class PaymentController extends Controller
         try {
             ['order' => $order, 'approval_url' => $url] = $this->paypal->pay($validated);
 
-
             return response()->json([
-                'success'      => true,
-                'order_id'     => $order->id,
+                'success' => true,
+                'order_id' => $order->id,
                 'approval_url' => $url,
             ]);
 
@@ -77,29 +76,18 @@ class PaymentController extends Controller
     {
         $token = $request->query('token');
 
-        if (!$token) {
+        if (! $token) {
             return response()->json(['success' => false, 'message' => 'Token missing.'], 400);
         }
 
         try {
             $result = $this->paypal->success($token);
-            $user     = $result['order']->user_id;
             $purchase = $result['order']->id;
 
-            $cart = $this->cartRepository->findByUserId((int) $user);
-            if (!$cart) {
-                return $this->error('Cart not Found', 404);
-            }
-
-            $items = $this->cartRepository->getItemsByCartId($cart->id);
-            foreach ($items as $item) {
-                $this->createPurchaseItemsFromCartItem($purchase, $item);
-            }
-
-            $this->cartRepository->deleteItemsByCartId($cart->id);
-            $this->clearCartCache($user);
-
-            return redirect('/en/waiting?order_id=' . $purchase);
+            return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/waiting?'.http_build_query([
+                'order_id' => $purchase,
+                'status' => $result['order']->status,
+            ]));
 
         } catch (Exception $e) {
             return response()->json([
@@ -131,31 +119,30 @@ class PaymentController extends Controller
     {
         $order = $this->purchaseRepository->findById((int) $id);
 
-        if (!$order) {
+        if (! $order) {
             return response()->json(['status' => 'not_found'], 404);
         }
 
         return response()->json([
-            'status'   => $order->status,
-            'amount'   => $order->amount,
+            'status' => $order->status,
+            'amount' => $order->amount,
             'order_id' => $order->id,
         ]);
     }
-
 
     public function payWallet(): JsonResponse
     {
         return DB::transaction(function () {
             $user = auth()->user();
             $wallet = $this->walletRepository->findByUserIdForUpdate($user->id);
-            if (!$wallet) {
+            if (! $wallet) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Wallet not found',
                 ], 404);
             }
             $cart = $this->cartRepository->findByUserId($user->id);
-            if (!$cart) {
+            if (! $cart) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cart not found',
@@ -177,11 +164,11 @@ class PaymentController extends Controller
             }
             $wallet->decrement('amount', $total);
             $purchase = $this->purchaseRepository->create([
-                "user_id" => $user->id,
-                'type'    => 'wallet',
-                'amount'  => $total,
-                'status'  => 'completed',
-                'idempotency_key' => md5($user->id . now() .'|' . $total . '|' . now()->format('Ymd')),
+                'user_id' => $user->id,
+                'type' => 'wallet',
+                'amount' => $total,
+                'status' => 'completed',
+                'idempotency_key' => md5($user->id.now().'|'.$total.'|'.now()->format('Ymd')),
                 'currency' => 'USD',
                 'description' => 'Wallet payment',
                 'payer_email' => $user->email,
@@ -193,14 +180,15 @@ class PaymentController extends Controller
             }
             $this->cartRepository->deleteItemsByCartId($cart->id);
             $this->clearCartCache($user->id);
-                Mail::to($purchase->user->email)->queue(
-                    new PaymentSuccessMail($purchase)
-                    );
+            Mail::to($purchase->user->email)->queue(
+                new PaymentSuccessMail($purchase)
+            );
+
             return response()->json([
                 'success' => true,
                 'message' => 'Payment successful',
                 'paid_amount' => $total,
-                'balance' => $wallet->amount
+                'balance' => $wallet->amount,
             ], 200);
 
         });
@@ -220,10 +208,10 @@ class PaymentController extends Controller
         if ($item->type === 'collection') {
             foreach ($item->collection_images_array as $image) {
                 $this->purchaseRepository->createItem([
-                    "purchase_id" => $purchaseId,
-                    "image_id"    => $image['id'] ?? null,
-                    "price"       => $image['price'] ?? 0,
-                    "purchased_type" => "collection",
+                    'purchase_id' => $purchaseId,
+                    'image_id' => $image['id'] ?? null,
+                    'price' => $image['price'] ?? 0,
+                    'purchased_type' => 'collection',
                 ]);
             }
 
@@ -231,9 +219,9 @@ class PaymentController extends Controller
         }
 
         $this->purchaseRepository->createItem([
-            "purchase_id" => $purchaseId,
-            "image_id"    => $item->image_id,
-            "price"       => $item->price,
+            'purchase_id' => $purchaseId,
+            'image_id' => $item->image_id,
+            'price' => $item->price,
         ]);
     }
 }

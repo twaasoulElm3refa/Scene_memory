@@ -15,6 +15,13 @@ class BlockBadBots
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->is([
+            'api/v1/paypal/webhook',
+            'api/v1/wallet/webhook',
+        ])) {
+            return $next($request);
+        }
+
         $userAgent = strtolower($request->header('User-Agent', ''));
         $blockedAgents = ['curl', 'python-requests', 'scrapy'];
         foreach ($blockedAgents as $agent) {

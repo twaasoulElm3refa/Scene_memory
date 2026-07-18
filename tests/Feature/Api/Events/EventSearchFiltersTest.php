@@ -64,7 +64,7 @@ class EventSearchFiltersTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertSame([$matchingEventId], collect($response->json('data'))->pluck('id')->all());
+        $this->assertSame([$matchingEventId], collect($response->json('data.data'))->pluck('id')->all());
     }
 
     public function test_country_filter_returns_only_events_inside_that_country(): void
@@ -80,11 +80,12 @@ class EventSearchFiltersTest extends TestCase
 
         $response->assertOk();
 
-        $this->assertSame([$firstEventId, $secondEventId], collect($response->json('data'))->pluck('id')->all());
+        $this->assertSame([$secondEventId, $firstEventId], collect($response->json('data.data'))->pluck('id')->all());
     }
 
     private function createSchema(): void
     {
+        Schema::dropIfExists('images_tags');
         Schema::dropIfExists('event__tags');
         Schema::dropIfExists('events_imges');
         Schema::dropIfExists('event_translations');
@@ -138,6 +139,7 @@ class EventSearchFiltersTest extends TestCase
             $table->string('langitude')->nullable();
             $table->string('lattitude')->nullable();
             $table->string('slug')->nullable();
+            $table->string('photography_type')->nullable();
             $table->string('is_active')->default('1');
             $table->timestamps();
         });
@@ -164,6 +166,13 @@ class EventSearchFiltersTest extends TestCase
             $table->unsignedBigInteger('tag_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
+        });
+
+        Schema::create('images_tags', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('events_imges_id');
+            $table->unsignedBigInteger('tags_id');
+            $table->timestamps();
         });
     }
 

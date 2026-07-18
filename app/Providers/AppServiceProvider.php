@@ -2,15 +2,15 @@
 
 namespace App\Providers;
 
+use App\Interfaces\PaymentInterface;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Models\Purchases;
 use App\Models\User;
 use App\Observers\AdminDashboardStatsObserver;
-use Illuminate\Support\ServiceProvider;
-use App\Interfaces\PaymentInterface;
 use App\Services\PayPalServices;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +27,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        URL::forceScheme('https');
+        $appUrl = (string) config('app.url');
+        URL::forceRootUrl($appUrl);
+
+        if ($scheme = parse_url($appUrl, PHP_URL_SCHEME)) {
+            URL::forceScheme($scheme);
+        }
 
         User::observe(AdminDashboardStatsObserver::class);
         Events::observe(AdminDashboardStatsObserver::class);
