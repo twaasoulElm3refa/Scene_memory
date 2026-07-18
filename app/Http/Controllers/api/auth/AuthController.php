@@ -2,60 +2,96 @@
 
 namespace App\Http\Controllers\api\auth;
 
+use App\Exceptions\RegistrationOtpException;
 use App\Http\Controllers\concerns\authApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\loginRequest;
 use App\Http\Requests\registerRequest;
 use App\Http\Resources\userResource;
-use App\Mail\WelcomeMail;
 use App\Models\Events;
+use App\Models\LicenceType;
 use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
+use App\Services\RegistrationOtpService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class AuthController extends Controller
 {
     use authApiResponse;
 
-    public function __construct(private readonly AuthRepositoryInterface $authRepository)
-    {
-    }
+    public function __construct(
+        private readonly AuthRepositoryInterface $authRepository,
+        private readonly RegistrationOtpService $registrationOtpService
+    ) {}
 
     public function register(registerRequest $request)
     {
         try {
-            $user = DB::transaction(function () use ($request) {
+            [$user, $otp] = DB::transaction(function () use ($request) {
                 $data = $request->validated();
+                $existingUser = $this->authRepository->findUserByEmail($data['email']);
 
-                return $this->authRepository->createUser([
+                if ($existingUser && $this->registrationOtpService->isVerified($existingUser)) {
+                    throw ValidationException::withMessages([
+                        'email' => ['هذا البريد الإلكتروني مستخدم بالفعل.'],
+                    ]);
+                }
+
+                $attributes = [
                     'name' => $data['name'] ?? null,
                     'email' => $data['email'] ?? null,
                     'password' => Hash::make($data['password']),
                     'image' => $data['image'] ?? null,
                     'role' => 'user',
-                    'is_active' => true,
+                    'is_active' => false,
+                    'email_verified_at' => null,
                     'country' => $data['country'] ?? null,
+                    'phone' => $data['phone'] ?? null,
                     'date_of_birth' => $data['date_of_birth'] ?? null,
                     'position' => $data['position'] ?? null,
-                    'last_login_at' => now(),
-                    'licence_type_id'=>1,
-                ]);
+                    'last_login_at' => null,
+                    'licence_type_id' => $this->defaultLicenceTypeId(),
+                ];
+
+                if ($existingUser) {
+                    $existingUser->forceFill($attributes)->save();
+                    $user = $existingUser->refresh();
+                } else {
+                    $user = $this->authRepository->createUser($attributes);
+                }
+
+                $otpPayload = $this->registrationOtpService->createForUser($user);
+
+                return [$user, $otpPayload['otp']];
             });
-            Mail::to($user->email)->queue(new WelcomeMail($user));
-            $token = $user->createToken('rag-token')->plainTextToken;
+
+            $this->registrationOtpService->send($user, $otp);
+
             Cache::forget('users_all_page_'.request('page', 1));
-            return $this->success([
-                'token' => $token,
-                'user' => new UserResource($user),
-            ], 'Registered successfully.');
+
+            return response()->json([
+                'status' => 'otp_required',
+                'message' => 'Verification code sent successfully.',
+                'data' => [
+                    'email' => $this->registrationOtpService->maskEmail($user->email),
+                    'expires_in' => RegistrationOtpService::EXPIRES_SECONDS,
+                ],
+            ], 202);
+
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (RegistrationOtpException $e) {
+            return $this->error($e->getMessage(), $e->statusCode(), $e->errors());
 
         } catch (Throwable $e) {
-            \Log::error('Register Error', [
+            Log::error('Register Error', [
                 'message' => $e->getMessage(),
             ]);
 
@@ -76,6 +112,10 @@ class AuthController extends Controller
             return $this->unauthorized('Invalid credentials.');
         }
 
+        if (! $user->is_active && ! $user->email_verified_at) {
+            return $this->forbidden('Please verify your email first.');
+        }
+
         if (! $user->is_active) {
             return $this->forbidden('Account is disabled.');
         }
@@ -90,6 +130,72 @@ class AuthController extends Controller
         ], 'Logged in successfully.');
     }
 
+    public function verifyRegisterOtp(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'otp' => ['required', 'digits:6'],
+        ]);
+
+        $user = $this->authRepository->findUserByEmail($validated['email']);
+
+        if (! $user) {
+            return $this->validationError([
+                'email' => ['Invalid verification code.'],
+            ], 'Invalid verification code.');
+        }
+
+        try {
+            $user = $this->registrationOtpService->verify($user, $validated['otp']);
+        } catch (RegistrationOtpException $e) {
+            return $this->error($e->getMessage(), $e->statusCode(), $e->errors());
+        }
+
+        $token = $user->createToken('rag-token')->plainTextToken;
+
+        return $this->success([
+            'user' => new userResource($user),
+            'token' => $token,
+        ], 'Email verified successfully.');
+    }
+
+    public function resendRegisterOtp(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $user = $this->authRepository->findUserByEmail($validated['email']);
+
+        if (! $user) {
+            return response()->json([
+                'status' => 'otp_resent',
+                'message' => 'A new verification code has been sent.',
+                'data' => [
+                    'expires_in' => RegistrationOtpService::EXPIRES_SECONDS,
+                    'resend_after' => RegistrationOtpService::RESEND_COOLDOWN_SECONDS,
+                ],
+            ]);
+        }
+
+        try {
+            $this->registrationOtpService->ensureCanResend($user);
+            $otpPayload = $this->registrationOtpService->createForUser($user);
+            $this->registrationOtpService->send($user, $otpPayload['otp']);
+        } catch (RegistrationOtpException $e) {
+            return $this->error($e->getMessage(), $e->statusCode(), $e->errors());
+        }
+
+        return response()->json([
+            'status' => 'otp_resent',
+            'message' => 'A new verification code has been sent.',
+            'data' => [
+                'expires_in' => RegistrationOtpService::EXPIRES_SECONDS,
+                'resend_after' => RegistrationOtpService::RESEND_COOLDOWN_SECONDS,
+            ],
+        ]);
+    }
+
     public function profile()
     {
         $user = auth()->user();
@@ -100,42 +206,43 @@ class AuthController extends Controller
 
         $cart = $this->authRepository->findOrCreateCartByUserId($user->id);
 
-        $cacheKey = 'user_profile_' . $user->id;
-        $wallet=$user->wallet;
+        $cacheKey = 'user_profile_'.$user->id;
+        $wallet = $user->wallet;
         if ($wallet == null) {
             $this->authRepository->createWalletIfMissing($user->id);
         }
         $items = $this->authRepository->countCartItems($cart->id);
-        $EventCount=Events::where('user_id', $user->id)->count();
+        $EventCount = Events::where('user_id', $user->id)->count();
         $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
-         ->remember($cacheKey, 60, function () use ($user, $items , $EventCount) {
-            $user->load('licenceType');
-            return [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'position' => $user->position,
-                'country' => $user->country,
-                'date_of_birth' => $user->date_of_birth,
-                'phone' => $user->phone,
-                'event_count' => $EventCount,
-                'role' => $user->role,
-                'items' => $items,
-                'points' => $user->points,
-                'last_login_at' => $user->last_login_at,
-                'wallet' => $user->wallet,
-                'licenceType' => [
-                    'id' => $user->licenceType?->id,
-                    'name' => $user->licenceType?->name,
-                    'price' => $user->licenceType?->price,
-                    'is_active' => $user->licenceType?->is_active,
-                    'created_at' => $user->licenceType?->created_at
-                ]
-            ];
-        });
+            ->remember($cacheKey, 60, function () use ($user, $items, $EventCount) {
+                $user->load('licenceType');
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'position' => $user->position,
+                    'country' => $user->country,
+                    'date_of_birth' => $user->date_of_birth,
+                    'phone' => $user->phone,
+                    'event_count' => $EventCount,
+                    'role' => $user->role,
+                    'items' => $items,
+                    'points' => $user->points,
+                    'last_login_at' => $user->last_login_at,
+                    'wallet' => $user->wallet,
+                    'licenceType' => [
+                        'id' => $user->licenceType?->id,
+                        'name' => $user->licenceType?->name,
+                        'price' => $user->licenceType?->price,
+                        'is_active' => $user->licenceType?->is_active,
+                        'created_at' => $user->licenceType?->created_at,
+                    ],
+                ];
+            });
 
         return $this->success([
-            'user' => $cachedProfile
+            'user' => $cachedProfile,
         ], 'Profile fetched successfully.');
     }
 
@@ -201,15 +308,15 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
             'phone' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-            'position'=> 'required|string',
-            'date_of_birth'=> 'required|string',
+            'position' => 'required|string',
+            'date_of_birth' => 'required|string',
         ]);
 
         $user->update($validated);
 
         Cache::tags(['user_profile', 'user_'.$user->id])->flush();
 
-        return $this->success($user , 'User updated Successfully');
+        return $this->success($user, 'User updated Successfully');
     }
 
     public function updatePassword(Request $request)
@@ -244,4 +351,8 @@ class AuthController extends Controller
         return $this->success(auth()->user()->wallet, 'Wallet fetched successfully.');
     }
 
+    private function defaultLicenceTypeId(): ?int
+    {
+        return LicenceType::query()->whereKey(1)->exists() ? 1 : null;
+    }
 }

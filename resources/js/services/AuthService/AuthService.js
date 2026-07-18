@@ -9,6 +9,14 @@ export const AuthService = {
     return api.post("/users/register", formData);
   },
 
+  verifyRegisterOtp(payload) {
+    return api.post("/users/register/verify-otp", payload);
+  },
+
+  resendRegisterOtp(payload) {
+    return api.post("/users/register/resend-otp", payload);
+  },
+
   forgotPassword(payload) {
     return api.post("/users/forgot-password", payload);
   },

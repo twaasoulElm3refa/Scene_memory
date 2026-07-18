@@ -39,11 +39,17 @@ class GoogleAuthController extends Controller
                     'name' => $googleUser->getName(),
                     'password' => Hash::make('password'),
                     'role' => 'user',
+                    'is_active' => true,
+                    'email_verified_at' => now(),
                     'licence_type_id' => 1,
                 ]
             );
             if ($user) {
-                $user->update(['last_login_at' => now()]);
+                $user->update([
+                    'is_active' => true,
+                    'email_verified_at' => $user->email_verified_at ?: now(),
+                    'last_login_at' => now(),
+                ]);
             }
             $token = $user->createToken('google-auth-token')->plainTextToken;
 

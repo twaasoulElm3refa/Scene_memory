@@ -22,13 +22,13 @@
                         <ul class="nav nav-pills nav-fill">
                             <li class="nav-item">
                                 <button class="nav-link px-0 fs-5 fw-semibold position-relative"
-                                    :class="{ 'active-tab': tab === 'login' }" @click.prevent="tab = 'login'">
+                                    :class="{ 'active-tab': tab === 'login' }" @click.prevent="switchToLogin">
                                     Login
                                 </button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link px-0 fs-5 fw-semibold position-relative"
-                                    :class="{ 'active-tab': tab === 'register' }" @click.prevent="tab = 'register'">
+                                    :class="{ 'active-tab': tab === 'register' }" @click.prevent="switchToRegister">
                                     Register
                                 </button>
                             </li>
@@ -82,7 +82,7 @@
                     </form>
 
                     <!-- Register Form -->
-                    <form v-else-if="tab === 'register'" @submit.prevent="handleRegister"
+                    <form v-else-if="tab === 'register' && registerStage === 'form'" @submit.prevent="handleRegister"
                         class="d-flex flex-column gap-4">
                         <input v-model="registerForm.name" type="text"
                             class="form-control form-control-lg glass-input rounded-3 px-4 fs-5" placeholder="Full Name"
@@ -140,6 +140,48 @@
                         </button>
 
                         <p v-if="error" class="text-center text-danger mb-0">{{ error }}</p>
+
+                        <button @click.prevent="handleGoogleLogin"
+                            class="btn btn-google btn-lg d-flex align-items-center justify-content-center gap-2 mt-1">
+                            <img src="/images/google_logo.png" alt="Google" style="width: 65px; height: 36px" />
+                            Continue with Google
+                        </button>
+                    </form>
+
+                    <!-- Register OTP Form -->
+                    <form v-else-if="tab === 'register' && registerStage === 'otp'" @submit.prevent="handleVerifyOtp"
+                        class="d-flex flex-column gap-4">
+                        <div class="text-center text-white">
+                            <h2 class="h4 fw-bold mb-2">Confirm your email</h2>
+                            <p class="mb-0 opacity-75">
+                                Enter the 6-digit code sent to {{ registerOtpMaskedEmail || pendingRegisterEmail }}
+                            </p>
+                        </div>
+
+                        <input v-model="otpForm.otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
+                            pattern="[0-9]{6}" type="text"
+                            class="form-control form-control-lg glass-input rounded-3 py-3 px-4 fs-5 text-center"
+                            placeholder="000000" required @input="sanitizeOtp" @paste="handleOtpPaste" />
+
+                        <p v-if="otpError || error" class="text-center text-danger mb-0">
+                            {{ otpError || error }}
+                        </p>
+
+                        <button type="submit" class="btn btn-glow btn-lg rounded-3 py-3 fw-bold fs-5"
+                            :disabled="loading || otpForm.otp.length !== 6">
+                            {{ loading ? "Verifying..." : "Confirm" }}
+                        </button>
+
+                        <button type="button" class="btn btn-google btn-lg rounded-3 py-3 fw-semibold"
+                            :disabled="resendLoading || resendRemaining > 0" @click="handleResendOtp">
+                            <span v-if="resendRemaining > 0">Resend code in {{ resendRemaining }}s</span>
+                            <span v-else>{{ resendLoading ? "Sending..." : "Resend OTP" }}</span>
+                        </button>
+
+                        <button type="button" class="btn btn-link text-glow fw-medium text-decoration-none"
+                            @click="backToRegisterForm">
+                            Change email
+                        </button>
                     </form>
 
                     <!-- Forgot Password Form -->
@@ -186,11 +228,11 @@
                     <div class="text-center mt-4 text-white fs-6">
                         <span v-if="tab === 'register'">
                             Already have an account?
-                            <a href="#" class="text-glow fw-medium" @click.prevent="tab = 'login'">Login</a>
+                            <a href="#" class="text-glow fw-medium" @click.prevent="switchToLogin">Login</a>
                         </span>
                         <span v-else-if="tab === 'login'">
                             Don't have an account?
-                            <a href="#" class="text-glow fw-medium" @click.prevent="tab = 'register'">Register</a>
+                            <a href="#" class="text-glow fw-medium" @click.prevent="switchToRegister">Register</a>
                         </span>
                     </div>
 
@@ -201,7 +243,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { AuthService } from "../../services/AuthService/AuthService";
 
@@ -214,8 +256,16 @@ const loading = ref(false);
 const error = ref("");
 const successMessage = ref("");
 const forgotEmail = ref("");
+const registerStage = ref("form");
+const pendingRegisterEmail = ref("");
+const registerOtpMaskedEmail = ref("");
+const otpError = ref("");
+const resendLoading = ref(false);
+const resendRemaining = ref(0);
+let resendTimer = null;
 
 const loginForm = ref({ email: "", password: "" });
+const otpForm = ref({ otp: "" });
 
 const registerForm = ref({
     name: "",
@@ -244,7 +294,7 @@ const countries = ref([
 ]);
 
 // ✅ الدالة الوحيدة اللي بتخزن وبتعمل redirect — كل حاجة بتمر منها
-const saveTokenAndRedirect = (token, role) => {
+const saveTokenAndRedirect = (token, role, user = null) => {
     if (!token) {
         error.value = "No token received";
         return;
@@ -255,6 +305,10 @@ const saveTokenAndRedirect = (token, role) => {
     localStorage.setItem("auth_token", token);
     localStorage.setItem("user_role", normalizedRole);
 
+    if (user) {
+        localStorage.setItem("user_data", JSON.stringify(user));
+    }
+
     const lang = getLang();
 
     if (normalizedRole === "admin") {
@@ -262,6 +316,49 @@ const saveTokenAndRedirect = (token, role) => {
     } else {
         router.push(`/${lang}/home`);
     }
+};
+
+const startResendTimer = (seconds = 60) => {
+    resendRemaining.value = seconds;
+    if (resendTimer) {
+        clearInterval(resendTimer);
+    }
+
+    resendTimer = setInterval(() => {
+        resendRemaining.value = Math.max(0, resendRemaining.value - 1);
+        if (resendRemaining.value === 0 && resendTimer) {
+            clearInterval(resendTimer);
+            resendTimer = null;
+        }
+    }, 1000);
+};
+
+const extractErrorMessage = (err, fallback) => {
+    const errors = err.response?.data?.errors;
+    if (errors) {
+        const first = Object.values(errors)[0];
+        if (Array.isArray(first) && first[0]) return first[0];
+        if (typeof first === "string") return first;
+    }
+
+    return err.response?.data?.message || fallback;
+};
+
+const switchToLogin = () => {
+    tab.value = "login";
+    error.value = "";
+};
+
+const switchToRegister = () => {
+    tab.value = "register";
+    error.value = "";
+};
+
+const backToRegisterForm = () => {
+    registerStage.value = "form";
+    otpForm.value.otp = "";
+    otpError.value = "";
+    error.value = "";
 };
 
 onMounted(async () => {
@@ -286,6 +383,12 @@ onMounted(async () => {
         } catch {
             saveTokenAndRedirect(token, "user");
         }
+    }
+});
+
+onUnmounted(() => {
+    if (resendTimer) {
+        clearInterval(resendTimer);
     }
 });
 
@@ -326,18 +429,89 @@ const handleRegister = async () => {
 
         const res = await AuthService.register(formData);
 
-        if (res.data.status === "success") {
-            const token = res.data.data?.token;
-            const role = res.data.data?.user?.role;
-            successMessage.value = "Account created successfully";
-            saveTokenAndRedirect(token, role);
+        if (res.data.status === "otp_required") {
+            pendingRegisterEmail.value = registerForm.value.email;
+            registerOtpMaskedEmail.value = res.data.data?.email || "";
+            registerStage.value = "otp";
+            otpForm.value.otp = "";
+            registerForm.value.password = "";
+            registerForm.value.password_confirmation = "";
+            successMessage.value = res.data.message || "Verification code sent successfully.";
+            startResendTimer(60);
         } else {
             error.value = res.data.message || "Registration failed";
         }
     } catch (err) {
-        error.value = err.response?.data?.message || "Error during registration";
+        error.value = extractErrorMessage(err, "Error during registration");
     } finally {
         loading.value = false;
+    }
+};
+
+const sanitizeOtp = () => {
+    otpForm.value.otp = String(otpForm.value.otp || "").replace(/\D/g, "").slice(0, 6);
+    otpError.value = "";
+};
+
+const handleOtpPaste = (event) => {
+    event.preventDefault();
+    otpForm.value.otp = event.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    otpError.value = "";
+};
+
+const handleVerifyOtp = async () => {
+    sanitizeOtp();
+
+    if (otpForm.value.otp.length !== 6) {
+        otpError.value = "Please enter the 6-digit verification code.";
+        return;
+    }
+
+    loading.value = true;
+    otpError.value = "";
+    error.value = "";
+
+    try {
+        const res = await AuthService.verifyRegisterOtp({
+            email: pendingRegisterEmail.value,
+            otp: otpForm.value.otp,
+        });
+
+        if (res.data.status === "success") {
+            const token = res.data.data?.token;
+            const user = res.data.data?.user;
+            const role = user?.role;
+            pendingRegisterEmail.value = "";
+            registerOtpMaskedEmail.value = "";
+            otpForm.value.otp = "";
+            successMessage.value = res.data.message || "Email verified successfully.";
+            saveTokenAndRedirect(token, role, user);
+        } else {
+            otpError.value = res.data.message || "Verification failed";
+        }
+    } catch (err) {
+        otpError.value = extractErrorMessage(err, "Verification failed");
+    } finally {
+        loading.value = false;
+    }
+};
+
+const handleResendOtp = async () => {
+    if (resendRemaining.value > 0 || !pendingRegisterEmail.value) return;
+
+    resendLoading.value = true;
+    otpError.value = "";
+    error.value = "";
+
+    try {
+        const res = await AuthService.resendRegisterOtp({ email: pendingRegisterEmail.value });
+        otpForm.value.otp = "";
+        successMessage.value = res.data.message || "A new verification code has been sent.";
+        startResendTimer(res.data.data?.resend_after || 60);
+    } catch (err) {
+        otpError.value = extractErrorMessage(err, "Unable to resend verification code");
+    } finally {
+        resendLoading.value = false;
     }
 };
 
@@ -686,4 +860,3 @@ const handleGoogleLogin = () => {
     font-weight: 600;
 }
 </style>
-

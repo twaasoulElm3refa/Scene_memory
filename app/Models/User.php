@@ -3,16 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    /** @use HasFactory<UserFactory> */
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
             'password' => 'hashed',
         ];
     }
@@ -51,80 +53,83 @@ class User extends Authenticatable
      *
      * @return mixed
      */
-
     public function event()
     {
-        return $this->belongsTo(Events::class,'user_id');
+        return $this->belongsTo(Events::class, 'user_id');
     }
 
     public function user_interactions()
     {
-        return $this->hasMany(UserInteractions::class,'user_id');
+        return $this->hasMany(UserInteractions::class, 'user_id');
     }
 
     public function whishlist()
     {
-        return $this->hasMany(Wishlist::class,'user_id');
+        return $this->hasMany(Wishlist::class, 'user_id');
     }
 
     public function contacts()
     {
-        return $this->hasMany(Contacts::class,'user_id');
+        return $this->hasMany(Contacts::class, 'user_id');
     }
 
     public function MediaRequest()
     {
-        return $this->hasMany(MediaRequest::class,'user_id');
+        return $this->hasMany(MediaRequest::class, 'user_id');
     }
 
     public function comment()
     {
-        return $this->hasMany(Comments::class,'user_id');
+        return $this->hasMany(Comments::class, 'user_id');
     }
 
     public function likes()
     {
-        return $this->hasMany(Likes::class,'user_id');
+        return $this->hasMany(Likes::class, 'user_id');
     }
 
     public function subscription()
     {
-        return $this->hasMany(Subscriptions::class,'user_id');
+        return $this->hasMany(Subscriptions::class, 'user_id');
     }
 
     public function licenceType()
     {
-        return $this->belongsTo(LicenceType::class,'licence_type_id');
+        return $this->belongsTo(LicenceType::class, 'licence_type_id');
     }
 
     public function cart()
     {
-        return $this->hsone(Cart::class,'user_id');
+        return $this->hsone(Cart::class, 'user_id');
     }
 
     public function purchase()
     {
-        return $this->hasMany(Purchases::class,'user_id');
+        return $this->hasMany(Purchases::class, 'user_id');
     }
 
     public function wallet()
     {
-        return $this->hasOne(Wallet::class,'user_id');
+        return $this->hasOne(Wallet::class, 'user_id');
     }
 
     public function withdraw()
     {
-        return $this->hasMany(Withdraw::class,'user_id');
+        return $this->hasMany(Withdraw::class, 'user_id');
     }
 
     public function approving()
     {
-        return $this->hasMany(Withdraw::class,'approved_by');
+        return $this->hasMany(Withdraw::class, 'approved_by');
     }
 
     public function walletTransactions()
     {
-        return $this->hasMany(WalletTransactions::class,'user_id');
+        return $this->hasMany(WalletTransactions::class, 'user_id');
+    }
+
+    public function registrationOtps(): HasMany
+    {
+        return $this->hasMany(RegistrationOtp::class);
     }
 }
-

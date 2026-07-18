@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
@@ -18,7 +20,7 @@ class registerRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -27,17 +29,30 @@ class registerRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    $existing = User::where('name', $value)->first();
+
+                    if ($existing && $existing->email !== $this->input('email')) {
+                        $fail('هذا الاسم مستخدم بالفعل.');
+                    }
+                },
             ],
             'email' => [
                 'required',
                 'email',
                 'max:255',
-                'unique:users,email',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    $existing = User::where('email', $value)->first();
+
+                    if ($existing && ((bool) $existing->is_active || $existing->email_verified_at !== null)) {
+                        $fail('هذا البريد الإلكتروني مستخدم بالفعل.');
+                    }
+                },
             ],
             'country' => 'nullable|string|max:255',
-            'phone'=>'nullable|string|max:255',
-            'position'=>'nullable|string|max:255',
-            'date_of_birth'=>'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|string|max:255',
             'password' => [
                 'required',
                 'confirmed',
