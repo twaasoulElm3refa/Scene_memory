@@ -3,8 +3,17 @@
         <main class="relative">
             <!-- FULL WIDTH HERO -->
             <section class="relative isolate min-h-[560px] w-full overflow-hidden bg-[#0D4D97]">
-                <img src="/images/Header.png" alt="Scemory Event Archive"
-                    class="absolute inset-0 h-full w-full object-cover object-center" />
+                <video
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    aria-hidden="true"
+                    class="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+                >
+                    <source src="/images/FINAL.mp4" type="video/mp4" />
+                </video>
 
                 <div class="absolute inset-0 bg-gradient-to-l from-[#0D4D97]/90 via-[#0D4D97]/60 to-[#0D4D97]/20"></div>
 
