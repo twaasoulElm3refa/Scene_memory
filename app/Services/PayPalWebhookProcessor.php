@@ -37,29 +37,37 @@ class PayPalWebhookProcessor
         try {
             $payload = json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
+            Log::warning('webhook_failed', ['reason' => 'invalid_json', 'webhook_type' => $webhookType]);
             return response()->json(['status' => 'invalid'], 400);
         }
         if (! is_array($payload) || ! is_string($payload['id'] ?? null) || trim($payload['id']) === ''
             || ! is_string($payload['event_type'] ?? null) || trim($payload['event_type']) === '') {
+            Log::warning('webhook_failed', ['reason' => 'missing_event_identity', 'webhook_type' => $webhookType]);
             return response()->json(['status' => 'invalid'], 400);
         }
 
         $eventId = $payload['id'];
         $eventType = $payload['event_type'];
+        Log::info('webhook_json_parsed', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         Log::info('webhook_received', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         if (! is_string($webhookId) || $webhookId === '') {
             Log::error('payment_validation_failed', ['event_id' => $eventId, 'reason' => 'webhook_id_not_configured']);
+            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'webhook_id_not_configured']);
             return response()->json(['status' => 'error'], 503);
         }
 
         try {
+            Log::info('webhook_signature_started', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
             if (! $this->verificationBypassed() && ! $this->verifier->verify($request, $rawBody, $webhookId)) {
+                Log::warning('webhook_signature_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
                 return response()->json(['status' => 'invalid'], 400);
             }
         } catch (Throwable $exception) {
             $this->logException($exception, $eventId, $eventType);
+            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'signature_exception']);
             return response()->json(['status' => 'error'], 500);
         }
+        Log::info('webhook_signature_success', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         Log::info('webhook_verified', ['event_id' => $eventId, 'event_type' => $eventType]);
 
         $resource = $payload['resource'] ?? [];
@@ -80,6 +88,12 @@ class PayPalWebhookProcessor
         } catch (QueryException) {
             $event = PaypalWebhookEvent::where('event_id', $eventId)->firstOrFail();
         }
+        Log::info('webhook_event_registered', [
+            'event_id' => $eventId,
+            'event_type' => $eventType,
+            'webhook_type' => $webhookType,
+            'was_created' => $event->wasRecentlyCreated,
+        ]);
 
         if (! $event->wasRecentlyCreated) {
             if (in_array($event->status, ['processed', 'ignored'], true)
@@ -98,6 +112,7 @@ class PayPalWebhookProcessor
         }, 5);
 
         try {
+            Log::info('webhook_dispatched', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
             $status = in_array($eventType, self::SUPPORTED_EVENTS, true) ? $handler($payload) : 'ignored';
             $finalStatus = $status === 'ignored' ? 'ignored' : 'processed';
             DB::transaction(function () use ($event, $finalStatus, $payment, $resource) {
@@ -121,6 +136,7 @@ class PayPalWebhookProcessor
             ]);
             Log::warning('payment_validation_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'exception' => $exception::class]);
             $this->logException($exception, $eventId, $eventType);
+            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'handler_exception']);
             return response()->json(['status' => 'error'], 500);
         }
     }
