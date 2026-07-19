@@ -5,8 +5,39 @@ import "toastr/build/toastr.min.css";
 const LANG_KEY = "language";
 const SUPPORTED_LANGS = ["ar", "en", "ru", "fr", "zh"];
 
+/*
+|--------------------------------------------------------------------------
+| Toastr Z-Index
+|--------------------------------------------------------------------------
+| يجعل رسائل Toastr تظهر فوق الـNavbar والـModal وأي Overlay.
+*/
+
+const TOAST_STYLE_ID = "global-toastr-z-index";
+
+if (!document.getElementById(TOAST_STYLE_ID)) {
+    const toastrStyle = document.createElement("style");
+
+    toastrStyle.id = TOAST_STYLE_ID;
+    toastrStyle.textContent = `
+        #toast-container {
+            z-index: 2147483647 !important;
+            position: fixed !important;
+        }
+
+        #toast-container > .toast {
+            z-index: 2147483647 !important;
+            position: relative !important;
+        }
+    `;
+
+    document.head.appendChild(toastrStyle);
+}
+
 const getLang = () => {
-    const lang = String(localStorage.getItem(LANG_KEY) || "").toLowerCase();
+    const lang = String(
+        localStorage.getItem(LANG_KEY) || ""
+    ).toLowerCase();
+
     return SUPPORTED_LANGS.includes(lang) ? lang : "ar";
 };
 
@@ -20,9 +51,15 @@ toastr.options = {
 
     tapToDismiss: false,
     closeOnHover: false,
+
+    newestOnTop: true,
+    preventDuplicates: true,
 };
 
-export function normalizeErrorMessage(message, fallback = "حدث خطأ غير معروف.") {
+export function normalizeErrorMessage(
+    message,
+    fallback = "حدث خطأ غير معروف."
+) {
     if (!message || typeof message !== "string") {
         return fallback;
     }
@@ -40,16 +77,29 @@ export function normalizeErrorMessage(message, fallback = "حدث خطأ غير 
     return cleaned;
 }
 
-export function showSafeToast(type = "error", message, fallback = "حدث خطأ غير معروف.") {
-    const safeType = typeof toastr[type] === "function" ? type : "error";
-    const safeMessage = normalizeErrorMessage(message, fallback);
+export function showSafeToast(
+    type = "error",
+    message,
+    fallback = "حدث خطأ غير معروف."
+) {
+    const safeType =
+        typeof toastr[type] === "function"
+            ? type
+            : "error";
+
+    const safeMessage = normalizeErrorMessage(
+        message,
+        fallback
+    );
 
     console.log("Toast message:", safeMessage);
+
     toastr[safeType](safeMessage);
 }
 
 const api = axios.create({
     baseURL: "/api/v1",
+
     headers: {
         Accept: "application/json",
         "Accept-Language": getLang(),
@@ -57,44 +107,65 @@ const api = axios.create({
 });
 
 const syncAcceptLanguageHeader = () => {
-    api.defaults.headers.common["Accept-Language"] = getLang();
+    api.defaults.headers.common["Accept-Language"] =
+        getLang();
 };
 
 syncAcceptLanguageHeader();
 
 window.addEventListener("lang-changed", (event) => {
-    const lang = event?.detail?.lang || getLang();
-    api.defaults.headers.common["Accept-Language"] = lang;
+    const lang =
+        event?.detail?.lang ||
+        getLang();
+
+    api.defaults.headers.common["Accept-Language"] =
+        lang;
 });
 
 window.addEventListener("storage", (event) => {
-    if (event.key === LANG_KEY && event.newValue) {
-        api.defaults.headers.common["Accept-Language"] = event.newValue;
+    if (
+        event.key === LANG_KEY &&
+        event.newValue
+    ) {
+        api.defaults.headers.common["Accept-Language"] =
+            event.newValue;
     }
 });
 
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("auth_token");
+        const token =
+            localStorage.getItem("auth_token");
+
         const lang = getLang();
 
-        config.headers["Accept-Language"] = lang;
+        config.headers =
+            config.headers || {};
+
+        config.headers["Accept-Language"] =
+            lang;
 
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization =
+                `Bearer ${token}`;
         }
 
         return config;
     },
+
     (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
     (response) => response,
-    (error) => {
-        const status = error.response?.status;
 
-        if (error.config?.suppressGlobalErrorToast) {
+    (error) => {
+        const status =
+            error.response?.status;
+
+        if (
+            error.config?.suppressGlobalErrorToast
+        ) {
             return Promise.reject(error);
         }
 
@@ -104,6 +175,7 @@ api.interceptors.response.use(
                 error.message,
                 "تعذر الاتصال بالخادم. تحقق من اتصال الشبكة وحاول مرة أخرى."
             );
+
             return Promise.reject(error);
         }
 
@@ -126,7 +198,8 @@ api.interceptors.response.use(
                 localStorage.removeItem("auth_token");
 
                 setTimeout(() => {
-                    window.location.href = `/${getLang()}/auth`;
+                    window.location.href =
+                        `/${getLang()}/auth`;
                 }, 1500);
                 break;
 
@@ -147,17 +220,26 @@ api.interceptors.response.use(
                 break;
 
             case 422: {
-                const errors = error.response.data.errors;
+                const errors =
+                    error.response?.data?.errors;
 
                 if (errors) {
-                    Object.values(errors).forEach((fieldErrors) => {
-                        const messages = Array.isArray(fieldErrors) ? fieldErrors : [fieldErrors];
-                        messages.forEach((msg) => showSafeToast(
-                            "error",
-                            msg,
-                            "من فضلك راجع الحقول المطلوبة."
-                        ));
-                    });
+                    Object.values(errors).forEach(
+                        (fieldErrors) => {
+                            const messages =
+                                Array.isArray(fieldErrors)
+                                    ? fieldErrors
+                                    : [fieldErrors];
+
+                            messages.forEach((msg) => {
+                                showSafeToast(
+                                    "error",
+                                    msg,
+                                    "من فضلك راجع الحقول المطلوبة."
+                                );
+                            });
+                        }
+                    );
                 } else {
                     showSafeToast(
                         "error",
@@ -181,7 +263,7 @@ api.interceptors.response.use(
                 showSafeToast(
                     "error",
                     error.response?.data?.message,
-                    "حدث خطأ في الخادم. راجع Console و Laravel log لمعرفة التفاصيل."
+                    "حدث خطأ في الخادم. راجع Console وLaravel log لمعرفة التفاصيل."
                 );
                 break;
 
@@ -198,7 +280,8 @@ api.interceptors.response.use(
             default:
                 showSafeToast(
                     "error",
-                    error.response?.data?.message || error.message,
+                    error.response?.data?.message ||
+                        error.message,
                     "حدث خطأ غير معروف."
                 );
         }
