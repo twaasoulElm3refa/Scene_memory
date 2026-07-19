@@ -12,9 +12,14 @@ const getLang = () => {
 
 toastr.options = {
     closeButton: true,
-    progressBar: true,
+    progressBar: false,
     positionClass: "toast-top-right",
-    timeOut: "3000",
+
+    timeOut: 0,
+    extendedTimeOut: 0,
+
+    tapToDismiss: false,
+    closeOnHover: false,
 };
 
 export function normalizeErrorMessage(message, fallback = "حدث خطأ غير معروف.") {
