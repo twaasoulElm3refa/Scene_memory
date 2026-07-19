@@ -100,7 +100,7 @@ class User extends Authenticatable
 
     public function cart()
     {
-        return $this->hsone(Cart::class, 'user_id');
+        return $this->hasOne(Cart::class, 'user_id');
     }
 
     public function purchase()
@@ -126,6 +126,11 @@ class User extends Authenticatable
     public function walletTransactions()
     {
         return $this->hasMany(WalletTransactions::class, 'user_id');
+    }
+
+    public function entitlements()
+    {
+        return $this->hasMany(Entitlement::class, 'user_id');
     }
 
     public function registrationOtps(): HasMany

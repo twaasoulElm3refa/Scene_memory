@@ -9,6 +9,8 @@ class PaypalWebhookEvent extends Model
     protected $guarded = [];
 
     protected $casts = [
+        'payload' => 'array',
+        'received_at' => 'datetime',
         'processed_at' => 'datetime',
     ];
 }

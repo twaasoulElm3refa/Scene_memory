@@ -28,7 +28,20 @@ class Purchases extends Model
         'amount' => 'decimal:2',
         'wallet_credited' => 'boolean',
         'mail_sent' => 'boolean',
+        'purchase_granted' => 'boolean',
+        'amount_minor' => 'integer',
+        'fulfilled_at' => 'datetime',
     ];
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'order_id');
+    }
+
+    public function entitlements()
+    {
+        return $this->hasMany(Entitlement::class, 'order_id');
+    }
 
     public function walletTransactions()
     {

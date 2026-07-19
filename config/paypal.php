@@ -25,4 +25,7 @@ return [
     'validate_ssl' => env('PAYPAL_VALIDATE_SSL', true),
     'webhook_id' => env('PAYPAL_CHECKOUT_WEBHOOK_ID'),
     'wallet_webhook_id' => env('PAYPAL_WALLET_WEBHOOK_ID'),
+    'merchant_id' => env('PAYPAL_MERCHANT_ID'),
+    'verify_webhooks' => env('PAYPAL_VERIFY_WEBHOOKS', true),
+    'allow_local_webhook_bypass' => env('PAYPAL_ALLOW_LOCAL_WEBHOOK_BYPASS', false),
 ];

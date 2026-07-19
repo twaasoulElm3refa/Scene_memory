@@ -6,9 +6,12 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PayPalGateway
 {
-    public function createOrder(array $data): array
+    public function createOrder(array $data, string $requestId): array
     {
-        return $this->client()->createOrder($data);
+        $client = $this->client();
+        $client->setRequestHeader('PayPal-Request-Id', $requestId);
+
+        return $client->createOrder($data);
     }
 
     public function showOrderDetails(string $orderId): array

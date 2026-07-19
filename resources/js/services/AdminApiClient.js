@@ -13,7 +13,6 @@ const AdminApiClient = axios.create({
     headers: {
         Accept: "application/json",
         "Accept-Language": getLang(),
-        "x-api-key": "K7xP9mQ2vR8tL3sNf6GdJ1aB9zW4cH0y",
     },
 });
 

@@ -2,226 +2,119 @@
 
 namespace App\Http\Controllers\api\payment;
 
-use App\Http\Controllers\concerns\ApiResponse;
+use App\Exceptions\CommerceException;
 use App\Http\Controllers\Controller;
-use App\Mail\PaymentSuccessMail;
-use App\Repositories\Contracts\Carts\CartRepositoryInterface;
-use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
-use App\Repositories\Contracts\Wallets\WalletRepositoryInterface;
+use App\Http\Requests\CheckoutRequest;
+use App\Http\Requests\WalletPurchaseRequest;
+use App\Models\Payment;
+use App\Models\Purchases;
+use App\Models\Wallet;
+use App\Services\CheckoutCartSnapshot;
+use App\Services\MinorMoney;
 use App\Services\PayPalServices;
-use Exception;
+use App\Services\PaymentFinalizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-
-// ══════════════════════════════════════════════════════════════════════════════
-// PaymentController  —  User-facing endpoints
-// ══════════════════════════════════════════════════════════════════════════════
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PaymentController extends Controller
 {
-    use ApiResponse;
-
-    private function clearCartCache($userId)
-    {
-        Cache::tags(['cart', "user_{$userId}"])->flush();
-        Cache::tags('user_profile')->flush();
-    }
-
     public function __construct(
-        protected PayPalServices $paypal,
-        private readonly CartRepositoryInterface $cartRepository,
-        private readonly PurchaseRepositoryInterface $purchaseRepository,
-        private readonly WalletRepositoryInterface $walletRepository
+        private readonly PayPalServices $paypal,
+        private readonly CheckoutCartSnapshot $orderBuilder,
+        private readonly PaymentFinalizer $finalizer,
+        private readonly MinorMoney $money,
     ) {}
 
-    public function pay(Request $request): JsonResponse
+    public function pay(CheckoutRequest $request): JsonResponse
     {
-
-        // Validation
-        $validated = $request->validate([
-            'amount' => 'nullable|numeric|min:0.01',
-            'description' => 'nullable|string|max:255',
-            'idempotency_key' => 'nullable|string|max:64',
-        ]);
-
-        $validated['user_id'] = $request->user()?->id;
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
 
         try {
-            ['order' => $order, 'approval_url' => $url] = $this->paypal->pay($validated);
-
-            return response()->json([
-                'success' => true,
-                'order_id' => $order->id,
-                'approval_url' => $url,
-            ]);
-
-        } catch (Exception $e) {
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+            ['order' => $order, 'approval_url' => $url] = $this->paypal->pay($data);
+            return response()->json(['order_id' => $order->id, 'approval_url' => $url]);
+        } catch (CommerceException $exception) {
+            return response()->json(['message' => $exception->getMessage()], $exception->status);
+        } catch (Throwable $exception) {
+            Log::error('payment_order_creation_failed', ['user_id' => $request->user()->id, 'exception' => $exception::class]);
+            return response()->json(['message' => 'Unable to create the payment order.'], 502);
         }
     }
 
-    // ── GET /api/paypal/success?token=xxx ─────────────────────────────────────
-    /**
-     * PayPal redirect بعد موافقة اليوزر.
-     * مش final — الـ source of truth هو الـ webhook.
-     */
+    public function payWallet(WalletPurchaseRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
+
+        try {
+            $order = DB::transaction(function () use ($data) {
+                ['payment' => $payment] = $this->orderBuilder->create($data, 'wallet');
+                return $this->finalizer->finalizeWalletPurchase($payment);
+            }, 5);
+            $wallet = Wallet::query()->where('user_id', $request->user()->id)->firstOrFail();
+
+            return response()->json([
+                'order_id' => $order->id,
+                'status' => 'completed',
+                'amount' => $order->amount,
+                'currency' => $order->currency,
+                'payment_method' => 'wallet',
+                'balance' => $this->money->toDecimal((int) $wallet->balance_minor),
+            ]);
+        } catch (CommerceException $exception) {
+            return response()->json(['message' => $exception->getMessage()], $exception->status);
+        } catch (Throwable $exception) {
+            $status = $exception->getMessage() === 'Insufficient wallet balance.' ? 422 : 500;
+            Log::warning('wallet_purchase_failed', ['user_id' => $request->user()->id, 'exception' => $exception::class]);
+            return response()->json(['message' => $status === 422 ? $exception->getMessage() : 'Wallet payment could not be completed.'], $status);
+        }
+    }
+
     public function success(Request $request)
     {
-        $token = $request->query('token');
-
-        if (! $token) {
-            return response()->json(['success' => false, 'message' => 'Token missing.'], 400);
+        $token = (string) $request->query('token', '');
+        if ($token === '') {
+            return response()->json(['message' => 'Token missing.'], 400);
         }
 
         try {
             $result = $this->paypal->success($token);
-            $purchase = $result['order']->id;
-
             return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/waiting?'.http_build_query([
-                'order_id' => $purchase,
-                'status' => $result['order']->status,
+                'order_id' => $result['order_id'],
             ]));
-
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+        } catch (Throwable) {
+            return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/failed');
         }
     }
 
-    // ── GET /api/paypal/cancel ────────────────────────────────────────────────
-    public function cancel(): JsonResponse
+    public function cancel()
     {
-
-        try {
-            $result = $this->paypal->cancel();
-
-            return response()->json($result);
-
-        } catch (Exception $e) {
-
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
-        }
+        return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/failed?cancelled=1');
     }
 
-    public function orderStatus(Request $request, $id): JsonResponse
+    public function orderStatus(Request $request, int $id): JsonResponse
     {
-        $order = $this->purchaseRepository->findById((int) $id);
-
+        $order = Purchases::query()
+            ->whereKey($id)
+            ->where('user_id', $request->user()->id)
+            ->where('type', 'checkout')
+            ->first();
         if (! $order) {
-            return response()->json(['status' => 'not_found'], 404);
+            return response()->json(['message' => 'Order not found.'], 404);
         }
+        $payment = Payment::query()->where('order_id', $order->id)->latest('id')->first();
 
         return response()->json([
-            'status' => $order->status,
-            'amount' => $order->amount,
             'order_id' => $order->id,
-        ]);
-    }
-
-    public function payWallet(): JsonResponse
-    {
-        return DB::transaction(function () {
-            $user = auth()->user();
-            $wallet = $this->walletRepository->findByUserIdForUpdate($user->id);
-            if (! $wallet) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Wallet not found',
-                ], 404);
-            }
-            $cart = $this->cartRepository->findByUserId($user->id);
-            if (! $cart) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Cart not found',
-                ], 404);
-            }
-            $items = $this->cartRepository->getItemsByCartId($cart->id);
-            if ($items->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Cart is empty',
-                ], 400);
-            }
-            $total = $items->sum(fn ($item) => $this->cartItemTotal($item));
-            if ($wallet->amount < $total) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Not enough money in wallet',
-                ], 422);
-            }
-            $wallet->decrement('amount', $total);
-            $purchase = $this->purchaseRepository->create([
-                'user_id' => $user->id,
-                'type' => 'wallet',
-                'amount' => $total,
-                'status' => 'completed',
-                'idempotency_key' => md5($user->id.now().'|'.$total.'|'.now()->format('Ymd')),
-                'currency' => 'USD',
-                'description' => 'Wallet payment',
-                'payer_email' => $user->email,
-                'paid_at' => now(),
-                'mail_sent' => false,
-            ]);
-            foreach ($items as $item) {
-                $this->createPurchaseItemsFromCartItem($purchase->id, $item);
-            }
-            $this->cartRepository->deleteItemsByCartId($cart->id);
-            $this->clearCartCache($user->id);
-            Mail::to($purchase->user->email)->queue(
-                new PaymentSuccessMail($purchase)
-            );
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Payment successful',
-                'paid_amount' => $total,
-                'balance' => $wallet->amount,
-            ], 200);
-
-        });
-    }
-
-    private function cartItemTotal($item): float
-    {
-        if ($item->type === 'collection') {
-            return max((float) $item->price - (float) $item->discount, 0);
-        }
-
-        return (float) $item->price;
-    }
-
-    private function createPurchaseItemsFromCartItem(int $purchaseId, $item): void
-    {
-        if ($item->type === 'collection') {
-            foreach ($item->collection_images_array as $image) {
-                $this->purchaseRepository->createItem([
-                    'purchase_id' => $purchaseId,
-                    'image_id' => $image['id'] ?? null,
-                    'price' => $image['price'] ?? 0,
-                    'purchased_type' => 'collection',
-                ]);
-            }
-
-            return;
-        }
-
-        $this->purchaseRepository->createItem([
-            'purchase_id' => $purchaseId,
-            'image_id' => $item->image_id,
-            'price' => $item->price,
+            'status' => $payment?->status ?? $order->status,
+            'amount' => $order->amount,
+            'currency' => $order->currency,
+            'payment_method' => $payment?->method ?? $order->payment_method,
+            'paid_at' => $payment?->paid_at?->toIso8601String(),
+            'fulfillment_status' => $payment?->purchase_granted ? 'fulfilled' : 'pending',
         ]);
     }
 }

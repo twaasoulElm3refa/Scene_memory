@@ -13,11 +13,11 @@ export const PaymentService = {
     return api.get("/paypal/success", { params: { token } });
   },
 
-  orderStatus(orderId) {
-    return api.get(`/order/status/${orderId}`);
+  orderStatus(orderId, signal) {
+    return api.get(`/order/status/${orderId}`, { signal, suppressGlobalErrorToast: true });
   },
 
-  walletOrderStatus(orderId) {
-    return api.get(`/wallet/order-status/${orderId}`);
+  walletOrderStatus(orderId, signal) {
+    return api.get(`/wallet/order-status/${orderId}`, { signal, suppressGlobalErrorToast: true });
   },
 };

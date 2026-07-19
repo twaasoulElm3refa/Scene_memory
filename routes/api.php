@@ -46,7 +46,6 @@ use App\Http\Controllers\api\home\WhisListController;
 use App\Http\Controllers\api\owner\CreatorController;
 use App\Http\Controllers\api\owner\UserWithdrawlController;
 use App\Http\Controllers\api\payment\DepositController;
-use App\Http\Controllers\api\payment\PurchaseController;
 use App\Http\Controllers\api\payment\PaymentController;
 use App\Http\Controllers\api\payment\CollectionController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
@@ -92,12 +91,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/dashboard/stats', [AdminDashboardController::class, 'stats']);
     });
 
-    // downloads Media
-    Route::get('/download', function (Request $request) {
-        $path = $request->query('path');
-        $fullPath = storage_path('app/public/' . $path);
-        return response()->download($fullPath);
-    })->middleware('auth:sanctum');
+    Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
+        ->middleware(['auth:sanctum', 'throttle:30,1']);
 
     // CATEGORIES CRUD
     Route::prefix('categories')->group(function () {
@@ -380,13 +375,6 @@ Route::prefix('v1')->group(function () {
         //139
     });
 
-    // Purchase
-    Route::prefix('purchase')->middleware('auth:sanctum')->group(
-        function () {
-        Route::post('/', [PurchaseController::class,'purchase']);
-        //140
-    });
-
     // Gate
     Route::prefix('gate')->middleware('auth:sanctum')->group(function () {
        Route::get('/random', [GateController::class, 'random']);
@@ -405,7 +393,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/paypal/success', [PaymentController::class, 'success'])->name('paypal.success');
     Route::get('/paypal/cancel',  [PaymentController::class, 'cancel'])->name('paypal.cancel');
     Route::post('/paypal/webhook', [WebhookController::class, 'handle'])->name('paypal.webhook');
-    Route::get('/order/status/{id}', [PaymentController::class, 'orderStatus']);
+    Route::get('/order/status/{id}', [PaymentController::class, 'orderStatus'])
+        ->middleware(['auth:sanctum', 'throttle:60,1']);
     //149
 
     Route::prefix('deposit')->middleware('auth:sanctum')->group(function () {
@@ -416,7 +405,8 @@ Route::prefix('v1')->group(function () {
     Route::get('/wallet/success', [DepositController::class, 'success'])->name('wallet.success');
     Route::get('/wallet/cancel',  [DepositController::class, 'cancel'])->name('wallet.cancel');
     Route::post('/wallet/webhook', [WalletWebhookController::class, 'handle'])->name('wallet.webhook');
-    Route::get('/wallet/order-status/{id}', [DepositController::class, 'orderStatus']);
+    Route::get('/wallet/order-status/{id}', [DepositController::class, 'orderStatus'])
+        ->middleware(['auth:sanctum', 'throttle:60,1']);
     //154
 
     Route::prefix('creator')->middleware('auth:sanctum')->group(function () {

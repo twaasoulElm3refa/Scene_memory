@@ -10,13 +10,16 @@ use App\Repositories\Contracts\Carts\CartRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\Entitlement;
+use App\Services\MinorMoney;
 
 class CollectionController extends Controller
 {
     use ApiResponse;
 
     public function __construct(
-        private readonly CartRepositoryInterface $cartRepository
+        private readonly CartRepositoryInterface $cartRepository,
+        private readonly MinorMoney $money,
     ) {}
 
     /**
@@ -31,10 +34,10 @@ class CollectionController extends Controller
         }
 
         try {
-            $event = Events::findOrFail($eventId);
+            $event = Events::query()->whereKey($eventId)->where('is_active', true)->firstOrFail();
 
             // Get all images for this event
-            $images = $event->images()->get();
+            $images = $event->images()->where('is_active', true)->orderBy('id')->get();
 
             if ($images->isEmpty()) {
                 return response()->json([
@@ -44,11 +47,14 @@ class CollectionController extends Controller
             }
 
             // Calculate total price before discount
-            $totalPrice = $images->sum('price');
+            $owned = Entitlement::where('user_id', $user->id)->whereIn('media_id', $images->pluck('id'))->exists();
+            if ($owned) {
+                return response()->json(['success' => false, 'message' => 'One or more collection items are already owned'], 409);
+            }
 
-            // Apply 10% discount
-            $discountAmount = $totalPrice * 0.10;
-            $finalPrice = $totalPrice - $discountAmount;
+            $totalMinor = $images->sum(fn ($image) => $this->money->fromDecimal((string) $image->price));
+            $finalMinor = intdiv($totalMinor * 90 + 50, 100);
+            $discountMinor = $totalMinor - $finalMinor;
 
             // Get or create cart
             $cart = $this->cartRepository->findByUserId($user->id)
@@ -64,15 +70,23 @@ class CollectionController extends Controller
             })->values()->all();
 
             // Create collection cart item
-            $collectionItem = CartItems::create([
-                'cart_id' => $cart->id,
-                'event_id' => $event->id,
-                'image_id' => null, // null for collections
-                'type' => 'collection',
-                'price' => $totalPrice,
-                'discount' => $discountAmount,
-                'collection_images' => $collectionImages,
-            ]);
+            $collectionItem = DB::transaction(function () use ($cart, $event, $images, $totalMinor, $discountMinor, $collectionImages) {
+                CartItems::query()
+                    ->where('cart_id', $cart->id)
+                    ->where('type', 'single')
+                    ->whereIn('image_id', $images->pluck('id'))
+                    ->delete();
+
+                return CartItems::updateOrCreate(
+                    ['cart_id' => $cart->id, 'event_id' => $event->id, 'type' => 'collection'],
+                    [
+                        'image_id' => null,
+                        'price' => $this->money->toDecimal((int) $totalMinor),
+                        'discount' => $this->money->toDecimal((int) $discountMinor),
+                        'collection_images' => $collectionImages,
+                    ],
+                );
+            }, 5);
 
             // Clear cache
             $this->clearCartCache($user->id);
@@ -81,9 +95,9 @@ class CollectionController extends Controller
                 'item' => $collectionItem,
                 'event' => $event->only(['id', 'title', 'slug']),
                 'total_images' => $images->count(),
-                'total_before_discount' => $totalPrice,
-                'discount' => $discountAmount,
-                'total_after_discount' => $finalPrice,
+                'total_before_discount' => $this->money->toDecimal((int) $totalMinor),
+                'discount' => $this->money->toDecimal((int) $discountMinor),
+                'total_after_discount' => $this->money->toDecimal((int) $finalMinor),
                 'collection_images' => $collectionImages,
             ], 'Collection added to cart successfully');
 

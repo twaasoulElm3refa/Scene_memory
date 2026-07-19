@@ -10,6 +10,11 @@ class PurchaseItems extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'snapshot' => 'array',
+    ];
+
     public function purchases()
     {
         return $this->belongsTo(Purchases::class, 'purchase_id');

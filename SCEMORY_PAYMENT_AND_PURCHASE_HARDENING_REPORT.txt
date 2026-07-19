@@ -1,0 +1,680 @@
+SCEMORY / SCENEMEMORY PAYMENT AND PURCHASE HARDENING REPORT
+Date: 2026-07-19
+Branch: codex/scemory-payment-hardening
+
+1. Executive Summary
+====================
+
+The real Laravel/Vue implementation was inspected and hardened in place. The existing
+Purchases model remains the commercial Order because the project has no Order model;
+PurchaseItems remains the immutable order-item snapshot. A separate Payment model now
+represents payment attempts, Entitlement represents final media ownership, and
+WalletTransactions is the balance ledger.
+
+All four purchase shapes (single_media, collection, multiple_media, cart) now use one
+server-priced order builder and one set of finalizers for PayPal and wallet payments.
+Wallet deposits use a separate operation but the same capture-validation and ledger
+rules. Redirects never grant ownership or credit a wallet. Only a validated COMPLETED
+capture, or an atomic wallet debit, can fulfill an order.
+
+Focused backend tests: 32 passed, 186 assertions.
+Full Laravel suite: 67 passed, 355 assertions. FULL SUITE GREEN: YES.
+Frontend payment tests: 10 passed out of 10.
+Production frontend build: PASSED.
+npm audit: 267 packages audited, 0 vulnerabilities.
+Migrations: both new migrations ran successfully on the existing MySQL database.
+
+No secret value was printed, copied to the frontend, logged, or committed. The report
+mentions configuration names and boolean readiness only.
+
+2. Existing Architecture
+========================
+
+Before hardening:
+- Purchases combined order, payment state, and fulfillment state.
+- PurchaseItems held media rows, including one historical duplicate group.
+- The cart was the main UI path for media and collection purchases.
+- A collection is an Event containing EventImages; no Collection model/table exists.
+- Wallet.amount was updated without a complete atomic ledger contract.
+- Ownership checks relied on purchase rows and could include non-completed states.
+- PayPal redirects and webhook handling did not provide one strict, idempotent financial
+  finalization boundary.
+- Order-status endpoints were public and vulnerable to IDOR.
+- The download endpoint accepted a caller-controlled storage path.
+
+After hardening:
+- Purchases = Order: buyer intent, type, server total, status, and immutable item snapshot.
+- Payment = payment attempt: operation, method, exact minor amount, gateway identifiers,
+  idempotency, status, validation data, paid/fulfilled flags, and timestamps.
+- PurchaseItems = Order Items: one server-priced row per media plus a JSON snapshot.
+- Entitlement = final media ownership with unique (user_id, media_id).
+- WalletTransactions = immutable credit/debit ledger linked to order/payment.
+- PaypalWebhookEvent = verified, idempotent webhook inbox and processing state.
+
+3. Routes Map
+=============
+
+All paths below are under /api/v1.
+
+- POST /pay: Sanctum-authenticated PayPal purchase creation.
+- POST /pay/wallet: Sanctum-authenticated atomic wallet purchase.
+- GET /paypal/success: browser return; resolves token and redirects to waiting only.
+- GET /paypal/cancel: browser cancellation page only; no financial mutation.
+- POST /paypal/webhook: public PayPal callback with mandatory signature verification.
+- GET /order/status/{id}: Sanctum-authenticated, throttled, buyer-scoped purchase status.
+- POST /deposit/pay: Sanctum-authenticated wallet top-up order creation.
+- GET /wallet/success: browser return; redirects to top-up waiting only.
+- GET /wallet/cancel: browser cancellation page only.
+- POST /wallet/webhook: public PayPal callback using the wallet webhook ID.
+- GET /wallet/order-status/{id}: Sanctum-authenticated, throttled, buyer- and type-scoped.
+- GET /download/{media}: Sanctum-authenticated, throttled, entitlement-scoped download.
+- GET /users/downloads: Sanctum-authenticated entitlement list.
+
+The old generic POST /purchase route that could grant ownership outside completed
+payment finalization was removed. routes/web.php now returns a JSON 404 for unmatched
+/api paths before the SPA fallback, preventing an invalid API URL from looking like a
+successful HTML response.
+
+4. Purchase Types Map
+=====================
+
+A. Single media via PayPal:
+   type=single_media and media_id are validated. Active/sale state, existing ownership,
+   server price, currency, item identity, seller, and snapshot are checked. PayPal is
+   created with custom_id purchase:{payment_id}.
+
+B. Single media via Wallet:
+   The same order builder is used. Payment, order, buyer wallet, seller wallet, ledger,
+   entitlement, and relevant cart cleanup commit or roll back together.
+
+C. Collection via PayPal:
+   type=collection and collection_id refer to an Event. The project policy represented
+   by its existing cart code is retained: buying a collection grants all currently
+   active saleable EventImages in that Event, with the existing 10% collection discount.
+   Media membership and allocated per-item minor prices are snapshotted at checkout.
+
+D. Collection via Wallet:
+   Same immutable snapshot and entitlement policy as PayPal, finalized atomically with
+   wallet debit and seller credits.
+
+E. Multiple media via PayPal:
+   media_ids are deduplicated and each media is validated and priced on the server.
+   Previously owned media is rejected. Independent PurchaseItems are created.
+
+F. Multiple media via Wallet:
+   Same builder and deduplication, then one atomic wallet finalization.
+
+G. Cart via PayPal:
+   The cart is loaded by authenticated user from the database. Collection entries are
+   processed before single entries so a child media is not charged twice. Only purchased
+   source rows are deleted after fulfillment.
+
+H. Cart via Wallet:
+   Same authoritative cart snapshot; cleanup occurs inside the wallet transaction only
+   after debit, ledger, and entitlements succeed.
+
+I. Wallet deposit via PayPal:
+   A dedicated wallet_deposit Payment and deposit Purchase are created from a validated
+   server-side amount and currency. A validated COMPLETED capture credits once.
+
+J. Browser success/cancel:
+   Success resolves only the known PayPal token and routes to the waiting page. Cancel
+   routes to the cancelled/failed UI. Neither grants, captures, debits, or credits.
+
+K. Webhooks:
+   JSON and event ID are mandatory. The PayPal signature is verified before processing.
+   APPROVED may request capture; COMPLETED calls the shared finalizer; DECLINED/DENIED
+   updates failure state safely. Unsupported and refund/reversal events are recorded as
+   ignored until a business policy exists.
+
+L. orderStatus:
+   Buyer-scoped checkout orders only; returns order_id, status, amount, currency,
+   payment_method, paid_at, and fulfillment_status.
+
+M. wallet orderStatus:
+   Buyer-scoped wallet_deposit orders only with the same safe response fields.
+
+N. Ownership/Entitlement/Download:
+   Unique entitlements are created only in a completed finalizer. Downloads require an
+   entitlement for the authenticated user and resolve only the server-stored relative
+   media path. Caller-supplied paths, external URLs, and traversal are rejected.
+
+5. Cart Flow
+============
+
+The cart is selected by user_id, not by request payload. Deleted, inactive, unavailable,
+or already owned media fails checkout rather than being silently charged. Duplicate IDs
+and collection-child overlap are normalized before the price is calculated. Collection
+rows are handled first. The order records source_cart_item_id so only fulfilled rows are
+deleted. Pending, approved, failed, cancelled, and timed-out client polling leave the cart
+unchanged. Cart/user cache invalidation runs after the authoritative database mutation.
+
+6. Single Media Flow
+====================
+
+The media must exist, be active and saleable, and not already have an Entitlement for the
+buyer. The request never supplies an authoritative total. Price and currency come from
+the model/config and are converted to integer minor units without float arithmetic. The
+identity, price, seller, event, and source are snapshotted in PurchaseItems.
+
+7. Collection Flow
+==================
+
+There is no Collection model in this codebase. The real collection concept is Event plus
+its EventImages, which is now explicit in the order builder. A collection order grants
+media entitlements, not a fictional collection entitlement. Membership is frozen in the
+order snapshot. The existing 10% discount is allocated in integer minor units, including
+remainder handling so item sums always equal the order total. Existing ownership and
+collection-child cart overlap cannot create duplicate entitlements.
+
+8. Multiple Media Flow
+======================
+
+IDs are deduplicated before querying. Every requested ID must resolve and pass sale and
+ownership rules. One immutable order item is created for each media. The sum is calculated
+from server values in minor units and is included in a stable snapshot hash.
+
+9. Wallet Purchase Flow
+=======================
+
+CheckoutRequest/WalletPurchaseRequest validate shape and UUID idempotency. The order
+builder and PaymentFinalizer run in a DB transaction with retry. Payment, order, and
+wallets use lockForUpdate. WalletLedgerService rejects negative results and integer
+overflow. It updates balance_minor and inserts exactly one linked ledger row in the same
+transaction. Buyer debit, seller credits, entitlements, completion flags, and cart
+cleanup are atomic. Idempotency and unique ledger fields prevent a second debit.
+
+10. Wallet Deposit Flow
+=======================
+
+WalletDepositRequest validates amount format and an idempotency UUID. The amount is
+converted exactly to minor units and checked against config/wallet.php limits. PayPal
+uses wallet_topup:{payment_id}. Completion validates capture status, order ID, real
+capture ID, amount, currency, custom/reference IDs, and merchant. Wallet, ledger,
+Payment, and order are locked and committed together. wallet_credited and paid_at are
+set once. Receipt dispatch happens after commit.
+
+11. PayPal Webhook Flow
+=======================
+
+The verifier requires:
+- PAYPAL-TRANSMISSION-ID
+- PAYPAL-TRANSMISSION-TIME
+- PAYPAL-CERT-URL
+- PAYPAL-AUTH-ALGO
+- PAYPAL-TRANSMISSION-SIG
+- the configured PayPal webhook ID
+
+The certificate URL must be HTTPS and use the expected PayPal host for sandbox/live.
+PayPal's verify-webhook-signature endpoint must return SUCCESS. Verification is enabled
+by default and production fails closed. Bypass requires BOTH verification disabled and
+explicit local bypass enabled, and is restricted to local/testing environments.
+
+PaypalWebhookEvent status transitions are received -> processing -> processed/ignored or
+failed. A processed event returns HTTP 200 without replaying finance. A failed event may
+be retried. The event is not marked processed until the financial handler has committed.
+Only identifiers, event type, and exception class are logged; headers, tokens, secrets,
+and raw payload are not logged.
+
+12. Database Review
+===================
+
+Preflight on the existing MySQL data before migration:
+- purchases: 3
+- purchase_items: 10
+- wallets: 3
+- wallet_transactions: 0
+- negative wallet balances: 0
+- duplicate wallet user groups: 0
+- duplicate transaction ID groups: 0
+- duplicate PayPal order ID groups: 0
+- duplicate purchase/order-media groups: 1
+- legacy purchases were approved checkout records, not completed records
+
+No historical financial row was deleted or rewritten as completed. No entitlement was
+backfilled from approved-only orders. The one duplicate PurchaseItems group was reported
+and preserved; therefore a destructive unique constraint was not forced on legacy
+PurchaseItems. New Entitlements provide the definitive unique ownership boundary.
+
+Post-migration validation:
+- payments: 3 legacy rows backfilled without changing their financial outcome
+- entitlements: 0, correctly, because no legacy record was completed
+- orders missing amount_minor: 0
+- wallets missing balance_minor: 0
+- required webhook columns: present
+- wallet transaction unique indexes for payment_id, slug, idempotency_key: present
+- both hardening migrations: Ran
+
+13. Ownership and Download Security
+===================================
+
+Ownership is no longer inferred from a pending/approved purchase. Entitlement has a
+database unique key on user_id/media_id and is inserted with insert-or-ignore semantics
+inside the final transaction. Listing and download are both user-scoped. The API no
+longer returns raw full storage paths. Download accepts a media route key, checks the
+entitlement, validates a server-owned relative path, and sends the file through Laravel.
+An authorization audit log records user_id and media_id only.
+
+14. Idempotency and Concurrency
+==============================
+
+- Request UUID is namespaced by user, payment method, and purchase type.
+- PayPal-Request-Id is stable for create and capture operations.
+- Completed/failed/cancelled attempts are not incorrectly reused as a new pending attempt.
+- paypal_order_id and paypal_capture_id are stored separately and uniquely.
+- PaypalWebhookEvent.event_id is unique.
+- Entitlement user/media is unique.
+- Ledger payment/idempotency/slug keys are unique where compatible with existing data.
+- lockForUpdate and DB transaction retry protect order, payment, wallet, and event races.
+- Repeated webhook/request/wallet debit/wallet credit/finalization tests prove replay is
+  idempotent. MySQL remains the required production engine for real row locking.
+
+15. Financial Validation
+========================
+
+PaymentFinancialValidator and PayPalCaptureData enforce:
+- capture status exactly COMPLETED
+- PayPal order ID equals Payment.paypal_order_id
+- capture ID is present, is stored separately, and is globally unused
+- amount equals Payment.amount_minor with exact decimal parsing
+- currency equals Payment.currency
+- custom_id exactly purchase:{payment_id} or wallet_topup:{payment_id}
+- reference_id equals the stored reference when PayPal supplies it
+- merchant/payee equals PAYPAL_MERCHANT_ID
+- operation, user, order, and immutable item total/snapshot are consistent
+- a fulfilled/credited payment remains an idempotent no-op
+
+No financial comparison uses float. Legacy decimal columns remain for compatibility but
+the authoritative new calculations and wallet ledger use integer minor units.
+
+16. Frontend Review
+===================
+
+sessionStorage now owns one UUID per operation and stable cart/amount fingerprint. It is
+reused for double clicks and replaced when the operation changes. Buttons are guarded
+while requests are active. The frontend does not send an authoritative price for a cart
+or purchase.
+
+Waiting pages use sequential setTimeout-style polling with no overlapping request. Each
+component owns an AbortController and stops on unmount. completed is the only success;
+failed/cancelled are failure; 401/403/404 are terminal access errors; 409/422/429/5xx and
+network errors may settle and are retried. Exhaustion is shown as timeout/unknown, not as
+payment failure. router.replace prevents stale success navigation. Cart, wallet, and
+owned content refresh only after completed.
+
+Hard-coded API key headers, local API URLs, and debug Axios error output that could expose
+request configuration were removed. No PayPal secret exists in VITE_*.
+
+17. Bugs Fixed
+==============
+
+- Public/IDOR order status and wallet status.
+- Caller-controlled download path and ownership inference from non-completed purchases.
+- A legacy route capable of granting purchases outside payment finalization.
+- Client-total trust and float-based wallet operations.
+- Cart deletion before authoritative fulfillment.
+- Collection-child duplicate charging and duplicate media IDs.
+- Missing Payment/Order/Entitlement separation.
+- PayPal order ID stored ambiguously as a transaction/capture ID.
+- Missing merchant/custom/reference/currency/amount validation.
+- Incomplete webhook signature/header/event-id verification and idempotency states.
+- Double wallet credit/debit and ledger-without-balance risks.
+- Receipt dispatch inside the financial outcome path.
+- Endless/overlapping polling and timeout treated as payment failure.
+- API fallback returning SPA HTML for an invalid API route.
+- Cache configuration ignored CACHE_STORE in tests.
+- User wallet relationship typo (hsone -> hasOne).
+- Frontend hard-coded x-api-key and localhost endpoint.
+
+18. Files Changed
+=================
+
+Configuration/root:
+- .env.example
+- config/cache.php
+- config/paypal.php
+- config/queue.php
+- config/wallet.php (new)
+- package.json
+- package-lock.json
+
+Routes/commands:
+- routes/api.php
+- routes/web.php
+- routes/console.php
+- app/Console/Commands/ReconcilePayPalPayments.php (new)
+
+Controllers/requests:
+- app/Http/Controllers/api/auth/DownloadController.php
+- app/Http/Controllers/api/home/CartController.php
+- app/Http/Controllers/api/payment/CollectionController.php
+- app/Http/Controllers/api/payment/DepositController.php
+- app/Http/Controllers/api/payment/PaymentController.php
+- app/Http/Requests/CheckoutRequest.php (new)
+- app/Http/Requests/WalletPurchaseRequest.php (new)
+- app/Http/Requests/WalletDepositRequest.php (new)
+
+Models/exceptions/jobs:
+- app/Exceptions/CommerceException.php (new)
+- app/Jobs/SendPaymentReceipt.php (new)
+- app/Models/Entitlement.php (new)
+- app/Models/Payment.php (new)
+- app/Models/PaypalWebhookEvent.php
+- app/Models/PurchaseItems.php
+- app/Models/Purchases.php
+- app/Models/User.php
+- app/Models/Wallet.php
+- app/Models/WalletTransactions.php
+
+Services:
+- app/Services/CheckoutCartSnapshot.php
+- app/Services/MinorMoney.php (new)
+- app/Services/PayPalCaptureData.php (new)
+- app/Services/PayPalGateway.php
+- app/Services/PayPalOrderResolver.php
+- app/Services/PayPalServices.php
+- app/Services/PayPalWalletServices.php
+- app/Services/PayPalWebhookProcessor.php
+- app/Services/PayPalWebhookVerifier.php
+- app/Services/PaymentFinalizer.php (new)
+- app/Services/PaymentFinancialValidator.php (new)
+- app/Services/WalletDepositOrderService.php (new)
+- app/Services/WalletLedgerService.php (new)
+
+Frontend:
+- resources/js/services/AdminApiClient.js
+- resources/js/services/ApiClient.js
+- resources/js/services/PaymentService/PaymentService.js
+- resources/js/services/PaymentService/checkoutSession.js (new)
+- resources/js/services/PaymentService/pollOrderStatus.js (new)
+- resources/js/services/downloadService/downloadService.js
+- resources/js/views/home/Waiting.vue
+- resources/js/views/home/WaitingDeposit.vue
+- resources/js/views/home/WalletDeposit.vue
+- resources/js/views/home/cart.vue
+- resources/js/views/home/download.vue
+- resources/js/views/home/failed.vue
+- resources/js/views/home/failedDeposit.vue
+
+Tests/report:
+- tests/Feature/Api/Payments/PayPalPaymentFlowTest.php
+- tests/Feature/Api/Payments/PayPalWebhookTest.php
+- tests/Feature/Api/Payments/PayPalReconciliationTest.php (new)
+- tests/Feature/Api/Payments/WalletPurchaseSecurityTest.php (new)
+- tests/Unit/PayPalWebhookVerifierTest.php
+- tests/Frontend/paymentFlow.test.js (new)
+- SCEMORY_PAYMENT_AND_PURCHASE_HARDENING_REPORT.txt (new)
+
+19. Migrations Added
+====================
+
+1) database/migrations/2026_07_19_000001_create_payment_hardening_tables.php
+   Creates payments and entitlements with foreign keys, unique identifiers, exact minor
+   amounts, lifecycle flags, timestamps, and guarded completed-only entitlement backfill.
+
+2) database/migrations/2026_07_19_000002_harden_existing_payment_tables.php
+   Guardedly adds order snapshots/minor amounts/fulfillment fields, wallet minor balance,
+   complete ledger fields, and webhook processing fields. It checks table/column/index
+   existence and adds unique indexes only when a duplicate preflight is clean. Its down()
+   is deliberately non-destructive for financial data.
+
+Migration incident and recovery:
+The second migration initially stopped after partial DDL because MySQL ONLY_FULL_GROUP_BY
+rejected the first duplicate-detection query. No rollback or data deletion was attempted.
+The index preflight was changed to a grouped subquery, and the same guarded migration was
+rerun safely to completion. A later `php artisan migrate --force` reported nothing to
+migrate.
+
+20. Tests Added
+===============
+
+Backend coverage includes all four purchase types through PayPal and wallet, server price
+authority, direct/cart creation, request idempotency, redirect without ownership,
+signature failure, missing headers, certificate host rejection, webhook inbox states,
+capture replay, entitlement replay, seller/buyer ledger, deposit replay, amount/currency/
+merchant/custom/reference/status/order mismatch rollback, insufficient balance rollback,
+status IDOR/type scoping, download IDOR/path rejection, and reconciliation using the same
+finalizer. PayPal, signature verification, and mail/queue behavior are faked; automated
+tests never call real PayPal.
+
+Frontend coverage includes UUID reuse/rotation/clear, double-click semantics, completed,
+failed, timeout, 429/5xx retry without overlap, 401/403/404 terminal handling, and unmount
+abort.
+
+Concurrency is enforced by database locks plus unique constraints and exercised through
+replayed requests/events/finalizers. A genuine parallel-process load test against a
+production-shaped MySQL replica is still a recommended pre-live manual gate.
+
+21. Test Results
+================
+
+- Focused Laravel payments/unit:
+  32 passed, 186 assertions, 0 failed.
+- Full Laravel suite:
+  67 passed, 355 assertions, 0 failed. FULL SUITE GREEN: YES.
+- Frontend Vitest:
+  1 file passed, 10 tests passed, 0 failed.
+- npm run build:
+  PASSED in approximately 26 seconds. Vite emitted only pre-existing-style chunk-size
+  advice for bundles larger than 500 kB.
+- PHP syntax check for every changed/new PHP file:
+  PASSED, no syntax errors.
+- git diff --check:
+  PASSED.
+- npm audit:
+  0 vulnerabilities after dependency updates.
+
+Composer reports two unrelated pre-existing PSR-4 filename/case warnings for
+app/Models/newsletters.php and app/Models/NewsLetters.php. They did not fail discovery or
+tests and were not changed as part of payment hardening.
+
+22. Environment Variables Required
+==================================
+
+Required names (values must be supplied securely outside source control):
+- PAYPAL_MODE
+- PAYPAL_SANDBOX_CLIENT_ID / PAYPAL_SANDBOX_CLIENT_SECRET for sandbox
+- PAYPAL_LIVE_CLIENT_ID / PAYPAL_LIVE_CLIENT_SECRET for live
+- PAYPAL_WEBHOOK_ID
+- PAYPAL_WALLET_WEBHOOK_ID
+- PAYPAL_MERCHANT_ID
+- PAYPAL_VERIFY_WEBHOOKS=true
+- PAYPAL_ALLOW_LOCAL_WEBHOOK_BYPASS=false
+- WALLET_TOPUP_MIN_MINOR
+- WALLET_TOPUP_MAX_MINOR
+- QUEUE_CONNECTION (redis recommended in production)
+- REDIS_HOST / REDIS_PORT / REDIS_PASSWORD as applicable
+- FRONTEND_URL and APP_URL with production HTTPS origins
+
+Current environment readiness, without values:
+- PAYPAL_MERCHANT_ID configured: YES
+- purchase webhook ID configured: YES
+- wallet webhook ID configured: YES
+- webhook verification enabled: YES
+- local webhook bypass enabled: NO
+- configured queue connection: redis
+
+The configured merchant ID must still be manually compared with the exact sandbox/live
+PayPal account used to create the corresponding app before release.
+
+23. Queue and Scheduler Requirements
+====================================
+
+SendPaymentReceipt is queueable and dispatched after commit. All queue connections are
+configured with after_commit=true. Receipt failure does not change completed payment or
+fulfillment state; mail_sent is set only after successful mail delivery.
+
+Reconciliation is scheduled every five minutes:
+  payments:reconcile --limit=100 --age=10
+and is protected with withoutOverlapping.
+
+Environment check result: Redis was not reachable from the current shell, and no running
+`php artisan queue:work` or `php artisan schedule:work` process was observed. Application
+logic and sync/fake tests passed, but production must provision and monitor Redis, a queue
+worker, and either cron `schedule:run` every minute or a supervised schedule worker.
+
+24. Manual Sandbox Test Plan
+============================
+
+Preparation for every case:
+1. Use a dedicated PayPal Sandbox business account whose merchant ID exactly matches
+   PAYPAL_MERCHANT_ID and a separate buyer account.
+2. Register both webhook URLs and place their exact IDs in their respective variables.
+3. Run migrations on a restored staging copy after backup and run the duplicate/negative
+   preflight. Start Redis, queue worker, and scheduler.
+4. Observe only sanitized structured logs and database IDs; never log tokens/headers.
+
+Single media PayPal:
+- Choose an active, unowned media; create type=single_media; approve in Sandbox.
+- Verify pending before webhook, completed after verified capture, one entitlement, one
+  seller ledger credit, no duplicate on webhook replay, and authorized download.
+
+Single media Wallet:
+- Fund buyer wallet, submit type=single_media twice with the same UUID.
+- Verify one buyer debit, one seller credit, one entitlement, exact before/after balances.
+
+Collection PayPal:
+- Record active media membership, buy type=collection, then modify the Event after order
+  creation but before completion. Verify only the immutable snapshot is granted and the
+  total equals the allocated discounted item sum.
+
+Collection Wallet:
+- Repeat with wallet; verify atomic debit/credits and no partial ownership on failure.
+
+Multiple media PayPal:
+- Submit repeated IDs and verify deduplication. Test one missing/inactive/owned ID and
+  confirm 422 with no gateway order. Complete a valid order and verify all entitlements.
+
+Multiple media Wallet:
+- Repeat with sufficient then insufficient balance; verify full rollback when insufficient.
+
+Cart PayPal:
+- Put a collection and one of its children in the same cart. Verify one charge/grant for
+  the child. Cancel once and ensure cart remains. Complete a new attempt and verify only
+  purchased source rows are removed.
+
+Cart Wallet:
+- Repeat overlap, insufficient balance, UUID replay, and successful atomic cleanup.
+
+Wallet deposit PayPal:
+- Top up valid min/max amounts. Replay the COMPLETED webhook and run reconciliation.
+- Verify one credit ledger row, wallet_credited=true, one capture ID, exact balance, and
+  buyer-only status access.
+
+Redirect/webhook ordering:
+- Exercise webhook before redirect, redirect before webhook, duplicated webhook, closed
+  browser, delayed webhook, and reconciliation during/after webhook. Every sequence must
+  finish with at most one payment completion, entitlement set, ledger mutation, and mail.
+
+Security/mismatch checks:
+- Send invalid JSON, missing event ID, missing signature headers, invalid signature, wrong
+  webhook ID, wrong merchant, amount, currency, custom ID, reference ID, PayPal order ID,
+  and reused capture ID. Confirm non-2xx for invalid verification or failed processing,
+  no fulfillment, and sanitized logs.
+
+25. Live Deployment Checklist
+==============================
+
+1. Take and verify a restorable database backup.
+2. Deploy first to a staging clone of live data and rerun all duplicate/negative checks.
+3. Manually investigate the reported legacy duplicate PurchaseItems group; do not delete
+   it merely to satisfy an index.
+4. Verify live PayPal app, business merchant ID, client ID/secret, webhook URLs/IDs, HTTPS,
+   and environment mode all belong to the same live account.
+5. Keep PAYPAL_VERIFY_WEBHOOKS=true and PAYPAL_ALLOW_LOCAL_WEBHOOK_BYPASS=false.
+6. Deploy additive code/migrations and run `php artisan migrate --force` once.
+7. Run optimize/cache commands with a reachable production cache.
+8. Use Node 20+ for the production asset pipeline. The current Node 18 build passed, but
+   @tailwindcss/oxide and vue3-toastify declare Node 20 requirements.
+9. Start and supervise Redis, queue workers, and scheduler; configure retry/failed-job
+   alerts and payment/webhook/reconciliation alerts.
+10. Run the complete sandbox plan, then a controlled low-value live purchase and top-up.
+11. Verify download storage permissions and that media paths are relative server values.
+12. Monitor failed/stale webhook events, pending payments, negative balances, duplicate
+   key errors, queue failures, and reconciliation counts.
+13. Confirm the frontend never contains a secret in built assets.
+
+26. Rollback Plan
+=================
+
+- Do not run a blind migration rollback and do not drop payments, entitlements, ledger,
+  or webhook history.
+- Stop new checkout traffic first; leave webhooks available if the hardened finalizer is
+  still deployed, or temporarily acknowledge/store events for controlled replay.
+- Revert application code to the prior release only after confirming it safely ignores
+  the additive tables/columns. The migrations are additive, so old code can leave them.
+- Preserve the database and event inbox for reconciliation. If an application rollback is
+  required, forward-fix and replay failed/stale events using their unique event IDs.
+- Financial corrections use compensating ledger transactions; never edit/delete the old
+  ledger row.
+- Restore a backup only as a coordinated disaster-recovery action with reconciliation of
+  PayPal captures that occurred after the backup timestamp.
+
+27. Remaining Risks
+===================
+
+- REFUNDED/REVERSED policy is intentionally not automated because the project has no
+  defined entitlement revocation, seller clawback, or wallet-negative-balance policy.
+  Events are preserved as ignored/manual-review items rather than applying guessed money.
+- One historical duplicate PurchaseItems group remains for manual business review. It was
+  not deleted and does not bypass the new unique Entitlement boundary.
+- Real PayPal Sandbox/Live calls were not made by automated tests; final account/webhook
+  wiring requires the manual plan.
+- A true multi-process MySQL race/load test remains recommended even though locks, unique
+  constraints, transaction retry, and replay tests are in place.
+- Redis/worker/scheduler were unavailable in this shell and must be proven in deployment.
+- Production asset builds should use Node 20+.
+- Vite reports large bundle chunks; this is a performance optimization opportunity, not a
+  payment-integrity failure.
+- Existing Newsletter model filename PSR-4 warnings remain outside this task.
+
+28. Required Manual Actions
+===========================
+
+1. Back up live data and test restore before deploying.
+2. Review the one legacy duplicate order/media group with finance/content owners; preserve
+   audit history and correct it only through an approved data-repair migration.
+3. Verify PAYPAL_MERCHANT_ID and both webhook IDs against the exact Sandbox then Live app.
+4. Run the full Sandbox matrix, including ordering and replay scenarios.
+5. Decide and document REFUNDED/REVERSED financial and entitlement policy before adding
+   automation for those events.
+6. Provision Redis and supervised queue/scheduler processes and prove alerting.
+7. Upgrade the build environment to Node 20+.
+8. Run a production-clone parallel race test for wallet purchase, duplicate capture,
+   webhook/reconciliation overlap, and cart cleanup.
+9. Confirm signed/private storage policy for the production disk/CDN. The new endpoint is
+   entitlement-scoped; if files move to object storage, return short-lived signed URLs
+   only after the same server authorization.
+
+Commands Executed and Outcomes
+==============================
+
+- git status: inspected before, during, and after changes; unrelated user changes were not
+  present at start.
+- git branch --show-current: main initially; codex/scemory-payment-hardening after creation.
+- git switch -c codex/scemory-payment-hardening: succeeded.
+- composer install --no-interaction --prefer-dist: succeeded. An initial filesystem
+  permission issue on storage/bootstrap/cache was corrected only for those runtime dirs;
+  final install/package discovery succeeded with the unrelated Newsletter PSR-4 warnings.
+- php artisan optimize:clear: the default Redis-backed attempt exposed unreachable Redis;
+  the cache-isolated verification run succeeded for config/cache/compiled/events/routes/views.
+- php artisan route:list and focused verbose route lists: succeeded; protected middleware
+  confirmed for order status, wallet status, and download.
+- php artisan migrate:status: succeeded; both new migrations show Ran.
+- php artisan migrate --force: first applied both guarded migrations (including safe rerun
+  after the documented partial DDL issue); final run reported Nothing to migrate.
+- php artisan schedule:list: succeeded; reconciliation appears every five minutes with
+  without-overlap configuration.
+- php artisan test tests/Feature/Api/Payments tests/Unit/PayPalWebhookVerifierTest.php:
+  32 passed / 186 assertions.
+- php artisan test: 67 passed / 355 assertions.
+- npm install: up to date; 267 packages audited; 0 vulnerabilities; Node 20 engine warnings
+  documented above.
+- npm run test -- --run: 10 passed / 10.
+- npm run build: succeeded; chunk-size performance warning only.
+- php -l on every changed/new PHP file: all passed.
+- secret/hard-coded URL scan: no frontend client secret, access token value, x-api-key, or
+  hard-coded 127.0.0.1:8000 remains. Server config references env variable names only.
+- process/connectivity check: Redis not reachable; no queue:work/schedule:work process seen.
+- git diff --check: passed.
+

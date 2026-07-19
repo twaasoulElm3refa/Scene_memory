@@ -6,7 +6,11 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\Carts\CartRepositoryInterface;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Models\CartItems;
+use App\Models\Entitlement;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use App\Services\MinorMoney;
 
 class CartController extends Controller
 {
@@ -14,7 +18,8 @@ class CartController extends Controller
 
     public function __construct(
         private readonly CartRepositoryInterface $cartRepository,
-        private readonly EventImageRepositoryInterface $eventImageRepository
+        private readonly EventImageRepositoryInterface $eventImageRepository,
+        private readonly MinorMoney $money,
     ) {
     }
 
@@ -23,7 +28,7 @@ class CartController extends Controller
         Cache::tags(['cart', "user_{$userId}"])->flush();
         Cache::tags('user_profile')->flush();
     }
-    public function addToCart()
+    public function addToCart($id = null)
     {
         try {
             $user = auth()->user();
@@ -31,7 +36,7 @@ class CartController extends Controller
             if (!$user) {
                 return $this->error('Unauthorized', 401);
             }
-            $id = request('id');
+            $id ??= request('id');
             if (!$id) {
                 return $this->error('Image ID is required', 400);
             }
@@ -40,11 +45,29 @@ class CartController extends Controller
             if (!$image) {
                 return $this->error('Image not found', 404);
             }
+            if (!in_array($image->is_active, [true, 1, '1', 'true', 'active'], true) || $this->money->fromDecimal((string) $image->price) < 1) {
+                return $this->error('Image is not available for sale', 422);
+            }
+            if (Entitlement::where('user_id', $user->id)->where('media_id', $image->id)->exists()) {
+                return $this->error('Image is already owned', 409);
+            }
+
+            $insideCollection = CartItems::query()
+                ->where('cart_id', $cart->id)
+                ->where('type', 'collection')
+                ->where('event_id', $image->event_id)
+                ->exists();
+            if ($insideCollection) {
+                return $this->error('Image is already included in a collection in this cart', 409);
+            }
+
             $item = $this->cartRepository->firstOrCreateItem([
-                'cart_id'  => $cart->id,
+                'cart_id' => $cart->id,
                 'image_id' => $image->id,
-                'price'    => $image->price,
             ]);
+            if ($item->wasRecentlyCreated) {
+                $item->fill(['type' => 'single', 'event_id' => $image->event_id, 'price' => $image->price])->save();
+            }
             $this->clearCartCache($user->id);
             return $this->success($item, 'Image added to cart successfully');
 
