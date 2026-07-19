@@ -46,7 +46,8 @@
                     </transition>
 
                     <!-- Login Form -->
-                    <form v-if="tab === 'login'" @submit.prevent="handleLogin" class="d-flex flex-column gap-4">
+                    <form v-if="tab === 'login' && !otpStage" @submit.prevent="handleLogin"
+                        class="d-flex flex-column gap-4">
                         <input v-model="loginForm.email" type="email"
                             class="form-control form-control-lg glass-input rounded-3 py-3 px-4 fs-5"
                             placeholder="Email Address" required />
@@ -82,7 +83,7 @@
                     </form>
 
                     <!-- Register Form -->
-                    <form v-else-if="tab === 'register' && registerStage === 'form'" @submit.prevent="handleRegister"
+                    <form v-else-if="tab === 'register' && !otpStage" @submit.prevent="handleRegister"
                         class="d-flex flex-column gap-4">
                         <input v-model="registerForm.name" type="text"
                             class="form-control form-control-lg glass-input rounded-3 px-4 fs-5" placeholder="Full Name"
@@ -148,13 +149,13 @@
                         </button>
                     </form>
 
-                    <!-- Register OTP Form -->
-                    <form v-else-if="tab === 'register' && registerStage === 'otp'" @submit.prevent="handleVerifyOtp"
+                    <!-- Email OTP Form -->
+                    <form v-else-if="otpStage" @submit.prevent="handleVerifyOtp"
                         class="d-flex flex-column gap-4">
                         <div class="text-center text-white">
                             <h2 class="h4 fw-bold mb-2">Confirm your email</h2>
                             <p class="mb-0 opacity-75">
-                                Enter the 6-digit code sent to {{ registerOtpMaskedEmail || pendingRegisterEmail }}
+                                Enter the 6-digit code sent to {{ maskedOtpEmail || pendingOtpEmail }}
                             </p>
                         </div>
 
@@ -179,8 +180,8 @@
                         </button>
 
                         <button type="button" class="btn btn-link text-glow fw-medium text-decoration-none"
-                            @click="backToRegisterForm">
-                            Change email
+                            @click="backFromOtp">
+                            {{ otpContext === "login" ? "Back to login" : "Change email" }}
                         </button>
                     </form>
 
@@ -256,9 +257,10 @@ const loading = ref(false);
 const error = ref("");
 const successMessage = ref("");
 const forgotEmail = ref("");
-const registerStage = ref("form");
-const pendingRegisterEmail = ref("");
-const registerOtpMaskedEmail = ref("");
+const otpStage = ref(false);
+const otpContext = ref(null);
+const pendingOtpEmail = ref("");
+const maskedOtpEmail = ref("");
 const otpError = ref("");
 const resendLoading = ref(false);
 const resendRemaining = ref(0);
@@ -344,18 +346,35 @@ const extractErrorMessage = (err, fallback) => {
     return err.response?.data?.message || fallback;
 };
 
+const openOtpStage = (context, email, data = null) => {
+    otpContext.value = context;
+    pendingOtpEmail.value = email;
+    maskedOtpEmail.value = data?.email || "";
+    otpForm.value.otp = "";
+    otpError.value = "";
+    error.value = "";
+    otpStage.value = true;
+    tab.value = context === "login" ? "login" : "register";
+    startResendTimer(data?.resend_after || 60);
+};
+
 const switchToLogin = () => {
     tab.value = "login";
+    otpStage.value = false;
     error.value = "";
+    otpError.value = "";
 };
 
 const switchToRegister = () => {
     tab.value = "register";
+    otpStage.value = false;
     error.value = "";
+    otpError.value = "";
 };
 
-const backToRegisterForm = () => {
-    registerStage.value = "form";
+const backFromOtp = () => {
+    tab.value = otpContext.value === "login" ? "login" : "register";
+    otpStage.value = false;
     otpForm.value.otp = "";
     otpError.value = "";
     error.value = "";
@@ -403,11 +422,23 @@ const handleLogin = async () => {
             const token = res.data.data?.token;
             const role = res.data.data?.user?.role;
             saveTokenAndRedirect(token, role);
+        } else if (res.data.status === "otp_required") {
+            const email = loginForm.value.email;
+            loginForm.value.password = "";
+            successMessage.value = res.data.message || "Please verify your email first.";
+            openOtpStage("login", email, res.data.data);
         } else {
             error.value = res.data.message || "Login failed";
         }
     } catch (err) {
-        error.value = err.response?.data?.message || "Error during login";
+        if (err.response?.data?.status === "otp_required") {
+            const email = loginForm.value.email;
+            loginForm.value.password = "";
+            successMessage.value = err.response.data.message || "Please verify your email first.";
+            openOtpStage("login", email, err.response.data.data);
+        } else {
+            error.value = err.response?.data?.message || "Error during login";
+        }
     } finally {
         loading.value = false;
     }
@@ -430,14 +461,10 @@ const handleRegister = async () => {
         const res = await AuthService.register(formData);
 
         if (res.data.status === "otp_required") {
-            pendingRegisterEmail.value = registerForm.value.email;
-            registerOtpMaskedEmail.value = res.data.data?.email || "";
-            registerStage.value = "otp";
-            otpForm.value.otp = "";
+            openOtpStage("register", registerForm.value.email, res.data.data);
             registerForm.value.password = "";
             registerForm.value.password_confirmation = "";
             successMessage.value = res.data.message || "Verification code sent successfully.";
-            startResendTimer(60);
         } else {
             error.value = res.data.message || "Registration failed";
         }
@@ -473,19 +500,23 @@ const handleVerifyOtp = async () => {
 
     try {
         const res = await AuthService.verifyRegisterOtp({
-            email: pendingRegisterEmail.value,
+            email: pendingOtpEmail.value,
             otp: otpForm.value.otp,
         });
 
-        if (res.data.status === "success") {
-            const token = res.data.data?.token;
-            const user = res.data.data?.user;
-            const role = user?.role;
-            pendingRegisterEmail.value = "";
-            registerOtpMaskedEmail.value = "";
+        if (res.data.status === "email_verified") {
+            const verifiedContext = otpContext.value;
+            loginForm.value.email = pendingOtpEmail.value;
+            loginForm.value.password = "";
+            pendingOtpEmail.value = "";
+            maskedOtpEmail.value = "";
+            otpContext.value = null;
+            otpStage.value = false;
             otpForm.value.otp = "";
-            successMessage.value = res.data.message || "Email verified successfully.";
-            saveTokenAndRedirect(token, role, user);
+            tab.value = "login";
+            successMessage.value = verifiedContext === "register"
+                ? "Email verified successfully. Please login."
+                : "Email verified successfully. Please login again.";
         } else {
             otpError.value = res.data.message || "Verification failed";
         }
@@ -497,14 +528,14 @@ const handleVerifyOtp = async () => {
 };
 
 const handleResendOtp = async () => {
-    if (resendRemaining.value > 0 || !pendingRegisterEmail.value) return;
+    if (resendRemaining.value > 0 || !pendingOtpEmail.value) return;
 
     resendLoading.value = true;
     otpError.value = "";
     error.value = "";
 
     try {
-        const res = await AuthService.resendRegisterOtp({ email: pendingRegisterEmail.value });
+        const res = await AuthService.resendRegisterOtp({ email: pendingOtpEmail.value });
         otpForm.value.otp = "";
         successMessage.value = res.data.message || "A new verification code has been sent.";
         startResendTimer(res.data.data?.resend_after || 60);

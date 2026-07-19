@@ -34,10 +34,11 @@ class RegisterOtpApiTest extends TestCase
         $response->assertStatus(202)
             ->assertJsonPath('status', 'otp_required')
             ->assertJsonPath('data.expires_in', 600)
+            ->assertJsonPath('data.resend_after', 60)
             ->assertJsonMissingPath('data.token')
             ->assertJsonMissing(['password' => $this->password(), 'otp' => true]);
 
-        $user = User::where('email', 'new-user@example.com')->firstOrFail();
+        $user = User::where('email', 'new-user@gmail.com')->firstOrFail();
 
         $this->assertFalse((bool) $user->is_active);
         $this->assertNull($user->email_verified_at);
@@ -49,7 +50,7 @@ class RegisterOtpApiTest extends TestCase
         });
     }
 
-    public function test_correct_otp_activates_user_sets_email_verified_at_and_returns_login_token(): void
+    public function test_correct_otp_verifies_email_without_returning_login_token(): void
     {
         [$user, $otp] = $this->registerAndReadOtp();
 
@@ -59,18 +60,19 @@ class RegisterOtpApiTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJsonPath('status', 'success')
-            ->assertJsonPath('message', 'Email verified successfully.')
-            ->assertJsonPath('data.user.email', $user->email)
-            ->assertJsonStructure(['data' => ['token']]);
+            ->assertJsonPath('status', 'email_verified')
+            ->assertJsonPath('message', 'Email verified successfully. Please login.')
+            ->assertJsonMissingPath('data.token')
+            ->assertJsonMissingPath('token')
+            ->assertJsonMissingPath('access_token');
 
         $user->refresh();
 
         $this->assertTrue((bool) $user->is_active);
         $this->assertNotNull($user->email_verified_at);
-        $this->assertNotNull($user->last_login_at);
+        $this->assertNull($user->last_login_at);
         $this->assertNotNull(RegistrationOtp::first()->verified_at);
-        $this->assertDatabaseCount('personal_access_tokens', 1);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
     }
 
     public function test_wrong_otp_returns_422_and_increments_attempts(): void
@@ -202,9 +204,11 @@ class RegisterOtpApiTest extends TestCase
 
     public function test_login_blocks_unactivated_user(): void
     {
+        Mail::fake();
+
         $user = User::factory()->create([
             'email' => 'blocked@gmail.com',
-            'is_active' => false,
+            'is_active' => true,
             'email_verified_at' => null,
             'password' => Hash::make($this->password()),
         ]);
@@ -213,7 +217,126 @@ class RegisterOtpApiTest extends TestCase
             'email' => $user->email,
             'password' => $this->password(),
         ])->assertStatus(403)
-            ->assertJsonPath('message', 'Please verify your email first.');
+            ->assertJsonPath('status', 'otp_required')
+            ->assertJsonPath('message', 'Please verify your email first.')
+            ->assertJsonMissingPath('data.token');
+
+        Mail::assertSent(RegisterOtpMail::class);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+        $this->assertDatabaseCount('registration_otps', 1);
+    }
+
+    public function test_login_with_wrong_password_does_not_send_otp(): void
+    {
+        Mail::fake();
+
+        $user = User::factory()->create([
+            'email' => 'wrong-password@gmail.com',
+            'is_active' => true,
+            'email_verified_at' => null,
+            'password' => Hash::make($this->password()),
+        ]);
+
+        $this->postJson('/api/v1/users/login', [
+            'email' => $user->email,
+            'password' => 'WrongPassword!123',
+        ])->assertStatus(401)
+            ->assertJsonPath('message', 'Invalid credentials.');
+
+        Mail::assertNothingSent();
+        $this->assertDatabaseCount('registration_otps', 0);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_login_with_unknown_email_returns_invalid_credentials_without_otp(): void
+    {
+        Mail::fake();
+
+        $this->postJson('/api/v1/users/login', [
+            'email' => 'unknown-user@gmail.com',
+            'password' => $this->password(),
+        ])->assertStatus(401)
+            ->assertJsonPath('message', 'Invalid credentials.');
+
+        Mail::assertNothingSent();
+        $this->assertDatabaseCount('registration_otps', 0);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_after_otp_verification_user_must_login_again_to_receive_token(): void
+    {
+        [$user, $otp] = $this->registerAndReadOtp();
+
+        $this->postJson('/api/v1/users/register/verify-otp', [
+            'email' => $user->email,
+            'otp' => $otp,
+        ])->assertOk()
+            ->assertJsonPath('status', 'email_verified')
+            ->assertJsonMissingPath('data.token');
+
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+
+        $this->postJson('/api/v1/users/login', [
+            'email' => $user->email,
+            'password' => $this->password(),
+        ])->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonStructure(['data' => ['token']]);
+
+        $this->assertDatabaseCount('personal_access_tokens', 1);
+        $this->assertNotNull($user->refresh()->last_login_at);
+    }
+
+    public function test_user_with_null_email_verified_at_never_receives_token_from_normal_login(): void
+    {
+        Mail::fake();
+
+        $user = User::factory()->create([
+            'email' => 'legacy-unverified@gmail.com',
+            'is_active' => true,
+            'email_verified_at' => null,
+            'password' => Hash::make($this->password()),
+        ]);
+
+        $this->postJson('/api/v1/users/login', [
+            'email' => $user->email,
+            'password' => $this->password(),
+        ])->assertStatus(403)
+            ->assertJsonPath('status', 'otp_required')
+            ->assertJsonMissingPath('data.token');
+
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_resend_works_for_otp_started_from_login(): void
+    {
+        Mail::fake();
+
+        $user = User::factory()->create([
+            'email' => 'login-resend@gmail.com',
+            'is_active' => true,
+            'email_verified_at' => null,
+            'password' => Hash::make($this->password()),
+        ]);
+
+        $this->postJson('/api/v1/users/login', [
+            'email' => $user->email,
+            'password' => $this->password(),
+        ])->assertStatus(403)
+            ->assertJsonPath('status', 'otp_required');
+
+        $oldOtp = $this->latestOtp();
+        $this->travel(61)->seconds();
+        Mail::fake();
+
+        $this->postJson('/api/v1/users/register/resend-otp', [
+            'email' => $user->email,
+        ])->assertOk()
+            ->assertJsonPath('status', 'otp_resent');
+
+        $newOtp = $this->latestOtp();
+
+        $this->assertNotSame($oldOtp, $newOtp);
     }
 
     public function test_register_otp_routes_have_expected_throttle_middleware(): void
@@ -232,7 +355,7 @@ class RegisterOtpApiTest extends TestCase
         $this->postJson('/api/v1/users/register', $this->payload())->assertStatus(202);
 
         return [
-            User::where('email', 'new-user@example.com')->firstOrFail(),
+            User::where('email', 'new-user@gmail.com')->firstOrFail(),
             $this->latestOtp(),
         ];
     }
@@ -258,7 +381,7 @@ class RegisterOtpApiTest extends TestCase
 
         return array_merge([
             'name' => 'New User',
-            'email' => 'new-user@example.com',
+            'email' => 'new-user@gmail.com',
             'country' => 'Egypt',
             'phone' => '01000000000',
             'position' => 'Photographer',

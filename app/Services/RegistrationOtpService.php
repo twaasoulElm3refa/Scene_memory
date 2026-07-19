@@ -112,7 +112,6 @@ class RegistrationOtpService
             $user->forceFill([
                 'is_active' => true,
                 'email_verified_at' => $now,
-                'last_login_at' => $now,
             ])->save();
 
             return $user->refresh();
@@ -142,7 +141,7 @@ class RegistrationOtpService
 
     public function isVerified(User $user): bool
     {
-        return (bool) $user->is_active || $user->email_verified_at !== null;
+        return $user->email_verified_at !== null;
     }
 
     public function maskEmail(string $email): string

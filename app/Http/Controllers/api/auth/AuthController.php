@@ -82,6 +82,7 @@ class AuthController extends Controller
                 'data' => [
                     'email' => $this->registrationOtpService->maskEmail($user->email),
                     'expires_in' => RegistrationOtpService::EXPIRES_SECONDS,
+                    'resend_after' => RegistrationOtpService::RESEND_COOLDOWN_SECONDS,
                 ],
             ], 202);
 
@@ -112,8 +113,23 @@ class AuthController extends Controller
             return $this->unauthorized('Invalid credentials.');
         }
 
-        if (! $user->is_active && ! $user->email_verified_at) {
-            return $this->forbidden('Please verify your email first.');
+        if ($user->email_verified_at === null) {
+            try {
+                $otpPayload = $this->registrationOtpService->createForUser($user);
+                $this->registrationOtpService->send($user, $otpPayload['otp']);
+            } catch (RegistrationOtpException $e) {
+                return $this->error($e->getMessage(), $e->statusCode(), $e->errors());
+            }
+
+            return response()->json([
+                'status' => 'otp_required',
+                'message' => 'Please verify your email first.',
+                'data' => [
+                    'email' => $this->registrationOtpService->maskEmail($user->email),
+                    'expires_in' => RegistrationOtpService::EXPIRES_SECONDS,
+                    'resend_after' => RegistrationOtpService::RESEND_COOLDOWN_SECONDS,
+                ],
+            ], 403);
         }
 
         if (! $user->is_active) {
@@ -146,17 +162,15 @@ class AuthController extends Controller
         }
 
         try {
-            $user = $this->registrationOtpService->verify($user, $validated['otp']);
+            $this->registrationOtpService->verify($user, $validated['otp']);
         } catch (RegistrationOtpException $e) {
             return $this->error($e->getMessage(), $e->statusCode(), $e->errors());
         }
 
-        $token = $user->createToken('rag-token')->plainTextToken;
-
-        return $this->success([
-            'user' => new userResource($user),
-            'token' => $token,
-        ], 'Email verified successfully.');
+        return response()->json([
+            'status' => 'email_verified',
+            'message' => 'Email verified successfully. Please login.',
+        ]);
     }
 
     public function resendRegisterOtp(Request $request)
