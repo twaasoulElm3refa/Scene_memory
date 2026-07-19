@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Services\PayPalWebhookVerifier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -37,6 +38,28 @@ class PayPalWebhookTest extends TestCase
 
         $this->postWebhook('/api/v1/paypal/webhook', $payload)->assertStatus(400);
         $this->assertDatabaseMissing('paypal_webhook_events', ['event_id' => 'WH-INVALID']);
+    }
+
+    public function test_webhook_endpoint_reached_is_logged_before_signature_rejection(): void
+    {
+        Log::spy();
+        $this->mockVerifier(false);
+        $payload = ['id' => 'WH-REACHED', 'event_type' => 'PAYMENT.CAPTURE.COMPLETED', 'resource' => []];
+
+        $this->postWebhook('/api/v1/paypal/webhook', $payload)->assertStatus(400);
+
+        Log::shouldHaveReceived('info')
+            ->with('SCEMORY_WEBHOOK_ENDPOINT_REACHED', Mockery::on(function (array $context) {
+                return $context['path'] === 'api/v1/paypal/webhook'
+                    && $context['method'] === 'POST'
+                    && $context['event_id'] === 'WH-REACHED'
+                    && $context['event_type'] === 'PAYMENT.CAPTURE.COMPLETED'
+                    && $context['has_transmission_id'] === true
+                    && $context['has_transmission_sig'] === true
+                    && $context['webhook_type'] === 'checkout'
+                    && ! array_key_exists('authorization', array_change_key_case($context, CASE_LOWER));
+            }))
+            ->once();
     }
 
     public function test_unsupported_verified_event_is_stored_as_ignored_with_payload(): void
