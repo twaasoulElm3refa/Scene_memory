@@ -22,6 +22,9 @@ Route::get('/robots.txt', function () {
 
 });
 
+Route::any('/api/{any}', fn () => response()->json(['message' => 'Not found.'], 404))
+    ->where('any', '.*');
+
 Route::get('/{any}', function () {
     return view('index');
 })->where('any', '.*');

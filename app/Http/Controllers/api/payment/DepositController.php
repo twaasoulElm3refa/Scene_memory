@@ -2,121 +2,83 @@
 
 namespace App\Http\Controllers\api\payment;
 
-use App\Http\Controllers\concerns\ApiResponse;
+use App\Exceptions\CommerceException;
 use App\Http\Controllers\Controller;
-use App\Repositories\Contracts\Purchases\PurchaseRepositoryInterface;
+use App\Http\Requests\WalletDepositRequest;
+use App\Models\Payment;
+use App\Models\Purchases;
 use App\Services\PayPalWalletServices;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class DepositController extends Controller
 {
-    use ApiResponse;
+    public function __construct(private readonly PayPalWalletServices $paypal) {}
 
-    public function __construct(
-        protected PayPalWalletServices $paypal,
-        private readonly PurchaseRepositoryInterface $purchaseRepository
-    ) {}
-
-    // POST /api/v1/deposit/pay
-    public function create(Request $request): JsonResponse
+    public function create(WalletDepositRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'description' => 'nullable|string|max:255',
-            'idempotency_key' => 'nullable|string|max:64',
-        ]);
-
-        $validated['user_id'] = $request->user()?->id;
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
 
         try {
-            ['order' => $order, 'approval_url' => $url] = $this->paypal->pay($validated);
-
-            return response()->json([
-                'success' => true,
-                'order_id' => $order->id,
-                'approval_url' => $url,
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+            ['order' => $order, 'approval_url' => $url] = $this->paypal->pay($data);
+            return response()->json(['order_id' => $order->id, 'approval_url' => $url]);
+        } catch (CommerceException $exception) {
+            return response()->json(['message' => $exception->getMessage()], $exception->status);
+        } catch (Throwable $exception) {
+            Log::error('wallet_deposit_order_creation_failed', ['user_id' => $request->user()->id, 'exception' => $exception::class]);
+            return response()->json(['message' => 'Unable to create the wallet deposit.'], 502);
         }
     }
 
-    // GET /api/v1/wallet/success?token=xxx
     public function success(Request $request)
     {
-        $token = $request->query('token');
-
-        if (! $token) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Token missing.',
-            ], 400);
+        $token = (string) $request->query('token', '');
+        if ($token === '') {
+            return response()->json(['message' => 'Token missing.'], 400);
         }
 
         try {
             $result = $this->paypal->success($token);
-
-            $orderId = $result['order_id'] ?? $result['order']?->id;
-
-            if (! $orderId) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Order ID missing.',
-                ], 500);
-            }
-
             return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/Deposit/waiting?'.http_build_query([
-                'order_id' => $orderId,
-                'status' => $result['order']->status,
+                'order_id' => $result['order_id'],
             ]));
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+        } catch (Throwable) {
+            return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/deposit/failed');
         }
     }
 
-    // GET /api/v1/wallet/cancel
-    public function cancel(): JsonResponse
+    public function cancel()
     {
-        try {
-            return response()->json($this->paypal->cancel());
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
-        }
+        return redirect(rtrim((string) config('app.frontend_url'), '/').'/en/deposit/failed?cancelled=1');
     }
 
-    // GET /api/v1/wallet/order-status/{id}
-    public function orderStatus(Request $request, $id): JsonResponse
+    public function orderStatus(Request $request, int $id): JsonResponse
     {
-        $order = $this->purchaseRepository->findById((int) $id);
-
+        $order = Purchases::query()
+            ->whereKey($id)
+            ->where('user_id', $request->user()->id)
+            ->where('type', 'wallet_deposit')
+            ->first();
         if (! $order) {
-            return response()->json([
-                'status' => 'not_found',
-            ], 404);
+            return response()->json(['message' => 'Order not found.'], 404);
         }
+        $payment = Payment::query()
+            ->where('order_id', $order->id)
+            ->where('operation', 'wallet_deposit')
+            ->latest('id')
+            ->first();
 
         return response()->json([
-            'status' => $order->status,
-            'amount' => $order->amount,
             'order_id' => $order->id,
+            'status' => $payment?->status ?? $order->status,
+            'amount' => $order->amount,
+            'currency' => $order->currency,
+            'payment_method' => 'paypal',
+            'paid_at' => $payment?->paid_at?->toIso8601String(),
+            'fulfillment_status' => $payment?->wallet_credited ? 'wallet_credited' : 'pending',
         ]);
-    }
-
-    public function clearUserProfileCache($id): void
-    {
-        $cacheKey = 'user_profile_'.$id;
-        Cache::tags(['user_profile', 'user_'.$id])->forget($cacheKey);
     }
 }

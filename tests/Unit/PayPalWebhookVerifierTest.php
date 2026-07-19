@@ -6,7 +6,7 @@ use App\Services\PayPalGateway;
 use App\Services\PayPalWebhookVerifier;
 use Illuminate\Http\Request;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class PayPalWebhookVerifierTest extends TestCase
 {
@@ -18,6 +18,7 @@ class PayPalWebhookVerifierTest extends TestCase
 
     public function test_it_returns_true_only_for_paypal_success_response(): void
     {
+        config()->set('paypal.mode', 'sandbox');
         $rawBody = '{"id":"WH-UNIT","event_type":"PAYMENT.CAPTURE.COMPLETED","resource":{"id":"CAPTURE-1"}}';
         $request = Request::create('/api/v1/paypal/webhook', 'POST', [], [], [], [
             'HTTP_PAYPAL_TRANSMISSION_ID' => 'transmission-id',
@@ -39,5 +40,33 @@ class PayPalWebhookVerifierTest extends TestCase
         $verifier = new PayPalWebhookVerifier($gateway);
 
         $this->assertTrue($verifier->verify($request, $rawBody, 'configured-webhook-id'));
+    }
+
+    public function test_it_fails_closed_when_signature_headers_are_missing(): void
+    {
+        config()->set('paypal.mode', 'sandbox');
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldNotReceive('verifyWebhookSignature');
+        $verifier = new PayPalWebhookVerifier($gateway);
+        $request = Request::create('/api/v1/paypal/webhook', 'POST', [], [], [], [], '{"id":"WH"}');
+
+        $this->assertFalse($verifier->verify($request, $request->getContent(), 'configured-webhook-id'));
+    }
+
+    public function test_it_rejects_a_certificate_url_outside_the_expected_paypal_host(): void
+    {
+        config()->set('paypal.mode', 'live');
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldNotReceive('verifyWebhookSignature');
+        $verifier = new PayPalWebhookVerifier($gateway);
+        $request = Request::create('/api/v1/paypal/webhook', 'POST', [], [], [], [
+            'HTTP_PAYPAL_TRANSMISSION_ID' => 'id',
+            'HTTP_PAYPAL_TRANSMISSION_TIME' => 'time',
+            'HTTP_PAYPAL_CERT_URL' => 'https://attacker.example/cert.pem',
+            'HTTP_PAYPAL_AUTH_ALGO' => 'algo',
+            'HTTP_PAYPAL_TRANSMISSION_SIG' => 'sig',
+        ], '{"id":"WH"}');
+
+        $this->assertFalse($verifier->verify($request, $request->getContent(), 'configured-webhook-id'));
     }
 }

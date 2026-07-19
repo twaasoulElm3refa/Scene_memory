@@ -342,8 +342,12 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { CartService } from "@/services/CartService/CartService";
 import { PaymentService } from "../../services/PaymentService/PaymentService";
+import { getOrCreateIdempotencyKey, clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
+
+const router = useRouter();
 
 // ══════════════════════════════════════════════════════════
 // STATE
@@ -382,10 +386,10 @@ const total = computed(() =>
     items.value.reduce((sum, item) => sum + getItemFinalPrice(item), 0)
 );
 
-const idempotencyKey = computed(() => {
+const cartFingerprint = () => {
     const ids = [...items.value.map(i => i.id)].sort().join('-');
-    return `cart-${ids}-${total.value.toFixed(2)}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-});
+    return `cart-${ids}`;
+};
 
 // ══════════════════════════════════════════════════════════
 // MEDIA HELPERS
@@ -631,14 +635,9 @@ const handleCheckout = async () => {
 
     try {
         const { data } = await PaymentService.pay({
-            amount: total.value,
-            description: `Cart (${items.value.length} items)`,
-            idempotency_key: idempotencyKey.value,
+            type: "cart",
+            idempotency_key: getOrCreateIdempotencyKey("cart:paypal", cartFingerprint()),
         });
-
-        if (!data.success) {
-            throw new Error(data.message || "Payment initiation failed");
-        }
 
         window.location.href = data.approval_url;
 
@@ -664,20 +663,20 @@ const handleWalletCheckout = async () => {
 
     try {
         const data = await CartService.payWithWallet({
-            amount: total.value,
-            description: `Cart (${items.value.length} items)`,
-            idempotency_key: idempotencyKey.value,
+            type: "cart",
+            idempotency_key: getOrCreateIdempotencyKey("cart:wallet", cartFingerprint()),
         });
 
-        if (!data.success) {
+        if (data.status !== "completed") {
             throw new Error(data.message || "Wallet payment failed");
         }
 
-        walletAmount.value = (parseFloat(walletAmount.value) - total.value).toFixed(2);
-        items.value = [];
+        clearIdempotencyKey("cart:wallet");
+        walletAmount.value = data.balance;
+        await Promise.all([fetchCart(), fetchWallet()]);
         showToast('Payment successful! 🎉 Paid from wallet.', 'success', 5000);
-        window.location.reload();
-        window.location.href = '/en/downloads';
+        const lang = localStorage.getItem("lang") || "en";
+        router.replace(`/${lang}/downloads`);
     } catch (e) {
         console.error(e);
         showToast(e.message || "Wallet payment failed. Please try again.", 'error', 4000);

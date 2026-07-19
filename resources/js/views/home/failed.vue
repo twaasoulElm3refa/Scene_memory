@@ -71,8 +71,13 @@
 </template>
 
 <script>
+import { clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
+
 export default {
     name: 'PaymentFailed',
+    mounted() {
+        clearIdempotencyKey("cart:paypal");
+    },
     computed: {
         errorReason() {
             const reasons = {

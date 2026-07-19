@@ -65,8 +65,8 @@
             <!-- Thumbnail -->
             <div class="media-thumb">
               <img
-                v-if="isImage(item.full_url)"
-                :src="getUrl(item.full_url)"
+                v-if="isImage(item.preview_url)"
+                :src="getUrl(item.preview_url)"
                 :alt="`file-${item.id}`"
                 class="thumb-img"
                 loading="lazy"
@@ -77,18 +77,18 @@
                 playsinline
                 preload="metadata"
               >
-                <source :src="getUrl(item.full_url)" />
+                <source :src="getUrl(item.preview_url)" />
               </video>
 
               <!-- Type badge -->
               <span class="type-badge">
-                <svg v-if="isImage(item.full_url)" width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                <svg v-if="isImage(item.preview_url)" width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
                 </svg>
                 <svg v-else width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M15 10l4.553-2.277A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4zM3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
                 </svg>
-                {{ isImage(item.full_url) ? 'IMG' : 'VID' }}
+                {{ isImage(item.preview_url) ? 'IMG' : 'VID' }}
               </span>
 
               <!-- Done checkmark overlay -->
@@ -105,7 +105,7 @@
 
               <!-- Hover overlay -->
               <div class="thumb-overlay">
-                <button class="preview-btn" @click="openFile(item.full_url)">
+                <button class="preview-btn" @click="openFile(item.preview_url)">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -232,7 +232,8 @@ const showToast = (message, type = "success") => {
 /* ── URL ── */
 const getUrl = (path) => {
   if (!path) return "";
-  return `http://127.0.0.1:8000/storage/${path}`;
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) return path;
+  return `/storage/${path}`;
 };
 
 /* ── Download URL — goes through Laravel to force download ── */
@@ -274,11 +275,11 @@ const downloadFile = async (item) => {
   if (downloadingId.value === item.id || doneIds.value.has(item.id)) return;
 
   downloadingId.value = item.id;
-  const filename = getFilename(item.full_url);
+  const filename = `scemory-media-${item.id}`;
 
   try {
     // Option 1: via Laravel endpoint (recommended — avoids CORS)
-    const response = await downloadService.downloadFile(item.full_url);
+    const response = await downloadService.downloadFile(item.id);
     const blob      = response.data;
     const objectUrl = URL.createObjectURL(blob);
     const anchor    = document.createElement("a");

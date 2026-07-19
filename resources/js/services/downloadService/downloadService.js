@@ -11,9 +11,8 @@ export default {
     }
   },
 
-  async downloadFile(path) {
-    return api.get("/download", {
-      params: { path },
+  async downloadFile(mediaId) {
+    return api.get(`/download/${mediaId}`, {
       responseType: "blob",
     });
   },

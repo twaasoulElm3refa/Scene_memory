@@ -67,10 +67,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { v4 as uuidv4 } from 'uuid'
 import { PaymentService } from '../../services/PaymentService/PaymentService'
+import { getOrCreateIdempotencyKey } from '../../services/PaymentService/checkoutSession'
 
-const idempotencyKey = ref(uuidv4())
 // Props — تمرر البيانات من الصفحة الأب
 const props = defineProps({
     wallet: { type: Object, default: null },
@@ -85,6 +84,10 @@ const form = ref({
     amount: '',
     description: '',
 })
+
+const idempotencyKey = computed(() =>
+    getOrCreateIdempotencyKey("wallet_deposit:paypal", String(form.value.amount))
+)
 
 function selectPreset(val) {
     selectedPreset.value = val

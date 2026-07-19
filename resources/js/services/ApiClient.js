@@ -53,7 +53,6 @@ const api = axios.create({
     headers: {
         Accept: "application/json",
         "Accept-Language": getLang(),
-        "x-api-key": "K7xP9mQ2vR8tL3sNf6GdJ1aB9zW4cH0y",
     },
 });
 
@@ -94,12 +93,6 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const status = error.response?.status;
-
-        console.group("Axios Global Error");
-        console.error("Full error:", error);
-        console.error("Status:", status);
-        console.error("Response data:", error?.response?.data);
-        console.groupEnd();
 
         if (error.config?.suppressGlobalErrorToast) {
             return Promise.reject(error);

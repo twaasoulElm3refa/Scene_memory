@@ -96,8 +96,14 @@
 </template>
 
 <script>
+import { clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
+
 export default {
   name: "PaymentFailed",
+
+  mounted() {
+    clearIdempotencyKey("wallet_deposit:paypal");
+  },
 
   computed: {
     errorReason() {

@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Models\PaypalWebhookEvent;
 use Closure;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use JsonException;
 use Throwable;
 
 class PayPalWebhookProcessor
@@ -23,105 +25,117 @@ class PayPalWebhookProcessor
         'PAYMENT.CAPTURE.REVERSED',
     ];
 
-    public function __construct(private readonly PayPalWebhookVerifier $verifier) {}
+    public function __construct(
+        private readonly PayPalWebhookVerifier $verifier,
+        private readonly PayPalOrderResolver $resolver,
+        private readonly PayPalCaptureData $captureData,
+    ) {}
 
-    public function process(
-        Request $request,
-        ?string $webhookId,
-        string $webhookType,
-        Closure $handler,
-    ): JsonResponse {
+    public function process(Request $request, ?string $webhookId, string $webhookType, Closure $handler): JsonResponse
+    {
         $rawBody = $request->getContent();
-        $payload = json_decode($rawBody, true);
-        $eventId = is_array($payload) ? ($payload['id'] ?? null) : null;
-        $eventType = is_array($payload) ? ($payload['event_type'] ?? null) : null;
-
-        Log::info('PayPal webhook received', [
-            'event_id' => $eventId,
-            'event_type' => $eventType,
-            'transmission_id' => $request->header('PAYPAL-TRANSMISSION-ID'),
-            'webhook_route' => $request->path(),
-            'timestamp' => now()->toIso8601String(),
-        ]);
-
-        if (! is_array($payload)) {
+        try {
+            $payload = json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return response()->json(['status' => 'invalid'], 400);
+        }
+        if (! is_array($payload) || ! is_string($payload['id'] ?? null) || trim($payload['id']) === ''
+            || ! is_string($payload['event_type'] ?? null) || trim($payload['event_type']) === '') {
             return response()->json(['status' => 'invalid'], 400);
         }
 
-        if (! $webhookId) {
-            Log::error('PayPal webhook ID is not configured', [
-                'event_id' => $eventId,
-                'event_type' => $eventType,
-                'webhook_type' => $webhookType,
-            ]);
-
-            return response()->json(['status' => 'error'], 500);
+        $eventId = $payload['id'];
+        $eventType = $payload['event_type'];
+        Log::info('webhook_received', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
+        if (! is_string($webhookId) || $webhookId === '') {
+            Log::error('payment_validation_failed', ['event_id' => $eventId, 'reason' => 'webhook_id_not_configured']);
+            return response()->json(['status' => 'error'], 503);
         }
 
         try {
-            if (! $this->verifier->verify($request, $rawBody, $webhookId)) {
+            if (! $this->verificationBypassed() && ! $this->verifier->verify($request, $rawBody, $webhookId)) {
                 return response()->json(['status' => 'invalid'], 400);
             }
         } catch (Throwable $exception) {
             $this->logException($exception, $eventId, $eventType);
-
             return response()->json(['status' => 'error'], 500);
         }
+        Log::info('webhook_verified', ['event_id' => $eventId, 'event_type' => $eventType]);
 
-        if (! is_string($eventId) || $eventId === '' || ! is_string($eventType) || $eventType === '') {
-            return response()->json(['status' => 'invalid'], 400);
-        }
-
-        $event = PaypalWebhookEvent::firstOrCreate(
-            ['event_id' => $eventId],
-            [
-                'event_type' => $eventType,
-                'webhook_type' => $webhookType,
-                'status' => 'processing',
-            ],
-        );
-
-        if (! $event->wasRecentlyCreated && in_array($event->status, ['processing', 'processed'], true)) {
-            return response()->json(['status' => 'duplicate']);
-        }
-
-        if ($event->status === 'failed') {
-            $event->update(['status' => 'processing', 'error' => null]);
-        }
+        $resource = $payload['resource'] ?? [];
+        $payment = $this->resolver->resolve($payload, false);
+        $attributes = [
+            'event_type' => $eventType,
+            'payment_id' => $payment?->id,
+            'paypal_order_id' => is_array($resource) ? $this->captureData->extractPaypalOrderId($resource) : null,
+            'capture_id' => is_array($resource) ? $this->captureData->extractCaptureId($resource) : null,
+            'payload' => $payload,
+            'webhook_type' => $webhookType,
+            'status' => 'received',
+            'received_at' => now(),
+        ];
 
         try {
-            $status = DB::transaction(function () use ($event, $eventType, $handler, $payload) {
-                $status = in_array($eventType, self::SUPPORTED_EVENTS, true)
-                    ? $handler($payload)
-                    : 'ignored';
+            $event = PaypalWebhookEvent::firstOrCreate(['event_id' => $eventId], $attributes);
+        } catch (QueryException) {
+            $event = PaypalWebhookEvent::where('event_id', $eventId)->firstOrFail();
+        }
 
-                $event->update([
-                    'status' => 'processed',
+        if (! $event->wasRecentlyCreated) {
+            if (in_array($event->status, ['processed', 'ignored'], true)
+                || ($event->status === 'processing' && $event->updated_at?->gt(now()->subMinutes(5)))) {
+                Log::info('webhook_duplicate', ['event_id' => $eventId, 'status' => $event->status]);
+                return response()->json(['status' => 'duplicate']);
+            }
+        }
+
+        DB::transaction(function () use ($event) {
+            PaypalWebhookEvent::query()->lockForUpdate()->findOrFail($event->id)->update([
+                'status' => 'processing',
+                'error' => null,
+                'error_message' => null,
+            ]);
+        }, 5);
+
+        try {
+            $status = in_array($eventType, self::SUPPORTED_EVENTS, true) ? $handler($payload) : 'ignored';
+            $finalStatus = $status === 'ignored' ? 'ignored' : 'processed';
+            DB::transaction(function () use ($event, $finalStatus, $payment, $resource) {
+                PaypalWebhookEvent::query()->lockForUpdate()->findOrFail($event->id)->update([
+                    'payment_id' => $payment?->id,
+                    'paypal_order_id' => is_array($resource) ? $this->captureData->extractPaypalOrderId($resource) : null,
+                    'capture_id' => is_array($resource) ? $this->captureData->extractCaptureId($resource) : null,
+                    'status' => $finalStatus,
                     'error' => null,
+                    'error_message' => null,
                     'processed_at' => now(),
                 ]);
+            }, 5);
 
-                return in_array($status, ['ok', 'ignored'], true) ? $status : 'ok';
-            });
-
-            return response()->json(['status' => $status]);
+            return response()->json(['status' => $status === 'ignored' ? 'ignored' : 'ok']);
         } catch (Throwable $exception) {
-            $event->update([
+            PaypalWebhookEvent::whereKey($event->id)->update([
                 'status' => 'failed',
                 'error' => Str::limit($exception->getMessage(), 500, ''),
+                'error_message' => Str::limit($exception->getMessage(), 500, ''),
             ]);
+            Log::warning('payment_validation_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'exception' => $exception::class]);
             $this->logException($exception, $eventId, $eventType);
-
             return response()->json(['status' => 'error'], 500);
         }
     }
 
-    private function logException(Throwable $exception, ?string $eventId, ?string $eventType): void
+    private function verificationBypassed(): bool
     {
-        Log::error('PayPal webhook processing failed', [
-            'message' => $exception->getMessage(),
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
+        return ! config('paypal.verify_webhooks', true)
+            && config('paypal.allow_local_webhook_bypass', false)
+            && app()->environment(['local', 'testing']);
+    }
+
+    private function logException(Throwable $exception, string $eventId, string $eventType): void
+    {
+        Log::error('paypal_webhook_processing_failed', [
+            'exception' => $exception::class,
             'event_id' => $eventId,
             'event_type' => $eventType,
         ]);
