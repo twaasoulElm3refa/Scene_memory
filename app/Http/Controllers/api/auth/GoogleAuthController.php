@@ -7,6 +7,7 @@ use App\Mail\WelcomeMail;
 use App\Repositories\Contracts\Users\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -58,7 +59,9 @@ class GoogleAuthController extends Controller
                 ! empty($user->country) &&
                 ! empty($user->position) &&
                 ! empty($user->date_of_birth);
-            Mail::to($user->email)->queue(new WelcomeMail($user));
+            if ($user->wasRecentlyCreated) {
+                Mail::to($user->email)->queue(new WelcomeMail($user));
+            }
 
             $payload = [
                 'status' => 'success',
@@ -72,6 +75,7 @@ class GoogleAuthController extends Controller
             ];
 
             if ($request->expectsJson()) {
+
                 return response()->json($payload);
             }
 
@@ -89,9 +93,10 @@ class GoogleAuthController extends Controller
 
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
+                Log::error($e);
                 return response()->json([
                     'status' => 'error',
-                    'message' => $e->getMessage(),
+                    'message' => 'Something went wrong',
                 ], 400);
             }
 
