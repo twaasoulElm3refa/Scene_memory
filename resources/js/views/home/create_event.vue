@@ -218,7 +218,7 @@
                                                     type="button"
                                                     class="form-control form-control-md rounded-3 text-start d-flex flex-wrap align-items-center gap-2"
                                                     :disabled="loadingTags"
-                                                    @click="showTagsDropdown = !showTagsDropdown"
+                                                    @click="toggleTagsDropdown"
                                                 >
                                                     <span v-if="loadingTags" class="text-muted">Loading tags...</span>
 
@@ -283,7 +283,7 @@
                                                         <span>#{{ tag.name }}</span>
                                                     </label>
 
-                                                    <div v-if="filteredTags.length === 0 && !canAddNewTag" class="text-muted small px-2 py-2">
+                                                    <div v-if="tagSearch.trim() && filteredTags.length === 0 && !canAddNewTag" class="text-muted small px-2 py-2">
                                                         No tags found
                                                     </div>
                                                 </div>
@@ -486,11 +486,17 @@ const hasSelectedLocation = computed(() =>
 const filteredTags = computed(() => {
     const search = tagSearch.value.trim().toLowerCase();
 
-    if (!search) return tags.value;
+    if (!search) return [];
 
-    return tags.value.filter((tag) =>
-        String(tag.name || "").toLowerCase().includes(search)
-    );
+    return tags.value.filter((tag) => {
+        const alreadySelected = selectedTags.value.some(
+            (selected) => !selected.isNew && String(selected.id) === String(tag.id)
+        );
+
+        if (alreadySelected) return false;
+
+        return String(tag.name || "").toLowerCase().includes(search);
+    });
 });
 
 const canAddNewTag = computed(() => {
@@ -498,9 +504,15 @@ const canAddNewTag = computed(() => {
 
     if (!name) return false;
 
-    return !selectedTags.value.some(
+    const existsInAllTags = tags.value.some(
         (tag) => String(tag.name || "").toLowerCase() === name.toLowerCase()
     );
+
+    const existsInSelected = selectedTags.value.some(
+        (tag) => String(tag.name || "").toLowerCase() === name.toLowerCase()
+    );
+
+    return !existsInAllTags && !existsInSelected;
 });
 
 const isPhotographyPhaseValid = computed(() =>
@@ -685,6 +697,14 @@ function isTagSelected(tagId) {
     return selectedTags.value.some(
         (tag) => !tag.isNew && String(tag.id) === String(tagId)
     );
+}
+
+function toggleTagsDropdown() {
+    showTagsDropdown.value = !showTagsDropdown.value;
+
+    if (showTagsDropdown.value) {
+        tagSearch.value = "";
+    }
 }
 
 function toggleTag(tag) {
