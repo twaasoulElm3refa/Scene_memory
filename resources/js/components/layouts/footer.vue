@@ -31,7 +31,7 @@
           <!-- Logo -->
           <div class="mb-3">
             <img
-              src="/images/event_logo.png"
+              src="/images/logo.png"
               alt="Logo"
               class="rounded-circle logo-glow p-1 w-50"
             />
