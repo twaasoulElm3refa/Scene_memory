@@ -7,6 +7,7 @@ use App\Models\Entitlement;
 use App\Models\EventsImges;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -15,12 +16,19 @@ class DownloadController extends Controller
 {
     public function downloads(Request $request): JsonResponse
     {
+        $latestEntitlements = DB::table('entitlements')
+            ->select('media_id')
+            ->selectRaw('MAX(granted_at) AS latest_granted_at')
+            ->where('user_id', $request->user()->id)
+            ->groupBy('media_id');
+
         $media = EventsImges::query()
             ->select(['events_imges.id', 'events_imges.preview_url', 'events_imges.type', 'events_imges.width', 'events_imges.height'])
-            ->join('entitlements', 'entitlements.media_id', '=', 'events_imges.id')
-            ->where('entitlements.user_id', $request->user()->id)
-            ->orderByDesc('entitlements.granted_at')
-            ->distinct()
+            ->joinSub($latestEntitlements, 'user_entitlements', function ($join) {
+                $join->on('user_entitlements.media_id', '=', 'events_imges.id');
+            })
+            ->orderByDesc('user_entitlements.latest_granted_at')
+            ->orderByDesc('events_imges.id')
             ->get()
             ->map(fn (EventsImges $item) => [
                 'id' => $item->id,

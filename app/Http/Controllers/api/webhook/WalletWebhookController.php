@@ -7,7 +7,6 @@ use App\Services\PayPalWalletServices;
 use App\Services\PayPalWebhookProcessor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class WalletWebhookController extends Controller
 {
@@ -18,21 +17,9 @@ class WalletWebhookController extends Controller
 
     public function handle(Request $request): JsonResponse
     {
-        Log::info('SCEMORY_WEBHOOK_ENDPOINT_REACHED', [
-            'path' => $request->path(),
-            'method' => $request->method(),
-            'ip' => $request->ip(),
-            'content_type' => $request->header('Content-Type'),
-            'event_id' => $request->input('id'),
-            'event_type' => $request->input('event_type'),
-            'has_transmission_id' => filled($request->header('PAYPAL-TRANSMISSION-ID')),
-            'has_transmission_sig' => filled($request->header('PAYPAL-TRANSMISSION-SIG')),
-            'webhook_type' => 'wallet',
-        ]);
-
         return $this->processor->process(
             $request,
-            config('paypal.wallet_webhook_id'),
+            config('paypal.webhooks.wallet'),
             'wallet',
             fn (array $payload) => $this->paypal->handleWebhook($payload),
         );
