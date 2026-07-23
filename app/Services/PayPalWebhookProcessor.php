@@ -48,6 +48,22 @@ class PayPalWebhookProcessor
 
         $eventId = $payload['id'];
         $eventType = $payload['event_type'];
+        Log::info('SCEMORY_WEBHOOK_ENDPOINT_REACHED', [
+            'path' => $request->path(),
+            'method' => $request->method(),
+            'ip' => $request->ip(),
+            'content_type' => $request->header('Content-Type'),
+            'event_id' => $eventId,
+            'event_type' => $eventType,
+            'has_transmission_id' => filled($request->header('PAYPAL-TRANSMISSION-ID')),
+            'has_transmission_time' => filled($request->header('PAYPAL-TRANSMISSION-TIME')),
+            'has_cert_url' => filled($request->header('PAYPAL-CERT-URL')),
+            'has_auth_algo' => filled($request->header('PAYPAL-AUTH-ALGO')),
+            'has_transmission_sig' => filled($request->header('PAYPAL-TRANSMISSION-SIG')),
+            'webhook_type' => $webhookType,
+            'paypal_mode' => config('paypal.mode') === 'live' ? 'live' : 'sandbox',
+            'webhook_id' => $webhookId,
+        ]);
         Log::info('webhook_json_parsed', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         Log::info('webhook_received', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         if (! is_string($webhookId) || $webhookId === '') {
@@ -58,7 +74,7 @@ class PayPalWebhookProcessor
 
         try {
             Log::info('webhook_signature_started', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
-            if (! $this->verificationBypassed() && ! $this->verifier->verify($request, $rawBody, $webhookId)) {
+            if (! $this->verificationBypassed() && ! $this->verifier->verify($request, $rawBody, $webhookId, $webhookType)) {
                 Log::warning('webhook_signature_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
                 return response()->json(['status' => 'invalid'], 400);
             }
@@ -78,15 +94,19 @@ class PayPalWebhookProcessor
             'paypal_order_id' => is_array($resource) ? $this->captureData->extractPaypalOrderId($resource) : null,
             'capture_id' => is_array($resource) ? $this->captureData->extractCaptureId($resource) : null,
             'payload' => $payload,
-            'webhook_type' => $webhookType,
             'status' => 'received',
             'received_at' => now(),
         ];
 
         try {
-            $event = PaypalWebhookEvent::firstOrCreate(['event_id' => $eventId], $attributes);
+            $event = PaypalWebhookEvent::firstOrCreate([
+                'event_id' => $eventId,
+                'webhook_type' => $webhookType,
+            ], $attributes);
         } catch (QueryException) {
-            $event = PaypalWebhookEvent::where('event_id', $eventId)->firstOrFail();
+            $event = PaypalWebhookEvent::where('event_id', $eventId)
+                ->where('webhook_type', $webhookType)
+                ->firstOrFail();
         }
         Log::info('webhook_event_registered', [
             'event_id' => $eventId,
@@ -98,7 +118,7 @@ class PayPalWebhookProcessor
         if (! $event->wasRecentlyCreated) {
             if (in_array($event->status, ['processed', 'ignored'], true)
                 || ($event->status === 'processing' && $event->updated_at?->gt(now()->subMinutes(5)))) {
-                Log::info('webhook_duplicate', ['event_id' => $eventId, 'status' => $event->status]);
+                Log::info('webhook_duplicate', ['event_id' => $eventId, 'webhook_type' => $webhookType, 'status' => $event->status]);
                 return response()->json(['status' => 'duplicate']);
             }
         }

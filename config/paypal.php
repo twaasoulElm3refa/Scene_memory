@@ -8,9 +8,9 @@
 return [
     'mode' => env('PAYPAL_MODE', 'sandbox'), // Can only be 'sandbox' Or 'live'. If empty or invalid, 'live' will be used.
     'sandbox' => [
-        'client_id' => env('PAYPAL_SANDBOX_CLIENT_ID', 'AapJPrBio7SSdYUbifrT858Yv7koS8qQmCYFBff4HsGn642ekA4iWQG9I31BOxutCxFZGVxGLRoqOahN'),
-        'client_secret' => env('PAYPAL_SANDBOX_CLIENT_SECRET', 'EMkxGd3hykpDZYPVnpo6DfFgRpRyndXs_8LK8IPIpb-3Gi6JqZ7KwLxgHrMR2A2m39c4z6QdvBPI2oQ4'),
-        'app_id' => 'APP-80W284485P519543T',
+        'client_id' => env('PAYPAL_SANDBOX_CLIENT_ID', ''),
+        'client_secret' => env('PAYPAL_SANDBOX_CLIENT_SECRET', ''),
+        'app_id' => env('PAYPAL_SANDBOX_APP_ID', 'APP-80W284485P519543T'),
     ],
     'live' => [
         'client_id' => env('PAYPAL_LIVE_CLIENT_ID', ''),
@@ -23,9 +23,20 @@ return [
     'notify_url' => env('PAYPAL_NOTIFY_URL', ''), // Change this accordingly for your application.
     'locale' => env('PAYPAL_LOCALE', 'en_US'), // force gateway language  i.e. it_IT, es_ES, en_US ... (for express checkout only)
     'validate_ssl' => env('PAYPAL_VALIDATE_SSL', true),
-    'webhook_id' => env('PAYPAL_WEBHOOK_ID', "3CS9110385018940X"),
-    'wallet_webhook_id' => env('PAYPAL_WALLET_WEBHOOK_ID',"8A229500A5104854Y"),
+    'webhooks' => [
+        'checkout' => env('PAYPAL_WEBHOOK_ID', env('PAYPAL_CHECKOUT_WEBHOOK_ID', '')),
+        'wallet' => env('PAYPAL_WALLET_WEBHOOK_ID', ''),
+    ],
+    'webhook_id' => env('PAYPAL_WEBHOOK_ID', env('PAYPAL_CHECKOUT_WEBHOOK_ID', '')),
+    'wallet_webhook_id' => env('PAYPAL_WALLET_WEBHOOK_ID', ''),
     'merchant_id' => env('PAYPAL_MERCHANT_ID'),
     'verify_webhooks' => env('PAYPAL_VERIFY_WEBHOOKS', true),
     'allow_local_webhook_bypass' => env('PAYPAL_ALLOW_LOCAL_WEBHOOK_BYPASS', false),
+    'api' => [
+        'sandbox_url' => env('PAYPAL_SANDBOX_API_URL', 'https://api-m.sandbox.paypal.com'),
+        'live_url' => env('PAYPAL_LIVE_API_URL', 'https://api-m.paypal.com'),
+        'timeout' => (int) env('PAYPAL_API_TIMEOUT', 10),
+        'retry_times' => (int) env('PAYPAL_API_RETRY_TIMES', 2),
+        'retry_sleep_ms' => (int) env('PAYPAL_API_RETRY_SLEEP_MS', 200),
+    ],
 ];

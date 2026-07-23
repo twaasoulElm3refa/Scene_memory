@@ -26,6 +26,8 @@ class PayPalWebhookTest extends TestCase
         parent::setUp();
         config()->set('paypal.webhook_id', 'checkout-webhook-test');
         config()->set('paypal.wallet_webhook_id', 'wallet-webhook-test');
+        config()->set('paypal.webhooks.checkout', 'checkout-webhook-test');
+        config()->set('paypal.webhooks.wallet', 'wallet-webhook-test');
         config()->set('paypal.merchant_id', 'MERCHANT-TEST');
         config()->set('paypal.currency', 'USD');
         Mail::fake();
@@ -73,6 +75,30 @@ class PayPalWebhookTest extends TestCase
         $this->assertSame('ignored', $event->status);
         $this->assertSame('WH-IGNORED', $event->payload['id']);
         $this->assertNotNull($event->received_at);
+    }
+
+    public function test_same_event_id_is_idempotent_per_webhook_type(): void
+    {
+        $this->mockVerifier(true, 2, ['checkout-webhook-test', 'wallet-webhook-test']);
+        $payload = ['id' => 'WH-SHARED', 'event_type' => 'CATALOG.PRODUCT.CREATED', 'resource' => []];
+
+        $this->postWebhook('/api/v1/paypal/webhook', $payload)
+            ->assertOk()
+            ->assertExactJson(['status' => 'ignored']);
+        $this->postWebhook('/api/v1/wallet/webhook', $payload)
+            ->assertOk()
+            ->assertExactJson(['status' => 'ignored']);
+
+        $this->assertDatabaseHas('paypal_webhook_events', [
+            'event_id' => 'WH-SHARED',
+            'webhook_type' => 'checkout',
+            'status' => 'ignored',
+        ]);
+        $this->assertDatabaseHas('paypal_webhook_events', [
+            'event_id' => 'WH-SHARED',
+            'webhook_type' => 'wallet',
+            'status' => 'ignored',
+        ]);
     }
 
     public function test_completed_purchase_capture_is_fulfilled_exactly_once(): void
@@ -215,11 +241,13 @@ class PayPalWebhookTest extends TestCase
         ];
     }
 
-    private function mockVerifier(bool $result, int $times = 1, string $webhookId = 'checkout-webhook-test'): void
+    private function mockVerifier(bool $result, int $times = 1, string|array $webhookId = 'checkout-webhook-test'): void
     {
+        $webhookIds = (array) $webhookId;
         $verifier = Mockery::mock(PayPalWebhookVerifier::class);
         $verifier->shouldReceive('verify')->times($times)
-            ->withArgs(fn ($request, $body, $id) => $id === $webhookId)
+            ->withArgs(fn ($request, $body, $id, $type) => in_array($id, $webhookIds, true)
+                && in_array($type, ['checkout', 'wallet'], true))
             ->andReturn($result);
         $this->app->instance(PayPalWebhookVerifier::class, $verifier);
     }
