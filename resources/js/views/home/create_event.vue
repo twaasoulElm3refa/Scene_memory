@@ -293,6 +293,25 @@
                                                     >
                                                         Clear selected tags
                                                     </button>
+
+                                                    <label
+                                                        v-for="tag in filteredTags"
+                                                        :key="tag.id"
+                                                        class="d-flex align-items-center gap-2 px-2 py-2 rounded-3"
+                                                        style="cursor: pointer"
+                                                    >
+                                                        <input
+                                                            class="form-check-input m-0"
+                                                            type="checkbox"
+                                                            :checked="isTagSelected(tag.id)"
+                                                            @change="toggleTag(tag)"
+                                                        />
+                                                        <span>#{{ tag.name }}</span>
+                                                    </label>
+
+                                                    <div v-if="tagSearch.trim() && filteredTags.length === 0 && !canAddNewTag" class="text-muted small px-2 py-2">
+                                                        No tags found
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -500,9 +519,15 @@ const filteredTags = computed(() => {
 
     if (!search) return [];
 
-    return tags.value.filter((tag) =>
-        String(tag.name || "").toLowerCase().includes(search)
-    );
+    return tags.value.filter((tag) => {
+        const alreadySelected = selectedTags.value.some(
+            (selected) => !selected.isNew && String(selected.id) === String(tag.id)
+        );
+
+        if (alreadySelected) return false;
+
+        return String(tag.name || "").toLowerCase().includes(search);
+    });
 });
 
 const canAddNewTag = computed(() => {
@@ -510,9 +535,15 @@ const canAddNewTag = computed(() => {
 
     if (!name) return false;
 
-    return !selectedTags.value.some(
+    const existsInAllTags = tags.value.some(
         (tag) => String(tag.name || "").toLowerCase() === name.toLowerCase()
     );
+
+    const existsInSelected = selectedTags.value.some(
+        (tag) => String(tag.name || "").toLowerCase() === name.toLowerCase()
+    );
+
+    return !existsInAllTags && !existsInSelected;
 });
 
 const isPhotographyPhaseValid = computed(() =>
@@ -712,6 +743,14 @@ function isTagSelected(tagId) {
     return selectedTags.value.some(
         (tag) => !tag.isNew && String(tag.id) === String(tagId)
     );
+}
+
+function toggleTagsDropdown() {
+    showTagsDropdown.value = !showTagsDropdown.value;
+
+    if (showTagsDropdown.value) {
+        tagSearch.value = "";
+    }
 }
 
 function toggleTag(tag) {
