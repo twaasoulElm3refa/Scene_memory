@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\home;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsRequest;
+use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\ProcessEventVideoJob;
 use App\Jobs\TranslateEventJob;
@@ -13,10 +14,14 @@ use App\Models\Tags;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
 use App\Services\PhotoQualityService;
+use App\Services\TagResolverService;
+use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -27,34 +32,43 @@ class EventUserCreateController extends Controller
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly RequestRepositoryInterface $requestRepository,
-        private readonly PhotoQualityService $photoQualityService
-    ) {
-    }
+        private readonly PhotoQualityService $photoQualityService,
+        private readonly TagResolverService $tagResolver
+    ) {}
 
     public function create(EventsRequest $request)
     {
         $photoValidationResults = $this->validateUserPhotoPayload($request);
         $data = $request->validated();
         $this->stripUploadOnlyData($data);
+        $imageJobs = [];
+        $videoJobs = [];
 
         try {
-            $event = DB::transaction(function () use ($data, $request, $photoValidationResults) {
+            $event = DB::transaction(function () use (
+                $data,
+                $request,
+                $photoValidationResults,
+                &$imageJobs,
+                &$videoJobs
+            ) {
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
                 $event = $this->eventRepository->create($data);
                 $this->requestRepository->createEventRequest(['event_id' => $event->id]);
-                $event->update(['slug' => 'event' . '-' . Str::slug($data['title']) . $event->id]);
+                $event->update(['slug' => 'event'.'-'.Str::slug($data['title']).$event->id]);
                 $event->translations()->create([
-                    'locale'      => 'ar',
-                    'title'       => $data['title'],
+                    'locale' => 'ar',
+                    'title' => $data['title'],
                     'description' => $data['description'],
                 ]);
                 $this->syncEventTags($event->id, $request);
                 $uploadedFiles = $this->uploadedMediaFiles($request);
                 if (! empty($uploadedFiles)) {
                     foreach ($uploadedFiles as $index => $file) {
-                        if (!$file instanceof \Illuminate\Http\UploadedFile) {
+                        if (! $file instanceof UploadedFile) {
                             \Log::error('Invalid uploaded item in urls', ['type' => gettype($file)]);
+
                             continue;
                         }
                         $mime = (string) $file->getMimeType();
@@ -74,12 +88,13 @@ class EventUserCreateController extends Controller
                         ];
                         if (in_array($mime, $supportedImageMimes, true)) {
                             $tempPath = $file->store('images_temp', 'public');
-                            if (!$tempPath || trim($tempPath) === '') {
+                            if (! $tempPath || trim($tempPath) === '') {
                                 \Log::error('Image temp store failed', [
                                     'event_id' => $event->id,
                                     'name' => $file->getClientOriginalName(),
                                     'mime' => $mime,
                                 ]);
+
                                 continue;
                             }
                             $manualPrice = $request->input("media_prices.$index");
@@ -91,24 +106,29 @@ class EventUserCreateController extends Controller
                                 $index,
                                 $photoValidationResults[$index] ?? null
                             );
-                            \Log::info('Dispatching ProcessEventImageJob', [
+                            \Log::info('Preparing ProcessEventImageJob', [
                                 'event_id' => $event->id,
                                 'temp_path' => $tempPath,
                                 'manual_price' => $manualPrice,
                                 'file_name' => $file->getClientOriginalName(),
                             ]);
-                            ProcessEventImageJob::dispatch($event->id, $tempPath, $manualPrice, $photoMetadata);
+                            $imageJobs[] = new ProcessEventImageJob(
+                                $event->id,
+                                $tempPath,
+                                $manualPrice,
+                                $photoMetadata
+                            );
                         } elseif (str_starts_with($mime, 'video/')) {
                             try {
                                 $path = $file->store('videos_temp', 'public');
-                                ProcessEventVideoJob::dispatch($event->id, $path);
+                                $videoJobs[] = new ProcessEventVideoJob($event->id, $path);
                             } catch (\Throwable $e) {
                                 \Log::error('Video processing dispatch failed', [
-                                    'name'    => $file->getClientOriginalName(),
-                                    'mime'    => $mime,
+                                    'name' => $file->getClientOriginalName(),
+                                    'mime' => $mime,
                                     'message' => $e->getMessage(),
-                                    'file'    => $e->getFile(),
-                                    'line'    => $e->getLine(),
+                                    'file' => $e->getFile(),
+                                    'line' => $e->getLine(),
                                 ]);
                                 throw $e;
                             }
@@ -120,9 +140,11 @@ class EventUserCreateController extends Controller
                         }
                     }
                 }
+
                 return $event;
             });
 
+            $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
 
             $this->clearEventsCache($event->slug);
@@ -135,9 +157,9 @@ class EventUserCreateController extends Controller
         } catch (\Throwable $th) {
             \Log::error('Event create failed', [
                 'message' => $th->getMessage(),
-                'file'    => $th->getFile(),
-                'line'    => $th->getLine(),
-                'trace'   => $th->getTraceAsString(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
             ]);
 
             return $this->error($th->getMessage());
@@ -149,9 +171,17 @@ class EventUserCreateController extends Controller
         $photoValidationResults = $this->validateUserPhotoPayload($request);
         $data = $request->validated();
         $this->stripUploadOnlyData($data);
+        $imageJobs = [];
+        $videoJobs = [];
 
         try {
-            $event = DB::transaction(function () use ($data, $request, $photoValidationResults) {
+            $event = DB::transaction(function () use (
+                $data,
+                $request,
+                $photoValidationResults,
+                &$imageJobs,
+                &$videoJobs
+            ) {
                 // لاحظ: مش محتاجين $imageAnalysisService جوه الـ transaction دلوقتي
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = 0;
@@ -160,10 +190,10 @@ class EventUserCreateController extends Controller
                 $event = $this->eventRepository->create($data);
 
                 $this->requestRepository->createEventRequest(['event_id' => $event->id]);
-                $event->update(['slug' => 'event' . '-' . Str::slug($data['title']) .'-'. $event->id]);
+                $event->update(['slug' => 'event'.'-'.Str::slug($data['title']).'-'.$event->id]);
                 $event->translations()->create([
-                    'locale'      => 'ar',
-                    'title'       => $data['title'],
+                    'locale' => 'ar',
+                    'title' => $data['title'],
                     'description' => $data['description'],
                 ]);
 
@@ -173,8 +203,9 @@ class EventUserCreateController extends Controller
 
                 if (! empty($uploadedFiles)) {
                     foreach ($uploadedFiles as $index => $file) {
-                        if (!$file instanceof \Illuminate\Http\UploadedFile) {
+                        if (! $file instanceof UploadedFile) {
                             \Log::error('Invalid uploaded item in urls', ['type' => gettype($file)]);
+
                             continue;
                         }
 
@@ -199,12 +230,13 @@ class EventUserCreateController extends Controller
                             // ✅ بس نخزن temp ونـ dispatch — مفيش processing هنا
                             $tempPath = $file->store('images_temp', 'public');
 
-                            if (!$tempPath || trim($tempPath) === '') {
+                            if (! $tempPath || trim($tempPath) === '') {
                                 \Log::error('Image temp store failed', [
                                     'event_id' => $event->id,
                                     'name' => $file->getClientOriginalName(),
                                     'mime' => $mime,
                                 ]);
+
                                 continue;
                             }
 
@@ -218,26 +250,31 @@ class EventUserCreateController extends Controller
                                 $photoValidationResults[$index] ?? null
                             );
 
-                            \Log::info('Dispatching ProcessEventImageJob', [
+                            \Log::info('Preparing ProcessEventImageJob', [
                                 'event_id' => $event->id,
                                 'temp_path' => $tempPath,
                                 'manual_price' => $manualPrice,
                                 'file_name' => $file->getClientOriginalName(),
                             ]);
 
-                            ProcessEventImageJob::dispatch($event->id, $tempPath, $manualPrice, $photoMetadata);
+                            $imageJobs[] = new ProcessEventImageJob(
+                                $event->id,
+                                $tempPath,
+                                $manualPrice,
+                                $photoMetadata
+                            );
 
                         } elseif (str_starts_with($mime, 'video/')) {
                             try {
                                 $path = $file->store('videos_temp', 'public');
-                                ProcessEventVideoJob::dispatch($event->id, $path);
+                                $videoJobs[] = new ProcessEventVideoJob($event->id, $path);
                             } catch (\Throwable $e) {
                                 \Log::error('Video processing dispatch failed', [
-                                    'name'    => $file->getClientOriginalName(),
-                                    'mime'    => $mime,
+                                    'name' => $file->getClientOriginalName(),
+                                    'mime' => $mime,
                                     'message' => $e->getMessage(),
-                                    'file'    => $e->getFile(),
-                                    'line'    => $e->getLine(),
+                                    'file' => $e->getFile(),
+                                    'line' => $e->getLine(),
                                 ]);
                                 throw $e;
                             }
@@ -253,6 +290,7 @@ class EventUserCreateController extends Controller
                 return $event;
             });
 
+            $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
 
             $this->clearEventsCache($event->slug);
@@ -265,9 +303,9 @@ class EventUserCreateController extends Controller
         } catch (\Throwable $th) {
             \Log::error('Event create failed', [
                 'message' => $th->getMessage(),
-                'file'    => $th->getFile(),
-                'line'    => $th->getLine(),
-                'trace'   => $th->getTraceAsString(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
             ]);
 
             return $this->error($th->getMessage());
@@ -319,6 +357,7 @@ class EventUserCreateController extends Controller
         foreach ($uploadedFiles as $index => $file) {
             if (! $file instanceof UploadedFile) {
                 $errors["urls.$index"] = ['Uploaded photo is invalid.'];
+
                 continue;
             }
 
@@ -468,38 +507,13 @@ class EventUserCreateController extends Controller
         $createdTagIds = collect();
 
         foreach (($tags['new_tags'] ?? []) as $tagName) {
-            $name = $this->normalizeTagName($tagName);
+            $tag = $this->tagResolver->resolve(
+                is_string($tagName) ? $tagName : null
+            );
 
-            if (! $name) {
-                continue;
+            if ($tag !== null) {
+                $createdTagIds->push($tag->id);
             }
-
-            $slug = Str::slug($name);
-
-            if (! $slug) {
-                $slug = 'tag-' . md5(mb_strtolower($name));
-            }
-
-            $tag = Tags::withTrashed()
-                ->where('slug', $slug)
-                ->first();
-
-            if ($tag) {
-                if (method_exists($tag, 'trashed') && $tag->trashed()) {
-                    $tag->restore();
-                }
-
-                if (! $tag->name) {
-                    $tag->update(['name' => $name]);
-                }
-            } else {
-                $tag = Tags::create([
-                    'name' => $name,
-                    'slug' => $slug,
-                ]);
-            }
-
-            $createdTagIds->push($tag->id);
         }
 
         return $validExistingTagIds
@@ -559,11 +573,13 @@ class EventUserCreateController extends Controller
 
                 if ($isNew && $name) {
                     $newTagNames[] = $name;
+
                     continue;
                 }
 
                 if (! $isNew && $id !== null && $id !== '' && is_numeric($id)) {
                     $existingTagIds[] = (int) $id;
+
                     continue;
                 }
 
@@ -597,10 +613,7 @@ class EventUserCreateController extends Controller
 
     private function normalizeTagName(?string $name): ?string
     {
-        $name = trim((string) $name);
-        $name = preg_replace('/\s+/u', ' ', $name);
-
-        return $name !== '' ? $name : null;
+        return $this->tagResolver->normalizeName($name);
     }
 
     private function syncEventTags(int $eventId, Request $request): void
@@ -608,11 +621,11 @@ class EventUserCreateController extends Controller
         $existingTagIds = $request->input('tags_id', []);
         $newTags = $request->input('new_tags', []);
 
-        if (!is_array($existingTagIds)) {
+        if (! is_array($existingTagIds)) {
             $existingTagIds = [$existingTagIds];
         }
 
-        if (!is_array($newTags)) {
+        if (! is_array($newTags)) {
             $newTags = [$newTags];
         }
 
@@ -640,32 +653,11 @@ class EventUserCreateController extends Controller
         $createdTagIds = collect();
 
         foreach ($newTagNames as $tagName) {
-            $slug = Str::slug($tagName);
+            $tag = $this->tagResolver->resolve($tagName);
 
-            if (!$slug) {
-                $slug = 'tag-' . md5(mb_strtolower($tagName));
+            if ($tag !== null) {
+                $createdTagIds->push($tag->id);
             }
-
-            $tag = Tags::withTrashed()
-                ->where('slug', $slug)
-                ->first();
-
-            if ($tag) {
-                if (method_exists($tag, 'trashed') && $tag->trashed()) {
-                    $tag->restore();
-                }
-
-                if (!$tag->name) {
-                    $tag->update(['name' => $tagName]);
-                }
-            } else {
-                $tag = Tags::create([
-                    'name' => $tagName,
-                    'slug' => $slug,
-                ]);
-            }
-
-            $createdTagIds->push($tag->id);
         }
 
         $allTagIds = $validExistingTagIds
@@ -691,6 +683,43 @@ class EventUserCreateController extends Controller
                 'event_id' => $eventId,
                 'tag_id' => $tagId,
             ]);
+        }
+    }
+
+    /**
+     * @param  array<int, ProcessEventImageJob>  $imageJobs
+     * @param  array<int, ProcessEventVideoJob>  $videoJobs
+     */
+    private function dispatchPostCommitJobs(int $eventId, array $imageJobs, array $videoJobs): void
+    {
+        try {
+            if ($imageJobs !== []) {
+                Bus::batch($imageJobs)
+                    ->name("event-images:{$eventId}")
+                    ->allowFailures()
+                    ->finally(function (Batch $batch) use ($eventId): void {
+                        GenerateEventAiTagsJob::dispatch($eventId);
+                    })
+                    ->dispatch();
+            } else {
+                GenerateEventAiTagsJob::dispatch($eventId);
+            }
+        } catch (\Throwable $exception) {
+            Log::error('Event image batch dispatch failed', [
+                'event_id' => $eventId,
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+        foreach ($videoJobs as $videoJob) {
+            try {
+                dispatch($videoJob);
+            } catch (\Throwable $exception) {
+                Log::error('Event video job dispatch failed', [
+                    'event_id' => $eventId,
+                    'message' => $exception->getMessage(),
+                ]);
+            }
         }
     }
 

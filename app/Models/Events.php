@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\EventsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
 class Events extends Model
 {
-    /** @use HasFactory<\Database\Factories\EventsFactory> */
+    /** @use HasFactory<EventsFactory> */
     use HasFactory , Searchable;
 
     public function toSearchableArray(): array
@@ -35,6 +36,7 @@ class Events extends Model
         'is_active' => 'boolean',
         'is_trending' => 'boolean',
     ];
+
     public function city()
     {
         return $this->belongsTo(Cities::class, 'city_id');
@@ -48,6 +50,16 @@ class Events extends Model
     public function event_tags()
     {
         return $this->hasMany(Event_Tags::class, 'event_id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tags::class,
+            'event__tags',
+            'event_id',
+            'tag_id'
+        )->wherePivotNull('deleted_at');
     }
 
     public function images()
@@ -72,25 +84,25 @@ class Events extends Model
 
     public function photos()
     {
-        return $this->hasMany(EventPhotos::class,'event_id');
+        return $this->hasMany(EventPhotos::class, 'event_id');
     }
 
     public function firstImage()
     {
-        return $this->hasOne(EventsImges::class,'event_id');
+        return $this->hasOne(EventsImges::class, 'event_id');
     }
 
     public function comments()
     {
-        return $this->hasMany(Comments::class,'event_id');
+        return $this->hasMany(Comments::class, 'event_id');
     }
 
     public function likes()
     {
-        return $this->hasMany(Likes::class,'event_id');
+        return $this->hasMany(Likes::class, 'event_id');
     }
 
-      public function translations()
+    public function translations()
     {
         return $this->hasMany(EventTranslations::class, 'event_id');
     }
@@ -101,7 +113,7 @@ class Events extends Model
             ->where('locale', app()->getLocale());
     }
 
-     public function adminTranslation()
+    public function adminTranslation()
     {
         return $this->hasOne(EventTranslations::class, 'event_id')
             ->where('locale', 'ar');
@@ -109,12 +121,11 @@ class Events extends Model
 
     public function views()
     {
-        return $this->hasMany(EventViews::class,'event_id');
+        return $this->hasMany(EventViews::class, 'event_id');
     }
 
     public function interactions()
     {
-        return $this->hasMany(UserInteractions::class,'event_id');
+        return $this->hasMany(UserInteractions::class, 'event_id');
     }
-
 }
