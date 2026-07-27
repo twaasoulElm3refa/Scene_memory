@@ -204,7 +204,7 @@
                                         </label>
 
                                         <div
-                                            v-if="filteredPhotoTags(item).length === 0 && !canAddNewPhotoTag(item)"
+                                            v-if="hasPhotoTagSearch(item) && filteredPhotoTags(item).length === 0 && !canAddNewPhotoTag(item)"
                                             class="text-muted small px-2 py-2"
                                         >
                                             No tags found
@@ -620,10 +620,14 @@ function normalizeTagName(value) {
         .replace(/\s+/g, " ");
 }
 
+function hasPhotoTagSearch(item) {
+    return normalizeTagName(item.tagSearch).length > 0;
+}
+
 function filteredPhotoTags(item) {
     const search = normalizeTagName(item.tagSearch).toLowerCase();
 
-    if (!search) return props.availableTags;
+    if (!search) return [];
 
     return props.availableTags.filter((tag) =>
         tagName(tag).toLowerCase().includes(search)
