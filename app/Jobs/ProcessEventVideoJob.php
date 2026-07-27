@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Events;
-use App\Models\eventsImges;
+use App\Models\EventsImges;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -76,8 +76,9 @@ class ProcessEventVideoJob implements ShouldQueue
                 throw new \RuntimeException('Watermarked preview video generation returned null.');
             }
 
-            eventsImges::create([
+            EventsImges::create([
                 'event_id' => $this->eventId,
+                'type' => 'video',
                 'preview_url' => $previewWatermarkedPath,
                 'full_url' => $finalFilename,
                 'price' => 15,

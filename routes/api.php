@@ -34,6 +34,7 @@ use App\Http\Controllers\api\home\CountriesController;
 use App\Http\Controllers\api\home\EventController;
 use App\Http\Controllers\api\home\EventUserCreateController;
 use App\Http\Controllers\api\home\GateController;
+use App\Http\Controllers\api\home\ImageTagsController;
 use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\webhook\WebhookController;
 use App\Http\Controllers\api\webhook\WalletWebhookController;
@@ -53,7 +54,6 @@ use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnEvent;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -428,6 +428,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/{event_id}', [CollectionController::class, 'getCollectionDetails']);
         Route::post('/{event_id}/add-to-cart', [CollectionController::class, 'addCollectionToCart'])->middleware('auth:sanctum');
     });
+
+    Route::post('/tools/image-tags', [ImageTagsController::class, 'generate'])
+    ->middleware(['auth:sanctum', 'throttle:10,1'])
+    ->name('tools.image-tags');
 
     // 162 EndPoint till now
 });

@@ -14,6 +14,12 @@ return [
     |
     */
 
+    'openrouter' => [
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'api_url' => env('OPENROUTER_API_URL', 'https://openrouter.ai/api/v1'),
+        'model' => env('OPENROUTER_MODEL', 'openrouter/free'),
+    ],
+
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
