@@ -11,3 +11,8 @@ Artisan::command('inspire', function () {
 Schedule::command('payments:reconcile --limit=100 --age=10')
     ->everyFiveMinutes()
     ->withoutOverlapping(10);
+
+Schedule::command('queue:work --stop-when-empty --tries=3 --timeout=1200')
+    ->everyThirtySeconds()
+    ->withoutOverlapping()
+    ->runInBackground();
