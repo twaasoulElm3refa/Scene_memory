@@ -1,56 +1,101 @@
-un<template>
-    <section ref="wrapperRef"
-        class="relative z-[9999] overflow-visible rounded-2xl border border-white/70 bg-white/90 p-4 shadow-sm backdrop-blur">
+<template>
+    <section
+        ref="wrapperRef"
+        class="relative z-[9999] overflow-visible rounded-2xl border border-white/70 bg-white/90 p-4 shadow-sm backdrop-blur"
+    >
         <div class="relative z-[10000] overflow-visible">
-            <div class="flex min-h-[50px] w-full items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm transition focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/20"
-                @click="focusInput">
+            <div
+                class="flex min-h-[50px] w-full items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm transition focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-500/20"
+                @click="focusInput"
+            >
                 <span class="shrink-0 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
                     <span class="shrink-0 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+                            />
                         </svg>
                     </span>
                 </span>
 
-                <input ref="inputRef" :value="modelValue" type="text" placeholder="Search ..."
+                <input
+                    ref="inputRef"
+                    :value="modelValue"
+                    type="text"
+                    placeholder="Search ..."
                     class="min-w-0 flex-1 bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
-                    @input="handleInput" @focus="handleFocus" @keydown.enter.prevent="emit('search')"
-                    @keydown.escape="closeDropdown" />
+                    @input="handleInput"
+                    @focus="handleFocus"
+                    @keydown.enter.prevent="emit('search')"
+                    @keydown.escape="closeDropdown"
+                />
 
-                <button v-if="modelValue" type="button"
+                <button
+                    v-if="modelValue"
+                    type="button"
                     class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
-                    @click.stop="clearText">
+                    @click.stop="clearText"
+                >
                     Clear text
                 </button>
 
-                <button v-if="selectedTags.length" type="button"
+                <button
+                    v-if="selectedTags.length"
+                    type="button"
                     class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-red-50 hover:text-red-500"
-                    @click.stop="clearTags">
+                    @click.stop="clearTags"
+                >
                     Clear tags
                 </button>
             </div>
 
-            <div v-if="showDropdown"
-                class="absolute left-0 right-0 top-full z-[99999] mt-2 max-h-72 overflow-y-auto rounded-xl border border-gray-200 bg-white py-2 shadow-2xl">
-                <div v-if="loading || loadingSuggestions" class="px-3 py-3 text-sm text-gray-400">
+            <div
+                v-if="showDropdown && hasSearch"
+                class="absolute left-0 right-0 top-full z-[99999] mt-2 max-h-72 overflow-y-auto rounded-xl border border-gray-200 bg-white py-2 shadow-2xl"
+            >
+                <div
+                    v-if="loading || loadingSuggestions"
+                    class="px-3 py-3 text-sm text-gray-400"
+                >
                     Loading tags...
                 </div>
 
                 <template v-else>
-                    <button v-for="tag in visibleSuggestions" :key="tag.id" type="button"
+                    <button
+                        v-for="tag in visibleSuggestions"
+                        :key="tag.id"
+                        type="button"
                         class="tag-option-row w-full px-3 py-2 text-left text-sm text-gray-700 transition hover:bg-blue-50"
-                        :class="{ 'bg-blue-50': isTagSelected(tag.id) }" @click="selectTag(tag)">
-                        <input type="checkbox" class="tag-option-checkbox" :checked="isTagSelected(tag.id)" readonly
-                            tabindex="-1" @click.prevent />
+                        :class="{ 'bg-blue-50': isTagSelected(tag.id) }"
+                        @click="selectTag(tag)"
+                    >
+                        <input
+                            type="checkbox"
+                            class="tag-option-checkbox"
+                            :checked="isTagSelected(tag.id)"
+                            readonly
+                            tabindex="-1"
+                            @click.prevent
+                        />
 
                         <span class="tag-option-name">
                             {{ getTagName(tag) }}
                         </span>
                     </button>
 
-                    <div v-if="visibleSuggestions.length === 0" class="px-3 py-3 text-sm text-gray-400">
+                    <div
+                        v-if="visibleSuggestions.length === 0"
+                        class="px-3 py-3 text-sm text-gray-400"
+                    >
                         No tags found
                     </div>
                 </template>
@@ -58,10 +103,17 @@ un<template>
         </div>
 
         <div class="mt-3 min-h-[36px]">
-            <div v-if="selectedTagObjects.length" class="flex flex-wrap gap-2">
-                <button v-for="tag in selectedTagObjects" :key="tag.id" type="button"
+            <div
+                v-if="selectedTagObjects.length"
+                class="flex flex-wrap gap-2"
+            >
+                <button
+                    v-for="tag in selectedTagObjects"
+                    :key="tag.id"
+                    type="button"
                     class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-blue-100"
-                    @click="removeTag(tag.id)">
+                    @click="removeTag(tag.id)"
+                >
                     <span>#{{ tag.name }}</span>
                     <span class="text-sm leading-none text-blue-400">x</span>
                 </button>
@@ -71,29 +123,40 @@ un<template>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+    computed,
+    onMounted,
+    onUnmounted,
+    ref,
+    watch,
+} from "vue";
 
 const props = defineProps({
     modelValue: {
         type: String,
         default: "",
     },
+
     tags: {
         type: Array,
         default: () => [],
     },
+
     selectedTags: {
         type: Array,
         default: () => [],
     },
+
     loading: {
         type: Boolean,
         default: false,
     },
+
     tagSuggestions: {
         type: Array,
         default: () => [],
     },
+
     loadingSuggestions: {
         type: Boolean,
         default: false,
@@ -113,16 +176,25 @@ const wrapperRef = ref(null);
 const cachedTags = ref([]);
 
 const getTagName = (tag) => {
-    return tag?.translation?.name || tag?.name || tag?.title || String(tag?.id || "");
+    return (
+        tag?.translation?.name ||
+        tag?.name ||
+        tag?.title ||
+        String(tag?.id || "")
+    );
 };
 
 const mergeCachedTags = (tags) => {
     const next = [...cachedTags.value];
 
     for (const tag of tags || []) {
-        if (!tag?.id) continue;
+        if (!tag?.id) {
+            continue;
+        }
 
-        const existingIndex = next.findIndex((item) => String(item.id) === String(tag.id));
+        const existingIndex = next.findIndex(
+            (item) => String(item.id) === String(tag.id)
+        );
 
         if (existingIndex >= 0) {
             next[existingIndex] = tag;
@@ -137,9 +209,26 @@ const mergeCachedTags = (tags) => {
 watch(
     () => [props.tags, props.tagSuggestions],
     ([tags, suggestions]) => {
-        mergeCachedTags([...(tags || []), ...(suggestions || [])]);
+        mergeCachedTags([
+            ...(tags || []),
+            ...(suggestions || []),
+        ]);
     },
-    { immediate: true, deep: true }
+    {
+        immediate: true,
+        deep: true,
+    }
+);
+
+watch(
+    () => props.modelValue,
+    (value) => {
+        const normalizedValue = String(value || "").trim();
+
+        if (!normalizedValue) {
+            closeDropdown();
+        }
+    }
 );
 
 const normalizedSelectedIds = computed(() => {
@@ -151,12 +240,8 @@ const hasSearch = computed(() => {
 });
 
 const suggestionSource = computed(() => {
-    if (hasSearch.value) {
-        return props.tagSuggestions || [];
-    }
-
-    if (props.tags?.length) {
-        return props.tags;
+    if (!hasSearch.value) {
+        return [];
     }
 
     return props.tagSuggestions || [];
@@ -167,30 +252,50 @@ const visibleSuggestions = computed(() => {
 
     return suggestionSource.value
         .filter((tag) => {
-            if (!tag?.id || seen.has(String(tag.id))) return false;
+            if (!tag?.id) {
+                return false;
+            }
 
-            seen.add(String(tag.id));
+            const tagId = String(tag.id);
+
+            if (seen.has(tagId)) {
+                return false;
+            }
+
+            seen.add(tagId);
+
             return true;
         })
-        .slice(0, hasSearch.value ? 10 : 5);
+        .slice(0, 10);
 });
 
 const selectedTagObjects = computed(() => {
     return props.selectedTags.map((tagId) => {
-        const found = cachedTags.value.find((tag) => String(tag.id) === String(tagId));
+        const found = cachedTags.value.find(
+            (tag) => String(tag.id) === String(tagId)
+        );
 
         return {
             id: tagId,
-            name: found ? getTagName(found) : String(tagId),
+            name: found
+                ? getTagName(found)
+                : String(tagId),
         };
     });
 });
 
 const isTagSelected = (tagId) => {
-    return normalizedSelectedIds.value.includes(String(tagId));
+    return normalizedSelectedIds.value.includes(
+        String(tagId)
+    );
 };
 
 const openDropdown = () => {
+    if (!hasSearch.value) {
+        showDropdown.value = false;
+        return;
+    }
+
     showDropdown.value = true;
 };
 
@@ -203,29 +308,52 @@ const focusInput = () => {
 };
 
 const requestSuggestions = (value) => {
-    emit("fetch-tag-suggestions", String(value || ""));
+    const normalizedValue = String(value || "").trim();
+
+    if (!normalizedValue) {
+        return;
+    }
+
+    emit("fetch-tag-suggestions", normalizedValue);
 };
 
 const handleInput = (event) => {
     const value = event.target.value;
+    const normalizedValue = String(value || "").trim();
 
     emit("update:modelValue", value);
-    requestSuggestions(value);
-    openDropdown();
+
+    if (!normalizedValue) {
+        closeDropdown();
+        return;
+    }
+
+    requestSuggestions(normalizedValue);
+    showDropdown.value = true;
 };
 
 const handleFocus = () => {
+    if (!hasSearch.value) {
+        closeDropdown();
+        return;
+    }
+
     requestSuggestions(props.modelValue);
     openDropdown();
 };
 
 const selectTag = (tag) => {
-    if (!tag?.id) return;
+    if (!tag?.id) {
+        return;
+    }
 
     mergeCachedTags([tag]);
 
     if (!isTagSelected(tag.id)) {
-        emit("update:selected-tags", [...props.selectedTags, tag.id]);
+        emit("update:selected-tags", [
+            ...props.selectedTags,
+            tag.id,
+        ]);
     }
 
     closeDropdown();
@@ -234,14 +362,15 @@ const selectTag = (tag) => {
 const removeTag = (tagId) => {
     emit(
         "update:selected-tags",
-        props.selectedTags.filter((id) => String(id) !== String(tagId))
+        props.selectedTags.filter(
+            (id) => String(id) !== String(tagId)
+        )
     );
 };
 
 const clearText = () => {
     emit("update:modelValue", "");
-    requestSuggestions("");
-    openDropdown();
+    closeDropdown();
     inputRef.value?.focus();
 };
 
@@ -257,11 +386,17 @@ const handleOutsideClick = (event) => {
 };
 
 onMounted(() => {
-    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener(
+        "mousedown",
+        handleOutsideClick
+    );
 });
 
 onUnmounted(() => {
-    document.removeEventListener("mousedown", handleOutsideClick);
+    document.removeEventListener(
+        "mousedown",
+        handleOutsideClick
+    );
 });
 </script>
 
