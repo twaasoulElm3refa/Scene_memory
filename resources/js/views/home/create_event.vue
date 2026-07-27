@@ -728,6 +728,8 @@ function toggleTagsDropdown() {
     showTagsDropdown.value = !showTagsDropdown.value;
 
     if (showTagsDropdown.value) {
+        tagSearch.value = "";
+
         nextTick(() => {
             eventTagSearchInput.value?.focus();
         });
@@ -743,14 +745,6 @@ function isTagSelected(tagId) {
     return selectedTags.value.some(
         (tag) => !tag.isNew && String(tag.id) === String(tagId)
     );
-}
-
-function toggleTagsDropdown() {
-    showTagsDropdown.value = !showTagsDropdown.value;
-
-    if (showTagsDropdown.value) {
-        tagSearch.value = "";
-    }
 }
 
 function toggleTag(tag) {
