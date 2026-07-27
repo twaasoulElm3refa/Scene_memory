@@ -243,26 +243,52 @@
                                                     style="max-height: 280px; overflow-y: auto"
                                                 >
                                                     <input
+                                                        ref="eventTagSearchInput"
                                                         v-model="tagSearch"
                                                         type="text"
                                                         class="form-control form-control-sm rounded-3 mb-2"
                                                         placeholder="Search or type new tag"
                                                         @keydown.enter.prevent="canAddNewTag && addNewTag()"
+                                                        @keydown.escape="closeTagsDropdown"
                                                     />
 
-                                                    <button
-                                                        v-if="canAddNewTag"
-                                                        type="button"
-                                                        class="btn btn-outline-success btn-sm w-100 mb-2 text-start"
-                                                        @click="addNewTag"
-                                                    >
-                                                        + Add "{{ normalizeTagName(tagSearch) }}"
-                                                    </button>
+                                                    <template v-if="hasTagSearch">
+                                                        <button
+                                                            v-if="canAddNewTag"
+                                                            type="button"
+                                                            class="btn btn-outline-success btn-sm w-100 mb-2 text-start"
+                                                            @click="addNewTag"
+                                                        >
+                                                            + Add "{{ normalizeTagName(tagSearch) }}"
+                                                        </button>
+
+                                                        <label
+                                                            v-for="tag in filteredTags"
+                                                            :key="tag.id"
+                                                            class="d-flex align-items-center gap-2 px-2 py-2 rounded-3"
+                                                            style="cursor: pointer"
+                                                        >
+                                                            <input
+                                                                class="form-check-input m-0"
+                                                                type="checkbox"
+                                                                :checked="isTagSelected(tag.id)"
+                                                                @change="toggleTag(tag)"
+                                                            />
+                                                            <span>#{{ tag.name }}</span>
+                                                        </label>
+
+                                                        <div
+                                                            v-if="filteredTags.length === 0 && !canAddNewTag"
+                                                            class="text-muted small px-2 py-2"
+                                                        >
+                                                            No tags found
+                                                        </div>
+                                                    </template>
 
                                                     <button
                                                         v-if="selectedTags.length"
                                                         type="button"
-                                                        class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
+                                                        class="btn btn-link btn-sm text-danger text-decoration-none px-0 mt-1"
                                                         @click="clearTags"
                                                     >
                                                         Clear selected tags
@@ -453,6 +479,7 @@ const selectedTags = ref([]);
 const loadingTags = ref(false);
 const tagSearch = ref("");
 const showTagsDropdown = ref(false);
+const eventTagSearchInput = ref(null);
 
 const wizardSteps = [
     { id: 1, label: "Photography Type", description: "Choose mode" },
@@ -483,8 +510,12 @@ const hasSelectedLocation = computed(() =>
     Number.isFinite(form.value.latitude) && Number.isFinite(form.value.longitude)
 );
 
+const hasTagSearch = computed(() =>
+    String(tagSearch.value || "").trim().length > 0
+);
+
 const filteredTags = computed(() => {
-    const search = tagSearch.value.trim().toLowerCase();
+    const search = String(tagSearch.value || "").trim().toLowerCase();
 
     if (!search) return [];
 
@@ -691,6 +722,21 @@ function translatedName(item) {
 
 function normalizeTagName(name) {
     return String(name || "").trim().replace(/\s+/g, " ");
+}
+
+function toggleTagsDropdown() {
+    showTagsDropdown.value = !showTagsDropdown.value;
+
+    if (showTagsDropdown.value) {
+        nextTick(() => {
+            eventTagSearchInput.value?.focus();
+        });
+    }
+}
+
+function closeTagsDropdown() {
+    showTagsDropdown.value = false;
+    tagSearch.value = "";
 }
 
 function isTagSelected(tagId) {
