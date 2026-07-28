@@ -107,7 +107,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // SUB CATEGORIES CRUD
-    Route::prefix('sub_categories')->middleware(['throttle:15,1'])->group(function () {
+    Route::prefix('sub_categories')->middleware(['throttle:30,1'])->group(function () {
         Route::get('/', [SubCategoryController::class,  'index']);
         Route::get('/all/paginated', [SubCategoryController::class,  'paginated']);
         Route::get('/{id}', [SubCategoryController::class,  'single']);
@@ -127,10 +127,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('countries')->group(function () {
         Route::get('/', [CountriesController::class,  'index']);
         Route::get('/all/get', [CountriesController::class,  'all']);
-        Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:25,1');
-        Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:25,1');
-        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:25,1');
-        Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:25,1');
+        Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:60,1');
+        Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:60,1');
+        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:60,1');
+        Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:60,1');
         Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -139,9 +139,9 @@ Route::prefix('v1')->group(function () {
 
     // CITIES CRUD
     Route::prefix('cities')->group(function () {
-        Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:25,1');
-        Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:25,1');
-        Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:25,1');
+        Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:60,1');
+        Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:60,1');
+        Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:60,1');
         Route::post('/create', [CitiesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CitiesController::class, 'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CitiesController::class, 'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -180,7 +180,7 @@ Route::prefix('v1')->group(function () {
     // Purchases CRUD
     Route::prefix('purchases')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/', [PurchasesController::class, 'index']);
-        Route::get('/all/count', [PurchasesController::class,  'count'])->middleware('throttle:25,1');
+        Route::get('/all/count', [PurchasesController::class,  'count'])->middleware('throttle:60,1');
         Route::get('/type/{type}', [PurchasesController::class, 'filter']);
         Route::get('/status/{status}', [PurchasesController::class, 'status']);
         Route::get('/show/{id}', [PurchasesController::class, 'show']);
@@ -189,7 +189,7 @@ Route::prefix('v1')->group(function () {
         //61
     });
      // withdrawals
-    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class,'throttle:90,1'])->group(function () {
+    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class,'throttle:60,1'])->group(function () {
         Route::get('/', [WithdrawlController::class, 'index']);
         Route::get('/all/count', [WithdrawlController::class,  'count']);
         Route::get('/status/{status}', [WithdrawlController::class, 'status']);

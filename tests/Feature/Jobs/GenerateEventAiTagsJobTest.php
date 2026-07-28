@@ -4,6 +4,7 @@ namespace Tests\Feature\Jobs;
 
 use App\Jobs\GenerateEventAiTagsJob;
 use App\Models\Event_Tags;
+use App\Models\EventRequestCreate;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Models\Tags;
@@ -391,6 +392,135 @@ class GenerateEventAiTagsJobTest extends TestCase
             ->once();
     }
 
+    public function test_safe_event_content_leaves_request_ai_flagged_false_without_changing_status(): void
+    {
+        $event = Events::create([
+            'title' => 'Family photography walk',
+            'description' => 'A calm outdoor photography event.',
+        ]);
+        $eventRequestCreate = EventRequestCreate::create([
+            'event_id' => $event->id,
+            'status' => 'pending',
+        ]);
+
+        Http::fake(fn ($request) => $this->isModerationRequest($request)
+            ? $this->openRouterContentResponse('{"flagged":false}')
+            : $this->openRouterContentResponse('{"event_tags":[],"images":[]}')
+        );
+
+        $this->runJob($event->id);
+
+        $eventRequestCreate->refresh();
+
+        $this->assertFalse($eventRequestCreate->ai_flagged);
+        $this->assertSame('pending', $eventRequestCreate->status);
+        Http::assertSentCount(2);
+    }
+
+    public function test_flagged_event_content_updates_only_ai_flagged_without_changing_status(): void
+    {
+        $event = Events::create([
+            'title' => 'Offensive submission',
+            'description' => 'The fake provider will flag this content.',
+        ]);
+        $eventRequestCreate = EventRequestCreate::create([
+            'event_id' => $event->id,
+            'status' => 'approved',
+        ]);
+
+        Http::fake(fn ($request) => $this->isModerationRequest($request)
+            ? $this->openRouterContentResponse('{"flagged":true}')
+            : $this->openRouterContentResponse('{"event_tags":[],"images":[]}')
+        );
+
+        $this->runJob($event->id);
+
+        $eventRequestCreate->refresh();
+
+        $this->assertTrue($eventRequestCreate->ai_flagged);
+        $this->assertSame('approved', $eventRequestCreate->status);
+    }
+
+    public function test_moderation_openrouter_failure_does_not_block_processing_or_change_status(): void
+    {
+        Log::spy();
+
+        $event = Events::create([
+            'title' => 'Provider timeout',
+            'description' => 'Moderation failure should be non-blocking.',
+        ]);
+        $eventRequestCreate = EventRequestCreate::create([
+            'event_id' => $event->id,
+            'status' => 'rejected',
+        ]);
+
+        Http::fake(function ($request) {
+            if ($this->isModerationRequest($request)) {
+                throw new ConnectionException(" Moderation\n timed out ");
+            }
+
+            return $this->openRouterContentResponse('{"event_tags":[],"images":[]}');
+        });
+
+        $this->runJob($event->id);
+
+        $eventRequestCreate->refresh();
+
+        $this->assertFalse($eventRequestCreate->ai_flagged);
+        $this->assertSame('rejected', $eventRequestCreate->status);
+        $this->assertDatabaseHas('events', ['id' => $event->id]);
+
+        Log::shouldHaveReceived('error')
+            ->with(
+                'Event content moderation: OpenRouter request failed',
+                Mockery::on(fn (array $context) => $context === [
+                    'event_id' => $event->id,
+                    'status' => null,
+                    'provider_error_code' => null,
+                    'provider_error_message' => 'Moderation timed out',
+                    'model' => 'test/vision-model',
+                ])
+            )
+            ->once();
+    }
+
+    public function test_invalid_moderation_json_does_not_block_processing_or_change_status(): void
+    {
+        Log::spy();
+
+        $event = Events::create([
+            'title' => 'Invalid moderation JSON',
+            'description' => 'The moderation response is malformed.',
+        ]);
+        $eventRequestCreate = EventRequestCreate::create([
+            'event_id' => $event->id,
+            'status' => 'pending',
+        ]);
+
+        Http::fake(fn ($request) => $this->isModerationRequest($request)
+            ? $this->openRouterContentResponse('not-json')
+            : $this->openRouterContentResponse('{"event_tags":[],"images":[]}')
+        );
+
+        $this->runJob($event->id);
+
+        $eventRequestCreate->refresh();
+
+        $this->assertFalse($eventRequestCreate->ai_flagged);
+        $this->assertSame('pending', $eventRequestCreate->status);
+        $this->assertDatabaseHas('events', ['id' => $event->id]);
+
+        Log::shouldHaveReceived('error')
+            ->with(
+                'Event content moderation: invalid AI JSON response',
+                Mockery::on(fn (array $context) => $context['event_id'] === $event->id
+                    && $context['model'] === 'test/vision-model'
+                    && is_string($context['message'])
+                    && $context['message'] !== '')
+            )
+            ->once();
+    }
+
     private function runJob(int $eventId): void
     {
         (new GenerateEventAiTagsJob($eventId))->handle(
@@ -411,6 +541,25 @@ class GenerateEventAiTagsJobTest extends TestCase
             'full_url' => $path,
             'preview_url' => $path,
             'is_active' => 1,
+        ]);
+    }
+
+    private function isModerationRequest($request): bool
+    {
+        $prompt = data_get($request->data(), 'messages.0.content.0.text', '');
+
+        return is_string($prompt)
+            && str_contains($prompt, 'strict content moderation classifier');
+    }
+
+    private function openRouterContentResponse(string $content)
+    {
+        return Http::response([
+            'choices' => [[
+                'message' => [
+                    'content' => $content,
+                ],
+            ]],
         ]);
     }
 }

@@ -14,6 +14,81 @@ use Throwable;
 
 class GenerateImageTagsService
 {
+    public function flagEventContent(string $title, ?string $description, ?int $eventId = null): bool
+    {
+        try {
+            $response = Http::withToken($this->apiKey())
+                ->acceptJson()
+                ->asJson()
+                ->timeout(30)
+                ->connectTimeout(10)
+                ->post($this->endpoint(), $this->buildModerationPayload($title, $description));
+        } catch (Throwable $exception) {
+            Log::error('Event content moderation: OpenRouter request failed', [
+                'event_id' => $eventId,
+                'status' => null,
+                'provider_error_code' => $exception->getCode() !== 0
+                    ? $this->safeProviderErrorValue($exception->getCode())
+                    : null,
+                'provider_error_message' => $this->safeProviderErrorValue($exception->getMessage()),
+                'model' => $this->model(),
+            ]);
+
+            return false;
+        }
+
+        if ($response->failed()) {
+            $providerResponse = $response->json();
+
+            Log::error('Event content moderation: OpenRouter request failed', [
+                'event_id' => $eventId,
+                'status' => $response->status(),
+                'provider_error_code' => $this->safeProviderErrorValue(
+                    data_get($providerResponse, 'error.code')
+                ),
+                'provider_error_message' => $this->safeProviderErrorValue(
+                    data_get($providerResponse, 'error.message')
+                ),
+                'model' => $this->model(),
+            ]);
+
+            return false;
+        }
+
+        $responseBody = $response->json();
+        $content = $this->extractContent(
+            is_array($responseBody) ? $responseBody : []
+        );
+
+        if (blank($content)) {
+            $this->logInvalidModerationResponse(
+                $eventId,
+                new RuntimeException('Empty response content from provider.')
+            );
+
+            return false;
+        }
+
+        try {
+            $decoded = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            $this->logInvalidModerationResponse($eventId, $exception);
+
+            return false;
+        }
+
+        if (! is_array($decoded) || ! array_key_exists('flagged', $decoded)) {
+            $this->logInvalidModerationResponse(
+                $eventId,
+                new RuntimeException('Moderation response missing flagged field.')
+            );
+
+            return false;
+        }
+
+        return $decoded['flagged'] === true;
+    }
+
     public function handle(array $validated, ?Authenticatable $user = null): array
     {
         $images = collect($validated['images'] ?? [])
@@ -181,6 +256,53 @@ class GenerateImageTagsService
             'temperature' => 0.2,
             'max_tokens' => 300,
         ];
+    }
+
+    protected function buildModerationPayload(string $title, ?string $description): array
+    {
+        return [
+            'model' => $this->model(),
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        [
+                            'type' => 'text',
+                            'text' => $this->buildModerationPrompt($title, $description),
+                        ],
+                    ],
+                ],
+            ],
+            'temperature' => 0,
+            'max_tokens' => 20,
+        ];
+    }
+
+    protected function buildModerationPrompt(string $title, ?string $description): string
+    {
+        return <<<PROMPT
+You are a strict content moderation classifier for event submissions.
+
+Check the title and description for:
+- profanity and obscene language
+- insults, bullying, and degrading language
+- sexually explicit content or sexual innuendo
+- hate speech or discrimination
+- threats, harassment, incitement, or calls for violence
+- offensive words hidden with spaces, symbols, numbers, repeated characters, or separated letters
+
+Cover Arabic and English, including Egyptian Arabic and common Arabic dialects.
+
+Return valid JSON only, exactly one of:
+{"flagged":true}
+{"flagged":false}
+
+Title:
+{$title}
+
+Description:
+{$description}
+PROMPT;
     }
 
     protected function buildPrompt(
@@ -413,6 +535,15 @@ PROMPT;
         ]);
     }
 
+    private function logInvalidModerationResponse(?int $eventId, Throwable $exception): void
+    {
+        Log::error('Event content moderation: invalid AI JSON response', [
+            'event_id' => $eventId,
+            'model' => $this->model(),
+            'message' => $exception->getMessage(),
+        ]);
+    }
+
     private function safeProviderErrorValue(mixed $value): int|string|null
     {
         if (is_int($value)) {
@@ -425,8 +556,16 @@ PROMPT;
 
         $value = preg_replace('/\s+/u', ' ', trim((string) $value));
 
-        return $value === null || $value === ''
-            ? null
-            : Str::limit($value, 500, '…');
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $apiKey = $this->apiKey();
+
+        if ($apiKey !== '') {
+            $value = str_replace($apiKey, '[redacted]', $value);
+        }
+
+        return Str::limit($value, 500, '…');
     }
 }

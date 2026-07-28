@@ -85,6 +85,21 @@ class GenerateEventAiTagsJob implements ShouldQueue
             ]);
         }
 
+        $eventRequestCreate = $event->requests()->first();
+
+        if (
+            $eventRequestCreate !== null
+            && $tagsService->flagEventContent(
+                title: (string) $event->title,
+                description: $event->description,
+                eventId: $this->eventId
+            )
+        ) {
+            $eventRequestCreate->update([
+                'ai_flagged' => true,
+            ]);
+        }
+
         Log::info('GenerateEventAiTagsJob: AI request started', [
             'event_id' => $this->eventId,
             'images_count' => count($storedPaths),
