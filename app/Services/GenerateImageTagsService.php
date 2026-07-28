@@ -37,17 +37,32 @@ class GenerateImageTagsService
             return false;
         }
 
-        if ($response->failed()) {
-            $providerResponse = $response->json();
+        $responseBody = $response->json();
+        $responseBody = is_array($responseBody) ? $responseBody : [];
+        $rawContent = data_get($responseBody, 'choices.0.message.content');
 
+        Log::info('OpenRouter moderation response structure', [
+            'event_id' => $eventId,
+            'status' => $response->status(),
+            'successful' => $response->successful(),
+            'top_level_keys' => array_keys($responseBody),
+            'finish_reason' => data_get($responseBody, 'choices.0.finish_reason'),
+            'content_type' => get_debug_type($rawContent),
+            'content' => $this->safeModerationContent($rawContent),
+            'extracted_content' => $this->safeProviderErrorValue($this->extractContent($responseBody)),
+            'has_tool_calls' => ! empty(data_get($responseBody, 'choices.0.message.tool_calls')),
+            'error' => $this->safeProviderErrorValue(data_get($responseBody, 'error.message')),
+        ]);
+
+        if ($response->failed()) {
             Log::error('Event content moderation: OpenRouter request failed', [
                 'event_id' => $eventId,
                 'status' => $response->status(),
                 'provider_error_code' => $this->safeProviderErrorValue(
-                    data_get($providerResponse, 'error.code')
+                    data_get($responseBody, 'error.code')
                 ),
                 'provider_error_message' => $this->safeProviderErrorValue(
-                    data_get($providerResponse, 'error.message')
+                    data_get($responseBody, 'error.message')
                 ),
                 'model' => $this->model(),
             ]);
@@ -55,9 +70,8 @@ class GenerateImageTagsService
             return false;
         }
 
-        $responseBody = $response->json();
         $content = $this->extractContent(
-            is_array($responseBody) ? $responseBody : []
+            $responseBody
         );
 
         if (blank($content)) {
@@ -542,6 +556,27 @@ PROMPT;
             'model' => $this->model(),
             'message' => $exception->getMessage(),
         ]);
+    }
+
+    private function safeModerationContent(mixed $content): mixed
+    {
+        if (is_string($content) || is_numeric($content)) {
+            return $this->safeProviderErrorValue($content);
+        }
+
+        if ($content === null || is_bool($content)) {
+            return $content;
+        }
+
+        if (is_array($content)) {
+            $encoded = json_encode($content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            return $encoded === false
+                ? '[unencodable array]'
+                : $this->safeProviderErrorValue($encoded);
+        }
+
+        return '['.get_debug_type($content).']';
     }
 
     private function safeProviderErrorValue(mixed $value): int|string|null
