@@ -92,7 +92,8 @@ class GenerateEventAiTagsJob implements ShouldQueue
             && $tagsService->flagEventContent(
                 title: (string) $event->title,
                 description: $event->description,
-                eventId: $this->eventId
+                eventId: $this->eventId,
+                eventRequestCreateId: (int) $eventRequestCreate->id
             )
         ) {
             $eventRequestCreate->update([

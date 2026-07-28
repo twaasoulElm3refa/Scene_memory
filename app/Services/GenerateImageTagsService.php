@@ -14,8 +14,19 @@ use Throwable;
 
 class GenerateImageTagsService
 {
-    public function flagEventContent(string $title, ?string $description, ?int $eventId = null): bool
-    {
+    public function flagEventContent(
+        string $title,
+        ?string $description,
+        ?int $eventId = null,
+        ?int $eventRequestCreateId = null
+    ): bool {
+        Log::info('AI moderation request started', [
+            'event_id' => $eventId,
+            'event_request_create_id' => $eventRequestCreateId,
+            'title_length' => mb_strlen((string) $title),
+            'description_length' => mb_strlen((string) ($description ?? '')),
+        ]);
+
         try {
             $response = Http::withToken($this->apiKey())
                 ->acceptJson()
