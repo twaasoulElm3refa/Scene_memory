@@ -642,7 +642,7 @@ class EventUserCreateController extends Controller
             ->unique(fn ($name) => mb_strtolower($name))
             ->values();
 
-        if (($existingTagIds->count() + $newTagNames->count()) > 4) {
+        if (($existingTagIds->count() + $newTagNames->count()) > 10) {
             throw new \Exception('You can select up to 4 tags only');
         }
 
