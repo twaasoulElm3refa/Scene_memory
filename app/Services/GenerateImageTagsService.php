@@ -81,37 +81,42 @@ class GenerateImageTagsService
             return false;
         }
 
-        $content = $this->extractContent(
+        $extractedContent = $this->extractContent(
             $responseBody
         );
 
-        if (blank($content)) {
-            $this->logInvalidModerationResponse(
-                $eventId,
-                new RuntimeException('Empty response content from provider.')
+        if (blank($extractedContent)) {
+            throw new RuntimeException('Empty response content from provider.');
+        }
+
+        $decoded = json_decode(
+            $extractedContent,
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        if (
+            ! is_array($decoded) ||
+            ! array_key_exists('flagged', $decoded) ||
+            ! is_bool($decoded['flagged'])
+        ) {
+            throw new RuntimeException(
+                'Invalid moderation response: flagged must be a boolean.'
             );
-
-            return false;
         }
 
-        try {
-            $decoded = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
-            $this->logInvalidModerationResponse($eventId, $exception);
+        $flagged = $decoded['flagged'];
 
-            return false;
-        }
+        Log::info('AI moderation parsed successfully', [
+            'event_id' => $eventId,
+            'event_request_create_id' => $eventRequestCreateId,
+            'decoded' => $decoded,
+            'flagged' => $flagged,
+            'flagged_type' => get_debug_type($flagged),
+        ]);
 
-        if (! is_array($decoded) || ! array_key_exists('flagged', $decoded)) {
-            $this->logInvalidModerationResponse(
-                $eventId,
-                new RuntimeException('Moderation response missing flagged field.')
-            );
-
-            return false;
-        }
-
-        return $decoded['flagged'] === true;
+        return $flagged;
     }
 
     public function handle(array $validated, ?Authenticatable $user = null): array

@@ -441,6 +441,35 @@ class GenerateEventAiTagsJobTest extends TestCase
         $this->assertSame('approved', $eventRequestCreate->status);
     }
 
+    public function test_ai_flagged_remains_saved_when_tag_generation_fails_after_moderation(): void
+    {
+        $event = Events::create([
+            'title' => 'Flagged before tags fail',
+            'description' => 'Moderation succeeds and tag generation fails after it.',
+        ]);
+        $eventRequestCreate = EventRequestCreate::create([
+            'event_id' => $event->id,
+            'status' => 'pending',
+        ]);
+
+        Http::fake(fn ($request) => $this->isModerationRequest($request)
+            ? $this->openRouterContentResponse('{"flagged":true}')
+            : $this->openRouterContentResponse('')
+        );
+
+        try {
+            $this->runJob($event->id);
+            $this->fail('The tags request should throw after moderation is saved.');
+        } catch (RuntimeException $exception) {
+            $this->assertSame('Empty response content from provider.', $exception->getMessage());
+        }
+
+        $eventRequestCreate->refresh();
+
+        $this->assertTrue($eventRequestCreate->ai_flagged);
+        $this->assertSame('pending', $eventRequestCreate->status);
+    }
+
     public function test_moderation_openrouter_failure_does_not_block_processing_or_change_status(): void
     {
         Log::spy();
@@ -512,9 +541,10 @@ class GenerateEventAiTagsJobTest extends TestCase
 
         Log::shouldHaveReceived('error')
             ->with(
-                'Event content moderation: invalid AI JSON response',
+                'AI moderation processing failed',
                 Mockery::on(fn (array $context) => $context['event_id'] === $event->id
-                    && $context['model'] === 'test/vision-model'
+                    && $context['event_request_create_id'] === $eventRequestCreate->id
+                    && $context['exception_class'] === \JsonException::class
                     && is_string($context['message'])
                     && $context['message'] !== '')
             )

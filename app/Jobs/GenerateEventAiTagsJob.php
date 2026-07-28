@@ -14,6 +14,7 @@ use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 use Throwable;
 
 class GenerateEventAiTagsJob implements ShouldQueue
@@ -87,17 +88,45 @@ class GenerateEventAiTagsJob implements ShouldQueue
 
         $eventRequestCreate = $event->requests()->first();
 
-        if (
-            $eventRequestCreate !== null
-            && $tagsService->flagEventContent(
+        try {
+            if (
+                ! $eventRequestCreate ||
+                ! $eventRequestCreate->exists
+            ) {
+                throw new RuntimeException(
+                    'EventRequestCreate record was not found.'
+                );
+            }
+
+            $flagged = $tagsService->flagEventContent(
                 title: (string) $event->title,
                 description: $event->description,
                 eventId: $this->eventId,
                 eventRequestCreateId: (int) $eventRequestCreate->id
-            )
-        ) {
-            $eventRequestCreate->update([
-                'ai_flagged' => true,
+            );
+
+            $eventRequestCreate->ai_flagged = $flagged;
+            $saved = $eventRequestCreate->save();
+            $eventRequestCreate->refresh();
+
+            Log::info('AI moderation flag saved', [
+                'event_id' => $event->id ?? null,
+                'event_request_create_id' => $eventRequestCreate->id,
+                'save_result' => $saved,
+                'parsed_flagged' => $flagged,
+                'stored_ai_flagged' => $eventRequestCreate->ai_flagged,
+                'stored_type' => get_debug_type(
+                    $eventRequestCreate->ai_flagged
+                ),
+            ]);
+        } catch (Throwable $exception) {
+            Log::error('AI moderation processing failed', [
+                'event_id' => $event->id ?? null,
+                'event_request_create_id' => $eventRequestCreate->id ?? null,
+                'exception_class' => $exception::class,
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
             ]);
         }
 
