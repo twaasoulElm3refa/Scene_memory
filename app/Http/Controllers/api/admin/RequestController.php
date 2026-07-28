@@ -32,11 +32,13 @@ class RequestController extends Controller
         try {
             $page = request('page', 1);
             $perPage = 5;
+            $aiFlagged = $this->aiFlaggedFilter();
+            $aiFlaggedCacheValue = $aiFlagged === null ? 'all' : (int) $aiFlagged;
 
-            $cacheKey = "requests:page_{$page}:per_{$perPage}";
+            $cacheKey = "requests:page_{$page}:per_{$perPage}:ai_flagged_{$aiFlaggedCacheValue}";
 
-            $requests = Cache::tags(['requests'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-                return $this->requestRepository->paginatedWithEvent($perPage);
+            $requests = Cache::tags(['requests'])->remember($cacheKey, $this->cacheTime, function () use ($perPage, $aiFlagged) {
+                return $this->requestRepository->paginatedWithEvent($perPage, $aiFlagged);
             });
 
             $countsKey = 'requests:counts';
@@ -60,6 +62,25 @@ class RequestController extends Controller
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
+    }
+
+    private function aiFlaggedFilter(): ?bool
+    {
+        if (! request()->has('ai_flagged')) {
+            return null;
+        }
+
+        $value = request('ai_flagged');
+
+        if ($value === '1' || $value === 1 || $value === true || $value === 'true') {
+            return true;
+        }
+
+        if ($value === '0' || $value === 0 || $value === false || $value === 'false') {
+            return false;
+        }
+
+        return null;
     }
 
     /**
