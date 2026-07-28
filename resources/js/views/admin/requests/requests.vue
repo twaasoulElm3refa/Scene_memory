@@ -671,11 +671,6 @@ async function fetchRequests(page = 1) {
     try {
         const params = getRequestParams();
 
-        console.log("Fetching requests with params:", {
-            page,
-            ...params,
-        });
-
         const response = await requestsService.getAllPaginated(
             page,
             params
