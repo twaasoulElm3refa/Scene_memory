@@ -27,43 +27,24 @@ class GenerateImageTagsService
             'description_length' => mb_strlen((string) ($description ?? '')),
         ]);
 
-        try {
-            $response = Http::withToken($this->apiKey())
-                ->acceptJson()
-                ->asJson()
-                ->timeout(30)
-                ->connectTimeout(10)
-                ->post($this->endpoint(), $this->buildModerationPayload($title, $description));
-        } catch (Throwable $exception) {
-            Log::error('Event content moderation: OpenRouter request failed', [
+        $payload = $this->buildModerationPayload($title, $description);
+        $response = $this->sendModerationRequest($payload, $eventId);
+        $responseBody = $this->moderationResponseBody($response);
+        $this->logModerationResponseStructure($eventId, $response, $responseBody);
+
+        if ($response->successful() && $this->shouldRetryModeration($responseBody)) {
+            $finishReason = data_get($responseBody, 'choices.0.finish_reason');
+
+            Log::warning('AI moderation retrying empty response', [
                 'event_id' => $eventId,
-                'status' => null,
-                'provider_error_code' => $exception->getCode() !== 0
-                    ? $this->safeProviderErrorValue($exception->getCode())
-                    : null,
-                'provider_error_message' => $this->safeProviderErrorValue($exception->getMessage()),
-                'model' => $this->model(),
+                'first_finish_reason' => $finishReason,
             ]);
 
-            return false;
+            $payload = $this->buildModerationPayload($title, $description, 512);
+            $response = $this->sendModerationRequest($payload, $eventId);
+            $responseBody = $this->moderationResponseBody($response);
+            $this->logModerationResponseStructure($eventId, $response, $responseBody);
         }
-
-        $responseBody = $response->json();
-        $responseBody = is_array($responseBody) ? $responseBody : [];
-        $rawContent = data_get($responseBody, 'choices.0.message.content');
-
-        Log::info('OpenRouter moderation response structure', [
-            'event_id' => $eventId,
-            'status' => $response->status(),
-            'successful' => $response->successful(),
-            'top_level_keys' => array_keys($responseBody),
-            'finish_reason' => data_get($responseBody, 'choices.0.finish_reason'),
-            'content_type' => get_debug_type($rawContent),
-            'content' => $this->safeModerationContent($rawContent),
-            'extracted_content' => $this->safeProviderErrorValue($this->extractContent($responseBody)),
-            'has_tool_calls' => ! empty(data_get($responseBody, 'choices.0.message.tool_calls')),
-            'error' => $this->safeProviderErrorValue(data_get($responseBody, 'error.message')),
-        ]);
 
         if ($response->failed()) {
             Log::error('Event content moderation: OpenRouter request failed', [
@@ -81,9 +62,14 @@ class GenerateImageTagsService
             return false;
         }
 
-        $extractedContent = $this->extractContent(
-            $responseBody
+        $content = data_get($responseBody, 'choices.0.message.content');
+        $extractedContent = trim((string) $content);
+        $extractedContent = preg_replace(
+            '/^```(?:json)?\s*|\s*```$/i',
+            '',
+            $extractedContent
         );
+        $extractedContent = trim((string) $extractedContent);
 
         if (blank($extractedContent)) {
             throw new RuntimeException('Empty response content from provider.');
@@ -288,7 +274,11 @@ class GenerateImageTagsService
         ];
     }
 
-    protected function buildModerationPayload(string $title, ?string $description): array
+    protected function buildModerationPayload(
+        string $title,
+        ?string $description,
+        int $maxCompletionTokens = 256
+    ): array
     {
         return [
             'model' => $this->model(),
@@ -304,7 +294,13 @@ class GenerateImageTagsService
                 ],
             ],
             'temperature' => 0,
-            'max_tokens' => 20,
+            'max_completion_tokens' => $maxCompletionTokens,
+            'reasoning' => [
+                'enabled' => false,
+            ],
+            'response_format' => [
+                'type' => 'json_object',
+            ],
         ];
     }
 
@@ -572,6 +568,91 @@ PROMPT;
             'model' => $this->model(),
             'message' => $exception->getMessage(),
         ]);
+    }
+
+    private function sendModerationRequest(array $payload, ?int $eventId)
+    {
+        Log::info('OpenRouter moderation request payload', [
+            'event_id' => $eventId,
+            'model' => $payload['model'] ?? null,
+            'max_tokens' => $payload['max_tokens'] ?? null,
+            'max_completion_tokens' => $payload['max_completion_tokens'] ?? null,
+            'temperature' => $payload['temperature'] ?? null,
+            'reasoning' => $payload['reasoning'] ?? null,
+            'reasoning_effort' => $payload['reasoning_effort'] ?? null,
+            'response_format' => $payload['response_format'] ?? null,
+            'timeout' => 30,
+            'connect_timeout' => 10,
+        ]);
+
+        try {
+            return Http::withToken($this->apiKey())
+                ->acceptJson()
+                ->asJson()
+                ->timeout(30)
+                ->connectTimeout(10)
+                ->post($this->endpoint(), $payload);
+        } catch (Throwable $exception) {
+            Log::error('Event content moderation: OpenRouter request failed', [
+                'event_id' => $eventId,
+                'status' => null,
+                'provider_error_code' => $exception->getCode() !== 0
+                    ? $this->safeProviderErrorValue($exception->getCode())
+                    : null,
+                'provider_error_message' => $this->safeProviderErrorValue($exception->getMessage()),
+                'model' => $this->model(),
+            ]);
+
+            throw $exception;
+        }
+    }
+
+    private function moderationResponseBody($response): array
+    {
+        $responseBody = $response->json();
+
+        return is_array($responseBody) ? $responseBody : [];
+    }
+
+    private function logModerationResponseStructure(?int $eventId, $response, array $responseBody): void
+    {
+        $rawContent = data_get($responseBody, 'choices.0.message.content');
+
+        Log::info('OpenRouter moderation response structure', [
+            'event_id' => $eventId,
+            'model' => data_get($responseBody, 'model'),
+            'provider' => data_get($responseBody, 'provider'),
+            'status' => $response->status(),
+            'successful' => $response->successful(),
+            'top_level_keys' => array_keys($responseBody),
+            'finish_reason' => data_get($responseBody, 'choices.0.finish_reason'),
+            'content_type' => get_debug_type($rawContent),
+            'content' => $this->safeModerationContent($rawContent),
+            'extracted_content' => $this->safeProviderErrorValue($this->extractContent($responseBody)),
+            'reasoning' => $this->safeModerationContent(data_get(
+                $responseBody,
+                'choices.0.message.reasoning'
+            )),
+            'reasoning_details' => $this->safeModerationContent(data_get(
+                $responseBody,
+                'choices.0.message.reasoning_details'
+            )),
+            'usage' => data_get($responseBody, 'usage'),
+            'has_tool_calls' => ! empty(data_get($responseBody, 'choices.0.message.tool_calls')),
+            'error' => data_get($responseBody, 'error'),
+        ]);
+    }
+
+    private function shouldRetryModeration(array $responseBody): bool
+    {
+        $finishReason = data_get($responseBody, 'choices.0.finish_reason');
+        $content = data_get($responseBody, 'choices.0.message.content');
+
+        if ($finishReason === 'length') {
+            return true;
+        }
+
+        return $content === null || trim((string) $content) === '';
     }
 
     private function safeModerationContent(mixed $content): mixed

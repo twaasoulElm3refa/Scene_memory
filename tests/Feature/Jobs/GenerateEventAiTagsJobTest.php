@@ -441,6 +441,59 @@ class GenerateEventAiTagsJobTest extends TestCase
         $this->assertSame('approved', $eventRequestCreate->status);
     }
 
+    public function test_moderation_retries_once_when_openrouter_returns_length_with_empty_content(): void
+    {
+        $event = Events::create([
+            'title' => 'Retry moderation',
+            'description' => 'The first moderation response is truncated.',
+        ]);
+        $eventRequestCreate = EventRequestCreate::create([
+            'event_id' => $event->id,
+            'status' => 'pending',
+        ]);
+
+        $moderationRequests = [];
+
+        Http::fake(function ($request) use (&$moderationRequests) {
+            if ($this->isModerationRequest($request)) {
+                $moderationRequests[] = $request->data();
+
+                if (count($moderationRequests) === 1) {
+                    return Http::response([
+                        'model' => 'test/router-model',
+                        'provider' => 'test-provider',
+                        'choices' => [[
+                            'finish_reason' => 'length',
+                            'message' => [
+                                'content' => null,
+                            ],
+                        ]],
+                        'usage' => [
+                            'completion_tokens' => 20,
+                        ],
+                    ]);
+                }
+
+                return $this->openRouterContentResponse('{"flagged":true}');
+            }
+
+            return $this->openRouterContentResponse('{"event_tags":[],"images":[]}');
+        });
+
+        $this->runJob($event->id);
+
+        $eventRequestCreate->refresh();
+
+        $this->assertTrue($eventRequestCreate->ai_flagged);
+        $this->assertSame('pending', $eventRequestCreate->status);
+        $this->assertCount(2, $moderationRequests);
+        $this->assertArrayNotHasKey('max_tokens', $moderationRequests[0]);
+        $this->assertSame(256, $moderationRequests[0]['max_completion_tokens']);
+        $this->assertSame(['enabled' => false], $moderationRequests[0]['reasoning']);
+        $this->assertSame(['type' => 'json_object'], $moderationRequests[0]['response_format']);
+        $this->assertSame(512, $moderationRequests[1]['max_completion_tokens']);
+    }
+
     public function test_ai_flagged_remains_saved_when_tag_generation_fails_after_moderation(): void
     {
         $event = Events::create([
