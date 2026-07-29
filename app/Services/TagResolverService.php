@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\TranslateTagJob;
 use App\Models\Tags;
 use Illuminate\Support\Str;
 
@@ -20,6 +21,9 @@ class TagResolverService
             ['slug' => $slug],
             ['name' => $name]
         );
+
+        // Tags transaltion Job
+        TranslateTagJob::dispatch($tag->id, $name);
 
         if ($tag->trashed()) {
             $tag->restore();

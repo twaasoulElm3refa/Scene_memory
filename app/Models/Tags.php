@@ -35,4 +35,15 @@ class Tags extends Model
     {
         return $this->belongsToMany(EventsImges::class, 'images_tags', 'tags_id', 'events_imges_id');
     }
+
+    public function translations()
+    {
+        return $this->hasMany(TagsTranslations::class, 'tag_id');
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(TagsTranslations::class, 'tag_id')
+            ->where('locale', app()->getLocale());
+    }
 }
