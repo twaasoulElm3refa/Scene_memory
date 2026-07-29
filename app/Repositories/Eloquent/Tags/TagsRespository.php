@@ -13,7 +13,17 @@ class TagsRespository implements TagRepositoryInterface
         return Cache::remember('all_tags', now()->addHours(1), function () {
             return Tags::query()
                 ->select('id', 'name', 'slug')
-                ->orderBy('id', 'desc')
+                ->with([
+                    'translation' => function ($query) {
+                        $query->select(
+                            'id',
+                            'tag_id', // غيرها لو اسم الـ FK مختلف
+                            'locale',
+                            'name'
+                        );
+                    }
+                ])
+                ->orderByDesc('id')
                 ->get();
         });
     }
