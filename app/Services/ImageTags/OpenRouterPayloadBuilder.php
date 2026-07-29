@@ -47,6 +47,12 @@ class OpenRouterPayloadBuilder
             ],
             'temperature' => 0.2,
             'max_tokens' => 300,
+            'reasoning' => [
+                'enabled' => false,
+            ],
+            'response_format' => [
+                'type' => 'json_object',
+            ],
         ];
     }
 

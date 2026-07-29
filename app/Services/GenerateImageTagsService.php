@@ -10,6 +10,7 @@ use App\Services\ImageTags\OpenRouterPayloadBuilder;
 use App\Services\ImageTags\TagsResponseParser;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Log;
 
 class GenerateImageTagsService
@@ -122,11 +123,41 @@ class GenerateImageTagsService
         );
 
         $responseBody = $response->json();
+        $this->logTagsRawResponse(
+            $response,
+            is_array($responseBody) ? $responseBody : [],
+            $eventId
+        );
 
         return $this->tagsResponseParser->parse(
             is_array($responseBody) ? $responseBody : [],
             count($imageDataUrls),
             $eventId
         );
+    }
+
+    private function logTagsRawResponse(Response $response, array $responseBody, ?int $eventId): void
+    {
+        $content = data_get($responseBody, 'choices.0.message.content');
+
+        Log::info('OpenRouter tags raw response', [
+            'event_id' => $eventId,
+            'status' => $response->status(),
+            'successful' => $response->successful(),
+            'finish_reason' => data_get($responseBody, 'choices.0.finish_reason'),
+            'content_type' => get_debug_type($content),
+            'content' => is_string($content)
+                ? mb_substr($content, 0, 2000)
+                : $content,
+            'body' => mb_substr($response->body(), 0, 2000),
+            'model' => data_get($responseBody, 'model', $this->config->get('services.openrouter.model')),
+            'error' => data_get($responseBody, 'error'),
+            'has_provider_error' => data_get($responseBody, 'error') !== null,
+            'has_tool_calls' => ! empty(data_get($responseBody, 'choices.0.message.tool_calls')),
+            'has_reasoning' => data_get($responseBody, 'choices.0.message.reasoning') !== null
+                || data_get($responseBody, 'choices.0.message.reasoning_details') !== null,
+            'reasoning_type' => get_debug_type(data_get($responseBody, 'choices.0.message.reasoning')),
+            'tool_calls_type' => get_debug_type(data_get($responseBody, 'choices.0.message.tool_calls')),
+        ]);
     }
 }
