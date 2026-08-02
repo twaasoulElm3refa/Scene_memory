@@ -409,7 +409,7 @@ class EventRepository implements EventRepositoryInterface
 
     public function findWithAdminRelationsById(int $id)
     {
-        return Events::with('city:id,name', 'sub_categorey:id,name', 'user:id,name', 'firstImage', 'adminTranslation','images')->find($id);
+        return Events::with('city:id,name','tags:id,name', 'sub_categorey:id,name', 'user:id,name', 'firstImage', 'adminTranslation','images')->find($id);
     }
 
     public function wishlistEventsPaginated($eventIds, int $perPage = 5)

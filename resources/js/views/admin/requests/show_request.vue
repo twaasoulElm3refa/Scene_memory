@@ -23,7 +23,9 @@
           <!-- Left Side: Header + Hero Image -->
           <aside class="xl:col-span-5 space-y-3">
             <!-- Header -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3">
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-100 p-3"
+            >
               <div class="flex items-center justify-between gap-3">
                 <button
                   @click="$router.back()"
@@ -42,6 +44,7 @@
                       d="M15 19l-7-7 7-7"
                     />
                   </svg>
+
                   Back
                 </button>
 
@@ -58,7 +61,9 @@
             </div>
 
             <!-- Hero Image -->
-            <div class="rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-white">
+            <div
+              class="rounded-2xl overflow-hidden shadow-md border border-gray-200 bg-white"
+            >
               <img
                 :src="heroImageUrl"
                 :alt="apiData.event.title || 'Event image'"
@@ -71,7 +76,9 @@
           <!-- Right Side: Event Data -->
           <main class="xl:col-span-7 space-y-3">
             <!-- Main Title / Description -->
-            <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <section
+              class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+            >
               <div class="flex flex-wrap items-center gap-2 mb-3">
                 <span
                   :class="
@@ -103,11 +110,19 @@
                 </span>
               </div>
 
-              <h1 class="text-xl md:text-2xl font-bold text-gray-900 leading-snug">
-                {{ apiData.event.admin_translation?.title || apiData.event.title || "—" }}
+              <h1
+                class="text-xl md:text-2xl font-bold text-gray-900 leading-snug"
+              >
+                {{
+                  apiData.event.admin_translation?.title ||
+                  apiData.event.title ||
+                  "—"
+                }}
               </h1>
 
-              <p class="mt-2 text-sm text-gray-600 leading-relaxed line-clamp-4">
+              <p
+                class="mt-2 text-sm text-gray-600 leading-relaxed line-clamp-4"
+              >
                 {{
                   apiData.event.admin_translation?.description ||
                   apiData.event.description ||
@@ -117,61 +132,129 @@
             </section>
 
             <!-- Small Data Cards -->
-            <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">Requested by</p>
+            <section
+              class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2"
+            >
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  Requested by
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ apiData.event.user?.name || "—" }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">Created At</p>
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  Created At
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ formatDate(apiData.event.created_at) }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">Start Date</p>
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  Start Date
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ formatDateOnly(apiData.event.start_date) }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">End Date</p>
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  End Date
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ formatDateOnly(apiData.event.end_date) }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">Time</p>
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  Time
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ apiData.event.time || "—" }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">City</p>
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  City
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ apiData.event.city?.name || "—" }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">Category</p>
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  Category
+                </p>
+
                 <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ apiData.event.sub_categorey?.name || "—" }}
                 </p>
               </div>
 
-              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
-                <p class="text-[11px] text-gray-500 mb-1">Request Status</p>
-                <p class="text-sm font-semibold text-gray-900 capitalize truncate">
+              <div
+                class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]"
+              >
+                <p class="text-[11px] text-gray-500 mb-1">
+                  Request Status
+                </p>
+
+                <p
+                  class="text-sm font-semibold text-gray-900 capitalize truncate"
+                >
                   {{ apiData.request.status || "—" }}
                 </p>
+              </div>
+            </section>
+
+            <!-- Event Tags -->
+            <section
+              v-if="apiData.event.tags?.length"
+              class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+              aria-labelledby="event-tags-heading"
+            >
+              <h2
+                id="event-tags-heading"
+                class="text-sm font-bold text-gray-900 mb-3"
+              >
+                Event Tags
+              </h2>
+
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="(tag, index) in apiData.event.tags"
+                  :key="tag.id || `${tag.name}-${index}`"
+                  class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 border border-indigo-100"
+                >
+                  {{ tag.name }}
+                </span>
               </div>
             </section>
           </main>
@@ -182,10 +265,18 @@
           class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-5"
           aria-labelledby="event-images-heading"
         >
-          <div class="flex items-center justify-between gap-4 pb-3 border-b border-gray-100">
+          <div
+            class="flex items-center justify-between gap-4 pb-3 border-b border-gray-100"
+          >
             <div>
-              <p class="text-xs font-medium text-indigo-600 mb-1">Event Gallery</p>
-              <h2 id="event-images-heading" class="text-xl font-bold text-gray-900">
+              <p class="text-xs font-medium text-indigo-600 mb-1">
+                Event Gallery
+              </p>
+
+              <h2
+                id="event-images-heading"
+                class="text-xl font-bold text-gray-900"
+              >
                 Event Images
               </h2>
             </div>
@@ -195,7 +286,12 @@
               class="shrink-0 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 text-xs font-semibold"
             >
               {{ apiData.event.images.length }}
-              {{ apiData.event.images.length === 1 ? "image" : "images" }}
+
+              {{
+                apiData.event.images.length === 1
+                  ? "image"
+                  : "images"
+              }}
             </span>
           </div>
 
@@ -210,14 +306,25 @@
           >
             <a
               v-for="(image, index) in apiData.event.images"
-              :key="image.id || `${image.full_url || image.preview_url}-${index}`"
-              :href="resolveImageUrl(image.full_url || image.preview_url)"
+              :key="
+                image.id ||
+                `${image.full_url || image.preview_url}-${index}`
+              "
+              :href="
+                resolveImageUrl(
+                  image.full_url || image.preview_url
+                )
+              "
               target="_blank"
               rel="noopener noreferrer"
               class="group relative block overflow-hidden rounded-xl aspect-[16/10] bg-gray-100 border border-gray-200 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               <img
-                :src="resolveImageUrl(image.full_url || image.preview_url)"
+                :src="
+                  resolveImageUrl(
+                    image.full_url || image.preview_url
+                  )
+                "
                 :alt="`${apiData.event.admin_translation?.title || apiData.event.title || 'Event'} image ${index + 1}`"
                 loading="lazy"
                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -245,7 +352,9 @@
           v-if="showRejectReason"
           class="bg-white rounded-xl shadow-sm border border-red-100 p-5 mt-4"
         >
-          <h3 class="text-lg font-bold text-red-700 mb-3">Reason for Rejection</h3>
+          <h3 class="text-lg font-bold text-red-700 mb-3">
+            Reason for Rejection
+          </h3>
 
           <textarea
             v-model="rejectReason"
@@ -254,19 +363,28 @@
             placeholder="Please enter the reason why this request is being rejected..."
           ></textarea>
 
-          <p v-if="rejectReasonError" class="mt-2 text-sm text-red-600">
+          <p
+            v-if="rejectReasonError"
+            class="mt-2 text-sm text-red-600"
+          >
             {{ rejectReasonError }}
           </p>
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 pt-5 justify-center">
+        <div
+          class="flex flex-col sm:flex-row gap-4 pt-5 justify-center"
+        >
           <button
             @click="approveRequest"
             :disabled="actionLoading"
             class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-8 transition-all shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded-full min-w-[200px] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {{ actionLoading ? "Processing..." : "Approve Request" }}
+            {{
+              actionLoading
+                ? "Processing..."
+                : "Approve Request"
+            }}
           </button>
 
           <button
@@ -284,7 +402,11 @@
             :disabled="actionLoading || !rejectReason.trim()"
             class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-8 transition-all shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full min-w-[200px] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {{ actionLoading ? "Processing..." : "Confirm Rejection" }}
+            {{
+              actionLoading
+                ? "Processing..."
+                : "Confirm Rejection"
+            }}
           </button>
 
           <button
@@ -339,14 +461,21 @@ const resolveImageUrl = (path) => {
     return imagePath;
   }
 
-  if (imagePath.startsWith("/storage/")) return imagePath;
+  if (imagePath.startsWith("/storage/")) {
+    return imagePath;
+  }
 
-  return `/storage/${imagePath.replace(/^\/+/, "").replace(/^public\//, "")}`;
+  return `/storage/${imagePath
+    .replace(/^\/+/, "")
+    .replace(/^public\//, "")}`;
 };
 
 const heroImageUrl = computed(() => {
   const firstImage = apiData.value?.event?.first_image;
-  const imagePath = firstImage?.full_url || firstImage?.preview_url;
+
+  const imagePath =
+    firstImage?.full_url ||
+    firstImage?.preview_url;
 
   return (
     resolveImageUrl(imagePath) ||
@@ -359,7 +488,9 @@ const formatDate = (dateStr) => {
 
   const date = new Date(dateStr);
 
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
 
   return date.toLocaleString("en-GB", {
     day: "2-digit",
@@ -374,13 +505,24 @@ const formatDateOnly = (dateStr) => {
   if (!dateStr) return "—";
 
   const rawDate = String(dateStr).split("T")[0];
-  const [year, month, day] = rawDate.split("-").map(Number);
 
-  if (!year || !month || !day) return rawDate || "—";
+  const [year, month, day] = rawDate
+    .split("-")
+    .map(Number);
 
-  const date = new Date(year, month - 1, day);
+  if (!year || !month || !day) {
+    return rawDate || "—";
+  }
 
-  if (Number.isNaN(date.getTime())) return rawDate || "—";
+  const date = new Date(
+    year,
+    month - 1,
+    day
+  );
+
+  if (Number.isNaN(date.getTime())) {
+    return rawDate || "—";
+  }
 
   return date.toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -389,71 +531,111 @@ const formatDateOnly = (dateStr) => {
   });
 };
 
-const handleImageError = (e) => {
-  e.target.src = "https://placehold.co/900x400/1f2937/9ca3af?text=No+Image+Available";
+const handleImageError = (event) => {
+  event.target.src =
+    "https://placehold.co/900x400/1f2937/9ca3af?text=No+Image+Available";
 };
 
 const fetchRequest = async () => {
   try {
     loading.value = true;
+    error.value = null;
 
-    const { data } = await RequestService.getSingle(route.params.id);
-
-    console.log("API Response:", data);
+    const { data } =
+      await RequestService.getSingle(
+        route.params.id
+      );
 
     apiData.value = {
       request: data.data.request,
       event: data.data.event,
     };
   } catch (err) {
-    error.value = err.response?.data?.message || "Failed to load request details.";
+    error.value =
+      err.response?.data?.message ||
+      "Failed to load request details.";
   } finally {
     loading.value = false;
   }
 };
 
 const approveRequest = async () => {
-  if (!confirm("Are you sure you want to APPROVE this event request?")) return;
+  const isConfirmed = confirm(
+    "Are you sure you want to APPROVE this event request?"
+  );
+
+  if (!isConfirmed) return;
 
   try {
     actionLoading.value = true;
 
-    await RequestService.approve(route.params.id);
+    await RequestService.approve(
+      route.params.id
+    );
 
-    apiData.value.request.status = "approved";
+    apiData.value.request.status =
+      "approved";
 
-    alert("Request approved successfully!");
+    alert(
+      "Request approved successfully!"
+    );
 
-    window.location.href = "/admin/requests";
+    window.location.href =
+      "/admin/requests";
   } catch (err) {
-    alert(err.response?.data?.message || "Failed to approve request.");
+    alert(
+      err.response?.data?.message ||
+      "Failed to approve request."
+    );
   } finally {
     actionLoading.value = false;
   }
 };
 
 const declineRequest = async () => {
-  const reason = (rejectReason.value || "").trim();
+  const reason = (
+    rejectReason.value || ""
+  ).trim();
+
+  rejectReasonError.value = "";
 
   if (!reason) {
-    rejectReasonError.value = "Please provide a reason for rejection";
+    rejectReasonError.value =
+      "Please provide a reason for rejection";
+
     return;
   }
 
-  if (!confirm("Are you sure you want to REJECT this event request?")) return;
+  const isConfirmed = confirm(
+    "Are you sure you want to REJECT this event request?"
+  );
+
+  if (!isConfirmed) return;
 
   try {
     actionLoading.value = true;
 
-    await RequestService.decline(route.params.id, { reason });
+    await RequestService.decline(
+      route.params.id,
+      {
+        reason,
+      }
+    );
 
-    apiData.value.request.status = "rejected";
+    apiData.value.request.status =
+      "rejected";
 
-    alert("Request rejected successfully!");
+    alert(
+      "Request rejected successfully!"
+    );
 
-    window.location.href = "/admin/requests";
+    window.location.href =
+      "/admin/requests";
   } catch (err) {
-    alert(err.response?.data?.message || "Failed to reject request.");
+    alert(
+      err.response?.data?.message ||
+      "Failed to reject request."
+    );
   } finally {
     actionLoading.value = false;
   }
