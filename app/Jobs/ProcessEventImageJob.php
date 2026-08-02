@@ -23,17 +23,11 @@ class ProcessEventImageJob implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-
     public int $timeout = 120;
-
     public int $eventId;
-
     public string $tempPath;
-
     public float $manualPrice = 0;
-
     public array $metadata = [];
-
     public function __construct(
         int $eventId,
         string $tempPath,
@@ -47,7 +41,6 @@ class ProcessEventImageJob implements ShouldQueue
             : 0;
         $this->metadata = $metadata;
     }
-
     public function handle(
         ImageAnalysisService $imageAnalysisService,
         TagResolverService $tagResolver
@@ -112,10 +105,8 @@ class ProcessEventImageJob implements ShouldQueue
             $filename = uniqid('', true).'.jpg';
             $fullPath = 'events/full/'.$filename;
             $previewPath = 'events/preview/'.$filename;
-
             Storage::disk('public')->put($fullPath, (string) $image->toJpeg(90));
             Storage::disk('public')->put($previewPath, (string) $preview);
-
             $eventImage = EventsImges::create([
                 'event_id' => $this->eventId,
                 'type' => 'image',

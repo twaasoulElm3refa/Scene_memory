@@ -304,7 +304,7 @@ class ImageAnalysisService
 
     private function makePreview($image, ImageManager $manager): EncodedImage
     {
-        $image->blur(12);
+        $image->blur(10);
 
         $watermark = $manager->read(public_path('images/watermark.png'));
 

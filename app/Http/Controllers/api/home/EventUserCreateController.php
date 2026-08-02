@@ -43,7 +43,6 @@ class EventUserCreateController extends Controller
         $this->stripUploadOnlyData($data);
         $imageJobs = [];
         $videoJobs = [];
-
         try {
             $event = DB::transaction(function () use (
                 $data,
@@ -68,7 +67,6 @@ class EventUserCreateController extends Controller
                     foreach ($uploadedFiles as $index => $file) {
                         if (! $file instanceof UploadedFile) {
                             \Log::error('Invalid uploaded item in urls', ['type' => gettype($file)]);
-
                             continue;
                         }
                         $mime = (string) $file->getMimeType();
@@ -94,7 +92,6 @@ class EventUserCreateController extends Controller
                                     'name' => $file->getClientOriginalName(),
                                     'mime' => $mime,
                                 ]);
-
                                 continue;
                             }
                             $manualPrice = $request->input("media_prices.$index");
@@ -140,20 +137,15 @@ class EventUserCreateController extends Controller
                         }
                     }
                 }
-
                 return $event;
             });
-
             $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
-
             $this->clearEventsCache($event->slug);
-
             return $this->success(
                 $event->load('translations', 'photos'),
                 'Event Created Successfully'
             );
-
         } catch (\Throwable $th) {
             \Log::error('Event create failed', [
                 'message' => $th->getMessage(),
@@ -161,7 +153,6 @@ class EventUserCreateController extends Controller
                 'line' => $th->getLine(),
                 'trace' => $th->getTraceAsString(),
             ]);
-
             return $this->error($th->getMessage());
         }
     }
