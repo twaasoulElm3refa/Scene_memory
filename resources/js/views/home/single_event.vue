@@ -70,7 +70,7 @@
                         </div>
 
                         <!-- Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div v-for="(media, index) in eventImages" :key="media?.id || index"
                                 class="aspect-[16/10] overflow-hidden rounded-2xl shadow hover:shadow-lg transition-shadow cursor-pointer relative group"
                                 @click="openLightbox(index)">
