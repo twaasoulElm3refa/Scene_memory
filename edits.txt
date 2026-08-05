@@ -1,4 +1,20 @@
-ai tags
-test functionallity
-historical page
+separation tags in request creation
+
+1- images
+2- videos
+3- events
+sorted in home by this arrange
+
+image contain a description for the search bar
+filter to get only (images || events || videos )
+
+filters Ui be under the search bar
+
+Edit the header Ui
+
+collection button hidden when only 1 photo
+
+Edit historical creation
+
 tags crud in dashboard
+

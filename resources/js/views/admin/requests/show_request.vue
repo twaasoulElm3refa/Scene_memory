@@ -67,7 +67,7 @@
               <img
                 :src="heroImageUrl"
                 :alt="apiData.event.title || 'Event image'"
-                class="w-full h-64 md:h-[360px] xl:h-[500px] object-cover transition-transform duration-700 hover:scale-105"
+                class="w-full h-64 md:h-[360px] xl:h-[720px] object-cover transition-transform duration-700 hover:scale-105"
                 @error="handleImageError"
               />
             </div>
@@ -254,6 +254,53 @@
                   class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 border border-indigo-100"
                 >
                   {{ tag.name }}
+                </span>
+              </div>
+            </section>
+
+            <section
+              v-if="allImageTags.length"
+              class="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
+              aria-labelledby="image-tags-heading"
+            >
+              <div class="flex items-center justify-between gap-3 mb-3">
+                <h2
+                  id="image-tags-heading"
+                  class="text-sm font-bold text-gray-900"
+                >
+                  Image Tags
+                </h2>
+
+                <span
+                  class="inline-flex items-center justify-center min-w-6 h-6 px-2 rounded-full bg-gray-100 text-gray-600 text-[11px] font-semibold"
+                >
+                  {{ allImageTags.length }}
+                </span>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="(tag, index) in allImageTags"
+                  :key="tag.id || `${tag.name}-${tag.mode}-${index}`"
+                  :class="[
+                    'inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold border',
+                    tag.mode === 'user'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                      : 'bg-violet-50 text-violet-700 border-violet-200',
+                  ]"
+                >
+                  <span>{{ tag.name }}</span>
+
+                  <span
+                    :class="[
+                      'rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide',
+                      tag.mode === 'user'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-violet-100 text-violet-700',
+                    ]"
+                  >
+                    {{ tag.mode === "user" ? "User" : "AI" }}
+                  </span>
                 </span>
               </div>
             </section>
@@ -483,6 +530,44 @@ const heroImageUrl = computed(() => {
   );
 });
 
+const allImageTags = computed(() => {
+  const images = apiData.value?.event?.images;
+
+  if (!Array.isArray(images)) {
+    return [];
+  }
+
+  const tags = images.flatMap((image) => {
+    return Array.isArray(image?.tags) ? image.tags : [];
+  });
+
+  const uniqueTags = new Map();
+
+  tags.forEach((tag) => {
+    const tagName = String(tag?.name || "").trim();
+
+    if (!tagName) {
+      return;
+    }
+
+    const mode = tag?.mode === "user" ? "user" : "ai";
+
+    const key =
+      tag?.id ??
+      `${tagName.toLowerCase()}-${mode}`;
+
+    if (!uniqueTags.has(key)) {
+      uniqueTags.set(key, {
+        ...tag,
+        name: tagName,
+        mode,
+      });
+    }
+  });
+
+  return Array.from(uniqueTags.values());
+});
+
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
 
@@ -545,7 +630,7 @@ const fetchRequest = async () => {
       await RequestService.getSingle(
         route.params.id
       );
-
+    console.log("Fetched request data:", data);
     apiData.value = {
       request: data.data.request,
       event: data.data.event,
