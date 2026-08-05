@@ -3,6 +3,7 @@
 namespace Tests\Feature\Jobs;
 
 use App\Jobs\GenerateEventAiTagsJob;
+use App\Jobs\TranslateTagJob;
 use App\Models\Event_Tags;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use RuntimeException;
@@ -41,6 +43,7 @@ class GenerateEventAiTagsJobTest extends TestCase
         config()->set('ai_tags.images_limit', 5);
         config()->set('ai_tags.event_tags_limit', 8);
         config()->set('ai_tags.image_tags_limit', 10);
+        Queue::fake([TranslateTagJob::class]);
     }
 
     protected function tearDown(): void
@@ -63,13 +66,25 @@ class GenerateEventAiTagsJobTest extends TestCase
         $firstImage = $this->createStoredImage($event, 'events/full/first.png');
         $secondImage = $this->createStoredImage($event, 'events/full/second.png');
 
-        $manualEventTag = Tags::create(['name' => 'Manual event', 'slug' => 'manual-event']);
+        $manualEventTag = Tags::create([
+            'name' => 'Manual event',
+            'slug' => 'manual-event',
+            'mode' => 'user',
+        ]);
         Event_Tags::create(['event_id' => $event->id, 'tag_id' => $manualEventTag->id]);
 
-        $manualImageTag = Tags::create(['name' => 'Manual image', 'slug' => 'manual-image']);
+        $manualImageTag = Tags::create([
+            'name' => 'Manual image',
+            'slug' => 'manual-image',
+            'mode' => 'user',
+        ]);
         $firstImage->tags()->attach($manualImageTag->id);
 
-        $softDeletedTag = Tags::create(['name' => 'Restored', 'slug' => 'restored']);
+        $softDeletedTag = Tags::create([
+            'name' => 'Restored',
+            'slug' => 'restored',
+            'mode' => 'ai',
+        ]);
         $softDeletedTag->delete();
 
         Http::fake([
@@ -95,6 +110,12 @@ class GenerateEventAiTagsJobTest extends TestCase
         $this->assertSame(1, Tags::where('slug', 'tourism')->count());
         $this->assertSame(1, Tags::where('slug', 'shared')->count());
         $this->assertFalse($softDeletedTag->fresh()->trashed());
+        $this->assertDatabaseHas('tags', ['slug' => 'tourism', 'mode' => 'ai']);
+        $this->assertDatabaseHas('tags', ['slug' => 'shared', 'mode' => 'ai']);
+        $this->assertDatabaseHas('tags', ['slug' => 'first-image', 'mode' => 'ai']);
+        $this->assertDatabaseHas('tags', ['slug' => 'second-image', 'mode' => 'ai']);
+        $this->assertDatabaseHas('tags', ['slug' => 'manual-event', 'mode' => 'user']);
+        $this->assertDatabaseHas('tags', ['slug' => 'manual-image', 'mode' => 'user']);
 
         $eventTagNames = DB::table('event__tags')
             ->join('tags', 'tags.id', '=', 'event__tags.tag_id')

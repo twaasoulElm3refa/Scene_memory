@@ -21,7 +21,10 @@ class EventAiTagsPersistenceService
     public function persist(Events $event, array $result, array $imagesByIndex): void
     {
         DB::transaction(function () use ($event, $result, $imagesByIndex): void {
-            $eventTagIds = $this->tagResolver->resolveIds($result['event_tags'] ?? []);
+            $eventTagIds = $this->tagResolver->resolveIds(
+                $result['event_tags'] ?? [],
+                'ai'
+            );
 
             foreach ($eventTagIds as $tagId) {
                 $pivot = Event_Tags::withTrashed()->firstOrCreate([
@@ -54,7 +57,10 @@ class EventAiTagsPersistenceService
                     continue;
                 }
 
-                $tagIds = $this->tagResolver->resolveIds($imageResult['tags'] ?? []);
+                $tagIds = $this->tagResolver->resolveIds(
+                    $imageResult['tags'] ?? [],
+                    'ai'
+                );
 
                 if ($tagIds !== []) {
                     $imagesByIndex[$imageIndex]

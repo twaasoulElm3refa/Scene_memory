@@ -499,7 +499,8 @@ class EventUserCreateController extends Controller
 
         foreach (($tags['new_tags'] ?? []) as $tagName) {
             $tag = $this->tagResolver->resolve(
-                is_string($tagName) ? $tagName : null
+                is_string($tagName) ? $tagName : null,
+                'user'
             );
 
             if ($tag !== null) {
@@ -644,7 +645,7 @@ class EventUserCreateController extends Controller
         $createdTagIds = collect();
 
         foreach ($newTagNames as $tagName) {
-            $tag = $this->tagResolver->resolve($tagName);
+            $tag = $this->tagResolver->resolve($tagName, 'user');
 
             if ($tag !== null) {
                 $createdTagIds->push($tag->id);

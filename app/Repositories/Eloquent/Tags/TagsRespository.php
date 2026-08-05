@@ -10,9 +10,9 @@ class TagsRespository implements TagRepositoryInterface
 {
     public function getAllTags()
     {
-        return Cache::remember('all_tags', now()->addHours(1), function () {
+        return Cache::remember('all_tags_v2', now()->addHours(1), function () {
             return Tags::query()
-                ->select('id', 'name', 'slug')
+                ->select('id', 'name', 'slug', 'mode')
                 ->with([
                     'translation' => function ($query) {
                         $query->select(

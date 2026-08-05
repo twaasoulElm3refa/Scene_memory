@@ -100,8 +100,12 @@ class EventAiTagsDispatchTest extends TestCase
             )],
             'start_date' => now()->toDateString(),
             'photo_descriptions' => ['Manual photo description'],
-            'photo_tags_json' => [json_encode(['new_tags' => ['Manual photo tag']])],
+            'photo_tags_json' => [json_encode([
+                'new_tags' => ['Manual photo tag'],
+                'mode' => 'ai',
+            ])],
             'new_tags' => ['Manual event tag'],
+            'mode' => 'ai',
         ]);
 
         $response->assertOk();
@@ -109,6 +113,22 @@ class EventAiTagsDispatchTest extends TestCase
         $this->assertDatabaseHas('events', [
             'id' => $eventId,
             'is_historical' => $historical ? 1 : 0,
+        ]);
+        $this->assertDatabaseHas('tags', [
+            'name' => 'Manual event tag',
+            'mode' => 'user',
+        ]);
+        $this->assertDatabaseHas('tags', [
+            'name' => 'Manual photo tag',
+            'mode' => 'user',
+        ]);
+        $this->assertDatabaseMissing('tags', [
+            'name' => 'Manual event tag',
+            'mode' => 'ai',
+        ]);
+        $this->assertDatabaseMissing('tags', [
+            'name' => 'Manual photo tag',
+            'mode' => 'ai',
         ]);
 
         $finallyCallback = null;

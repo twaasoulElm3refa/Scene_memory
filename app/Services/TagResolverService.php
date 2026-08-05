@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class TagResolverService
 {
-    public function resolve(?string $rawName): ?Tags
+    public function resolve(?string $rawName, string $mode = 'ai'): ?Tags
     {
         $name = $this->normalizeName($rawName);
 
@@ -16,9 +16,16 @@ class TagResolverService
             return null;
         }
 
+        if (! in_array($mode, ['ai', 'user'], true)) {
+            throw new \InvalidArgumentException('Invalid tag mode.');
+        }
+
         $slug = $this->slugFor($name);
         $tag = Tags::withTrashed()->firstOrCreate(
-            ['slug' => $slug],
+            [
+                'slug' => $slug,
+                'mode' => $mode,
+            ],
             ['name' => $name]
         );
 
@@ -40,7 +47,7 @@ class TagResolverService
      * @param  iterable<mixed>  $names
      * @return array<int>
      */
-    public function resolveIds(iterable $names): array
+    public function resolveIds(iterable $names, string $mode = 'ai'): array
     {
         $ids = [];
         $seen = [];
@@ -63,7 +70,7 @@ class TagResolverService
             }
 
             $seen[$key] = true;
-            $tag = $this->resolve($name);
+            $tag = $this->resolve($name, $mode);
 
             if ($tag !== null) {
                 $ids[] = (int) $tag->getKey();

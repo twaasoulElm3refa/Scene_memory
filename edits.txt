@@ -1,4 +1,4 @@
-custom plan
-ait tags
+ai tags
 test functionallity
 historical page
+tags crud in dashboard

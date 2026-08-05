@@ -147,7 +147,10 @@ class ProcessEventImageJob implements ShouldQueue
                 ->values()
                 ->all();
 
-            $newTagIds = $tagResolver->resolveIds($decodedTags['new_tags'] ?? []);
+            $newTagIds = $tagResolver->resolveIds(
+                $decodedTags['new_tags'] ?? [],
+                'user'
+            );
 
             $tagIds = collect([...$existingTagIds, ...$newTagIds])
                 ->unique()

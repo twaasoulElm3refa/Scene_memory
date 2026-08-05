@@ -30,7 +30,7 @@ class TagsController extends Controller
         $limit = min(max((int) $request->query('limit', 8), 1), 10);
 
         $query = Tags::query()
-            ->select(['id', 'name', 'slug']);
+            ->select(['id', 'name', 'slug', 'mode']);
 
         if ($q !== '') {
             $like = '%' . str_replace(['%', '_'], ['\%', '\_'], $q) . '%';
