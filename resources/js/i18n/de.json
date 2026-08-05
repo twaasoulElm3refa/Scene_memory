@@ -437,6 +437,7 @@
         "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
     },
     "plans": {
+        "contactUs" : "Kontaktiere uns",
         "chooseYourPlan": "Wählen Sie Ihren Plan",
         "getStarted": "Kostenlos starten",
         "noFeatures": "Keine Funktionen",

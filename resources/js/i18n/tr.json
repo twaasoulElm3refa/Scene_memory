@@ -434,6 +434,7 @@
         "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
     },
     "plans": {
+        "contactUs" : "Bize Ulaşın",
         "chooseYourPlan": "Planınızı Seçin",
         "getStarted": "Ücretsiz Başla",
         "subscribe": "Şimdi Abone Ol",

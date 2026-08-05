@@ -437,6 +437,7 @@
         "contact_text": "Per qualsiasi domanda su questi termini, contattare l'amministrazione della piattaforma."
     },
     "plans": {
+        "contactUs" : "Contattaci",
         "chooseYourPlan": "Scegli il tuo piano",
         "getStarted": "Inizia gratis",
         "noCreditCard": "Nessuna carta di credito richiesta",

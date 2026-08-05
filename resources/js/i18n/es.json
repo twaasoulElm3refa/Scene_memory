@@ -437,6 +437,7 @@
         "contact_text": "Para cualquier pregunta sobre estos términos, contacte con la administración."
     },
     "plans": {
+        "contactUs" : "Contáctanos",
         "chooseYourPlan": "Elige tu plan",
         "getStarted": "Comienza gratis",
         "perMonth": "por mes",

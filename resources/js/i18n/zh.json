@@ -437,6 +437,7 @@
         "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
     },
     "plans": {
+        "contactUs" : "联系我们",
         "chooseYourPlan": "选择您的计划",
         "getStarted": "免费开始",
         "subscribe": "立即订阅",

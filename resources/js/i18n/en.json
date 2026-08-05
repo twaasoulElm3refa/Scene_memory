@@ -437,6 +437,7 @@
         "contact_text": "If you have any questions about these Terms, please contact the platform administration."
     },
     "plans": {
+        "contactUs" : "Contact Us",
         "chooseYourPlan": "Choose your plan",
         "getStarted": "Get started for free",
         "perMonth": "per month",

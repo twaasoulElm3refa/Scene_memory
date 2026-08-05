@@ -437,6 +437,7 @@
         "contact_text": "Pour toute question concernant ces conditions, veuillez contacter l'administration."
     },
     "plans": {
+        "contactUs" : "Contactez-nous",
         "chooseYourPlan": "Choisissez votre plan",
         "getStarted": "Commencez gratuitement",
         "subscribe": "Abonnez-vous maintenant",
