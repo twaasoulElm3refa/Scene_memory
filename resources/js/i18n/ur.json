@@ -296,29 +296,43 @@
         }
     },
     "contacts": {
-        "title": "ہم سے رابطہ کریں",
-        "description": "کیا آپ کے پاس اپنی ایونٹ یادوں کے بارے میں کوئی سوال ہے؟ ہم یہاں ہیں تاکہ دنیا بھر میں ہر لمحے کو محفوظ رکھنے میں آپ کی مدد کریں۔",
+        "badge": "ہم سے رابطہ کریں",
+        "title": "آئیں بات کریں",
+        "description": "کوئی سوال ہے، مدد چاہیے، یا ایک مخصوص پلان چاہتے ہیں؟ ہمیں پیغام بھیجیں اور ہماری ٹیم آپ سے رابطہ کرے گی۔",
         "form": {
+            "title": "ہمیں پیغام بھیجیں",
+            "description": "نیچے دیا گیا فارم مکمل کریں، ہم جلد از جلد جواب دیں گے۔",
             "fullName": "مکمل نام",
-            "fullNamePlaceholder": "احمد محمد",
-            "emailAddress": "ای میل",
-            "emailPlaceholder": "hello@example.com",
+            "fullNamePlaceholder": "اپنا مکمل نام درج کریں",
+            "emailAddress": "ای میل ایڈریس",
+            "emailPlaceholder": "اپنا ای میل ایڈریس درج کریں",
             "subject": "موضوع",
-            "generalInquiry": "عام استفسار",
-            "support": "تکنیکی سپورٹ",
-            "feedback": "رائے و تاثرات",
+            "generalInquiry": "عمومی سوال",
+            "customPlan": "مخصوص پلان",
+            "support": "تکنیکی مدد",
+            "feedback": "رائے",
             "other": "دیگر",
             "message": "پیغام",
-            "messagePlaceholder": "ہمیں بتائیں کہ ہم آپ کی کس طرح مدد کر سکتے ہیں...",
+            "messagePlaceholder": "ہمیں بتائیں ہم آپ کی کیسے مدد کر سکتے ہیں...",
+            "minimumCharacters": "براہ کرم کافی تفصیلات فراہم کریں۔",
             "sendMessage": "پیغام بھیجیں",
-            "successMessage": "شکریہ! آپ کا پیغام کامیابی سے بھیج دیا گیا ہے۔"
+            "sending": "بھیجا جا رہا ہے...",
+            "successMessage": "آپ کا پیغام کامیابی سے بھیج دیا گیا ہے۔",
+            "errorMessage": "آپ کا پیغام بھیجتے وقت کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔"
         },
         "info": {
+            "getInTouch": "رابطے میں رہیں",
+            "title": "ہم مدد کے لیے حاضر ہیں",
+            "description": "عمومی سوالات، تکنیکی مدد، یا مخصوص قیمت کے لیے ہماری ٹیم سے رابطہ کریں۔",
             "emailUs": "ہمیں ای میل کریں",
-            "available": "ہماری ٹیم 24/7 دستیاب ہے",
-            "visitStudio": "ہمارا سٹوڈیو دیکھیں",
-            "address": "123 میموری روڈ، ٹیک ڈسٹرکٹ\nسان فرانسسکو، کیلیفورنیا 94103",
-            "followJourney": "سفر کو فالو کریں"
+            "available": "ہماری ٹیم جلد از جلد جواب دے گی۔",
+            "customPlans": "مخصوص پلانز",
+            "customPlansDescription": "اپنی ٹیم یا کاروبار کے لیے مخصوص حل چاہیے؟ ہمیں اپنی ضرورت بتائیں۔",
+            "customerSupport": "کسٹمر سپورٹ",
+            "supportDescription": "اگر آپ کو اپنے اکاؤنٹ، سبسکرپشن، یا خدمات کے بارے میں مدد چاہیے تو ہم سے رابطہ کریں۔",
+            "followJourney": "ہمارا سفر فالو کریں",
+            "responseTime": "فوری جواب",
+            "responseTimeDescription": "ہم عموماً ایک کاروباری دن کے اندر پیغامات کا جواب دیتے ہیں۔"
         },
         "map": {
             "title": "سین میموری کا عالمی نقشہ",
@@ -326,19 +340,21 @@
         }
     },
     "faq": {
+        "badge": "عمومی سوالات",
         "title": "اکثر پوچھے جانے والے سوالات",
+        "description": "کچھ عام سوالات کے فوری جوابات۔",
         "questions": {
             "0": {
-                "question": "میں یاد کیسے شامل کروں؟",
-                "answer": "بس اپنی تصاویر اپ لوڈ کریں اور ہمارے انٹرایکٹو نقشے پر مقام ٹیگ کریں۔"
+                "question": "مجھے کتنی جلدی جواب ملے گا؟",
+                "answer": "ہماری ٹیم عموماً ایک کاروباری دن کے اندر جواب دیتی ہے۔"
             },
             "1": {
-                "question": "کیا میرا ڈیٹا محفوظ ہے؟",
-                "answer": "ہم انٹرپرائز لیول انکرپشن استعمال کرتے ہیں تاکہ آپ کی یادیں مکمل طور پر نجی رہیں۔"
+                "question": "کیا میں مخصوص پلان کی درخواست کر سکتا ہوں؟",
+                "answer": "جی ہاں۔ موضوع کے خانے میں مخصوص پلان منتخب کریں اور اپنی ضروریات بیان کریں۔"
             },
             "2": {
-                "question": "کیا میں البمز شیئر کر سکتا ہوں؟",
-                "answer": "جی ہاں! آپ دوستوں اور فیملی کے ساتھ محفوظ لنکس کے ذریعے تعاونی البمز بنا سکتے ہیں۔"
+                "question": "کیا میں تکنیکی مدد کے لیے رابطہ کر سکتا ہوں؟",
+                "answer": "جی ہاں۔ تکنیکی مدد منتخب کریں اور مسئلے سے متعلق تمام ضروری تفصیلات شامل کریں۔"
             }
         }
     },
@@ -434,9 +450,9 @@
         "contact_text": "ان شرائط کے بارے میں کسی بھی سوال کے لیے پلیٹ فارم انتظامیہ سے رابطہ کریں۔"
     },
     "plans": {
-        "customPrice" : "Maßgeschneiderter Preis",
-        "customPricingDescription" : "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
-        "contactUs" : "ہم سے رابطہ کریں",
+        "customPrice": "Maßgeschneiderter Preis",
+        "customPricingDescription": "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
+        "contactUs": "ہم سے رابطہ کریں",
         "chooseYourPlan": "اپنا پلان منتخب کریں",
         "getStarted": "مفت میں شروع کریں",
         "subscribe": "ابھی سبسکرائب کریں",

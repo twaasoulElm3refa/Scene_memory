@@ -299,29 +299,43 @@
         }
     },
     "contacts": {
-        "title": "Contáctanos",
-        "description": "¿Tienes una pregunta sobre tus recuerdos de eventos? Estamos aquí para ayudarte a preservar cada momento en todo el mundo.",
+        "badge": "Contáctanos",
+        "title": "Hablemos",
+        "description": "¿Tienes una pregunta, necesitas soporte o quieres un plan personalizado? Envíanos un mensaje y nuestro equipo te responderá.",
         "form": {
+            "title": "Envíanos un mensaje",
+            "description": "Completa el formulario y te responderemos lo antes posible.",
             "fullName": "Nombre completo",
-            "fullNamePlaceholder": "Ahmed Mohamed",
+            "fullNamePlaceholder": "Ingresa tu nombre completo",
             "emailAddress": "Correo electrónico",
-            "emailPlaceholder": "hola@ejemplo.com",
+            "emailPlaceholder": "Ingresa tu correo electrónico",
             "subject": "Asunto",
             "generalInquiry": "Consulta general",
+            "customPlan": "Plan personalizado",
             "support": "Soporte técnico",
             "feedback": "Comentarios",
             "other": "Otro",
             "message": "Mensaje",
-            "messagePlaceholder": "Dinos cómo podemos ayudarte...",
+            "messagePlaceholder": "Cuéntanos cómo podemos ayudarte...",
+            "minimumCharacters": "Proporciona suficientes detalles.",
             "sendMessage": "Enviar mensaje",
-            "successMessage": "¡Gracias! Tu mensaje se ha enviado correctamente."
+            "sending": "Enviando...",
+            "successMessage": "Tu mensaje se ha enviado correctamente.",
+            "errorMessage": "Ocurrió un error al enviar tu mensaje. Inténtalo de nuevo."
         },
         "info": {
+            "getInTouch": "Ponte en contacto",
+            "title": "Estamos aquí para ayudarte",
+            "description": "Contacta con nuestro equipo para consultas generales, soporte técnico o precios personalizados.",
             "emailUs": "Escríbenos",
-            "available": "Nuestro equipo está disponible 24/7",
-            "visitStudio": "Visita nuestro estudio",
-            "address": "123 Memory Lane, Distrito Tecnológico\nSan Francisco, California 94103",
-            "followJourney": "Sigue nuestro viaje"
+            "available": "Nuestro equipo responderá lo antes posible.",
+            "customPlans": "Planes personalizados",
+            "customPlansDescription": "¿Necesitas una solución a medida para tu equipo o negocio? Cuéntanos qué necesitas.",
+            "customerSupport": "Atención al cliente",
+            "supportDescription": "Contáctanos si necesitas ayuda con tu cuenta, suscripción o servicios.",
+            "followJourney": "Sigue nuestro camino",
+            "responseTime": "Respuesta rápida",
+            "responseTimeDescription": "Normalmente respondemos los mensajes en un día laborable."
         },
         "map": {
             "title": "Mapa mundial de Scene Memory",
@@ -329,19 +343,21 @@
         }
     },
     "faq": {
+        "badge": "Preguntas frecuentes",
         "title": "Preguntas frecuentes",
+        "description": "Respuestas rápidas a algunas de las preguntas más comunes.",
         "questions": {
             "0": {
-                "question": "¿Cómo agrego un recuerdo?",
-                "answer": "Simplemente sube tus fotos y coloca un marcador en nuestra mapa interactivo."
+                "question": "¿Con qué rapidez recibiré una respuesta?",
+                "answer": "Nuestro equipo normalmente responde en un día laborable."
             },
             "1": {
-                "question": "¿Mis datos están seguros?",
-                "answer": "Usamos cifrado a nivel empresarial para garantizar que tus recuerdos permanezcan privados."
+                "question": "¿Puedo solicitar un plan personalizado?",
+                "answer": "Sí. Elige Plan personalizado en el campo de asunto y describe tus requisitos."
             },
             "2": {
-                "question": "¿Puedo compartir álbumes?",
-                "answer": "¡Sí! Puedes crear álbumes colaborativos con amigos y familia mediante enlaces seguros."
+                "question": "¿Puedo contactar para recibir soporte técnico?",
+                "answer": "Sí. Selecciona Soporte técnico e incluye todos los detalles relevantes sobre el problema."
             }
         }
     },
@@ -437,9 +453,9 @@
         "contact_text": "Para cualquier pregunta sobre estos términos, contacte con la administración."
     },
     "plans": {
-        "customPrice" : "Precio personalizado",
-        "customPricingDescription" : "Para suscripciones personalizadas, por favor contactenos para recibir una oferta a medida que se ajuste a sus necesidades.",
-        "contactUs" : "Contáctanos",
+        "customPrice": "Precio personalizado",
+        "customPricingDescription": "Para suscripciones personalizadas, por favor contactenos para recibir una oferta a medida que se ajuste a sus necesidades.",
+        "contactUs": "Contáctanos",
         "chooseYourPlan": "Elige tu plan",
         "getStarted": "Comienza gratis",
         "perMonth": "por mes",

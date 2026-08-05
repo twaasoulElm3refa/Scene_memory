@@ -1,150 +1,392 @@
 <template>
   <div class="contact-page">
-    <!-- Hero Section -->
-    <section class="hero-section">
+    <!-- Main Contact Section -->
+    <section class="contact-section">
       <div class="container">
-        <div class="row">
-          <!-- Left Column - Form -->
-          <div class="col-lg-6">
-            <h1 class="page-title">{{ $t("contacts.title") }}</h1>
-            <p class="page-description">{{ $t("contacts.description") }}</p>
+        <!-- Page Header -->
+        <div class="page-header">
+          <span class="page-badge">
+            {{ $t("contacts.badge") || "Contact us" }}
+          </span>
 
-            <form @submit.prevent="submitForm" class="contact-form">
-              <!-- Full Name -->
-              <div class="form-group">
-                <label>{{ $t("contacts.form.fullName") }}</label>
-                <input
-                  v-model="form.fullName"
-                  type="text"
-                  class="form-control"
-                  :placeholder="$t('contact.form.fullNamePlaceholder')"
-                  required
-                />
+          <h1 class="page-title">
+            {{ $t("contacts.title") || "Let’s talk" }}
+          </h1>
+
+          <p class="page-description">
+            {{
+              $t("contacts.description") ||
+              "Have a question, need support, or want a custom plan? Send us a message and our team will get back to you."
+            }}
+          </p>
+        </div>
+
+        <div class="contact-layout">
+          <!-- Contact Form -->
+          <div class="form-column">
+            <div class="contact-form-card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">
+                    {{ $t("contacts.form.title") || "Send us a message" }}
+                  </h2>
+
+                  <p class="card-description">
+                    {{
+                      $t("contacts.form.description") ||
+                      "Complete the form below and we will respond as soon as possible."
+                    }}
+                  </p>
+                </div>
+
+                <div class="header-icon" aria-hidden="true">
+                  <i class="bi bi-send"></i>
+                </div>
               </div>
 
-              <!-- Email Address -->
-              <div class="form-group">
-                <label>{{ $t("contacts.form.emailAddress") }}</label>
-                <input
-                  v-model="form.email"
-                  type="email"
-                  class="form-control"
-                  :placeholder="$t('contact.form.emailPlaceholder')"
-                  required
-                />
-              </div>
+              <form class="contact-form" @submit.prevent="submitForm">
+                <!-- Full Name -->
+                <div class="form-group">
+                  <label for="full-name">
+                    {{ $t("contacts.form.fullName") || "Full name" }}
+                  </label>
 
-              <!-- Subject -->
-              <div class="form-group">
-                <label>{{ $t("contacts.form.subject") }}</label>
-                <select v-model="form.subject" class="form-control" required>
-                  <option value="general">
-                    {{ $t("contacts.form.generalInquiry") }}
-                  </option>
-                  <option value="support">{{ $t("contacts.form.support") }}</option>
-                  <option value="feedback">{{ $t("contacts.form.feedback") }}</option>
-                  <option value="other">{{ $t("contacts.form.other") }}</option>
-                </select>
-              </div>
+                  <div class="input-wrapper">
+                    <i class="bi bi-person input-icon" aria-hidden="true"></i>
 
-              <!-- Message -->
-              <div class="form-group">
-                <label>{{ $t("contacts.form.message") }}</label>
-                <textarea
-                  v-model="form.message"
-                  class="form-control message-textarea"
-                  :placeholder="$t('contact.form.messagePlaceholder')"
-                  rows="5"
-                  required
-                ></textarea>
-              </div>
+                    <input
+                      id="full-name"
+                      v-model.trim="form.fullName"
+                      type="text"
+                      class="form-control"
+                      :placeholder="
+                        $t('contacts.form.fullNamePlaceholder') ||
+                        'Enter your full name'
+                      "
+                      autocomplete="name"
+                      required
+                    />
+                  </div>
+                </div>
 
-              <!-- Submit Button -->
-              <button type="submit" class="btn-submit" :disabled="isSubmitting">
-                <span v-if="isSubmitting">{{ $t("contacts.form.sending") }}</span>
-                <span v-else>
-                  {{ $t("contacts.form.sendMessage") }}
-                  <span class="arrow">→</span>
-                </span>
-              </button>
+                <!-- Email -->
+                <div class="form-group">
+                  <label for="email">
+                    {{ $t("contacts.form.emailAddress") || "Email address" }}
+                  </label>
 
-              <!-- حالة الإرسال (نجاح أو خطأ) -->
-              <div v-if="successMessage" class="alert alert-success mt-3">
-                {{ successMessage }}
-              </div>
-              <div v-if="errorMessage" class="alert alert-danger mt-3">
-                {{ errorMessage }}
-              </div>
-            </form>
+                  <div class="input-wrapper">
+                    <i class="bi bi-envelope input-icon" aria-hidden="true"></i>
+
+                    <input
+                      id="email"
+                      v-model.trim="form.email"
+                      type="email"
+                      class="form-control"
+                      :placeholder="
+                        $t('contacts.form.emailPlaceholder') ||
+                        'Enter your email address'
+                      "
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <!-- Subject -->
+                <div class="form-group">
+                  <label for="subject">
+                    {{ $t("contacts.form.subject") || "Subject" }}
+                  </label>
+
+                  <div class="input-wrapper">
+                    <i class="bi bi-chat-square-text input-icon" aria-hidden="true"></i>
+
+                    <select
+                      id="subject"
+                      v-model="form.subject"
+                      class="form-control form-select"
+                      required
+                    >
+                      <option value="general">
+                        {{
+                          $t("contacts.form.generalInquiry") ||
+                          "General inquiry"
+                        }}
+                      </option>
+
+                      <option value="custom-plan">
+                        {{
+                          $t("contacts.form.customPlan") ||
+                          "Custom plan"
+                        }}
+                      </option>
+
+                      <option value="support">
+                        {{ $t("contacts.form.support") || "Technical support" }}
+                      </option>
+
+                      <option value="feedback">
+                        {{ $t("contacts.form.feedback") || "Feedback" }}
+                      </option>
+
+                      <option value="other">
+                        {{ $t("contacts.form.other") || "Other" }}
+                      </option>
+                    </select>
+
+                    <i
+                      class="bi bi-chevron-down select-arrow"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                </div>
+
+                <!-- Message -->
+                <div class="form-group">
+                  <label for="message">
+                    {{ $t("contacts.form.message") || "Message" }}
+                  </label>
+
+                  <textarea
+                    id="message"
+                    v-model.trim="form.message"
+                    class="form-control message-textarea"
+                    :placeholder="
+                      $t('contacts.form.messagePlaceholder') ||
+                      'Tell us how we can help you...'
+                    "
+                    rows="6"
+                    required
+                  ></textarea>
+
+                  <div class="message-meta">
+                    <span>
+                      {{
+                        $t("contacts.form.minimumCharacters") ||
+                        "Please provide enough details."
+                      }}
+                    </span>
+
+                    <span>{{ form.message.length }}/2000</span>
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                  type="submit"
+                  class="btn-submit"
+                  :disabled="isSubmitting || !isFormValid"
+                >
+                  <span v-if="isSubmitting" class="button-content">
+                    <span class="button-spinner" aria-hidden="true"></span>
+
+                    {{ $t("contacts.form.sending") || "Sending..." }}
+                  </span>
+
+                  <span v-else class="button-content">
+                    {{ $t("contacts.form.sendMessage") || "Send message" }}
+
+                    <i
+                      class="bi bi-arrow-right button-arrow"
+                      aria-hidden="true"
+                    ></i>
+                  </span>
+                </button>
+
+                <!-- Success Message -->
+                <div
+                  v-if="successMessage"
+                  class="form-alert alert-success"
+                  role="status"
+                >
+                  <span class="alert-icon">
+                    <i class="bi bi-check-lg" aria-hidden="true"></i>
+                  </span>
+
+                  <span>{{ successMessage }}</span>
+                </div>
+
+                <!-- Error Message -->
+                <div
+                  v-if="errorMessage"
+                  class="form-alert alert-danger"
+                  role="alert"
+                >
+                  <span class="alert-icon">
+                    <i class="bi bi-exclamation-lg" aria-hidden="true"></i>
+                  </span>
+
+                  <span>{{ errorMessage }}</span>
+                </div>
+              </form>
+            </div>
           </div>
 
-          <!-- Right Column - Contact Info -->
-          <div class="col-lg-6">
-            <div class="contact-info">
-              <!-- Email Us -->
-              <div class="info-card">
-                <div class="icon-wrapper email-icon">
-                  <i class="bi bi-envelope"></i>
+          <!-- Contact Information -->
+          <aside class="info-column">
+            <div class="contact-info-card">
+              <div class="info-header">
+                <span class="info-eyebrow">
+                  {{ $t("contacts.info.getInTouch") || "Get in touch" }}
+                </span>
+
+                <h2>
+                  {{
+                    $t("contacts.info.title") ||
+                    "We’re here to help"
+                  }}
+                </h2>
+
+                <p>
+                  {{
+                    $t("contacts.info.description") ||
+                    "Reach our team for general questions, technical support, or custom pricing."
+                  }}
+                </p>
+              </div>
+
+              <div class="info-list">
+                <!-- Email -->
+                <div class="info-item">
+                  <div class="info-icon">
+                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                  </div>
+
+                  <div class="info-content">
+                    <h3>
+                      {{ $t("contacts.info.emailUs") || "Email us" }}
+                    </h3>
+
+                    <p>
+                      {{
+                        $t("contacts.info.available") ||
+                        "Our team will reply as soon as possible."
+                      }}
+                    </p>
+
+                    <a
+                      href="mailto:scemorygmail@gmail.com"
+                      class="info-link"
+                    >
+                      scemorygmail@gmail.com
+                    </a>
+                  </div>
                 </div>
-                <div class="info-content">
-                  <h3>{{ $t("contacts.info.emailUs") }}</h3>
-                  <p class="info-subtitle">{{ $t("contacts.info.available") }}</p>
-                  <a href="mailto:hello@scenememory.com" class="info-link">
-                    hello@scenememory.com
+
+                <!-- Custom Plans -->
+                <div class="info-item">
+                  <div class="info-icon">
+                    <i class="bi bi-sliders" aria-hidden="true"></i>
+                  </div>
+
+                  <div class="info-content">
+                    <h3>
+                      {{
+                        $t("contacts.info.customPlans") ||
+                        "Custom plans"
+                      }}
+                    </h3>
+
+                    <p>
+                      {{
+                        $t("contacts.info.customPlansDescription") ||
+                        "Need a tailored solution for your team or business? Tell us what you need."
+                      }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Support -->
+                <div class="info-item">
+                  <div class="info-icon">
+                    <i class="bi bi-headset" aria-hidden="true"></i>
+                  </div>
+
+                  <div class="info-content">
+                    <h3>
+                      {{
+                        $t("contacts.info.customerSupport") ||
+                        "Customer support"
+                      }}
+                    </h3>
+
+                    <p>
+                      {{
+                        $t("contacts.info.supportDescription") ||
+                        "Contact us if you need help with your account, subscription, or services."
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div class="social-section">
+                <h3>
+                  {{
+                    $t("contacts.info.followJourney") ||
+                    "Follow our journey"
+                  }}
+                </h3>
+
+                <div class="social-links">
+                  <a
+                    href="#"
+                    class="social-link"
+                    aria-label="Facebook"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i class="bi bi-facebook" aria-hidden="true"></i>
+                  </a>
+
+                  <a
+                    href="#"
+                    class="social-link"
+                    aria-label="X"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i class="bi bi-twitter-x" aria-hidden="true"></i>
+                  </a>
+
+                  <a
+                    href="#"
+                    class="social-link"
+                    aria-label="Instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <i class="bi bi-instagram" aria-hidden="true"></i>
                   </a>
                 </div>
               </div>
+            </div>
 
-              <!-- Visit Our Studio -->
-              <div class="info-card">
-                <div class="icon-wrapper location-icon">
-                  <i class="bi bi-geo-alt"></i>
-                </div>
-                <div class="info-content">
-                  <h3>{{ $t("contacts.info.visitStudio") }}</h3>
-                  <p class="info-address">{{ $t("contacts.info.address") }}</p>
-                </div>
+            <!-- Response Notice -->
+            <div class="response-card">
+              <div class="response-icon">
+                <i class="bi bi-clock" aria-hidden="true"></i>
               </div>
 
-              <!-- Follow the Journey -->
-              <div class="info-card">
-                <div class="icon-wrapper social-icon">
-                  <i class="bi bi-globe"></i>
-                </div>
-                <div class="info-content">
-                  <h3>{{ $t("contacts.info.followJourney") }}</h3>
-                  <div class="social-links">
-                    <a href="#" class="social-link" aria-label="Facebook">
-                      <i class="bi bi-facebook"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Twitter">
-                      <i class="bi bi-twitter-x"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Instagram">
-                      <i class="bi bi-instagram"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <div>
+                <h3>
+                  {{
+                    $t("contacts.info.responseTime") ||
+                    "Fast response"
+                  }}
+                </h3>
 
-              <!-- Map Card -->
-              <div class="map-card">
-                <img src="/images/world-map.jpg" alt="World Map" class="map-image" />
-                <div class="map-overlay">
-                  <div class="map-icon">
-                    <i class="bi bi-geo-alt-fill"></i>
-                  </div>
-                  <div class="map-content">
-                    <div class="map-icon-wrapper">
-                      <i class="bi bi-globe2"></i>
-                    </div>
-                    <h4>{{ $t("contacts.map.title") }}</h4>
-                    <p>{{ $t("contacts.map.description") }}</p>
-                  </div>
-                </div>
+                <p>
+                  {{
+                    $t("contacts.info.responseTimeDescription") ||
+                    "We usually respond to messages within one business day."
+                  }}
+                </p>
               </div>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -152,13 +394,47 @@
     <!-- FAQ Section -->
     <section class="faq-section">
       <div class="container">
-        <h2 class="section-title">{{ $t("faq.title") }}</h2>
+        <div class="faq-header">
+          <span class="page-badge">
+            {{ $t("faq.badge") || "FAQ" }}
+          </span>
+
+          <h2 class="section-title">
+            {{ $t("faq.title") || "Frequently asked questions" }}
+          </h2>
+
+          <p class="section-description">
+            {{
+              $t("faq.description") ||
+              "Quick answers to some of the most common questions."
+            }}
+          </p>
+        </div>
 
         <div class="faq-grid">
-          <div v-for="(faq, index) in faqs" :key="index" class="faq-card">
-            <h3 class="faq-question">{{ $t(`faq.questions.${index}.question`) }}</h3>
-            <p class="faq-answer">{{ $t(`faq.questions.${index}.answer`) }}</p>
-          </div>
+          <article
+            v-for="(faq, index) in faqs"
+            :key="faq.id"
+            class="faq-card"
+          >
+            <div class="faq-number">
+              {{ String(index + 1).padStart(2, "0") }}
+            </div>
+
+            <h3 class="faq-question">
+              {{
+                $t(`faq.questions.${index}.question`) ||
+                faq.fallbackQuestion
+              }}
+            </h3>
+
+            <p class="faq-answer">
+              {{
+                $t(`faq.questions.${index}.answer`) ||
+                faq.fallbackAnswer
+              }}
+            </p>
+          </article>
         </div>
       </div>
     </section>
@@ -170,6 +446,7 @@ import { ContactService } from "../../services/ContactService/ContactService";
 
 export default {
   name: "ContactUs",
+
   data() {
     return {
       form: {
@@ -178,40 +455,88 @@ export default {
         subject: "general",
         message: "",
       },
-      faqs: [{ id: 0 }, { id: 1 }, { id: 2 }],
+
+      faqs: [
+        {
+          id: 1,
+          fallbackQuestion: "How quickly will I receive a response?",
+          fallbackAnswer:
+            "Our team usually responds within one business day.",
+        },
+        {
+          id: 2,
+          fallbackQuestion: "Can I request a custom plan?",
+          fallbackAnswer:
+            "Yes. Choose Custom Plan in the subject field and describe your requirements.",
+        },
+        {
+          id: 3,
+          fallbackQuestion: "Can I contact you for technical support?",
+          fallbackAnswer:
+            "Yes. Select Technical Support and include all relevant details about the issue.",
+        },
+      ],
+
       isSubmitting: false,
       successMessage: "",
       errorMessage: "",
     };
   },
+
+  computed: {
+    isFormValid() {
+      return (
+        this.form.fullName.trim().length >= 2 &&
+        this.isValidEmail(this.form.email) &&
+        this.form.subject &&
+        this.form.message.trim().length >= 5 &&
+        this.form.message.length <= 2000
+      );
+    },
+  },
+
   methods: {
+    isValidEmail(email) {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailPattern.test(email);
+    },
+
     async submitForm() {
+      if (!this.isFormValid || this.isSubmitting) {
+        return;
+      }
+
       this.isSubmitting = true;
       this.successMessage = "";
       this.errorMessage = "";
 
       const payload = {
-        name: this.form.fullName,
-        email: this.form.email,
+        name: this.form.fullName.trim(),
+        email: this.form.email.trim(),
         subject: this.form.subject,
-        message: this.form.message,
+        message: this.form.message.trim(),
       };
 
       try {
         const response = await ContactService.create(payload);
 
-        if (response.status === 200 || response.status === 201) {
+        if (response?.status === 200 || response?.status === 201) {
           this.successMessage =
-            this.$t("contacts.form.successMessage") || "تم إرسال رسالتك بنجاح!";
+            this.$t("contacts.form.successMessage") ||
+            "Your message has been sent successfully.";
+
           this.resetForm();
+          return;
         }
+
+        throw new Error("Unexpected response from the server.");
       } catch (error) {
         console.error("Error submitting contact form:", error);
 
         this.errorMessage =
-          error.response?.data?.message ||
+          error?.response?.data?.message ||
           this.$t("contacts.form.errorMessage") ||
-          "حدث خطأ أثناء الإرسال، حاول مرة أخرى لاحقًا";
+          "Something went wrong while sending your message. Please try again.";
       } finally {
         this.isSubmitting = false;
       }
@@ -230,396 +555,754 @@ export default {
 </script>
 
 <style scoped>
-.contact-page {
-  background-color: #f8f9fa;
-  min-height: 100vh;
+* {
+  box-sizing: border-box;
 }
 
-.hero-section {
-  padding: 80px 0;
+.contact-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(59, 130, 246, 0.08),
+      transparent 30%
+    ),
+    #f8fafc;
+  color: #111827;
 }
 
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
-/* لو عايز تضيف أي ستايل إضافي للـ alerts أو الـ disabled state */
-.alert {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  border-radius: 6px;
+/* Main Section */
+
+.contact-section {
+  padding: 88px 0 96px;
 }
 
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+.page-header {
+  max-width: 720px;
+  margin: 0 auto 56px;
+  text-align: center;
 }
 
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.btn-submit:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.row {
-  display: flex;
-  gap: 60px;
-  flex-wrap: wrap;
-}
-
-.col-lg-6 {
-  flex: 1;
-  min-width: 300px;
-}
-
-/* Left Column - Form */
-.page-title {
-  font-size: 48px;
+.page-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 15px;
+  margin-bottom: 18px;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 0 0 16px;
+  color: #0f172a;
+  font-size: clamp(38px, 5vw, 58px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
 }
 
 .page-description {
-  font-size: 16px;
-  color: #6b7280;
-  margin-bottom: 40px;
-  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto;
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1.8;
 }
 
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.form-column,
+.info-column {
+  min-width: 0;
+}
+
+/* Form Card */
+
+.contact-form-card,
+.contact-info-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.06),
+    0 4px 12px rgba(15, 23, 42, 0.03);
+}
+
+.contact-form-card {
+  padding: 36px;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.card-title {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.card-description {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  border-radius: 16px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 22px;
+}
+
+/* Form */
+
 .contact-form {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
 }
 
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
   display: block;
+  margin-bottom: 9px;
+  color: #1e293b;
   font-size: 14px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  z-index: 1;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 17px;
+  pointer-events: none;
 }
 
 .form-control {
   width: 100%;
-  padding: 12px 16px;
-  font-size: 15px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  transition: all 0.3s;
+  min-height: 52px;
+  padding: 13px 16px;
+  border: 1px solid #dbe3ed;
+  border-radius: 13px;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
   font-family: inherit;
+  font-size: 15px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.input-wrapper .form-control:not(.message-textarea) {
+  padding-inline-start: 46px;
+}
+
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+.form-control:hover {
+  border-color: #b8c5d5;
 }
 
 .form-control:focus {
-  outline: none;
   border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.11);
+}
+
+.form-select {
+  appearance: none;
+  padding-inline-end: 44px;
+  cursor: pointer;
+}
+
+.select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 13px;
+  pointer-events: none;
 }
 
 .message-textarea {
+  min-height: 148px;
   resize: vertical;
-  min-height: 120px;
+  line-height: 1.7;
 }
+
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 8px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Button */
 
 .btn-submit {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 14px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 54px;
+  margin-top: 4px;
+  padding: 14px 24px;
+  border: 0;
+  border-radius: 14px;
+  background: #2563eb;
+  color: #ffffff;
   cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.22);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #1d4ed8;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.3);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.button-content {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.3s;
+  justify-content: center;
+  gap: 10px;
 }
 
-.btn-submit:hover {
-  background: #2563eb;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+.button-arrow {
+  font-size: 17px;
+  transition: transform 0.2s ease;
 }
 
-.arrow {
-  font-size: 18px;
-  transition: transform 0.3s;
-}
-
-.btn-submit:hover .arrow {
+.btn-submit:hover:not(:disabled) .button-arrow {
   transform: translateX(4px);
 }
 
-/* Right Column - Contact Info */
-.contact-info {
+.button-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Alerts */
+
+.form-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid;
+  border-radius: 13px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.alert-success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.alert-danger {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.alert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: currentColor;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+/* Contact Information */
+
+.info-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.info-card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+.contact-info-card {
+  overflow: hidden;
 }
 
-.icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+.info-header {
+  padding: 32px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(145deg, #0f172a, #1e3a8a);
+  color: #ffffff;
+}
+
+.info-eyebrow {
+  display: block;
+  margin-bottom: 12px;
+  color: #bfdbfe;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.info-header h2 {
+  margin: 0 0 12px;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.info-header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.info-list {
+  padding: 10px 28px;
+}
+
+.info-item {
   display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.info-item:last-child {
+  border-bottom: 0;
+}
+
+.info-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  font-size: 24px;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 20px;
 }
 
-.email-icon {
-  background: #dbeafe;
-  color: #3b82f6;
-}
-
-.location-icon {
-  background: #dbeafe;
-  color: #3b82f6;
-}
-
-.social-icon {
-  background: #dbeafe;
-  color: #3b82f6;
+.info-content {
+  min-width: 0;
 }
 
 .info-content h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 800;
 }
 
-.info-subtitle {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 8px;
+.info-content p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .info-link {
-  color: #3b82f6;
+  display: inline-block;
+  margin-top: 8px;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 700;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
+  word-break: break-word;
+  transition: color 0.2s ease;
 }
 
 .info-link:hover {
-  color: #2563eb;
+  color: #1d4ed8;
+  text-decoration: underline;
 }
 
-.info-address {
+.social-section {
+  padding: 24px 28px 28px;
+  border-top: 1px solid #edf2f7;
+  background: #f8fafc;
+}
+
+.social-section h3 {
+  margin: 0 0 14px;
+  color: #334155;
   font-size: 14px;
-  color: #6b7280;
-  line-height: 1.6;
+  font-weight: 800;
 }
 
 .social-links {
   display: flex;
-  gap: 12px;
-  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .social-link {
-  width: 40px;
-  height: 40px;
-  background: #f3f4f6;
-  border-radius: 8px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
-  transition: all 0.3s;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #dbe3ed;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 17px;
   text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .social-link:hover {
-  background: #3b82f6;
-  color: white;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
 }
 
-/* Map Card */
-.map-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  height: 250px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.map-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.map-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  padding: 24px;
-  color: white;
-}
-
-.map-icon {
-  position: absolute;
-  top: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48px;
-  height: 48px;
-  background: #3b82f6;
-  border-radius: 50%;
+.response-card {
   display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 22px;
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  background: #eff6ff;
+}
+
+.response-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: white;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 13px;
+  background: #ffffff;
+  color: #2563eb;
+  font-size: 18px;
 }
 
-.map-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.response-card h3 {
+  margin: 0 0 5px;
+  color: #1e3a8a;
+  font-size: 15px;
+  font-weight: 800;
 }
 
-.map-icon-wrapper {
-  width: 32px;
-  height: 32px;
-  background: rgba(59, 130, 246, 0.2);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #3b82f6;
-}
-
-.map-content h4 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-}
-
-.map-content p {
-  font-size: 13px;
+.response-card p {
   margin: 0;
-  opacity: 0.9;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.65;
 }
 
-/* FAQ Section */
+/* FAQ */
+
 .faq-section {
-  padding: 80px 0;
-  background: white;
+  padding: 88px 0;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.faq-header {
+  max-width: 680px;
+  margin: 0 auto 46px;
+  text-align: center;
 }
 
 .section-title {
-  text-align: center;
-  font-size: 36px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 60px;
+  margin: 0 0 13px;
+  color: #0f172a;
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.section-description {
+  margin: 0;
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 .faq-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
 }
 
 .faq-card {
-  background: #f8f9fa;
-  padding: 32px;
-  border-radius: 12px;
-  transition: all 0.3s;
+  position: relative;
+  min-width: 0;
+  padding: 30px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #f8fafc;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .faq-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  border-color: #bfdbfe;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+}
+
+.faq-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 30px;
+  margin-bottom: 20px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .faq-question {
+  margin: 0 0 12px;
+  color: #0f172a;
   font-size: 18px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 12px;
+  font-weight: 800;
+  line-height: 1.45;
 }
 
 .faq-answer {
-  font-size: 14px;
-  color: #6b7280;
-  line-height: 1.6;
   margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
 }
 
-/* RTL Support */
-[dir="rtl"] .arrow {
+/* RTL */
+
+[dir="rtl"] .input-icon {
+  right: 16px;
+  left: auto;
+}
+
+[dir="rtl"] .select-arrow {
+  right: auto;
+  left: 16px;
+}
+
+[dir="rtl"] .button-arrow {
   transform: rotate(180deg);
 }
 
-[dir="rtl"] .btn-submit:hover .arrow {
+[dir="rtl"] .btn-submit:hover:not(:disabled) .button-arrow {
   transform: rotate(180deg) translateX(4px);
 }
 
 /* Responsive */
+
 @media (max-width: 992px) {
-  .row {
-    flex-direction: column;
+  .contact-section {
+    padding: 70px 0 76px;
   }
 
-  .page-title {
-    font-size: 36px;
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .info-column {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.55fr);
+    align-items: start;
+  }
+
+  .faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 768px) {
-  .hero-section,
-  .faq-section {
-    padding: 40px 0;
+  .container {
+    padding: 0 18px;
   }
 
-  .contact-form {
+  .contact-section {
+    padding: 50px 0 58px;
+  }
+
+  .page-header {
+    margin-bottom: 36px;
+  }
+
+  .page-description {
+    font-size: 15px;
+  }
+
+  .contact-form-card {
     padding: 24px;
+    border-radius: 20px;
   }
 
-  .page-title {
-    font-size: 32px;
+  .card-header {
+    margin-bottom: 26px;
   }
 
-  .section-title {
-    font-size: 28px;
+  .header-icon {
+    width: 46px;
+    height: 46px;
+    flex-basis: 46px;
+  }
+
+  .info-column {
+    display: flex;
+  }
+
+  .faq-section {
+    padding: 58px 0;
   }
 
   .faq-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 14px;
+  }
+
+  .contact-form-card {
+    padding: 20px 16px;
+  }
+
+  .card-header {
+    gap: 12px;
+  }
+
+  .card-title {
+    font-size: 21px;
+  }
+
+  .header-icon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .message-meta {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .info-header {
+    padding: 26px 22px;
+  }
+
+  .info-list {
+    padding: 8px 20px;
+  }
+
+  .social-section {
+    padding: 22px 20px;
+  }
+
+  .faq-card {
+    padding: 24px 20px;
   }
 }
 </style>

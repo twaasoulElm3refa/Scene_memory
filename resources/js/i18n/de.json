@@ -299,29 +299,43 @@
         }
     },
     "contacts": {
-        "title": "Kontaktiere uns",
-        "description": "Hast du eine Frage zu deinen Veranstaltungserinnerungen? Wir helfen dir gerne, jeden Moment auf der ganzen Welt zu bewahren.",
+        "badge": "Kontakt",
+        "title": "Lassen Sie uns sprechen",
+        "description": "Haben Sie eine Frage, benötigen Sie Unterstützung oder wünschen Sie einen individuellen Plan? Senden Sie uns eine Nachricht, und unser Team meldet sich bei Ihnen.",
         "form": {
+            "title": "Senden Sie uns eine Nachricht",
+            "description": "Füllen Sie das Formular aus, und wir antworten so schnell wie möglich.",
             "fullName": "Vollständiger Name",
-            "fullNamePlaceholder": "Ahmed Mohamed",
+            "fullNamePlaceholder": "Geben Sie Ihren vollständigen Namen ein",
             "emailAddress": "E-Mail-Adresse",
-            "emailPlaceholder": "hallo@example.com",
+            "emailPlaceholder": "Geben Sie Ihre E-Mail-Adresse ein",
             "subject": "Betreff",
             "generalInquiry": "Allgemeine Anfrage",
+            "customPlan": "Individueller Plan",
             "support": "Technischer Support",
             "feedback": "Feedback",
             "other": "Sonstiges",
             "message": "Nachricht",
-            "messagePlaceholder": "Sag uns, wie wir dir helfen können...",
+            "messagePlaceholder": "Sagen Sie uns, wie wir helfen können...",
+            "minimumCharacters": "Bitte geben Sie ausreichend Details an.",
             "sendMessage": "Nachricht senden",
-            "successMessage": "Vielen Dank! Deine Nachricht wurde erfolgreich gesendet."
+            "sending": "Wird gesendet...",
+            "successMessage": "Ihre Nachricht wurde erfolgreich gesendet.",
+            "errorMessage": "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
         },
         "info": {
-            "emailUs": "Schreib uns",
-            "available": "Unser Team ist 24/7 für dich da",
-            "visitStudio": "Besuche unser Studio",
-            "address": "123 Memory Lane, Tech District\nSan Francisco, CA 94103",
-            "followJourney": "Folge unserer Reise"
+            "getInTouch": "Kontakt aufnehmen",
+            "title": "Wir sind für Sie da",
+            "description": "Erreichen Sie unser Team bei allgemeinen Fragen, technischem Support oder individueller Preisgestaltung.",
+            "emailUs": "Schreiben Sie uns",
+            "available": "Unser Team antwortet so schnell wie möglich.",
+            "customPlans": "Individuelle Pläne",
+            "customPlansDescription": "Benötigen Sie eine passende Lösung für Ihr Team oder Unternehmen? Teilen Sie uns mit, was Sie brauchen.",
+            "customerSupport": "Kundensupport",
+            "supportDescription": "Kontaktieren Sie uns, wenn Sie Hilfe mit Ihrem Konto, Abonnement oder unseren Services benötigen.",
+            "followJourney": "Folgen Sie unserer Reise",
+            "responseTime": "Schnelle Antwort",
+            "responseTimeDescription": "Wir antworten in der Regel innerhalb eines Werktags."
         },
         "map": {
             "title": "Scene Memory Weltkarte",
@@ -329,19 +343,21 @@
         }
     },
     "faq": {
+        "badge": "FAQ",
         "title": "Häufig gestellte Fragen",
+        "description": "Kurze Antworten auf einige der häufigsten Fragen.",
         "questions": {
             "0": {
-                "question": "Wie füge ich eine Erinnerung hinzu?",
-                "answer": "Lade einfach deine Fotos hoch und setze einen Marker auf unserer interaktiven Karte."
+                "question": "Wie schnell erhalte ich eine Antwort?",
+                "answer": "Unser Team antwortet in der Regel innerhalb eines Werktags."
             },
             "1": {
-                "question": "Sind meine Daten sicher?",
-                "answer": "Wir verwenden Verschlüsselung auf Unternehmensniveau, damit deine Erinnerungen privat bleiben."
+                "question": "Kann ich einen individuellen Plan anfragen?",
+                "answer": "Ja. Wählen Sie im Betrefffeld Individueller Plan aus und beschreiben Sie Ihre Anforderungen."
             },
             "2": {
-                "question": "Kann ich Alben teilen?",
-                "answer": "Ja! Du kannst kollaborative Alben mit Freunden und Familie über sichere Links erstellen."
+                "question": "Kann ich Sie für technischen Support kontaktieren?",
+                "answer": "Ja. Wählen Sie Technischer Support aus und fügen Sie alle relevanten Details zum Problem hinzu."
             }
         }
     },
@@ -437,9 +453,9 @@
         "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
     },
     "plans": {
-        "customPrice" : "Preis nach Maß",
-        "customPricingDescription" : "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein individuelles Angebot zu erhalten, das Ihren Bedürfnissen entspricht.",
-        "contactUs" : "Kontaktiere uns",
+        "customPrice": "Preis nach Maß",
+        "customPricingDescription": "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein individuelles Angebot zu erhalten, das Ihren Bedürfnissen entspricht.",
+        "contactUs": "Kontaktiere uns",
         "chooseYourPlan": "Wählen Sie Ihren Plan",
         "getStarted": "Kostenlos starten",
         "noFeatures": "Keine Funktionen",

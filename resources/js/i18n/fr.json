@@ -299,29 +299,43 @@
         }
     },
     "contacts": {
-        "title": "Contactez-nous",
-        "description": "Vous avez une question sur vos souvenirs d'événements ? Nous sommes là pour vous aider à préserver chaque moment à travers le monde.",
+        "badge": "Contactez-nous",
+        "title": "Parlons-en",
+        "description": "Vous avez une question, besoin d’aide ou souhaitez une offre sur mesure ? Envoyez-nous un message et notre équipe vous répondra.",
         "form": {
+            "title": "Envoyez-nous un message",
+            "description": "Remplissez le formulaire ci-dessous et nous vous répondrons dès que possible.",
             "fullName": "Nom complet",
-            "fullNamePlaceholder": "Ahmed Mohamed",
-            "emailAddress": "Email",
-            "emailPlaceholder": "bonjour@example.com",
+            "fullNamePlaceholder": "Entrez votre nom complet",
+            "emailAddress": "Adresse e-mail",
+            "emailPlaceholder": "Entrez votre adresse e-mail",
             "subject": "Sujet",
             "generalInquiry": "Question générale",
+            "customPlan": "Offre personnalisée",
             "support": "Support technique",
-            "feedback": "Retour / suggestion",
+            "feedback": "Retour d’expérience",
             "other": "Autre",
             "message": "Message",
             "messagePlaceholder": "Dites-nous comment nous pouvons vous aider...",
+            "minimumCharacters": "Merci de fournir suffisamment de détails.",
             "sendMessage": "Envoyer le message",
-            "successMessage": "Merci ! Votre message a été envoyé avec succès."
+            "sending": "Envoi en cours...",
+            "successMessage": "Votre message a bien été envoyé.",
+            "errorMessage": "Une erreur est survenue lors de l’envoi de votre message. Veuillez réessayer."
         },
         "info": {
+            "getInTouch": "Entrer en contact",
+            "title": "Nous sommes là pour vous aider",
+            "description": "Contactez notre équipe pour vos questions générales, le support technique ou une tarification personnalisée.",
             "emailUs": "Écrivez-nous",
-            "available": "Notre équipe est disponible 24h/24 et 7j/7",
-            "visitStudio": "Visitez notre studio",
-            "address": "123 Memory Lane, Tech District\nSan Francisco, CA 94103",
-            "followJourney": "Suivez notre aventure"
+            "available": "Notre équipe vous répondra dès que possible.",
+            "customPlans": "Offres personnalisées",
+            "customPlansDescription": "Besoin d’une solution adaptée à votre équipe ou à votre entreprise ? Dites-nous ce qu’il vous faut.",
+            "customerSupport": "Support client",
+            "supportDescription": "Contactez-nous si vous avez besoin d’aide avec votre compte, votre abonnement ou nos services.",
+            "followJourney": "Suivez notre parcours",
+            "responseTime": "Réponse rapide",
+            "responseTimeDescription": "Nous répondons généralement aux messages sous un jour ouvré."
         },
         "map": {
             "title": "Carte mondiale des souvenirs Scene",
@@ -329,19 +343,21 @@
         }
     },
     "faq": {
-        "title": "Foire aux questions",
+        "badge": "FAQ",
+        "title": "Questions fréquentes",
+        "description": "Des réponses rapides aux questions les plus courantes.",
         "questions": {
             "0": {
-                "question": "Comment ajouter un souvenir ?",
-                "answer": "Il suffit de télécharger vos photos et de placer un repère sur notre carte interactive."
+                "question": "Dans quel délai recevrai-je une réponse ?",
+                "answer": "Notre équipe répond généralement sous un jour ouvré."
             },
             "1": {
-                "question": "Mes données sont-elles sécurisées ?",
-                "answer": "Nous utilisons un chiffrement de niveau entreprise pour garantir que vos souvenirs restent strictement privés."
+                "question": "Puis-je demander une offre personnalisée ?",
+                "answer": "Oui. Choisissez Offre personnalisée dans le champ sujet et décrivez vos besoins."
             },
             "2": {
-                "question": "Puis-je partager mes albums ?",
-                "answer": "Oui ! Vous pouvez créer des albums collaboratifs avec vos amis et votre famille via des liens sécurisés."
+                "question": "Puis-je vous contacter pour un support technique ?",
+                "answer": "Oui. Sélectionnez Support technique et ajoutez tous les détails utiles sur le problème."
             }
         }
     },
@@ -437,9 +453,9 @@
         "contact_text": "Pour toute question concernant ces conditions, veuillez contacter l'administration."
     },
     "plans": {
-        "customPrice" : "Prix personnalisé",
-        "customPricingDescription" : "Pour les abonnements personnalisés, veuillez nous contacter pour recevoir une offre sur mesure qui répond à vos besoins.",
-        "contactUs" : "Contactez-nous",
+        "customPrice": "Prix personnalisé",
+        "customPricingDescription": "Pour les abonnements personnalisés, veuillez nous contacter pour recevoir une offre sur mesure qui répond à vos besoins.",
+        "contactUs": "Contactez-nous",
         "chooseYourPlan": "Choisissez votre plan",
         "getStarted": "Commencez gratuitement",
         "subscribe": "Abonnez-vous maintenant",

@@ -299,29 +299,43 @@
         }
     },
     "contacts": {
-        "title": "お問い合わせ",
-        "description": "イベントの思い出について質問がありますか？私たちは世界中のあらゆる瞬間を保存するお手伝いをします。",
+        "badge": "お問い合わせ",
+        "title": "まずはご相談ください",
+        "description": "ご質問、サポートのご依頼、カスタムプランのご相談がありましたら、メッセージをお送りください。チームより折り返しご連絡します。",
         "form": {
-            "fullName": "フルネーム",
-            "fullNamePlaceholder": "アハメド・モハメド",
+            "title": "メッセージを送信",
+            "description": "下のフォームにご記入ください。できるだけ早く返信いたします。",
+            "fullName": "氏名",
+            "fullNamePlaceholder": "氏名を入力してください",
             "emailAddress": "メールアドレス",
-            "emailPlaceholder": "hello@example.com",
+            "emailPlaceholder": "メールアドレスを入力してください",
             "subject": "件名",
             "generalInquiry": "一般的なお問い合わせ",
+            "customPlan": "カスタムプラン",
             "support": "技術サポート",
             "feedback": "フィードバック",
             "other": "その他",
             "message": "メッセージ",
-            "messagePlaceholder": "どのようにお手伝いできるか教えてください...",
+            "messagePlaceholder": "どのようにお手伝いできるかお聞かせください...",
+            "minimumCharacters": "十分な詳細をご記入ください。",
             "sendMessage": "メッセージを送信",
-            "successMessage": "ありがとうございます！メッセージが正常に送信されました。"
+            "sending": "送信中...",
+            "successMessage": "メッセージが正常に送信されました。",
+            "errorMessage": "メッセージの送信中に問題が発生しました。もう一度お試しください。"
         },
         "info": {
+            "getInTouch": "お問い合わせ",
+            "title": "私たちがお手伝いします",
+            "description": "一般的なご質問、技術サポート、カスタム料金についてチームまでお問い合わせください。",
             "emailUs": "メールで連絡",
-            "available": "チームは24時間対応可能です",
-            "visitStudio": "スタジオを訪問",
-            "address": "123 メモリーロード、テック地区\nサンフランシスコ、カリフォルニア 94103",
-            "followJourney": "私たちの旅をフォロー"
+            "available": "チームよりできるだけ早く返信いたします。",
+            "customPlans": "カスタムプラン",
+            "customPlansDescription": "チームやビジネスに合わせたソリューションが必要ですか？ご要望をお聞かせください。",
+            "customerSupport": "カスタマーサポート",
+            "supportDescription": "アカウント、サブスクリプション、サービスについてサポートが必要な場合はお問い合わせください。",
+            "followJourney": "最新情報をフォロー",
+            "responseTime": "迅速な返信",
+            "responseTimeDescription": "通常、1営業日以内にメッセージへ返信します。"
         },
         "map": {
             "title": "Scene Memory世界マップ",
@@ -329,19 +343,21 @@
         }
     },
     "faq": {
+        "badge": "FAQ",
         "title": "よくある質問",
+        "description": "よく寄せられる質問への簡単な回答です。",
         "questions": {
             "0": {
-                "question": "思い出をどうやって追加しますか？",
-                "answer": "写真をアップロードし、インタラクティブマップ上で場所にマークするだけです。"
+                "question": "どのくらいで返信を受け取れますか？",
+                "answer": "通常、チームより1営業日以内に返信します。"
             },
             "1": {
-                "question": "データは安全ですか？",
-                "answer": "企業レベルの暗号化を使用して、思い出がプライベートなまま保たれます。"
+                "question": "カスタムプランを依頼できますか？",
+                "answer": "はい。件名欄でカスタムプランを選択し、ご要件をご記入ください。"
             },
             "2": {
-                "question": "アルバムを共有できますか？",
-                "answer": "はい！安全なリンクを通じて友人や家族と共同アルバムを作成できます。"
+                "question": "技術サポートについて問い合わせできますか？",
+                "answer": "はい。技術サポートを選択し、問題に関する詳細をすべてご記入ください。"
             }
         }
     },
@@ -437,9 +453,9 @@
         "contact_text": "これらの規約について質問がある場合は、プラットフォーム管理者までお問い合わせください。"
     },
     "plans": {
-        "customPrice" : "カスタム価格",
-        "customPricingDescription" : "カスタムサブスクリプションの場合は、お問い合わせください。お客様のニーズに合ったオファーをお届けします。",
-        "contactUs" : "お問い合わせ",
+        "customPrice": "カスタム価格",
+        "customPricingDescription": "カスタムサブスクリプションの場合は、お問い合わせください。お客様のニーズに合ったオファーをお届けします。",
+        "contactUs": "お問い合わせ",
         "chooseYourPlan": "プランを選択してください",
         "getStarted": "無料で始める",
         "subscribe": "今すぐ登録",

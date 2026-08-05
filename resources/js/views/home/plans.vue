@@ -256,11 +256,6 @@ const normalizePlanName = (plan) => {
         .replace(/\s+/g, ' ');
 };
 
-const isFreePlan = (plan) => {
-    return normalizePlanName(plan) === 'free' ||
-        Number(plan?.price) === 0 && !isCustomPlan(plan);
-};
-
 const isCustomPlan = (plan) => {
     const name = normalizePlanName(plan);
 
@@ -268,6 +263,13 @@ const isCustomPlan = (plan) => {
         name === 'custom' ||
         name === 'custom plan' ||
         name === 'custom plans'
+    );
+};
+
+const isFreePlan = (plan) => {
+    return (
+        normalizePlanName(plan) === 'free' ||
+        (Number(plan?.price) === 0 && !isCustomPlan(plan))
     );
 };
 
@@ -338,6 +340,11 @@ const getPlanIconBackground = (plan) => {
 };
 
 const goToPlan = (plan) => {
+    if (isCustomPlan(plan)) {
+        router.push(`/${lang}/contact`);
+        return;
+    }
+
     if (!plan?.slug) {
         console.warn('The selected plan does not have a slug.', plan);
         return;

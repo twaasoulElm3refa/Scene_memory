@@ -299,29 +299,43 @@
         }
     },
     "contacts": {
-        "title": "联系我们",
-        "description": "您对事件回忆有任何疑问吗？我们在这里帮助您在全世界保存每一刻。",
+        "badge": "联系我们",
+        "title": "一起聊聊",
+        "description": "有问题、需要支持，或想了解定制方案？给我们留言，我们的团队会尽快回复你。",
         "form": {
-            "fullName": "全名",
-            "fullNamePlaceholder": "艾哈迈德·穆罕默德",
-            "emailAddress": "电子邮件",
-            "emailPlaceholder": "hello@example.com",
+            "title": "给我们留言",
+            "description": "填写下方表单，我们会尽快回复。",
+            "fullName": "姓名",
+            "fullNamePlaceholder": "请输入你的姓名",
+            "emailAddress": "电子邮箱",
+            "emailPlaceholder": "请输入你的电子邮箱",
             "subject": "主题",
             "generalInquiry": "一般咨询",
+            "customPlan": "定制方案",
             "support": "技术支持",
             "feedback": "反馈",
             "other": "其他",
-            "message": "消息",
-            "messagePlaceholder": "告诉我们如何帮助您...",
+            "message": "留言内容",
+            "messagePlaceholder": "告诉我们可以如何帮助你...",
+            "minimumCharacters": "请提供足够的详细信息。",
             "sendMessage": "发送消息",
-            "successMessage": "谢谢您！您的消息已成功发送。"
+            "sending": "正在发送...",
+            "successMessage": "你的消息已成功发送。",
+            "errorMessage": "发送消息时出现问题，请重试。"
         },
         "info": {
+            "getInTouch": "保持联系",
+            "title": "我们随时为你提供帮助",
+            "description": "无论是一般问题、技术支持还是定制价格，都可以联系我们的团队。",
             "emailUs": "给我们发邮件",
-            "available": "我们的团队全天候可用",
-            "visitStudio": "访问我们的工作室",
-            "address": "123 记忆之路，科技区\n旧金山，加利福尼亚 94103",
-            "followJourney": "关注我们的旅程"
+            "available": "我们的团队会尽快回复。",
+            "customPlans": "定制方案",
+            "customPlansDescription": "需要适合团队或业务的专属解决方案？告诉我们你的需求。",
+            "customerSupport": "客户支持",
+            "supportDescription": "如果你在账户、订阅或服务方面需要帮助，请联系我们。",
+            "followJourney": "关注我们的旅程",
+            "responseTime": "快速回复",
+            "responseTimeDescription": "我们通常会在一个工作日内回复消息。"
         },
         "map": {
             "title": "Scene Memory 世界地图",
@@ -329,19 +343,21 @@
         }
     },
     "faq": {
+        "badge": "常见问题",
         "title": "常见问题",
+        "description": "快速解答一些最常见的问题。",
         "questions": {
             "0": {
-                "question": "如何添加回忆？",
-                "answer": "只需上传您的照片并在我们的互动地图上标记位置。"
+                "question": "我多久能收到回复？",
+                "answer": "我们的团队通常会在一个工作日内回复。"
             },
             "1": {
-                "question": "我的数据安全吗？",
-                "answer": "我们使用企业级加密，确保您的回忆保持私密。"
+                "question": "我可以申请定制方案吗？",
+                "answer": "可以。请在主题字段中选择定制方案，并描述你的需求。"
             },
             "2": {
-                "question": "我可以分享相册吗？",
-                "answer": "是的！您可以通过安全链接与朋友和家人创建协作相册。"
+                "question": "我可以联系你们获取技术支持吗？",
+                "answer": "可以。请选择技术支持，并提供与问题相关的所有详细信息。"
             }
         }
     },
@@ -437,9 +453,9 @@
         "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
     },
     "plans": {
-        "customPrice" : "定制价格",
-        "customPricingDescription" : "对于定制订阅，请联系我们以获取满足您需求的定制报价。",
-        "contactUs" : "联系我们",
+        "customPrice": "定制价格",
+        "customPricingDescription": "对于定制订阅，请联系我们以获取满足您需求的定制报价。",
+        "contactUs": "联系我们",
         "chooseYourPlan": "选择您的计划",
         "getStarted": "免费开始",
         "subscribe": "立即订阅",

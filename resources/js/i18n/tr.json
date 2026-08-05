@@ -296,29 +296,43 @@
         }
     },
     "contacts": {
-        "title": "Bize Ulaşın",
-        "description": "Etkinlik anılarınızla ilgili bir sorunuz mu var? Dünyanın her yerinde her anı korumanızda size yardımcı olmak için buradayız.",
+        "badge": "Bize ulaşın",
+        "title": "Konuşalım",
+        "description": "Bir sorunuz mu var, desteğe mi ihtiyacınız var ya da özel bir plan mı istiyorsunuz? Bize mesaj gönderin, ekibimiz size geri dönecektir.",
         "form": {
-            "fullName": "Tam Ad",
-            "fullNamePlaceholder": "Ahmet Yılmaz",
-            "emailAddress": "E-posta Adresi",
-            "emailPlaceholder": "merhaba@example.com",
+            "title": "Bize mesaj gönderin",
+            "description": "Aşağıdaki formu doldurun, size en kısa sürede yanıt verelim.",
+            "fullName": "Ad soyad",
+            "fullNamePlaceholder": "Adınızı ve soyadınızı girin",
+            "emailAddress": "E-posta adresi",
+            "emailPlaceholder": "E-posta adresinizi girin",
             "subject": "Konu",
-            "generalInquiry": "Genel Soru",
-            "support": "Teknik Destek",
-            "feedback": "Geri Bildirim",
+            "generalInquiry": "Genel soru",
+            "customPlan": "Özel plan",
+            "support": "Teknik destek",
+            "feedback": "Geri bildirim",
             "other": "Diğer",
             "message": "Mesaj",
             "messagePlaceholder": "Size nasıl yardımcı olabileceğimizi anlatın...",
-            "sendMessage": "Mesajı Gönder",
-            "successMessage": "Teşekkürler! Mesajınız başarıyla gönderildi."
+            "minimumCharacters": "Lütfen yeterli ayrıntı paylaşın.",
+            "sendMessage": "Mesaj gönder",
+            "sending": "Gönderiliyor...",
+            "successMessage": "Mesajınız başarıyla gönderildi.",
+            "errorMessage": "Mesajınız gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
         },
         "info": {
-            "emailUs": "Bize Yazın",
-            "available": "Ekibimiz haftanın 7 günü 24 saat hizmetinizde",
-            "visitStudio": "Stüdyomuzu Ziyaret Edin",
-            "address": "123 Anı Yolu, Teknoloji Mahallesi\nSan Francisco, California 94103",
-            "followJourney": "Yolculuğu Takip Et"
+            "getInTouch": "İletişime geçin",
+            "title": "Yardım etmek için buradayız",
+            "description": "Genel sorular, teknik destek veya özel fiyatlandırma için ekibimize ulaşın.",
+            "emailUs": "Bize e-posta gönderin",
+            "available": "Ekibimiz en kısa sürede yanıt verecektir.",
+            "customPlans": "Özel planlar",
+            "customPlansDescription": "Ekibiniz veya işletmeniz için size özel bir çözüme mi ihtiyacınız var? Bize neye ihtiyacınız olduğunu anlatın.",
+            "customerSupport": "Müşteri desteği",
+            "supportDescription": "Hesabınız, aboneliğiniz veya hizmetler hakkında yardıma ihtiyacınız varsa bizimle iletişime geçin.",
+            "followJourney": "Yolculuğumuzu takip edin",
+            "responseTime": "Hızlı yanıt",
+            "responseTimeDescription": "Mesajlara genellikle bir iş günü içinde yanıt veririz."
         },
         "map": {
             "title": "Scene Memory Dünya Haritası",
@@ -326,19 +340,21 @@
         }
     },
     "faq": {
-        "title": "Sık Sorulan Sorular",
+        "badge": "SSS",
+        "title": "Sıkça sorulan sorular",
+        "description": "En sık sorulan sorulardan bazılarına hızlı yanıtlar.",
         "questions": {
             "0": {
-                "question": "Bir anıyı nasıl eklerim?",
-                "answer": "Sadece fotoğraflarınızı yükleyin ve etkileşimli haritamızda konumu işaretleyin."
+                "question": "Ne kadar sürede yanıt alırım?",
+                "answer": "Ekibimiz genellikle bir iş günü içinde yanıt verir."
             },
             "1": {
-                "question": "Verilerim güvende mi?",
-                "answer": "Kurumsal düzeyde şifreleme kullanıyoruz, böylece özel anılarınız özel kalır."
+                "question": "Özel plan talep edebilir miyim?",
+                "answer": "Evet. Konu alanında Özel planı seçin ve gereksinimlerinizi açıklayın."
             },
             "2": {
-                "question": "Albümleri paylaşabilir miyim?",
-                "answer": "Evet! Güvenli bağlantılar aracılığıyla arkadaşlarınız ve ailenizle işbirlikçi albümler oluşturabilirsiniz."
+                "question": "Teknik destek için sizinle iletişime geçebilir miyim?",
+                "answer": "Evet. Teknik desteği seçin ve sorunla ilgili tüm ayrıntıları ekleyin."
             }
         }
     },
@@ -434,9 +450,9 @@
         "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
     },
     "plans": {
-        "customPrice" : "Maßgeschneiderter Preis",
-        "customPricingDescription" : "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
-        "contactUs" : "Bize Ulaşın",
+        "customPrice": "Maßgeschneiderter Preis",
+        "customPricingDescription": "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
+        "contactUs": "Bize Ulaşın",
         "chooseYourPlan": "Planınızı Seçin",
         "getStarted": "Ücretsiz Başla",
         "subscribe": "Şimdi Abone Ol",
