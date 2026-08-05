@@ -434,6 +434,8 @@
         "contact_text": "ان شرائط کے بارے میں کسی بھی سوال کے لیے پلیٹ فارم انتظامیہ سے رابطہ کریں۔"
     },
     "plans": {
+        "customPrice" : "Maßgeschneiderter Preis",
+        "customPricingDescription" : "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
         "contactUs" : "ہم سے رابطہ کریں",
         "chooseYourPlan": "اپنا پلان منتخب کریں",
         "getStarted": "مفت میں شروع کریں",

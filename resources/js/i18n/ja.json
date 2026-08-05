@@ -437,6 +437,8 @@
         "contact_text": "これらの規約について質問がある場合は、プラットフォーム管理者までお問い合わせください。"
     },
     "plans": {
+        "customPrice" : "カスタム価格",
+        "customPricingDescription" : "カスタムサブスクリプションの場合は、お問い合わせください。お客様のニーズに合ったオファーをお届けします。",
         "contactUs" : "お問い合わせ",
         "chooseYourPlan": "プランを選択してください",
         "getStarted": "無料で始める",

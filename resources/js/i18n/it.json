@@ -437,6 +437,8 @@
         "contact_text": "Per qualsiasi domanda su questi termini, contattare l'amministrazione della piattaforma."
     },
     "plans": {
+        "customPrice" : "Prezzo personalizzato",
+        "customPricingDescription" : "Per abbonamenti personalizzati, contattaci per ricevere un'offerta su misura che soddisfi le tue esigenze.",
         "contactUs" : "Contattaci",
         "chooseYourPlan": "Scegli il tuo piano",
         "getStarted": "Inizia gratis",

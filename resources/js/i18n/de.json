@@ -437,6 +437,8 @@
         "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
     },
     "plans": {
+        "customPrice" : "Preis nach Maß",
+        "customPricingDescription" : "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein individuelles Angebot zu erhalten, das Ihren Bedürfnissen entspricht.",
         "contactUs" : "Kontaktiere uns",
         "chooseYourPlan": "Wählen Sie Ihren Plan",
         "getStarted": "Kostenlos starten",

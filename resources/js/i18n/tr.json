@@ -434,6 +434,8 @@
         "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
     },
     "plans": {
+        "customPrice" : "Maßgeschneiderter Preis",
+        "customPricingDescription" : "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
         "contactUs" : "Bize Ulaşın",
         "chooseYourPlan": "Planınızı Seçin",
         "getStarted": "Ücretsiz Başla",

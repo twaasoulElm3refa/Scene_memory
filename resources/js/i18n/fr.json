@@ -437,6 +437,8 @@
         "contact_text": "Pour toute question concernant ces conditions, veuillez contacter l'administration."
     },
     "plans": {
+        "customPrice" : "Prix personnalisé",
+        "customPricingDescription" : "Pour les abonnements personnalisés, veuillez nous contacter pour recevoir une offre sur mesure qui répond à vos besoins.",
         "contactUs" : "Contactez-nous",
         "chooseYourPlan": "Choisissez votre plan",
         "getStarted": "Commencez gratuitement",

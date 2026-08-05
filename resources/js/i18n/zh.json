@@ -437,6 +437,8 @@
         "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
     },
     "plans": {
+        "customPrice" : "定制价格",
+        "customPricingDescription" : "对于定制订阅，请联系我们以获取满足您需求的定制报价。",
         "contactUs" : "联系我们",
         "chooseYourPlan": "选择您的计划",
         "getStarted": "免费开始",

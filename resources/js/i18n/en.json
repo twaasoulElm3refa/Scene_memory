@@ -437,6 +437,8 @@
         "contact_text": "If you have any questions about these Terms, please contact the platform administration."
     },
     "plans": {
+        "customPrice" : "Custom Price",
+        "customPricingDescription" : "FFor custom subscriptions, please contact us to receive a tailored offer that meets your needs.",
         "contactUs" : "Contact Us",
         "chooseYourPlan": "Choose your plan",
         "getStarted": "Get started for free",
