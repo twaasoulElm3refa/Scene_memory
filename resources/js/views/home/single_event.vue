@@ -59,7 +59,7 @@
                                 class="text-2xl md:text-3xl font-bold text-gray-900 border-b border-gray-200 pb-4 flex-1">
                                 {{ $t('event.media_gallery_title') }}
                             </h2>
-                            <button v-if="isAuthenticated" @click="showUploadModal = true"
+                            <button v-if="isAuthenticated && Number(event?.user_id) === Number(currentUserId)" @click="showUploadModal = true"
                                 class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-sm ml-4">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
