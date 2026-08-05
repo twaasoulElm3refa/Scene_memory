@@ -8,6 +8,8 @@ sorted in home by this arrange
 image contain a description for the search bar
 filter to get only (images || events || videos )
 
+On See More Show Filter (from date to date) & (Countries - Cities) & (Categorey & Sub_Categories)
+
 filters Ui be under the search bar
 
 Edit the header Ui
@@ -18,3 +20,8 @@ Edit historical creation
 
 tags crud in dashboard
 
+Event type (General - Real Event ) on creation
+
+Home Page More Comfortable For Buying not uploading (60% to 40%)
+
+trending button in admin add event

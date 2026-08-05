@@ -410,8 +410,8 @@ class EventRepository implements EventRepositoryInterface
     public function findWithAdminRelationsById(int $id)
     {
         return Events::with([
-            'city:id,name,mode',
-            'tags:id,name',
+            'city:id,name',
+            'tags:id,name,mode',
             'sub_categorey:id,name',
             'user:id,name',
             'firstImage',

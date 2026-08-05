@@ -253,7 +253,7 @@
                   :key="tag.id || `${tag.name}-${index}`"
                   class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 border border-indigo-100"
                 >
-                  {{ tag.name }}
+                  {{ tag.name }}  {{ tag.mode }}
                 </span>
               </div>
             </section>
