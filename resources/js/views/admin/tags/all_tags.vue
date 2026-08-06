@@ -124,7 +124,7 @@
                 <td class="px-6 py-4">
                   <div>
                     <div class="font-semibold text-gray-900">
-                      {{ tag.translation?.name || tag.name }}
+                      {{ tag.name }}
                     </div>
 
                     <div
