@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Eloquent\Tags;
 
+use App\Jobs\TranslateTagJob;
 use App\Models\Tags;
 use App\Repositories\Contracts\Tags\TagRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class TagsRespository implements TagRepositoryInterface
 {
@@ -17,7 +19,7 @@ class TagsRespository implements TagRepositoryInterface
                     'translation' => function ($query) {
                         $query->select(
                             'id',
-                            'tag_id', // غيرها لو اسم الـ FK مختلف
+                            'tag_id',
                             'locale',
                             'name'
                         );
@@ -26,5 +28,70 @@ class TagsRespository implements TagRepositoryInterface
                 ->orderByDesc('id')
                 ->get();
         });
+    }
+
+    public function paginated($perPage = 30)
+    {
+        return Tags::query()
+            ->select('id', 'name', 'slug', 'mode')
+            ->with([
+                'translation' => function ($query) {
+                    $query->select(
+                        'id',
+                        'tag_id',
+                        'locale',
+                        'name'
+                    );
+                }
+            ])
+            ->orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    public function getTagById($id)
+    {
+        return Tags::query()
+            ->select('id', 'name', 'slug', 'mode')
+            ->with([
+                'translation' => function ($query) {
+                    $query->select(
+                        'id',
+                        'tag_id',
+                        'locale',
+                        'name'
+                    );
+                }
+            ])
+            ->where('slug', $id)
+            ->firstOrFail();
+    }
+
+    public function createTag(array $data)
+    {
+        $data['slug'] = str_replace(' ', '-', strtolower($data['name']));
+        $tag = Tags::create($data);
+        TranslateTagJob::dispatch($tag->id , $data['name']);
+        return $tag;
+    }
+
+    public function updateTag($id, array $data)
+    {
+        try {
+            $data['slug'] = str_replace(' ', '-', strtolower($data['name']));
+            $tag = $this->getTagById($id);
+            $tag->update($data);
+            TranslateTagJob::dispatch($tag->id , $data['name']);
+            return $tag;
+        } catch (\Throwable $th) {
+            Log::error('Error updating tag: ' . $th->getMessage());
+            return null;
+        }
+    }
+
+    public function deleteTag($id)
+    {
+        $tag = $this->getTagById($id);
+        $tag->delete();
+        return true;
     }
 }

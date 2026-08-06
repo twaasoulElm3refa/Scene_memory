@@ -91,6 +91,8 @@ const AdminLogin = () => import("../views/admin/auth/login.vue");
 
 const getCurrentLang = () => localStorage.getItem("lang") || "en";
 
+const all_tags = () => import("../views/admin/tags/all_tags.vue");
+
 const routes = [
     {
         path: "/",
@@ -517,6 +519,14 @@ const routes = [
     {
         path: "/admin/events/:id",
         component: show_event,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
+    // Tags
+
+    {
+        path: "/admin/tags",
+        component: all_tags,
         meta: { hideNavbar: true, hideFooter: true },
     },
 ];

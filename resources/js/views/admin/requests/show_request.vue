@@ -251,9 +251,18 @@
                 <span
                   v-for="(tag, index) in apiData.event.tags"
                   :key="tag.id || `${tag.name}-${index}`"
-                  class="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 border border-indigo-100"
+                  class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold"
+                  :class="tagModeClasses(tag.mode).wrapper"
                 >
-                  {{ tag.name }}  {{ tag.mode }}
+                  <span>{{ tag.name }}</span>
+
+                  <span
+                    v-if="normalizeTagMode(tag.mode)"
+                    class="rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase leading-none"
+                    :class="tagModeClasses(tag.mode).badge"
+                  >
+                    {{ normalizeTagMode(tag.mode).toUpperCase() }}
+                  </span>
                 </span>
               </div>
             </section>
@@ -493,6 +502,33 @@ const statusClasses = {
   pending: "bg-amber-50 text-amber-800 border-amber-200",
   approved: "bg-green-50 text-green-800 border-green-200",
   rejected: "bg-red-50 text-red-800 border-red-200",
+};
+
+const normalizeTagMode = (mode) => {
+  return String(mode || "").trim().toLowerCase();
+};
+
+const tagModeClasses = (mode) => {
+  const normalized = normalizeTagMode(mode);
+
+  if (normalized === "user") {
+    return {
+      wrapper: "border-emerald-100 bg-emerald-50 text-emerald-700",
+      badge: "bg-emerald-100 text-emerald-700",
+    };
+  }
+
+  if (normalized === "ai") {
+    return {
+      wrapper: "border-violet-100 bg-violet-50 text-violet-700",
+      badge: "bg-violet-100 text-violet-700",
+    };
+  }
+
+  return {
+    wrapper: "border-slate-200 bg-slate-50 text-slate-700",
+    badge: "bg-slate-200 text-slate-600",
+  };
 };
 
 const resolveImageUrl = (path) => {

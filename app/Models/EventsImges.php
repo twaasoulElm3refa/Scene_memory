@@ -34,4 +34,15 @@ class EventsImges extends Model
     {
         return $this->hasMany(ImagesTags::class, 'events_imges_id');
     }
+
+    public function translations()
+    {
+        return $this->hasMany(ImageTranslations::class, 'image_id');
+    }
+
+    public function translation()
+    {
+        return $this->hasOne(ImageTranslations::class, 'image_id')
+            ->where('locale', app()->getLocale());
+    }
 }

@@ -129,6 +129,8 @@ class ProcessEventImageJob implements ShouldQueue
                 'validation_message' => $this->metadata['validation_message'] ?? null,
             ]);
 
+            // dispatch the image translation job
+            TranslateImageJob::dispatch($eventImage->id, $this->metadata['description'] ?? 'description');
             $photoTagsJson = $this->metadata['tags_json'] ?? null;
 
             $decodedTags = [];

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\admin\AdminPlanController;
 use App\Http\Controllers\api\admin\AdminDashboardController;
+use App\Http\Controllers\api\admin\AdminTagsController;
 use App\Http\Controllers\api\admin\auth\AdminAuthController;
 use App\Http\Controllers\api\admin\BenefitsController;
 use App\Http\Controllers\api\admin\CategoriesCreateController;
@@ -121,6 +122,11 @@ Route::prefix('v1')->group(function () {
     Route::prefix('tags')->group(function () {
         Route::get('/search', [TagsController::class,  'search'])->middleware('throttle:60,1');
         Route::get('/', [TagsController::class,  'index']);
+        Route::get('/all/paginated', [AdminTagsController::class,  'paginated']);
+        Route::get('/{id}', [AdminTagsController::class,  'single'])->middleware('throttle:60,1');
+        Route::post('/create', [AdminTagsController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/update/{id}', [AdminTagsController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::delete('/delete/{id}', [AdminTagsController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
     });
 
     // COUNTRIES CRUD

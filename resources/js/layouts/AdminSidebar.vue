@@ -237,6 +237,28 @@
             </Transition>
         </div>
 
+        <!-- tags -->
+        <div class="sidebar-group">
+            <button class="sidebar-btn dropdown-toggle group" :class="{ 'active-parent': tagsActive }"
+                @click="toggle('tags')">
+                <span class="flex items-center gap-3">
+                    <TagIcon class="w-5 h-5" />
+                    tags
+                </span>
+                <ChevronIcon class="w-5 h-5 transition-transform duration-300"
+                    :class="{ 'rotate-180': open.tags }" />
+            </button>
+            <Transition name="dropdown">
+                <div v-if="open.tags" class="dropdown">
+                    <RouterLink to="/admin/tags" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path === '/admin/tags' }">
+                        <TagIcon class="w-5 h-5" />
+                        All tags
+                    </RouterLink>
+                </div>
+            </Transition>
+        </div>
+
         <hr />
 
         <!-- SETTINGS -->
@@ -294,6 +316,7 @@ import {
     CalendarIcon,
     AdjustmentsHorizontalIcon,
     UserPlusIcon,
+    TagIcon,
     PlusIcon,
     DocumentTextIcon,
     PhoneIcon,
@@ -315,6 +338,7 @@ const open = reactive({
     plans: route.path.startsWith("/admin/plans"),
     purchases: route.path.startsWith("/admin/purchases"),   // جديد
     requests: route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media"),
+    tags: route.path.startsWith("/admin/tags"),
 });
 
 const toggle = (key) => {
@@ -333,6 +357,7 @@ const productsActive = computed(() => route.path.startsWith("/admin/countries"))
 const brandsActive = computed(() => route.path.startsWith("/admin/cities"));
 const eventsActive = computed(() => route.path.startsWith("/admin/events"));
 const settingsActive = computed(() => route.path.startsWith("/admin/settings"));
+const tagsActive = computed(() => route.path.startsWith("/admin/tags"));
 </script>
 
 <style scoped>
