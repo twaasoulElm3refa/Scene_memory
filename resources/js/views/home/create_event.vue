@@ -41,33 +41,49 @@
                         <div class="card-body p-4">
                             <!-- is_real: Event Type -->
                             <h2 class="card-title h4 fw-bold mb-3">Event Type</h2>
-                            <div class="row g-3 mb-4">
+                            <div class="row g-2 g-md-3 mb-4">
                                 <div class="col-12 col-md-6">
-                                    <button
-                                        type="button"
-                                        class="btn w-100 text-start border rounded-3 p-4 h-100"
-                                        :class="eventTypeCardClass(true)"
-                                        @click="selectEventType(true)"
+                                    <label
+                                        class="event-type-option d-flex align-items-start gap-3 border rounded-3 px-3 py-3 h-100"
+                                        :class="form.is_real === true ? 'border-primary bg-primary-subtle shadow-sm' : 'border-secondary-subtle bg-white'"
                                     >
-                                        <span class="d-block h5 fw-bold mb-2">Public / Official Event</span>
-                                        <span class="text-muted">
-                                            Conference, exhibition, festival, international or public event.
+                                        <input
+                                            v-model="form.is_real"
+                                            class="event-type-input"
+                                            type="radio"
+                                            name="event_type"
+                                            :value="true"
+                                        />
+                                        <span class="event-type-radio flex-shrink-0 mt-1"></span>
+                                        <span>
+                                            <span class="d-block fw-semibold lh-sm">Public / Official Event</span>
+                                            <small class="text-muted d-block mt-1">
+                                                Conference, exhibition, festival or public event.
+                                            </small>
                                         </span>
-                                    </button>
+                                    </label>
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <button
-                                        type="button"
-                                        class="btn w-100 text-start border rounded-3 p-4 h-100"
-                                        :class="eventTypeCardClass(false)"
-                                        @click="selectEventType(false)"
+                                    <label
+                                        class="event-type-option d-flex align-items-start gap-3 border rounded-3 px-3 py-3 h-100"
+                                        :class="form.is_real === false ? 'border-primary bg-primary-subtle shadow-sm' : 'border-secondary-subtle bg-white'"
                                     >
-                                        <span class="d-block h5 fw-bold mb-2">Personal Event / Memory</span>
-                                        <span class="text-muted">
-                                            A personal event, occasion or memory uploaded by you.
+                                        <input
+                                            v-model="form.is_real"
+                                            class="event-type-input"
+                                            type="radio"
+                                            name="event_type"
+                                            :value="false"
+                                        />
+                                        <span class="event-type-radio flex-shrink-0 mt-1"></span>
+                                        <span>
+                                            <span class="d-block fw-semibold lh-sm">Personal Event / Memory</span>
+                                            <small class="text-muted d-block mt-1">
+                                                Personal occasion, event or memory.
+                                            </small>
                                         </span>
-                                    </button>
+                                    </label>
                                 </div>
                             </div>
 
@@ -1066,3 +1082,54 @@ function patchLanguage(activeMap, isAr) {
     });
 }
 </script>
+
+<style scoped>
+.event-type-option {
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.event-type-option:hover {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0.25rem 0.75rem rgba(var(--bs-primary-rgb), 0.08);
+}
+
+.event-type-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.event-type-radio {
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 2px solid var(--bs-secondary-color);
+    border-radius: 50%;
+    background: var(--bs-body-bg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-type-radio::after {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--bs-primary);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.event-type-input:checked + .event-type-radio {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.12);
+}
+
+.event-type-input:checked + .event-type-radio::after {
+    opacity: 1;
+    transform: scale(1);
+}
+</style>
