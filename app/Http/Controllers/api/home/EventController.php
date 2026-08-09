@@ -37,11 +37,28 @@ class EventController extends Controller
     {
         $page = request()->get('page', 1);
         $perPage = 8;
+        $isRealValue = request()->get('is_real');
+        $normalizedIsReal = null;
 
-        $cacheKey = "events_page_{$page}_per_{$perPage}_".app()->getLocale();
+        if ($isRealValue !== null && $isRealValue !== '' && $isRealValue !== 'all') {
+            if (is_bool($isRealValue)) {
+                $normalizedIsReal = $isRealValue;
+            } else {
+                $isRealValue = strtolower(trim((string) $isRealValue));
 
-        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return $this->eventRepository->allActivePaginated($perPage);
+                if (in_array($isRealValue, ['1', 'true', 'real'], true)) {
+                    $normalizedIsReal = true;
+                } elseif (in_array($isRealValue, ['0', 'false', 'general'], true)) {
+                    $normalizedIsReal = false;
+                }
+            }
+        }
+
+        $isRealCacheValue = $normalizedIsReal === null ? 'all' : ($normalizedIsReal ? '1' : '0');
+        $cacheKey = "events_page_{$page}_per_{$perPage}_is_real_{$isRealCacheValue}_".app()->getLocale();
+
+        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage, $normalizedIsReal) {
+            return $this->eventRepository->allActivePaginated($perPage, $normalizedIsReal);
         });
 
         return $this->success($events, 'All events');

@@ -84,13 +84,18 @@ class EventRepository implements EventRepositoryInterface
         return Events::whereIn('city_id', $cityIds);
     }
 
-    public function allActivePaginated(int $perPage)
+    public function allActivePaginated(int $perPage, ?bool $isReal = null)
     {
-        return Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,preview_url'])
+        $query = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,preview_url'])
             ->where('is_active', 1)
-            ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id','is_real')
+            ->orderBy('created_at', 'desc');
+
+        if ($isReal !== null) {
+            $query->where('is_real', $isReal ? 1 : 0);
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function historicalActivePaginated(int $perPage)

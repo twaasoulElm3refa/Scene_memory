@@ -9,13 +9,29 @@
                 </p>
             </div>
 
-            <div class="sort-control">
-                <label>{{ $t("events.sort_by") }}:</label>
-                <select v-model="sortBy" @change="sortEvents" class="sort-select">
-                    <option value="newest">{{ $t("events.sort.newest") }}</option>
-                    <option value="oldest">{{ $t("events.sort.oldest") }}</option>
-                    <option value="title">{{ $t("events.sort.title") }}</option>
-                </select>
+            <div class="header-actions">
+                <div class="filter-control">
+                    <label>Event Type:</label>
+                    <select
+                        v-model="eventTypeFilter"
+                        @change="onEventTypeFilterChange"
+                        class="sort-select"
+                        aria-label="Event Type"
+                    >
+                        <option value="all">All Events</option>
+                        <option value="real">Real Events</option>
+                        <option value="general">General Events</option>
+                    </select>
+                </div>
+
+                <div class="sort-control">
+                    <label>{{ $t("events.sort_by") }}:</label>
+                    <select v-model="sortBy" @change="sortEvents" class="sort-select">
+                        <option value="newest">{{ $t("events.sort.newest") }}</option>
+                        <option value="oldest">{{ $t("events.sort.oldest") }}</option>
+                        <option value="title">{{ $t("events.sort.title") }}</option>
+                    </select>
+                </div>
             </div>
         </header>
 
@@ -34,14 +50,14 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else-if="events.length === 0" class="error-container">
+        <div v-else-if="filteredEvents.length === 0" class="error-container">
             <p>لا توجد فعاليات متاحة حاليًا.</p>
         </div>
 
         <!-- Events Grid -->
         <div v-else class="events-grid">
             <div
-                v-for="event in events"
+                v-for="event in filteredEvents"
                 :key="event.id"
                 class="event-card"
                 @click="viewEvent(event)"
@@ -169,6 +185,7 @@ export default {
             totalEvents: 0,
             perPage: 8,
             sortBy: "newest",
+            eventTypeFilter: "all",
             uniqueCities: 0,
             uniqueCategories: 0,
             fallbackImage: FALLBACK_IMAGE,
@@ -177,6 +194,10 @@ export default {
     },
 
     computed: {
+        filteredEvents() {
+            return this.events;
+        },
+
         visiblePages() {
             const pages = [];
             const maxVisible = 5;
@@ -402,7 +423,7 @@ export default {
             this.error = null;
 
             try {
-                const response = await EventService.getAll(page);
+                const response = await EventService.getAll(page, this.eventTypeFilter);
                 const result = response.data;
 
                 if (result.status !== "success") {
@@ -438,6 +459,11 @@ export default {
             } finally {
                 this.loading = false;
             }
+        },
+
+        onEventTypeFilterChange() {
+            this.currentPage = 1;
+            this.fetchEvents(1);
         },
 
         calculateStats() {
@@ -651,7 +677,15 @@ export default {
     font-weight: 300;
 }
 
-.sort-control {
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.sort-control,
+.filter-control {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -661,9 +695,11 @@ export default {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.sort-control label {
+.sort-control label,
+.filter-control label {
     font-weight: 500;
     color: #475569;
+    white-space: nowrap;
 }
 
 .sort-select {
@@ -955,6 +991,23 @@ export default {
     .page-header {
         flex-direction: column;
         gap: 1.5rem;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sort-control,
+    .filter-control {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .sort-select {
+        flex: 1;
+        min-width: 0;
     }
 
     .events-grid {

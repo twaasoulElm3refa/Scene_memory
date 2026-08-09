@@ -13,8 +13,16 @@ export const EventService = {
     return api.get("/events/trending");
   },
 
-  getAll(page = 1) {
-    return api.get("/events", { params: { page } });
+  getAll(page = 1, isReal = null) {
+    const params = { page };
+
+    if (isReal === true || isReal === 1 || isReal === "1" || isReal === "true" || isReal === "real") {
+      params.is_real = 1;
+    } else if (isReal === false || isReal === 0 || isReal === "0" || isReal === "false" || isReal === "general") {
+      params.is_real = 0;
+    }
+
+    return api.get("/events", { params });
   },
 
   getHistorical(page = 1) {
