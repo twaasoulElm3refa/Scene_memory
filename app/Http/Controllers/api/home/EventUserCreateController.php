@@ -40,6 +40,8 @@ class EventUserCreateController extends Controller
     {
         $photoValidationResults = $this->validateUserPhotoPayload($request);
         $data = $request->validated();
+        // is_real: normalize boolean from FormData
+        $data['is_real'] = $request->boolean('is_real');
         $this->stripUploadOnlyData($data);
         $imageJobs = [];
         $videoJobs = [];

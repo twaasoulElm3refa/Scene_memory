@@ -29,6 +29,8 @@ class EventsRequest extends FormRequest
             'description' => 'required|string',
             'city_id' => 'required|exists:cities,id',
             'sub_categorey_id' => 'required|exists:sub_categoreys,id',
+            // is_real: Event Type
+            'is_real' => ['required', 'boolean'],
             'photography_type' => ['nullable', 'in:normal,professional'],
             'urls' => 'required_without:photos|array|min:1',
             'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',

@@ -39,6 +39,38 @@
                 <div v-show="currentPhase === 1" class="col-12">
                     <div class="card shadow border-0 rounded-3">
                         <div class="card-body p-4">
+                            <!-- is_real: Event Type -->
+                            <h2 class="card-title h4 fw-bold mb-3">Event Type</h2>
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-6">
+                                    <button
+                                        type="button"
+                                        class="btn w-100 text-start border rounded-3 p-4 h-100"
+                                        :class="eventTypeCardClass(true)"
+                                        @click="selectEventType(true)"
+                                    >
+                                        <span class="d-block h5 fw-bold mb-2">Public / Official Event</span>
+                                        <span class="text-muted">
+                                            Conference, exhibition, festival, international or public event.
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <button
+                                        type="button"
+                                        class="btn w-100 text-start border rounded-3 p-4 h-100"
+                                        :class="eventTypeCardClass(false)"
+                                        @click="selectEventType(false)"
+                                    >
+                                        <span class="d-block h5 fw-bold mb-2">Personal Event / Memory</span>
+                                        <span class="text-muted">
+                                            A personal event, occasion or memory uploaded by you.
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+
                             <h2 class="card-title h4 fw-bold mb-3">Photography Type</h2>
                             <div class="row g-3">
                                 <div class="col-12 col-md-6">
@@ -71,7 +103,7 @@
                             </div>
 
                             <div v-if="!isPhotographyPhaseValid" class="text-danger small mt-3">
-                                Please select a photography type before continuing.
+                                Please select an event type and photography type before continuing.
                             </div>
                         </div>
                     </div>
@@ -451,6 +483,8 @@ const { t, te } = useI18n();
 const tr = (key, fallback) => (te(key) ? t(key) : fallback);
 
 const form = ref({
+    // is_real: Event Type
+    is_real: null,
     photography_type: "",
     title: "",
     description: "",
@@ -546,7 +580,13 @@ const canAddNewTag = computed(() => {
     return !existsInAllTags && !existsInSelected;
 });
 
+// is_real: Event Type
+const isEventTypeValid = computed(() =>
+    form.value.is_real === true || form.value.is_real === false
+);
+
 const isPhotographyPhaseValid = computed(() =>
+    isEventTypeValid.value &&
     ["professional", "normal"].includes(form.value.photography_type)
 );
 
@@ -615,6 +655,18 @@ const canSubmit = computed(() =>
 async function goNext() {
     if (!currentPhaseValid.value) return;
     await nextPhase();
+}
+
+// is_real: Event Type
+function selectEventType(isReal) {
+    form.value.is_real = isReal;
+}
+
+// is_real: Event Type
+function eventTypeCardClass(isReal) {
+    return form.value.is_real === isReal
+        ? "border-primary bg-primary-subtle shadow-sm"
+        : "bg-white";
 }
 
 function selectPhotographyType(type) {
@@ -839,6 +891,8 @@ async function createEvent() {
     loading.value = true;
     const fd = new FormData();
 
+    // is_real: Event Type
+    fd.append("is_real", form.value.is_real ? "1" : "0");
     fd.append("photography_type", form.value.photography_type);
     fd.append("title", form.value.title);
     fd.append("description", form.value.description);

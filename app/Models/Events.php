@@ -35,6 +35,8 @@ class Events extends Model
         'end_date' => 'datetime',
         'is_active' => 'boolean',
         'is_trending' => 'boolean',
+        // is_real: Event Type
+        'is_real' => 'boolean',
     ];
 
     public function city()
