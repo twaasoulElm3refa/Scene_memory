@@ -340,7 +340,7 @@ const selectLanguage = async (lang) => {
 /* NAV */
 const allLinks = [
     { labelKey: "nav.home", path: "/home", active: "home" },
-    { labelKey: "nav.allEvents", path: "/all_events", active: "all_events" },
+    // { labelKey: "nav.allEvents", path: "/all_events", active: "all_events" },
     { labelKey: "nav.scemoryGate", path: "/scemory-gate", active: "scemory-gate" },
 ];
 
