@@ -1,4 +1,5 @@
 import api from "@/services/ApiClient";
+import { normalizeEventSearchFilters } from "@/services/EventService/eventSearchHelpers";
 
 export const EventService = {
   getCount() {
@@ -54,32 +55,24 @@ export const EventService = {
    */
   async searchEvents(filters = {}) {
     try {
-      const countryId = filters.countryId || filters.country_id || "all";
-      const cityId = filters.cityId || filters.city_id || "all";
-      const subCategoryId = filters.subCategoryId || filters.sub_category_id || "all";
-      const searchQuery = String(filters.searchQuery || filters.search || filters.q || "").trim();
-      const page = Number(filters.page) || 1;
-      const perPage = Number(filters.perPage || filters.per_page) || 8;
-
-      const tagsIds = Array.isArray(filters.tagsIds)
-        ? filters.tagsIds.filter(Boolean)
-        : Array.isArray(filters.tags_id)
-          ? filters.tags_id.filter(Boolean)
-          : [];
+      const normalizedFilters = normalizeEventSearchFilters(filters, {
+        defaultPerPage: filters.perPage || filters.per_page || 8,
+      });
 
       const params = {
-        country_id: countryId || "all",
-        city_id: cityId || "all",
-        sub_category_id: subCategoryId || "all",
-        from: filters.fromDate || filters.from || null,
-        to: filters.toDate || filters.to || null,
-        q: searchQuery || null,
-        page,
-        per_page: perPage,
+        country_id: normalizedFilters.countryId || "all",
+        city_id: normalizedFilters.cityId || "all",
+        category_id: normalizedFilters.categoryId || "all",
+        sub_category_id: normalizedFilters.subCategoryId || "all",
+        from: normalizedFilters.fromDate || null,
+        to: normalizedFilters.toDate || null,
+        q: normalizedFilters.searchQuery || null,
+        page: normalizedFilters.page,
+        per_page: normalizedFilters.perPage,
       };
 
-      if (tagsIds.length) {
-        params.tags_id = tagsIds;
+      if (normalizedFilters.tagsIds.length) {
+        params.tags_id = normalizedFilters.tagsIds;
       }
 
       const url = `/events/${params.city_id}/${params.sub_category_id}`;

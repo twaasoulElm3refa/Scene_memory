@@ -1,6 +1,6 @@
 <template>
 <section v-if="searched" class="scemory-events-section home-events-results max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-    <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-10">
+    <div class="flex flex-col gap-5 md:flex-row md:justify-between md:items-end mb-10">
       <div>
         <div
           class="inline-flex items-center gap-2 text-blue-600 bg-blue-50 px-4 py-2 rounded-full text-sm font-medium mb-4"
@@ -20,6 +20,16 @@
           Showing {{ resultFrom || 0 }} - {{ resultTo || 0 }} of {{ totalResults || 0 }} events
         </p>
       </div>
+
+      <button
+        v-if="showSeeMore && displayedEvents.length > 0 && !loading"
+        type="button"
+        class="see-more-results-btn inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition"
+        @click="$emit('see-more')"
+      >
+        See More
+        <span class="see-more-arrow" aria-hidden="true">&#8594;</span>
+      </button>
     </div>
 
     <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
@@ -195,9 +205,13 @@ defineProps({
     type: String,
     default: "en",
   },
+  showSeeMore: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits(["update:current-page"]);
+const emit = defineEmits(["update:current-page", "see-more"]);
 
 const emitPageChange = (page) => {
   emit("update:current-page", page);
@@ -307,5 +321,21 @@ const emitPageChange = (page) => {
   color: #FFFFFF !important;
   border-color: rgba(22, 119, 255, 0.24) !important;
   box-shadow: 0 8px 20px rgba(13, 77, 151, 0.16);
+}
+
+.home-events-results .see-more-results-btn {
+  min-height: 46px;
+  border: 1px solid rgba(22, 119, 255, 0.22) !important;
+  background: linear-gradient(135deg, var(--scemory-primary), var(--scemory-blue)) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 24px rgba(13, 77, 151, 0.16);
+}
+
+.home-events-results .see-more-results-btn:hover {
+  background: linear-gradient(135deg, var(--scemory-blue), var(--scemory-light-blue)) !important;
+}
+
+.see-more-arrow {
+  margin-inline-start: 0.45rem;
 }
 </style>

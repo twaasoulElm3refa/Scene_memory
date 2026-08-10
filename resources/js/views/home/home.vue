@@ -169,7 +169,8 @@
                         :paginated-events="paginatedEvents" :visible-pages="visiblePages" :current-page="currentPage"
                         :total-pages="totalPages" :total-results="totalResults" :result-from="resultFrom"
                         :result-to="resultTo" :per-page="perPage" :fallback-image="fallbackImage"
-                        :format-date="formatDate" :lang="lang" @update:current-page="handlePageChange" />
+                        :format-date="formatDate" :lang="lang" :show-see-more="canSeeMoreSearchResults"
+                        @update:current-page="handlePageChange" @see-more="goToMoreSearchResults" />
                 </div>
             </section>
 
@@ -243,6 +244,12 @@ import { CategoryService } from "@/services/CategoryService/CategoryService";
 import { TagService } from "@/services/TagService/TagService";
 import { LocationService } from "@/services/LocationService/LocationService";
 import { EventService } from "@/services/EventService/EventService";
+import {
+    eventFiltersToQuery,
+    normalizeEvent,
+    normalizePaginatedResponse,
+    toMediaUrl,
+} from "@/services/EventService/eventSearchHelpers";
 import { PlanService } from "@/services/planService/planService";
 import { AuthService } from "@/services/AuthService/AuthService";
 import Navbar from "@/components/layouts/Navbar.vue";
@@ -344,6 +351,13 @@ const paginatedEvents = computed(() => {
     return displayedEvents.value;
 });
 
+const canSeeMoreSearchResults = computed(() => {
+    return searched.value
+        && !loading.value
+        && displayedEvents.value.length > 0
+        && totalResults.value > displayedEvents.value.length;
+});
+
 const missingFieldsList = computed(() => {
     const data = localStorage.getItem("missingFields");
     return data ? JSON.parse(data) : [];
@@ -371,26 +385,6 @@ const formatDate = (dateStr) => {
     }
 };
 
-const toMediaUrl = (pathValue) => {
-    if (!pathValue) return null;
-    if (/^https?:\/\//i.test(pathValue)) return pathValue;
-    return `/storage/${pathValue}`;
-};
-
-const normalizeEvent = (ev) => ({
-    id: ev.id || ev._id,
-    slug: ev.slug,
-    translation: ev.translation,
-    title: ev.title || "Untitled event",
-    start_date: ev.start_date,
-    city: ev.city?.translation?.name || ev.city || "Not specified",
-    category_name: ev.sub_categorey?.translation?.name || "Event",
-    image_url: toMediaUrl(ev.first_image?.full_url),
-    image_webp_url: toMediaUrl(ev.first_image?.webp_url || ev.first_image?.full_url_webp),
-    lattitude: ev.lattitude,
-    langitude: ev.langitude,
-});
-
 const normalizeTrendingEvent = (ev = {}) => {
     const firstImage = ev.first_image;
     const imagePath = typeof firstImage === "string" ? firstImage : firstImage?.full_url;
@@ -407,62 +401,6 @@ const normalizeTrendingEvent = (ev = {}) => {
         views_count: ev.views_count ?? 0,
     };
 };
-
-const buildPaginationPayload = (paginator) => {
-    const events = Array.isArray(paginator?.data) ? paginator.data : [];
-
-    return {
-        events,
-        currentPage: Number(paginator?.current_page ?? 1),
-        lastPage: Number(paginator?.last_page ?? 1),
-        perPage: Number(paginator?.per_page ?? perPage.value),
-        total: Number(paginator?.total ?? events.length),
-        from: paginator?.from ?? (events.length ? 1 : null),
-        to: paginator?.to ?? events.length,
-    };
-};
-
-const buildArrayPaginationPayload = (events) => ({
-    events,
-    currentPage: 1,
-    lastPage: 1,
-    perPage: events.length,
-    total: events.length,
-    from: events.length ? 1 : null,
-    to: events.length,
-});
-
-function normalizePaginatedResponse(response) {
-    const candidates = [
-        response?.data?.data,
-        response?.data,
-        response,
-    ];
-
-    let arrayFallback = null;
-
-    for (const candidate of candidates) {
-        if (!candidate) continue;
-
-        if (candidate?.data && Array.isArray(candidate.data)) {
-            return buildPaginationPayload(candidate);
-        }
-
-        if (candidate?.data?.data && Array.isArray(candidate.data.data)) {
-            return buildPaginationPayload(candidate.data);
-        }
-
-        if (Array.isArray(candidate) && !arrayFallback) {
-            arrayFallback = candidate;
-        }
-    }
-
-    if (arrayFallback) {
-        return buildArrayPaginationPayload(arrayFallback);
-    }
-
-    return buildPaginationPayload(null);
-}
 
 const resetPaginationMeta = () => {
     currentPage.value = 1;
@@ -606,6 +544,24 @@ const handleSearchClick = () => {
     closeCountryDropdown();
     currentPage.value = 1;
     search(true, 1);
+};
+
+const buildHomeEventSearchQuery = () => eventFiltersToQuery({
+    searchQuery: searchQuery.value,
+    categoryId: selectedCategory.value,
+    subCategoryId: selectedSubCategory.value,
+    countryId: selectedCountry.value,
+    cityId: selectedCity.value,
+    tagsIds: selectedTags.value,
+    fromDate: fromDate.value,
+    toDate: toDate.value,
+});
+
+const goToMoreSearchResults = () => {
+    router.push({
+        path: `/${lang}/events`,
+        query: buildHomeEventSearchQuery(),
+    });
 };
 
 const handleClickOutsideFilters = (event) => {
@@ -793,6 +749,7 @@ const search = async (isInitial = false, page = currentPage.value) => {
         const response = await EventService.searchEvents({
             countryId: selectedCountry.value || null,
             cityId: selectedCity.value || null,
+            categoryId: selectedCategory.value || null,
             subCategoryId: selectedSubCategory.value || null,
             tagsIds: selectedTags.value,
             fromDate: fromDate.value || null,
@@ -801,7 +758,7 @@ const search = async (isInitial = false, page = currentPage.value) => {
             page: requestedPage,
             perPage: perPage.value,
         });
-        const paginator = normalizePaginatedResponse(response);
+        const paginator = normalizePaginatedResponse(response, perPage.value);
 
         displayedEvents.value = paginator.events.map(normalizeEvent);
         currentPage.value = paginator.currentPage;

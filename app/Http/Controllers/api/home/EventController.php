@@ -91,6 +91,44 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
+        $filterIdRule = static function (string $attribute, mixed $value, \Closure $fail): void {
+            if ($value === null || $value === '' || $value === 'all') {
+                return;
+            }
+
+            if (!filter_var($value, FILTER_VALIDATE_INT) || (int) $value < 1) {
+                $fail("The {$attribute} field must be a valid id.");
+            }
+        };
+
+        $request->validate([
+            'q' => ['nullable', 'string', 'max:255'],
+            'search' => ['nullable', 'string', 'max:255'],
+            'searchQuery' => ['nullable', 'string', 'max:255'],
+            'country_id' => ['nullable', $filterIdRule],
+            'countryId' => ['nullable', $filterIdRule],
+            'city_id' => ['nullable', $filterIdRule],
+            'cityId' => ['nullable', $filterIdRule],
+            'category_id' => ['nullable', $filterIdRule],
+            'categoryId' => ['nullable', $filterIdRule],
+            'sub_category_id' => ['nullable', $filterIdRule],
+            'subCategoryId' => ['nullable', $filterIdRule],
+            'tags' => ['nullable'],
+            'tags_id' => ['nullable'],
+            'tags_id.*' => ['integer', 'min:1'],
+            'tagsIds' => ['nullable'],
+            'tagsIds.*' => ['integer', 'min:1'],
+            'from' => ['nullable', 'date'],
+            'from_date' => ['nullable', 'date'],
+            'fromDate' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'to_date' => ['nullable', 'date', 'after_or_equal:from_date'],
+            'toDate' => ['nullable', 'date', 'after_or_equal:fromDate'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'perPage' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
         $normalizeFilterId = static function ($value): ?int {
             if ($value === null || $value === '' || $value === 'all') {
                 return null;
@@ -102,20 +140,29 @@ class EventController extends Controller
         };
 
         $cityId = $normalizeFilterId(
-            $request->query('city_id', $request->route('city_id'))
+            $request->query('city_id', $request->query('cityId', $request->route('city_id')))
+        );
+        $subCategoryId = $normalizeFilterId(
+            $request->query('sub_category_id', $request->query('subCategoryId', $request->route('sub_category_id')))
         );
         $categoryId = $normalizeFilterId(
-            $request->query('sub_category_id', $request->route('sub_category_id'))
+            $request->query('category_id', $request->query('categoryId'))
         );
-        $countryId = $normalizeFilterId($request->query('country_id'));
+        $countryId = $normalizeFilterId(
+            $request->query('country_id', $request->query('countryId'))
+        );
 
-        $tagsIds = $request->query('tags_id', []);
+        $tagsIds = $request->query(
+            'tags_id',
+            $request->query('tagsIds', $request->query('tags', []))
+        );
 
         if (!is_array($tagsIds)) {
-            $tagsIds = [$tagsIds];
+            $tagsIds = explode(',', (string) $tagsIds);
         }
 
         $tagsIds = collect($tagsIds)
+            ->flatMap(fn ($id) => is_string($id) ? explode(',', $id) : [$id])
             ->filter(fn ($id) => $id !== null && $id !== '' && $id !== 'all')
             ->map(fn ($id) => (int) $id)
             ->filter(fn ($id) => $id > 0)
@@ -123,15 +170,15 @@ class EventController extends Controller
             ->values()
             ->all();
 
-        $from = $request->query('from');
-        $to = $request->query('to');
+        $from = $request->query('from', $request->query('from_date', $request->query('fromDate')));
+        $to = $request->query('to', $request->query('to_date', $request->query('toDate')));
 
-        $searchQuery = trim((string) $request->query('q', $request->query('search', '')));
+        $searchQuery = trim((string) $request->query('q', $request->query('searchQuery', $request->query('search', ''))));
 
-        $perPage = (int) $request->query('per_page', 20);
+        $perPage = (int) $request->query('per_page', $request->query('perPage', 20));
         $page = (int) $request->query('page', 1);
 
-        $perPage = max(1, min($perPage, 50));
+        $perPage = max(1, min($perPage, 100));
         $page = max(1, $page);
 
         $filters = [
@@ -151,7 +198,11 @@ class EventController extends Controller
         }
 
         if ($categoryId) {
-            $filters[] = 'sub_category_id:=' . $categoryId;
+            $filters[] = 'category_id:=' . $categoryId;
+        }
+
+        if ($subCategoryId) {
+            $filters[] = 'sub_category_id:=' . $subCategoryId;
         }
 
         if ($from) {

@@ -11,6 +11,7 @@ const terms = () => import("../views/home/terms.vue");
 const dataProtction = () => import("../views/home/data-protction.vue");
 const single_event = () => import("../views/home/single_event.vue");
 const all_events = () => import("../views/home/all_events.vue");
+const events_search = () => import("../views/home/EventsSearchPage.vue");
 
 const admin = () => import("../views/admin/admin.vue");
 const all_users = () => import("../views/admin/users/all_users.vue");
@@ -248,6 +249,12 @@ const routes = [
     {
         path: "/:lang/all_events",
         component: all_events,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/events",
+        name: "events-search",
+        component: events_search,
         meta: { hideNavbar: false, hideFooter: false },
     },
     {

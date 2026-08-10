@@ -185,6 +185,9 @@ class EventRepository implements EventRepositoryInterface
 
         $subCategoryId = $parsedFilters['sub_category_id']
             ?? $parsedFilters['subCategoryId']
+            ?? null;
+
+        $categoryId = $parsedFilters['category_id']
             ?? $parsedFilters['categoryId']
             ?? null;
 
@@ -299,6 +302,12 @@ class EventRepository implements EventRepositoryInterface
 
         if ($cityId) {
             $query->where('city_id', (int) $cityId);
+        }
+
+        if ($categoryId) {
+            $query->whereHas('sub_categorey', function ($q) use ($categoryId) {
+                $q->where('category_id', (int) $categoryId);
+            });
         }
 
         if ($subCategoryId) {
