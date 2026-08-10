@@ -1,5 +1,5 @@
 <template>
-    <div class="failed-page">
+    <div class="scemory-page failed-page">
         <div class="particles">
             <div v-for="i in 8" :key="i" class="particle"
                 :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }">
@@ -24,14 +24,14 @@
                 </div>
             </div>
 
-            <h1>فشلت عملية الدفع 😞</h1>
+            <h1>فشلت عملية الدفع</h1>
             <p class="subtitle">
                 للأسف لم تتم عملية الدفع بنجاح<br>
                 يمكنك المحاولة مرة أخرى أو التواصل مع الدعم
             </p>
 
             <div class="info-row">
-                <div class="info-icon red">❌</div>
+                <div class="info-icon red">ERR</div>
                 <div>
                     <div class="info-label">حالة الطلب</div>
                     <div class="info-val red">مرفوض / فشل الدفع</div>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon orange">⚠️</div>
+                <div class="info-icon orange">INFO</div>
                 <div>
                     <div class="info-label">السبب المحتمل</div>
                     <div class="info-val">{{ errorReason }}</div>
@@ -47,7 +47,7 @@
             </div>
 
             <div class="info-row">
-                <div class="info-icon orange">🔒</div>
+                <div class="info-icon orange">SAFE</div>
                 <div>
                     <div class="info-label">ملاحظة</div>
                     <div class="info-val">لم يتم خصم أي مبلغ من حسابك</div>
@@ -57,12 +57,12 @@
             <div class="divider"></div>
 
             <router-link :to="`/${$route.params.lang}/cart`" class="btn-retry">
-                <span class="btn-icon">🔄</span>
+                <span class="btn-icon">↻</span>
                 إعادة المحاولة
             </router-link>
 
             <a href="scemorygmail@gmail.com" class="btn-support">
-                💬 التواصل مع الدعم الفني
+                التواصل مع الدعم الفني
             </a>
 
             <router-link to="/" class="sec-link">العودة إلى الصفحة الرئيسية</router-link>
@@ -471,5 +471,74 @@ h1 {
 
 .sec-link:hover {
     color: #333;
+}
+
+.failed-page {
+    background:
+        radial-gradient(circle at 20% 14%, rgba(239, 68, 68, 0.10), transparent 24rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+    color: #0F172A;
+    padding: 32px 16px;
+}
+
+.particle {
+    background: #30A8FF;
+}
+
+.card {
+    border: 1px solid #E5EDF6;
+    box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.card::before {
+    background: linear-gradient(90deg, transparent, #EF4444, #30A8FF, transparent);
+}
+
+.paypal-badge {
+    background: #F4F8FC;
+    border-color: #DCE8F5;
+    color: #0D4D97;
+}
+
+.paypal-dot,
+.icon-circle {
+    background: linear-gradient(135deg, #DC2626, #EF4444);
+    box-shadow: 0 12px 30px rgba(239, 68, 68, 0.20);
+}
+
+h1 {
+    color: #06142A;
+}
+
+.subtitle,
+.info-label,
+.sec-link {
+    color: #64748B;
+}
+
+.info-row {
+    background: #F8FAFC;
+    border-color: #DCE8F5;
+}
+
+.info-val {
+    color: #0F172A;
+}
+
+.btn-retry {
+    background: linear-gradient(135deg, #0D4D97, #1677FF);
+    color: #FFFFFF;
+    box-shadow: 0 14px 30px rgba(22, 119, 255, 0.20);
+}
+
+.btn-retry:hover {
+    background: linear-gradient(135deg, #0D4D97, #30A8FF);
+    box-shadow: 0 18px 38px rgba(22, 119, 255, 0.26);
+}
+
+.btn-support {
+    border-color: #CFE2F6;
+    color: #0D4D97;
+    background: #FFFFFF;
 }
 </style>

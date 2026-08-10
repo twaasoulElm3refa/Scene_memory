@@ -1,228 +1,272 @@
 <template>
-    <header class="navbar-wrap shadow-lg" :dir="isArabic ? 'ltr' : 'rtl'">
-        <div class="container d-flex justify-content-between align-items-center p-1 navbar-inner">
-
-            <div class="cart-wrapper">
-                <button class="cart-btn" @click="goToCart">
-                    🛒
-                    <span class="cart-badge">{{ count }}</span>
-                </button>
-            </div>
-
-            <nav class="d-none d-md-flex flex-grow-1 justify-content-center align-items-center gap-2">
-                <RouterLink
-                    v-for="link in links"
-                    :key="link.active"
-                    :to="localizedPath(link.path)"
-                    class="nav-link px-2"
-                    :class="{ active: isActive(link.active) }"
-                >
-                    {{ $t(link.labelKey) }}
-                </RouterLink>
-
-                <RouterLink
-                    :to="localizedPath('/plans')"
-                    class="nav-link px-2"
-                    :class="{ active: isActive('plans') }"
-                >
-                    {{ $t('nav.plans') }}
-                </RouterLink>
-
-                <!-- Events Dropdown -->
-                <div class="position-relative navbar-dropdown-wrap">
-                    <button
-                        class="nav-link px-2 d-flex align-items-center gap-1"
-                        @click="eventsOpen = !eventsOpen"
+    <header class="navbar-wrap" :class="{ 'is-arabic': isArabic }" :dir="isArabic ? 'rtl' : 'ltr'">
+        <div class="container-fluid navbar-shell">
+            <div class="navbar-inner">
+                <nav class="desktop-nav d-none d-md-flex align-items-center">
+                    <RouterLink
+                        v-for="link in links"
+                        :key="link.active"
+                        :to="localizedPath(link.path)"
+                        class="nav-link premium-nav-link"
+                        :class="{ active: isActive(link.active) }"
                     >
-                        {{ $t('nav.events') }}
-                        <i class="bi transition" :class="eventsOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                    </button>
+                        {{ $t(link.labelKey) }}
+                    </RouterLink>
 
-                    <transition name="fade-slide">
-                        <div
-                            v-if="eventsOpen"
-                            class="dropdown-menu show shadow rounded mt-2 p-2 navbar-dropdown"
-                            style="min-width:220px;"
-                        >
-                            <RouterLink class="dropdown-item" :to="localizedPath('/all_events')">
-                                {{ $t('nav.allEvents') }}
-                            </RouterLink>
-
-                            <RouterLink
-                                v-if="isLoggedIn"
-                                class="dropdown-item"
-                                :to="localizedPath('/add_event')"
-                            >
-                                {{ $t('nav.addEvent') }}
-                            </RouterLink>
-
-                            <RouterLink
-                                v-if="isLoggedIn"
-                                class="dropdown-item"
-                                :to="localizedPath('/historical')"
-                            >
-                                {{ $t('nav.historical') }}
-                            </RouterLink>
-                        </div>
-                    </transition>
-                </div>
-
-                <!-- More Dropdown -->
-                <div class="position-relative navbar-dropdown-wrap">
-                    <button
-                        class="nav-link px-2 d-flex align-items-center gap-1"
-                        @click="moreOpen = !moreOpen"
+                    <RouterLink
+                        :to="localizedPath('/plans')"
+                        class="nav-link premium-nav-link"
+                        :class="{ active: isActive('plans') }"
                     >
-                        {{ $t('nav.more') }}
-                        <i class="bi transition" :class="moreOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                    </button>
+                        {{ $t('nav.plans') }}
+                    </RouterLink>
 
-                    <transition name="fade-slide">
-                        <div
-                            v-if="moreOpen"
-                            class="dropdown-menu show shadow rounded mt-2 p-2 navbar-dropdown"
-                            style="min-width:220px;"
-                        >
-                            <RouterLink class="dropdown-item" :to="localizedPath('/WishList')">
-                                {{ $t('nav.favourites') }}
-                            </RouterLink>
-
-                            <RouterLink class="dropdown-item" :to="localizedPath('/contact')">
-                                {{ $t('nav.contact') }}
-                            </RouterLink>
-
-                            <RouterLink class="dropdown-item" :to="localizedPath('/terms')">
-                                {{ $t('nav.terms') }}
-                            </RouterLink>
-
-                            <RouterLink class="dropdown-item" :to="localizedPath('/who')">
-                                {{ $t('nav.about') }}
-                            </RouterLink>
-                        </div>
-                    </transition>
-                </div>
-            </nav>
-
-            <button class="btn-icon d-md-none" @click="mobileMenu = !mobileMenu">
-                <i class="bi" :class="mobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
-            </button>
-
-            <div class="d-flex align-items-center gap-2">
-                <!-- Language Selector -->
-                <div class="position-relative navbar-dropdown-wrap">
-                    <button
-                        class="btn-user user-hover fw-bold shadow-gray d-flex align-items-center gap-1"
-                        @click="languageDropdownOpen = !languageDropdownOpen"
-                    >
-                        {{ currentLanguage }}
-                        <i class="bi" :class="languageDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                    </button>
-
-                    <div
-                        v-if="languageDropdownOpen"
-                        class="dropdown-menu show shadow rounded mt-2 navbar-dropdown"
-                        style="min-width:140px;"
-                    >
+                    <!-- Events Dropdown -->
+                    <div class="navbar-dropdown-wrap">
                         <button
-                            class="dropdown-item"
-                            v-for="lang in languages"
-                            :key="lang"
-                            @click="selectLanguage(lang)"
+                            class="nav-link premium-nav-link nav-dropdown-trigger d-flex align-items-center gap-1"
+                            @click="eventsOpen = !eventsOpen"
                         >
-                            {{ $t(`languages.${lang}`) }}
+                            {{ $t('nav.events') }}
+                            <i class="bi transition" :class="eventsOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        </button>
+
+                        <transition name="fade-slide">
+                            <div
+                                v-if="eventsOpen"
+                                class="dropdown-menu show navbar-dropdown"
+                            >
+                                <RouterLink class="dropdown-item" :to="localizedPath('/all_events')">
+                                    {{ $t('nav.allEvents') }}
+                                </RouterLink>
+
+                                <RouterLink
+                                    v-if="isLoggedIn"
+                                    class="dropdown-item"
+                                    :to="localizedPath('/add_event')"
+                                >
+                                    {{ $t('nav.addEvent') }}
+                                </RouterLink>
+
+                                <RouterLink
+                                    v-if="isLoggedIn"
+                                    class="dropdown-item"
+                                    :to="localizedPath('/historical')"
+                                >
+                                    {{ $t('nav.historical') }}
+                                </RouterLink>
+                            </div>
+                        </transition>
+                    </div>
+
+                    <!-- More Dropdown -->
+                    <div class="navbar-dropdown-wrap">
+                        <button
+                            class="nav-link premium-nav-link nav-dropdown-trigger d-flex align-items-center gap-1"
+                            @click="moreOpen = !moreOpen"
+                        >
+                            {{ $t('nav.more') }}
+                            <i class="bi transition" :class="moreOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        </button>
+
+                        <transition name="fade-slide">
+                            <div
+                                v-if="moreOpen"
+                                class="dropdown-menu show navbar-dropdown"
+                            >
+                                <RouterLink class="dropdown-item" :to="localizedPath('/WishList')">
+                                    {{ $t('nav.favourites') }}
+                                </RouterLink>
+
+                                <RouterLink class="dropdown-item" :to="localizedPath('/contact')">
+                                    {{ $t('nav.contact') }}
+                                </RouterLink>
+
+                                <RouterLink class="dropdown-item" :to="localizedPath('/terms')">
+                                    {{ $t('nav.terms') }}
+                                </RouterLink>
+
+                                <RouterLink class="dropdown-item" :to="localizedPath('/who')">
+                                    {{ $t('nav.about') }}
+                                </RouterLink>
+                            </div>
+                        </transition>
+                    </div>
+                </nav>
+
+                <div class="navbar-actions">
+                    <!-- Language Selector -->
+                    <div class="navbar-dropdown-wrap">
+                        <button
+                            class="control-btn language-btn d-flex align-items-center gap-1"
+                            @click="languageDropdownOpen = !languageDropdownOpen"
+                        >
+                            <i class="bi bi-globe2"></i>
+                            <span>{{ currentLanguage }}</span>
+                            <i class="bi chevron" :class="languageDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        </button>
+
+                        <transition name="fade-slide">
+                            <div
+                                v-if="languageDropdownOpen"
+                                class="dropdown-menu show navbar-dropdown language-dropdown"
+                            >
+                                <button
+                                    class="dropdown-item"
+                                    v-for="lang in languages"
+                                    :key="lang"
+                                    @click="selectLanguage(lang)"
+                                >
+                                    {{ $t(`languages.${lang}`) }}
+                                </button>
+                            </div>
+                        </transition>
+                    </div>
+
+                    <!-- User / Login -->
+                    <div class="navbar-dropdown-wrap user-control">
+                        <template v-if="isLoggedIn">
+                            <button
+                                class="control-btn user-menu-button d-flex align-items-center gap-2"
+                                @click="toggleDropdown"
+                            >
+                                <span class="user-initial">{{ userInitial }}</span>
+                                <span class="user-name">{{ userName }}</span>
+                                <i class="bi chevron" :class="dropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                            </button>
+
+                            <transition name="fade-slide">
+                                <div
+                                    v-if="dropdownOpen"
+                                    class="dropdown-menu show navbar-dropdown user-dropdown"
+                                >
+                                    <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
+                                        {{ $t("nav.profile") }}
+                                    </RouterLink>
+
+                                    <RouterLink class="dropdown-item" :to="localizedPath('/downloads')">
+                                        {{ $t("nav.downloads") }}
+                                    </RouterLink>
+
+                                    <RouterLink
+                                        v-if="eventCount > 0"
+                                        class="dropdown-item"
+                                        :to="localizedPath('/creator/events')"
+                                    >
+                                        {{ $t("nav.dashboard") }}
+                                    </RouterLink>
+
+                                    <hr class="dropdown-divider" />
+
+                                    <button class="dropdown-item logout-item" @click="logout">
+                                        {{ $t("nav.logout") }}
+                                    </button>
+                                </div>
+                            </transition>
+                        </template>
+
+                        <template v-else>
+                            <RouterLink
+                                :to="localizedPath('/auth')"
+                                class="control-btn login-btn text-decoration-none"
+                            >
+                                {{ $t("nav.login") }}
+                            </RouterLink>
+                        </template>
+                    </div>
+
+                    <div class="cart-wrapper">
+                        <button class="cart-btn" type="button" @click="goToCart" aria-label="Cart">
+                            <i class="bi bi-bag"></i>
+                            <span class="cart-badge">{{ count }}</span>
                         </button>
                     </div>
-                </div>
 
-                <!-- User / Login -->
-                <div class="d-flex gap-2 position-relative navbar-dropdown-wrap">
-                    <template v-if="isLoggedIn">
-                        <button
-                            class="btn-user user-hover fw-bold d-flex align-items-center gap-2 shadow-gray"
-                            @click="toggleDropdown"
-                        >
-                            {{ userName }}
-                            <i class="bi" :class="dropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
-                        </button>
+                    <RouterLink :to="localizedPath('/home')" class="brand-mark text-decoration-none" aria-label="Scemory home">
+                        <span class="brand-logo">
+                            <img src="/images/logo.png" alt="Scemory logo" />
+                        </span>
+                        <span class="brand-name d-none d-lg-inline">Scemory</span>
+                    </RouterLink>
 
-                        <div
-                            v-if="dropdownOpen"
-                            class="dropdown-menu show shadow rounded mt-2 dropdown-dark navbar-dropdown"
-                            style="min-width:150px; margin-top:8px;"
-                        >
-                            <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
-                                {{ $t("nav.profile") }}
-                            </RouterLink>
-
-                            <RouterLink class="dropdown-item" :to="localizedPath('/downloads')">
-                                {{ $t("nav.downloads") }}
-                            </RouterLink>
-
-                            <RouterLink
-                                v-if="eventCount > 0"
-                                class="dropdown-item"
-                                :to="localizedPath('/creator/events')"
-                            >
-                                {{ $t("nav.dashboard") }}
-                            </RouterLink>
-
-                            <hr class="dropdown-divider" />
-
-                            <button class="dropdown-item text-danger" @click="logout">
-                                {{ $t("nav.logout") }}
-                            </button>
-                        </div>
-                    </template>
-
-                    <template v-else>
-                        <RouterLink
-                            :to="localizedPath('/auth')"
-                            class="btn-user user-hover fw-bold shadow-gray text-decoration-none"
-                        >
-                            {{ $t("nav.login") }}
-                        </RouterLink>
-                    </template>
+                    <button class="mobile-toggle d-md-none" type="button" @click="mobileMenu = !mobileMenu" aria-label="Toggle menu">
+                        <i class="bi" :class="mobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div
-            v-if="mobileMenu"
-            class="d-md-none mt-2 bg-white shadow-lg rounded p-3 navbar-mobile-menu"
-        >
-            <RouterLink
-                v-for="link in links"
-                :key="link.active"
-                :to="localizedPath(link.path)"
-                class="d-block nav-link py-2 px-1"
-                :class="{ active: isActive(link.active) }"
+        <transition name="fade-slide">
+            <div
+                v-if="mobileMenu"
+                class="container d-md-none navbar-mobile-menu"
             >
-                {{ $t(link.labelKey) }}
-            </RouterLink>
+                <div class="mobile-menu-panel">
+                    <div class="mobile-section">
+                        <RouterLink
+                            v-for="link in links"
+                            :key="link.active"
+                            :to="localizedPath(link.path)"
+                            class="mobile-nav-link"
+                            :class="{ active: isActive(link.active) }"
+                        >
+                            {{ $t(link.labelKey) }}
+                        </RouterLink>
 
-            <RouterLink :to="localizedPath('/plans')" class="d-block nav-link py-2 px-1">
-                {{ $t('nav.plans') }}
-            </RouterLink>
+                        <RouterLink
+                            :to="localizedPath('/plans')"
+                            class="mobile-nav-link"
+                            :class="{ active: isActive('plans') }"
+                        >
+                            {{ $t('nav.plans') }}
+                        </RouterLink>
+                    </div>
 
-            <hr />
+                    <div class="mobile-section">
+                        <p class="mobile-section-title">{{ $t('nav.events') }}</p>
+                        <RouterLink class="mobile-nav-link" :to="localizedPath('/all_events')">
+                            {{ $t('nav.allEvents') }}
+                        </RouterLink>
 
-            <RouterLink :to="localizedPath('/WishList')" class="d-block nav-link py-2 px-1">
-                {{ $t('nav.favourites') }}
-            </RouterLink>
+                        <RouterLink
+                            v-if="isLoggedIn"
+                            class="mobile-nav-link"
+                            :to="localizedPath('/add_event')"
+                        >
+                            {{ $t('nav.addEvent') }}
+                        </RouterLink>
 
-            <RouterLink :to="localizedPath('/contact')" class="d-block nav-link py-2 px-1">
-                {{ $t('nav.contact') }}
-            </RouterLink>
+                        <RouterLink
+                            v-if="isLoggedIn"
+                            class="mobile-nav-link"
+                            :to="localizedPath('/historical')"
+                        >
+                            {{ $t('nav.historical') }}
+                        </RouterLink>
+                    </div>
 
-            <RouterLink :to="localizedPath('/terms')" class="d-block nav-link py-2 px-1">
-                {{ $t('nav.terms') }}
-            </RouterLink>
+                    <div class="mobile-section">
+                        <p class="mobile-section-title">{{ $t('nav.more') }}</p>
+                        <RouterLink :to="localizedPath('/WishList')" class="mobile-nav-link">
+                            {{ $t('nav.favourites') }}
+                        </RouterLink>
 
-            <RouterLink :to="localizedPath('/who')" class="d-block nav-link py-2 px-1">
-                {{ $t('nav.about') }}
-            </RouterLink>
-        </div>
+                        <RouterLink :to="localizedPath('/contact')" class="mobile-nav-link">
+                            {{ $t('nav.contact') }}
+                        </RouterLink>
+
+                        <RouterLink :to="localizedPath('/terms')" class="mobile-nav-link">
+                            {{ $t('nav.terms') }}
+                        </RouterLink>
+
+                        <RouterLink :to="localizedPath('/who')" class="mobile-nav-link">
+                            {{ $t('nav.about') }}
+                        </RouterLink>
+                    </div>
+                </div>
+            </div>
+        </transition>
     </header>
 </template>
 
@@ -344,7 +388,7 @@ const logout = () => {
     localStorage.removeItem("is_profile_filled");
 
     isLoggedIn.value = false;
-    userName.value = "Kullanıcı";
+    userName.value = "Kullanici";
     eventCount.value = 0;
 
     router.push(localizedPath("/auth"));
@@ -391,37 +435,129 @@ const goToCart = () => {
 <style scoped>
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-    transition: all 0.2s ease;
+    transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 .fade-slide-enter-from,
 .fade-slide-leave-to {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
 }
 
-/* ─────────────────────────────────────────────── */
-/* Navbar always above the whole page */
 .navbar-wrap {
+    --navy-950: #f7fafd;
+    --navy-900: #f7fafd;
+    --blue-500: #1677ff;
+    --blue-400: #30a8ff;
+    --text-soft: #334a62;
+    --glass-border: #c9ddef;
     position: sticky !important;
     top: 0 !important;
     left: 0;
     right: 0;
     z-index: 2147483000 !important;
     width: 100%;
-    background: var(--nav-bg, #ffffff);
-    color: var(--text-main);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    padding: 14px 0 8px;
+    color: #334a62;
+    background: transparent;
     isolation: isolate;
     overflow: visible !important;
-    transition: all 0.4s ease;
+}
+
+.navbar-shell {
+    position: relative;
+    z-index: 2147483001 !important;
+    width: calc(100% - 96px);
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: visible !important;
 }
 
 .navbar-inner {
     position: relative;
     z-index: 2147483001 !important;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 14px 10px 20px;
+    direction: ltr;
     overflow: visible !important;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 88% 50%, rgba(48, 168, 255, 0.10), transparent 32%),
+        linear-gradient(135deg, rgba(247, 250, 253, 0.96), rgba(237, 244, 250, 0.92));
+    box-shadow:
+        0 14px 35px rgba(13, 77, 151, 0.10),
+        0 3px 10px rgba(15, 23, 42, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
+
+.desktop-nav {
+    min-width: 0;
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
+.premium-nav-link {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 14px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: var(--text-soft);
+    background: transparent;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.premium-nav-link:hover,
+.premium-nav-link.active {
+    color: #0d4d97;
+    border-color: rgba(22, 119, 255, 0.22);
+    background: linear-gradient(135deg, #ddecf9, #e6f0f9);
+    box-shadow: 0 5px 16px rgba(13, 77, 151, 0.09);
+}
+
+.premium-nav-link:hover {
+    transform: translateY(-1px);
+}
+
+.premium-nav-link::after {
+    display: none;
+}
+
+.nav-dropdown-trigger {
+    cursor: pointer;
+}
+
+.transition {
+    font-size: 12px;
+    transition: transform 0.22s ease;
+}
+
+.navbar-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-left: auto;
 }
 
 .navbar-dropdown-wrap {
@@ -429,16 +565,309 @@ const goToCart = () => {
     z-index: 2147483002 !important;
 }
 
+.control-btn,
+.cart-btn,
+.mobile-toggle {
+    min-height: 42px;
+    border: 1px solid #c9ddef;
+    color: #334a62;
+    background: rgba(243, 247, 252, 0.92);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.70);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.control-btn {
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 13px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.control-btn:hover,
+.cart-btn:hover,
+.mobile-toggle:hover {
+    color: #0d4d97;
+    border-color: rgba(22, 119, 255, 0.30);
+    background: #e6f0f9;
+    box-shadow: 0 5px 16px rgba(13, 77, 151, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transform: translateY(-1px);
+}
+
+.language-btn {
+    min-width: 82px;
+}
+
+.chevron {
+    font-size: 11px;
+    opacity: 0.78;
+}
+
+.login-btn {
+    min-width: 88px;
+    color: #ffffff;
+    border-color: rgba(22, 119, 255, 0.28);
+    background: linear-gradient(135deg, #0d4d97, #1677ff);
+    box-shadow: 0 8px 20px rgba(13, 77, 151, 0.18);
+}
+
+.login-btn:hover {
+    color: #ffffff;
+    border-color: rgba(48, 168, 255, 0.36);
+    background: linear-gradient(135deg, #1677ff, #30a8ff);
+    box-shadow: 0 10px 22px rgba(13, 77, 151, 0.20);
+}
+
+.user-menu-button {
+    max-width: 190px;
+    padding-left: 8px;
+}
+
+.user-initial {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    color: #06142a;
+    background: linear-gradient(135deg, #ddecf9, #30a8ff);
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.user-name {
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cart-wrapper {
+    position: relative;
+    z-index: 2147483002;
+}
+
+.cart-btn {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    color: #0d4d97;
+    background: #f3f7fc;
+    border-color: #c9ddef;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -4px;
+    right: -5px;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    border: 2px solid #f7fafd;
+    border-radius: 999px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #1677ff, #30a8ff);
+    box-shadow: 0 4px 12px rgba(22, 119, 255, 0.22);
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.brand-mark {
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 6px;
+    border: 1px solid #c9ddef;
+    border-radius: 999px;
+    color: #06142a;
+    background: linear-gradient(135deg, #f7fafd, #edf4fa);
+    box-shadow: 0 6px 18px rgba(13, 77, 151, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.brand-mark:hover {
+    border-color: rgba(22, 119, 255, 0.30);
+    box-shadow: 0 8px 20px rgba(13, 77, 151, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    transform: translateY(-1px);
+}
+
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #f3f7fc;
+    box-shadow: 0 4px 12px rgba(13, 77, 151, 0.10);
+}
+
+.brand-logo img {
+    width: 31px;
+    height: 31px;
+    object-fit: contain;
+}
+
+.brand-name {
+    color: #06142a;
+    font-size: 15px;
+    font-weight: 850;
+    letter-spacing: 0;
+}
+
+.mobile-toggle {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
 .navbar-dropdown {
     position: absolute !important;
+    top: calc(100% + 12px);
     right: 0;
-    top: 100%;
     z-index: 2147483003 !important;
+    min-width: 220px;
+    padding: 8px;
+    overflow: hidden;
+    border: 1px solid #c9ddef;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at top right, rgba(48, 168, 255, 0.10), transparent 45%),
+        linear-gradient(145deg, rgba(247, 250, 253, 0.98), rgba(237, 244, 250, 0.97));
+    box-shadow: 0 18px 45px rgba(13, 77, 151, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.language-dropdown {
+    min-width: 150px;
+    max-height: 330px;
+    overflow-y: auto;
+}
+
+.user-dropdown {
+    min-width: 180px;
+}
+
+.dropdown-item {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 12px;
+    color: #334a62;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 650;
+    text-decoration: none;
+    transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: #0d4d97;
+    background: #e6f0f9;
+    transform: translateX(2px);
+}
+
+.dropdown-divider {
+    margin: 8px 4px;
+    border-color: #dce8f5;
+}
+
+.logout-item {
+    color: #dc5868;
+}
+
+.logout-item:hover,
+.logout-item:focus {
+    color: #b42335;
+    background: #fdecef;
 }
 
 .navbar-mobile-menu {
     position: relative;
     z-index: 2147483003 !important;
+    margin-top: 10px;
+}
+
+.mobile-menu-panel {
+    padding: 14px;
+    border: 1px solid #c9ddef;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at top right, rgba(48, 168, 255, 0.10), transparent 42%),
+        linear-gradient(145deg, rgba(247, 250, 253, 0.98), rgba(237, 244, 250, 0.97));
+    box-shadow: 0 18px 45px rgba(13, 77, 151, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.mobile-section {
+    display: grid;
+    gap: 6px;
+    padding: 10px 0;
+}
+
+.mobile-section + .mobile-section {
+    border-top: 1px solid #dce8f5;
+}
+
+.mobile-section-title {
+    margin: 0 0 4px;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.mobile-nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    color: #334a62;
+    font-size: 14px;
+    font-weight: 750;
+    text-decoration: none;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+    color: #0d4d97;
+    border-color: rgba(22, 119, 255, 0.22);
+    background: #e6f0f9;
 }
 
 .navbar-wrap :deep(.dropdown-menu),
@@ -446,249 +875,147 @@ const goToCart = () => {
     z-index: 2147483003 !important;
 }
 
-/* Logo */
-.logo {
-    width: 140px;
-    height: 80px;
-    object-fit: cover;
+.is-arabic .desktop-nav,
+.is-arabic .dropdown-item,
+.is-arabic .mobile-menu-panel {
+    direction: rtl;
 }
 
-/* Navigation Links */
-.nav-link {
-    margin: 0 3px;
-    color: var(--text-main);
-    text-decoration: none;
-    font-weight: 500;
-    padding: 5px 8px;
-    font-size: 14px;
-    position: relative;
-    padding-bottom: 4px;
-    transition: color 0.3s ease;
-    display: inline-block;
-    white-space: nowrap;
-    text-align: center;
-    background: transparent;
-    border: 0;
+.is-arabic .dropdown-item:hover,
+.is-arabic .dropdown-item:focus {
+    transform: translateX(-2px);
 }
 
-/* Animated Underline */
-.nav-link::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 2.5px;
-    bottom: 0;
-    right: 0;
-    background: var(--gray);
-    transition: width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-    border-radius: 4px;
+@media (max-width: 1199.98px) {
+    .navbar-shell {
+        width: calc(100% - 48px);
+    }
+
+    .navbar-inner {
+        gap: 10px;
+        padding-left: 14px;
+    }
+
+    .desktop-nav {
+        gap: 4px;
+    }
+
+    .premium-nav-link {
+        padding: 0 10px;
+        font-size: 13px;
+    }
+
+    .user-name {
+        max-width: 82px;
+    }
 }
 
-[data-theme="dark"] .nav-link:hover,
-[data-theme="dark"] .nav-link.active {
-    color: var(--gray);
+@media (max-width: 767.98px) {
+    .navbar-wrap {
+        padding-top: 10px;
+    }
+
+    .navbar-shell {
+        width: calc(100% - 24px);
+    }
+
+    .navbar-inner {
+        min-height: 64px;
+        padding: 9px;
+        border-radius: 26px;
+    }
+
+    .navbar-actions {
+        width: 100%;
+        gap: 6px;
+    }
+
+    .control-btn {
+        height: 40px;
+        min-height: 40px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .language-btn {
+        min-width: 68px;
+    }
+
+    .user-control {
+        min-width: 0;
+    }
+
+    .user-menu-button {
+        max-width: 118px;
+        padding-right: 9px;
+    }
+
+    .user-name {
+        max-width: 46px;
+    }
+
+    .login-btn {
+        min-width: 68px;
+    }
+
+    .cart-btn,
+    .mobile-toggle {
+        width: 40px;
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .brand-mark {
+        height: 42px;
+        padding: 4px;
+    }
+
+    .brand-logo {
+        width: 34px;
+        height: 34px;
+    }
+
+    .brand-logo img {
+        width: 27px;
+        height: 27px;
+    }
+
+    .navbar-dropdown {
+        right: 0;
+        min-width: 180px;
+    }
 }
 
-[data-theme="dark"] .nav-link:hover::after,
-[data-theme="dark"] .nav-link.active::after {
-    width: 100%;
-}
+@media (max-width: 420px) {
+    .navbar-inner {
+        padding: 8px;
+    }
 
-/* Light Mode */
-[data-theme="light"] .nav-link,
-[data-theme="light"] .nav-link:hover,
-[data-theme="light"] .nav-link.active {
-    color: #111827;
-}
+    .navbar-actions {
+        gap: 5px;
+    }
 
-[data-theme="light"] .nav-link::after {
-    background: #111827;
-}
+    .control-btn {
+        padding: 0 8px;
+    }
 
-[data-theme="light"] .nav-link:hover::after,
-[data-theme="light"] .nav-link.active::after {
-    width: 100%;
-}
+    .language-btn .bi-globe2,
+    .language-btn .chevron,
+    .user-menu-button .chevron {
+        display: none;
+    }
 
-/* Buttons */
-.btn-icon {
-    width: 42px;
-    position: relative;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--btn-bg);
-    color: var(--gray);
-    border: none;
-    display: grid;
-    place-items: center;
-    transition: all 0.25s ease;
-}
+    .user-menu-button {
+        max-width: 74px;
+        padding: 0 7px;
+    }
 
-.btn-icon .badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
+    .user-name {
+        display: none;
+    }
 
-/* Dark mode icon & bg */
-[data-theme="dark"] .btn-icon {
-    color: var(--gray);
-}
-
-[data-theme="dark"] .btn-icon:hover {
-    background: var(--gray);
-    color: #000;
-    transform: scale(1.08);
-}
-
-/* Light mode */
-[data-theme="light"] .btn-icon {
-    background: #ffffff;
-    color: #111827;
-    border: 1px solid #d1d5db;
-}
-
-[data-theme="light"] .btn-icon:hover {
-    background: #f3f4f6;
-    color: #111827;
-    border-color: #9ca3af;
-    transform: scale(1.08);
-}
-
-/* Cart Badge light mode */
-[data-theme="light"] .badge {
-    background: #111827;
-    color: #ffffff;
-}
-
-/* User avatar */
-.user-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--gray);
-}
-
-.user-avatar-wrapper {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: #6b7280;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.user-avatar,
-.user-placeholder {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #6b7280;
-    border: 2px solid #6b7280;
-}
-
-.user-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--gray);
-    color: #000;
-    font-weight: bold;
-    font-size: 20px;
-}
-
-/* Login / User Button */
-.btn-user {
-    background: transparent;
-    border: 1.5px solid var(--gray);
-    color: var(--gray);
-    text-decoration: none;
-    padding: 6px 10px;
-    border-radius: 10px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-/* Dark mode */
-[data-theme="dark"] .btn-user {
-    border-color: var(--gray);
-    color: var(--gray);
-}
-
-[data-theme="dark"] .user-hover:hover {
-    background: var(--gray);
-    color: #000;
-    transform: scale(1.06);
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.7);
-}
-
-/* Light mode */
-[data-theme="light"] .btn-user {
-    border: 1.5px solid #111827;
-    color: #111827;
-}
-
-[data-theme="light"] .user-hover:hover {
-    background: #111827;
-    color: #ffffff;
-    transform: scale(1.06);
-    box-shadow: 0 0 16px rgba(17, 24, 39, 0.35);
-}
-
-/* Cart */
-.cart-wrapper {
-    position: relative;
-    z-index: 2147483002;
-}
-
-.cart-btn {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    color: white;
-    font-size: 22px;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: 0.2s;
-    background: transparent;
-}
-
-.cart-btn:hover {
-    transform: scale(1.08);
-}
-
-.cart-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: red;
-    color: white;
-    font-size: 12px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+    .login-btn {
+        min-width: auto;
+    }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-4xl mx-auto p-4 md:p-8">
+    <div class="scemory-page profile-page max-w-4xl mx-auto p-4 md:p-8">
         <!-- Header -->
         <div class="mb-8 text-center">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">ملفي الشخصي</h1>
@@ -234,7 +234,7 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
                                 <button type="button" @click="showPassword = !showPassword"
                                     class="absolute right-3 top-10 text-gray-500">
-                                    {{ showPassword ? '🚫👁️' : '👁️' }}
+                                    {{ showPassword ? 'Hide' : 'Show' }}
                                 </button>
                             </div>
                             <div class="relative">
@@ -243,7 +243,7 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
                                 <button type="button" @click="showNewPassword = !showNewPassword"
                                     class="absolute right-3 top-10 text-gray-500">
-                                    {{ showNewPassword ? '🚫👁️' : '👁️' }}
+                                    {{ showNewPassword ? 'Hide' : 'Show' }}
                                 </button>
                             </div>
                             <div class="relative">
@@ -253,7 +253,7 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
                                 <button type="button" @click="showConfirmPassword = !showConfirmPassword"
                                     class="absolute right-3 top-10 text-gray-500">
-                                    {{ showConfirmPassword ? '🚫👁️' : '👁️' }}
+                                    {{ showConfirmPassword ? 'Hide' : 'Show' }}
                                 </button>
                             </div>
                         </div>
@@ -863,5 +863,50 @@ export default {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #a1a1a1;
+}
+
+.profile-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 30rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+    max-width: 1100px;
+}
+
+.profile-page h1,
+.profile-page h2,
+.profile-page h3 {
+    color: #06142A;
+}
+
+.profile-page .bg-white {
+    border: 1px solid #E5EDF6;
+    border-radius: 24px;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.profile-page .from-emerald-50,
+.profile-page .to-teal-50 {
+    --tw-gradient-from: #F4F8FC !important;
+    --tw-gradient-to: #EEF5FC !important;
+}
+
+.profile-page .from-emerald-500,
+.profile-page .to-teal-500 {
+    --tw-gradient-from: #0D4D97 !important;
+    --tw-gradient-to: #1677FF !important;
+}
+
+.profile-page input,
+.profile-page select,
+.profile-page textarea {
+    border-color: #DCE8F5;
+    border-radius: 14px;
+}
+
+.profile-page input:focus,
+.profile-page select:focus,
+.profile-page textarea:focus {
+    border-color: #1677FF;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
 }
 </style>

@@ -25,13 +25,13 @@ const reportSuccess = ref(false);
 const reportError = ref('');
 
 const reportReasons = [
-  { value: 'spam',             label: 'بريد مزعج',          icon: '🚫' },
-  { value: 'offensive',        label: 'محتوى مسيء',         icon: '😡' },
-  { value: 'inappropriate',    label: 'غير لائق',            icon: '⚠️' },
-  { value: 'illegal',          label: 'محتوى غير قانوني',    icon: '⚖️' },
-  { value: 'untrue',           label: 'محتوى كاذب',          icon: '🤥' },
-  { value: 'False information',label: 'معلومات مضللة',       icon: '📛' },
-  { value: 'other',            label: 'سبب آخر',             icon: '💬' },
+  { value: 'spam',             label: 'بريد مزعج',          icon: 'SP' },
+  { value: 'offensive',        label: 'محتوى مسيء',         icon: 'OF' },
+  { value: 'inappropriate',    label: 'غير لائق',            icon: 'IN' },
+  { value: 'illegal',          label: 'محتوى غير قانوني',    icon: 'LG' },
+  { value: 'untrue',           label: 'محتوى كاذب',          icon: 'UN' },
+  { value: 'False information',label: 'معلومات مضللة',       icon: 'FI' },
+  { value: 'other',            label: 'سبب آخر',             icon: 'OT' },
 ];
 
 const openReportModal = (commentId) => {
@@ -150,7 +150,7 @@ const setReaction = async (commentId, type) => {
 </script>
 
 <template>
-  <div class="comments-section max-w-2xl mx-auto px-4 py-8" dir="rtl">
+<div class="scemory-page comments-page comments-section max-w-2xl mx-auto px-4 py-8" dir="rtl">
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-6">
@@ -185,13 +185,13 @@ const setReaction = async (commentId, type) => {
       v-else-if="errorMsg"
       class="flex items-center gap-3 bg-red-50 border border-red-200 text-red-600 rounded-2xl px-5 py-4 text-sm"
     >
-      <span class="text-lg">⚠️</span>
+      <span class="text-xs font-bold">ERR</span>
       {{ errorMsg }}
     </div>
 
     <!-- No comments -->
     <div v-else-if="comments.length === 0" class="text-center py-16 text-gray-400">
-      <div class="text-4xl mb-3">💬</div>
+      <div class="text-sm font-bold mb-3 text-[#0D4D97]">COMMENTS</div>
       <p class="text-sm">لا توجد تعليقات بعد. كن أول من يعلّق!</p>
     </div>
 
@@ -246,7 +246,7 @@ const setReaction = async (commentId, type) => {
               reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
             ]"
           >
-            <span class="text-base">👍</span>
+            <span class="text-[11px] font-bold">YES</span>
             موافق
             <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
               {{ comment.support_count ?? 0 }}
@@ -265,7 +265,7 @@ const setReaction = async (commentId, type) => {
               reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
             ]"
           >
-            <span class="text-base">😐</span>
+            <span class="text-[11px] font-bold">MID</span>
             محايد
             <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
               {{ comment.neutral_count ?? 0 }}
@@ -284,7 +284,7 @@ const setReaction = async (commentId, type) => {
               reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
             ]"
           >
-            <span class="text-base">👎</span>
+            <span class="text-[11px] font-bold">NO</span>
             غير موافق
             <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
               {{ comment.exhibitions_count ?? 0 }}
@@ -337,7 +337,7 @@ const setReaction = async (commentId, type) => {
 
           <!-- Success State -->
           <div v-if="reportSuccess" class="flex flex-col items-center py-6 gap-3 text-center">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">✅</div>
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold">OK</div>
             <h4 class="text-lg font-bold text-gray-800">تم إرسال البلاغ</h4>
             <p class="text-sm text-gray-500">شكراً لك، سنراجع هذا التعليق قريباً.</p>
           </div>
@@ -386,7 +386,7 @@ const setReaction = async (commentId, type) => {
 
             <!-- Error Message -->
             <p v-if="reportError" class="text-xs text-red-500 mb-3 flex items-center gap-1">
-              <span>⚠️</span> {{ reportError }}
+              <span class="text-xs font-bold">ERR</span> {{ reportError }}
             </p>
 
             <!-- Actions -->
@@ -435,5 +435,32 @@ const setReaction = async (commentId, type) => {
 .modal-leave-to {
   opacity: 0;
   transform: scale(0.95);
+}
+
+.comments-page {
+  background:
+    radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 28rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+  border-radius: 28px;
+}
+
+.comments-page h2 {
+  color: #06142A;
+}
+
+.comments-page .bg-white,
+.comments-page .rounded-2xl {
+  border: 1px solid #E5EDF6;
+  box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.comments-page .bg-indigo-500,
+.comments-page .bg-indigo-600 {
+  background: #1677FF !important;
+}
+
+.comments-page .text-indigo-600,
+.comments-page .text-indigo-700 {
+  color: #0D4D97 !important;
 }
 </style>

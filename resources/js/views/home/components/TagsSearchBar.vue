@@ -1,6 +1,6 @@
 <template>
     <section
-        class="relative z-[9999] overflow-visible rounded-2xl border border-white/70 bg-white/90 p-4 shadow-sm backdrop-blur"
+        class="scemory-search-bar scemory-tags-search-bar relative z-[9999] overflow-visible rounded-2xl border p-4 backdrop-blur"
     >
         <div class="flex flex-col gap-3">
             <div class="w-full">
@@ -226,6 +226,42 @@ onUnmounted(() => {
     document.removeEventListener("mousedown", handleOutsideTagClick);
 });
 </script>
+
+<style scoped>
+.scemory-tags-search-bar {
+    border-color: var(--scemory-border-soft);
+    background: linear-gradient(145deg, rgba(247, 250, 253, 0.98), rgba(237, 244, 250, 0.94));
+    box-shadow: var(--scemory-shadow);
+}
+
+.scemory-tags-search-bar .rounded-xl {
+    border-color: var(--scemory-border);
+    background: var(--scemory-control);
+}
+
+.scemory-tags-search-bar input {
+    color: var(--scemory-heading);
+}
+
+.scemory-tags-search-bar input::placeholder {
+    color: #94A3B8;
+}
+
+.scemory-tags-search-bar .tag-option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--scemory-text);
+}
+
+.scemory-tags-search-bar .tag-option-row:hover {
+    background: var(--scemory-hover);
+}
+
+.scemory-tags-search-bar .tag-option-checkbox {
+    accent-color: var(--scemory-blue);
+}
+</style>
 
 <style scoped>
 .tag-option-row {

@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-50/60 py-14 px-4">
+    <div class="scemory-page legal-page min-h-screen bg-gray-50/60 py-14 px-4">
         <div class="max-w-4xl mx-auto">
 
             <!-- Header -->

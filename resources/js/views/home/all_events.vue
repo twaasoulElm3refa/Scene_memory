@@ -1,5 +1,5 @@
 <template>
-    <div class="events-page">
+    <div class="scemory-page events-page">
         <!-- Header Section -->
         <header class="page-header">
             <div class="header-content">
@@ -1076,5 +1076,69 @@ export default {
 
 .event-card:nth-child(8) {
     animation-delay: 0.8s;
+}
+
+.events-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 32rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+    color: #0F172A;
+}
+
+.page-header {
+    padding: 2rem;
+    border: 1px solid #DCE8F5;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at top right, rgba(48, 168, 255, 0.16), transparent 20rem),
+        linear-gradient(135deg, #FFFFFF, #F4F8FC);
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.main-title {
+    color: #06142A;
+}
+
+.subtitle {
+    color: #64748B;
+}
+
+.sort-control,
+.filter-control {
+    border: 1px solid #DCE8F5;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(13, 77, 151, 0.06);
+}
+
+.sort-select {
+    border-color: #DCE8F5;
+    border-radius: 12px;
+}
+
+.sort-select:focus {
+    border-color: #1677FF;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
+}
+
+.event-card {
+    border: 1px solid #E5EDF6;
+    border-radius: 22px;
+    background: #FFFFFF;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.event-card:hover {
+    border-color: #CFE2F6;
+    box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.btn-view {
+    background: linear-gradient(135deg, #0D4D97, #1677FF);
+}
+
+.pagination button,
+.page-btn {
+    border-color: #DCE8F5;
+    border-radius: 12px;
 }
 </style>

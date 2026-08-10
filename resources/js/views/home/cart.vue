@@ -5,18 +5,19 @@
         {{ toast.message }}
     </div>
 
-    <div class="min-h-screen py-10" style="background: #f0f4f8;">
+    <div class="scemory-page cart-page min-h-screen py-10">
         <div class="container mx-auto px-4 max-w-6xl">
 
             <!-- Header -->
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
-                    <span class="text-4xl">🛒</span>
+                    <i class="bi bi-bag-check text-4xl text-[#0D4D97]"></i>
                     Shopping Cart
                 </h1>
                 <button v-if="items.length" @click="clearCart"
                     class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition shadow-sm">
-                    Clear Cart 🗑️
+                    <i class="bi bi-trash3 me-1"></i>
+                    Clear Cart
                 </button>
             </div>
 
@@ -54,11 +55,11 @@
                         <span v-if="parseFloat(walletAmount) >= total"
                             class="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
                             style="background: rgba(52,211,153,0.2); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3);">
-                            ✅ Sufficient Balance
+                            Sufficient Balance
                         </span>
                         <span v-else class="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
                             style="background: rgba(251,191,36,0.15); color: #fcd34d; border: 1px solid rgba(251,191,36,0.3);">
-                            ⚠️ Insufficient Balance
+                            Insufficient Balance
                         </span>
                     </div>
                 </div>
@@ -88,7 +89,7 @@
 
                 <!-- EMPTY -->
                 <div v-if="!items.length" class="text-center py-20 bg-white rounded-2xl shadow-sm">
-                    <div class="text-6xl mb-4">🛍️</div>
+                    <div class="text-sm font-bold mb-4 text-[#0D4D97]">CART</div>
                     <h3 class="text-2xl font-semibold text-gray-700 mb-2">Your cart is empty</h3>
                     <p class="text-gray-500 mb-6">Looks like you haven't added anything yet</p>
                     <router-link to="/en/all_events"
@@ -202,7 +203,7 @@
 
                                     <button @click="removeItem(getCartItemId(item))"
                                         class="p-2 text-red-500 hover:bg-red-50 rounded-full transition">
-                                        🗑️
+                                        Remove
                                     </button>
                                 </div>
                             </div>
@@ -286,7 +287,7 @@
                         </button>
                         <p v-if="parseFloat(walletAmount) < total && !walletLoading"
                             class="text-center text-xs mt-2 text-amber-500 flex items-center justify-center gap-1">
-                            ⚠️ You need {{ (total - parseFloat(walletAmount)).toFixed(2) }}$ more in your wallet
+                            You need {{ (total - parseFloat(walletAmount)).toFixed(2) }}$ more in your wallet
                         </p>
 
                         <!-- Divider -->
@@ -322,7 +323,7 @@
 
                         <!-- Security note -->
                         <p class="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
-                            🔒 Secure checkout powered by PayPal. You'll be redirected to complete payment.
+                            Secure checkout powered by PayPal. You'll be redirected to complete payment.
                         </p>
                     </div>
 
@@ -606,7 +607,7 @@ const removeItem = async (id) => {
     try {
         await CartService.deleteFromCart(id);
         items.value = items.value.filter(i => getCartItemId(i) !== id);
-        showToast('Item removed ✅');
+        showToast('Item removed');
     } catch (e) {
         console.error(e);
         showToast('Failed to remove item', 'error');
@@ -617,7 +618,7 @@ const clearCart = async () => {
     try {
         await CartService.clearCart();
         items.value = [];
-        showToast('Cart cleared 🗑️');
+        showToast('Cart cleared');
     } catch (e) {
         console.error(e);
         showToast('Failed to clear cart', 'error');
@@ -674,7 +675,7 @@ const handleWalletCheckout = async () => {
         clearIdempotencyKey("cart:wallet");
         walletAmount.value = data.balance;
         await Promise.all([fetchCart(), fetchWallet()]);
-        showToast('Payment successful! 🎉 Paid from wallet.', 'success', 5000);
+        showToast('Payment successful! Paid from wallet.', 'success', 5000);
         const lang = localStorage.getItem("lang") || "en";
         router.replace(`/${lang}/downloads`);
     } catch (e) {
@@ -701,5 +702,38 @@ onMounted(() => {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.cart-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 32rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.cart-page .container {
+    max-width: 1200px;
+}
+
+.cart-page h1 {
+    color: #06142A;
+}
+
+.cart-page .rounded-2xl,
+.cart-page .rounded-xl {
+    border-color: #E5EDF6;
+}
+
+.cart-page .shadow-lg,
+.cart-page .shadow-xl,
+.cart-page .shadow-2xl {
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.08) !important;
+}
+
+.cart-page button:not(.bg-red-500) {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-page button:not(.bg-red-500):hover {
+    transform: translateY(-1px);
 }
 </style>

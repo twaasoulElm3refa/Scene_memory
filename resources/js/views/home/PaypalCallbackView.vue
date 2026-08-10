@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen">
+  <div class="scemory-page status-page flex items-center justify-center min-h-screen">
     <div class="text-center">
       <div v-if="loading">
         <p>جاري تأكيد الدفع...</p>

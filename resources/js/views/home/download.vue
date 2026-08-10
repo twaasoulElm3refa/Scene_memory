@@ -1,5 +1,5 @@
 <template>
-  <div class="downloads-page">
+  <div class="scemory-page downloads-page">
 
     <!-- Header -->
     <div class="page-header">
@@ -693,4 +693,45 @@ onMounted(fetchDownloads);
 .toast-slide-leave-active { transition: all 0.25s ease-in; }
 .toast-slide-enter-from   { opacity: 0; transform: translateX(60px); }
 .toast-slide-leave-to     { opacity: 0; transform: translateX(60px); }
+
+.downloads-page {
+  max-width: 1200px;
+  padding: 3rem 1.5rem;
+  background:
+    radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 30rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.page-header {
+  padding: 1.5rem;
+  border: 1px solid #DCE8F5;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #FFFFFF, #F4F8FC);
+  box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.page-title {
+  color: #06142A;
+}
+
+.count-badge {
+  background: #EAF4FF;
+  color: #0D4D97;
+}
+
+.media-card {
+  border: 1px solid #E5EDF6;
+  border-radius: 22px;
+  background: #FFFFFF;
+  box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.spinner {
+  border-top-color: #1677FF;
+}
+
+.retry-btn {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0D4D97, #1677FF);
+}
 </style>

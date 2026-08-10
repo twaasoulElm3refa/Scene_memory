@@ -1,5 +1,5 @@
 <template>
-  <div class="waiting-container">
+  <div class="scemory-page waiting-container">
     <div class="card">
       <div v-if="!timedOut" class="spinner"></div>
       <h2>Processing Your Payment</h2>
@@ -51,9 +51,46 @@ onUnmounted(() => controller.abort());
 </script>
 
 <style scoped>
-.waiting-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f5f5f5; }
-.card { background: white; border-radius: 16px; padding: 48px 40px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,.1); max-width: 480px; width: 90%; }
-.spinner { width: 56px; height: 56px; border: 5px solid #e5e7eb; border-top-color: #2563eb; border-radius: 50%; margin: 0 auto 24px; animation: spin .9s linear infinite; }
-.hint { color: #6b7280; font-size: .9rem; margin-top: 16px; }
+.waiting-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background:
+    radial-gradient(circle at 24% 16%, rgba(245, 158, 11, 0.12), transparent 24rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.card {
+  width: min(90%, 500px);
+  border: 1px solid #E5EDF6;
+  border-radius: 28px;
+  background: #FFFFFF;
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.spinner {
+  width: 56px;
+  height: 56px;
+  border: 5px solid #EEF5FC;
+  border-top-color: #F59E0B;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  animation: spin .9s linear infinite;
+}
+
+h2 {
+  color: #06142A;
+  font-weight: 800;
+}
+
+p {
+  color: #64748B;
+}
+
+.hint { color: #64748B; font-size: .9rem; margin-top: 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white border-b shadow-sm sticky top-0 z-10">
+    <div class="scemory-filter-panel home-filter-panel sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-3 items-end">
                 <div class="space-y-1">
@@ -145,3 +145,114 @@ const onCategoryChange = (event) => {
     emit("category-changed");
 };
 </script>
+
+<style scoped>
+.home-filter-panel {
+    border: 1px solid var(--scemory-border-soft);
+    border-radius: 24px;
+    background: linear-gradient(145deg, var(--scemory-surface), var(--scemory-surface-soft));
+    box-shadow: var(--scemory-shadow);
+}
+
+:global(.home-discovery-panel) .home-filter-panel {
+    position: relative !important;
+    top: auto !important;
+    z-index: 1;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+:global(.home-discovery-panel) .home-filter-panel > div {
+    max-width: none;
+    padding: 0;
+}
+
+:global(.home-discovery-panel) .home-filter-panel .grid {
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 12px;
+    align-items: center;
+}
+
+.home-filter-panel select,
+.home-filter-panel input {
+    min-height: 46px;
+    border-color: var(--scemory-border) !important;
+    border-radius: 14px !important;
+    background: var(--scemory-surface) !important;
+    color: var(--scemory-text) !important;
+    box-shadow: none !important;
+    transition: var(--scemory-transition);
+}
+
+.home-filter-panel select:hover,
+.home-filter-panel input:hover {
+    border-color: rgba(22, 119, 255, 0.30) !important;
+    background: var(--scemory-control) !important;
+}
+
+.home-filter-panel select:focus,
+.home-filter-panel input:focus {
+    border-color: var(--scemory-blue) !important;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.08) !important;
+    background: #FFFFFF !important;
+    outline: none;
+}
+
+.home-filter-panel [class*="absolute"][class*="bg-white"] {
+    border-color: var(--scemory-border) !important;
+    border-radius: 14px !important;
+    background: var(--scemory-surface) !important;
+    box-shadow: 0 16px 38px rgba(13, 77, 151, 0.12) !important;
+    z-index: 100000 !important;
+}
+
+.home-filter-panel [class*="absolute"] [class*="hover\\:bg-blue-50"]:hover {
+    background: var(--scemory-hover) !important;
+    color: var(--scemory-primary) !important;
+}
+
+.home-filter-panel button {
+    min-height: 46px;
+    min-width: 130px;
+    border: 1px solid rgba(22, 119, 255, 0.20);
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, var(--scemory-primary), var(--scemory-blue)) !important;
+    color: #FFFFFF;
+    box-shadow: 0 8px 20px rgba(13, 77, 151, 0.16);
+    transition: var(--scemory-transition);
+}
+
+.home-filter-panel button:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, var(--scemory-blue), var(--scemory-light-blue)) !important;
+    box-shadow: var(--scemory-shadow-hover);
+}
+
+@media (max-width: 640px) {
+    .home-filter-panel {
+        border-radius: 20px;
+    }
+
+    :global(.home-discovery-panel) .home-filter-panel {
+        border-radius: 0;
+    }
+
+    :global(.home-discovery-panel) .home-filter-panel .grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    :global(.home-discovery-panel) .home-filter-panel button {
+        width: 100%;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1199px) {
+    :global(.home-discovery-panel) .home-filter-panel .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+</style>

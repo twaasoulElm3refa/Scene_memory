@@ -1,8 +1,8 @@
 <template>
     <section
-        class="rounded-[22px] border border-[#CFE0FF] bg-white/90 p-4 shadow-[0_14px_34px_rgba(13,77,151,0.09)] backdrop-blur-xl">
+        class="scemory-trending-panel rounded-[22px] border p-4 backdrop-blur-xl">
         <div class="mb-3">
-            <span class="inline-flex rounded-full bg-[#EAF2FF] px-2.5 py-0.5 text-[10px] font-bold text-[#0D4D97]">
+            <span class="trending-eyebrow inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold">
                 Trending
             </span>
 
@@ -17,14 +17,14 @@
 
         <div v-if="loading" class="space-y-2">
             <article v-for="item in 4" :key="`trending-skeleton-${item}`"
-                class="flex h-[118px] animate-pulse gap-3 overflow-hidden rounded-xl border border-[#CFE0FF]/70 bg-[#F8FAFC] p-2.5">
-                <div class="h-16 w-16 shrink-0 rounded-xl bg-[#EAF2FF]"></div>
+                class="trending-item flex h-[118px] animate-pulse gap-3 overflow-hidden rounded-xl border p-2.5">
+                <div class="h-16 w-16 shrink-0 rounded-xl"></div>
 
                 <div class="min-w-0 flex-1 space-y-2">
-                    <div class="h-3 w-20 rounded bg-[#EAF2FF]"></div>
-                    <div class="h-3 w-full rounded bg-[#EAF2FF]"></div>
-                    <div class="h-3 w-4/5 rounded bg-[#EAF2FF]"></div>
-                    <div class="h-3 w-24 rounded bg-[#EAF2FF]"></div>
+                    <div class="h-3 w-20 rounded"></div>
+                    <div class="h-3 w-full rounded"></div>
+                    <div class="h-3 w-4/5 rounded"></div>
+                    <div class="h-3 w-24 rounded"></div>
                 </div>
             </article>
         </div>
@@ -35,18 +35,18 @@
         </div>
 
         <div v-else-if="events.length === 0"
-            class="rounded-xl border border-dashed border-[#CFE0FF] bg-[#F8FAFC] px-3 py-5 text-center">
+            class="trending-empty rounded-xl border border-dashed px-3 py-5 text-center">
             <p class="text-sm font-bold text-[#0F172A]">No trending events yet</p>
             <p class="mt-1 text-xs leading-5 text-[#64748B]">Check back soon for highlighted events.</p>
         </div>
 
         <div v-else class="space-y-2">
             <article v-for="event in events" :key="event.slug || event.id" role="button" tabindex="0"
-                class="group flex h-[118px] cursor-pointer gap-3 overflow-hidden rounded-xl border border-[#CFE0FF]/70 bg-[#F8FAFC] p-2.5 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#0D4D97]/30"
+                class="trending-item group flex h-[118px] cursor-pointer gap-3 overflow-hidden rounded-xl border p-2.5 transition focus:outline-none focus:ring-2"
                 @click="goToEvent(event)" @keydown.enter.prevent="goToEvent(event)"
                 @keydown.space.prevent="goToEvent(event)">
                 <img :src="event.image_url || fallbackImage" :alt="event.title || 'Trending event'"
-                    class="h-16 w-16 shrink-0 rounded-xl bg-[#EAF2FF] object-cover" loading="lazy" decoding="async" />
+                    class="h-16 w-16 shrink-0 rounded-xl object-cover" loading="lazy" decoding="async" />
 
                 <div class="min-w-0 flex-1">
                     <div class="flex items-center justify-between gap-2">
@@ -131,3 +131,65 @@ const truncateText = (text, limit = 20) => {
     return text.length > limit ? `${text.slice(0, limit)}...` : text;
 };
 </script>
+
+<style scoped>
+.scemory-trending-panel {
+    border-color: var(--scemory-border-soft);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(247, 250, 253, 0.96));
+    box-shadow: var(--scemory-shadow);
+}
+
+.trending-eyebrow {
+    border: 1px solid var(--scemory-border);
+    background: var(--scemory-active);
+    color: var(--scemory-primary);
+}
+
+.scemory-trending-panel article {
+    border-color: var(--scemory-border-soft);
+    background: var(--scemory-control);
+    box-shadow: var(--scemory-shadow-sm);
+}
+
+.scemory-trending-panel article:hover {
+    transform: translateY(-2px);
+    border-color: var(--scemory-border);
+    background: var(--scemory-hover);
+    box-shadow: var(--scemory-shadow-hover);
+}
+
+.trending-item {
+    border-color: var(--scemory-border-soft);
+    background: var(--scemory-control);
+    box-shadow: var(--scemory-shadow-sm);
+}
+
+.trending-item:focus {
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
+}
+
+.trending-item img,
+.trending-item .rounded {
+    background: var(--scemory-active);
+}
+
+.trending-empty {
+    border-color: var(--scemory-border);
+    background: var(--scemory-surface);
+}
+
+.scemory-trending-panel h2,
+.scemory-trending-panel h6 {
+    color: var(--scemory-heading);
+}
+
+.scemory-trending-panel p,
+.scemory-trending-panel .text-\[\#475569\],
+.scemory-trending-panel .text-\[\#64748B\] {
+    color: var(--scemory-muted);
+}
+
+.scemory-trending-panel span {
+    border-color: rgba(22, 119, 255, 0.15);
+}
+</style>

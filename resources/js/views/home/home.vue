@@ -1,89 +1,156 @@
 ﻿<template>
-    <div class="min-h-screen bg-[#F8FAFC] font-sans">
+    <div class="home-page-shell min-h-screen font-sans">
         <main class="relative">
             <!-- FULL WIDTH HERO -->
-            <section class="relative isolate min-h-[560px] w-full overflow-hidden bg-[#0D4D97]">
-                <video
-                    autoplay
-                    muted
-                    loop
-                    playsinline
-                    preload="auto"
-                    aria-hidden="true"
-                    class="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
-                >
-                    <source src="/images/FINAL.mp4" type="video/mp4" />
+            <section class="relative min-h-screen overflow-hidden">
+
+                <!-- Background Video -->
+                <video class="absolute inset-0 z-0 h-full w-full object-cover" autoplay muted loop playsinline
+                    preload="auto">
+                    <source src="/video/Final_Scemory.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
                 </video>
 
-                <div class="absolute inset-0 bg-gradient-to-l from-[#0D4D97]/90 via-[#0D4D97]/60 to-[#0D4D97]/20"></div>
-
-                <div
-                    class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/70 to-transparent">
+                <!-- Dark / Blue Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-b
+               from-[#04111D]/70
+               via-[#06233B]/65
+               to-[#071C2D]/80">
                 </div>
 
-                <div class="relative z-10 mx-auto flex min-h-[560px] max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-                    <div class="mr-auto max-w-3xl text-left">
-                        <span
-                            class="inline-flex items-center rounded-full bg-white/90 px-5 py-2 text-sm font-semibold text-[#0D4D97] shadow-lg backdrop-blur-md">
+                <!-- Soft Blue Center Glow -->
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(13,77,151,0.20),transparent_55%)]">
+                </div>
+
+                <!-- Bottom Fade
+                <div class="absolute inset-x-0 bottom-0 h-40
+               bg-gradient-to-t
+               from-[#F8FAFC]
+               via-[#F8FAFC]/35
+               to-transparent">
+                </div> -->
+
+                <!-- Hero Navbar -->
+                <div class="hero-navbar absolute inset-x-0 top-2 z-30">
+                    <Navbar />
+                </div>
+
+                <!-- Content -->
+                <div class="relative z-10 mx-auto flex min-h-screen
+               max-w-7xl items-center justify-center
+               px-4 pt-24 sm:px-6 sm:pt-28 lg:px-8">
+                    <div class="mx-auto flex w-full max-w-5xl
+                   flex-col items-center text-center">
+
+                        <!-- Badge -->
+                        <span class="inline-flex items-center gap-2
+                       rounded-full border border-white/20
+                       bg-white/10 px-5 py-2
+                       text-sm font-semibold text-white
+                       shadow-lg backdrop-blur-md">
                             Scemory Event Archive
+
+                            <span class="text-[#38AEEA]">
+                                ✦
+                            </span>
                         </span>
 
-                        <h1
-                            class="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.35)] md:text-6xl lg:text-7xl">
-                            Explore documented events through the map
+                        <!-- Heading -->
+                        <h1 class="mt-6 max-w-5xl
+                       text-4xl font-bold leading-[1.1]
+                       tracking-tight text-white
+                       drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]
+                       sm:text-5xl md:text-6xl lg:text-7xl">
+                            Explore documented events
+
+                            <span class="mt-1 block text-[#38AEEA]">
+                                through the map
+                            </span>
                         </h1>
 
-                        <p class="mt-5 max-w-2xl text-base leading-8 text-white/90 md:text-lg">
-                            Discover event media uploaded by journalists, media teams, and eyewitness
-                            contributors around the world.
+                        <!-- Description -->
+                        <p class="mt-6 max-w-2xl
+                       text-base leading-8
+                       text-white/85
+                       md:text-lg">
+                            Discover event media uploaded by journalists,
+                            media teams, and eyewitness contributors
+                            around the world.
                         </p>
 
-                        <div class="mt-8 flex flex-wrap justify-start gap-3">
-                            <a href="#filters-section"
-                                class="rounded-full bg-white px-7 py-3 text-sm font-bold text-[#0D4D97] shadow-xl transition hover:bg-[#EAF2FF]">
+                        <!-- Buttons -->
+                        <div class="mt-8 flex flex-wrap
+                       items-center justify-center gap-3">
+
+                            <a href="#filters-section" class="inline-flex items-center justify-center
+                           rounded-full bg-[#1597D4]
+                           px-8 py-3.5
+                           text-sm font-bold text-white
+                           shadow-[0_12px_30px_rgba(21,151,212,0.30)]
+                           transition duration-300
+                           hover:-translate-y-1
+                           hover:bg-[#28A9E6]">
                                 Search Events
                             </a>
 
-                            <RouterLink :to="`/${lang}/add_event`"
-                                class="rounded-full bg-[#0D4D97] px-7 py-3 text-sm font-bold text-white shadow-xl transition hover:bg-[#1E5FB8]">
+                            <RouterLink :to="`/${lang}/add_event`" class="inline-flex items-center justify-center
+                           rounded-full border border-white/35
+                           bg-white/10
+                           px-8 py-3.5
+                           text-sm font-bold text-white
+                           shadow-lg backdrop-blur-md
+                           transition duration-300
+                           hover:-translate-y-1
+                           hover:bg-white/20">
                                 Upload Your Story
                             </RouterLink>
-                        </div>
-                    </div>
 
+                        </div>
+
+                        <!-- Small Bottom Text -->
+                        <p class="mt-6 text-sm text-white/60">
+                            Discover stories, places and moments from around the world.
+                        </p>
+
+                    </div>
                 </div>
+
             </section>
 
             <!-- MAP + TRENDING + FILTERS -->
-            <section id="explore-events" class="relative bg-[#F8FAFC] pb-10 pt-10">
+            <section id="explore-events" class="home-after-hero relative pb-10 pt-10">
                 <div class="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start">
                         <div class="space-y-8">
-                            <UnifiedSearchBar v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
-                                :loading="loadingTags" :tag-suggestions="tagSuggestions"
-                                :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
-                                @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
+                            <div class="home-discovery-panel">
+                                <UnifiedSearchBar v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
+                                    :loading="loadingTags" :tag-suggestions="tagSuggestions"
+                                    :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
+                                    @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
 
+                                <div class="home-discovery-divider"></div>
+
+                                <section id="filters-section" ref="filtersSectionRef" class="home-discovery-filters">
+                                    <FiltersSection :categories="categories" :selected-category="selectedCategory"
+                                        :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
+                                        :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
+                                        :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
+                                        :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
+                                        :from-date="fromDate" :to-date="toDate"
+                                        @update:selected-category="handleCategoryUpdate"
+                                        @update:selected-sub-category="handleSubCategoryUpdate"
+                                        @update:country-search="countrySearch = $event"
+                                        @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
+                                        @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
+                                        @select-country="selectCountry" @category-changed="handleMainCategoryChange"
+                                        @search="handleSearchClick" />
+                                </section>
+                            </div>
                             <MapSection :fullscreen="fullscreen" :is-map-ready="isMapReady"
                                 :is-map-loading="isMapLoading" :map-error="mapError" :can-init-map="canInitMap"
                                 @map-viewport-enter="handleMapViewportEnter" @load-map="handleManualMapLoad"
                                 @open-fullscreen="openFullscreen" @close-fullscreen="closeFullscreen" />
-
-                            <section id="filters-section" ref="filtersSectionRef">
-                                <FiltersSection :categories="categories" :selected-category="selectedCategory"
-                                    :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
-                                    :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
-                                    :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
-                                    :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
-                                    :from-date="fromDate" :to-date="toDate"
-                                    @update:selected-category="handleCategoryUpdate"
-                                    @update:selected-sub-category="handleSubCategoryUpdate"
-                                    @update:country-search="countrySearch = $event"
-                                    @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
-                                    @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
-                                    @select-country="selectCountry" @category-changed="handleMainCategoryChange"
-                                    @search="handleSearchClick" />
-                            </section>
                         </div>
 
                         <aside class="xl:sticky xl:top-24">
@@ -96,7 +163,7 @@
             </section>
 
             <!-- EVENTS RESULTS -->
-            <section id="events-results" class="bg-white py-10">
+            <section id="events-results" class="home-results-band py-10">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <EventsSection :searched="searched" :loading="loading" :displayed-events="displayedEvents"
                         :paginated-events="paginatedEvents" :visible-pages="visiblePages" :current-page="currentPage"
@@ -106,11 +173,11 @@
                 </div>
             </section>
 
-            <!-- ABOUT -->
-            <AboutScemorySection />
+            <!-- SCEMORY EXPERIENCE -->
+            <ScemoryExperienceTabs />
 
             <!-- PLANS -->
-            <section class="bg-[#F8FAFC] py-14">
+            <section class="home-plans-band py-14">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <PlansSection :licence-name="licenceName" :plans="plans" :loading-plans="loadingPlans"
                         @open-plan="openPlan" />
@@ -178,6 +245,7 @@ import { LocationService } from "@/services/LocationService/LocationService";
 import { EventService } from "@/services/EventService/EventService";
 import { PlanService } from "@/services/planService/planService";
 import { AuthService } from "@/services/AuthService/AuthService";
+import Navbar from "@/components/layouts/Navbar.vue";
 
 const MapSection = defineAsyncComponent(() => import("./components/MapSection.vue"));
 const UnifiedSearchBar = defineAsyncComponent(() => import("./components/UnifiedSearchBar.vue"));
@@ -185,7 +253,7 @@ const FiltersSection = defineAsyncComponent(() => import("./components/FiltersSe
 const EventsSection = defineAsyncComponent(() => import("./components/EventsSection.vue"));
 const PlansSection = defineAsyncComponent(() => import("./components/PlansSection.vue"));
 const TrendingEventsSection = defineAsyncComponent(() => import("./components/TrendingEventsSection.vue"));
-const AboutScemorySection = defineAsyncComponent(() => import("./components/AboutScemorySection.vue"));
+const ScemoryExperienceTabs = defineAsyncComponent(() => import("./components/ScemoryExperienceTabs.vue"));
 const NewsletterSection = defineAsyncComponent(() => import("./components/NewsletterSection.vue"));
 
 const router = useRouter();
@@ -1079,3 +1147,54 @@ onUnmounted(() => {
     }
 });
 </script>
+
+<style scoped>
+.hero-navbar :deep(.navbar-wrap) {
+    position: relative !important;
+    top: auto !important;
+}
+
+.home-discovery-panel {
+    position: relative;
+    z-index: 20;
+    margin-bottom: 1%;
+    overflow: visible;
+    border: none;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 88% 10%, rgba(48, 168, 255, 0.06), transparent 30%),
+        linear-gradient(145deg, #F7FAFD, #EDF4FA);
+    box-shadow: 0 12px 34px rgba(13, 77, 151, 0.07);
+    padding: 22px;
+}
+
+.home-discovery-divider {
+    height: 1px;
+    margin: 18px 0;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #DCE8F5 12%,
+            #C9DDEF 50%,
+            #DCE8F5 88%,
+            transparent
+        );
+}
+
+.home-discovery-filters {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 640px) {
+    .home-discovery-panel {
+        border-radius: 20px;
+        padding: 14px;
+    }
+
+    .home-discovery-divider {
+        margin: 14px 0;
+    }
+}
+</style>

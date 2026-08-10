@@ -1,32 +1,32 @@
 <template>
-  <section ref="sectionRef" class="relative h-[500px] md:h-[600px] min-h-[420px] bg-gray-900 overflow-hidden">
+<section ref="sectionRef" class="scemory-map-section home-map-shell relative h-[500px] md:h-[600px] min-h-[420px] overflow-hidden">
     <div id="map-main" class="absolute inset-0 w-full h-full"></div>
 
     <div
       v-if="!isMapReady && !mapError"
-      class="absolute inset-0 z-20 pointer-events-none bg-gradient-to-b from-gray-100 to-gray-200"
+      class="map-loading-surface absolute inset-0 z-20 pointer-events-none"
       aria-hidden="true"
     >
       <div class="w-full h-full animate-pulse">
-        <div class="h-full w-full bg-[linear-gradient(110deg,#e5e7eb,45%,#f3f4f6,55%,#e5e7eb)] bg-[length:200%_100%] animate-[shimmer_1.8s_linear_infinite]"></div>
+        <div class="h-full w-full bg-[linear-gradient(110deg,#EDF4FA,45%,#F7FAFD,55%,#EDF4FA)] bg-[length:200%_100%] animate-[shimmer_1.8s_linear_infinite]"></div>
       </div>
     </div>
 
     <div
       v-if="(!canInitMap && !isMapLoading) || (isMapLoading && !isMapReady) || !!mapError"
-      class="absolute inset-0 bg-black/20 flex items-center justify-center z-30 pointer-events-none"
+      class="map-state-overlay absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
     >
       <button
         v-if="!canInitMap && !isMapLoading && !mapError"
         @click="$emit('load-map')"
-        class="pointer-events-auto px-6 py-3 rounded-full bg-white text-gray-900 font-semibold shadow-lg hover:bg-gray-100 transition"
+        class="map-control-button pointer-events-auto px-6 py-3 rounded-full font-semibold transition"
       >
         Load Map
       </button>
 
       <div
         v-else-if="isMapLoading && !isMapReady"
-        class="pointer-events-auto inline-flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full text-sm font-medium text-gray-700"
+        class="map-status-pill pointer-events-auto inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
       >
         <span class="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></span>
         Loading map...
@@ -34,12 +34,12 @@
 
       <div
         v-else-if="mapError"
-        class="pointer-events-auto inline-flex flex-col items-center gap-3 bg-white/95 px-5 py-4 rounded-2xl text-sm text-gray-700 shadow"
+        class="map-error-card pointer-events-auto inline-flex flex-col items-center gap-3 px-5 py-4 rounded-2xl text-sm"
       >
         <p class="font-medium">{{ mapError }}</p>
         <button
           @click="$emit('load-map')"
-          class="px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition"
+          class="map-control-button px-4 py-2 rounded-full transition"
         >
           Retry loading map
         </button>
@@ -50,7 +50,7 @@
       <button
         v-if="isMapReady"
         @click="$emit('open-fullscreen')"
-        class="bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition text-gray-800"
+        class="map-icon-button p-3 rounded-full transition"
         aria-label="Open fullscreen map"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,13 +65,13 @@
     </div>
 
     <Teleport to="body">
-      <div v-show="fullscreen" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-        <div class="relative w-full h-full max-w-7xl max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl">
+      <div v-show="fullscreen" class="map-fullscreen-backdrop fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="map-fullscreen-panel relative w-full h-full max-w-7xl max-h-[90vh] rounded-2xl overflow-hidden">
           <div id="map-fullscreen" class="absolute inset-0 w-full h-full"></div>
 
           <button
             @click="$emit('close-fullscreen')"
-            class="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition text-gray-800"
+            class="map-icon-button absolute top-4 right-4 z-30 p-3 rounded-full transition"
             aria-label="Close fullscreen map"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,6 +152,77 @@ onUnmounted(() => {
 
   100% {
     background-position: -200% 0;
+  }
+}
+
+.home-map-shell {
+  border: 1px solid var(--scemory-border);
+  border-radius: 26px;
+  background: var(--scemory-surface-soft);
+  box-shadow: 0 12px 34px rgba(13, 77, 151, 0.08);
+}
+
+.map-loading-surface {
+  background: linear-gradient(145deg, var(--scemory-surface-soft), var(--scemory-surface));
+}
+
+.map-state-overlay {
+  background: rgba(247, 250, 253, 0.42);
+  backdrop-filter: blur(2px);
+}
+
+.map-control-button,
+.map-icon-button,
+.map-status-pill {
+  border: 1px solid var(--scemory-border);
+  background: rgba(247, 250, 253, 0.94);
+  color: var(--scemory-primary);
+  box-shadow: var(--scemory-shadow-sm);
+  backdrop-filter: blur(14px);
+}
+
+.map-control-button:hover,
+.map-icon-button:hover {
+  transform: translateY(-1px);
+  background: var(--scemory-hover);
+  color: var(--scemory-blue);
+  box-shadow: var(--scemory-shadow-hover);
+}
+
+.map-status-pill {
+  color: var(--scemory-text);
+}
+
+.map-status-pill span {
+  border-color: var(--scemory-border-soft);
+  border-top-color: var(--scemory-blue);
+}
+
+.map-error-card {
+  border: 1px solid var(--scemory-border);
+  background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface));
+  color: var(--scemory-text);
+  box-shadow: var(--scemory-shadow-strong);
+}
+
+.map-error-card p {
+  color: var(--scemory-heading);
+}
+
+.map-fullscreen-backdrop {
+  background: rgba(6, 20, 42, 0.55);
+  backdrop-filter: blur(10px);
+}
+
+.map-fullscreen-panel {
+  border: 1px solid var(--scemory-border);
+  box-shadow: var(--scemory-shadow-strong);
+}
+
+@media (max-width: 640px) {
+  .home-map-shell {
+    border-radius: 22px;
+    min-height: 420px;
   }
 }
 </style>

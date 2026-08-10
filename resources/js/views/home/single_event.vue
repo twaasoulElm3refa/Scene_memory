@@ -3,7 +3,7 @@
         :class="cartAlert.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
         {{ cartAlert.message }}
     </div>
-    <div class="min-h-screen bg-gray-50">
+    <div class="scemory-page single-event-page min-h-screen bg-gray-50">
 
         <div v-if="loading" class="text-center py-40">
             <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 mx-auto mb-8"></div>
@@ -94,12 +94,12 @@
                                     class="absolute bottom-0 left-0 right-0 z-20 bg-black/70 text-white p-3 flex items-center justify-between opacity-100 transition">
                                     <!-- PRICE -->
                                     <div class="text-sm font-bold">
-                                        💰 {{ formatPrice(getImagePrice(media)) }} $
+                                        Price {{ formatPrice(getImagePrice(media)) }} $
                                     </div>
                                     <!-- ADD TO CART -->
                                     <button @click.stop="addToCart(media?.id)"
                                         class="bg-gray-500 hover:bg-gray-600 px-3 py-1 rounded text-sm font-semibold transition">
-                                        🛒 Add
+                                        Add
                                     </button>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
                                             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                     </svg>
                                     <span v-if="collectionLoading">{{ $t('common.loading') || 'Loading...' }}</span>
-                                    <span v-else>{{ $t('event.add_collection_to_cart') || '🎁 Add Full Collection toCart' }}</span>
+                                    <span v-else>{{ $t('event.add_collection_to_cart') || 'Add Full Collection toCart' }}</span>
                                 </button>
 
                                 <!-- Alert Message -->
@@ -359,7 +359,7 @@
                                                     : 'bg-white border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-400',
                                                 comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
-                                            <span class="text-base">👍</span>
+                                            <span class="text-[11px] font-bold">YES</span>
                                             موافق
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
@@ -375,7 +375,7 @@
                                                     : 'bg-white border-gray-300 text-gray-700 hover:bg-amber-50 hover:border-amber-400',
                                                 comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
-                                            <span class="text-base">😐</span>
+                                            <span class="text-[11px] font-bold">MID</span>
                                             محايد
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
@@ -391,7 +391,7 @@
                                                     : 'bg-white border-gray-300 text-gray-700 hover:bg-rose-50 hover:border-rose-400',
                                                 comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
-                                            <span class="text-base">👎</span>
+                                            <span class="text-[11px] font-bold">NO</span>
                                             غير موافق
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
@@ -512,7 +512,7 @@
                                     </h3>
                                     <div class="space-y-3 text-gray-700 text-sm">
                                         <div class="flex items-start gap-2">
-                                            <span class="text-xl mt-0.5">📅</span>
+                                            <span class="text-[11px] font-bold mt-0.5">FROM</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.from_date')
                                                 }}</p>
@@ -520,7 +520,7 @@
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
-                                            <span class="text-xl mt-0.5">📅</span>
+                                            <span class="text-[11px] font-bold mt-0.5">TO</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.to_date') }}
                                                 </p>
@@ -528,7 +528,7 @@
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
-                                            <span class="text-xl mt-0.5">🕒</span>
+                                            <span class="text-[11px] font-bold mt-0.5">TIME</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.time_label')
                                                 }}</p>
@@ -536,7 +536,7 @@
                                             </div>
                                         </div>
                                         <div class="flex items-start gap-2">
-                                            <span class="text-xl mt-0.5">📍</span>
+                                            <span class="text-[11px] font-bold mt-0.5">LOC</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.location')
                                                 }}</p>
@@ -545,7 +545,7 @@
                                             </div>
                                         </div>
                                         <div v-if="event?.user?.name" class="flex items-start gap-2">
-                                            <span class="text-xl mt-0.5">👤</span>
+                                            <span class="text-[11px] font-bold mt-0.5">USER</span>
                                             <div>
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
                                                 }}</p>
@@ -658,7 +658,7 @@
 
                     <!-- Success -->
                     <div v-if="reportSuccess" class="flex flex-col items-center py-6 gap-3 text-center">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">✅
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold">OK
                         </div>
                         <h4 class="text-lg font-bold text-gray-800">تم إرسال البلاغ</h4>
                         <p class="text-sm text-gray-500">شكراً لك، سنراجع هذا التعليق قريباً.</p>
@@ -704,7 +704,7 @@
 
                         <p v-if="reportError"
                             class="text-xs text-red-500 mb-3 bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
-                            ⚠️ {{ reportError }}
+                            {{ reportError }}
                         </p>
 
                         <div class="flex gap-2 justify-end">
@@ -965,7 +965,7 @@ const addToCart = async (mediaId) => {
     try {
         await CartService.addToCart(mediaId);
 
-        showCartAlert("success", "تمت الإضافة إلى السلة 🛒 بنجاح");
+        showCartAlert("success", "تمت الإضافة إلى السلة بنجاح");
     } catch (err) {
         showCartAlert("error", err?.message || "حدث خطأ أثناء الإضافة");
     } finally {
@@ -1020,7 +1020,7 @@ const addCollectionToCart = async () => {
         collectionAlert.value = {
             show: true,
             type: 'success',
-            message: `✅ تم إضافة ${totalImages} صورة إلى السلة بخصم 10%!`
+            message: `تم إضافة ${totalImages} صورة إلى السلة بخصم 10%!`
         };
 
         setTimeout(() => {
@@ -1124,13 +1124,13 @@ const reportSuccess = ref(false);
 const reportError = ref("");
 
 const reportReasons = [
-    { value: "spam", label: "بريد مزعج", icon: "🚫" },
-    { value: "offensive", label: "محتوى مسيء", icon: "😡" },
-    { value: "inappropriate", label: "غير لائق", icon: "⚠️" },
-    { value: "illegal", label: "محتوى غير قانوني", icon: "⚖️" },
-    { value: "untrue", label: "محتوى كاذب", icon: "🤥" },
-    { value: "False information", label: "معلومات مضللة", icon: "📛" },
-    { value: "other", label: "سبب آخر", icon: "💬" },
+    { value: "spam", label: "بريد مزعج", icon: "SP" },
+    { value: "offensive", label: "محتوى مسيء", icon: "OF" },
+    { value: "inappropriate", label: "غير لائق", icon: "IN" },
+    { value: "illegal", label: "محتوى غير قانوني", icon: "LG" },
+    { value: "untrue", label: "محتوى كاذب", icon: "UN" },
+    { value: "False information", label: "معلومات مضللة", icon: "FI" },
+    { value: "other", label: "سبب آخر", icon: "OT" },
 ];
 
 const openReportModal = (commentId) => {
@@ -1525,7 +1525,7 @@ const openLightbox = (index) => {
     lightboxOpen.value = true;
 };
 
-// ✅ Navigation inside lightbox
+// Navigation inside lightbox
 const lightboxPrev = () => {
     const total = eventImages.value.length;
     if (!total) return;
@@ -1713,5 +1713,61 @@ onMounted(async () => {
     color: #16a34a;
     font-size: 12px;
     margin-top: 6px;
+}
+
+.single-event-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 34rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+    color: #0F172A;
+}
+
+.single-event-page .bg-white,
+.single-event-page .comment-form,
+.single-event-page .comment-box {
+    border: 1px solid #E5EDF6;
+    border-radius: 22px;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.single-event-page .bg-gray-50,
+.single-event-page .bg-gray-50\/60 {
+    background-color: #F8FAFC !important;
+}
+
+.single-event-page h1,
+.single-event-page h2,
+.single-event-page h3,
+.single-event-page .comments-title {
+    color: #06142A;
+}
+
+.single-event-page .text-indigo-600,
+.single-event-page .text-blue-600 {
+    color: #0D4D97 !important;
+}
+
+.single-event-page .bg-indigo-600,
+.single-event-page .bg-blue-600,
+.submit-btn,
+.view-all-btn {
+    background: linear-gradient(135deg, #0D4D97, #1677FF) !important;
+}
+
+.single-event-page textarea,
+.comment-textarea {
+    border-color: #DCE8F5;
+    border-radius: 14px;
+}
+
+.single-event-page textarea:focus,
+.comment-textarea:focus {
+    border-color: #1677FF;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
+}
+
+.view-all-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(22, 119, 255, 0.20);
 }
 </style>

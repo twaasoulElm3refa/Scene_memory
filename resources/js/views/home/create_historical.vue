@@ -1,5 +1,5 @@
 <template>
-    <div class="min-vh-100 bg-light py-4">
+    <div class="scemory-page create-event-page min-vh-100 py-4">
         <div class="container px-3 px-md-4">
             <div class="mb-4">
                 <h1 class="display-6 fw-bold text-dark">{{ tr("eventForm.title", "Create historical event") }}</h1>
@@ -883,3 +883,50 @@ function patchLanguage(activeMap, isAr) {
     });
 }
 </script>
+
+<style scoped>
+.create-event-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.12), transparent 32rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.create-event-page .container {
+    max-width: 1280px;
+}
+
+.create-event-page h1 {
+    color: #06142A !important;
+    letter-spacing: 0;
+}
+
+.create-event-page .card {
+    border: 1px solid #E5EDF6 !important;
+    border-radius: 24px !important;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06) !important;
+}
+
+.create-event-page .btn {
+    border-radius: 16px !important;
+}
+
+.create-event-page .btn-primary,
+.create-event-page button[type="submit"] {
+    border: 0 !important;
+    background: linear-gradient(135deg, #0D4D97, #1677FF) !important;
+    box-shadow: 0 14px 30px rgba(22, 119, 255, 0.18);
+}
+
+.create-event-page .form-control,
+.create-event-page .form-select {
+    min-height: 46px;
+    border-color: #DCE8F5;
+    border-radius: 14px;
+}
+
+.create-event-page .form-control:focus,
+.create-event-page .form-select:focus {
+    border-color: #1677FF;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
+}
+</style>

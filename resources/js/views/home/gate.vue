@@ -1,10 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-6 rtl">
+  <div class="scemory-page gate-page min-h-screen bg-gray-50 p-6 rtl">
 
     <!-- Search Bar -->
     <div class="relative max-w-lg mx-auto mb-10">
       <div class="relative">
-        <span class="absolute inset-y-0 right-3 flex items-center text-gray-400 text-lg">🔍</span>
+        <span class="absolute inset-y-0 right-3 flex items-center text-gray-400" aria-hidden="true">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-4.35-4.35m1.1-5.15a6.25 6.25 0 11-12.5 0 6.25 6.25 0 0112.5 0z" />
+          </svg>
+        </span>
         <input
           v-model="searchQuery"
           type="text"
@@ -80,9 +85,9 @@
             />
             <div
               v-else
-              class="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center text-4xl"
+              class="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center text-sm font-bold"
             >
-              🎪
+              Media
             </div>
 
             <!-- Category Badge -->
@@ -107,11 +112,11 @@
             <!-- Meta -->
             <div class="flex flex-col gap-1 mb-4">
               <div class="flex items-center gap-1.5 text-xs text-gray-500">
-                <span>📍</span>
+                <span aria-hidden="true">LOC</span>
                 <span>{{ event.city?.translation?.name || event.city?.name }}</span>
               </div>
               <div class="flex items-center gap-1.5 text-xs text-gray-500">
-                <span>📅</span>
+                <span aria-hidden="true">DATE</span>
                 <span>{{ formatDate(event.start_date) }}</span>
               </div>
             </div>
@@ -221,3 +226,38 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.gate-page {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(48, 168, 255, 0.06), transparent 28rem),
+    linear-gradient(180deg, var(--scemory-surface), var(--scemory-surface-soft) 48%, var(--scemory-surface)) !important;
+}
+
+.gate-page input,
+.gate-page ul,
+.gate-page .bg-white {
+  border-color: var(--scemory-border-soft) !important;
+  background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface)) !important;
+  box-shadow: var(--scemory-shadow);
+}
+
+.gate-page li:hover {
+  background: var(--scemory-hover) !important;
+}
+
+.gate-page h2,
+.gate-page h3 {
+  color: var(--scemory-heading) !important;
+}
+
+.gate-page .text-indigo-600 {
+  color: var(--scemory-primary) !important;
+}
+
+.gate-page a.bg-indigo-500 {
+  background: linear-gradient(135deg, var(--scemory-primary), var(--scemory-blue)) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 20px rgba(13, 77, 151, 0.16);
+}
+</style>

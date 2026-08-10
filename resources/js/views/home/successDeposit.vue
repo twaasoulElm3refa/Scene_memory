@@ -1,5 +1,5 @@
 <template>
-  <div class="success-page">
+  <div class="scemory-page success-page">
     <!-- Background particles -->
     <div class="particles">
       <div
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <h1>تم شحن الرصيد بنجاح 🎉</h1>
+      <h1>تم شحن الرصيد بنجاح</h1>
       <p class="subtitle">
         تم إضافة المبلغ إلى محفظتك بنجاح<br />
         يمكنك الآن استخدامه أو تحميل مشترياتك
@@ -42,7 +42,7 @@
 
       <!-- Info -->
       <div class="info-row">
-        <div class="info-icon">💰</div>
+        <div class="info-icon">WAL</div>
         <div>
           <div class="info-label">حالة العملية</div>
           <div class="info-val">ناجحة</div>
@@ -50,7 +50,7 @@
       </div>
 
       <div class="info-row">
-        <div class="info-icon">📧</div>
+        <div class="info-icon">MAIL</div>
         <div>
           <div class="info-label">الإشعار</div>
           <div class="info-val">تم إرسال رسالة لبريدك</div>
@@ -58,7 +58,7 @@
       </div>
 
       <div class="info-row">
-        <div class="info-icon">💳</div>
+        <div class="info-icon">PAY</div>
         <div>
           <div class="info-label">رقم العملية</div>
           <div class="info-val">{{ transactionId }}</div>
@@ -207,5 +207,58 @@ export default {
   border: none;
   color: #777;
   cursor: pointer;
+}
+
+.success-page {
+  background:
+    radial-gradient(circle at 22% 14%, rgba(34, 197, 94, 0.10), transparent 24rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+  color: #0F172A;
+  padding: 32px 16px;
+}
+
+.particle { background: #30A8FF; }
+
+.card {
+  border: 1px solid #E5EDF6;
+  box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.card::before {
+  background: linear-gradient(90deg, transparent, #22C55E, #30A8FF, transparent);
+}
+
+.paypal-badge {
+  background: #F4F8FC;
+  border-color: #DCE8F5;
+  color: #0D4D97;
+}
+
+.paypal-dot,
+.icon-circle {
+  background: linear-gradient(135deg, #16A34A, #22C55E);
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.20);
+}
+
+h1 { color: #06142A; }
+.subtitle,
+.info-label,
+.sec-link { color: #64748B; }
+
+.info-row {
+  background: #F8FAFC;
+  border: 1px solid #DCE8F5;
+}
+
+.info-val { color: #0F172A; }
+
+.btn-downloads {
+  background: linear-gradient(135deg, #0D4D97, #1677FF);
+  box-shadow: 0 14px 30px rgba(22, 119, 255, 0.20);
+}
+
+.btn-downloads:hover {
+  background: linear-gradient(135deg, #0D4D97, #30A8FF);
+  box-shadow: 0 18px 38px rgba(22, 119, 255, 0.26);
 }
 </style>

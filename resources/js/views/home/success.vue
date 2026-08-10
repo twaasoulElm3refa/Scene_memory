@@ -1,5 +1,5 @@
 <template>
-  <div class="success-page">
+  <div class="scemory-page success-page">
     <!-- Background particles -->
     <div class="particles">
       <div v-for="i in 8" :key="i" class="particle" :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"></div>
@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <h1>تمّت عملية الدفع! 🎉</h1>
+      <h1>تمّت عملية الدفع!</h1>
       <p class="subtitle">
         شكراً لك على ثقتك بنا<br>
         طلبك تم تأكيده بنجاح وجاهز للتحميل
@@ -31,7 +31,7 @@
 
       <!-- Info rows -->
       <div class="info-row">
-        <div class="info-icon green">✅</div>
+        <div class="info-icon green">OK</div>
         <div>
           <div class="info-label">حالة الطلب</div>
           <div class="info-val green">مدفوع ومؤكد</div>
@@ -39,7 +39,7 @@
       </div>
 
       <div class="info-row">
-        <div class="info-icon blue">📧</div>
+        <div class="info-icon blue">MAIL</div>
         <div>
           <div class="info-label">تأكيد الدفع</div>
           <div class="info-val">تم إرساله على بريدك الإلكتروني</div>
@@ -47,7 +47,7 @@
       </div>
 
       <div class="info-row">
-        <div class="info-icon green">💳</div>
+        <div class="info-icon green">PAY</div>
         <div>
           <div class="info-label">رقم المعاملة</div>
           <div class="info-val">{{ transactionId }}</div>
@@ -240,4 +240,57 @@ h1 {
   animation: fade-in 0.5s ease 1.1s both; transition: color 0.2s;
 }
 .sec-link:hover { color: #333; }
+
+.success-page {
+  background:
+    radial-gradient(circle at 22% 14%, rgba(34, 197, 94, 0.10), transparent 24rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+  color: #0F172A;
+  padding: 32px 16px;
+}
+
+.particle { background: #30A8FF; }
+
+.card {
+  border: 1px solid #E5EDF6;
+  box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.card::before {
+  background: linear-gradient(90deg, transparent, #22C55E, #30A8FF, transparent);
+}
+
+.paypal-badge {
+  background: #F4F8FC;
+  border-color: #DCE8F5;
+  color: #0D4D97;
+}
+
+.paypal-dot,
+.icon-circle {
+  background: linear-gradient(135deg, #16A34A, #22C55E);
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.20);
+}
+
+h1 { color: #06142A; }
+.subtitle,
+.info-label,
+.sec-link { color: #64748B; }
+
+.info-row {
+  background: #F8FAFC;
+  border-color: #DCE8F5;
+}
+
+.info-val { color: #0F172A; }
+
+.btn-downloads {
+  background: linear-gradient(135deg, #0D4D97, #1677FF);
+  box-shadow: 0 14px 30px rgba(22, 119, 255, 0.20);
+}
+
+.btn-downloads:hover {
+  background: linear-gradient(135deg, #0D4D97, #30A8FF);
+  box-shadow: 0 18px 38px rgba(22, 119, 255, 0.26);
+}
 </style>

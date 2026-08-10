@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-white overflow-y-auto font-sans">
+    <div class="scemory-page show-plan-page min-h-screen bg-white overflow-y-auto font-sans">
 
         <!-- Top Bar -->
         <div class="border-b border-black">
@@ -330,3 +330,40 @@ const subscribe = async () => {
 
 onMounted(fetchPlan);
 </script>
+
+<style scoped>
+.show-plan-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.12), transparent 34rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+    color: #0F172A;
+}
+
+.show-plan-page .border-black {
+    border-color: #DCE8F5 !important;
+}
+
+.show-plan-page .text-black {
+    color: #06142A !important;
+}
+
+.show-plan-page .bg-black {
+    background: linear-gradient(135deg, #0D4D97, #1677FF) !important;
+}
+
+.show-plan-page .grid.lg\:grid-cols-5 {
+    overflow: hidden;
+    border-radius: 28px;
+    background: #FFFFFF;
+    box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.show-plan-page button,
+.show-plan-page a {
+    border-radius: 999px;
+}
+
+.show-plan-page .border-t {
+    border-color: #DCE8F5 !important;
+}
+</style>

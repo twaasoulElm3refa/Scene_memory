@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-page">
+  <div class="scemory-page contact-page">
     <!-- Main Contact Section -->
     <section class="contact-section">
       <div class="container">
@@ -1304,5 +1304,43 @@ export default {
   .faq-card {
     padding: 24px 20px;
   }
+}
+
+.contact-page {
+  background:
+    radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 30rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.page-badge {
+  border-color: #CFE2F6;
+  background: #EAF4FF;
+  color: #0D4D97;
+}
+
+.page-title,
+.card-title,
+.info-title {
+  color: #06142A;
+}
+
+.contact-form-card,
+.contact-info-card,
+.info-card,
+.faq-card {
+  border-color: #E5EDF6;
+  box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #0D4D97, #1677FF);
+  box-shadow: 0 14px 30px rgba(22, 119, 255, 0.18);
+}
+
+.form-control:focus,
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #1677FF;
+  box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
 }
 </style>

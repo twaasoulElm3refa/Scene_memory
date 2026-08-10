@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-white py-16 px-4">
+<div class="scemory-page plans-page min-h-screen bg-white py-16 px-4">
         <!-- Header -->
         <div class="text-center mb-14">
             <h1 class="text-4xl font-bold text-black mb-3 tracking-tight">
@@ -21,7 +21,7 @@
         <!-- Error -->
         <div v-else-if="error" class="max-w-md mx-auto text-center py-16">
             <div class="text-red-600 text-5xl mb-4">
-                ⚠️
+                !
             </div>
 
             <p class="text-red-600 text-lg">
@@ -297,26 +297,26 @@ const getPlanIcon = (plan, index) => {
     const name = normalizePlanName(plan);
 
     if (name === 'free') {
-        return '🌱';
+        return 'F';
     }
 
     if (name === 'basic') {
-        return '📚';
+        return 'B';
     }
 
     if (name === 'professional' || name === 'pro') {
-        return '💎';
+        return 'P';
     }
 
     if (name === 'premium') {
-        return '🚀';
+        return 'A';
     }
 
     if (isCustomPlan(plan)) {
-        return '⚙️';
+        return 'C';
     }
 
-    const fallbackIcons = ['🌱', '⚡', '🚀', '⚙️'];
+    const fallbackIcons = ['F', 'B', 'P', 'C'];
 
     return fallbackIcons[index % fallbackIcons.length];
 };
@@ -374,3 +374,56 @@ const fetchPlans = async () => {
 
 onMounted(fetchPlans);
 </script>
+
+<style scoped>
+.plans-page {
+    background:
+        radial-gradient(circle at 85% 10%, rgba(48, 168, 255, 0.06), transparent 28rem),
+        linear-gradient(180deg, var(--scemory-surface), var(--scemory-surface-soft) 46%, var(--scemory-surface)) !important;
+}
+
+.plans-page h1 {
+    color: var(--scemory-heading) !important;
+}
+
+.plans-page > div.text-center p {
+    color: var(--scemory-muted) !important;
+}
+
+.plans-page [class*="rounded-3xl"] {
+    border-color: var(--scemory-border-soft) !important;
+    background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface)) !important;
+    color: var(--scemory-text) !important;
+    box-shadow: var(--scemory-shadow);
+}
+
+.plans-page [class*="rounded-3xl"]:hover {
+    transform: translateY(-2px);
+    border-color: var(--scemory-border) !important;
+    box-shadow: var(--scemory-shadow-hover) !important;
+}
+
+.plans-page [class*="bg-black"],
+.plans-page [class*="border-black"] {
+    background: linear-gradient(145deg, var(--scemory-surface), var(--scemory-surface-soft)) !important;
+    border-color: rgba(22, 119, 255, 0.26) !important;
+    color: var(--scemory-heading) !important;
+}
+
+.plans-page .text-white,
+.plans-page .text-white\/70 {
+    color: var(--scemory-text) !important;
+}
+
+.plans-page button {
+    background: linear-gradient(135deg, var(--scemory-primary), var(--scemory-blue)) !important;
+    border: 1px solid rgba(22, 119, 255, 0.22) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 8px 20px rgba(13, 77, 151, 0.16);
+}
+
+.plans-page button:hover {
+    background: linear-gradient(135deg, var(--scemory-blue), var(--scemory-light-blue)) !important;
+    transform: translateY(-1px);
+}
+</style>

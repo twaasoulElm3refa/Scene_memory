@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
+  <div class="scemory-page legal-page min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4">
     <div class="max-w-4xl mx-auto">
       
       <!-- Hero Section -->
       <div class="text-center mb-12">
         <!-- <div class="flex justify-center mb-6">
           <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-            <span class="text-3xl">🎞️</span>
+            <span class="text-3xl">SC</span>
           </div>
         </div> -->
         <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
@@ -43,14 +43,14 @@
                       : 'hover:bg-blue-50 text-gray-600'
                   ]"
                 >
-                  <span class="text-lg ml-2">{{ section.icon }}</span>
+                  <span class="text-xs font-bold ml-2">{{ section.icon }}</span>
                   <span>{{ section.title }}</span>
                 </button>
               </nav>
               
               <!-- Quick Info Box -->
               <div class="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
-                <h4 class="font-bold text-gray-700 mb-2">⚡ ملخص سريع</h4>
+                <h4 class="font-bold text-gray-700 mb-2">ملخص سريع</h4>
                 <ul class="space-y-2 text-sm text-gray-600">
                   <li class="flex items-center">
                     <span class="text-green-500 ml-2">✓</span>
@@ -75,7 +75,7 @@
             <section id="intro" class="mb-12 scroll-mt-20">
               <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl flex items-center justify-center ml-4">
-                  <span class="text-2xl">👋</span>
+                  <span class="text-xs font-bold">INTRO</span>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800">مرحباً بك في Scene Memory</h2>
               </div>
@@ -93,7 +93,7 @@
             <section id="data-collection" class="mb-12 scroll-mt-20">
               <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-gradient-to-r from-green-100 to-teal-100 rounded-xl flex items-center justify-center ml-4">
-                  <span class="text-2xl">📊</span>
+                  <span class="text-xs font-bold">DATA</span>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800">البيانات التي نجمعها</h2>
               </div>
@@ -102,7 +102,7 @@
                 <div class="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
                   <div class="flex items-center mb-4">
                     <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center ml-3">
-                      <span class="text-xl">👤</span>
+                      <span class="text-xs font-bold">USER</span>
                     </div>
                     <h3 class="font-bold text-gray-800">معلومات الحساب</h3>
                   </div>
@@ -125,7 +125,7 @@
                 <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
                   <div class="flex items-center mb-4">
                     <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center ml-3">
-                      <span class="text-xl">🎞️</span>
+                      <span class="text-xs font-bold">MEDIA</span>
                     </div>
                     <h3 class="font-bold text-gray-800">الذكريات والأحداث</h3>
                   </div>
@@ -152,7 +152,7 @@
 
               <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-xl border">
                 <div class="flex items-center mb-4">
-                  <span class="text-2xl ml-3">⚠️</span>
+                  <span class="text-xs font-bold ml-3">NOTE</span>
                   <h3 class="font-bold text-gray-800">ماذا لا نجمع</h3>
                 </div>
                 <p class="text-gray-700">
@@ -165,7 +165,7 @@
             <section id="data-usage" class="mb-12 scroll-mt-20">
               <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl flex items-center justify-center ml-4">
-                  <span class="text-2xl">🎯</span>
+                  <span class="text-xs font-bold">USE</span>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800">كيف نستخدم بياناتك</h2>
               </div>
@@ -173,7 +173,7 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="text-center p-6 bg-gradient-to-b from-white to-purple-50 rounded-xl border border-purple-100 hover:shadow-md transition-shadow">
                   <div class="w-16 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-2xl">💾</span>
+                    <span class="text-xs font-bold">SAVE</span>
                   </div>
                   <h3 class="font-bold text-gray-800 mb-3">تخزين الذكريات</h3>
                   <p class="text-gray-600 text-sm">نحفظ أحداثك وآمنة لتعود إليها متى شئت</p>
@@ -181,7 +181,7 @@
 
                 <div class="text-center p-6 bg-gradient-to-b from-white to-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
                   <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-2xl">🔔</span>
+                    <span class="text-xs font-bold">REM</span>
                   </div>
                   <h3 class="font-bold text-gray-800 mb-3">تذكيرات ذكية</h3>
                   <p class="text-gray-600 text-sm">نذكرك بالأحداث المهمة في تواريخها</p>
@@ -189,7 +189,7 @@
 
                 <div class="text-center p-6 bg-gradient-to-b from-white to-green-50 rounded-xl border border-green-100 hover:shadow-md transition-shadow">
                   <div class="w-16 h-16 bg-gradient-to-r from-green-100 to-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="text-2xl">📈</span>
+                    <span class="text-xs font-bold">UP</span>
                   </div>
                   <h3 class="font-bold text-gray-800 mb-3">تحسين التطبيق</h3>
                   <p class="text-gray-600 text-sm">نطور تجربتك بناءً على استخدامك الآمن</p>
@@ -201,7 +201,7 @@
             <section id="data-protection" class="mb-12 scroll-mt-20">
               <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-gradient-to-r from-red-100 to-orange-100 rounded-xl flex items-center justify-center ml-4">
-                  <span class="text-2xl">🛡️</span>
+                  <span class="text-xs font-bold">SAFE</span>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800">كيف نحمي بياناتك</h2>
               </div>
@@ -210,7 +210,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                      <span class="text-red-500 ml-2">🔐</span>
+                      <span class="text-red-500 ml-2 text-xs font-bold">ENC</span>
                       <span>التشفير المتقدم</span>
                     </h3>
                     <ul class="space-y-3 text-gray-700">
@@ -231,7 +231,7 @@
 
                   <div>
                     <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                      <span class="text-orange-500 ml-2">👁️</span>
+                      <span class="text-orange-500 ml-2 text-xs font-bold">VIEW</span>
                       <span>الخصوصية</span>
                     </h3>
                     <ul class="space-y-3 text-gray-700">
@@ -254,7 +254,7 @@
                 <div class="mt-8 pt-6 border-t border-red-200">
                   <div class="flex items-center">
                     <div class="w-10 h-10 bg-gradient-to-r from-red-200 to-orange-200 rounded-full flex items-center justify-center ml-4">
-                      <span class="text-xl">📋</span>
+                      <span class="text-xs font-bold">STD</span>
                     </div>
                     <h4 class="font-bold text-gray-800">التزامنا بالأمان</h4>
                   </div>
@@ -269,7 +269,7 @@
             <section id="your-rights" class="mb-12 scroll-mt-20">
               <div class="flex items-center mb-6">
                 <div class="w-12 h-12 bg-gradient-to-r from-yellow-100 to-amber-100 rounded-xl flex items-center justify-center ml-4">
-                  <span class="text-2xl">⚖️</span>
+                  <span class="text-xs font-bold">LAW</span>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800">حقوقك</h2>
               </div>
@@ -279,7 +279,7 @@
                      class="flex items-start p-5 bg-gradient-to-r from-white to-gray-50 rounded-xl border hover:shadow-sm transition-all">
                   <div class="w-12 h-12 rounded-lg flex items-center justify-center ml-4 flex-shrink-0"
                        :class="right.color">
-                    <span class="text-xl">{{ right.icon }}</span>
+                    <span class="text-xs font-bold">{{ right.icon }}</span>
                   </div>
                   <div>
                     <h3 class="font-bold text-gray-800 mb-2">{{ right.title }}</h3>
@@ -294,7 +294,7 @@
               <div class="bg-gradient-to-r from-gray-100 to-white p-8 rounded-2xl border">
                 <div class="flex items-center mb-6">
                   <div class="w-12 h-12 bg-gradient-to-r from-gray-200 to-blue-200 rounded-xl flex items-center justify-center ml-4">
-                    <span class="text-2xl">🔄</span>
+                    <span class="text-xs font-bold">UPD</span>
                   </div>
                   <h2 class="text-2xl font-bold text-gray-800">تحديثات السياسة</h2>
                 </div>
@@ -305,7 +305,7 @@
                   </p>
                   <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                     <div class="flex items-center">
-                      <span class="text-blue-500 text-2xl ml-3">📅</span>
+                      <span class="text-blue-500 text-xs font-bold ml-3">DATE</span>
                       <div>
                         <p class="font-bold text-gray-800">تاريخ آخر تحديث</p>
                         <p class="text-gray-600">{{ lastUpdateDate }}</p>
@@ -327,7 +327,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div class="text-center">
                     <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span class="text-2xl">📧</span>
+                      <span class="text-xs font-bold">MAIL</span>
                     </div>
                     <h3 class="font-bold text-gray-800 mb-2">البريد الإلكتروني</h3>
                     <a href="mailto:privacy@scenememory.com" class="text-blue-600 hover:text-blue-800">
@@ -338,7 +338,7 @@
 
                   <div class="text-center">
                     <div class="w-16 h-16 bg-gradient-to-r from-green-100 to-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span class="text-2xl">💬</span>
+                      <span class="text-xs font-bold">CHAT</span>
                     </div>
                     <h3 class="font-bold text-gray-800 mb-2">الدعم الفني</h3>
                     <a href="#" class="text-green-600 hover:text-green-800">
@@ -360,7 +360,7 @@
             <div class="mt-12 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200">
               <div class="flex items-center justify-between flex-wrap">
                 <div class="flex items-center mb-4 md:mb-0">
-                  <span class="text-2xl text-green-600 ml-3">✅</span>
+                  <span class="text-xs font-bold text-green-600 ml-3">OK</span>
                   <div>
                     <p class="font-bold text-gray-800">باستخدامك تطبيق Scene Memory، فإنك توافق على سياسة الخصوصية هذه</p>
                     <p class="text-gray-600 text-sm">نشكرك على ثقتك بنا لحفظ ذكرياتك الثمينة</p>
@@ -391,13 +391,13 @@ const activeSection = ref('intro')
 const lastUpdateDate = ref('1 يناير 2024')
 
 const sections = [
-  { id: 'intro', title: 'مقدمة', icon: '👋' },
-  { id: 'data-collection', title: 'البيانات المجمعة', icon: '📊' },
-  { id: 'data-usage', title: 'استخدام البيانات', icon: '🎯' },
-  { id: 'data-protection', title: 'حماية البيانات', icon: '🛡️' },
-  { id: 'your-rights', title: 'حقوقك', icon: '⚖️' },
-  { id: 'updates', title: 'التحديثات', icon: '🔄' },
-  { id: 'contact', title: 'اتصل بنا', icon: '📞' }
+  { id: 'intro', title: 'مقدمة', icon: 'IN' },
+  { id: 'data-collection', title: 'البيانات المجمعة', icon: 'DA' },
+  { id: 'data-usage', title: 'استخدام البيانات', icon: 'US' },
+  { id: 'data-protection', title: 'حماية البيانات', icon: 'PR' },
+  { id: 'your-rights', title: 'حقوقك', icon: 'RT' },
+  { id: 'updates', title: 'التحديثات', icon: 'UP' },
+  { id: 'contact', title: 'اتصل بنا', icon: 'CO' }
 ]
 
 const rights = [
@@ -405,35 +405,35 @@ const rights = [
     id: 1,
     title: 'حق الوصول',
     description: 'يمكنك الوصول إلى جميع بياناتك الشخصية المخزنة في أي وقت',
-    icon: '👁️',
+    icon: 'AC',
     color: 'bg-gradient-to-r from-blue-100 to-cyan-100'
   },
   {
     id: 2,
     title: 'حق التصحيح',
     description: 'يمكنك طلب تصحيح أي بيانات غير دقيقة أو غير مكتملة',
-    icon: '✏️',
+    icon: 'ED',
     color: 'bg-gradient-to-r from-green-100 to-teal-100'
   },
   {
     id: 3,
     title: 'حق الحذف',
     description: 'يمكنك طلب حذف بياناتك الشخصية في أي وقت',
-    icon: '🗑️',
+    icon: 'DL',
     color: 'bg-gradient-to-r from-red-100 to-pink-100'
   },
   {
     id: 4,
     title: 'حق التنقل',
     description: 'يمكنك نقل بياناتك إلى خدمات أخرى عند الرغبة',
-    icon: '📤',
+    icon: 'MV',
     color: 'bg-gradient-to-r from-purple-100 to-indigo-100'
   },
   {
     id: 5,
     title: 'حق الاعتراض',
     description: 'يمكنك الاعتراض على معالجة بياناتك لأغراض معينة',
-    icon: '✋',
+    icon: 'NO',
     color: 'bg-gradient-to-r from-yellow-100 to-amber-100'
   }
 ]
@@ -495,12 +495,12 @@ onUnmounted(() => {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #667eea, #764ba2);
+  background: linear-gradient(to bottom, #0D4D97, #30A8FF);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #5a67d8, #6b46c1);
+  background: linear-gradient(to bottom, #1677FF, #30A8FF);
 }
 
 /* Smooth transitions */
@@ -510,9 +510,35 @@ onUnmounted(() => {
 
 /* Gradient text for important elements */
 .gradient-text {
-  background: linear-gradient(to right, #667eea, #764ba2);
+  background: linear-gradient(to right, #0D4D97, #1677FF);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.legal-page {
+  background:
+    radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 30rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.legal-page h1,
+.legal-page h2,
+.legal-page h3 {
+  color: #06142A;
+}
+
+.legal-page .bg-white {
+  border: 1px solid #E5EDF6;
+  box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.legal-page .text-purple-600,
+.legal-page .text-purple-700 {
+  color: #0D4D97 !important;
+}
+
+.legal-page .bg-purple-100 {
+  background: #EAF4FF !important;
 }
 
 /* Responsive design improvements */

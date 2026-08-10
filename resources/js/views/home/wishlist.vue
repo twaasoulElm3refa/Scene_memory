@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto px-4 py-8" dir="rtl">
+    <div class="scemory-page wishlist-page container mx-auto px-4 py-8" dir="rtl">
 
         <h1 class="mb-8 text-center text-3xl font-bold text-gray-800 md:text-4xl">
             {{ $t('wishlist.title') }}
@@ -376,5 +376,43 @@ onMounted(() => {
     padding: 4rem 1rem;
     color: #64748b;
     font-size: 1.1rem;
+}
+
+.wishlist-page {
+    max-width: 1200px;
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 30rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.wishlist-page h1,
+.page-title {
+    color: #06142A;
+}
+
+.wishlist-page .group,
+.wishlist-card {
+    border: 1px solid #E5EDF6;
+    border-radius: 22px;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.wishlist-page .group:hover,
+.wishlist-card:hover {
+    border-color: #CFE2F6;
+    box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.pagination button {
+    border-color: #DCE8F5;
+    border-radius: 999px;
+    color: #0D4D97;
+}
+
+.empty-state,
+.loading {
+    border: 1px dashed #CFE2F6;
+    border-radius: 24px;
+    background: #FFFFFF;
 }
 </style>

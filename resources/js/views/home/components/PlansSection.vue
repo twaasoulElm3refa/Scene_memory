@@ -1,15 +1,15 @@
 <template>
   <section
     v-if="licenceName === 'free'"
-    class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10"
+    class="scemory-plans-section container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10"
   >
     <!-- Section Header -->
     <div class="text-center mb-10">
       <div
         class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 shadow-md"
       >
-        <span class="text-lg animate-pulse" aria-hidden="true">
-          &#9889;
+        <span class="text-xs font-extrabold" aria-hidden="true">
+          PLAN
         </span>
 
         {{ $t("plans.chooseYourPlan") || "Choose your plan" }}
@@ -534,3 +534,60 @@ const handlePlanClick = (plan) => {
   emit("open-plan", plan.slug);
 };
 </script>
+
+<style scoped>
+.scemory-plans-section {
+  color: var(--scemory-text);
+}
+
+.scemory-plans-section > .text-center > div:first-child {
+  background: var(--scemory-active) !important;
+  border: 1px solid var(--scemory-border);
+  color: var(--scemory-primary) !important;
+  box-shadow: var(--scemory-shadow-sm);
+}
+
+.scemory-plans-section h2,
+.scemory-plans-section h3 {
+  color: var(--scemory-heading) !important;
+}
+
+.scemory-plans-section article {
+  border-color: var(--scemory-border-soft) !important;
+  background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface)) !important;
+  box-shadow: var(--scemory-shadow);
+}
+
+.scemory-plans-section article:hover {
+  transform: translateY(-2px);
+  border-color: var(--scemory-border) !important;
+  box-shadow: var(--scemory-shadow-hover);
+}
+
+.scemory-plans-section .shadow-blue-100 {
+  box-shadow: 0 14px 34px rgba(13, 77, 151, 0.10) !important;
+}
+
+.scemory-plans-section .text-purple-600,
+.scemory-plans-section .text-amber-600,
+.scemory-plans-section .text-blue-600 {
+  color: var(--scemory-primary) !important;
+}
+
+.scemory-plans-section .bg-purple-100,
+.scemory-plans-section .bg-amber-100,
+.scemory-plans-section .bg-blue-100,
+.scemory-plans-section .bg-gray-100 {
+  background: var(--scemory-active) !important;
+  color: var(--scemory-primary) !important;
+}
+
+.scemory-plans-section button.bg-gray-900,
+.scemory-plans-section button.bg-blue-600,
+.scemory-plans-section button.bg-purple-600 {
+  background: linear-gradient(135deg, var(--scemory-primary), var(--scemory-blue)) !important;
+  color: #FFFFFF !important;
+  border-color: rgba(22, 119, 255, 0.22) !important;
+  box-shadow: 0 8px 20px rgba(13, 77, 151, 0.16);
+}
+</style>

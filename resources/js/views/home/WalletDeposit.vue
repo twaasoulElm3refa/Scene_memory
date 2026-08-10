@@ -1,5 +1,5 @@
 <template>
-    <div class="deposit-page">
+    <div class="scemory-page deposit-page">
         <!-- Current Balance -->
         <div class="balance-card">
             <p class="label">رصيدك الحالي</p>
@@ -297,5 +297,81 @@ hr {
     font-size: 13px;
     color: #e24b4a;
     margin-top: 6px;
+}
+
+.deposit-page {
+    max-width: 620px;
+    padding: 3rem 1rem;
+}
+
+.balance-card {
+    border: 1px solid #DCE8F5;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at top right, rgba(48, 168, 255, 0.18), transparent 16rem),
+        linear-gradient(135deg, #FFFFFF, #F4F8FC);
+    box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.balance-card .label,
+.balance-card .currency,
+.input-group label,
+.summary-row span:first-child {
+    color: #64748B;
+}
+
+.balance-card .amount,
+.deposit-card h2 {
+    color: #06142A;
+    font-weight: 800;
+}
+
+.deposit-card {
+    border: 1px solid #E5EDF6;
+    border-radius: 28px;
+    padding: 2rem;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.preset-btn {
+    border-color: #DCE8F5;
+    border-radius: 14px;
+    color: #0F172A;
+}
+
+.preset-btn:hover {
+    border-color: #CFE2F6;
+    background: #F4F8FC;
+}
+
+.preset-btn.active {
+    border: 1px solid #1677FF;
+    color: #0D4D97;
+    background: #EAF4FF;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.08);
+}
+
+.amount-wrap input,
+.input-group input[type="text"] {
+    min-height: 46px;
+    border-color: #DCE8F5;
+    border-radius: 14px;
+}
+
+.amount-wrap input:focus,
+.input-group input[type="text"]:focus {
+    border-color: #1677FF;
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
+}
+
+hr {
+    border-top-color: #DCE8F5;
+}
+
+.pay-btn {
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0D4D97, #1677FF);
+    font-weight: 800;
+    box-shadow: 0 14px 30px rgba(22, 119, 255, 0.20);
 }
 </style>

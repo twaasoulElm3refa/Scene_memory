@@ -1,5 +1,5 @@
 <template>
-    <div dir="rtl" class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div dir="rtl" class="scemory-page country-page min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <div v-if="loading" class="flex items-center justify-center min-h-screen">
             <div class="text-center">
                 <div class="relative">
@@ -436,7 +436,7 @@ export default {
 
                 const container = this.$refs.mapContainer;
                 if (!container) {
-                    console.warn('⚠️ mapContainer ref is missing after render');
+                    console.warn('mapContainer ref is missing after render');
                     return;
                 }
 
@@ -800,7 +800,7 @@ export default {
             const container = this.$refs.mapContainer;
 
             if (!container) {
-                console.warn('⚠️ mapContainer ref is missing');
+                console.warn('mapContainer ref is missing');
                 return;
             }
 
@@ -940,11 +940,11 @@ export default {
     display: block;
     width: 30px;
     height: 30px;
-    background: #000000;
-    border: 3px solid #111827;
+    background: #1677FF;
+    border: 3px solid #0D4D97;
     border-radius: 9999px 9999px 9999px 0;
     transform: rotate(-45deg);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 20px rgba(22, 119, 255, 0.25);
     position: relative;
 }
 
@@ -957,5 +957,36 @@ export default {
     border-radius: 9999px;
     top: 3px;
     left: 3px;
+}
+
+.country-page {
+    background:
+        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 32rem),
+        linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.country-page h1,
+.country-page h2,
+.country-page h3 {
+    color: #06142A;
+}
+
+.country-page .group,
+.country-page .rounded-2xl,
+.country-page .rounded-3xl {
+    border-color: #E5EDF6;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.country-map {
+    overflow: hidden;
+    border: 1px solid #DCE8F5;
+    border-radius: 28px;
+    box-shadow: 0 18px 55px rgba(13, 77, 151, 0.12);
+}
+
+.country-map :deep(.maplibregl-popup-content) {
+    border: 1px solid #DCE8F5;
+    box-shadow: 0 10px 35px rgba(13, 77, 151, 0.12);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+  <div class="scemory-page who-page min-h-screen bg-gradient-to-b from-gray-50 to-white">
     <!-- Hero Section -->
     <section
       class="relative overflow-hidden bg-gradient-to-br from-purple-900 via-blue-800 to-cyan-700 text-white"
@@ -12,7 +12,7 @@
               <div
                 class="w-20 h-20 bg-gradient-to-br from-white/20 to-white/10 rounded-2xl backdrop-blur-sm flex items-center justify-center mx-auto lg:mx-0"
               >
-                <span class="text-4xl">🎞️</span>
+                <span class="text-xl font-extrabold tracking-normal">SC</span>
               </div>
             </div>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
@@ -49,7 +49,7 @@
                   <div
                     class="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-2xl p-6 backdrop-blur-sm"
                   >
-                    <span class="text-3xl mb-4 block">✨</span>
+                    <span class="text-xs font-extrabold mb-4 block text-[#0D4D97]">01</span>
                     <h3 class="font-bold text-lg mb-2">
                       {{ $t("hero.feature_organized") }}
                     </h3>
@@ -60,7 +60,7 @@
                   <div
                     class="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl p-6 backdrop-blur-sm mt-8"
                   >
-                    <span class="text-3xl mb-4 block">🔒</span>
+                    <span class="text-xs font-extrabold mb-4 block text-[#0D4D97]">02</span>
                     <h3 class="font-bold text-lg mb-2">
                       {{ $t("hero.feature_private") }}
                     </h3>
@@ -71,7 +71,7 @@
                   <div
                     class="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl p-6 backdrop-blur-sm"
                   >
-                    <span class="text-3xl mb-4 block">🎯</span>
+                    <span class="text-xs font-extrabold mb-4 block text-[#0D4D97]">03</span>
                     <h3 class="font-bold text-lg mb-2">
                       {{ $t("hero.feature_reminders") }}
                     </h3>
@@ -82,7 +82,7 @@
                   <div
                     class="bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-2xl p-6 backdrop-blur-sm mt-8"
                   >
-                    <span class="text-3xl mb-4 block">🚀</span>
+                    <span class="text-xs font-extrabold mb-4 block text-[#0D4D97]">04</span>
                     <h3 class="font-bold text-lg mb-2">
                       {{ $t("hero.feature_evolving") }}
                     </h3>
@@ -140,7 +140,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div class="relative">
             <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 h-full">
-              <div class="text-5xl mb-6">🎬</div>
+              <div class="text-sm font-extrabold text-[#0D4D97] mb-6">01</div>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">
                 {{ $t("our_story.stage1_title") }}
               </h3>
@@ -162,7 +162,7 @@
 
           <div class="relative">
             <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 h-full">
-              <div class="text-5xl mb-6">🚀</div>
+              <div class="text-sm font-extrabold text-[#0D4D97] mb-6">02</div>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">
                 {{ $t("our_story.stage2_title") }}
               </h3>
@@ -187,7 +187,7 @@
 
           <div class="relative">
             <div class="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 h-full">
-              <div class="text-5xl mb-6">🌟</div>
+              <div class="text-sm font-extrabold text-[#0D4D97] mb-6">03</div>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">
                 {{ $t("our_story.stage3_title") }}
               </h3>
@@ -218,7 +218,7 @@
             <div
               class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-bold mb-6"
             >
-              <span class="ml-2">🎯</span>
+              <span class="ml-2 text-xs font-extrabold">M</span>
               <span>{{ $t("mission_vision.mission_badge") }}</span>
             </div>
             <h2 class="text-3xl font-bold text-gray-800 mb-6">
@@ -233,7 +233,7 @@
                 <div
                   class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm ml-4 flex-shrink-0"
                 >
-                  <span class="text-2xl">💖</span>
+                  <span class="text-sm font-extrabold text-[#0D4D97]">01</span>
                 </div>
                 <div>
                   <h4 class="font-bold text-gray-800 mb-2">
@@ -249,7 +249,7 @@
                 <div
                   class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm ml-4 flex-shrink-0"
                 >
-                  <span class="text-2xl">🛡️</span>
+                  <span class="text-sm font-extrabold text-[#0D4D97]">02</span>
                 </div>
                 <div>
                   <h4 class="font-bold text-gray-800 mb-2">
@@ -265,7 +265,7 @@
                 <div
                   class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm ml-4 flex-shrink-0"
                 >
-                  <span class="text-2xl">🌱</span>
+                  <span class="text-sm font-extrabold text-[#0D4D97]">03</span>
                 </div>
                 <div>
                   <h4 class="font-bold text-gray-800 mb-2">
@@ -285,7 +285,7 @@
             <div
               class="inline-flex items-center px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-bold mb-6"
             >
-              <span class="ml-2">✨</span>
+              <span class="ml-2 text-xs font-extrabold">V</span>
               <span>{{ $t("mission_vision.vision_badge") }}</span>
             </div>
             <h2 class="text-3xl font-bold text-gray-800 mb-6">
@@ -389,7 +389,7 @@
                     :class="member.color"
                     class="w-full h-full flex items-center justify-center"
                   >
-                    <span class="text-3xl">{{ member.emoji }}</span>
+                    <span class="text-xl font-extrabold text-[#0D4D97]">{{ member.initials }}</span>
                   </div>
                 </div>
                 <div
@@ -410,19 +410,19 @@
                   href="#"
                   class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-blue-100 hover:text-blue-600 transition"
                 >
-                  <span class="text-lg">💼</span>
+                  <span class="text-xs font-bold">IN</span>
                 </a>
                 <a
                   href="#"
                   class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-green-100 hover:text-green-600 transition"
                 >
-                  <span class="text-lg">🐦</span>
+                  <span class="text-xs font-bold">X</span>
                 </a>
                 <a
                   href="#"
                   class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-purple-100 hover:text-purple-600 transition"
                 >
-                  <span class="text-lg">💻</span>
+                  <span class="text-xs font-bold">GH</span>
                 </a>
               </div>
             </div>
@@ -455,7 +455,7 @@
               class="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-6 mx-auto"
               :class="value.bgColor"
             >
-              {{ value.icon }}
+              {{ value.id.toString().padStart(2, "0") }}
             </div>
             <h3 class="text-xl font-bold text-gray-800 text-center mb-4">
               {{ value.title }}
@@ -497,8 +497,8 @@
           class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl p-8 md:p-12 text-white text-center relative overflow-hidden"
         >
           <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-10 right-10 text-6xl">🎞️</div>
-            <div class="absolute bottom-10 left-10 text-6xl">✨</div>
+            <div class="absolute top-10 right-10 text-4xl font-extrabold">SC</div>
+            <div class="absolute bottom-10 left-10 text-4xl font-extrabold">AI</div>
           </div>
 
           <div class="relative z-10">
@@ -541,7 +541,7 @@ const teamMembers = [
     name: "أحمد خالد",
     role: "المؤسس والرئيس التنفيذي",
     bio: "مؤمن بقوة الذكريات وتأثيرها على حياتنا",
-    emoji: "👨‍💼",
+    emoji: "AK",
     initials: "AK",
     color: "bg-gradient-to-r from-blue-100 to-cyan-100",
   },
@@ -550,7 +550,7 @@ const teamMembers = [
     name: "سارة محمد",
     role: "مديرة التصميم",
     bio: "تعمل على جعل تجربة حفظ الذكريات جميلة وسلسة",
-    emoji: "👩‍🎨",
+    emoji: "SM",
     initials: "SM",
     color: "bg-gradient-to-r from-purple-100 to-pink-100",
   },
@@ -559,7 +559,7 @@ const teamMembers = [
     name: "محمد علي",
     role: "رئيس المطورين",
     bio: "يضمن أن كل سطر كود يحمي خصوصيتك",
-    emoji: "👨‍💻",
+    emoji: "MA",
     initials: "MA",
     color: "bg-gradient-to-r from-green-100 to-emerald-100",
   },
@@ -568,7 +568,7 @@ const teamMembers = [
     name: "فاطمة حسن",
     role: "مديرة خدمة العملاء",
     bio: "تساعدك في كل خطوة من رحلتك معنا",
-    emoji: "👩‍💼",
+    emoji: "FH",
     initials: "FH",
     color: "bg-gradient-to-r from-orange-100 to-red-100",
   },
@@ -579,28 +579,28 @@ const values = [
     id: 1,
     title: "الخصوصية أولاً",
     description: "ذكرياتك تبقى خاصة بك، ونحميها بأفضل تقنيات التشفير",
-    icon: "🔒",
+    icon: "01",
     bgColor: "bg-gradient-to-r from-blue-100 to-cyan-100",
   },
   {
     id: 2,
     title: "البساطة",
     description: "نجعل حفظ الذكريات سهلاً وسلساً للجميع",
-    icon: "✨",
+    icon: "02",
     bgColor: "bg-gradient-to-r from-purple-100 to-pink-100",
   },
   {
     id: 3,
     title: "الابتكار",
     description: "نطور باستمرار لنقدم لك أفضل تجربة ممكنة",
-    icon: "🚀",
+    icon: "03",
     bgColor: "bg-gradient-to-r from-green-100 to-emerald-100",
   },
   {
     id: 4,
     title: "المجتمع",
     description: "نبني منصة تربط الناس بذكرياتهم وأحبائهم",
-    icon: "🤝",
+    icon: "04",
     bgColor: "bg-gradient-to-r from-orange-100 to-red-100",
   },
 ];
@@ -638,9 +638,100 @@ html {
 .gradient-border {
   border: double 3px transparent;
   background-image: linear-gradient(white, white),
-    linear-gradient(to right, #667eea, #764ba2);
+    linear-gradient(to right, #0D4D97, #30A8FF);
   background-origin: border-box;
   background-clip: padding-box, border-box;
+}
+
+.who-page {
+  background:
+    radial-gradient(circle at 85% 10%, rgba(48, 168, 255, 0.06), transparent 28rem),
+    radial-gradient(circle at 10% 40%, rgba(13, 77, 151, 0.04), transparent 30rem),
+    linear-gradient(180deg, var(--scemory-surface), var(--scemory-surface-soft) 48%, var(--scemory-surface));
+}
+
+.who-page section:first-child {
+  background:
+    radial-gradient(circle at 86% 20%, rgba(48, 168, 255, 0.10), transparent 22rem),
+    linear-gradient(145deg, #FFFFFF, var(--scemory-surface) 55%, var(--scemory-surface-soft)) !important;
+  color: var(--scemory-text) !important;
+  border-bottom: 1px solid var(--scemory-border-soft);
+}
+
+.who-page h1,
+.who-page h2,
+.who-page h3 {
+  letter-spacing: 0;
+  color: var(--scemory-heading) !important;
+}
+
+.who-page section:first-child p,
+.who-page section:first-child h3 {
+  color: var(--scemory-text) !important;
+  opacity: 1 !important;
+}
+
+.who-page section:first-child .text-white,
+.who-page section:first-child .text-white\/30,
+.who-page section:first-child .text-white\/10 {
+  color: var(--scemory-text) !important;
+}
+
+.who-page section:first-child .bg-black\/20 {
+  background: transparent !important;
+}
+
+.who-page section:first-child .bg-white\/10,
+.who-page section:first-child .bg-white\/5,
+.who-page section:first-child .bg-white\/20 {
+  background: rgba(243, 247, 252, 0.86) !important;
+  border-color: var(--scemory-border-soft) !important;
+}
+
+.who-page section:first-child path[fill="white"] {
+  fill: var(--scemory-surface);
+}
+
+.who-page .bg-purple-100,
+.who-page .from-purple-100,
+.who-page .bg-green-100,
+.who-page .from-green-100,
+.who-page .bg-orange-100,
+.who-page .from-orange-100 {
+  background: var(--scemory-active) !important;
+  --tw-gradient-from: var(--scemory-active) !important;
+  --tw-gradient-to: var(--scemory-surface-soft) !important;
+}
+
+.who-page .text-purple-900,
+.who-page .text-purple-700,
+.who-page .text-purple-600,
+.who-page .text-green-700,
+.who-page .text-orange-700 {
+  color: #0D4D97 !important;
+}
+
+.who-page .bg-white {
+  border-color: var(--scemory-border-soft);
+  background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface)) !important;
+  box-shadow: var(--scemory-shadow);
+}
+
+.who-page .from-purple-500,
+.who-page .from-pink-400,
+.who-page .from-cyan-500,
+.who-page .from-orange-500,
+.who-page .from-green-500,
+.who-page .to-pink-500,
+.who-page .to-purple-500,
+.who-page .to-emerald-500,
+.who-page .to-red-500 {
+  --tw-gradient-from: var(--scemory-primary) !important;
+  --tw-gradient-to: var(--scemory-blue) !important;
+}
+
+.who-page .blur-xl {
+  opacity: 0.08 !important;
 }
 
 /* Responsive text sizes */
@@ -660,6 +751,6 @@ html {
 
 /* Smooth transitions */
 * {
-  transition: all 0.3s ease;
+  transition: var(--scemory-transition);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="data-protection-page">
+  <div class="scemory-page legal-page data-protection-page">
     <!-- Header -->
     <header class="app-header">
       <div class="container">
@@ -660,7 +660,40 @@ export default {
 }
 
 .social-links a:hover {
-  color: #bb86fc;
+  color: #30A8FF;
+}
+
+.data-protection-page {
+  background:
+    radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 32rem),
+    linear-gradient(180deg, #FFFFFF, #F8FAFC);
+}
+
+.data-protection-page .app-header,
+.data-protection-page .data-protection-card,
+.data-protection-page .info-card,
+.data-protection-page .contact-card {
+  border: 1px solid #E5EDF6;
+  border-radius: 24px;
+  background: #FFFFFF;
+  box-shadow: 0 10px 35px rgba(13, 77, 151, 0.06);
+}
+
+.data-protection-page h1,
+.data-protection-page h2,
+.data-protection-page h3 {
+  color: #06142A;
+}
+
+.data-protection-page .main-nav a.active,
+.data-protection-page .main-nav a:hover {
+  color: #0D4D97;
+  background: #EAF4FF;
+}
+
+.data-protection-page .card-icon,
+.data-protection-page .logo-icon {
+  background: linear-gradient(135deg, #0D4D97, #1677FF);
 }
 
 /* Responsive */

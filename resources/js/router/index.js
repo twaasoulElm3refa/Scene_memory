@@ -109,7 +109,7 @@ const routes = [
     {
         path: "/:lang/home",
         component: Home,
-        meta: { hideNavbar: false, hideFooter: false },
+        meta: { hideNavbar: true, hideFooter: false },
     },
     {
         path: "/:lang/creator",

@@ -1,14 +1,11 @@
 <template>
-  <section v-if="searched" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+<section v-if="searched" class="scemory-events-section home-events-results max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
     <div class="flex flex-col md:flex-row md:justify-between md:items-end mb-10">
       <div>
         <div
           class="inline-flex items-center gap-2 text-blue-600 bg-blue-50 px-4 py-2 rounded-full text-sm font-medium mb-4"
         >
           <span class="relative flex h-2 w-2">
-            <span
-              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"
-            ></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
           </span>
           {{ $t("events.latestEvents") }}
@@ -29,7 +26,7 @@
       <div
         v-for="i in Number(perPage) || 8"
         :key="`event-skeleton-${i}`"
-        class="bg-white rounded overflow-hidden shadow-lg animate-pulse"
+        class="event-skeleton-card overflow-hidden animate-pulse"
       >
         <div class="aspect-[4/3] bg-gray-200"></div>
         <div class="p-5 space-y-3">
@@ -40,8 +37,8 @@
       </div>
     </div>
 
-    <div v-else-if="displayedEvents.length === 0" class="text-center py-20 bg-gray-50 rounded-3xl">
-      <div class="text-7xl mb-6">&#127917;</div>
+    <div v-else-if="displayedEvents.length === 0" class="empty-events-state text-center py-20 rounded-3xl">
+      <div class="empty-events-mark mb-6">EVENTS</div>
       <h3 class="text-2xl font-bold text-gray-900 mb-3">
         {{ $t("events.noEventsFound") }}
       </h3>
@@ -55,7 +52,7 @@
         <div
           v-for="(event, index) in paginatedEvents"
           :key="event.slug || event.id"
-          class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+          class="home-event-card group rounded-2xl overflow-hidden transition-all duration-300"
         >
           <div class="aspect-[4/3] relative overflow-hidden bg-gray-100">
             <picture>
@@ -63,7 +60,7 @@
               <img
                 :src="event.image_url || fallbackImage"
                 :alt="event.title"
-                class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-300"
                 :loading="index === 0 ? 'eager' : 'lazy'"
                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                 decoding="async"
@@ -206,3 +203,109 @@ const emitPageChange = (page) => {
   emit("update:current-page", page);
 };
 </script>
+
+<style scoped>
+.home-events-results {
+  color: var(--scemory-text);
+}
+
+.home-events-results > div:first-child {
+  border: 1px solid var(--scemory-border-soft);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(247, 250, 253, 0.92));
+  padding: 24px;
+  box-shadow: var(--scemory-shadow-sm);
+}
+
+.home-events-results .inline-flex.bg-blue-50 {
+  border: 1px solid var(--scemory-border);
+  background: var(--scemory-active) !important;
+  color: var(--scemory-primary) !important;
+}
+
+.home-events-results h2,
+.home-events-results h3,
+.home-events-results h4 {
+  color: var(--scemory-heading) !important;
+}
+
+.home-events-results p,
+.home-events-results .text-gray-500,
+.home-events-results .text-gray-600 {
+  color: var(--scemory-muted) !important;
+}
+
+.event-skeleton-card,
+.home-event-card,
+.empty-events-state {
+  border: 1px solid var(--scemory-border-soft);
+  border-radius: 24px;
+  background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface));
+  box-shadow: 0 8px 26px rgba(13, 77, 151, 0.06);
+}
+
+.home-event-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--scemory-border);
+  box-shadow: var(--scemory-shadow-hover);
+}
+
+.home-event-card .bg-white\/90 {
+  border: 1px solid rgba(22, 119, 255, 0.16);
+  background: rgba(221, 236, 249, 0.92) !important;
+  color: var(--scemory-primary) !important;
+}
+
+.home-event-card .border-gray-100 {
+  border-color: var(--scemory-border-soft) !important;
+}
+
+.home-event-card a,
+.home-event-card .text-blue-600 {
+  color: var(--scemory-primary) !important;
+}
+
+.home-event-card a:hover {
+  color: var(--scemory-blue) !important;
+}
+
+.event-skeleton-card .bg-gray-200,
+.event-skeleton-card .bg-gray-100 {
+  background: var(--scemory-surface-soft) !important;
+}
+
+.empty-events-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  min-height: 42px;
+  border: 1px solid var(--scemory-border);
+  border-radius: 999px;
+  background: var(--scemory-active);
+  color: var(--scemory-primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.home-events-results button {
+  border-color: var(--scemory-border) !important;
+  border-radius: 14px !important;
+  background: var(--scemory-control) !important;
+  color: var(--scemory-text) !important;
+  transition: var(--scemory-transition);
+}
+
+.home-events-results button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--scemory-hover) !important;
+}
+
+.home-events-results button.bg-blue-600,
+.home-events-results button[class*="bg-blue-600"] {
+  background: linear-gradient(135deg, var(--scemory-primary), var(--scemory-blue)) !important;
+  color: #FFFFFF !important;
+  border-color: rgba(22, 119, 255, 0.24) !important;
+  box-shadow: 0 8px 20px rgba(13, 77, 151, 0.16);
+}
+</style>
