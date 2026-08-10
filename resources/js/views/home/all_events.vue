@@ -12,12 +12,8 @@
             <div class="header-actions">
                 <div class="filter-control">
                     <label>Event Type:</label>
-                    <select
-                        v-model="eventTypeFilter"
-                        @change="onEventTypeFilterChange"
-                        class="sort-select"
-                        aria-label="Event Type"
-                    >
+                    <select v-model="eventTypeFilter" @change="onEventTypeFilterChange" class="sort-select"
+                        aria-label="Event Type">
                         <option value="all">All Events</option>
                         <option value="real">Real Events</option>
                         <option value="general">General Events</option>
@@ -56,19 +52,10 @@
 
         <!-- Events Grid -->
         <div v-else class="events-grid">
-            <div
-                v-for="event in filteredEvents"
-                :key="event.id"
-                class="event-card"
-                @click="viewEvent(event)"
-            >
+            <div v-for="event in filteredEvents" :key="event.id" class="event-card" @click="viewEvent(event)">
                 <div class="event-image">
-                    <img
-                        :src="getEventImageUrl(event)"
-                        :alt="event.translation?.title || event.title || 'Event image'"
-                        loading="lazy"
-                        @error="onImageError"
-                    />
+                    <img :src="getEventImageUrl(event)" :alt="event.translation?.title || event.title || 'Event image'"
+                        loading="lazy" @error="onImageError" />
 
                     <span class="event-date">
                         {{ formatDate(event.start_date) }}
@@ -79,26 +66,27 @@
                     <div class="event-location">
                         <svg class="location-icon" viewBox="0 0 24 24" fill="currentColor">
                             <path
-                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
-                            />
+                                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                         </svg>
 
                         <span>{{ event.city?.translation?.name || event.city?.name || "-" }}</span>
                     </div>
 
-                    <h3 class="event-title">
-                        {{ event.translation?.title || event.title || "-" }}
-                    </h3>
+                    <h4 class="event-title">
+                        {{
+                            (event.translation?.title || event.title || "-").length > 20
+                                ? (event.translation?.title || event.title || "-").slice(0, 20) + "..."
+                                : (event.translation?.title || event.title || "-")
+                        }}
+                    </h4>
 
                     <p class="event-category">
                         {{ event.sub_categorey?.translation?.name || event.sub_categorey?.name || "-" }}
                     </p>
 
-                    <router-link
-                        :to="getEventRoute(event)"
-                        class="btn-view"
-                        @click.stop
-                    >
+                    <router-link :to="getEventRoute(event)"
+                        class="bg-gray-200 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-300 transition-colors"
+                        @click.stop>
                         تفاصيل الحدث
                     </router-link>
                 </div>
@@ -107,31 +95,18 @@
 
         <!-- Pagination -->
         <div v-if="!loading && !error && lastPage > 1" class="pagination">
-            <button
-                @click="goToPage(currentPage - 1)"
-                :disabled="currentPage === 1"
-                class="page-btn"
-            >
+            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="page-btn">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
                 </svg>
             </button>
 
-            <button
-                v-for="(page, index) in visiblePages"
-                :key="`${page}-${index}`"
-                @click="goToPage(page)"
-                :class="['page-number', { active: page === currentPage }]"
-                :disabled="page === '...'"
-            >
+            <button v-for="(page, index) in visiblePages" :key="`${page}-${index}`" @click="goToPage(page)"
+                :class="['page-number', { active: page === currentPage }]" :disabled="page === '...'">
                 {{ page }}
             </button>
 
-            <button
-                @click="goToPage(currentPage + 1)"
-                :disabled="currentPage === lastPage"
-                class="page-btn"
-            >
+            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === lastPage" class="page-btn">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
                 </svg>
