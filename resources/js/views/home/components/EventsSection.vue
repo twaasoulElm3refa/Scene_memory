@@ -2,20 +2,6 @@
 <section v-if="searched" class="scemory-events-section home-events-results max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
     <div class="flex flex-col gap-5 md:flex-row md:justify-between md:items-end mb-10">
       <div>
-        <div
-          class="inline-flex items-center gap-2 text-blue-600 bg-blue-50 px-4 py-2 rounded-full text-sm font-medium mb-4"
-        >
-          <span class="relative flex h-2 w-2">
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-          </span>
-          {{ $t("events.latestEvents") }}
-        </div>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-          {{ $t("events.recentMemories") }}
-        </h2>
-        <p class="text-gray-500 text-base md:text-lg max-w-xl">
-          <!-- {{ $t("events.discoverAroundYou") }} -->
-        </p>
         <p v-if="totalResults > 0" class="mt-2 text-sm font-medium text-gray-500">
           Showing {{ resultFrom || 0 }} - {{ resultTo || 0 }} of {{ totalResults || 0 }} events
         </p>
@@ -111,7 +97,7 @@
         </div>
       </div>
 
-      <div v-if="totalPages > 1" class="flex flex-wrap justify-center mt-12 gap-2">
+      <!-- <div v-if="totalPages > 1" class="flex flex-wrap justify-center mt-12 gap-2">
         <button
           @click="emitPageChange(Math.max(1, currentPage - 1))"
           :disabled="currentPage <= 1 || loading"
@@ -142,7 +128,7 @@
         >
           {{ $t("pagination.next") }}
         </button>
-      </div>
+      </div> -->
     </template>
   </section>
 </template>

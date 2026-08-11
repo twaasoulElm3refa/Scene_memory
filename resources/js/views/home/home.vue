@@ -120,9 +120,9 @@
 
             <!-- MAP + TRENDING + FILTERS -->
             <section id="explore-events" class="home-after-hero relative pb-10 pt-10">
-                <div class="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
-                    <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start">
-                        <div class="space-y-8">
+                <div class="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+                    <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+                        <div class="space-y-5">
                             <div class="home-discovery-panel">
                                 <UnifiedSearchBar v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
                                     :loading="loadingTags" :tag-suggestions="tagSuggestions"
@@ -1116,18 +1116,18 @@ onUnmounted(() => {
     z-index: 20;
     margin-bottom: 1%;
     overflow: visible;
-    border: none;
+    border: 1px solid rgba(220, 232, 245, 0.86);
     border-radius: 24px;
     background:
         radial-gradient(circle at 88% 10%, rgba(48, 168, 255, 0.06), transparent 30%),
         linear-gradient(145deg, #F7FAFD, #EDF4FA);
-    box-shadow: 0 12px 34px rgba(13, 77, 151, 0.07);
-    padding: 22px;
+    box-shadow: 0 14px 38px rgba(13, 77, 151, 0.06);
+    padding: 20px;
 }
 
 .home-discovery-divider {
     height: 1px;
-    margin: 18px 0;
+    margin: 16px 0;
     background:
         linear-gradient(
             90deg,
