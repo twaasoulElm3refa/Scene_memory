@@ -1,5 +1,9 @@
 <template>
-  <div class="scemory-page gate-page min-h-screen bg-gray-50 p-6 rtl">
+  <div
+    class="scemory-page gate-page min-h-screen bg-gray-50 p-6"
+    :class="{ rtl: isRtl }"
+    :dir="isRtl ? 'rtl' : 'ltr'"
+  >
 
     <!-- Search Bar -->
     <div class="relative max-w-lg mx-auto mb-10">
@@ -149,10 +153,16 @@ export default {
       countries: [],
       randomEvents: [],
       loadingEvents: false,
+      requestController: null,
+      requestKey: '',
     };
   },
 
   computed: {
+    isRtl() {
+      return ['ar', 'fa', 'ur'].includes(this.$route.params.lang);
+    },
+
     filteredCountries() {
       if (!this.searchQuery.trim()) return [];
       const q = this.searchQuery.toLowerCase();
@@ -164,15 +174,45 @@ export default {
   },
 
   methods: {
+    makeRequestKey() {
+      return `${this.$route.params.lang || 'en'}:all`;
+    },
+
+    cancelActiveRequest() {
+      if (this.requestController) {
+        this.requestController.abort();
+        this.requestController = null;
+      }
+    },
+
+    isCanceledRequest(error) {
+      return error?.name === 'CanceledError' || error?.code === 'ERR_CANCELED';
+    },
+
     async fetchRandomEvents() {
+      this.cancelActiveRequest();
+      const requestKey = this.makeRequestKey();
+      const controller = new AbortController();
+      this.requestKey = requestKey;
+      this.requestController = controller;
       this.loadingEvents = true;
+
       try {
-        const { data } = await GateService.getRandomEvents();
+        const { data } = await GateService.getRandomEvents({
+          signal: controller.signal,
+        });
+
+        if (this.requestKey !== requestKey) return;
+
         this.randomEvents = data.data;
       } catch (e) {
+        if (this.isCanceledRequest(e)) return;
         console.error('Error fetching random events:', e);
       } finally {
-        this.loadingEvents = false;
+        if (this.requestKey === requestKey) {
+          this.loadingEvents = false;
+          this.requestController = null;
+        }
       }
     },
 
@@ -213,16 +253,30 @@ export default {
 
     formatDate(dateStr) {
       if (!dateStr) return '';
-      return new Date(dateStr).toLocaleDateString('ar-EG', {
+
+      const date = new Date(dateStr);
+      if (Number.isNaN(date.getTime())) return '';
+
+      return new Intl.DateTimeFormat(this.$route.params.lang || 'en', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      });
+      }).format(date);
     },
   },
 
   mounted() {
     Promise.all([this.fetchRandomEvents(), this.fetchCountries()]);
+  },
+
+  beforeUnmount() {
+    this.cancelActiveRequest();
+  },
+
+  watch: {
+    '$route.params.lang'() {
+      Promise.all([this.fetchRandomEvents(), this.fetchCountries()]);
+    },
   },
 };
 </script>

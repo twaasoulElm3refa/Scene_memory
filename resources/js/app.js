@@ -50,6 +50,7 @@ const messages = {
 };
 
 const DEFAULT_LANG = "en";
+const RTL_LANGS = ["ar", "fa", "ur"];
 
 // تنظيف اللغة
 const normalizeLang = (lang) => {
@@ -90,7 +91,13 @@ router.afterEach((to) => {
 
     // HTML attributes
     document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = RTL_LANGS.includes(lang) ? "rtl" : "ltr";
+
+    localStorage.setItem("language", lang);
+    localStorage.setItem("lang", lang);
+    window.dispatchEvent(new CustomEvent("lang-changed", {
+        detail: { lang },
+    }));
 });
 
 /**
@@ -101,7 +108,9 @@ const initialLang = normalizeLang(router.currentRoute.value.params.lang);
 i18n.global.locale.value = initialLang;
 
 document.documentElement.lang = initialLang;
-document.documentElement.dir = initialLang === "ar" ? "rtl" : "ltr";
+document.documentElement.dir = RTL_LANGS.includes(initialLang) ? "rtl" : "ltr";
+localStorage.setItem("language", initialLang);
+localStorage.setItem("lang", initialLang);
 
 app.use(router);
 app.use(i18n);

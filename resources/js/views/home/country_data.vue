@@ -1,5 +1,8 @@
 <template>
-    <div dir="rtl" class="scemory-page country-page min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div
+        class="scemory-page country-page min-h-screen bg-gradient-to-b from-gray-50 to-white"
+        :dir="isRtl ? 'rtl' : 'ltr'"
+    >
         <div v-if="loading" class="flex items-center justify-center min-h-screen">
             <div class="text-center">
                 <div class="relative">
@@ -183,7 +186,7 @@
 
                             <div class="absolute top-3 right-3">
                                 <span class="text-xs bg-white/95 backdrop-blur-sm text-gray-700 px-3 py-1.5 rounded-full font-medium shadow-sm">
-                                    {{ getDisplayCategoryName(event.sub_categorey) || 'No Category' }}
+                                    {{ getDisplayCategoryName(event.sub_categorey) || $t('country.noCategory') }}
                                 </span>
                             </div>
 
@@ -250,6 +253,8 @@ export default {
             eventMarkers: [],
             isMapInitializing: false,
             maplibrePromise: null,
+            requestController: null,
+            requestKey: '',
         };
     },
 
@@ -260,6 +265,10 @@ export default {
 
         currentLang() {
             return this.$route.params.lang || 'en';
+        },
+
+        isRtl() {
+            return ['ar', 'fa', 'ur'].includes(this.currentLang);
         },
 
         getUniqueCategoriesCount() {
@@ -283,6 +292,7 @@ export default {
     },
 
     beforeUnmount() {
+        this.cancelActiveRequest();
         this.destroyMap();
     },
 
@@ -301,6 +311,21 @@ export default {
     },
 
     methods: {
+        makeRequestKey() {
+            return `${this.currentLang}:${String(this.countryParam).trim().toUpperCase()}`;
+        },
+
+        cancelActiveRequest() {
+            if (this.requestController) {
+                this.requestController.abort();
+                this.requestController = null;
+            }
+        },
+
+        isCanceledRequest(error) {
+            return error?.name === 'CanceledError' || error?.code === 'ERR_CANCELED';
+        },
+
         goToEvent(slug) {
             this.$router.push({
                 name: 'single_event',
@@ -317,7 +342,7 @@ export default {
                 country?.name_en ||
                 country?.english_name ||
                 country?.name ||
-                'Country'
+                this.$t('country.countryFallback')
             );
         },
 
@@ -327,7 +352,7 @@ export default {
                 city?.name_en ||
                 city?.english_name ||
                 city?.name ||
-                'City'
+                this.$t('country.cityFallback')
             );
         },
 
@@ -347,7 +372,7 @@ export default {
                 event?.title_en ||
                 event?.english_title ||
                 event?.title ||
-                'Event'
+                this.$t('country.eventFallback')
             );
         },
 
@@ -385,6 +410,11 @@ export default {
         },
 
         async fetchData() {
+            this.cancelActiveRequest();
+            const requestKey = this.makeRequestKey();
+            const controller = new AbortController();
+            this.requestKey = requestKey;
+            this.requestController = controller;
             this.loading = true;
             this.error = null;
             this.country = null;
@@ -393,8 +423,11 @@ export default {
             this.destroyMap();
 
             try {
-                const response = await CountryService.getCountryStats(this.countryParam);
-                console.log(response.data);
+                const response = await CountryService.getCountryStats(this.countryParam, {
+                    signal: controller.signal,
+                });
+
+                if (this.requestKey !== requestKey) return;
 
                 this.country = response?.data?.data?.country || null;
                 this.events = Array.isArray(response?.data?.data?.events)
@@ -402,17 +435,22 @@ export default {
                     : [];
                 this.CountCitites = this.country?.cities_count ?? this.country?.cities?.length ?? 0;
             } catch (err) {
+                if (this.isCanceledRequest(err)) return;
+
                 console.error('Error while loading data:', err);
 
                 if (err.response?.status === 401) {
-                    this.error = 'Unauthorized. Please sign in.';
+                    this.error = this.$t('country.errors.unauthorized');
                 } else if (err.response?.status === 404) {
-                    this.error = 'Country not found.';
+                    this.error = this.$t('country.errors.notFound');
                 } else {
-                    this.error = err?.message || 'An error occurred while loading data.';
+                    this.error = err?.message || this.$t('country.errors.loadFailed');
                 }
             } finally {
+                if (this.requestKey !== requestKey) return;
+
                 this.loading = false;
+                this.requestController = null;
 
                 await this.$nextTick();
 
@@ -452,7 +490,7 @@ export default {
             const d = new Date(date);
             if (Number.isNaN(d.getTime())) return '';
 
-            return new Intl.DateTimeFormat('en-US', {
+            return new Intl.DateTimeFormat(this.currentLang || 'en', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -609,7 +647,7 @@ export default {
                 if (existingScript) {
                     existingScript.addEventListener('load', () => resolve(window.maplibregl));
                     existingScript.addEventListener('error', () =>
-                        reject(new Error('Failed to load MapLibre'))
+                        reject(new Error(this.$t('country.errors.mapLibraryFailed')))
                     );
                     return;
                 }
@@ -619,7 +657,7 @@ export default {
                 script.src = 'https://unpkg.com/maplibre-gl@5.23.0/dist/maplibre-gl.js';
                 script.async = true;
                 script.onload = () => resolve(window.maplibregl);
-                script.onerror = () => reject(new Error('Failed to load MapLibre'));
+                script.onerror = () => reject(new Error(this.$t('country.errors.mapLibraryFailed')));
                 document.body.appendChild(script);
             });
 
@@ -636,13 +674,13 @@ export default {
             });
 
             if (!res.ok) {
-                throw new Error(`Failed to load countries data (${res.status})`);
+                throw new Error(`${this.$t('country.errors.bordersFailed')} (${res.status})`);
             }
 
             const data = await res.json();
 
             if (data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
-                throw new Error('Invalid border file.');
+                throw new Error(this.$t('country.errors.invalidBorders'));
             }
 
             return data;
@@ -770,7 +808,7 @@ export default {
                             ${this.escapeHtml(this.getDisplayCityName(event.city))}
                         </div>
                         <div style="margin-top: 8px; font-size: 12px; color: #2563eb;">
-                            Click marker to open
+                            ${this.escapeHtml(this.$t('country.clickMarkerToOpen'))}
                         </div>
                     </div>
                 `);
@@ -821,13 +859,13 @@ export default {
                     };
                     console.error('Country match debug:', debugInfo);
                     throw new Error(
-                        `Could not find borders for country (${debugInfo.code || 'UNKNOWN'}).`
+                        `${this.$t('country.errors.countryBordersNotFound')} (${debugInfo.code || 'UNKNOWN'}).`
                     );
                 }
 
                 const bounds = this.getGeometryBounds(feature.geometry);
                 if (!bounds) {
-                    throw new Error('Could not calculate country bounds.');
+                    throw new Error(this.$t('country.errors.countryBoundsFailed'));
                 }
 
                 this.map = new maplibregl.Map({
@@ -865,7 +903,7 @@ export default {
                 });
             } catch (err) {
                 console.error('Map error:', err);
-                this.error = err?.message || 'An error occurred while loading the map.';
+                this.error = err?.message || this.$t('country.errors.mapLoadFailed');
             }
         },
     },

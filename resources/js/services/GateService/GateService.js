@@ -1,11 +1,11 @@
 import api from '@/services/ApiClient';
 
 export default {
-  getRandomEvents() {
-    return api.get('/gate/random');
+  getRandomEvents(config = {}) {
+    return api.get('/gate/random', config);
   },
 
-  getAllCountries() {
-    return api.get('/gate/all');
+  getAllCountries(config = {}) {
+    return api.get('/gate/all', config);
   }
 };

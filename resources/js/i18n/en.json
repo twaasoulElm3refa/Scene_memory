@@ -20,7 +20,7 @@
         "plans": "Plans",
         "more": "More",
         "dashboard": "Dashboard",
-        "scemoryGate": "ScemoryGate",
+        "scemoryGate": "Scemory Gate",
         "events": "Events",
         "terms": "Terms",
         "historical": "Historical",
@@ -996,7 +996,23 @@
         "noEvents": "No events available right now",
         "checkBack": "Check back again soon",
         "noImage": "No image",
-        "viewEvent": "View Event"
+        "viewEvent": "View Event",
+        "noCategory": "No category",
+        "countryFallback": "Country",
+        "cityFallback": "City",
+        "eventFallback": "Event",
+        "clickMarkerToOpen": "Click marker to open",
+        "errors": {
+            "unauthorized": "Unauthorized. Please sign in.",
+            "notFound": "Country not found.",
+            "loadFailed": "An error occurred while loading data.",
+            "mapLibraryFailed": "Failed to load the map library.",
+            "bordersFailed": "Failed to load country borders",
+            "invalidBorders": "Invalid country borders file.",
+            "countryBordersNotFound": "Could not find borders for country",
+            "countryBoundsFailed": "Could not calculate country bounds.",
+            "mapLoadFailed": "An error occurred while loading the map."
+        }
     },
     "cancel": "Cancel",
     "login": "Log in",

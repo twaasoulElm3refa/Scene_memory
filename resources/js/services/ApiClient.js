@@ -3,7 +3,22 @@ import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 
 const LANG_KEY = "language";
-const SUPPORTED_LANGS = ["ar", "en", "ru", "fr", "zh"];
+const LEGACY_LANG_KEY = "lang";
+const SUPPORTED_LANGS = [
+    "ar",
+    "de",
+    "en",
+    "es",
+    "fa",
+    "fr",
+    "hi",
+    "it",
+    "ja",
+    "ru",
+    "tr",
+    "ur",
+    "zh",
+];
 
 /*
 |--------------------------------------------------------------------------
@@ -34,11 +49,21 @@ if (!document.getElementById(TOAST_STYLE_ID)) {
 }
 
 const getLang = () => {
-    const lang = String(
-        localStorage.getItem(LANG_KEY) || ""
+    const routeLang = String(
+        window.location.pathname.split("/").filter(Boolean)[0] || ""
     ).toLowerCase();
 
-    return SUPPORTED_LANGS.includes(lang) ? lang : "ar";
+    if (SUPPORTED_LANGS.includes(routeLang)) {
+        return routeLang;
+    }
+
+    const lang = String(
+        localStorage.getItem(LANG_KEY) ||
+        localStorage.getItem(LEGACY_LANG_KEY) ||
+        ""
+    ).toLowerCase();
+
+    return SUPPORTED_LANGS.includes(lang) ? lang : "en";
 };
 
 toastr.options = {
@@ -124,7 +149,7 @@ window.addEventListener("lang-changed", (event) => {
 
 window.addEventListener("storage", (event) => {
     if (
-        event.key === LANG_KEY &&
+        (event.key === LANG_KEY || event.key === LEGACY_LANG_KEY) &&
         event.newValue
     ) {
         api.defaults.headers.common["Accept-Language"] =

@@ -25,44 +25,53 @@ class GateController extends Controller
 
     public function random()
     {
-        $events = Cache::remember('random_events', 60*60, function () {
-            return $this->eventRepository->randomActive(8);
+        $locale = app()->getLocale();
+        $take = 8;
+        $events = Cache::remember("gate:random:locale:{$locale}:take:{$take}", now()->addHour(), function () use ($take) {
+            return $this->eventRepository->randomActive($take);
         });
 
-        return $this->success($events, 'Get Random Events');
+        return $this->success($events, 'Get Random Events')
+            ->header('Vary', 'Accept-Language');
     }
 
     public function countries()
     {
-        $countries = Cache::remember('countries_'.app()->getLocale(), now()->addHours(24), function () {
+        $locale = app()->getLocale();
+        $countries = Cache::remember("gate:countries:locale:{$locale}", now()->addHours(24), function () {
             return $this->countryRepository->allForGate();
         });
 
-        return $this->success($countries, 'Get all Countries');
+        return $this->success($countries, 'Get all Countries')
+            ->header('Vary', 'Accept-Language');
     }
 
     public function country($code, Request $request)
     {
-        $page    = $request->get('page', 1);
-        $locale  = app()->getLocale();
-        $countryKey = "country:{$code}:{$locale}";
-        $citiesKey  = "country:{$code}:cities";
-        $eventsKey  = "country:{$code}:{$locale}:events:page:{$page}";
+        $code = strtoupper(trim($code));
+        $page = max(1, (int) $request->get('page', 1));
+        $locale = app()->getLocale();
+        $countryKey = "gate:country:{$code}:locale:{$locale}";
+        $citiesKey = "gate:country:{$code}:cities";
+        $eventsKey = "gate:country:{$code}:locale:{$locale}:events:page:{$page}";
         $country = Cache::remember($countryKey, now()->addHours(24), function () use ($code) {
             return $this->countryRepository->findByCode($code);
         });
         if (!$country) {
-            return $this->error('Country not found', 404);
+            return $this->error('Country not found', 404)
+                ->header('Vary', 'Accept-Language');
         }
         $cityIds = Cache::remember($citiesKey, now()->addHours(24), function () use ($country) {
             return $this->cityRepository->byCountryId((int) $country->id)->pluck('id');
         });
-        $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds,) {
+        $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds) {
             return $this->eventRepository->gateEventsByCityIds($cityIds);
         });
+
         return $this->success([
             'country' => $country,
             'events'  => $events
-        ], 'Get Country with Events');
+        ], 'Get Country with Events')
+            ->header('Vary', 'Accept-Language');
     }
 }

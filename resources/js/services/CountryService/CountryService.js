@@ -1,8 +1,8 @@
 import api from '@/services/ApiClient';
 
 const CountryService = {
-  getCountryStats(code) {
-    return api.get(`/gate/${code}/stats`);
+  getCountryStats(code, config = {}) {
+    return api.get(`/gate/${code}/stats`, config);
   },
 };
 
