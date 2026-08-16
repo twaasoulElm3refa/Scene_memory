@@ -2,14 +2,14 @@
   <section class="scemory-experience-section" aria-labelledby="scemory-experience-title">
     <div class="experience-inner">
       <header class="experience-header">
-        <span class="experience-kicker">SCEMORY EXPERIENCE</span>
-        <h3 id="scemory-experience-title">One platform. Every side of the story.</h3>
+        <span class="experience-kicker">{{ $t('experience.kicker') }}</span>
+        <h3 id="scemory-experience-title">{{ $t('experience.title') }}</h3>
         <!-- <p>
           Explore moments, document your own, or discover media captured by contributors around the world.
         </p> -->
       </header>
 
-      <div class="experience-tabs" role="tablist" aria-label="Scemory experience paths">
+      <div class="experience-tabs" role="tablist" :aria-label="$t('experience.pathsLabel')">
         <button
           v-for="(tab, index) in tabs"
           :id="`scemory-tab-${tab.id}`"
@@ -25,7 +25,7 @@
           @keydown="handleTabKeydown($event, index)"
         >
           <span class="tab-number">{{ String(index + 1).padStart(2, "0") }}</span>
-          <span class="tab-label">{{ tab.label }}</span>
+          <span class="tab-label">{{ $t(tab.label) }}</span>
         </button>
       </div>
 
@@ -39,17 +39,17 @@
           :aria-labelledby="`scemory-tab-${activeTab.id}`"
         >
           <div class="experience-media">
-            <img :src="activeTab.image" :alt="activeTab.imageAlt" />
+            <img :src="activeTab.image" :alt="$t(activeTab.imageAltKey)" />
             <div class="media-sheen"></div>
 
             <div class="media-card media-card-primary">
-              <span>{{ activeTab.visual.kicker }}</span>
-              <strong>{{ activeTab.visual.title }}</strong>
+              <span>{{ $t(activeTab.visual.kickerKey) }}</span>
+              <strong>{{ $t(activeTab.visual.titleKey) }}</strong>
             </div>
 
             <div class="media-card media-card-secondary">
-              <span>{{ activeTab.visual.stat }}</span>
-              <strong>{{ activeTab.visual.note }}</strong>
+              <span>{{ $t(activeTab.visual.statKey) }}</span>
+              <strong>{{ $t(activeTab.visual.noteKey) }}</strong>
             </div>
 
             <div class="media-path" aria-hidden="true">
@@ -58,21 +58,21 @@
           </div>
 
           <article class="experience-copy">
-            <span class="copy-kicker">{{ activeTab.eyebrow }}</span>
-            <h3>{{ activeTab.heading }}</h3>
-            <p>{{ activeTab.description }}</p>
+            <span class="copy-kicker">{{ $t(activeTab.eyebrowKey) }}</span>
+            <h3>{{ $t(activeTab.headingKey) }}</h3>
+            <p>{{ $t(activeTab.descriptionKey) }}</p>
 
-            <ul class="experience-features" aria-label="Section highlights">
-              <li v-for="feature in activeTab.features" :key="feature">
+            <ul class="experience-features" :aria-label="$t('experience.highlightsLabel')">
+              <li v-for="featureKey in activeTab.featureKeys" :key="featureKey">
                 <span class="feature-check" aria-hidden="true">
                   <i class="bi bi-check2"></i>
                 </span>
-                <span>{{ feature }}</span>
+                <span>{{ $t(featureKey) }}</span>
               </li>
             </ul>
 
             <RouterLink class="experience-cta" :to="localizedPath(activeTab.to)">
-              {{ activeTab.cta }}
+              {{ $t(activeTab.ctaKey) }}
             </RouterLink>
           </article>
         </div>
@@ -90,71 +90,68 @@ const lang = localStorage.getItem("language") || localStorage.getItem("lang") ||
 const tabs = [
   {
     id: "explore",
-    label: "Explore Events",
-    eyebrow: "DISCOVER THE WORLD THROUGH EVENTS",
-    heading: "Explore stories, events and places around the world",
-    description:
-      "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-    cta: "Explore Events",
+    label: "experience.tabs.explore.label",
+    eyebrowKey: "experience.tabs.explore.eyebrow",
+    headingKey: "experience.tabs.explore.heading",
+    descriptionKey: "experience.tabs.explore.description",
+    ctaKey: "experience.tabs.explore.cta",
     to: "/all_events",
     image: "/images/photo1.png",
-    imageAlt: "Scemory event discovery interface with documented media panels",
-    features: [
-      "Browse event media by place and timeline",
-      "Discover nearby stories through a visual archive",
-      "Move from overview to documented event detail",
+    imageAltKey: "experience.tabs.explore.imageAlt",
+    featureKeys: [
+      "experience.tabs.explore.features.browse",
+      "experience.tabs.explore.features.discover",
+      "experience.tabs.explore.features.move",
     ],
     visual: {
-      kicker: "Live discovery",
-      title: "Map-linked event stories",
-      stat: "Global archive",
-      note: "Places, dates and media in one view",
+      kickerKey: "experience.tabs.explore.visual.kicker",
+      titleKey: "experience.tabs.explore.visual.title",
+      statKey: "experience.tabs.explore.visual.stat",
+      noteKey: "experience.tabs.explore.visual.note",
     },
   },
   {
     id: "share",
-    label: "Share Your Story",
-    eyebrow: "TURN MOMENTS INTO DOCUMENTED STORIES",
-    heading: "Document the moments that matter",
-    description:
-      "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-    cta: "Upload Your Story",
+    label: "experience.tabs.share.label",
+    eyebrowKey: "experience.tabs.share.eyebrow",
+    headingKey: "experience.tabs.share.heading",
+    descriptionKey: "experience.tabs.share.description",
+    ctaKey: "experience.tabs.share.cta",
     to: "/add_event",
     image: "/images/photo2.png",
-    imageAlt: "Scemory contributor workspace for documenting event media",
-    features: [
-      "Add media, descriptions and location context",
-      "Build a structured memory from raw moments",
-      "Keep contributor stories connected to the archive",
+    imageAltKey: "experience.tabs.share.imageAlt",
+    featureKeys: [
+      "experience.tabs.share.features.add",
+      "experience.tabs.share.features.build",
+      "experience.tabs.share.features.keep",
     ],
     visual: {
-      kicker: "Contributor flow",
-      title: "Media, context and location",
-      stat: "Story builder",
-      note: "Upload moments with meaningful detail",
+      kickerKey: "experience.tabs.share.visual.kicker",
+      titleKey: "experience.tabs.share.visual.title",
+      statKey: "experience.tabs.share.visual.stat",
+      noteKey: "experience.tabs.share.visual.note",
     },
   },
   {
     id: "license",
-    label: "License Media",
-    eyebrow: "DISCOVER MEDIA READY TO USE",
-    heading: "Find and license event media with confidence",
-    description:
-      "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-    cta: "Discover Media",
+    label: "experience.tabs.license.label",
+    eyebrowKey: "experience.tabs.license.eyebrow",
+    headingKey: "experience.tabs.license.heading",
+    descriptionKey: "experience.tabs.license.description",
+    ctaKey: "experience.tabs.license.cta",
     to: "/all_events",
     image: "/images/photo3.png",
-    imageAlt: "Scemory media discovery panels for browsing licensable event content",
-    features: [
-      "Preview event visuals before opening details",
-      "Use event pages as the path into media options",
-      "Keep discovery and licensing intent connected",
+    imageAltKey: "experience.tabs.license.imageAlt",
+    featureKeys: [
+      "experience.tabs.license.features.preview",
+      "experience.tabs.license.features.use",
+      "experience.tabs.license.features.keep",
     ],
     visual: {
-      kicker: "Media access",
-      title: "Event visuals ready to review",
-      stat: "Licensing path",
-      note: "From discovery to detail pages",
+      kickerKey: "experience.tabs.license.visual.kicker",
+      titleKey: "experience.tabs.license.visual.title",
+      statKey: "experience.tabs.license.visual.stat",
+      noteKey: "experience.tabs.license.visual.note",
     },
   },
 ];

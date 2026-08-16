@@ -21,7 +21,7 @@
         @click="$emit('load-map')"
         class="map-control-button pointer-events-auto px-6 py-3 rounded-full font-semibold transition"
       >
-        Load Map
+        {{ $t('homeAudit.map.loadMap') }}
       </button>
 
       <div
@@ -29,7 +29,7 @@
         class="map-status-pill pointer-events-auto inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
       >
         <span class="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></span>
-        Loading map...
+        {{ $t('homeAudit.map.loading') }}
       </div>
 
       <div
@@ -41,7 +41,7 @@
           @click="$emit('load-map')"
           class="map-control-button px-4 py-2 rounded-full transition"
         >
-          Retry loading map
+          {{ $t('homeAudit.map.retry') }}
         </button>
       </div>
     </div>
@@ -51,7 +51,7 @@
         v-if="isMapReady"
         @click="$emit('open-fullscreen')"
         class="map-icon-button p-3 rounded-full transition"
-        aria-label="Open fullscreen map"
+        :aria-label="$t('homeAudit.map.openFullscreen')"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -72,7 +72,7 @@
           <button
             @click="$emit('close-fullscreen')"
             class="map-icon-button absolute top-4 right-4 z-30 p-3 rounded-full transition"
-            aria-label="Close fullscreen map"
+            :aria-label="$t('homeAudit.map.closeFullscreen')"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

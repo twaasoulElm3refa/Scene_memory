@@ -8,7 +8,7 @@
                         <div class="w-8 h-8 bg-blue-500 rounded-full animate-pulse"></div>
                     </div>
                 </div>
-                <p class="text-gray-400 text-sm font-medium mt-2">Loading...</p>
+                <p class="text-gray-400 text-sm font-medium mt-2">{{ $t('common.loading') }}</p>
             </div>
         </div>
 
@@ -24,7 +24,7 @@
                     @click="fetchData"
                     class="mt-5 px-6 py-2 bg-blue-500 text-white rounded-xl text-sm font-medium hover:bg-blue-600 transition-colors"
                 >
-                    Try Again
+                    {{ $t('common.tryAgain') }}
                 </button>
             </div>
         </div>
@@ -43,7 +43,7 @@
                             </span>
                         </div>
                         <p class="text-gray-500 text-sm md:text-base">
-                            Discover featured events in {{ getDisplayCountryName(country) }}
+                            {{ $t('country.discoverFeaturedIn') }} {{ getDisplayCountryName(country) }}
                         </p>
                     </div>
 
@@ -54,7 +54,7 @@
                         <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
-                        <span class="text-sm font-medium">Back</span>
+                        <span class="text-sm font-medium">{{ $t('common.back') }}</span>
                     </button>
                 </div>
             </div>
@@ -69,7 +69,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                 <div class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-50">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="text-gray-400 text-sm font-medium">Cities</span>
+                        <span class="text-gray-400 text-sm font-medium">{{ $t('country.cities') }}</span>
                         <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                             <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -77,12 +77,12 @@
                         </div>
                     </div>
                     <p class="text-3xl font-bold text-gray-800">{{ CountCitites }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Available city</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ $t('country.availableCity') }}</p>
                 </div>
 
                 <div class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-50">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="text-gray-400 text-sm font-medium">Events</span>
+                        <span class="text-gray-400 text-sm font-medium">{{ $t('nav.events') }}</span>
                         <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                             <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -90,12 +90,12 @@
                         </div>
                     </div>
                     <p class="text-3xl font-bold text-gray-800">{{ events.length }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Current event</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ $t('country.currentEvent') }}</p>
                 </div>
 
                 <div class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-50">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="text-gray-400 text-sm font-medium">Event Markers</span>
+                        <span class="text-gray-400 text-sm font-medium">{{ $t('country.eventMarkers') }}</span>
                         <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                             <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -104,12 +104,12 @@
                         </div>
                     </div>
                     <p class="text-3xl font-bold text-gray-800">{{ mappedEventsCount }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Clickable marker</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ $t('country.clickableMarker') }}</p>
                 </div>
 
                 <div class="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-50">
                     <div class="flex items-center justify-between mb-3">
-                        <span class="text-gray-400 text-sm font-medium">Categories</span>
+                        <span class="text-gray-400 text-sm font-medium">{{ $t('events.categories') }}</span>
                         <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                             <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l5 5a2 2 0 01.586 1.414V19a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
@@ -117,14 +117,14 @@
                         </div>
                     </div>
                     <p class="text-3xl font-bold text-gray-800">{{ getUniqueCategoriesCount }}</p>
-                    <p class="text-xs text-gray-400 mt-1">Different category</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ $t('country.differentCategory') }}</p>
                 </div>
             </div>
 
             <div class="mb-12">
                 <div class="flex items-center gap-2 mb-5">
                     <div class="w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                    <h2 class="text-xl font-bold text-gray-800">Available Cities</h2>
+                    <h2 class="text-xl font-bold text-gray-800">{{ $t('country.availableCities') }}</h2>
                     <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full">{{ CountCitites }}</span>
                 </div>
 
@@ -146,7 +146,7 @@
             <div>
                 <div class="flex items-center gap-2 mb-6">
                     <div class="w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
-                    <h2 class="text-xl font-bold text-gray-800">All Events</h2>
+                    <h2 class="text-xl font-bold text-gray-800">{{ $t('nav.allEvents') }}</h2>
                     <span class="text-xs bg-gray-100 text-gray-600 px-2.5 py-0.5 rounded-full">{{ events.length }}</span>
                 </div>
 
@@ -156,8 +156,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    <p class="text-gray-400 font-medium">No events available right now</p>
-                    <p class="text-sm text-gray-300 mt-1">Check back again soon</p>
+                    <p class="text-gray-400 font-medium">{{ $t('country.noEvents') }}</p>
+                    <p class="text-sm text-gray-300 mt-1">{{ $t('country.checkBack') }}</p>
                 </div>
 
                 <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -178,7 +178,7 @@
                                 <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <span class="text-xs">No image</span>
+                                <span class="text-xs">{{ $t('country.noImage') }}</span>
                             </div>
 
                             <div class="absolute top-3 right-3">
@@ -220,7 +220,7 @@
                                 @click="goToEvent(event.slug)"
                                 class="w-full inline-flex items-center justify-center gap-2 text-sm font-medium bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98]"
                             >
-                                <span>View Event</span>
+                                <span>{{ $t('country.viewEvent') }}</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>

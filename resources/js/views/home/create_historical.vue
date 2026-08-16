@@ -26,8 +26,8 @@
                                             {{ step.id }}
                                         </span>
                                         <span>
-                                            <span class="d-block fw-semibold">{{ step.label }}</span>
-                                            <small class="text-muted">{{ step.description }}</small>
+                                            <span class="d-block fw-semibold">{{ $t(step.label) }}</span>
+                                            <small class="text-muted">{{ $t(step.description) }}</small>
                                         </span>
                                     </button>
                                 </div>
@@ -39,7 +39,7 @@
                 <div v-show="currentPhase === 1" class="col-12">
                     <div class="card shadow border-0 rounded-3">
                         <div class="card-body p-4">
-                            <h2 class="card-title h4 fw-bold mb-3">Photography Type</h2>
+                            <h2 class="card-title h4 fw-bold mb-3">{{ $t('eventForm.photographyType') }}</h2>
                             <div class="row g-3">
                                 <div class="col-12 col-md-6">
                                     <button
@@ -48,9 +48,9 @@
                                         :class="photographyCardClass('professional')"
                                         @click="selectPhotographyType('professional')"
                                     >
-                                        <span class="d-block h5 fw-bold mb-2">Professional photography</span>
+                                        <span class="d-block h5 fw-bold mb-2">{{ $t('photoUpload.professionalPhotography') }}</span>
                                         <span class="text-muted">
-                                            Requires backend quality approval, minimum 1080px width and height, and sharpness checks.
+                                            {{ $t('eventForm.professional1080Notice') }}
                                         </span>
                                     </button>
                                 </div>
@@ -62,16 +62,16 @@
                                         :class="photographyCardClass('normal')"
                                         @click="selectPhotographyType('normal')"
                                     >
-                                        <span class="d-block h5 fw-bold mb-2">Normal photography</span>
+                                        <span class="d-block h5 fw-bold mb-2">{{ $t('photoUpload.normalPhotography') }}</span>
                                         <span class="text-muted">
-                                            Valid images are accepted without professional resolution or sharpness constraints.
+                                            {{ $t('eventForm.normalPhotoNotice') }}
                                         </span>
                                     </button>
                                 </div>
                             </div>
 
                             <div v-if="!isPhotographyPhaseValid" class="text-danger small mt-3">
-                                Please select a photography type before continuing.
+                                {{ $t('eventForm.selectPhotographyBeforeContinue') }}
                             </div>
                         </div>
                     </div>
@@ -209,7 +209,7 @@
 
                                         <div class="col-12">
                                             <label class="form-label fw-medium d-flex align-items-center justify-content-between">
-                                                <span>Tags <span class="text-danger">*</span></span>
+                                                <span>{{ $t('eventForm.tags') }} <span class="text-danger">*</span></span>
                                                 <small class="text-muted">{{ selectedTags.length }} / 4</small>
                                             </label>
 
@@ -220,7 +220,7 @@
                                                     :disabled="loadingTags"
                                                     @click="showTagsDropdown = !showTagsDropdown"
                                                 >
-                                                    <span v-if="loadingTags" class="text-muted">Loading tags...</span>
+                                                    <span v-if="loadingTags" class="text-muted">{{ $t('homeAudit.tags.loading') }}</span>
 
                                                     <template v-else-if="selectedTags.length">
                                                         <span
@@ -232,7 +232,7 @@
                                                         </span>
                                                     </template>
 
-                                                    <span v-else class="text-muted">Select tags</span>
+                                                    <span v-else class="text-muted">{{ $t('eventForm.selectTags') }}</span>
                                                 </button>
 
                                                 <div
@@ -244,7 +244,7 @@
                                                         v-model="tagSearch"
                                                         type="text"
                                                         class="form-control form-control-sm rounded-3 mb-2"
-                                                        placeholder="Search tags"
+                                                        :placeholder="$t('eventForm.searchTags')"
                                                     />
 
                                                     <button
@@ -253,7 +253,7 @@
                                                         class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
                                                         @click="clearTags"
                                                     >
-                                                        Clear selected tags
+                                                        {{ $t('homeAudit.tags.clearSelected') }}
                                                     </button>
 
                                                     <label
@@ -272,7 +272,7 @@
                                                     </label>
 
                                                     <div v-if="filteredTags.length === 0" class="text-muted small px-2 py-2">
-                                                        No tags found
+                                                        {{ $t('homeAudit.tags.none') }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -291,7 +291,7 @@
                                         ></div>
 
                                         <div class="mt-2 small text-muted" v-if="locatingUser">
-                                            Detecting your current location...
+                                            {{ $t('eventForm.detectingLocation') }}
                                         </div>
 
                                         <div class="mt-2 small text-warning" v-if="locationError">
@@ -360,7 +360,7 @@
                         :disabled="currentPhase === 1 || loading"
                         @click="previousPhase"
                     >
-                        Previous
+                        {{ $t('common.previous') }}
                     </button>
 
                     <div class="d-flex flex-column flex-sm-row gap-2 ms-sm-auto">
@@ -371,7 +371,7 @@
                             :disabled="!currentPhaseValid"
                             @click="goNext"
                         >
-                            Next
+                            {{ $t('common.next') }}
                         </button>
 
                         <button
@@ -437,9 +437,9 @@ const tagSearch = ref("");
 const showTagsDropdown = ref(false);
 
 const wizardSteps = [
-    { id: 1, label: "Photography Type", description: "Choose mode" },
-    { id: 2, label: "Details", description: "Main form data" },
-    { id: 3, label: "Photos", description: "Upload and tag" },
+    { id: 1, label: "eventForm.steps.photographyType", description: "eventForm.steps.chooseMode" },
+    { id: 2, label: "eventForm.steps.details", description: "eventForm.steps.mainFormData" },
+    { id: 3, label: "eventForm.steps.photos", description: "eventForm.steps.uploadAndTag" },
 ];
 
 const { currentPhase, goToPhase, nextPhase, previousPhase } = useFormWizard({
@@ -518,7 +518,7 @@ const photosBlockingMessage = computed(() => {
     if (rejected) {
         return rejected.errors?.length
             ? rejected.errors.join("; ")
-            : "Rejected photos must be fixed before creating the historical event.";
+            : t("eventForm.errors.rejectedPhotosHistorical");
     }
 
     if (form.value.photography_type === "professional" && photos.some((item) => item.status !== "accepted")) {
@@ -605,7 +605,7 @@ async function loadCities() {
     } catch (err) {
         console.error("Failed to load cities", err);
         cities.value = [];
-        alert("An error occurred while loading cities.");
+        alert(t("eventForm.errors.loadCities"));
     }
 }
 
@@ -663,7 +663,7 @@ function toggleTag(tagId) {
     }
 
     if (selectedTags.value.length >= 4) {
-        alert("You can select up to 4 tags only");
+        alert(t("eventForm.errors.maxFourTags"));
         return;
     }
 
@@ -708,7 +708,7 @@ function appendPhotoFields(fd, item) {
 
 async function createEvent() {
     if (!canSubmit.value) {
-        return alert(photosBlockingMessage.value || "Please complete all required fields.");
+        return alert(photosBlockingMessage.value || t("eventForm.errors.requiredFields"));
     }
 
     loading.value = true;
@@ -736,11 +736,11 @@ async function createEvent() {
     try {
         await EventService.createHistoricUser(fd);
 
-        alert("Historical event created successfully!");
+        alert(t("eventForm.success.historicalCreated"));
         window.location.href = "/";
     } catch (err) {
         console.error(err);
-        alert("Failed to create historical event: " + (err.response?.data?.message || "Unknown error"));
+        alert(t("eventForm.errors.historicalCreateFailed") + " " + (err.response?.data?.message || t("common.unknownError")));
     } finally {
         loading.value = false;
     }
@@ -852,7 +852,7 @@ function locateUserOnMap() {
         (error) => {
             console.warn("Geolocation error:", error);
 
-            locationError.value = "Unable to detect your current location. You can select the location manually on the map.";
+            locationError.value = t("eventForm.errors.locationDetect");
             locatingUser.value = false;
         },
         {

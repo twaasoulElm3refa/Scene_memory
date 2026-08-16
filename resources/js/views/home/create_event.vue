@@ -26,8 +26,8 @@
                                             {{ step.id }}
                                         </span>
                                         <span>
-                                            <span class="d-block fw-semibold">{{ step.label }}</span>
-                                            <small class="text-muted">{{ step.description }}</small>
+                                            <span class="d-block fw-semibold">{{ $t(step.label) }}</span>
+                                            <small class="text-muted">{{ $t(step.description) }}</small>
                                         </span>
                                     </button>
                                 </div>
@@ -39,8 +39,8 @@
                 <div v-show="currentPhase === 1" class="col-12">
                     <div class="card shadow border-0 rounded-3">
                         <div class="card-body p-4">
-                            <!-- is_real: Event Type -->
-                            <h2 class="card-title h4 fw-bold mb-3">Event Type</h2>
+                            <!-- is_real: {{ $t('eventForm.eventType') }} -->
+                            <h2 class="card-title h4 fw-bold mb-3">{{ $t('eventForm.eventType') }}</h2>
                             <div class="row g-2 g-md-3 mb-4">
                                 <div class="col-12 col-md-6">
                                     <label
@@ -56,9 +56,9 @@
                                         />
                                         <span class="event-type-radio flex-shrink-0 mt-1"></span>
                                         <span>
-                                            <span class="d-block fw-semibold lh-sm">Public / Official Event</span>
+                                            <span class="d-block fw-semibold lh-sm">{{ $t('eventForm.publicOfficialEvent') }}</span>
                                             <small class="text-muted d-block mt-1">
-                                                Conference, exhibition, festival or public event.
+                                                {{ $t('eventForm.publicOfficialDescription') }}
                                             </small>
                                         </span>
                                     </label>
@@ -78,16 +78,16 @@
                                         />
                                         <span class="event-type-radio flex-shrink-0 mt-1"></span>
                                         <span>
-                                            <span class="d-block fw-semibold lh-sm">Personal Event / Memory</span>
+                                            <span class="d-block fw-semibold lh-sm">{{ $t('eventForm.personalEvent') }}</span>
                                             <small class="text-muted d-block mt-1">
-                                                Personal occasion, event or memory.
+                                                {{ $t('eventForm.personalEventDescription') }}
                                             </small>
                                         </span>
                                     </label>
                                 </div>
                             </div>
 
-                            <h2 class="card-title h4 fw-bold mb-3">Photography Type</h2>
+                            <h2 class="card-title h4 fw-bold mb-3">{{ $t('eventForm.photographyType') }}</h2>
                             <div class="row g-3">
                                 <div class="col-12 col-md-6">
                                     <button
@@ -96,9 +96,9 @@
                                         :class="photographyCardClass('professional')"
                                         @click="selectPhotographyType('professional')"
                                     >
-                                        <span class="d-block h5 fw-bold mb-2">Professional photography</span>
+                                        <span class="d-block h5 fw-bold mb-2">{{ $t('photoUpload.professionalPhotography') }}</span>
                                         <span class="text-muted">
-                                            Requires backend quality approval, minimum 720px width and height, and sharpness checks.
+                                            {{ $t('eventForm.professional720Notice') }}
                                         </span>
                                     </button>
                                 </div>
@@ -110,9 +110,9 @@
                                         :class="photographyCardClass('normal')"
                                         @click="selectPhotographyType('normal')"
                                     >
-                                        <span class="d-block h5 fw-bold mb-2">Normal photography</span>
+                                        <span class="d-block h5 fw-bold mb-2">{{ $t('photoUpload.normalPhotography') }}</span>
                                         <span class="text-muted">
-                                            Valid images are accepted without professional resolution or sharpness constraints.
+                                            {{ $t('eventForm.normalPhotoNotice') }}
                                         </span>
                                     </button>
                                 </div>
@@ -271,8 +271,8 @@
 
                                         <div class="col-12">
                                             <label class="form-label fw-medium d-flex align-items-center justify-content-between">
-                                                <span>Tags <span class="text-danger">*</span></span>
-                                                <small class="text-muted">{{ selectedTags.length }} tags selected</small>
+                                                <span>{{ $t('eventForm.tags') }} <span class="text-danger">*</span></span>
+                                                <small class="text-muted">{{ selectedTags.length }} {{ $t('eventForm.tagsSelected') }}</small>
                                             </label>
 
                                             <div class="position-relative">
@@ -282,7 +282,7 @@
                                                     :disabled="loadingTags"
                                                     @click="toggleTagsDropdown"
                                                 >
-                                                    <span v-if="loadingTags" class="text-muted">Loading tags...</span>
+                                                    <span v-if="loadingTags" class="text-muted">{{ $t('homeAudit.tags.loading') }}</span>
 
                                                     <template v-else-if="selectedTags.length">
                                                         <span
@@ -296,7 +296,7 @@
                                                         </span>
                                                     </template>
 
-                                                    <span v-else class="text-muted">Select or create tags</span>
+                                                    <span v-else class="text-muted">{{ $t('eventForm.selectOrCreateTags') }}</span>
                                                 </button>
 
                                                 <div
@@ -309,7 +309,7 @@
                                                         v-model="tagSearch"
                                                         type="text"
                                                         class="form-control form-control-sm rounded-3 mb-2"
-                                                        placeholder="Search or type new tag"
+                                                        :placeholder="$t('eventForm.searchOrTypeTag')"
                                                         @keydown.enter.prevent="canAddNewTag && addNewTag()"
                                                         @keydown.escape="closeTagsDropdown"
                                                     />
@@ -321,7 +321,7 @@
                                                             class="btn btn-outline-success btn-sm w-100 mb-2 text-start"
                                                             @click="addNewTag"
                                                         >
-                                                            + Add "{{ normalizeTagName(tagSearch) }}"
+                                                            {{ $t('eventForm.addTag', { tag: normalizeTagName(tagSearch) }) }}
                                                         </button>
 
                                                         <label
@@ -343,7 +343,7 @@
                                                             v-if="filteredTags.length === 0 && !canAddNewTag"
                                                             class="text-muted small px-2 py-2"
                                                         >
-                                                            No tags found
+                                                            {{ $t('homeAudit.tags.none') }}
                                                         </div>
                                                     </template>
 
@@ -353,7 +353,7 @@
                                                         class="btn btn-link btn-sm text-danger text-decoration-none px-0 mt-1"
                                                         @click="clearTags"
                                                     >
-                                                        Clear selected tags
+                                                        {{ $t('homeAudit.tags.clearSelected') }}
                                                     </button>
 
                                                     <label
@@ -372,13 +372,13 @@
                                                     </label>
 
                                                     <div v-if="tagSearch.trim() && filteredTags.length === 0 && !canAddNewTag" class="text-muted small px-2 py-2">
-                                                        No tags found
+                                                        {{ $t('homeAudit.tags.none') }}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <small class="text-muted d-block mt-1">
-                                  You can select existing tags or create new ones.
+                                  {{ $t('eventForm.tagHelper') }}
                                             </small>
                                         </div>
                                     </div>
@@ -395,7 +395,7 @@
                                         ></div>
 
                                         <div class="mt-2 small text-muted" v-if="locatingUser">
-                                            Detecting your current location...
+                                            {{ $t('eventForm.detectingLocation') }}
                                         </div>
 
                                         <div class="mt-2 small text-warning" v-if="locationError">
@@ -452,7 +452,7 @@
                         :disabled="currentPhase === 1 || loading"
                         @click="previousPhase"
                     >
-                        Previous
+                        {{ $t('common.previous') }}
                     </button>
 
                     <div class="d-flex flex-column flex-sm-row gap-2 ms-sm-auto">
@@ -463,7 +463,7 @@
                             :disabled="!currentPhaseValid"
                             @click="goNext"
                         >
-                            Next
+                            {{ $t('common.next') }}
                         </button>
 
                         <button
@@ -499,7 +499,7 @@ const { t, te } = useI18n();
 const tr = (key, fallback) => (te(key) ? t(key) : fallback);
 
 const form = ref({
-    // is_real: Event Type
+    // is_real: {{ $t('eventForm.eventType') }}
     is_real: null,
     photography_type: "",
     title: "",
@@ -532,8 +532,8 @@ const showTagsDropdown = ref(false);
 const eventTagSearchInput = ref(null);
 
 const wizardSteps = [
-    { id: 1, label: "Photography & Photos", description: "Choose mode and upload" },
-    { id: 2, label: "Event Details", description: "Main form data" },
+    { id: 1, label: "eventForm.steps.photographyPhotos", description: "eventForm.steps.chooseModeUpload" },
+    { id: 2, label: "eventForm.steps.eventDetails", description: "eventForm.steps.mainFormData" },
 ];
 
 const { currentPhase, goToPhase, nextPhase, previousPhase } = useFormWizard({
@@ -595,7 +595,7 @@ const canAddNewTag = computed(() => {
     return !existsInAllTags && !existsInSelected;
 });
 
-// is_real: Event Type
+// is_real: {{ $t('eventForm.eventType') }}
 const isEventTypeValid = computed(() =>
     form.value.is_real === true || form.value.is_real === false
 );
@@ -643,7 +643,7 @@ const photosBlockingMessage = computed(() => {
     if (rejected) {
         return rejected.errors?.length
             ? rejected.errors.join("; ")
-            : "Rejected photos must be fixed before creating the event.";
+            : t("eventForm.errors.rejectedPhotosEvent");
     }
 
     if (form.value.photography_type === "professional" && photos.some((item) => item.status !== "accepted")) {
@@ -661,7 +661,7 @@ const stepOneBlockingMessage = computed(() => {
     }
 
     if (!["professional", "normal"].includes(form.value.photography_type)) {
-        return "Please select a photography type before continuing.";
+        return t("eventForm.selectPhotographyBeforeContinue");
     }
 
     return photosBlockingMessage.value;
@@ -684,12 +684,12 @@ async function goNext() {
     await nextPhase();
 }
 
-// is_real: Event Type
+// is_real: {{ $t('eventForm.eventType') }}
 function selectEventType(isReal) {
     form.value.is_real = isReal;
 }
 
-// is_real: Event Type
+// is_real: {{ $t('eventForm.eventType') }}
 function eventTypeCardClass(isReal) {
     return form.value.is_real === isReal
         ? "border-primary bg-primary-subtle shadow-sm"
@@ -753,7 +753,7 @@ async function loadCities() {
     } catch (err) {
         console.error("Failed to load cities", err);
         cities.value = [];
-        alert("An error occurred while loading cities.");
+        alert(t("eventForm.errors.loadCities"));
     }
 }
 
@@ -911,13 +911,13 @@ function appendPhotoFields(fd, item) {
 
 async function createEvent() {
     if (!canSubmit.value) {
-        return alert(photosBlockingMessage.value || "Please complete all required fields.");
+        return alert(photosBlockingMessage.value || t("eventForm.errors.requiredFields"));
     }
 
     loading.value = true;
     const fd = new FormData();
 
-    // is_real: Event Type
+    // is_real: {{ $t('eventForm.eventType') }}
     fd.append("is_real", form.value.is_real ? "1" : "0");
     fd.append("photography_type", form.value.photography_type);
     fd.append("title", form.value.title);
@@ -945,11 +945,11 @@ async function createEvent() {
     try {
         await EventService.createUser(fd);
 
-        alert("Event created successfully!");
+        alert(t("eventForm.success.created"));
         window.location.href = "/";
     } catch (err) {
         console.error(err);
-        alert("Failed to create event: " + (err.response?.data?.message || "Unknown error"));
+        alert(t("eventForm.errors.createFailed") + " " + (err.response?.data?.message || t("common.unknownError")));
     } finally {
         loading.value = false;
     }
@@ -1061,7 +1061,7 @@ function locateUserOnMap() {
         (error) => {
             console.warn("Geolocation error:", error);
 
-            locationError.value = "Unable to detect your current location. You can select the location manually on the map.";
+            locationError.value = t("eventForm.errors.locationDetect");
             locatingUser.value = false;
         },
         {

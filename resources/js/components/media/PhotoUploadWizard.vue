@@ -3,9 +3,9 @@
         <div class="card-body p-4">
             <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
                 <div>
-                    <h2 class="card-title h4 fw-bold mb-1">Photos Upload</h2>
+                    <h2 class="card-title h4 fw-bold mb-1">{{ $t('photoUpload.title') }}</h2>
                     <p class="text-muted mb-0">
-                        Upload one or more images. Each photo needs its own description and tags.
+                        {{ $t('photoUpload.description') }}
                     </p>
                 </div>
 
@@ -16,7 +16,7 @@
             </div>
 
             <div v-if="photographyType === 'professional'" class="alert alert-info py-2">
-                Professional photos must be at least 720px by 720px and pass live backend quality validation.
+                {{ $t('photoUpload.professionalNotice') }}
             </div>
 
             <div
@@ -33,9 +33,9 @@
                     @change="handleSelect"
                 />
 
-                <p class="fs-5 fw-medium text-secondary mb-2">Choose photos</p>
+                <p class="fs-5 fw-medium text-secondary mb-2">{{ $t('photoUpload.choosePhotosTitle') }}</p>
                 <p class="text-muted small mb-3">
-                    JPG, PNG, or WEBP. Maximum file size is 20 MB.
+                    {{ $t('photoUpload.fileHint') }}
                 </p>
 
                 <button
@@ -44,11 +44,11 @@
                     :disabled="!photographyType || hasReachedLimit || uploading"
                     @click="choosePhoto"
                 >
-                    {{ uploading ? "Checking..." : "Choose Photos" }}
+                    {{ uploading ? $t('photoUpload.checking') : $t('photoUpload.choosePhotos') }}
                 </button>
 
                 <small class="text-muted d-block mt-2">
-                    {{ items.length }} / {{ maxPhotos }} photos
+                    {{ $t('photoUpload.photosCount', { count: items.length, max: maxPhotos }) }}
                 </small>
 
                 <div v-if="uploadLimitMessage" class="text-danger small mt-2">
@@ -57,7 +57,7 @@
             </div>
 
             <div v-if="items.length === 0" class="text-muted text-center py-4">
-                No photos added yet.
+                {{ $t('photoUpload.empty') }}
             </div>
 
             <div v-else class="d-flex flex-column gap-3">
@@ -72,7 +72,7 @@
                                 <img
                                     v-if="previewSource(item)"
                                     :src="previewSource(item)"
-                                    :alt="'photo ' + (index + 1)"
+                                    :alt="$t('photoUpload.photoAlt', { number: index + 1 })"
                                     class="img-fluid rounded-3 shadow-sm w-100"
                                     style="height: 210px; object-fit: cover"
                                 />
@@ -82,14 +82,14 @@
                                     class="rounded-3 bg-body-tertiary d-flex align-items-center justify-content-center text-muted"
                                     style="height: 210px"
                                 >
-                                    Preview unavailable
+                                    {{ $t('photoUpload.previewUnavailable') }}
                                 </div>
 
                                 <button
                                     type="button"
                                     class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle"
                                     style="width: 30px; height: 30px; line-height: 1; padding: 0"
-                                    title="Remove photo"
+                                    :title="$t('photoUpload.removePhoto')"
                                     @click="removePhoto(index)"
                                 >
                                     x
@@ -106,7 +106,7 @@
                                 </span>
 
                                 <span v-if="item.metrics.quality_score !== null" class="badge text-bg-light">
-                                    Quality {{ item.metrics.quality_score }}
+                                    {{ $t('photoUpload.quality', { score: item.metrics.quality_score }) }}
                                 </span>
                             </div>
                         </div>
@@ -114,20 +114,20 @@
                         <div class="col-12 col-md-8">
                             <div class="mb-3">
                                 <label class="form-label fw-medium">
-                                    Photo description <span class="text-danger">*</span>
+                                    {{ $t('photoUpload.photoDescription') }} <span class="text-danger">*</span>
                                 </label>
                                 <textarea
                                     v-model="item.description"
                                     class="form-control rounded-3"
                                     rows="3"
-                                    placeholder="Describe this photo"
+                                    :placeholder="$t('photoUpload.photoDescriptionPlaceholder')"
                                     @input="emitUpdate"
                                 ></textarea>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-medium d-flex justify-content-between">
-                                    <span>Photo tags <span class="text-danger">*</span></span>
+                                    <span>{{ $t('photoUpload.photoTags') }} <span class="text-danger">*</span></span>
                                     <small class="text-muted">{{ item.tags.length }} / {{ maxTags }}</small>
                                 </label>
 
@@ -139,7 +139,7 @@
                                         @click="togglePhotoTagsDropdown(item)"
                                     >
                                         <span v-if="loadingTags" class="text-muted">
-                                            Loading tags...
+                                            {{ $t('homeAudit.tags.loading') }}
                                         </span>
 
                                         <template v-else-if="item.tags.length">
@@ -157,7 +157,7 @@
                                         </template>
 
                                         <span v-else class="text-muted">
-                                            Select or create photo tags
+                                            {{ $t('photoUpload.selectOrCreateTags') }}
                                         </span>
                                     </button>
 
@@ -170,7 +170,7 @@
                                             v-model="item.tagSearch"
                                             type="text"
                                             class="form-control form-control-sm rounded-3 mb-2"
-                                            placeholder="Search or type new tag"
+                                            :placeholder="$t('photoUpload.searchTagPlaceholder')"
                                             @keydown.enter.prevent="canAddNewPhotoTag(item) && addNewPhotoTag(item)"
                                             @input="emitUpdate"
                                         />
@@ -181,7 +181,7 @@
                                             class="btn btn-outline-success btn-sm w-100 mb-2 text-start"
                                             @click="addNewPhotoTag(item)"
                                         >
-                                            + Add "{{ normalizeTagName(item.tagSearch) }}"
+                                            {{ $t('photoUpload.addTag', { tag: normalizeTagName(item.tagSearch) }) }}
                                         </button>
 
                                         <button
@@ -190,7 +190,7 @@
                                             class="btn btn-link btn-sm text-danger text-decoration-none px-0 mb-1"
                                             @click="clearPhotoTags(item)"
                                         >
-                                            Clear selected tags
+                                            {{ $t('homeAudit.tags.clearSelected') }}
                                         </button>
 
                                         <label
@@ -212,7 +212,7 @@
                                             v-if="hasPhotoTagSearch(item) && filteredPhotoTags(item).length === 0 && !canAddNewPhotoTag(item)"
                                             class="text-muted small px-2 py-2"
                                         >
-                                            No tags found
+                                            {{ $t('homeAudit.tags.none') }}
                                         </div>
                                     </div>
                                 </div>
@@ -220,35 +220,34 @@
 
                             <div class="row g-3">
                                 <div class="col-12 col-sm-6">
-                                    <label class="form-label fw-medium">Your price</label>
+                                    <label class="form-label fw-medium">{{ $t('photoUpload.yourPrice') }}</label>
                                     <input
                                         v-model.number="item.custom_price"
                                         type="number"
                                         min="1"
                                         step="1"
                                         class="form-control rounded-3"
-                                        placeholder="Enter your price"
+                                        :placeholder="$t('photoUpload.pricePlaceholder')"
                                         @input="emitUpdate"
                                     />
                                     <small v-if="item.suggested_price" class="text-muted">
-                                        Suggested: ${{ item.suggested_price }}
+                                        {{ $t('photoUpload.suggestedPrice', { price: item.suggested_price }) }}
                                     </small>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
-                                    <label class="form-label fw-medium">Validation details</label>
+                                    <label class="form-label fw-medium">{{ $t('photoUpload.validationDetails') }}</label>
                                     <div class="small text-muted">
-                                        {{ item.validationMessage || "Waiting for validation" }}
+                                        {{ item.validationMessage || $t('photoUpload.waitingValidation') }}
                                     </div>
                                     <div v-if="item.metrics.sharpness_score !== null" class="small text-muted">
-                                        Sharpness {{ item.metrics.sharpness_score }},
-                                        Blur {{ item.metrics.blur_score }}
+                                        {{ $t('photoUpload.metrics', { sharpness: item.metrics.sharpness_score, blur: item.metrics.blur_score }) }}
                                     </div>
                                 </div>
                             </div>
 
                             <div v-if="item.errors.length" class="alert alert-danger py-2 mt-3 mb-0">
-                                <div class="fw-semibold mb-1">Rejection reasons</div>
+                                <div class="fw-semibold mb-1">{{ $t('photoUpload.rejectionReasons') }}</div>
                                 <ul class="mb-0 ps-3">
                                     <li v-for="error in item.errors" :key="error">{{ error }}</li>
                                 </ul>
@@ -263,6 +262,7 @@
 
 <script setup>
 import { computed, onUnmounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { MediaService } from "../../services/MediaService/MediaService";
 
 const props = defineProps({
@@ -293,6 +293,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+const { t } = useI18n();
 
 const fileInput = ref(null);
 const uploading = ref(false);
@@ -307,9 +308,9 @@ const maxFileSize = 20 * 1024 * 1024;
 const hasReachedLimit = computed(() => items.value.length >= props.maxPhotos);
 
 const photographyLabel = computed(() => {
-    if (props.photographyType === "professional") return "Professional photography";
-    if (props.photographyType === "normal") return "Normal photography";
-    return "Select photography type first";
+    if (props.photographyType === "professional") return t("photoUpload.professionalPhotography");
+    if (props.photographyType === "normal") return t("photoUpload.normalPhotography");
+    return t("photoUpload.selectPhotographyFirst");
 });
 
 watch(
@@ -343,12 +344,12 @@ onUnmounted(() => {
 
 function choosePhoto() {
     if (!props.photographyType) {
-        alert("Please select photography type first.");
+        alert(t("photoUpload.selectPhotographyFirst"));
         return;
     }
 
     if (hasReachedLimit.value) {
-        alert(`You can upload up to ${props.maxPhotos} photos.`);
+        alert(t("photoUpload.maxPhotos", { max: props.maxPhotos }));
         return;
     }
 
@@ -373,7 +374,7 @@ async function addFiles(files) {
     }
 
     if (!props.photographyType) {
-        uploadLimitMessage.value = "Please select photography type first.";
+        uploadLimitMessage.value = t("photoUpload.selectPhotographyFirst");
         alert(uploadLimitMessage.value);
         return;
     }
@@ -381,7 +382,7 @@ async function addFiles(files) {
     const remainingSlots = Math.max(0, props.maxPhotos - items.value.length);
 
     if (remainingSlots === 0) {
-        uploadLimitMessage.value = `You can upload up to ${props.maxPhotos} photos.`;
+        uploadLimitMessage.value = t("photoUpload.maxPhotos", { max: props.maxPhotos });
         alert(uploadLimitMessage.value);
         return;
     }
@@ -389,7 +390,7 @@ async function addFiles(files) {
     const filesToAdd = selectedFiles.slice(0, remainingSlots);
 
     uploadLimitMessage.value = selectedFiles.length > remainingSlots
-        ? `Only ${remainingSlots} of ${selectedFiles.length} selected photos were added. You can upload up to ${props.maxPhotos} photos.`
+        ? t("photoUpload.partialAdded", { added: remainingSlots, selected: selectedFiles.length, max: props.maxPhotos })
         : "";
 
     if (uploadLimitMessage.value) {
@@ -403,12 +404,12 @@ async function addFiles(files) {
 
 async function addFile(file) {
     if (!props.photographyType) {
-        alert("Please select photography type first.");
+        alert(t("photoUpload.selectPhotographyFirst"));
         return;
     }
 
     if (hasReachedLimit.value) {
-        alert(`You can upload up to ${props.maxPhotos} photos.`);
+        alert(t("photoUpload.maxPhotos", { max: props.maxPhotos }));
         return;
     }
 
@@ -420,7 +421,7 @@ async function addFile(file) {
     if (basicErrors.length) {
         item.status = "rejected";
         item.errors = basicErrors;
-        item.validationMessage = "Photo rejected";
+        item.validationMessage = t("photoUpload.photoRejected");
         emitUpdate();
         return;
     }
@@ -430,8 +431,8 @@ async function addFile(file) {
         await validatePhotoItem(item);
     } catch (error) {
         item.status = "rejected";
-        item.errors = [error.message || "Unable to read or validate this photo."];
-        item.validationMessage = "Photo rejected";
+        item.errors = [error.message || t("photoUpload.unableToValidate")];
+        item.validationMessage = t("photoUpload.photoRejected");
     } finally {
         uploading.value = false;
         emitUpdate();
@@ -497,11 +498,11 @@ function validateBasicFile(file) {
     const errors = [];
 
     if (!allowedTypes.includes(file.type)) {
-        errors.push("Allowed types are jpg, jpeg, png, and webp.");
+        errors.push(t("photoUpload.allowedTypes"));
     }
 
     if (file.size > maxFileSize) {
-        errors.push("Maximum file size is 20 MB.");
+        errors.push(t("photoUpload.maxFileSize"));
     }
 
     return errors;
@@ -510,7 +511,7 @@ function validateBasicFile(file) {
 async function validatePhotoItem(item) {
     item.status = "checking";
     item.errors = [];
-    item.validationMessage = "Checking photo...";
+    item.validationMessage = t("photoUpload.checkingPhoto");
     emitUpdate();
 
     const fd = new FormData();
@@ -525,15 +526,15 @@ async function validatePhotoItem(item) {
             applyValidationResult(item, error.response.data);
         } else {
             item.status = "rejected";
-            item.validationMessage = "Photo rejected";
-            item.errors = ["Photo validation failed. Please try again."];
+            item.validationMessage = t("photoUpload.photoRejected");
+            item.errors = [t("photoUpload.validationFailed")];
             item.metrics = emptyMetrics();
         }
     } finally {
         if (item.status === "checking") {
             item.status = "rejected";
-            item.validationMessage = "Photo rejected";
-            item.errors = ["Photo validation failed. Please try again."];
+            item.validationMessage = t("photoUpload.photoRejected");
+            item.errors = [t("photoUpload.validationFailed")];
         }
 
         emitUpdate();
@@ -545,7 +546,7 @@ function applyValidationResult(item, result) {
     const metrics = normalizeMetrics(result?.metrics || {});
 
     item.status = accepted ? "accepted" : "rejected";
-    item.validationMessage = result?.message || (accepted ? "Photo accepted" : "Photo rejected");
+    item.validationMessage = result?.message || (accepted ? t("photoUpload.photoAccepted") : t("photoUpload.photoRejected"));
     item.errors = Array.isArray(result?.errors) ? result.errors : [];
     item.metrics = metrics;
 
@@ -712,12 +713,12 @@ function togglePhotoTag(item, tag) {
     }
 
     if (item.tags.length >= props.maxTags) {
-        alert(`Each photo can have up to ${props.maxTags} tags.`);
+        alert(t("photoUpload.maxTags", { max: props.maxTags }));
         return;
     }
 
     if (isTagNameSelected(item, tagName(tag))) {
-        alert("This tag is already selected.");
+        alert(t("photoUpload.tagAlreadySelected"));
         return;
     }
 
@@ -795,10 +796,10 @@ function statusBadgeClass(status) {
 }
 
 function statusLabel(status) {
-    if (status === "accepted") return "accepted";
-    if (status === "rejected") return "rejected";
-    if (status === "checking") return "checking";
-    return "idle";
+    if (status === "accepted") return t("photoUpload.status.accepted");
+    if (status === "rejected") return t("photoUpload.status.rejected");
+    if (status === "checking") return t("photoUpload.status.checking");
+    return t("photoUpload.status.idle");
 }
 
 function cloneMediaItemForEmit(item) {

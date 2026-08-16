@@ -7,8 +7,8 @@
                 <!-- Background Video -->
                 <video class="absolute inset-0 z-0 h-full w-full object-cover" autoplay muted loop playsinline
                     preload="auto">
-                    <source src="/video/Final_Scemory.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
+                    <source src="/video/Final_Scemory.mp4" type="video/mp4" />
+                    {{ $t('homeAudit.home.videoUnsupported') }}
                 </video>
 
                 <!-- Dark / Blue Overlay -->
@@ -49,7 +49,7 @@
                        bg-white/10 px-5 py-2
                        text-sm font-semibold text-white
                        shadow-lg backdrop-blur-md">
-                            Scemory Event Archive
+                            {{ $t('homeAudit.home.badge') }}
 
                             <span class="text-[#38AEEA]">
                                 ✦
@@ -62,10 +62,10 @@
                        tracking-tight text-white
                        drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]
                        sm:text-5xl md:text-6xl lg:text-7xl">
-                            Explore documented events
+                            {{ $t('homeAudit.home.title') }}
 
                             <span class="mt-1 block text-[#38AEEA]">
-                                through the map
+                                {{ $t('homeAudit.home.titleHighlight') }}
                             </span>
                         </h1>
 
@@ -74,9 +74,7 @@
                        text-base leading-8
                        text-white/85
                        md:text-lg">
-                            Discover event media uploaded by journalists,
-                            media teams, and eyewitness contributors
-                            around the world.
+                            {{ $t('homeAudit.home.description') }}
                         </p>
 
                         <!-- Buttons -->
@@ -91,7 +89,7 @@
                            transition duration-300
                            hover:-translate-y-1
                            hover:bg-[#28A9E6]">
-                                Search Events
+                                {{ $t('homeAudit.home.searchEvents') }}
                             </a>
 
                             <RouterLink :to="`/${lang}/add_event`" class="inline-flex items-center justify-center
@@ -103,14 +101,14 @@
                            transition duration-300
                            hover:-translate-y-1
                            hover:bg-white/20">
-                                Upload Your Story
+                                {{ $t('homeAudit.home.uploadStory') }}
                             </RouterLink>
 
                         </div>
 
                         <!-- Small Bottom Text -->
                         <p class="mt-6 text-sm text-white/60">
-                            Discover stories, places and moments from around the world.
+                            {{ $t('homeAudit.home.bottomText') }}
                         </p>
 
                     </div>
@@ -196,25 +194,25 @@
                 @click="goToProfile">
                 <div class="flex items-center justify-between border-b bg-yellow-50 px-3 py-2">
                     <span class="text-sm font-semibold text-yellow-800">
-                        Not Completed Profile
+                        {{ $t('homeAudit.profileToast.title') }}
                     </span>
 
                     <button type="button" @click.stop="closeToast"
                         class="text-4xl font-bold leading-none text-gray-400 transition-colors hover:text-red-500"
-                        aria-label="Close">
+                        :aria-label="$t('common.close')">
                         ×
                     </button>
                 </div>
 
                 <div class="p-3 text-xs text-gray-600">
-                    Your profile is not complete. Please update:
+                    {{ $t('homeAudit.profileToast.message') }}
                     <ul class="mt-1.5 list-inside list-disc text-[11px] text-gray-500">
                         <li v-for="field in missingFieldsList" :key="field">
                             {{ fieldLabels[field] || field }}
                         </li>
                     </ul>
 
-                    <p class="mt-2 text-[11px] font-medium text-blue-600">Click to complete -></p>
+                    <p class="mt-2 text-[11px] font-medium text-blue-600">{{ $t('homeAudit.profileToast.complete') }}</p>
                 </div>
 
                 <div class="h-1 bg-gray-100">
@@ -238,6 +236,7 @@ import {
     watch,
 } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import debounce from "lodash/debounce";
 
 import { CategoryService } from "@/services/CategoryService/CategoryService";
@@ -264,6 +263,7 @@ const ScemoryExperienceTabs = defineAsyncComponent(() => import("./components/Sc
 const NewsletterSection = defineAsyncComponent(() => import("./components/NewsletterSection.vue"));
 
 const router = useRouter();
+const { t } = useI18n();
 const lang = localStorage.getItem("language") || "en";
 
 const DEFAULT_LOCATION = { lat: 30.0444, lng: 31.2357 };
@@ -364,10 +364,10 @@ const missingFieldsList = computed(() => {
 });
 
 const fieldLabels = {
-    phone: "Phone",
-    country: "Country",
-    position: "Position",
-    date_of_birth: "Date of birth",
+    phone: t("homeAudit.profileToast.fields.phone"),
+    country: t("homeAudit.profileToast.fields.country"),
+    position: t("homeAudit.profileToast.fields.position"),
+    date_of_birth: t("homeAudit.profileToast.fields.dateOfBirth"),
 };
 
 const formatDate = (dateStr) => {
@@ -392,7 +392,7 @@ const normalizeTrendingEvent = (ev = {}) => {
     return {
         id: ev.id || ev._id,
         slug: ev.slug,
-        title: ev.translation?.title || ev.title || "Untitled event",
+        title: ev.translation?.title || ev.title || t("events.no_title"),
         description: ev.translation?.description || "",
         start_date: ev.start_date,
         image_url: toMediaUrl(imagePath) || fallbackImage,
@@ -423,7 +423,7 @@ const loadTrendingEvents = async () => {
     } catch (error) {
         console.error("Error loading trending events:", error);
         trendingEvents.value = [];
-        trendingEventsError.value = error.response?.data?.message || "Unable to load trending events right now.";
+        trendingEventsError.value = error.response?.data?.message || t("homeAudit.trending.loadError");
     } finally {
         loadingTrendingEvents.value = false;
     }
@@ -694,7 +694,7 @@ const ensureMapInitialized = async () => {
             if (!hasMapErrorListener) {
                 mapService.map.on("error", () => {
                     if (!isMapReady.value) {
-                        mapError.value = "Map tiles are taking too long to render.";
+                        mapError.value = t("homeAudit.map.tilesSlow");
                     }
                 });
 
@@ -723,7 +723,7 @@ const ensureMapInitialized = async () => {
         console.error("Error loading map:", error);
         hasRequestedMapInit.value = false;
         canInitMap.value = false;
-        mapError.value = "Unable to load map right now.";
+        mapError.value = t("homeAudit.map.loadError");
     } finally {
         isMapLoading.value = false;
     }

@@ -10,9 +10,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back
+                    {{ $t('common.back') }}
                 </button>
-                <span class="text-xs tracking-[0.3em] uppercase text-gray-400 font-medium">Subscription</span>
+                <span class="text-xs tracking-[0.3em] uppercase text-gray-400 font-medium">{{ $t('plans.subscription') }}</span>
             </div>
         </div>
 
@@ -20,16 +20,16 @@
         <div v-if="loading" class="flex items-center justify-center min-h-[80vh]">
             <div class="text-center space-y-4">
                 <div class="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin mx-auto"></div>
-                <p class="text-sm tracking-widest uppercase text-gray-400">Loading plan...</p>
+                <p class="text-sm tracking-widest uppercase text-gray-400">{{ $t('plans.loadingPlan') }}</p>
             </div>
         </div>
 
-        <!-- Plan Content -->
+        <!-- {{ $t('plans.plan') }} Content -->
         <div v-else-if="plan" class="max-w-6xl mx-auto px-6 py-12">
 
             <div class="grid lg:grid-cols-5 gap-0 border border-black">
 
-                <!-- Left Column - Plan Details (3 cols) -->
+                <!-- Left Column - {{ $t('plans.plan') }} Details (3 cols) -->
                 <div class="lg:col-span-3 border-r border-black">
 
                     <!-- Header Section -->
@@ -37,7 +37,7 @@
                         <div class="flex items-start justify-between mb-8">
                             <span
                                 class="text-xs tracking-[0.4em] uppercase font-semibold border border-black px-3 py-1">
-                                Premium Plan
+                                {{ $t('plans.premiumPlan') }}
                             </span>
                             <span class="text-xs text-gray-400 tracking-widest uppercase">
                                 #{{ plan.id.toString().padStart(4, '0') }}
@@ -53,8 +53,7 @@
                                 ${{ plan.price.split('.')[0] }}
                             </span>
                             <span class="text-3xl font-black text-black">.{{ plan.price.split('.')[1] }}</span>
-                            <span class="text-sm text-gray-400 ml-2 tracking-widest uppercase self-end mb-1">/
-                                month</span>
+                            <span class="text-sm text-gray-400 ml-2 tracking-widest uppercase self-end mb-1">{{ $t('plans.perMonthSlash') }}</span>
                         </div>
                     </div>
 
@@ -70,7 +69,7 @@
                     <!-- Features -->
                     <div class="p-10">
                         <h3 class="text-xs tracking-[0.4em] uppercase font-semibold text-gray-400 mb-8">
-                            What's Included
+                            {{ $t('plans.whatsIncluded') }}
                         </h3>
                         <ul class="divide-y divide-gray-100">
                             <li v-for="feature in plan.advantges" :key="feature.id"
@@ -97,26 +96,26 @@
                     <!-- Subscribe Block -->
                     <div class="p-10 border-b border-black">
                         <h2 class="text-2xl font-black text-black mb-2 leading-tight">
-                            Ready to get started?
+                            {{ $t('plans.readyToStart') }}
                         </h2>
                         <p class="text-sm text-gray-500 mb-8 tracking-wide">
-                            Cancel anytime. No questions asked.
+                            {{ $t('plans.cancelNoQuestions') }}
                         </p>
 
                         <!-- Price Summary -->
                         <div class="border border-black p-5 mb-6">
                             <div class="flex justify-between items-center mb-3">
-                                <span class="text-sm text-gray-500">Plan</span>
+                                <span class="text-sm text-gray-500">{{ $t('plans.plan') }}</span>
                                 <span class="text-sm font-semibold text-black">
                                     {{ plan.translation?.name || plan.name }}
                                 </span>
                             </div>
                             <div class="flex justify-between items-center mb-3">
-                                <span class="text-sm text-gray-500">Billing</span>
-                                <span class="text-sm font-semibold text-black">Monthly</span>
+                                <span class="text-sm text-gray-500">{{ $t('plans.billing') }}</span>
+                                <span class="text-sm font-semibold text-black">{{ $t('plans.Monthly') }}</span>
                             </div>
                             <div class="border-t border-black pt-3 flex justify-between items-center">
-                                <span class="text-sm font-bold text-black uppercase tracking-wider">Total</span>
+                                <span class="text-sm font-bold text-black uppercase tracking-wider">{{ $t('cart.total') }}</span>
                                 <span class="text-xl font-black text-black">${{ plan.price }}</span>
                             </div>
                         </div>
@@ -140,14 +139,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 15v2m-6-4h12a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2zm10-10V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
                                 </svg>
-                                Secure 256-bit SSL encryption
+                                {{ $t('plans.secureSsl') }}
                             </div>
                             <div class="flex items-center gap-2 text-xs text-gray-400">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
-                                30-day money-back guarantee
+                                {{ $t('plans.moneyBack') }}
                             </div>
                         </div>
                     </div>
@@ -156,23 +155,22 @@
                     <div class="grid grid-cols-3 divide-x divide-black border-b border-black">
                         <div class="p-6 text-center">
                             <div class="text-2xl font-black text-black">10K+</div>
-                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">Users</div>
+                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">{{ $t('plans.users') }}</div>
                         </div>
                         <div class="p-6 text-center">
                             <div class="text-2xl font-black text-black">4.9</div>
-                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">Rating</div>
+                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">{{ $t('plans.rating') }}</div>
                         </div>
                         <div class="p-6 text-center">
                             <div class="text-2xl font-black text-black">24/7</div>
-                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">Support</div>
+                            <div class="text-xs text-gray-400 tracking-wider uppercase mt-1">{{ $t('plans.support') }}</div>
                         </div>
                     </div>
 
                     <!-- Footer note -->
                     <div class="flex-1 p-10 flex items-end">
                         <p class="text-xs text-gray-300 leading-relaxed">
-                            By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews
-                            automatically each month.
+                            {{ $t('plans.subscriptionAgreement') }}
                         </p>
                     </div>
                 </div>
@@ -182,14 +180,14 @@
             <div class="border-x border-b border-black">
                 <div class="border-b border-black p-10">
                     <h3 class="text-xs tracking-[0.4em] uppercase font-semibold text-gray-400">
-                        Frequently Asked Questions
+                        {{ $t('faq.title') }}
                     </h3>
                 </div>
                 <div class="divide-y divide-gray-100">
                     <div v-for="(faq, index) in faqs" :key="index">
                         <button @click="toggleFaq(index)"
                             class="w-full text-left flex justify-between items-center p-8 hover:bg-gray-50 transition-colors duration-150">
-                            <span class="font-bold text-black text-base pr-8">{{ faq.question }}</span>
+                            <span class="font-bold text-black text-base pr-8">{{ $t(faq.question) }}</span>
                             <svg class="w-4 h-4 text-black flex-shrink-0 transition-transform duration-200"
                                 :class="{ 'rotate-180': openFaqs[index] }" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -199,7 +197,7 @@
                         </button>
                         <div v-if="openFaqs[index]"
                             class="px-8 pb-8 text-gray-600 leading-relaxed text-sm border-t border-gray-100">
-                            <div class="pt-4">{{ faq.answer }}</div>
+                            <div class="pt-4">{{ $t(faq.answer) }}</div>
                         </div>
                     </div>
                 </div>
@@ -215,13 +213,13 @@
                             d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h3 class="text-2xl font-black text-black mb-3">Plan Not Found</h3>
+                <h3 class="text-2xl font-black text-black mb-3">{{ $t('plans.notFound') }}</h3>
                 <p class="text-gray-500 text-sm mb-8 leading-relaxed">
-                    The plan you're looking for doesn't exist or has been removed.
+                    {{ $t('plans.notFoundDescription') }}
                 </p>
                 <button @click="$router.push('/plans')"
                     class="inline-flex items-center gap-3 bg-black text-white px-8 py-4 text-sm font-bold tracking-widest uppercase hover:bg-gray-800 transition-colors">
-                    Browse All Plans
+                    {{ $t('plans.browseAll') }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -255,9 +253,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { PlanService } from "@/services/planService/planService";
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -269,20 +269,20 @@ const toast = ref({ show: false, message: '', type: '' });
 const openFaqs = ref({});
 const faqs = ref([
     {
-        question: "Can I cancel my subscription anytime?",
-        answer: "Yes, you can cancel your subscription at any time. No questions asked, and you'll still have access until the end of your billing period."
+        question: "plans.faq.cancel.question",
+        answer: "plans.faq.cancel.answer"
     },
     {
-        question: "Is there a free trial?",
-        answer: "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+        question: "plans.faq.trial.question",
+        answer: "plans.faq.trial.answer"
     },
     {
-        question: "What payment methods do you accept?",
-        answer: "We accept all major credit cards, PayPal, and bank transfers for annual plans."
+        question: "plans.faq.payment.question",
+        answer: "plans.faq.payment.answer"
     },
     {
-        question: "Can I switch plans later?",
-        answer: "Absolutely! You can upgrade or downgrade your plan at any time from your account dashboard."
+        question: "plans.faq.switch.question",
+        answer: "plans.faq.switch.answer"
     }
 ]);
 
@@ -304,7 +304,7 @@ const fetchPlan = async () => {
         plan.value = res.data.data[0];
     } catch (error) {
         console.error(error);
-        showToast('Failed to load plan. Please try again.', 'error');
+        showToast(t('plans.errors.loadPlan'), 'error');
     } finally {
         loading.value = false;
     }
@@ -314,7 +314,7 @@ const subscribe = async () => {
     subscribing.value = true;
     try {
         await PlanService.subscribe(plan.value.id);
-        showToast('Successfully subscribed! Welcome aboard.', 'success');
+        showToast(t('plans.subscribeSuccess'), 'success');
         const lang = localStorage.getItem('language') || 'en';
 
         setTimeout(() => {
@@ -322,7 +322,7 @@ const subscribe = async () => {
         }, 1200);
     } catch (error) {
         console.error(error);
-        showToast('Subscription failed. Please try again.', 'error');
+        showToast(t('plans.errors.subscribeFailed'), 'error');
     } finally {
         subscribing.value = false;
     }

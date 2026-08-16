@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import CommentService from '../../services/CommentService/CommentService';
 
 const route = useRoute();
+const { t, locale } = useI18n();
 const comments = ref([]);
 const pagination = ref({
   current_page: 1,
@@ -38,15 +40,15 @@ const reportLoading = ref(false);
 const reportSuccess = ref(false);
 const reportError = ref('');
 
-const reportReasons = [
-  { value: 'spam',             label: 'بريد مزعج',          icon: 'SP' },
-  { value: 'offensive',        label: 'محتوى مسيء',         icon: 'OF' },
-  { value: 'inappropriate',    label: 'غير لائق',            icon: 'IN' },
-  { value: 'illegal',          label: 'محتوى غير قانوني',    icon: 'LG' },
-  { value: 'untrue',           label: 'محتوى كاذب',          icon: 'UN' },
-  { value: 'False information',label: 'معلومات مضللة',       icon: 'FI' },
-  { value: 'other',            label: 'سبب آخر',             icon: 'OT' },
-];
+const reportReasons = computed(() => [
+  { value: 'spam', label: t('report.reasons.spam'), icon: 'SP' },
+  { value: 'offensive', label: t('report.reasons.offensive'), icon: 'OF' },
+  { value: 'inappropriate', label: t('report.reasons.inappropriate'), icon: 'IN' },
+  { value: 'illegal', label: t('report.reasons.illegal'), icon: 'LG' },
+  { value: 'untrue', label: t('report.reasons.untrue'), icon: 'UN' },
+  { value: 'False information', label: t('report.reasons.falseInformation'), icon: 'FI' },
+  { value: 'other', label: t('report.reasons.other'), icon: 'OT' },
+]);
 
 const openReportModal = (commentId) => {
   reportCommentId.value = commentId;
@@ -66,7 +68,7 @@ const closeReportModal = () => {
 
 const submitReport = async () => {
   if (!reportReason.value) {
-    reportError.value = 'يرجى اختيار سبب البلاغ';
+    reportError.value = t('report.errors.selectReason');
     return;
   }
   reportLoading.value = true;
@@ -76,7 +78,7 @@ const submitReport = async () => {
     reportSuccess.value = true;
     setTimeout(() => closeReportModal(), 2000);
   } catch (err) {
-    reportError.value = 'حدث خطأ أثناء إرسال البلاغ. حاول مرة أخرى.';
+    reportError.value = t('report.errors.submitFailed');
     console.error(err);
   } finally {
     reportLoading.value = false;
@@ -97,7 +99,7 @@ const fetchComments = async (page = 1) => {
       per_page: response.data.per_page || 10,
     };
   } catch (error) {
-    errorMsg.value = "حصل خطأ أثناء جلب التعليقات";
+    errorMsg.value = t('commentsPage.errors.loadFailed');
     console.error(error);
   } finally {
     loading.value = false;
@@ -169,7 +171,7 @@ const setReaction = async (commentId, type) => {
     <!-- Header -->
     <div class="flex items-center gap-3 mb-6">
       <div class="w-1 h-7 bg-indigo-500 rounded-full"></div>
-      <h3 class="text-xl font-bold text-gray-800">التعليقات</h3>
+      <h3 class="text-xl font-bold text-gray-800">{{ $t('commentsPage.title') }}</h3>
       <span
         v-if="pagination.total > 0"
         class="text-xs bg-indigo-100 text-indigo-600 font-semibold px-2.5 py-0.5 rounded-full"
@@ -205,8 +207,8 @@ const setReaction = async (commentId, type) => {
 
     <!-- No comments -->
     <div v-else-if="comments.length === 0" class="text-center py-16 text-gray-400">
-      <div class="text-sm font-bold mb-3 text-[#0D4D97]">COMMENTS</div>
-      <p class="text-sm">لا توجد تعليقات بعد. كن أول من يعلّق!</p>
+      <div class="text-sm font-bold mb-3 text-[#0D4D97]">{{ $t('commentsPage.emptyLabel') }}</div>
+      <p class="text-sm">{{ $t('commentsPage.emptyMessage') }}</p>
     </div>
 
     <!-- Comments list -->
@@ -234,7 +236,7 @@ const setReaction = async (commentId, type) => {
           >
             <img
               :src="getCommentImageUrl(image)"
-              alt="Comment attachment"
+              :alt="$t('commentsPage.attachmentAlt')"
               class="h-32 w-full object-cover"
               loading="lazy"
             />
@@ -246,7 +248,7 @@ const setReaction = async (commentId, type) => {
             <div class="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
               {{ comment.user?.name?.charAt(0)?.toUpperCase() || '?' }}
             </div>
-            <span class="font-medium">{{ comment.user?.name || 'مستخدم' }}</span>
+            <span class="font-medium">{{ comment.user?.name || $t('event.visitor') }}</span>
           </div>
           <div class="flex items-center gap-3">
             <span>
@@ -256,13 +258,13 @@ const setReaction = async (commentId, type) => {
             <button
               @click="openReportModal(comment.id)"
               class="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors duration-150 px-2 py-1 rounded-lg hover:bg-red-50"
-              title="الإبلاغ عن هذا التعليق"
+              :title="$t('report.commentTitle')"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18l-2 9H5L3 3z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 12v7h14v-7" />
               </svg>
-              إبلاغ
+              {{ $t('report.action') }}
             </button>
           </div>
         </div>
@@ -282,7 +284,7 @@ const setReaction = async (commentId, type) => {
             ]"
           >
             <span class="text-[11px] font-bold">YES</span>
-            موافق
+            {{ $t('commentsPage.reactions.support') }}
             <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
               {{ comment.support_count ?? 0 }}
             </span>
@@ -301,7 +303,7 @@ const setReaction = async (commentId, type) => {
             ]"
           >
             <span class="text-[11px] font-bold">MID</span>
-            محايد
+            {{ $t('commentsPage.reactions.neutral') }}
             <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
               {{ comment.neutral_count ?? 0 }}
             </span>
@@ -320,7 +322,7 @@ const setReaction = async (commentId, type) => {
             ]"
           >
             <span class="text-[11px] font-bold">NO</span>
-            غير موافق
+            {{ $t('commentsPage.reactions.oppose') }}
             <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
               {{ comment.exhibitions_count ?? 0 }}
             </span>
@@ -336,18 +338,17 @@ const setReaction = async (commentId, type) => {
         @click="goToPage(pagination.current_page - 1)"
         class="px-5 py-2 rounded-xl border text-sm font-medium disabled:opacity-40 transition"
       >
-        &#8594; السابق
+        &#8594; {{ $t('common.previous') }}
       </button>
       <span class="text-sm">
-        صفحة <strong class="text-indigo-600">{{ pagination.current_page }}</strong> من
-        <strong>{{ pagination.last_page }}</strong>
+        {{ $t('commentsPage.pageInfo', { current: pagination.current_page, total: pagination.last_page }) }}
       </span>
       <button
         :disabled="pagination.current_page === pagination.last_page"
         @click="goToPage(pagination.current_page + 1)"
         class="px-5 py-2 rounded-xl border text-sm font-medium disabled:opacity-40 transition"
       >
-        التالي &#8592;
+        {{ $t('common.next') }} &#8592;
       </button>
     </div>
 
@@ -373,8 +374,8 @@ const setReaction = async (commentId, type) => {
           <!-- Success State -->
           <div v-if="reportSuccess" class="flex flex-col items-center py-6 gap-3 text-center">
             <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold">OK</div>
-            <h4 class="text-lg font-bold text-gray-800">تم إرسال البلاغ</h4>
-            <p class="text-sm text-gray-500">شكراً لك، سنراجع هذا التعليق قريباً.</p>
+            <h4 class="text-lg font-bold text-gray-800">{{ $t('report.successTitle') }}</h4>
+            <p class="text-sm text-gray-500">{{ $t('report.successMessage') }}</p>
           </div>
 
           <!-- Form State -->
@@ -387,7 +388,7 @@ const setReaction = async (commentId, type) => {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                   </svg>
                 </div>
-                <h3 class="text-base font-bold text-gray-800">الإبلاغ عن تعليق</h3>
+                <h3 class="text-base font-bold text-gray-800">{{ $t('report.modalTitle') }}</h3>
               </div>
               <button
                 @click="closeReportModal"
@@ -399,7 +400,7 @@ const setReaction = async (commentId, type) => {
               </button>
             </div>
 
-            <p class="text-sm text-gray-500 mb-4">اختر سبب الإبلاغ عن هذا التعليق:</p>
+            <p class="text-sm text-gray-500 mb-4">{{ $t('report.reasonPrompt') }}</p>
 
             <!-- Reasons Grid -->
             <div class="grid grid-cols-2 gap-2 mb-5">
@@ -430,7 +431,7 @@ const setReaction = async (commentId, type) => {
                 @click="closeReportModal"
                 class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition"
               >
-                إلغاء
+                {{ $t('common.cancel') }}
               </button>
               <button
                 @click="submitReport"
@@ -447,9 +448,9 @@ const setReaction = async (commentId, type) => {
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
-                  جاري الإرسال...
+                  {{ $t('report.submitting') }}
                 </span>
-                <span v-else>إرسال البلاغ</span>
+                <span v-else>{{ $t('report.submit') }}</span>
               </button>
             </div>
           </template>

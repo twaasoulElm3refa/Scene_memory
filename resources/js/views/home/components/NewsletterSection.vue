@@ -7,31 +7,30 @@
                     <div>
                         <span
                             class="newsletter-eyebrow inline-flex rounded-full px-4 py-2 text-sm font-bold">
-                            Newsletter
+                            {{ $t('newsletter.kicker') }}
                         </span>
 
                         <h2 class="mt-5 text-3xl font-bold tracking-tight text-[#0F172A] md:text-5xl">
-                            Stay updated with verified event stories
+                            {{ $t('newsletter.verifiedTitle') }}
                         </h2>
 
                         <p class="mt-5 max-w-2xl text-base leading-8 text-[#475569]">
-                            Get curated updates about trending events, new media archives, and major stories documented
-                            by contributors around the world.
+                            {{ $t('newsletter.verifiedDescription') }}
                         </p>
                     </div>
 
                     <form class="newsletter-form rounded-[26px] border p-4 backdrop-blur-xl"
                         @submit.prevent="submit">
-                        <label class="sr-only" for="newsletter-email">Email</label>
+                        <label class="sr-only" for="newsletter-email">{{ $t('newsletter.email') }}</label>
 
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                            <input id="newsletter-email" v-model="email" type="email" placeholder="Enter your email"
+                            <input id="newsletter-email" v-model="email" type="email" :placeholder="$t('newsletter.emailPlaceholder')"
                                 class="newsletter-input min-h-[52px] w-full rounded-full border px-5 text-sm outline-none transition sm:w-[200px]" />
 
                             <button
                                 class="newsletter-button min-h-[52px] rounded px-7 text-sm font-bold text-white transition"
                                 type="submit">
-                                Subscribe
+                                {{ $t('newsletter.subscribeShort') }}
                             </button>
                         </div>
 
@@ -40,7 +39,7 @@
                         </p>
 
                         <p v-if="success" class="mt-3 text-sm font-semibold text-[#0D4D97]">
-                            Thanks for subscribing. Newsletter API will be connected soon.
+                            {{ $t('newsletter.pendingApiMessage') }}
                         </p>
                     </form>
                 </div>

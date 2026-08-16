@@ -4,10 +4,10 @@
     <!-- Header -->
     <div class="page-header">
       <div class="header-left">
-        <h1 class="page-title">My Downloads</h1>
+        <h1 class="page-title">{{ $t('downloads.title') }}</h1>
         <transition name="badge-pop">
           <span v-if="downloads.length" class="count-badge">
-            {{ downloads.length }} files
+            {{ $t('downloads.fileCount', { count: downloads.length }) }}
           </span>
         </transition>
       </div>
@@ -35,7 +35,7 @@
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <p class="state-text">حصل خطأ في تحميل البيانات</p>
+        <p class="state-text">{{ $t('downloads.loadError') }}</p>
         <button class="retry-btn" @click="fetchDownloads">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
             <path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" stroke-width="2.5"
@@ -43,7 +43,7 @@
             <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"
               stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Try again
+          {{ $t('common.tryAgain') }}
         </button>
       </div>
     </transition>
@@ -67,7 +67,7 @@
               <img
                 v-if="isImage(item.preview_url)"
                 :src="getUrl(item.preview_url)"
-                :alt="`file-${item.id}`"
+                :alt="$t('downloads.fileAlt', { id: item.id })"
                 class="thumb-img"
                 loading="lazy"
               />
@@ -88,7 +88,7 @@
                 <svg v-else width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M15 10l4.553-2.277A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4zM3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
                 </svg>
-                {{ isImage(item.preview_url) ? 'IMG' : 'VID' }}
+                {{ isImage(item.preview_url) ? $t('downloads.imageType') : $t('downloads.videoType') }}
               </span>
 
               <!-- Done checkmark overlay -->
@@ -111,7 +111,7 @@
                       stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
                   </svg>
-                  Preview
+                  {{ $t('downloads.preview') }}
                 </button>
               </div>
             </div>
@@ -128,7 +128,7 @@
                 <div class="progress-bar"></div>
               </div>
 
-              <!-- Download Button -->
+              <!-- {{ $t('downloads.download') }} Button -->
               <button
                 class="download-btn"
                 :class="{
@@ -155,9 +155,9 @@
 
                 <span class="btn-label">
                   <transition name="text-swap" mode="out-in">
-                    <span v-if="downloadingId === item.id" key="loading">Downloading...</span>
-                    <span v-else-if="doneIds.has(item.id)" key="done">Downloaded</span>
-                    <span v-else key="idle">Download</span>
+                    <span v-if="downloadingId === item.id" key="loading">{{ $t('downloads.downloading') }}</span>
+                    <span v-else-if="doneIds.has(item.id)" key="done">{{ $t('downloads.downloaded') }}</span>
+                    <span v-else key="idle">{{ $t('downloads.download') }}</span>
                   </transition>
                 </span>
               </button>
@@ -180,8 +180,8 @@
               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <p class="state-text">لا يوجد تحميلات</p>
-        <p class="state-sub">Files you purchase will appear here</p>
+        <p class="state-text">{{ $t('downloads.empty') }}</p>
+        <p class="state-sub">{{ $t('downloads.emptyHint') }}</p>
       </div>
     </transition> -->
 
@@ -208,8 +208,10 @@
 
 <script setup>
 import { ref, onMounted, reactive } from "vue";
+import { useI18n } from "vue-i18n";
 import downloadService from "@/services/downloadService/downloadService";
 
+const { t } = useI18n();
 const downloads     = ref([]);
 const loading       = ref(true);
 const error         = ref(false);
@@ -236,7 +238,7 @@ const getUrl = (path) => {
   return `/storage/${path}`;
 };
 
-/* ── Download URL — goes through Laravel to force download ── */
+/* ── {{ $t('downloads.download') }} URL — goes through Laravel to force download ── */
 
 /* ── Type check ── */
 const isImage = (path) => {
@@ -265,12 +267,12 @@ const fetchDownloads = async () => {
   }
 };
 
-/* ── Preview ── */
+/* ── {{ $t('downloads.preview') }} ── */
 const openFile = (url) => {
   window.open(getUrl(url), "_blank");
 };
 
-/* ── Download ── */
+/* ── {{ $t('downloads.download') }} ── */
 const downloadFile = async (item) => {
   if (downloadingId.value === item.id || doneIds.value.has(item.id)) return;
 
@@ -291,11 +293,11 @@ const downloadFile = async (item) => {
     URL.revokeObjectURL(objectUrl);
 
     doneIds.value = new Set([...doneIds.value, item.id]);
-    showToast(`${filename} downloaded successfully!`, "success");
+    showToast(t("downloads.downloadSuccess", { filename }), "success");
 
   } catch (err) {
-    console.error("Download failed:", err);
-    showToast("Download failed. Please try again.", "error");
+    console.error('Download failed:', err);
+    showToast(t('downloads.downloadFailed'), 'error');
   } finally {
     downloadingId.value = null;
   }
@@ -571,7 +573,7 @@ onMounted(fetchDownloads);
   100% { transform: translateX(200%)  scaleX(0.5); }
 }
 
-/* ── Download button ── */
+/* ── {{ $t('downloads.download') }} button ── */
 .download-btn {
   width: 100%;
   display: flex;

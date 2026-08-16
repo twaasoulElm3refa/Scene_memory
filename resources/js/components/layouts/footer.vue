@@ -2,25 +2,25 @@
   <footer class="footer-gradient py-5 mt-10">
     <div class="container">
       <div class="row">
-        <!-- Quick Links -->
+        <!-- {{ $t('footer.quickLinks') }} -->
         <div class="col-md-4 mb-4 mb-md-0">
-          <h5 class="fw-bold mb-3 text-glow">Quick Links</h5>
+          <h5 class="fw-bold mb-3 text-glow">{{ $t('footer.quickLinks') }}</h5>
           <ul class="list-unstyled">
-            <li v-for="link in quickLinks" :key="link.label">
+            <li v-for="link in quickLinks" :key="link.labelKey">
               <a :href="link.href" class="footer-link d-block mb-2">
-                {{ link.label }}
+                {{ $t(link.labelKey) }}
               </a>
             </li>
           </ul>
         </div>
 
-        <!-- Support & Contact -->
+        <!-- {{ $t('footer.supportContact') }} -->
         <div class="col-md-4 mb-4 mb-md-0">
-          <h5 class="fw-bold mb-3 text-glow">Support & Contact</h5>
+          <h5 class="fw-bold mb-3 text-glow">{{ $t('footer.supportContact') }}</h5>
           <ul class="list-unstyled">
-            <li v-for="link in supportLinks" :key="link.label">
+            <li v-for="link in supportLinks" :key="link.labelKey">
               <a :href="link.href" class="footer-link d-block mb-2">
-                {{ link.label }}
+                {{ $t(link.labelKey) }}
               </a>
             </li>
           </ul>
@@ -32,7 +32,7 @@
           <div class="mb-3">
             <img
               src="/images/logo.png"
-              alt="Logo"
+              :alt="$t('footer.logoAlt')"
               class="rounded-circle logo-glow p-1 w-50"
             />
           </div>
@@ -55,14 +55,14 @@
             <a href="#" target="_blank">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                alt="Get it on Google Play"
+                :alt="$t('footer.googlePlayAlt')"
                 class="store-badge"
               />
             </a>
             <a href="#" target="_blank">
               <img
                 src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                alt="Download on the App Store"
+                :alt="$t('footer.appStoreAlt')"
                 class="store-badge"
               />
             </a>
@@ -70,7 +70,7 @@
 
           <!-- Copyright -->
           <p class="small mb-0 copyright-text">
-            © 2025 Scene Memory — جميع الحقوق محفوظة
+{{ $t('footer.copyright2025') }}
           </p>
         </div>
       </div>
@@ -85,17 +85,17 @@ export default {
   data() {
     return {
       quickLinks: [
-        { label: "Home", href: "/" },
-        { label: "Services", href: "#" },
+        { labelKey: "nav.home", href: "/" },
+        { labelKey: "footer.services", href: "#" },
       ],
 
       supportLinks: [
-        { label: "Who Are We?", href: "/who" },
-        { label: "Contact Us", href: "/contact" },
-        { label: "Copyright", href: "#" },
-        { label: "Terms of Services", href: "/terms" },
-        { label: "Privacy Policy", href: "/privacy-policy" },
-        { label: "Data Protection", href: "/data-protection" },
+        { labelKey: "nav.about", href: "/who" },
+        { labelKey: "nav.contact", href: "/contact" },
+        { labelKey: "footer.copyrightLink", href: "#" },
+        { labelKey: "footer.termsOfService", href: "/terms" },
+        { labelKey: "footer.privacyPolicy", href: "/privacy-policy" },
+        { labelKey: "footer.dataProtection", href: "/data-protection" },
       ],
 
       socials: [

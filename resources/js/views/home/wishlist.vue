@@ -138,8 +138,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { WishlistService } from '../../services/WishlistService/WishlistService'
 
+const { t, locale } = useI18n()
 const wishlists = ref([])
 const pagination = ref({})
 const currentPage = ref(1)
@@ -181,7 +183,7 @@ const getImageUrl = (item) => {
     return `https://picsum.photos/seed/event-${item.id}/800/600`
 }
 const deleteFromWishlist = async (id) => {
-    if (!confirm('هل أنت متأكد من إزالة هذا العنصر من قائمة المفضلة؟')) return
+    if (!confirm(t('wishlist.confirmRemove'))) return
 
     deletingItemId.value = id
 
@@ -195,7 +197,7 @@ const deleteFromWishlist = async (id) => {
         }
     } catch (error) {
         console.error('Error deleting from wishlist:', error)
-        let errorMessage = 'حدث خطأ أثناء الحذف، حاول مرة أخرى'
+        let errorMessage = t('wishlist.errors.deleteFailed')
 
         if (error.response) {
             const res = error.response.data
@@ -210,9 +212,9 @@ const deleteFromWishlist = async (id) => {
                 errorMessage = res.data.message
             }
         } else if (error.request) {
-            errorMessage = 'مشكلة في الاتصال بالخادم، تأكد من الإنترنت وحاول مرة أخرى'
+            errorMessage = t('wishlist.errors.connectionFailed')
         } else {
-            errorMessage = error.message || 'خطأ غير متوقع'
+            errorMessage = error.message || t('common.unknownError')
         }
 
         alert(errorMessage)
@@ -224,7 +226,7 @@ const deleteFromWishlist = async (id) => {
 const formatDate = (dateString) => {
     if (!dateString) return '—';
 
-    const language = localStorage.getItem('language') || 'ar';
+    const language = locale.value || localStorage.getItem('language') || 'en';
 
     try {
         return new Date(dateString).toLocaleDateString(language, {
@@ -239,7 +241,7 @@ const formatDate = (dateString) => {
 
 const formatDateTime = (dateString) => {
     if (!dateString) return '—'
-    return new Date(dateString).toLocaleString('ar-EG', {
+    return new Date(dateString).toLocaleString(locale.value || 'en', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',

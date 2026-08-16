@@ -4,7 +4,7 @@
       <div class="about-media relative min-h-[420px] overflow-hidden rounded-[34px] border">
         <img
           src="/images/about.png"
-          alt="Scemory documentation platform"
+          :alt="$t('homeAudit.about.imageAlt')"
           class="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div class="absolute inset-0 bg-gradient-to-tr from-[#0D4D97]/60 via-[#0D4D97]/18 to-transparent"></div>
@@ -13,15 +13,15 @@
       <div class="flex items-center">
         <div class="about-copy-panel rounded-[34px] border p-8 backdrop-blur-xl md:p-10">
           <span class="about-eyebrow inline-flex rounded-full px-4 py-2 text-sm font-bold">
-            Trusted Event Memory
+            {{ $t('homeAudit.about.kicker') }}
           </span>
 
           <h2 class="mt-5 text-3xl font-bold tracking-tight md:text-5xl">
-            About Scemory
+            {{ $t('homeAudit.about.title') }}
           </h2>
 
           <p class="mt-5 text-base leading-8 text-[#475569]">
-            Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, locations, and timelines into one searchable visual memory.
+            {{ $t('homeAudit.about.description') }}
           </p>
 
           <div class="mt-7 space-y-4">
@@ -37,7 +37,7 @@
             type="button"
             class="about-cta mt-8 rounded px-7 py-3 mt-2 text-sm font-bold text-white transition"
           >
-            Learn more
+            {{ $t('common.learnMore') }}
           </button>
         </div>
       </div>

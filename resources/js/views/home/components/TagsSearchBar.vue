@@ -15,7 +15,7 @@
                         </span>
 
                         <span v-if="loading" class="truncate text-sm text-gray-500">
-                            Loading tags...
+                            {{ $t('homeAudit.tags.loading') }}
                         </span>
 
                         <input
@@ -23,7 +23,7 @@
                             ref="tagInputRef"
                             v-model="tagSearch"
                             type="text"
-                            :placeholder="selectedTags.length ? 'Search more tags' : 'Search tags'"
+                            :placeholder="selectedTags.length ? $t('homeAudit.tags.searchMore') : $t('eventForm.searchTags')"
                             class="min-w-0 flex-1 bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
                             @focus="openTagDropdown"
                             @input="openTagDropdown"
@@ -36,7 +36,7 @@
                             class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-red-50 hover:text-red-500"
                             @click.stop="clearTags"
                         >
-                            Clear
+                            {{ $t('common.clear') }}
                         </button>
                     </div>
 
@@ -48,7 +48,7 @@
                             v-if="!hasSearch && tags.length > visibleTagsLimit"
                             class="border-b border-gray-100 px-3 pb-2 text-xs text-gray-400"
                         >
-                            Showing first {{ visibleTagsLimit }} tags. Search to find more.
+                            {{ $t('homeAudit.tags.showingFirst') }} {{ visibleTagsLimit }} {{ $t('homeAudit.tags.searchToFindMore') }}
                         </div>
 
                         <div
@@ -75,7 +75,7 @@
                             v-if="filteredTags.length === 0"
                             class="px-3 py-3 text-sm text-gray-400"
                         >
-                            No tags found
+                            {{ $t('homeAudit.tags.none') }}
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                     v-else
                     class="flex min-h-[46px] items-center rounded-xl border border-dashed border-gray-200 px-3 text-sm text-gray-400"
                 >
-                    Select one or more tags to filter map events.
+                    {{ $t('homeAudit.tags.helper') }}
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@
           v-model="searchQuery"
           type="text"
           class="w-full pr-10 pl-4 py-3 rounded-2xl border-2 border-gray-200 bg-white shadow-sm text-sm focus:outline-none focus:border-indigo-400 transition-all duration-200"
-          :placeholder="$t('search_country') || 'ابحث عن دولة...'"
+          :placeholder="$t('gate.searchCountry')"
           @blur="closeDropdownDelayed"
           @focus="openDropdown"
         />
@@ -41,14 +41,14 @@
         v-if="showDropdown && searchQuery && !filteredCountries.length"
         class="absolute top-[110%] right-0 left-0 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 p-4 text-center text-sm text-gray-400"
       >
-        لا توجد نتائج
+        {{ $t('common.noResults') }}
       </div>
     </div>
 
     <!-- Random Events -->
     <div class="max-w-7xl mx-auto">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">
-        {{ $t('random_events') || 'أحداث مميزة' }}
+        {{ $t('gate.featuredEvents') }}
       </h2>
 
       <!-- Skeleton Loading -->
@@ -87,7 +87,7 @@
               v-else
               class="w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center text-sm font-bold"
             >
-              Media
+              {{ $t('gate.media') }}
             </div>
 
             <!-- Category Badge -->
@@ -112,11 +112,11 @@
             <!-- Meta -->
             <div class="flex flex-col gap-1 mb-4">
               <div class="flex items-center gap-1.5 text-xs text-gray-500">
-                <span aria-hidden="true">LOC</span>
+                <span aria-hidden="true">{{ $t('gate.locationShort') }}</span>
                 <span>{{ event.city?.translation?.name || event.city?.name }}</span>
               </div>
               <div class="flex items-center gap-1.5 text-xs text-gray-500">
-                <span aria-hidden="true">DATE</span>
+                <span aria-hidden="true">{{ $t('gate.dateShort') }}</span>
                 <span>{{ formatDate(event.start_date) }}</span>
               </div>
             </div>
@@ -126,7 +126,7 @@
               :to="`/${$route.params.lang}/${getCountryCode(event)}/scemory-gate`"
               class="block text-center bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-semibold py-2 rounded-xl transition-colors duration-200"
             >
-              {{ $t('view_more') || 'عرض التفاصيل' }}
+              {{ $t('common.details') }}
             </router-link>
           </div>
         </div>

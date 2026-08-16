@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-5 md:flex-row md:justify-between md:items-end mb-10">
       <div>
         <p v-if="totalResults > 0" class="mt-2 text-sm font-medium text-gray-500">
-          Showing {{ resultFrom || 0 }} - {{ resultTo || 0 }} of {{ totalResults || 0 }} events
+          {{ $t('homeAudit.events.showing') }} {{ resultFrom || 0 }} - {{ resultTo || 0 }} {{ $t('homeAudit.events.of') }} {{ totalResults || 0 }} {{ $t('homeAudit.events.events') }}
         </p>
       </div>
 
@@ -13,7 +13,7 @@
         class="see-more-results-btn inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition"
         @click="$emit('see-more')"
       >
-        See More
+        {{ $t('homeAudit.events.seeMore') }}
         <span class="see-more-arrow" aria-hidden="true">&#8594;</span>
       </button>
     </div>
@@ -34,7 +34,7 @@
     </div>
 
     <div v-else-if="displayedEvents.length === 0" class="empty-events-state text-center py-20 rounded-3xl">
-      <div class="empty-events-mark mb-6">EVENTS</div>
+      <div class="empty-events-mark mb-6">{{ $t('homeAudit.events.badge') }}</div>
       <h3 class="text-2xl font-bold text-gray-900 mb-3">
         {{ $t("events.noEventsFound") }}
       </h3>

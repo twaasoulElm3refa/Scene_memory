@@ -31,7 +31,7 @@
                     ref="inputRef"
                     :value="modelValue"
                     type="text"
-                    placeholder="Search ..."
+                    :placeholder="$t('common.placeholder')"
                     class="min-w-0 flex-1 bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
                     @input="handleInput"
                     @focus="handleFocus"
@@ -45,7 +45,7 @@
                     class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
                     @click.stop="clearText"
                 >
-                    Clear text
+                    {{ $t('homeAudit.search.clearText') }}
                 </button>
 
                 <button
@@ -54,7 +54,7 @@
                     class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-red-50 hover:text-red-500"
                     @click.stop="clearTags"
                 >
-                    Clear tags
+                    {{ $t('homeAudit.search.clearTags') }}
                 </button>
             </div>
 
@@ -66,7 +66,7 @@
                     v-if="loading || loadingSuggestions"
                     class="px-3 py-3 text-sm text-gray-400"
                 >
-                    Loading tags...
+                    {{ $t('homeAudit.tags.loading') }}
                 </div>
 
                 <template v-else>
@@ -96,7 +96,7 @@
                         v-if="visibleSuggestions.length === 0"
                         class="px-3 py-3 text-sm text-gray-400"
                     >
-                        No tags found
+                        {{ $t('homeAudit.tags.none') }}
                     </div>
                 </template>
             </div>

@@ -6,15 +6,15 @@
     >
         <div class="mb-3">
             <span class="trending-eyebrow inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold">
-                Trending
+                {{ $t('homeAudit.trending.kicker') }}
             </span>
 
             <h2 class="mt-2 text-lg font-bold text-[#0F172A]">
-                Trending Events
+                {{ $t('homeAudit.trending.title') }}
             </h2>
 
             <p class="mt-1 text-xs leading-5 text-[#475569]">
-                Events gaining attention across the archive.
+                {{ $t('homeAudit.trending.description') }}
             </p>
         </div>
 
@@ -42,8 +42,8 @@
             v-else-if="events.length === 0"
             class="trending-empty rounded-xl border border-dashed px-3 py-5 text-center"
         >
-            <p class="text-sm font-bold text-[#0F172A]">No trending events yet</p>
-            <p class="mt-1 text-xs leading-5 text-[#64748B]">Check back soon for highlighted events.</p>
+            <p class="text-sm font-bold text-[#0F172A]">{{ $t('homeAudit.trending.emptyTitle') }}</p>
+            <p class="mt-1 text-xs leading-5 text-[#64748B]">{{ $t('homeAudit.trending.emptyDescription') }}</p>
         </div>
 
         <div v-else class="trending-carousel-shell">
@@ -62,7 +62,7 @@
                         <div class="trending-media relative h-[240px] shrink-0 overflow-hidden">
                             <img
                                 :src="currentEvent.image_url || fallbackImage"
-                                :alt="currentEvent.title || 'Trending event'"
+                                :alt="currentEvent.title || $t('homeAudit.trending.title')"
                                 class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
                                 loading="lazy"
                                 decoding="async"
@@ -106,13 +106,13 @@
                                         <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8" />
                                     </svg>
-                                    {{ formatCount(currentEvent.views_count) }} views
+                                    {{ formatCount(currentEvent.views_count) }} {{ $t('homeAudit.trending.views') }}
                                 </span>
                                 <span class="inline-flex items-center gap-1.5">
                                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path d="M20.8 5.7a5.1 5.1 0 0 0-7.2 0L12 7.3l-1.6-1.6a5.1 5.1 0 0 0-7.2 7.2L12 21l8.8-8.1a5.1 5.1 0 0 0 0-7.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
-                                    {{ formatCount(currentEvent.likes_count) }} likes
+                                    {{ formatCount(currentEvent.likes_count) }} {{ $t('homeAudit.trending.likes') }}
                                 </span>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
             <div
                 v-if="events.length > 1"
                 class="trending-indicators"
-                aria-label="Trending event slides"
+                :aria-label="$t('homeAudit.trending.slidesLabel')"
             >
                 <button
                     v-for="(event, index) in events"

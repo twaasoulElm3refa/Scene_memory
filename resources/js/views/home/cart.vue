@@ -12,12 +12,12 @@
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
                     <i class="bi bi-bag-check text-4xl text-[#0D4D97]"></i>
-                    Shopping Cart
+                    {{ $t('cart.title') }}
                 </h1>
                 <button v-if="items.length" @click="clearCart"
                     class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-semibold transition shadow-sm">
                     <i class="bi bi-trash3 me-1"></i>
-                    Clear Cart
+                    {{ $t('cart.clear') }}
                 </button>
             </div>
 
@@ -38,10 +38,10 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold tracking-widest uppercase"
-                                style="color: rgba(255,255,255,0.5);">My Wallet Balance</p>
+                                style="color: rgba(255,255,255,0.5);">{{ $t('cart.walletBalance') }}</p>
                             <div v-if="walletLoading" class="flex items-center gap-2 mt-1">
                                 <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white opacity-60"></div>
-                                <span class="text-white opacity-60 text-sm">Loading...</span>
+                                <span class="text-white opacity-60 text-sm">{{ $t('common.loading') }}</span>
                             </div>
                             <p v-else class="text-3xl font-bold text-white mt-0.5">
                                 {{ parseFloat(walletAmount).toFixed(2) }}
@@ -55,11 +55,11 @@
                         <span v-if="parseFloat(walletAmount) >= total"
                             class="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
                             style="background: rgba(52,211,153,0.2); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.3);">
-                            Sufficient Balance
+                            {{ $t('cart.sufficientBalance') }}
                         </span>
                         <span v-else class="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
                             style="background: rgba(251,191,36,0.15); color: #fcd34d; border: 1px solid rgba(251,191,36,0.3);">
-                            Insufficient Balance
+                            {{ $t('cart.insufficientBalance') }}
                         </span>
                     </div>
                 </div>
@@ -67,8 +67,8 @@
                 <!-- Progress bar: wallet vs total -->
                 <div v-if="!walletLoading && items.length" class="px-7 pb-5">
                     <div class="flex justify-between text-xs mb-1.5" style="color: rgba(255,255,255,0.45);">
-                        <span>Wallet covers</span>
-                        <span>{{ Math.min(100, Math.round((parseFloat(walletAmount) / total) * 100)) }}% of order</span>
+                        <span>{{ $t('cart.walletCovers') }}</span>
+                        <span>{{ Math.min(100, Math.round((parseFloat(walletAmount) / total) * 100)) }}% {{ $t('cart.ofOrder') }}</span>
                     </div>
                     <div class="h-1.5 rounded-full w-full" style="background: rgba(255,255,255,0.1);">
                         <div class="h-1.5 rounded-full transition-all duration-700" :style="{
@@ -89,13 +89,12 @@
 
                 <!-- EMPTY -->
                 <div v-if="!items.length" class="text-center py-20 bg-white rounded-2xl shadow-sm">
-                    <div class="text-sm font-bold mb-4 text-[#0D4D97]">CART</div>
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">Your cart is empty</h3>
-                    <p class="text-gray-500 mb-6">Looks like you haven't added anything yet</p>
+                    <div class="text-sm font-bold mb-4 text-[#0D4D97]">{{ $t('cart.badge') }}</div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-2">{{ $t('cart.emptyTitle') }}</h3>
+                    <p class="text-gray-500 mb-6">{{ $t('cart.emptyDescription') }}</p>
                     <router-link to="/en/all_events"
                         class="inline-block px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all">
-                        Start Shopping →
-                    </router-link>
+                        {{ $t('cart.startShopping') }}</router-link>
                 </div>
 
                 <!-- ITEMS -->
@@ -112,17 +111,17 @@
                                     <div v-if="getCollectionImages(item).length" class="grid grid-cols-2 gap-2">
                                         <img v-for="(image, index) in getCollectionImages(item).slice(0, 4)"
                                             :key="image.id || index" :src="getStorageUrl(image)"
-                                            :alt="image.title || image.name || 'Collection image'"
+                                            :alt="image.title || image.name || $t('cart.collectionImageAlt')"
                                             class="w-full h-24 object-cover rounded-lg bg-gray-100"
                                             @error="event => event.target.src = placeholderImage" />
                                     </div>
                                     <div v-if="getCollectionImages(item).length > 4"
                                         class="text-xs text-gray-500 mt-1">
-                                        +{{ getCollectionImages(item).length - 4 }} more
+                                        +{{ getCollectionImages(item).length - 4 }} {{ $t('cart.more') }}
                                     </div>
                                     <div v-if="item.type === 'collection' && getCollectionImages(item).length === 0"
                                         class="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm">
-                                        No images
+                                        {{ $t('cart.noImages') }}
                                     </div>
                                 </div>
 
@@ -160,7 +159,7 @@
 
                                 <div
                                     class="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded-lg text-sm font-semibold">
-                                    {{ isCollectionItem(item) ? 'Collection' : 'In Stock' }}
+                                    {{ isCollectionItem(item) ? $t('cart.collection') : $t('cart.inStock') }}
                                 </div>
                             </div>
 
@@ -168,19 +167,19 @@
                             <div class="p-5">
                                 <template v-if="isCollectionItem(item)">
                                     <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-1">
-                                        {{ item.name || 'Full Collection' }}
+                                        {{ item.name || $t('cart.fullCollection') }}
                                     </h3>
                                     <p class="text-sm text-gray-500">
-                                        {{ getCollectionImages(item).length }} images
+                                        {{ getCollectionImages(item).length }} {{ $t('cart.images') }}
                                     </p>
                                     <p v-if="item.event_id" class="text-sm text-gray-500">
-                                        Event ID: {{ item.event_id }}
+                                        {{ $t('cart.eventId') }} {{ item.event_id }}
                                     </p>
                                 </template>
 
                                 <template v-else>
                                     <h3 class="font-semibold text-gray-800 text-lg mb-2 line-clamp-1">
-                                        {{ item.name || 'Product' }}
+                                        {{ item.name || $t('cart.product') }}
                                     </h3>
                                 </template>
 
@@ -197,13 +196,13 @@
                                         </p>
                                         <p v-if="isCollectionItem(item) && toNumber(item.discount) > 0"
                                             class="text-xs text-red-500 mt-1">
-                                            Discount: {{ formatPrice(item.discount) }} $
+                                            {{ $t('cart.discount') }} {{ formatPrice(item.discount) }} $
                                         </p>
                                     </div>
 
                                     <button @click="removeItem(getCartItemId(item))"
                                         class="p-2 text-red-500 hover:bg-red-50 rounded-full transition">
-                                        Remove
+                                        {{ $t('common.remove') }}
                                     </button>
                                 </div>
                             </div>
@@ -213,11 +212,11 @@
 
                     <!-- SUMMARY -->
                     <div class="mt-10 bg-white rounded-2xl shadow-lg p-6 md:p-8">
-                        <h2 class="text-2xl font-bold mb-6">Order Summary</h2>
+                        <h2 class="text-2xl font-bold mb-6">{{ $t('cart.orderSummary') }}</h2>
 
                         <div class="space-y-3 border-b pb-4">
                             <div class="flex justify-between">
-                                <span>Subtotal ({{ items.length }} items)</span>
+                                <span>{{ $t('cart.subtotal', { count: items.length }) }}</span>
                                 <span>{{ total.toFixed(2) }} $</span>
                             </div>
                             <!-- Wallet row -->
@@ -229,7 +228,7 @@
                                             d="M21 12V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2v-5z" />
                                         <circle cx="17" cy="12" r="1.2" fill="currentColor" stroke="none" />
                                     </svg>
-                                    Wallet Balance
+                                    {{ $t('cart.walletBalance') }}
                                 </span>
                                 <span class="font-semibold text-sm" style="color: #0f3460;">
                                     {{ parseFloat(walletAmount).toFixed(2) }} $
@@ -239,18 +238,18 @@
 
                         <div class="flex justify-between mt-4">
                             <div>
-                                <p class="text-xl font-bold">Total</p>
-                                <p class="text-sm text-gray-500">Including VAT</p>
+                                <p class="text-xl font-bold">{{ $t('cart.total') }}</p>
+                                <p class="text-sm text-gray-500">{{ $t('cart.includingVat') }}</p>
                             </div>
                             <p class="text-3xl font-bold text-green-600">
                                 {{ total.toFixed(2) }} $
                             </p>
                         </div>
 
-                        <!-- ─── Pay with Wallet Button ──────────────────────── -->
+                        <!-- ─── {{ $t('cart.payWithWallet') }} Button ──────────────────────── -->
                         <button @click="handleWalletCheckout"
                             :disabled="walletCheckoutLoading || parseFloat(walletAmount) < total"
-                            :title="parseFloat(walletAmount) < total ? 'Insufficient wallet balance' : ''"
+                            :title="parseFloat(walletAmount) < total ? $t('cart.insufficientBalance') : ''"
                             class="mt-6 w-full py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all shadow-md relative overflow-hidden group"
                             :class="parseFloat(walletAmount) >= total
                                 ? 'text-white hover:shadow-xl'
@@ -269,7 +268,7 @@
                                         stroke-width="4" />
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                                 </svg>
-                                Processing...
+                                {{ $t('cart.processing') }}
                             </span>
                             <span v-else class="flex items-center gap-2 relative z-10">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -278,7 +277,7 @@
                                     <circle cx="17" cy="12" r="1.5" fill="currentColor" stroke="none" />
                                     <path d="M3 9h18" stroke-linecap="round" />
                                 </svg>
-                                Pay with Wallet
+                                {{ $t('cart.payWithWallet') }}
                                 <span class="ml-1 px-2 py-0.5 rounded-full text-xs font-bold"
                                     style="background: rgba(255,255,255,0.15);">
                                     {{ total.toFixed(2) }} $
@@ -287,13 +286,13 @@
                         </button>
                         <p v-if="parseFloat(walletAmount) < total && !walletLoading"
                             class="text-center text-xs mt-2 text-amber-500 flex items-center justify-center gap-1">
-                            You need {{ (total - parseFloat(walletAmount)).toFixed(2) }}$ more in your wallet
+                            {{ $t('cart.needMoreWallet', { amount: (total - parseFloat(walletAmount)).toFixed(2) }) }}
                         </p>
 
                         <!-- Divider -->
                         <div class="flex items-center gap-3 my-5">
                             <div class="flex-1 h-px bg-gray-200"></div>
-                            <span class="text-xs text-gray-400 font-medium">OR</span>
+                            <span class="text-xs text-gray-400 font-medium">{{ $t('cart.or') }}</span>
                             <div class="flex-1 h-px bg-gray-200"></div>
                         </div>
 
@@ -307,7 +306,7 @@
                                         stroke-width="4" />
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                                 </svg>
-                                Redirecting to PayPal...
+                                {{ $t('cart.redirectingPayPal') }}
                             </span>
 
                             <span v-else class="flex items-center gap-2">
@@ -317,20 +316,20 @@
                                     <path
                                         d="M9.108 6.5h4.5c.548 0 1.072.07 1.557.205a4.5 4.5 0 011.38.595c-.408.981-1.459 1.626-2.917 1.626H12.03a.75.75 0 00-.746.642l-.812 5.29a.25.25 0 00.246.29h1.984l.4-2.558h1.5c2.223 0 3.513-2.12 3.026-4.108A3.32 3.32 0 0016.3 6.092 4.946 4.946 0 0013.608 5.5H9c-.373 0-.69.27-.747.642L7 14.5h1.756L9.108 6.5z" />
                                 </svg>
-                                Pay with PayPal — {{ total.toFixed(2) }} $
+                                {{ $t('cart.payWithPayPal', { amount: total.toFixed(2) }) }}
                             </span>
                         </button>
 
                         <!-- Security note -->
                         <p class="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
-                            Secure checkout powered by PayPal. You'll be redirected to complete payment.
+                            {{ $t('cart.secureCheckout') }}
                         </p>
                     </div>
 
                     <div class="mt-6 text-center">
                         <router-link to="/en/all_events"
                             class="text-green-600 font-medium hover:text-green-700 transition">
-                            ← Continue Shopping
+                            {{ $t('cart.continueShopping') }}
                         </router-link>
                     </div>
 
@@ -344,11 +343,13 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { CartService } from "@/services/CartService/CartService";
 import { PaymentService } from "../../services/PaymentService/PaymentService";
 import { getOrCreateIdempotencyKey, clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
 
 const router = useRouter();
+const { t } = useI18n();
 
 // ══════════════════════════════════════════════════════════
 // STATE
@@ -570,7 +571,7 @@ const onTimeUpdate = (id, event) => {
 };
 
 // ══════════════════════════════════════════════════════════
-// CART ACTIONS
+// {{ $t('cart.badge') }} ACTIONS
 // ══════════════════════════════════════════════════════════
 
 const fetchCart = async () => {
@@ -579,7 +580,7 @@ const fetchCart = async () => {
         items.value = res.data || [];
     } catch (e) {
         console.error(e);
-        showToast('Failed to load cart', 'error');
+        showToast(t("cart.errors.loadCart"), "error");
     } finally {
         loading.value = false;
     }
@@ -590,14 +591,14 @@ const fetchWallet = async () => {
     try {
         const res = await CartService.wallet();
         // Support both response shapes:
-        // { data: { amount: "100.00" } }  OR  { data: [...] }
+        // { data: { amount: "100.00" } }  {{ $t('cart.or') }}  { data: [...] }
         const d = res.data;
         if (d && typeof d === 'object' && !Array.isArray(d) && d.amount !== undefined) {
             walletAmount.value = d.amount;
         }
     } catch (e) {
         console.error(e);
-        showToast('Failed to load wallet', 'error');
+        showToast(t("cart.errors.loadWallet"), "error");
     } finally {
         walletLoading.value = false;
     }
@@ -607,10 +608,10 @@ const removeItem = async (id) => {
     try {
         await CartService.deleteFromCart(id);
         items.value = items.value.filter(i => getCartItemId(i) !== id);
-        showToast('Item removed');
+        showToast(t("cart.itemRemoved"));
     } catch (e) {
         console.error(e);
-        showToast('Failed to remove item', 'error');
+        showToast(t("cart.errors.removeItem"), "error");
     }
 };
 
@@ -618,10 +619,10 @@ const clearCart = async () => {
     try {
         await CartService.clearCart();
         items.value = [];
-        showToast('Cart cleared');
+        showToast(t("cart.cartCleared"));
     } catch (e) {
         console.error(e);
-        showToast('Failed to clear cart', 'error');
+        showToast(t("cart.errors.clearCart"), "error");
     }
 };
 
@@ -644,7 +645,7 @@ const handleCheckout = async () => {
 
     } catch (e) {
         console.error(e);
-        showToast(e.message || "Checkout failed. Please try again.", 'error', 4000);
+        showToast(e.message || t("cart.errors.checkout"), "error", 4000);
         checkoutLoading.value = false;
     }
 };
@@ -656,7 +657,7 @@ const handleCheckout = async () => {
 const handleWalletCheckout = async () => {
     if (walletCheckoutLoading.value || !items.value.length) return;
     if (parseFloat(walletAmount.value) < total.value) {
-        showToast('Insufficient wallet balance', 'error');
+        showToast(t("cart.insufficientBalance"), "error");
         return;
     }
 
@@ -669,18 +670,18 @@ const handleWalletCheckout = async () => {
         });
 
         if (data.status !== "completed") {
-            throw new Error(data.message || "Wallet payment failed");
+            throw new Error(data.message || t("cart.errors.walletPayment"));
         }
 
         clearIdempotencyKey("cart:wallet");
         walletAmount.value = data.balance;
         await Promise.all([fetchCart(), fetchWallet()]);
-        showToast('Payment successful! Paid from wallet.', 'success', 5000);
+        showToast(t("cart.walletPaymentSuccess"), "success", 5000);
         const lang = localStorage.getItem("lang") || "en";
         router.replace(`/${lang}/downloads`);
     } catch (e) {
         console.error(e);
-        showToast(e.message || "Wallet payment failed. Please try again.", 'error', 4000);
+        showToast(e.message || t("cart.errors.walletPaymentRetry"), "error", 4000);
     } finally {
         walletCheckoutLoading.value = false;
     }

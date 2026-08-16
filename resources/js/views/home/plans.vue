@@ -3,11 +3,11 @@
         <!-- Header -->
         <div class="text-center mb-14">
             <h1 class="text-4xl font-bold text-black mb-3 tracking-tight">
-                Choose Your Plan
+                {{ $t('plans.chooseYourPlan') }}
             </h1>
 
             <p class="text-gray-600 text-lg">
-                Simple, transparent pricing for everyone
+                {{ $t('plans.transparentPricing') }}
             </p>
         </div>
 
@@ -33,7 +33,7 @@
                 @click="fetchPlans"
                 class="mt-6 px-6 py-2 bg-black hover:bg-gray-800 text-white rounded-lg transition"
             >
-                Try Again
+                {{ $t('common.tryAgain') }}
             </button>
         </div>
 
@@ -57,7 +57,7 @@
                     v-if="isPopularPlan(plan, index)"
                     class="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white text-xs font-bold px-5 py-1.5 rounded-full uppercase tracking-widest whitespace-nowrap border border-white/20"
                 >
-                    Most Popular
+                    {{ $t('plans.mostPopular') }}
                 </div>
 
                 <!-- Plan Icon -->
@@ -95,7 +95,7 @@
                                     : 'text-black'
                             ]"
                         >
-                            Custom
+                            {{ $t('plans.custom') }}
                         </span>
 
                         <p
@@ -106,7 +106,7 @@
                                     : 'text-gray-500'
                             ]"
                         >
-                            Contact us for pricing
+                            {{ $t('plans.contactPricing') }}
                         </p>
                     </template>
 
@@ -121,7 +121,7 @@
                         >
                             {{
                                 isFreePlan(plan)
-                                    ? 'Free'
+                                    ? $t('plans.free')
                                     : '$' + formatPrice(plan.price)
                             }}
                         </span>
@@ -135,7 +135,7 @@
                                     : 'text-gray-500'
                             ]"
                         >
-                            / mo
+                            {{ $t('plans.perMonthShort') }}
                         </span>
                     </template>
                 </div>
@@ -163,8 +163,8 @@
                     >
                         {{
                             isCustomPlan(plan)
-                                ? 'Custom features based on your needs'
-                                : 'Basic access included'
+                                ? $t('plans.customPlanNote')
+                                : $t('plans.basicAccessIncluded')
                         }}
                     </li>
 
@@ -220,10 +220,10 @@
                 >
                     {{
                         isCustomPlan(plan)
-                            ? 'Contact Us'
+                            ? $t('plans.contactUs')
                             : isFreePlan(plan)
-                                ? 'Get Started Free'
-                                : 'Get Started'
+                                ? $t('plans.getStarted')
+                                : $t('plans.getStarted')
                     }}
                 </button>
             </div>
@@ -234,6 +234,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { PlanService } from '@/services/planService/planService';
 
 const lang = localStorage.getItem('language') || 'en';
@@ -243,6 +244,7 @@ const loading = ref(false);
 const error = ref(null);
 
 const router = useRouter();
+const { t } = useI18n();
 
 const normalizePlanName = (plan) => {
     return String(
@@ -366,7 +368,7 @@ const fetchPlans = async () => {
     } catch (err) {
         error.value =
             err.response?.data?.message ||
-            'Failed to load plans. Please try again.';
+            t('plans.errors.loadPlans');
     } finally {
         loading.value = false;
     }

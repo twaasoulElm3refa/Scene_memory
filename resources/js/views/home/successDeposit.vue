@@ -1,81 +1,17 @@
 <template>
   <div class="scemory-page success-page">
-    <!-- Background particles -->
-    <div class="particles">
-      <div
-        v-for="i in 8"
-        :key="i"
-        class="particle"
-        :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"
-      ></div>
-    </div>
-
+    <div class="particles"><div v-for="i in 8" :key="i" class="particle" :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"></div></div>
     <div class="card">
-      <!-- PayPal badge -->
-      <div class="paypal-badge">
-        <div class="paypal-dot"></div>
-        تم شحن الرصيد عبر PayPal
-      </div>
-
-      <!-- Success icon -->
-      <div class="icon-wrap">
-        <div class="icon-ring"></div>
-        <div class="icon-circle">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
-            <polyline
-              class="checkmark"
-              points="8,20 16,28 30,12"
-              stroke="#fff"
-              stroke-width="3.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </div>
-      </div>
-
-      <h1>تم شحن الرصيد بنجاح</h1>
-      <p class="subtitle">
-        تم إضافة المبلغ إلى محفظتك بنجاح<br />
-        يمكنك الآن استخدامه أو تحميل مشترياتك
-      </p>
-
-      <!-- Info -->
-      <div class="info-row">
-        <div class="info-icon">WAL</div>
-        <div>
-          <div class="info-label">حالة العملية</div>
-          <div class="info-val">ناجحة</div>
-        </div>
-      </div>
-
-      <div class="info-row">
-        <div class="info-icon">MAIL</div>
-        <div>
-          <div class="info-label">الإشعار</div>
-          <div class="info-val">تم إرسال رسالة لبريدك</div>
-        </div>
-      </div>
-
-      <div class="info-row">
-        <div class="info-icon">PAY</div>
-        <div>
-          <div class="info-label">رقم العملية</div>
-          <div class="info-val">{{ transactionId }}</div>
-        </div>
-      </div>
-
+      <div class="paypal-badge"><div class="paypal-dot"></div>{{ $t('payment.depositSuccess.paypalBadge') }}</div>
+      <div class="icon-wrap"><div class="icon-ring"></div><div class="icon-circle"><svg width="38" height="38" viewBox="0 0 38 38" fill="none"><polyline class="checkmark" points="8,20 16,28 30,12" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div></div>
+      <h1>{{ $t('payment.depositSuccess.title') }}</h1>
+      <p class="subtitle">{{ $t('payment.depositSuccess.subtitleLine1') }}<br />{{ $t('payment.depositSuccess.subtitleLine2') }}</p>
+      <div class="info-row"><div class="info-icon">WAL</div><div><div class="info-label">{{ $t('payment.operationStatus') }}</div><div class="info-val">{{ $t('payment.successful') }}</div></div></div>
+      <div class="info-row"><div class="info-icon">MAIL</div><div><div class="info-label">{{ $t('payment.notification') }}</div><div class="info-val">{{ $t('payment.depositSuccess.emailSent') }}</div></div></div>
+      <div class="info-row"><div class="info-icon">PAY</div><div><div class="info-label">{{ $t('payment.transactionId') }}</div><div class="info-val">{{ transactionId }}</div></div></div>
       <div class="divider"></div>
-
-      <!-- Buttons -->
-      <button @click="goToDownloads" class="btn-downloads">
-        <span class="btn-arrow">⬇</span>
-        الذهاب إلى الملف الشخصي
-      </button>
-
-      <button @click="goHome" class="sec-link">
-        العودة إلى الصفحة الرئيسية
-      </button>
+      <button @click="goToDownloads" class="btn-downloads"><span class="btn-arrow">?</span>{{ $t('payment.depositSuccess.goProfile') }}</button>
+      <button @click="goHome" class="sec-link">{{ $t('payment.backHome') }}</button>
     </div>
   </div>
 </template>

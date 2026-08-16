@@ -2,14 +2,14 @@
     <div class="scemory-page deposit-page">
         <!-- Current Balance -->
         <div class="balance-card">
-            <p class="label">رصيدك الحالي</p>
+            <p class="label">{{ $t('walletDeposit.currentBalance') }}</p>
             <p class="amount">${{ wallet?.amount ?? '0.00' }}</p>
             <p class="currency">USD</p>
         </div>
 
         <!-- Deposit Form -->
         <div class="deposit-card">
-            <h2>شحن المحفظة</h2>
+            <h2>{{ $t('walletDeposit.title') }}</h2>
 
             <!-- Preset Amounts -->
             <div class="presets">
@@ -21,7 +21,7 @@
 
             <!-- Custom Amount -->
             <div class="input-group">
-                <label>المبلغ المخصص</label>
+                <label>{{ $t('walletDeposit.customAmount') }}</label>
                 <div class="amount-wrap">
                     <span class="currency-badge">$</span>
                     <input v-model.number="form.amount" type="number" min="1" step="0.01" placeholder="0.00"
@@ -32,30 +32,30 @@
 
             <!-- Description -->
             <div class="input-group">
-                <label>وصف (اختياري)</label>
-                <input v-model="form.description" type="text" maxlength="255" placeholder="مثلاً: شحن رصيد لشراء صور" />
+                <label>{{ $t('walletDeposit.descriptionOptional') }}</label>
+                <input v-model="form.description" type="text" maxlength="255" :placeholder="$t('walletDeposit.descriptionPlaceholder')" />
             </div>
 
             <hr />
 
             <!-- Summary -->
             <div class="summary-row">
-                <span>المبلغ</span>
+                <span>{{ $t('walletDeposit.amount') }}</span>
                 <span>{{ form.amount ? '$' + Number(form.amount).toFixed(2) : '—' }}</span>
             </div>
             <div class="summary-row">
-                <span>العملة</span>
+                <span>{{ $t('walletDeposit.currency') }}</span>
                 <span>USD</span>
             </div>
             <div class="summary-row">
-                <span>وسيلة الدفع</span>
+                <span>{{ $t('walletDeposit.paymentMethod') }}</span>
                 <span class="paypal-text">PayPal</span>
             </div>
 
             <!-- Submit -->
             <button class="pay-btn" :disabled="!isValid || loading" @click="handlePay">
-                <span v-if="loading">جاري التحويل...</span>
-                <span v-else>ادفع عبر PayPal</span>
+                <span v-if="loading">{{ $t('walletDeposit.redirecting') }}</span>
+                <span v-else>{{ $t('walletDeposit.payWithPayPal') }}</span>
             </button>
 
             <p v-if="serverError" class="error" style="margin-top:12px;text-align:center">
@@ -67,10 +67,13 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { PaymentService } from '../../services/PaymentService/PaymentService'
 import { getOrCreateIdempotencyKey } from '../../services/PaymentService/checkoutSession'
 
 // Props — تمرر البيانات من الصفحة الأب
+const { t } = useI18n()
+
 const props = defineProps({
     wallet: { type: Object, default: null },
 })
@@ -96,7 +99,7 @@ function selectPreset(val) {
 
 const amountError = computed(() => {
     if (!form.value.amount) return ''
-    if (form.value.amount < 1) return 'أدخل مبلغ صحيح (أكثر من $1)'
+    if (form.value.amount < 1) return t('walletDeposit.errors.invalidAmount')
     return ''
 })
 
@@ -122,7 +125,7 @@ async function handlePay() {
         }
 
     } catch (err) {
-        serverError.value = err.response?.data?.message ?? 'حدث خطأ، حاول مرة أخرى.'
+        serverError.value = err.response?.data?.message ?? t('common.unknownError')
     } finally {
         loading.value = false
     }

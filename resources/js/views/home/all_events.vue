@@ -11,12 +11,12 @@
 
             <div class="header-actions">
                 <div class="filter-control">
-                    <label>Event Type:</label>
+                    <label>{{ $t('events.eventType') }}:</label>
                     <select v-model="eventTypeFilter" @change="onEventTypeFilterChange" class="sort-select"
-                        aria-label="Event Type">
-                        <option value="all">All Events</option>
-                        <option value="real">Real Events</option>
-                        <option value="general">General Events</option>
+                        :aria-label="$t('events.eventType')">
+                        <option value="all">{{ $t('events.types.all') }}</option>
+                        <option value="real">{{ $t('events.types.real') }}</option>
+                        <option value="general">{{ $t('events.types.general') }}</option>
                     </select>
                 </div>
 
@@ -47,14 +47,14 @@
 
         <!-- Empty State -->
         <div v-else-if="filteredEvents.length === 0" class="error-container">
-            <p>لا توجد فعاليات متاحة حاليًا.</p>
+            <p>{{ $t("events.emptyAvailable") }}</p>
         </div>
 
         <!-- Events Grid -->
         <div v-else class="events-grid">
             <div v-for="event in filteredEvents" :key="event.id" class="event-card" @click="viewEvent(event)">
                 <div class="event-image">
-                    <img :src="getEventImageUrl(event)" :alt="event.translation?.title || event.title || 'Event image'"
+                    <img :src="getEventImageUrl(event)" :alt="event.translation?.title || event.title || $t('event.media_alt')"
                         loading="lazy" @error="onImageError" />
 
                     <span class="event-date">
@@ -87,7 +87,7 @@
                     <router-link :to="getEventRoute(event)"
                         class="bg-gray-200 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-300 transition-colors"
                         @click.stop>
-                        تفاصيل الحدث
+                        {{ $t("common.details") }}
                     </router-link>
                 </div>
             </div>
@@ -430,7 +430,7 @@ export default {
             } catch (err) {
                 console.error("Error fetching events:", err);
                 this.events = [];
-                this.error = "فشل في تحميل الفعاليات. الرجاء المحاولة مرة أخرى.";
+                this.error = this.$t("searchResults.errors.loadFailed");
             } finally {
                 this.loading = false;
             }

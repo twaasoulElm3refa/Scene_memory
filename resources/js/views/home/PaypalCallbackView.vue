@@ -2,12 +2,12 @@
   <div class="scemory-page status-page flex items-center justify-center min-h-screen">
     <div class="text-center">
       <div v-if="loading">
-        <p>جاري تأكيد الدفع...</p>
+        <p>{{ $t('payment.callback.confirming') }}</p>
         <!-- spinner بتاعك -->
       </div>
       <div v-else-if="error">
         <p>{{ error }}</p>
-        <router-link to="/">الرئيسية</router-link>
+        <router-link to="/">{{ $t('nav.home') }}</router-link>
       </div>
     </div>
   </div>

@@ -89,7 +89,14 @@
         "you_save": "You Save",
         "save_discount": "10% OFF",
         "total_images": "Total Images",
-        "buy_collection_title": "Buy Full Collection"
+        "buy_collection_title": "Buy Full Collection",
+        "upload_media_to_event": "Etkinli?e medya y?kle",
+        "media_alt": "Event media",
+        "send_reply": "Send reply",
+        "comment_add_images": "G?rsel ekle ({count}/{max})",
+        "comment_image_limit": "En fazla 2 g?rsel, her biri 5 MB",
+        "selected_comment_image_alt": "Se?ilen g?rsel {number}",
+        "remove_selected_comment_image": "Se?ilen g?rsel {number} ??esini kald?r"
     },
     "common": {
         "search": "Ara",
@@ -97,7 +104,22 @@
         "searching": "Aranıyor...",
         "details": "Detaylar",
         "notSpecified": "Belirtilmemiş",
-        "loadingEvents": "Etkinlikler yükleniyor..."
+        "loadingEvents": "Etkinlikler yükleniyor...",
+        "loading": "Y?kleniyor...",
+        "close": "Kapat",
+        "tryAgain": "Tekrar dene",
+        "back": "Geri",
+        "remove": "Kald?r",
+        "clear": "Temizle",
+        "previous": "?nceki",
+        "next": "Sonraki",
+        "noResults": "Sonu? yok",
+        "unknownError": "Bilinmeyen hata",
+        "learnMore": "Daha fazla bilgi",
+        "cancel": "?ptal",
+        "sending": "G?nderiliyor...",
+        "show": "G?ster",
+        "hide": "Gizle"
     },
     "events": {
         "add_historical_event": "Tarihi Kişi Ekle",
@@ -122,7 +144,15 @@
         "noEventsFound": "Etkinlik bulunamadı",
         "noMatchingEvents": "Arama kriterlerinize veya konumunuza uyan etkinlik bulunamadı",
         "event": "Etkinlik",
-        "startDate": "Başlangıç Tarihi"
+        "startDate": "Başlangıç Tarihi",
+        "eventType": "Event Type",
+        "types": {
+            "all": "All Events",
+            "real": "Real Events",
+            "general": "General Events"
+        },
+        "emptyAvailable": "No events are currently available.",
+        "no_title": "Ba?l?ks?z Etkinlik"
     },
     "pagination": {
         "previous": "Önceki",
@@ -155,7 +185,12 @@
         "emailPlaceholder": "siz@example.com",
         "consent": "Anı ipuçları, güncellemeler ve zaman zaman promosyon teklifleri almak istiyorum. İstediğim zaman aboneliği iptal edebilirim.",
         "subscribe": "Anı Güncellemelerine Abone Ol",
-        "community": "Topluluğumuzdaki 5.000'den fazla anı koruyucusuna katılın"
+        "community": "Topluluğumuzdaki 5.000'den fazla anı koruyucusuna katılın",
+        "kicker": "Newsletter",
+        "verifiedTitle": "Stay updated with verified event stories",
+        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
+        "subscribeShort": "Subscribe",
+        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
     },
     "map": {
         "exploreMap": "Haritayı Keşfet"
@@ -230,7 +265,18 @@
         "privacy": "Gizlilik Politikası",
         "contact": "Bize Ulaşın",
         "copyright": "© 2024 Scene Memory. Tüm hakları saklıdır.",
-        "made_with": "Anılarınızı korumak için yapıldı"
+        "made_with": "Anılarınızı korumak için yapıldı",
+        "quickLinks": "Quick Links",
+        "supportContact": "Support & Contact",
+        "logoAlt": "Logo",
+        "googlePlayAlt": "Get it on Google Play",
+        "appStoreAlt": "Download on the App Store",
+        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
+        "services": "Services",
+        "copyrightLink": "Copyright",
+        "termsOfService": "Terms of Service",
+        "privacyPolicy": "Privacy Policy",
+        "dataProtection": "Data Protection"
     },
     "contact": {
         "hero": {
@@ -390,7 +436,51 @@
         "chooseImages": "Fotoğraf Seç",
         "addMore": "Daha Fazla Ekle",
         "imagesCount": "{count} / 8 fotoğraf",
-        "remove": "Kaldır"
+        "remove": "Kaldır",
+        "eventType": "Event Type",
+        "publicOfficialEvent": "Public / Official Event",
+        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+        "personalEvent": "Personal Event / Memory",
+        "personalEventDescription": "Personal occasion, event or memory.",
+        "photographyType": "Photography Type",
+        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+        "tags": "Tags",
+        "tagsSelected": "tags selected",
+        "selectOrCreateTags": "Select or create tags",
+        "selectTags": "Select tags",
+        "searchOrTypeTag": "Search or type new tag",
+        "searchTags": "Search tags",
+        "addTag": "Add \"{tag}\"",
+        "tagHelper": "You can select existing tags or create new ones.",
+        "detectingLocation": "Detecting your current location...",
+        "steps": {
+            "photographyPhotos": "Photography & Photos",
+            "chooseModeUpload": "Choose mode and upload",
+            "photographyType": "Photography Type",
+            "chooseMode": "Choose mode",
+            "eventDetails": "Event Details",
+            "details": "Details",
+            "mainFormData": "Main form data",
+            "photos": "Photos",
+            "uploadAndTag": "Upload and tag"
+        },
+        "errors": {
+            "loadCities": "An error occurred while loading cities.",
+            "requiredFields": "Please complete all required fields.",
+            "createFailed": "Failed to create event:",
+            "historicalCreateFailed": "Failed to create historical event:",
+            "maxFourTags": "You can select up to 4 tags only",
+            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+        },
+        "success": {
+            "created": "Event created successfully!",
+            "historicalCreated": "Historical event created successfully!"
+        }
     },
     "commons": {
         "required": "Zorunlu",
@@ -427,6 +517,11 @@
             "previous": "Önceki",
             "next": "Sonraki",
             "page_info": "Sayfa {current} / {total}"
+        },
+        "confirmRemove": "Are you sure you want to remove this item from favorites?",
+        "errors": {
+            "deleteFailed": "An error occurred while deleting. Please try again.",
+            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
         }
     },
     "terms": {
@@ -468,10 +563,549 @@
         "Monthly": "Aylık",
         "Yearly": "Yıllık",
         "unlimitedEvents": "Sınırsız etkinlik",
-        "addEvents": "Etkinlik ekleme"
+        "addEvents": "Etkinlik ekleme",
+        "transparentPricing": "Simple, transparent pricing for everyone",
+        "custom": "Custom",
+        "contactPricing": "Contact us for pricing",
+        "perMonthShort": "/ mo",
+        "subscription": "Subscription",
+        "loadingPlan": "Loading plan...",
+        "premiumPlan": "Premium Plan",
+        "perMonthSlash": "/ month",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "whatsIncluded": "What's Included",
+        "readyToStart": "Ready to get started?",
+        "cancelNoQuestions": "Cancel anytime. No questions asked.",
+        "plan": "Plan",
+        "billing": "Billing",
+        "secureSsl": "Secure 256-bit SSL encryption",
+        "users": "Users",
+        "rating": "Rating",
+        "support": "Support",
+        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+        "notFound": "Plan Not Found",
+        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+        "browseAll": "Browse All Plans",
+        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+        "faq": {
+            "cancel": {
+                "question": "Can I cancel my subscription anytime?",
+                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+            },
+            "trial": {
+                "question": "Is there a free trial?",
+                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+            },
+            "payment": {
+                "question": "What payment methods do you accept?",
+                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+            },
+            "switch": {
+                "question": "Can I switch plans later?",
+                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+            }
+        },
+        "errors": {
+            "loadPlan": "Failed to load plan. Please try again.",
+            "subscribeFailed": "Subscription failed. Please try again.",
+            "loadPlans": "Planlar y?klenemedi. L?tfen tekrar deneyin."
+        },
+        "customPlanNote": "Gereksinimlerinize g?re haz?rlan?r",
+        "basicAccessIncluded": "Temel eri?im dahildir",
+        "moneyBack": "Para iade garantisi",
+        "perMonth": "ayl?k",
+        "securePayments": "G?venli ?demeler",
+        "support247": "7/24 destek"
     },
     "free": "Ücretsiz",
     "basic": "Temel",
     "professional": "Profesyonel",
-    "premium": "Premium"
+    "premium": "Premium",
+    "homeAudit": {
+        "home": {
+            "videoUnsupported": "Your browser does not support the video tag.",
+            "badge": "Scemory Event Archive",
+            "title": "Explore documented events",
+            "titleHighlight": "through the map",
+            "description": "Discover event media uploaded by journalists, media teams, and eyewitness contributors around the world.",
+            "searchEvents": "Search Events",
+            "uploadStory": "Upload Your Story",
+            "bottomText": "Discover stories, places and moments from around the world."
+        },
+        "profileToast": {
+            "title": "Profile not complete",
+            "message": "Your profile is not complete. Please update:",
+            "complete": "Click to complete",
+            "fields": {
+                "phone": "Phone",
+                "country": "Country",
+                "position": "Position",
+                "dateOfBirth": "Date of birth"
+            }
+        },
+        "trending": {
+            "loadError": "Unable to load trending events right now.",
+            "kicker": "Trending",
+            "title": "Trending Events",
+            "description": "Events gaining attention across the archive.",
+            "emptyTitle": "No trending events yet",
+            "emptyDescription": "Check back soon for highlighted events.",
+            "views": "views",
+            "likes": "likes",
+            "slidesLabel": "Trending event slides"
+        },
+        "map": {
+            "tilesSlow": "Map tiles are taking too long to render.",
+            "loadError": "Unable to load map right now.",
+            "loadMap": "Load Map",
+            "loading": "Loading map...",
+            "retry": "Retry loading map",
+            "openFullscreen": "Open fullscreen map",
+            "closeFullscreen": "Close fullscreen map"
+        },
+        "about": {
+            "imageAlt": "Scemory documentation platform",
+            "kicker": "Trusted Event Memory",
+            "title": "About Scemory",
+            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+        },
+        "events": {
+            "showing": "Showing",
+            "of": "of",
+            "events": "events",
+            "seeMore": "See More",
+            "badge": "EVENTS"
+        },
+        "tags": {
+            "loading": "Loading tags...",
+            "showingFirst": "Showing first",
+            "searchToFindMore": "tags. Search to find more.",
+            "none": "No tags found",
+            "helper": "Select one or more tags to filter map events.",
+            "clearSelected": "Clear selected tags",
+            "searchMore": "Daha fazla etiket ara"
+        },
+        "search": {
+            "clearText": "Clear text",
+            "clearTags": "Clear tags"
+        }
+    },
+    "photoUpload": {
+        "title": "Photos Upload",
+        "description": "Upload one or more images. Each photo needs its own description and tags.",
+        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+        "choosePhotosTitle": "Choose photos",
+        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+        "checking": "Checking...",
+        "choosePhotos": "Choose Photos",
+        "photosCount": "{count} / {max} photos",
+        "empty": "No photos added yet.",
+        "photoAlt": "Photo {number}",
+        "previewUnavailable": "Preview unavailable",
+        "removePhoto": "Remove photo",
+        "quality": "Quality {score}",
+        "photoDescription": "Photo description",
+        "photoDescriptionPlaceholder": "Describe this photo",
+        "photoTags": "Photo tags",
+        "selectOrCreateTags": "Select or create photo tags",
+        "searchTagPlaceholder": "Search or type new tag",
+        "addTag": "Add \"{tag}\"",
+        "yourPrice": "Your price",
+        "pricePlaceholder": "Enter your price",
+        "suggestedPrice": "Suggested: ${price}",
+        "validationDetails": "Validation details",
+        "waitingValidation": "Waiting for validation",
+        "metrics": "Sharpness {sharpness}, Blur {blur}",
+        "rejectionReasons": "Rejection reasons",
+        "professionalPhotography": "Professional photography",
+        "normalPhotography": "Normal photography",
+        "selectPhotographyFirst": "Please select photography type first.",
+        "maxPhotos": "You can upload up to {max} photos.",
+        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+        "photoRejected": "Photo rejected",
+        "unableToValidate": "Unable to read or validate this photo.",
+        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+        "maxFileSize": "Maximum file size is 20 MB.",
+        "checkingPhoto": "Checking photo...",
+        "validationFailed": "Photo validation failed. Please try again.",
+        "photoAccepted": "Photo accepted",
+        "maxTags": "Each photo can have up to {max} tags.",
+        "tagAlreadySelected": "This tag is already selected.",
+        "status": {
+            "accepted": "accepted",
+            "rejected": "rejected",
+            "checking": "checking",
+            "idle": "idle"
+        }
+    },
+    "cart": {
+        "title": "Shopping Cart",
+        "clear": "Clear Cart",
+        "walletBalance": "My Wallet Balance",
+        "sufficientBalance": "Sufficient Balance",
+        "insufficientBalance": "Insufficient Balance",
+        "walletCovers": "Wallet covers",
+        "ofOrder": "of order",
+        "badge": "CART",
+        "emptyTitle": "Your cart is empty",
+        "emptyDescription": "Looks like you haven't added anything yet",
+        "startShopping": "Start Shopping",
+        "collectionImageAlt": "Collection image",
+        "more": "more",
+        "noImages": "No images",
+        "collection": "Collection",
+        "inStock": "In Stock",
+        "fullCollection": "Full Collection",
+        "images": "images",
+        "eventId": "Event ID:",
+        "product": "Product",
+        "discount": "Discount:",
+        "orderSummary": "Order Summary",
+        "subtotal": "Subtotal ({count} items)",
+        "total": "Total",
+        "includingVat": "Including VAT",
+        "processing": "Processing...",
+        "payWithWallet": "Pay with Wallet",
+        "needMoreWallet": "You need ${amount} more in your wallet",
+        "or": "OR",
+        "redirectingPayPal": "Redirecting to PayPal...",
+        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+        "continueShopping": "Continue Shopping",
+        "itemRemoved": "Item removed",
+        "cartCleared": "Cart cleared",
+        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+        "errors": {
+            "loadCart": "Failed to load cart",
+            "loadWallet": "Failed to load wallet",
+            "removeItem": "Failed to remove item",
+            "clearCart": "Failed to clear cart",
+            "checkout": "Checkout failed. Please try again.",
+            "walletPayment": "Wallet payment failed",
+            "walletPaymentRetry": "Wallet payment failed. Please try again.",
+            "collectionAddFailed": "Failed to add the collection to the cart.",
+            "itemNotIdentified": "This item could not be identified.",
+            "addFailed": "An error occurred while adding to the cart."
+        },
+        "messages": {
+            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+            "added": "Added to cart successfully."
+        }
+    },
+    "downloads": {
+        "title": "My Downloads",
+        "fileCount": "{count} files",
+        "loadError": "An error occurred while loading data",
+        "fileAlt": "File {id}",
+        "imageType": "IMG",
+        "videoType": "VID",
+        "preview": "Preview",
+        "downloading": "Downloading...",
+        "downloaded": "Downloaded",
+        "download": "Download",
+        "downloadSuccess": "{filename} downloaded successfully!",
+        "downloadFailed": "Download failed. Please try again.",
+        "empty": "No downloads found",
+        "emptyHint": "Sat?n ald???n?z dosyalar burada g?r?necek"
+    },
+    "experience": {
+        "kicker": "SCEMORY EXPERIENCE",
+        "title": "One platform. Every side of the story.",
+        "pathsLabel": "Scemory experience paths",
+        "highlightsLabel": "Section highlights",
+        "tabs": {
+            "explore": {
+                "label": "Explore Events",
+                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
+                "heading": "Explore stories, events and places around the world",
+                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
+                "cta": "Explore Events",
+                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "features": {
+                    "browse": "Browse event media by place and timeline",
+                    "discover": "Discover nearby stories through a visual archive",
+                    "move": "Move from overview to documented event detail"
+                },
+                "visual": {
+                    "kicker": "Live discovery",
+                    "title": "Map-linked event stories",
+                    "stat": "Global archive",
+                    "note": "Places, dates and media in one view"
+                }
+            },
+            "share": {
+                "label": "Share Your Story",
+                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
+                "heading": "Document the moments that matter",
+                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
+                "cta": "Upload Your Story",
+                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "features": {
+                    "add": "Add media, descriptions and location context",
+                    "build": "Build a structured memory from raw moments",
+                    "keep": "Keep contributor stories connected to the archive"
+                },
+                "visual": {
+                    "kicker": "Contributor flow",
+                    "title": "Media, context and location",
+                    "stat": "Story builder",
+                    "note": "Upload moments with meaningful detail"
+                }
+            },
+            "license": {
+                "label": "License Media",
+                "eyebrow": "DISCOVER MEDIA READY TO USE",
+                "heading": "Find and license event media with confidence",
+                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
+                "cta": "Discover Media",
+                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "features": {
+                    "preview": "Preview event visuals before opening details",
+                    "use": "Use event pages as the path into media options",
+                    "keep": "Keep discovery and licensing intent connected"
+                },
+                "visual": {
+                    "kicker": "Media access",
+                    "title": "Event visuals ready to review",
+                    "stat": "Licensing path",
+                    "note": "From discovery to detail pages"
+                }
+            }
+        }
+    },
+    "searchResults": {
+        "loadError": "Unable to load search results",
+        "errors": {
+            "loadFailed": "Failed to load events. Please try again."
+        }
+    },
+    "payment": {
+        "backHome": "Back to home page",
+        "transactionId": "Transaction ID",
+        "operationStatus": "Operation status",
+        "successful": "Successful",
+        "notification": "Notification",
+        "status": "Status",
+        "info": "Info",
+        "waiting": {
+            "title": "Processing Your Payment",
+            "message": "Please wait while we confirm your payment with PayPal."
+        },
+        "depositWaiting": {
+            "title": "Processing Your Wallet Deposit",
+            "message": "Please wait while we confirm your deposit with PayPal."
+        },
+        "callback": {
+            "confirming": "Confirming payment..."
+        },
+        "success": {
+            "paypalBadge": "Paid via PayPal",
+            "title": "Payment completed!",
+            "subtitleLine1": "Thank you for trusting us",
+            "subtitleLine2": "Your order has been confirmed and is ready to download",
+            "orderStatus": "Order status",
+            "statusValue": "Paid and confirmed",
+            "confirmationLabel": "Payment confirmation",
+            "emailSent": "A confirmation was sent to your email",
+            "goDownloads": "Go to downloads"
+        },
+        "failed": {
+            "paypalBadge": "Payment failed via PayPal",
+            "title": "Payment failed",
+            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+            "subtitleLine2": "You can try again or contact support",
+            "orderStatus": "Order status",
+            "statusValue": "Rejected / payment failed",
+            "reasonLabel": "Possible reason",
+            "noteLabel": "Note",
+            "noCharge": "No amount was charged to your account",
+            "retry": "Tekrar dene",
+            "contactSupport": "Contact support",
+            "statusShort": "Payment failed",
+            "noChargeShort": "No amount was charged",
+            "reasons": {
+                "instrumentDeclined": "The payment method was declined",
+                "payerCannotPay": "Insufficient balance in the account",
+                "transactionRefused": "The transaction was refused by PayPal",
+                "default": "Insufficient balance or the operation was cancelled"
+            }
+        },
+        "depositSuccess": {
+            "paypalBadge": "Wallet topped up via PayPal",
+            "title": "Wallet topped up successfully",
+            "subtitleLine1": "The amount was added to your wallet successfully",
+            "subtitleLine2": "You can now use it or download your purchases",
+            "emailSent": "A message was sent to your email",
+            "goProfile": "Go to profile"
+        },
+        "depositFailed": {
+            "subtitleLine1": "The deposit was not completed successfully"
+        }
+    },
+    "walletDeposit": {
+        "currentBalance": "Current balance",
+        "title": "Top up wallet",
+        "customAmount": "Custom amount",
+        "descriptionOptional": "Description (optional)",
+        "descriptionPlaceholder": "For example: top up balance to buy photos",
+        "amount": "Amount",
+        "currency": "Currency",
+        "paymentMethod": "Payment method",
+        "redirecting": "Redirecting...",
+        "payWithPayPal": "Pay with PayPal",
+        "invalidAmount": "Enter a valid amount (more than $1)",
+        "genericError": "Something went wrong. Please try again.",
+        "errors": {
+            "invalidAmount": "Enter a valid amount (more than $1)"
+        }
+    },
+    "gate": {
+        "media": "Media",
+        "locationShort": "LOC",
+        "dateShort": "DATE",
+        "searchCountry": "Search for a country...",
+        "featuredEvents": "Featured events"
+    },
+    "country": {
+        "discoverFeaturedIn": "Discover featured events in",
+        "cities": "Cities",
+        "availableCity": "Available city",
+        "currentEvent": "Current event",
+        "eventMarkers": "Event Markers",
+        "clickableMarker": "Clickable marker",
+        "differentCategory": "Different category",
+        "availableCities": "Available Cities",
+        "noEvents": "No events available right now",
+        "checkBack": "Check back again soon",
+        "noImage": "No image",
+        "viewEvent": "View Event"
+    },
+    "cancel": "?ptal",
+    "login": "Giri? yap",
+    "sending": "G?nderiliyor...",
+    "send_reply": "Yan?t g?nder",
+    "report": {
+        "action": "Report",
+        "commentTitle": "Report this comment",
+        "modalTitle": "Report comment",
+        "reasonPrompt": "Choose the reason for reporting this comment:",
+        "submit": "Submit report",
+        "submitting": "Submitting...",
+        "successTitle": "Report submitted",
+        "successMessage": "Thank you. We will review this comment soon.",
+        "errors": {
+            "selectReason": "Please choose a report reason.",
+            "submitFailed": "An error occurred while submitting the report. Please try again."
+        },
+        "reasons": {
+            "spam": "Spam",
+            "offensive": "Offensive content",
+            "inappropriate": "Inappropriate",
+            "illegal": "Illegal content",
+            "untrue": "False content",
+            "falseInformation": "Misleading information",
+            "other": "Other reason"
+        }
+    },
+    "commentsPage": {
+        "title": "Comments",
+        "emptyLabel": "Comments",
+        "emptyMessage": "No comments yet. Be the first to comment.",
+        "attachmentAlt": "Comment attachment",
+        "pageInfo": "Page {current} of {total}",
+        "confirmDelete": "Are you sure you want to delete this comment?",
+        "errors": {
+            "loadFailed": "An error occurred while loading comments."
+        },
+        "reactions": {
+            "support": "Agree",
+            "neutral": "Neutral",
+            "oppose": "Disagree"
+        },
+        "you": "You"
+    },
+    "profilePage": {
+        "title": "My Profile",
+        "subtitle": "Manage your account information and update your password",
+        "noPlan": "No plan",
+        "lastLogin": "Last login",
+        "accountInfo": "Account information",
+        "systemInfo": "System information",
+        "currentPlan": "Current plan",
+        "planType": "Plan type",
+        "editAccount": "Edit account details",
+        "saving": "Saving...",
+        "saveChanges": "Save changes",
+        "tabs": {
+            "userInfo": "User information",
+            "editData": "Edit data",
+            "password": "Update password",
+            "wallet": "Wallet"
+        },
+        "fields": {
+            "name": "Name",
+            "fullName": "Full name",
+            "email": "Email",
+            "phone": "Phone",
+            "phoneNumber": "Phone number",
+            "country": "Country",
+            "position": "Position",
+            "positionJob": "Position / Job",
+            "birthDate": "Date of birth",
+            "role": "Role",
+            "status": "Status",
+            "points": "Points",
+            "price": "Price"
+        },
+        "placeholders": {
+            "fullName": "Enter your full name",
+            "countrySearch": "Search for a country",
+            "position": "Software engineer"
+        },
+        "status": {
+            "active": "Active"
+        },
+        "password": {
+            "title": "Update password",
+            "current": "Current password",
+            "new": "New password",
+            "confirm": "Confirm password",
+            "updating": "Updating...",
+            "update": "Update password"
+        },
+        "messages": {
+            "fillAllFields": "Please fill in all fields.",
+            "passwordMismatch": "Passwords do not match.",
+            "passwordUpdated": "Password updated successfully.",
+            "passwordUpdateFailed": "An error occurred while updating the password.",
+            "chooseCountry": "Please choose a country from the list.",
+            "noChanges": "You have not made any changes.",
+            "profileUpdated": "Your profile has been updated successfully.",
+            "profileUpdateFailed": "An error occurred while updating your profile."
+        },
+        "wallet": {
+            "title": "Wallet",
+            "availableBalance": "Available balance",
+            "deposit": "Add funds",
+            "recentTransactions": "Recent transactions",
+            "depositType": "Deposit",
+            "withdrawType": "Withdrawal",
+            "noTransactions": "No transactions yet",
+            "withdrawComingSoon": "The withdrawal window will open soon."
+        }
+    },
+    "eventUpload": {
+        "maxPerFile": "Maximum per file: 100 MB",
+        "dragFiles": "Drag files here or",
+        "clickToChoose": "click to choose",
+        "supportedFiles": "Images and videos (max 100 MB per file)",
+        "selectedFiles": "Selected files ({count})",
+        "uploading": "Uploading...",
+        "uploadFiles": "Upload files",
+        "success": "Files uploaded successfully!",
+        "errors": {
+            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
+            "unsupportedType": "File type \"{name}\" is not supported."
+        }
+    }
 }

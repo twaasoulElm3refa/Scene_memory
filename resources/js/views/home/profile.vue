@@ -2,8 +2,8 @@
     <div class="scemory-page profile-page max-w-4xl mx-auto p-4 md:p-8">
         <!-- Header -->
         <div class="mb-8 text-center">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">ملفي الشخصي</h1>
-            <p class="text-gray-600">إدارة معلومات حسابك وتحديث كلمة المرور</p>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $t('profilePage.title') }}</h1>
+            <p class="text-gray-600">{{ $t('profilePage.subtitle') }}</p>
         </div>
 
         <!-- Card -->
@@ -25,13 +25,13 @@
                                     {{ profile.role || '—' }}
                                 </span>
                                 <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
-                                    {{ profile.licenceType?.name ?? 'No Plan' }}
+                                    {{ profile.licenceType?.name ?? $t('profilePage.noPlan') }}
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="text-gray-600 text-sm">آخر دخول</p>
+                        <p class="text-gray-600 text-sm">{{ $t('profilePage.lastLogin') }}</p>
                         <p class="text-gray-800 font-medium">
                             {{ formatDate(profile.last_login_at) }}
                         </p>
@@ -58,54 +58,54 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Account Info -->
                         <div class="bg-gray-50 rounded-xl p-6">
-                            <h3 class="text-lg font-bold mb-4">معلومات الحساب</h3>
+                            <h3 class="text-lg font-bold mb-4">{{ $t('profilePage.accountInfo') }}</h3>
                             <div class="space-y-3">
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">الاسم</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.name') }}</span>
                                     <span class="font-medium">{{ profile.name || '—' }}</span>
                                 </div>
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">الإيميل</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.email') }}</span>
                                     <span class="font-medium">{{ profile.email || '—' }}</span>
                                 </div>
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">الهاتف</span>
-                                    <span class="font-medium">{{ profile.phone ?? 'غير متوفر' }}</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.phone') }}</span>
+                                    <span class="font-medium">{{ profile.phone ?? $t('common.notSpecified') }}</span>
                                 </div>
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">الدولة</span>
-                                    <span class="font-medium">{{ profile.country ?? 'غير متوفر' }}</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.country') }}</span>
+                                    <span class="font-medium">{{ profile.country ?? $t('common.notSpecified') }}</span>
                                 </div>
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">المنصب</span>
-                                    <span class="font-medium">{{ profile.position ?? 'غير متوفر' }}</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.position') }}</span>
+                                    <span class="font-medium">{{ profile.position ?? $t('common.notSpecified') }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600">تاريخ الميلاد</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.birthDate') }}</span>
                                     <span class="font-medium">{{ profile.date_of_birth ?
-                                        formatDate(profile.date_of_birth) : 'غير متوفر' }}</span>
+                                        formatDate(profile.date_of_birth) : $t('common.notSpecified') }}</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- System Info -->
                         <div class="bg-gray-50 rounded-xl p-6">
-                            <h3 class="text-lg font-bold mb-4">معلومات النظام</h3>
+                            <h3 class="text-lg font-bold mb-4">{{ $t('profilePage.systemInfo') }}</h3>
                             <div class="space-y-3">
                                 <div class="flex justify-between border-b pb-2">
                                     <span class="text-gray-600">ID</span>
                                     <span class="font-medium">{{ profile.id || '—' }}</span>
                                 </div>
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">الدور</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.role') }}</span>
                                     <span class="font-medium">{{ profile.role || '—' }}</span>
                                 </div>
                                 <div class="flex justify-between border-b pb-2">
-                                    <span class="text-gray-600">الحالة</span>
-                                    <span class="font-medium text-green-600">نشط</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.status') }}</span>
+                                    <span class="font-medium text-green-600">{{ $t('profilePage.status.active') }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-600">النقاط</span>
+                                    <span class="text-gray-600">{{ $t('profilePage.fields.points') }}</span>
                                     <span class="font-medium text-green-600">{{ profile.points || '—' }}</span>
                                 </div>
                             </div>
@@ -114,14 +114,14 @@
 
                     <!-- Licence -->
                     <div class="mt-6 bg-emerald-50 p-6 rounded-xl border border-emerald-200">
-                        <h3 class="font-bold mb-4 text-emerald-800">الباقة الحالية</h3>
+                        <h3 class="font-bold mb-4 text-emerald-800">{{ $t('profilePage.currentPlan') }}</h3>
                         <div class="space-y-3">
                             <div class="flex justify-between">
-                                <span class="text-gray-600">نوع الباقة</span>
-                                <span class="font-bold">{{ profile.licenceType?.name ?? 'غير متوفر' }}</span>
+                                <span class="text-gray-600">{{ $t('profilePage.planType') }}</span>
+                                <span class="font-bold">{{ profile.licenceType?.name ?? $t('common.notSpecified') }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600">السعر</span>
+                                <span class="text-gray-600">{{ $t('profilePage.fields.price') }}</span>
                                 <span class="font-bold text-emerald-700">
                                     {{ profile.licenceType?.price ? profile.licenceType.price + ' $' : '—' }}
                                 </span>
@@ -133,22 +133,22 @@
                 <!-- TAB 2: تعديل البيانات -->
                 <div v-if="currentTab === 2">
                     <div class="max-w-2xl mx-auto">
-                        <h3 class="text-xl font-bold mb-6">تعديل بيانات الحساب</h3>
+                        <h3 class="text-xl font-bold mb-6">{{ $t('profilePage.editAccount') }}</h3>
                         <div class="space-y-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الكامل</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.fields.fullName') }}</label>
                                 <input v-model="editData.name" type="text"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
-                                    placeholder="أدخل اسمك الكامل" />
+                                    :placeholder="$t('profilePage.placeholders.fullName')" />
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">البريد الإلكتروني</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.fields.email') }}</label>
                                 <input v-model="editData.email" type="email"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
                                     placeholder="example@email.com" />
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">رقم الهاتف</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.fields.phoneNumber') }}</label>
                                 <input v-model="editData.phone" type="tel"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
                                     placeholder="+20 123 456 789" />
@@ -156,13 +156,13 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="relative" ref="countryDropdownRef" dir="rtl">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                                        الدولة
+                                        {{ $t('profilePage.fields.country') }}
                                     </label>
 
                                     <div class="relative">
                                         <input v-model="countrySearch" type="text"
                                             class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
-                                            placeholder="ابحث عن الدولة" autocomplete="off"
+                                            :placeholder="$t('profilePage.placeholders.countrySearch')" autocomplete="off"
                                             @focus="isCountryDropdownOpen = true"
                                             @input="isCountryDropdownOpen = true" />
 
@@ -190,19 +190,19 @@
 
                                         <div v-if="filteredCountries.length === 0"
                                             class="px-4 py-4 text-center text-gray-500">
-                                            لا توجد نتائج مطابقة
+                                            {{ $t('common.noResults') }}
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">المنصب / الوظيفة</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.fields.positionJob') }}</label>
                                     <input v-model="editData.position" type="text"
                                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition"
-                                        placeholder="مهندس برمجيات" />
+                                        :placeholder="$t('profilePage.placeholders.position')" />
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الميلاد</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.fields.birthDate') }}</label>
                                 <input v-model="editData.date_of_birth" type="date"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 transition" />
                             </div>
@@ -210,7 +210,7 @@
                         <div class="mt-8 flex justify-center w-full">
                             <button @click="updateProfile" :disabled="isUpdatingProfile"
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 px-8 rounded-xl transition disabled:opacity-70">
-                                {{ isUpdatingProfile ? 'جاري الحفظ...' : 'حفظ التغييرات' }}
+                                {{ isUpdatingProfile ? $t('profilePage.saving') : $t('profilePage.saveChanges') }}
                             </button>
                         </div>
                         <div v-if="statusMessage" :class="[
@@ -225,42 +225,42 @@
                 <!-- TAB 3: تحديث كلمة المرور -->
                 <div v-if="currentTab === 3">
                     <div class="max-w-2xl mx-auto">
-                        <h3 class="text-xl font-bold mb-6">تحديث كلمة المرور</h3>
+                        <h3 class="text-xl font-bold mb-6">{{ $t('profilePage.password.title') }}</h3>
                         <div class="space-y-6">
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الحالية</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.password.current') }}</label>
                                 <input v-model="passwordData.current_password"
                                     :type="showPassword ? 'text' : 'password'"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
                                 <button type="button" @click="showPassword = !showPassword"
                                     class="absolute right-3 top-10 text-gray-500">
-                                    {{ showPassword ? 'Hide' : 'Show' }}
+                                    {{ showPassword ? $t('common.hide') : $t('common.show') }}
                                 </button>
                             </div>
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الجديدة</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.password.new') }}</label>
                                 <input v-model="passwordData.new_password" :type="showNewPassword ? 'text' : 'password'"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
                                 <button type="button" @click="showNewPassword = !showNewPassword"
                                     class="absolute right-3 top-10 text-gray-500">
-                                    {{ showNewPassword ? 'Hide' : 'Show' }}
+                                    {{ showNewPassword ? $t('common.hide') : $t('common.show') }}
                                 </button>
                             </div>
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">تأكيد كلمة المرور</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('profilePage.password.confirm') }}</label>
                                 <input v-model="passwordData.confirm_password"
                                     :type="showConfirmPassword ? 'text' : 'password'"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-emerald-500 pr-12" />
                                 <button type="button" @click="showConfirmPassword = !showConfirmPassword"
                                     class="absolute right-3 top-10 text-gray-500">
-                                    {{ showConfirmPassword ? 'Hide' : 'Show' }}
+                                    {{ showConfirmPassword ? $t('common.hide') : $t('common.show') }}
                                 </button>
                             </div>
                         </div>
                         <div class="mt-8 flex gap-4">
                             <button @click="updatePassword" :disabled="isUpdatingPassword"
                                 class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3.5 rounded-xl transition disabled:opacity-70">
-                                {{ isUpdatingPassword ? 'جاري التحديث...' : 'تحديث كلمة المرور' }}
+                                {{ isUpdatingPassword ? $t('profilePage.password.updating') : $t('profilePage.password.update') }}
                             </button>
                         </div>
                         <div v-if="passwordStatusMessage" :class="[
@@ -275,14 +275,14 @@
                 <!-- TAB 4: المحفظة (Wallet) - المُحدث -->
                 <div v-if="currentTab === 4">
                     <div class="max-w-3xl mx-auto">
-                        <h3 class="text-xl font-bold mb-6 text-center">المحفظة</h3>
+                        <h3 class="text-xl font-bold mb-6 text-center">{{ $t('profilePage.wallet.title') }}</h3>
 
                         <!-- Wallet Card -->
                         <div
                             class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-8 rounded-3xl shadow-lg mb-8">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <p class="text-sm opacity-90">الرصيد المتاح</p>
+                                    <p class="text-sm opacity-90">{{ $t('profilePage.wallet.availableBalance') }}</p>
                                     <h2 class="text-5xl font-bold mt-3">
                                         {{ walletAmount }} <span class="text-2xl font-normal">$</span>
                                     </h2>
@@ -300,18 +300,18 @@
                         <div class="flex justify-center mb-8">
                             <button @click="deposit"
                                 class="bg-emerald-600 hover:bg-emerald-700 text-white py-6 px-8 rounded font-medium transition flex items-center justify-center gap-2">
-                                <span>شحن الرصيد</span>
+                                <span>{{ $t('profilePage.wallet.deposit') }}</span>
                             </button>
                         </div>
 
                         <!-- Transactions -->
                         <div class="bg-gray-50 p-6 rounded-2xl">
-                            <h4 class="font-bold mb-5 text-lg">آخر العمليات</h4>
+                            <h4 class="font-bold mb-5 text-lg">{{ $t('profilePage.wallet.recentTransactions') }}</h4>
                             <div v-if="transactions.length > 0" class="space-y-3">
                                 <div v-for="tx in transactions" :key="tx.id"
                                     class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
                                     <div>
-                                        <p class="font-medium">{{ tx.type === 'deposit' ? 'شحن' : 'سحب' }}</p>
+                                        <p class="font-medium">{{ tx.type === 'deposit' ? $t('profilePage.wallet.depositType') : $t('profilePage.wallet.withdrawType') }}</p>
                                         <p class="text-sm text-gray-500">{{ formatDate(tx.created_at) }}</p>
                                     </div>
                                     <span :class="[
@@ -323,7 +323,7 @@
                                 </div>
                             </div>
                             <p v-else class="text-gray-500 text-center py-8">
-                                لا توجد عمليات حتى الآن
+                                {{ $t('profilePage.wallet.noTransactions') }}
                             </p>
                         </div>
                     </div>
@@ -338,12 +338,14 @@ import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { getProfile, updateProfileAPI } from "@/services/userService/userService";
 import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 export default {
     name: "UserProfile",
     setup() {
         const router = useRouter();
         const route = useRoute();
+        const { t, locale } = useI18n();
         // Profile Data
         const profile = ref({
             id: "",
@@ -606,12 +608,12 @@ export default {
 
         const originalEditData = ref({});
 
-        const tabs = [
-            { id: 1, label: "معلومات المستخدم" },
-            { id: 2, label: "تعديل البيانات" },
-            { id: 3, label: "تحديث كلمة المرور" },
-            { id: 4, label: 'المحفظة' }
-        ];
+        const tabs = computed(() => [
+            { id: 1, label: t("profilePage.tabs.userInfo") },
+            { id: 2, label: t("profilePage.tabs.editData") },
+            { id: 3, label: t("profilePage.tabs.password") },
+            { id: 4, label: t("profilePage.tabs.wallet") }
+        ]);
 
         const currentTab = ref(1);
         const isUpdatingProfile = ref(false);
@@ -643,12 +645,12 @@ export default {
 
         const updatePassword = async () => {
             if (!passwordData.value.current_password || !passwordData.value.new_password || !passwordData.value.confirm_password) {
-                passwordStatusMessage.value = "من فضلك املأ كل الحقول";
+                passwordStatusMessage.value = t("profilePage.messages.fillAllFields");
                 passwordStatusType.value = "error";
                 return;
             }
             if (passwordData.value.new_password !== passwordData.value.confirm_password) {
-                passwordStatusMessage.value = "كلمة المرور غير متطابقة";
+                passwordStatusMessage.value = t("profilePage.messages.passwordMismatch");
                 passwordStatusType.value = "error";
                 return;
             }
@@ -656,11 +658,11 @@ export default {
             isUpdatingPassword.value = true;
             try {
                 const res = await updatePasswordAPI(passwordData.value);
-                passwordStatusMessage.value = res.message || "تم تحديث كلمة المرور بنجاح";
+                passwordStatusMessage.value = res.message || t("profilePage.messages.passwordUpdated");
                 passwordStatusType.value = "success";
                 passwordData.value = { current_password: "", new_password: "", confirm_password: "" };
             } catch (error) {
-                passwordStatusMessage.value = error.response?.data?.message || "حدث خطأ أثناء تحديث كلمة المرور";
+                passwordStatusMessage.value = error.response?.data?.message || t("profilePage.messages.passwordUpdateFailed");
                 passwordStatusType.value = "error";
             } finally {
                 isUpdatingPassword.value = false;
@@ -708,17 +710,17 @@ export default {
         };
 
         const formatDate = (dateString) => {
-            if (!dateString) return "غير متوفر";
+            if (!dateString) return t("common.notSpecified");
             try {
                 const date = new Date(dateString);
-                if (isNaN(date.getTime())) return "غير متوفر";
-                return date.toLocaleDateString("ar-EG", {
+                if (isNaN(date.getTime())) return t("common.notSpecified");
+                return date.toLocaleDateString(locale.value || "en", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                 });
             } catch {
-                return "غير متوفر";
+                return t("common.notSpecified");
             }
         };
 
@@ -728,12 +730,12 @@ export default {
             );
 
             if (!selectedCountry && countrySearch.value) {
-                showStatusMessage("من فضلك اختر الدولة من القائمة", "error");
+                showStatusMessage(t("profilePage.messages.chooseCountry"), "error");
                 return;
             }
 
             if (JSON.stringify(editData.value) === JSON.stringify(originalEditData.value)) {
-                showStatusMessage("لم تقم بإجراء أي تغييرات", "error");
+                showStatusMessage(t("profilePage.messages.noChanges"), "error");
                 return;
             }
 
@@ -743,10 +745,10 @@ export default {
                 if (!payload.date_of_birth) payload.date_of_birth = null;
 
                 const response = await updateProfileAPI(payload);
-                showStatusMessage(response.message || "تم تحديث بياناتك بنجاح", "success");
+                showStatusMessage(response.message || t("profilePage.messages.profileUpdated"), "success");
                 await fetchProfile();
             } catch (error) {
-                showStatusMessage(error.response?.data?.message || "حدث خطأ أثناء تحديث البيانات", "error");
+                showStatusMessage(error.response?.data?.message || t("profilePage.messages.profileUpdateFailed"), "error");
             } finally {
                 isUpdatingProfile.value = false;
             }
@@ -766,7 +768,7 @@ export default {
         };
 
         const withdraw = () => {
-            alert("سيتم فتح نافذة سحب الرصيد قريباً");
+            alert(t("profilePage.wallet.withdrawComingSoon"));
         };
 
         onMounted(() => {
@@ -788,6 +790,7 @@ export default {
             countryDropdownRef,
             filteredCountries,
             tabs,
+            t,
             currentTab,
             isUpdatingProfile,
             statusMessage,

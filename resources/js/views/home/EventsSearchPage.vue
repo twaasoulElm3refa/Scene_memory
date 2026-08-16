@@ -3,10 +3,10 @@
 
         <section v-if="error" class="events-search-error mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div>
-                <h2>Unable to load search results</h2>
+                <h2>{{ $t('searchResults.loadError') }}</h2>
                 <p>{{ error }}</p>
                 <button type="button" @click="fetchEventsFromRoute">
-                    Try Again
+                    {{ $t('common.tryAgain') }}
                 </button>
             </div>
         </section>

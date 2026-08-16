@@ -65,7 +65,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4v16m8-8H4" />
                                 </svg>
-                                {{ $t('upload_media') || 'رفع وسائط' }}
+                                {{ $t('upload_media') }}
                             </button> -->
                         </div>
 
@@ -77,7 +77,7 @@
 
                                 <!-- IMAGE -->
                                 <img v-if="!isMediaVideo(media)" :src="getMediaUrl(media) || placeholderImage"
-                                    :alt="media?.title || media?.name || 'Event media'" @error="onMediaImageError"
+                                    :alt="media?.title || media?.name || $t('event.media_alt')" @error="onMediaImageError"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     loading="lazy" />
 
@@ -291,7 +291,7 @@
                                         <a v-for="image in comment.images.slice(0, 2)" :key="image.id"
                                             :href="getMediaUrl(image)" target="_blank" rel="noopener noreferrer"
                                             class="block overflow-hidden rounded-lg bg-gray-100">
-                                            <img :src="getMediaUrl(image)" alt="Comment attachment"
+                                            <img :src="getMediaUrl(image)" :alt="$t('commentsPage.attachmentAlt')"
                                                 class="h-32 w-full object-cover" loading="lazy"
                                                 @error="onMediaImageError" />
                                         </a>
@@ -322,7 +322,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                                                 </svg>
-                                                {{ $t('event.reply') || 'رد' }}
+                                                {{ $t('event.reply') }}
                                             </button>
 
                                             <!-- Delete Button -->
@@ -335,13 +335,13 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
-                                                {{ $t('event.delete') || 'حذف' }}
+                                                {{ $t('event.delete') }}
                                             </button>
 
                                             <!-- Report Button -->
                                             <button @click="openReportModal(comment?.id)"
                                                 class="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
-                                                title="الإبلاغ عن هذا التعليق">
+                                                :title="$t('report.commentTitle')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none"
                                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -349,7 +349,7 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M5 12v7h14v-7" />
                                                 </svg>
-                                                إبلاغ
+                                                {{ $t('report.action') }}
                                             </button>
                                         </div>
                                     </div>
@@ -371,7 +371,7 @@
                                                 comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
                                             <span class="text-[11px] font-bold">YES</span>
-                                            موافق
+                                            {{ $t('commentsPage.reactions.support') }}
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
                                                 {{ comment?.support_count ?? 0 }}
@@ -387,7 +387,7 @@
                                                 comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
                                             <span class="text-[11px] font-bold">MID</span>
-                                            محايد
+                                            {{ $t('commentsPage.reactions.neutral') }}
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
                                                 {{ comment?.neutral_count ?? 0 }}
@@ -403,7 +403,7 @@
                                                 comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
                                             ]">
                                             <span class="text-[11px] font-bold">NO</span>
-                                            غير موافق
+                                            {{ $t('commentsPage.reactions.oppose') }}
                                             <span
                                                 class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
                                                 {{ comment?.exhibitions_count ?? 0 }}
@@ -422,7 +422,7 @@
                                         <form @submit.prevent="addReply(comment.id)" class="space-y-4">
                                             <textarea v-model="replyTexts[comment.id]" rows="2"
                                                 class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                                :placeholder="$t('event.reply_placeholder') || 'اكتب ردك هنا...'"
+                                                :placeholder="$t('event.reply_placeholder')"
                                                 required></textarea>
                                             <p v-if="replyErrors[comment.id]"
                                                 class="text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg text-sm">
@@ -431,14 +431,13 @@
                                             <div class="flex justify-end gap-3">
                                                 <button type="button" @click="cancelReply(comment.id)"
                                                     class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                                                    {{ $t('cancel') || 'إلغاء' }}
+                                                    {{ $t('common.cancel') }}
                                                 </button>
                                                 <button type="submit"
                                                     :disabled="replyLoading[comment.id] || !replyTexts[comment.id]?.trim()"
                                                     class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                                                    <span v-if="replyLoading[comment.id]">{{ $t('sending') || ''
-                                                    }}</span>
-                                                    <span v-else>{{ $t('send_reply') || 'إرسال الرد' }}</span>
+                                                    <span v-if="replyLoading[comment.id]">{{ $t('common.sending') }}</span>
+                                                    <span v-else>{{ $t('event.send_reply') }}</span>
                                                 </button>
                                             </div>
                                         </form>
@@ -472,12 +471,12 @@
                                 <div v-if="isAuthenticated"
                                     class="comment-form mt-12 bg-white p-8 rounded-xl shadow-md border border-gray-100">
                                     <h3 class="text-xl font-bold text-gray-900 mb-6">
-                                        {{ $t('event.add_comment_title') || 'أضف تعليقًا' }}
+                                        {{ $t('event.add_comment_title') }}
                                     </h3>
                                     <form @submit.prevent="addComment">
                                         <textarea v-model="newComment" rows="4"
                                             class="w-full border border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                                            :placeholder="$t('event.comment_placeholder') || 'اكتب تعليقك هنا...'"
+                                            :placeholder="$t('event.comment_placeholder')"
                                             :disabled="commentLoading" required></textarea>
                                         <div class="mt-3 flex flex-wrap items-center gap-3">
                                             <input ref="commentImageInput" type="file"
@@ -488,18 +487,18 @@
                                                 :disabled="commentLoading || commentImages.length >= MAX_COMMENT_IMAGES"
                                                 class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
                                                 <PhotoIcon class="h-5 w-5" aria-hidden="true" />
-                                                Add images ({{ commentImages.length }}/{{ MAX_COMMENT_IMAGES }})
+                                                {{ $t('event.comment_add_images', { count: commentImages.length, max: MAX_COMMENT_IMAGES }) }}
                                             </button>
-                                            <span class="text-xs text-gray-500">Maximum 2 images, 5 MB each</span>
+                                            <span class="text-xs text-gray-500">{{ $t('event.comment_image_limit') }}</span>
                                         </div>
                                         <div v-if="commentImages.length" class="mt-3 grid max-w-xs grid-cols-2 gap-2">
                                             <div v-for="(item, index) in commentImages" :key="item.key"
                                                 class="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
-                                                <img :src="item.previewUrl" :alt="`Selected image ${index + 1}`"
+                                                <img :src="item.previewUrl" :alt="$t('event.selected_comment_image_alt', { number: index + 1 })"
                                                     class="h-full w-full object-cover" />
                                                 <button type="button" @click="removeCommentImage(index)"
                                                     class="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/65 text-white hover:bg-black"
-                                                    :aria-label="`Remove selected image ${index + 1}`">
+                                                    :aria-label="$t('event.remove_selected_comment_image', { number: index + 1 })">
                                                     <XMarkIcon class="h-4 w-4" aria-hidden="true" />
                                                 </button>
                                             </div>
@@ -509,7 +508,7 @@
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
                                                 <span v-if="commentLoading">{{ $t('event.sending_comment') || ''
                                                 }}</span>
-                                                <span v-else>{{ $t('event.submit_comment') || 'إرسال التعليق' }}</span>
+                                                <span v-else>{{ $t('event.submit_comment') }}</span>
                                             </button>
                                         </div>
                                         <p v-if="commentError"
@@ -518,7 +517,7 @@
                                         </p>
                                         <p v-if="commentSuccess"
                                             class="mt-3 text-green-600 bg-green-50 border border-green-200 px-4 py-2 rounded-lg text-sm">
-                                            {{ $t('event.comment_added_success') || 'تم إضافة التعليق بنجاح' }}
+                                            {{ $t('event.comment_added_success') }}
                                         </p>
                                     </form>
                                 </div>
@@ -526,11 +525,11 @@
                                 <!-- Login prompt -->
                                 <div v-else class="text-center py-12 bg-gray-50 rounded-xl">
                                     <p class="text-lg text-gray-700 mb-4">
-                                        {{ $t('login_to_comment') || 'يجب عليك تسجيل الدخول لإضافة تعليق أو الرد' }}
+                                        {{ $t('login_to_comment') }}
                                     </p>
                                     <RouterLink to="/auth"
                                         class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                                        {{ $t('login') || 'تسجيل الدخول' }}
+                                        {{ $t('login') }}
                                     </RouterLink>
                                 </div>
                             </div>
@@ -627,9 +626,9 @@
                 <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
                     <div class="p-6 border-b">
                         <h3 class="text-2xl font-bold text-gray-900">
-                            {{ $t('event.upload_media_to_event') || 'رفع صور / فيديو للحدث' }}
+                            {{ $t('event.upload_media_to_event') }}
                         </h3>
-                        <p class="text-gray-600 mt-1 text-sm">الحد الأقصى لكل ملف: 100 ميجابايت</p>
+                        <p class="text-gray-600 mt-1 text-sm">{{ $t('eventUpload.maxPerFile') }}</p>
                     </div>
 
                     <div class="p-6">
@@ -640,15 +639,15 @@
                             <label for="mediaUploadInput" class="cursor-pointer">
                                 <div class="text-indigo-600 text-5xl mb-4">↑</div>
                                 <p class="text-lg font-medium text-gray-700">
-                                    اسحب الملفات هنا أو
-                                    <span class="text-indigo-600 hover:underline">اضغط للاختيار</span>
+                                    {{ $t('eventUpload.dragFiles') }}
+                                    <span class="text-indigo-600 hover:underline">{{ $t('eventUpload.clickToChoose') }}</span>
                                 </p>
-                                <p class="text-sm text-gray-500 mt-2">صور وفيديوهات (max 100MB لكل ملف)</p>
+                                <p class="text-sm text-gray-500 mt-2">{{ $t('eventUpload.supportedFiles') }}</p>
                             </label>
                         </div>
 
                         <div v-if="selectedFiles.length > 0" class="mt-6">
-                            <h4 class="font-semibold mb-3">الملفات المختارة ({{ selectedFiles.length }})</h4>
+                            <h4 class="font-semibold mb-3">{{ $t('eventUpload.selectedFiles', { count: selectedFiles.length }) }}</h4>
                             <ul class="space-y-2 max-h-48 overflow-y-auto pr-2">
                                 <li v-for="(file, idx) in selectedFiles" :key="idx"
                                     class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
@@ -657,7 +656,7 @@
                                         <span class="text-xs text-gray-500">({{ formatFileSize(file?.size) }})</span>
                                     </div>
                                     <button @click="removeFile(idx)"
-                                        class="text-red-600 hover:text-red-800 text-sm">حذف</button>
+                                        class="text-red-600 hover:text-red-800 text-sm">{{ $t('common.remove') }}</button>
                                 </li>
                             </ul>
                         </div>
@@ -673,11 +672,11 @@
 
                     <div class="p-6 border-t flex gap-3 justify-end">
                         <button @click="showUploadModal = false"
-                            class="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50">إلغاء</button>
+                            class="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50">{{ $t('common.cancel') }}</button>
                         <button @click="uploadFiles" :disabled="uploading || selectedFiles.length === 0"
                             class="px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                            <span v-if="uploading" class="animate-pulse">جاري الرفع...</span>
-                            <template v-else>رفع الملفات</template>
+                            <span v-if="uploading" class="animate-pulse">{{ $t('eventUpload.uploading') }}</span>
+                            <template v-else>{{ $t('eventUpload.uploadFiles') }}</template>
                         </button>
                     </div>
                 </div>
@@ -696,8 +695,8 @@
                     <div v-if="reportSuccess" class="flex flex-col items-center py-6 gap-3 text-center">
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-sm font-bold">OK
                         </div>
-                        <h4 class="text-lg font-bold text-gray-800">تم إرسال البلاغ</h4>
-                        <p class="text-sm text-gray-500">شكراً لك، سنراجع هذا التعليق قريباً.</p>
+                        <h4 class="text-lg font-bold text-gray-800">{{ $t('report.successTitle') }}</h4>
+                        <p class="text-sm text-gray-500">{{ $t('report.successMessage') }}</p>
                     </div>
 
                     <!-- Form -->
@@ -712,7 +711,7 @@
                                             d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-base font-bold text-gray-800">الإبلاغ عن تعليق</h3>
+                                <h3 class="text-base font-bold text-gray-800">{{ $t('report.modalTitle') }}</h3>
                             </div>
                             <button @click="closeReportModal"
                                 class="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition">
@@ -723,7 +722,7 @@
                             </button>
                         </div>
 
-                        <p class="text-sm text-gray-500 mb-4">اختر سبب الإبلاغ عن هذا التعليق:</p>
+                        <p class="text-sm text-gray-500 mb-4">{{ $t('report.reasonPrompt') }}</p>
 
                         <div class="grid grid-cols-2 gap-2 mb-5">
                             <button v-for="reason in reportReasons" :key="reason.value"
@@ -746,7 +745,7 @@
                         <div class="flex gap-2 justify-end">
                             <button @click="closeReportModal"
                                 class="px-4 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition">
-                                إلغاء
+                                {{ $t('common.cancel') }}
                             </button>
                             <button @click="submitReport" :disabled="reportLoading || !reportReason" :class="[
                                 'px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-150',
@@ -761,9 +760,9 @@
                                             stroke-width="4" />
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                                     </svg>
-                                    جاري الإرسال...
+                                    {{ $t('report.submitting') }}
                                 </span>
-                                <span v-else>إرسال البلاغ</span>
+                                <span v-else>{{ $t('report.submit') }}</span>
                             </button>
                         </div>
                     </template>
@@ -777,6 +776,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { PhotoIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { EventService } from "@/services/singleEventService/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService/CommentService";
 import { CartService } from "@/services/CartService/CartService";
@@ -795,6 +795,7 @@ const collectionAlert = ref({
 });
 
 const route = useRoute();
+const { t } = useI18n();
 const slug = route.params?.slug;
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -991,14 +992,14 @@ const onMediaImageError = (e) => {
 
 const addToCart = async (mediaId) => {
     if (!mediaId) {
-        showCartAlert("error", "لا يمكن تحديد هذا العنصر");
+        showCartAlert("error", t("cart.errors.itemNotIdentified"));
         return;
     }
 
     const token = localStorage.getItem("auth_token");
 
     if (!token) {
-        showCartAlert("error", "يجب تسجيل الدخول أولاً");
+        showCartAlert("error", t("event.comment_login_required"));
         return;
     }
 
@@ -1007,9 +1008,9 @@ const addToCart = async (mediaId) => {
     try {
         await CartService.addToCart(mediaId);
 
-        showCartAlert("success", "تمت الإضافة إلى السلة بنجاح");
+        showCartAlert("success", t("cart.messages.added"));
     } catch (err) {
-        showCartAlert("error", err?.message || "حدث خطأ أثناء الإضافة");
+        showCartAlert("error", err?.message || t("cart.errors.addFailed"));
     } finally {
         cartLoading.value = false;
     }
@@ -1023,7 +1024,7 @@ const addCollectionToCart = async () => {
         collectionAlert.value = {
             show: true,
             type: 'error',
-            message: 'يجب تسجيل الدخول أولاً'
+            message: t("event.comment_login_required")
         };
         return;
     }
@@ -1032,7 +1033,7 @@ const addCollectionToCart = async () => {
         collectionAlert.value = {
             show: true,
             type: 'error',
-            message: 'لا توجد صور في هذا الحدث'
+            message: t("event.no_media")
         };
         return;
     }
@@ -1054,7 +1055,7 @@ const addCollectionToCart = async () => {
         const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-            throw new Error(data?.message || 'حدث خطأ أثناء إضافة المجموعة');
+            throw new Error(data?.message || t("cart.errors.collectionAddFailed"));
         }
 
         const totalImages = data?.total_images || eventImages.value.length;
@@ -1062,7 +1063,7 @@ const addCollectionToCart = async () => {
         collectionAlert.value = {
             show: true,
             type: 'success',
-            message: `تم إضافة ${totalImages} صورة إلى السلة بخصم 10%!`
+            message: t("cart.messages.collectionAddedDiscount", { count: totalImages })
         };
 
         setTimeout(() => {
@@ -1074,7 +1075,7 @@ const addCollectionToCart = async () => {
         collectionAlert.value = {
             show: true,
             type: 'error',
-            message: err?.message || 'فشل في إضافة المجموعة إلى السلة'
+            message: err?.message || t("cart.errors.collectionAddFailed")
         };
     } finally {
         collectionLoading.value = false;
@@ -1165,15 +1166,15 @@ const reportLoading = ref(false);
 const reportSuccess = ref(false);
 const reportError = ref("");
 
-const reportReasons = [
-    { value: "spam", label: "بريد مزعج", icon: "SP" },
-    { value: "offensive", label: "محتوى مسيء", icon: "OF" },
-    { value: "inappropriate", label: "غير لائق", icon: "IN" },
-    { value: "illegal", label: "محتوى غير قانوني", icon: "LG" },
-    { value: "untrue", label: "محتوى كاذب", icon: "UN" },
-    { value: "False information", label: "معلومات مضللة", icon: "FI" },
-    { value: "other", label: "سبب آخر", icon: "OT" },
-];
+const reportReasons = computed(() => [
+    { value: "spam", label: t("report.reasons.spam"), icon: "SP" },
+    { value: "offensive", label: t("report.reasons.offensive"), icon: "OF" },
+    { value: "inappropriate", label: t("report.reasons.inappropriate"), icon: "IN" },
+    { value: "illegal", label: t("report.reasons.illegal"), icon: "LG" },
+    { value: "untrue", label: t("report.reasons.untrue"), icon: "UN" },
+    { value: "False information", label: t("report.reasons.falseInformation"), icon: "FI" },
+    { value: "other", label: t("report.reasons.other"), icon: "OT" },
+]);
 
 const openReportModal = (commentId) => {
     reportCommentId.value = commentId;
@@ -1193,7 +1194,7 @@ const closeReportModal = () => {
 
 const submitReport = async () => {
     if (!reportReason.value) {
-        reportError.value = "يرجى اختيار سبب البلاغ";
+        reportError.value = t("report.errors.selectReason");
         return;
     }
     reportLoading.value = true;
@@ -1243,7 +1244,7 @@ const addReply = async (commentId) => {
                 comment_id: commentId,
                 user_id: currentUserId.value,
                 created_at: new Date().toISOString(),
-                user: { name: "أنت" },
+                user: { name: t("commentsPage.you") },
             };
 
             ensureEventCommentsArray();
@@ -1300,7 +1301,7 @@ const toggleLike = async () => {
 
     const token = localStorage.getItem("auth_token");
     if (!token) {
-        likeError.value = "يرجى تسجيل الدخول أولاً";
+        likeError.value = t("event.comment_login_required");
         setTimeout(() => (likeError.value = ""), 4000);
         return;
     }
@@ -1329,7 +1330,7 @@ const addToWishlist = async () => {
 
     const token = localStorage.getItem("auth_token");
     if (!token) {
-        wishlistError.value = "يرجى تسجيل الدخول أولاً";
+        wishlistError.value = t("event.comment_login_required");
         setTimeout(() => (wishlistError.value = ""), 4000);
         return;
     }
@@ -1456,7 +1457,7 @@ const addComment = async () => {
 
 const deleteComment = async (commentId) => {
     if (!commentId) return;
-    if (!confirm("هل أنت متأكد من حذف التعليق؟")) return;
+    if (!confirm(t("commentsPage.confirmDelete"))) return;
 
     deleteCommentErrors.value[commentId] = "";
 
@@ -1479,11 +1480,11 @@ const addValidFiles = (files) => {
     (files || []).forEach((file) => {
         if (!file) return;
         if (file.size > MAX) {
-            uploadError.value = `الملف "${file.name}" أكبر من 100 ميجا`;
+            uploadError.value = t("eventUpload.errors.fileTooLarge", { name: file.name });
             return;
         }
         if (!file.type?.startsWith("image/") && !file.type?.startsWith("video/")) {
-            uploadError.value = `نوع الملف "${file.name}" غير مدعوم`;
+            uploadError.value = t("eventUpload.errors.unsupportedType", { name: file.name });
             return;
         }
         selectedFiles.value.push(file);
@@ -1523,7 +1524,7 @@ const uploadFiles = async () => {
                 await refreshEvent();
             }
 
-            uploadSuccess.value = "تم رفع الملفات بنجاح!";
+            uploadSuccess.value = t("eventUpload.success");
             selectedFiles.value = [];
             setTimeout(() => {
                 showUploadModal.value = false;

@@ -57,7 +57,7 @@
                     <h3 class="event-title">{{ event.translation.title || "-" }}</h3>
                     <p class="event-category">{{ event.sub_categorey?.translation.name || "-" }}</p>
                     <router-link :to="{ path: `/${lang}/single_event/${event.slug}` }" class="btn-view">
-                        تفاصيل الحدث
+                        {{ $t("common.details") }}
                     </router-link>
                 </div>
             </div>
@@ -185,7 +185,7 @@ export default {
             } catch (err) {
                 console.error("Error fetching events:", err);
                 this.events = [];
-                this.error = "فشل في تحميل الفعاليات. الرجاء المحاولة مرة أخرى.";
+                this.error = this.$t("searchResults.errors.loadFailed");
             } finally {
                 this.loading = false;
             }
@@ -263,7 +263,7 @@ export default {
         getPlaceholderImage(event) {
             const colors = ["#1e3a5f", "#2d5a3d", "#5a3d2d", "#3d2d5a", "#2d4d5a"];
             const color = colors[event?.id % colors.length] || "#1e3a5f";
-            const subName = event?.sub_categorey?.translation.name || "حدث";
+            const subName = event?.sub_categorey?.translation.name || this.$t("events.event");
 
             return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='${encodeURIComponent(
                 color

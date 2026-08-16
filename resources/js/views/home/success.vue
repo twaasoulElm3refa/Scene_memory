@@ -1,68 +1,17 @@
 <template>
   <div class="scemory-page success-page">
-    <!-- Background particles -->
-    <div class="particles">
-      <div v-for="i in 8" :key="i" class="particle" :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"></div>
-    </div>
-
+    <div class="particles"><div v-for="i in 8" :key="i" class="particle" :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"></div></div>
     <div class="card">
-      <!-- PayPal badge -->
-      <div class="paypal-badge">
-        <div class="paypal-dot"></div>
-        تم الدفع عبر PayPal
-      </div>
-
-      <!-- Success icon -->
-      <div class="icon-wrap">
-        <div class="icon-ring"></div>
-        <div class="icon-circle">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
-            <polyline class="checkmark" points="8,20 16,28 30,12"
-              stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <h1>تمّت عملية الدفع!</h1>
-      <p class="subtitle">
-        شكراً لك على ثقتك بنا<br>
-        طلبك تم تأكيده بنجاح وجاهز للتحميل
-      </p>
-
-      <!-- Info rows -->
-      <div class="info-row">
-        <div class="info-icon green">OK</div>
-        <div>
-          <div class="info-label">حالة الطلب</div>
-          <div class="info-val green">مدفوع ومؤكد</div>
-        </div>
-      </div>
-
-      <div class="info-row">
-        <div class="info-icon blue">MAIL</div>
-        <div>
-          <div class="info-label">تأكيد الدفع</div>
-          <div class="info-val">تم إرساله على بريدك الإلكتروني</div>
-        </div>
-      </div>
-
-      <div class="info-row">
-        <div class="info-icon green">PAY</div>
-        <div>
-          <div class="info-label">رقم المعاملة</div>
-          <div class="info-val">{{ transactionId }}</div>
-        </div>
-      </div>
-
+      <div class="paypal-badge"><div class="paypal-dot"></div>{{ $t('payment.success.paypalBadge') }}</div>
+      <div class="icon-wrap"><div class="icon-ring"></div><div class="icon-circle"><svg width="38" height="38" viewBox="0 0 38 38" fill="none"><polyline class="checkmark" points="8,20 16,28 30,12" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+      <h1>{{ $t('payment.success.title') }}</h1>
+      <p class="subtitle">{{ $t('payment.success.subtitleLine1') }}<br />{{ $t('payment.success.subtitleLine2') }}</p>
+      <div class="info-row"><div class="info-icon green">OK</div><div><div class="info-label">{{ $t('payment.success.orderStatus') }}</div><div class="info-val green">{{ $t('payment.success.statusValue') }}</div></div></div>
+      <div class="info-row"><div class="info-icon blue">MAIL</div><div><div class="info-label">{{ $t('payment.success.confirmationLabel') }}</div><div class="info-val">{{ $t('payment.success.emailSent') }}</div></div></div>
+      <div class="info-row"><div class="info-icon green">PAY</div><div><div class="info-label">{{ $t('payment.transactionId') }}</div><div class="info-val">{{ transactionId }}</div></div></div>
       <div class="divider"></div>
-
-      <!-- CTA Button -->
-      <router-link :to="`/${$route.params.lang}/downloads`" class="btn-downloads">
-        <span class="btn-arrow">←</span>
-        الذهاب إلى التحميلات
-      </router-link>
-
-      <router-link to="/" class="sec-link">العودة إلى الصفحة الرئيسية</router-link>
+      <router-link :to="`/${$route.params.lang}/downloads`" class="btn-downloads"><span class="btn-arrow">?</span>{{ $t('payment.success.goDownloads') }}</router-link>
+      <router-link to="/" class="sec-link">{{ $t('payment.backHome') }}</router-link>
     </div>
   </div>
 </template>

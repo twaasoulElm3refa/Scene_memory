@@ -1,96 +1,18 @@
 <template>
   <div class="scemory-page failed-page">
-    <div class="particles">
-      <div
-        v-for="i in 8"
-        :key="i"
-        class="particle"
-        :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"
-      ></div>
-    </div>
-
+    <div class="particles"><div v-for="i in 8" :key="i" class="particle" :style="{ left: (i * 12) + '%', animationDelay: (i * 0.3) + 's' }"></div></div>
     <div class="card">
-      <!-- Badge -->
-      <div class="paypal-badge">
-        <div class="paypal-dot"></div>
-        فشل الدفع عبر PayPal
-      </div>
-
-      <!-- Icon -->
-      <div class="icon-wrap">
-        <div class="icon-ring"></div>
-        <div class="icon-circle">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
-            <line
-              class="x-line"
-              x1="12"
-              y1="12"
-              x2="26"
-              y2="26"
-              stroke="#fff"
-              stroke-width="3.5"
-              stroke-linecap="round"
-            />
-            <line
-              class="x-line2"
-              x1="26"
-              y1="12"
-              x2="12"
-              y2="26"
-              stroke="#fff"
-              stroke-width="3.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </div>
-      </div>
-
-      <h1>فشلت عملية الدفع</h1>
-      <p class="subtitle">
-        لم تتم العملية بنجاح<br />
-        يمكنك المحاولة مرة أخرى أو التواصل مع الدعم
-      </p>
-
-      <!-- Info -->
-      <div class="info-row">
-        <div class="info-icon">ERR</div>
-        <div>
-          <div class="info-label">الحالة</div>
-          <div class="info-val">فشل الدفع</div>
-        </div>
-      </div>
-
-      <div class="info-row">
-        <div class="info-icon">INFO</div>
-        <div>
-          <div class="info-label">السبب</div>
-          <div class="info-val">{{ errorReason }}</div>
-        </div>
-      </div>
-
-      <div class="info-row">
-        <div class="info-icon">SAFE</div>
-        <div>
-          <div class="info-label">معلومة</div>
-          <div class="info-val">لم يتم خصم أي مبلغ</div>
-        </div>
-      </div>
-
+      <div class="paypal-badge"><div class="paypal-dot"></div>{{ $t('payment.failed.paypalBadge') }}</div>
+      <div class="icon-wrap"><div class="icon-ring"></div><div class="icon-circle"><svg width="38" height="38" viewBox="0 0 38 38" fill="none"><line class="x-line" x1="12" y1="12" x2="26" y2="26" stroke="#fff" stroke-width="3.5" stroke-linecap="round" /><line class="x-line2" x1="26" y1="12" x2="12" y2="26" stroke="#fff" stroke-width="3.5" stroke-linecap="round" /></svg></div></div>
+      <h1>{{ $t('payment.failed.title') }}</h1>
+      <p class="subtitle">{{ $t('payment.depositFailed.subtitleLine1') }}<br />{{ $t('payment.failed.subtitleLine2') }}</p>
+      <div class="info-row"><div class="info-icon">ERR</div><div><div class="info-label">{{ $t('payment.status') }}</div><div class="info-val">{{ $t('payment.failed.statusShort') }}</div></div></div>
+      <div class="info-row"><div class="info-icon">INFO</div><div><div class="info-label">{{ $t('payment.failed.reasonLabel') }}</div><div class="info-val">{{ errorReason }}</div></div></div>
+      <div class="info-row"><div class="info-icon">SAFE</div><div><div class="info-label">{{ $t('payment.info') }}</div><div class="info-val">{{ $t('payment.failed.noChargeShort') }}</div></div></div>
       <div class="divider"></div>
-
-      <!-- Buttons -->
-      <button @click="retryPayment" class="btn-retry">
-        <span class="btn-icon">↻</span>
-        إعادة المحاولة
-      </button>
-
-      <button @click="contactSupport" class="btn-support">
-        التواصل مع الدعم الفني
-      </button>
-
-      <button @click="goHome" class="sec-link">
-        العودة إلى الصفحة الرئيسية
-      </button>
+      <button @click="retryPayment" class="btn-retry"><span class="btn-icon">?</span>{{ $t('payment.failed.retry') }}</button>
+      <button @click="contactSupport" class="btn-support">{{ $t('payment.failed.contactSupport') }}</button>
+      <button @click="goHome" class="sec-link">{{ $t('payment.backHome') }}</button>
     </div>
   </div>
 </template>
@@ -108,13 +30,13 @@ export default {
   computed: {
     errorReason() {
       const reasons = {
-        INSTRUMENT_DECLINED: "تم رفض وسيلة الدفع",
-        PAYER_CANNOT_PAY: "رصيد غير كافٍ",
-        TRANSACTION_REFUSED: "تم رفض العملية من PayPal",
-      };
+                INSTRUMENT_DECLINED: this.$t("payment.failed.reasons.instrumentDeclined"),
+                PAYER_CANNOT_PAY: this.$t("payment.failed.reasons.payerCannotPay"),
+                TRANSACTION_REFUSED: this.$t("payment.failed.reasons.transactionRefused"),
+            };
 
       const code = this.$route.query.error;
-      return reasons[code] || "تم إلغاء العملية أو فشل الدفع";
+      return reasons[code] || this.$t("payment.failed.reasons.default");
     },
   },
 

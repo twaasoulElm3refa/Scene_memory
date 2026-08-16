@@ -2,8 +2,8 @@
   <div class="scemory-page waiting-container">
     <div class="card">
       <div v-if="!timedOut" class="spinner"></div>
-      <h2>Processing Your Wallet Deposit</h2>
-      <p>Please wait while we confirm your deposit with PayPal.</p>
+      <h2>{{ $t('payment.depositWaiting.title') }}</h2>
+      <p>{{ $t('payment.depositWaiting.message') }}</p>
       <p class="hint">
         {{ timedOut
           ? "Confirmation is taking longer than expected. The deposit may still complete safely."
