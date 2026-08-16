@@ -624,13 +624,13 @@
     "homeAudit": {
         "home": {
             "videoUnsupported": "Your browser does not support the video tag.",
-            "badge": "Scemory Event Archive",
-            "title": "Explore documented events",
-            "titleHighlight": "through the map",
-            "description": "Discover event media uploaded by journalists, media teams, and eyewitness contributors around the world.",
-            "searchEvents": "Search Events",
-            "uploadStory": "Upload Your Story",
-            "bottomText": "Discover stories, places and moments from around the world."
+            "badge": "أرشيف فعاليات Scemory",
+            "title": "استكشف الفعاليات الموثقة",
+            "titleHighlight": "عبر الخريطة",
+            "description": "اكتشف وسائط الفعاليات التي يرفعها الصحفيون وفرق الإعلام والمساهمون شهود العيان من حول العالم.",
+            "searchEvents": "ابحث عن الفعاليات",
+            "uploadStory": "ارفع قصتك",
+            "bottomText": "اكتشف القصص والأماكن واللحظات من حول العالم."
         },
         "profileToast": {
             "title": "Profile not complete",
