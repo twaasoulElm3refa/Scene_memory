@@ -301,8 +301,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/{id}/Exhibitions', [CommentInteractionController::class, 'exhibitions']);
         Route::post('/{id}/neutral', [CommentInteractionController::class, 'neutral']);
         Route::post('/{id}/report', [CommentInteractionController::class, 'report']);
-        Route::post('{id}/create', [CommentController::class, 'create']);
-        Route::delete('/{id}/delete', [CommentController::class, 'destroy']);
+        Route::post('{id}/create', [CommentController::class, 'create'])->middleware('auth:sanctum');
+        Route::delete('/{id}/delete', [CommentController::class, 'destroy'])->middleware('auth:sanctum');
         //115
     });
 

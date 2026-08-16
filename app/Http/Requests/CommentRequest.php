@@ -22,7 +22,19 @@ class CommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'comment' => 'required|string',
+            'comment' => ['required', 'string'],
+            'images' => ['sometimes', 'array', 'max:2'],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'images.max' => 'A comment can have a maximum of 2 images.',
+            'images.*.image' => 'Each comment attachment must be a valid image.',
+            'images.*.mimes' => 'Comment images must be JPG, JPEG, PNG, or WEBP files.',
+            'images.*.max' => 'Each comment image must not exceed 5 MB.',
         ];
     }
 }

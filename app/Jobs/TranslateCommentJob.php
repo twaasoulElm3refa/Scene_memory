@@ -14,7 +14,10 @@ class TranslateCommentJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public const TARGET_LOCALES = ['ar', 'en'];
+
     protected $commentId;
+
     protected $text;
 
     public function __construct($commentId, $text)
@@ -25,28 +28,43 @@ class TranslateCommentJob implements ShouldQueue
 
     public function handle(): void
     {
-
         $comment = comments::find($this->commentId);
-        if (!$comment) return;
+        if (! $comment) {
+            return;
+        }
 
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi','tr'];
+        $comment->translations()
+            ->whereNotIn('locale', self::TARGET_LOCALES)
+            ->delete();
 
-        foreach ($locales as $locale) {
+        foreach (self::TARGET_LOCALES as $locale) {
             try {
-                $tr = new GoogleTranslate($locale);
-                $tr->setSource('auto');
-                $translated = $tr->translate($this->text);
+                $translation = $this->translateTo($locale);
 
-                if ($translated) {
+                if ($translation['text']) {
                     $comment->translations()->updateOrCreate(
                         ['locale' => $locale],
-                        ['comment' => $translated]
+                        [
+                            'comment' => $translation['source'] === $locale
+                                ? $this->text
+                                : $translation['text'],
+                        ]
                     );
                 }
-
             } catch (\Exception $e) {
-                \Log::error('Translate Comment Error: ' . $e->getMessage());
+                \Log::error('Translate Comment Error: '.$e->getMessage());
             }
         }
+    }
+
+    protected function translateTo(string $locale): array
+    {
+        $translator = new GoogleTranslate($locale);
+        $translator->setSource('auto');
+
+        return [
+            'text' => $translator->translate($this->text),
+            'source' => $translator->getLastDetectedSource(),
+        ];
     }
 }

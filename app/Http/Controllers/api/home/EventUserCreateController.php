@@ -309,10 +309,10 @@ class EventUserCreateController extends Controller
     {
         $request->validate([
             'photography_type' => ['required', 'in:normal,professional'],
-            'urls' => ['required_without:photos', 'array', 'min:1'],
-            'urls.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
-            'photos' => ['nullable', 'array', 'min:1'],
-            'photos.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
+            'urls' => ['required_without:photos', 'array', 'min:1', 'max:8'],
+            'urls.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
+            'photos' => ['nullable', 'array', 'min:1', 'max:8'],
+            'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
             'photo_descriptions' => ['required', 'array', 'min:1'],
             'photo_descriptions.*' => ['required', 'string', 'max:2000'],
             'photo_tags_json' => ['required', 'array', 'min:1'],
@@ -324,6 +324,14 @@ class EventUserCreateController extends Controller
             'photo_blur_scores' => ['nullable', 'array'],
             'photo_validation_statuses' => ['nullable', 'array'],
             'photo_validation_messages' => ['nullable', 'array'],
+            'media_prices' => ['nullable', 'array'],
+            'media_widths' => ['nullable', 'array'],
+            'media_heights' => ['nullable', 'array'],
+            'media_quality_scores' => ['nullable', 'array'],
+            'media_sharpness_scores' => ['nullable', 'array'],
+            'media_contrast_scores' => ['nullable', 'array'],
+            'media_brightness_scores' => ['nullable', 'array'],
+            'media_file_sizes_mb' => ['nullable', 'array'],
         ]);
 
         $uploadedFiles = $this->uploadedMediaFiles($request);
@@ -346,6 +354,8 @@ class EventUserCreateController extends Controller
         if (count($photoTags) !== $photoCount) {
             $errors['photo_tags_json'] = ['Every photo must have at least one tag.'];
         }
+
+        $this->addMetadataAlignmentErrors($request, $photoCount, $errors);
 
         foreach ($uploadedFiles as $index => $file) {
             if (! $file instanceof UploadedFile) {
@@ -398,6 +408,39 @@ class EventUserCreateController extends Controller
         }
 
         return $validationResults;
+    }
+
+    private function addMetadataAlignmentErrors(Request $request, int $photoCount, array &$errors): void
+    {
+        foreach ([
+            'photo_widths',
+            'photo_heights',
+            'photo_quality_scores',
+            'photo_sharpness_scores',
+            'photo_blur_scores',
+            'photo_validation_statuses',
+            'photo_validation_messages',
+            'media_prices',
+            'media_widths',
+            'media_heights',
+            'media_quality_scores',
+            'media_sharpness_scores',
+            'media_contrast_scores',
+            'media_brightness_scores',
+            'media_file_sizes_mb',
+        ] as $key) {
+            if (! $request->has($key)) {
+                continue;
+            }
+
+            $values = $request->input($key);
+
+            if (is_array($values) && count($values) === $photoCount) {
+                continue;
+            }
+
+            $errors[$key] = ['Photo metadata must match the uploaded photo count.'];
+        }
     }
 
     private function stripUploadOnlyData(array &$data): void

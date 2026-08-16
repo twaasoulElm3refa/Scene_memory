@@ -25,6 +25,7 @@ class CommentRepository implements CommentRepositoryInterface
         return Comments::with([
             'translation:id,comment_id,locale,comment,created_at',
             'user:id,name',
+            'images',
         ])
             ->withCount([
                 'interactions as support_count' => fn ($q) => $q->where('type', 'support'),

@@ -412,7 +412,7 @@ class EventRepository implements EventRepositoryInterface
                     'interactions as exhibitions_count' => fn ($q) => $q->where('type', 'Exhibitions'),
                     'interactions as neutral_count' => fn ($q) => $q->where('type', 'neutral'),
                 ])
-                ->with('user:id,name', 'translation', 'replies', 'replies.user:id,name'),
+                ->with('user:id,name', 'translation', 'images', 'replies', 'replies.user:id,name'),
         ])
         ->withCount('comments')
         ->withCount('likes')

@@ -5,7 +5,7 @@
                 <div>
                     <h2 class="card-title h4 fw-bold mb-1">Photos Upload</h2>
                     <p class="text-muted mb-0">
-                        Upload one image at a time. Each photo needs its own description and tags.
+                        Upload one or more images. Each photo needs its own description and tags.
                     </p>
                 </div>
 
@@ -28,11 +28,12 @@
                     ref="fileInput"
                     type="file"
                     accept="image/png,image/jpeg,image/webp"
+                    multiple
                     hidden
                     @change="handleSelect"
                 />
 
-                <p class="fs-5 fw-medium text-secondary mb-2">Choose one photo</p>
+                <p class="fs-5 fw-medium text-secondary mb-2">Choose photos</p>
                 <p class="text-muted small mb-3">
                     JPG, PNG, or WEBP. Maximum file size is 20 MB.
                 </p>
@@ -43,12 +44,16 @@
                     :disabled="!photographyType || hasReachedLimit || uploading"
                     @click="choosePhoto"
                 >
-                    {{ uploading ? "Checking..." : "Add another photo" }}
+                    {{ uploading ? "Checking..." : "Choose Photos" }}
                 </button>
 
                 <small class="text-muted d-block mt-2">
                     {{ items.length }} / {{ maxPhotos }} photos
                 </small>
+
+                <div v-if="uploadLimitMessage" class="text-danger small mt-2">
+                    {{ uploadLimitMessage }}
+                </div>
             </div>
 
             <div v-if="items.length === 0" class="text-muted text-center py-4">
@@ -292,6 +297,7 @@ const emit = defineEmits(["update:modelValue"]);
 const fileInput = ref(null);
 const uploading = ref(false);
 const items = ref([]);
+const uploadLimitMessage = ref("");
 const objectUrls = new Set();
 let ignoreNextModelSync = false;
 
@@ -350,19 +356,47 @@ function choosePhoto() {
 }
 
 async function handleSelect(event) {
-    const file = event.target.files?.[0];
-
-    if (file) {
-        await addFile(file);
-    }
+    await addFiles(Array.from(event.target.files || []));
 
     event.target.value = "";
 }
 
 async function handleDrop(event) {
-    const file = event.dataTransfer.files?.[0];
+    await addFiles(Array.from(event.dataTransfer.files || []));
+}
 
-    if (file) {
+async function addFiles(files) {
+    const selectedFiles = Array.isArray(files) ? files.filter(Boolean) : [];
+
+    if (selectedFiles.length === 0) {
+        return;
+    }
+
+    if (!props.photographyType) {
+        uploadLimitMessage.value = "Please select photography type first.";
+        alert(uploadLimitMessage.value);
+        return;
+    }
+
+    const remainingSlots = Math.max(0, props.maxPhotos - items.value.length);
+
+    if (remainingSlots === 0) {
+        uploadLimitMessage.value = `You can upload up to ${props.maxPhotos} photos.`;
+        alert(uploadLimitMessage.value);
+        return;
+    }
+
+    const filesToAdd = selectedFiles.slice(0, remainingSlots);
+
+    uploadLimitMessage.value = selectedFiles.length > remainingSlots
+        ? `Only ${remainingSlots} of ${selectedFiles.length} selected photos were added. You can upload up to ${props.maxPhotos} photos.`
+        : "";
+
+    if (uploadLimitMessage.value) {
+        alert(uploadLimitMessage.value);
+    }
+
+    for (const file of filesToAdd) {
         await addFile(file);
     }
 }

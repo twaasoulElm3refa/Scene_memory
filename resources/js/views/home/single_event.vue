@@ -59,14 +59,14 @@
                                 class="text-2xl md:text-3xl font-bold text-gray-900 border-b border-gray-200 pb-4 flex-1">
                                 {{ $t('event.media_gallery_title') }}
                             </h2>
-                            <button v-if="isAuthenticated && Number(event?.user_id) === Number(currentUserId)" @click="showUploadModal = true"
+                            <!-- <button v-if="isAuthenticated && Number(event?.user_id) === Number(currentUserId)" @click="showUploadModal = true"
                                 class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-sm ml-4">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4v16m8-8H4" />
                                 </svg>
                                 {{ $t('upload_media') || 'رفع وسائط' }}
-                            </button>
+                            </button> -->
                         </div>
 
                         <!-- Grid -->
@@ -286,6 +286,17 @@
                                         {{ comment?.translation?.comment || comment?.comment || '' }}
                                     </p>
 
+                                    <div v-if="comment?.images?.length"
+                                        :class="['grid gap-2 mb-4', comment.images.length === 1 ? 'grid-cols-1 max-w-sm' : 'grid-cols-2']">
+                                        <a v-for="image in comment.images.slice(0, 2)" :key="image.id"
+                                            :href="getMediaUrl(image)" target="_blank" rel="noopener noreferrer"
+                                            class="block overflow-hidden rounded-lg bg-gray-100">
+                                            <img :src="getMediaUrl(image)" alt="Comment attachment"
+                                                class="h-32 w-full object-cover" loading="lazy"
+                                                @error="onMediaImageError" />
+                                        </a>
+                                    </div>
+
                                     <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
                                         <div class="flex items-center gap-2">
                                             <div
@@ -468,6 +479,31 @@
                                             class="w-full border border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                             :placeholder="$t('event.comment_placeholder') || 'اكتب تعليقك هنا...'"
                                             :disabled="commentLoading" required></textarea>
+                                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                                            <input ref="commentImageInput" type="file"
+                                                accept="image/jpeg,image/png,image/webp" multiple class="hidden"
+                                                :disabled="commentLoading || commentImages.length >= MAX_COMMENT_IMAGES"
+                                                @change="handleCommentImageSelection" />
+                                            <button type="button" @click="commentImageInput?.click()"
+                                                :disabled="commentLoading || commentImages.length >= MAX_COMMENT_IMAGES"
+                                                class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50">
+                                                <PhotoIcon class="h-5 w-5" aria-hidden="true" />
+                                                Add images ({{ commentImages.length }}/{{ MAX_COMMENT_IMAGES }})
+                                            </button>
+                                            <span class="text-xs text-gray-500">Maximum 2 images, 5 MB each</span>
+                                        </div>
+                                        <div v-if="commentImages.length" class="mt-3 grid max-w-xs grid-cols-2 gap-2">
+                                            <div v-for="(item, index) in commentImages" :key="item.key"
+                                                class="relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
+                                                <img :src="item.previewUrl" :alt="`Selected image ${index + 1}`"
+                                                    class="h-full w-full object-cover" />
+                                                <button type="button" @click="removeCommentImage(index)"
+                                                    class="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/65 text-white hover:bg-black"
+                                                    :aria-label="`Remove selected image ${index + 1}`">
+                                                    <XMarkIcon class="h-4 w-4" aria-hidden="true" />
+                                                </button>
+                                            </div>
+                                        </div>
                                         <div class="mt-4 flex justify-end">
                                             <button type="submit" :disabled="commentLoading || !newComment.trim()"
                                                 class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2">
@@ -738,7 +774,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { PhotoIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useRoute } from "vue-router";
 import { EventService } from "@/services/singleEventService/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService/CommentService";
@@ -766,6 +803,8 @@ const loading = ref(true);
 const lightboxOpen = ref(false);
 const lightboxIndex = ref(0);
 const newComment = ref("");
+const commentImageInput = ref(null);
+const commentImages = ref([]);
 const commentLoading = ref(false);
 const commentError = ref("");
 const commentSuccess = ref(false);
@@ -779,6 +818,9 @@ const isInWishlist = ref(false);
 const wishlistError = ref("");
 const wishlistSuccess = ref(false);
 const isAuthenticated = ref(false);
+const MAX_COMMENT_IMAGES = 2;
+const MAX_COMMENT_IMAGE_SIZE = 5 * 1024 * 1024;
+const COMMENT_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const showUploadModal = ref(false);
 const selectedFiles = ref([]);
 const uploading = ref(false);
@@ -1312,6 +1354,69 @@ const addToWishlist = async () => {
 };
 
 // ─── Comments ─────────────────────────────────────────────────────────────────
+const clearCommentImages = () => {
+    commentImages.value.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+    commentImages.value = [];
+
+    if (commentImageInput.value) {
+        commentImageInput.value.value = "";
+    }
+};
+
+const removeCommentImage = (index) => {
+    const [removed] = commentImages.value.splice(index, 1);
+
+    if (removed) {
+        URL.revokeObjectURL(removed.previewUrl);
+    }
+};
+
+const handleCommentImageSelection = (inputEvent) => {
+    const files = Array.from(inputEvent.target.files || []);
+    let validationMessage = "";
+
+    commentError.value = "";
+
+    for (const file of files) {
+        if (commentImages.value.length >= MAX_COMMENT_IMAGES) {
+            validationMessage = "A comment can have a maximum of 2 images.";
+            break;
+        }
+
+        if (!COMMENT_IMAGE_TYPES.has(file.type)) {
+            validationMessage = "Comment images must be JPG, JPEG, PNG, or WEBP files.";
+            continue;
+        }
+
+        if (file.size > MAX_COMMENT_IMAGE_SIZE) {
+            validationMessage = "Each comment image must not exceed 5 MB.";
+            continue;
+        }
+
+        const duplicate = commentImages.value.some((item) => (
+            item.file.name === file.name &&
+            item.file.size === file.size &&
+            item.file.lastModified === file.lastModified
+        ));
+
+        if (duplicate) {
+            validationMessage = "That image is already selected.";
+            continue;
+        }
+
+        commentImages.value.push({
+            file,
+            previewUrl: URL.createObjectURL(file),
+            key: `${file.name}-${file.size}-${file.lastModified}`,
+        });
+    }
+
+    inputEvent.target.value = "";
+    commentError.value = validationMessage;
+};
+
+onUnmounted(clearCommentImages);
+
 const addComment = async () => {
     if (!newComment.value.trim() || !event.value?.id) return;
 
@@ -1320,23 +1425,25 @@ const addComment = async () => {
     commentSuccess.value = false;
 
     try {
-        const response = await CommentService.createComment(event.value.id, {
-            comment: newComment.value.trim(),
+        const formData = new FormData();
+        formData.append("comment", newComment.value.trim());
+        commentImages.value.forEach((item) => {
+            formData.append("images[]", item.file);
         });
 
+        const response = await CommentService.createComment(event.value.id, formData);
+
         if (response?.data?.status === "success") {
-            const newCommentData = response.data?.data || {
-                id: Date.now(),
-                event_id: event.value.id,
-                user_id: currentUserId.value,
-                comment: newComment.value.trim(),
-                created_at: new Date().toISOString(),
-                user: { name: "أنت" },
-            };
+            const newCommentData = response.data?.data;
+
+            if (!newCommentData) {
+                throw new Error("The server did not return the created comment.");
+            }
 
             ensureEventCommentsArray();
             event.value.comments.unshift(newCommentData);
             newComment.value = "";
+            clearCommentImages();
             commentSuccess.value = true;
             setTimeout(() => (commentSuccess.value = false), 4000);
         }

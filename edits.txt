@@ -11,10 +11,17 @@ collection button hidden when only 1 photo
 
 Edit historical creation
 
-Home Page More Comfortable For Buying not uploading (60% to 40%)
-
 trending button in admin add event
 
 test mobile functionallity
 
+add everything then make the check in backend
 
+search button in header
+translations
+
+contact us as plan
+
+media in comment section
+
+upload button

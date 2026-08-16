@@ -18,19 +18,18 @@ export const extractErrorMessage = (error) => {
     // رسالة مباشرة
     if (typeof data === 'string') return data;
 
-    // { message: "..." }
-    if (data.message && typeof data.message === 'string') return data.message;
-
-    // { error: "..." }
-    if (data.error && typeof data.error === 'string') return data.error;
-
-    // { errors: { field: ["msg"] } }
     if (data.errors && typeof data.errors === 'object') {
         const firstKey = Object.keys(data.errors)[0];
         const firstVal = data.errors[firstKey];
         if (Array.isArray(firstVal) && firstVal.length > 0) return firstVal[0];
         if (typeof firstVal === 'string') return firstVal;
     }
+
+    // { message: "..." }
+    if (data.message && typeof data.message === 'string') return data.message;
+
+    // { error: "..." }
+    if (data.error && typeof data.error === 'string') return data.error;
 
     // { data: { message: "..." } }
     if (data.data?.message) return data.data.message;
@@ -74,8 +73,11 @@ const CommentService = {
             });
     },
 
-    createComment(eventId, payload) {
-        return api.post(`/comments/${eventId}/create`, payload);
+    /**
+     * Accepts FormData for image attachments and plain objects for legacy text-only callers.
+     */
+    createComment(eventId, commentData) {
+        return api.post(`/comments/${eventId}/create`, commentData);
     },
 
     deleteComment(commentId) {

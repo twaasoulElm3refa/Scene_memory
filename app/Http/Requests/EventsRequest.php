@@ -32,9 +32,9 @@ class EventsRequest extends FormRequest
             // is_real: Event Type
             'is_real' => ['required', 'boolean'],
             'photography_type' => ['nullable', 'in:normal,professional'],
-            'urls' => 'required_without:photos|array|min:1',
+            'urls' => ['required_without:photos', 'array', 'min:1', 'max:8'],
             'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
-            'photos' => 'nullable|array|min:1',
+            'photos' => ['nullable', 'array', 'min:1', 'max:8'],
             'photos.*' => 'nullable|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
             'start_date' => 'required',
             'lattitude' => 'nullable',

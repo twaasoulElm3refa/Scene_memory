@@ -16,6 +16,20 @@ const slug = route.params.slug;
 const reactions = ref({});
 const reactionLoading = ref({});
 
+const getCommentImageUrl = (image) => {
+  const rawPath = image?.url || image?.path || '';
+
+  if (!rawPath || typeof rawPath !== 'string') return '';
+
+  const path = rawPath.replace(/\\/g, '/').trim();
+
+  if (/^https?:\/\//i.test(path) || path.startsWith('/')) return path;
+  if (path.startsWith('storage/')) return `/${path}`;
+  if (path.startsWith('public/')) return `/storage/${path.replace(/^public\//, '')}`;
+
+  return `/storage/${path}`;
+};
+
 // ======= Report Modal State =======
 const reportModal = ref(false);
 const reportCommentId = ref(null);
@@ -205,6 +219,27 @@ const setReaction = async (commentId, type) => {
         <p class="text-gray-700 text-sm leading-relaxed mb-3">
           {{ comment.translation?.comment || comment.comment }}
         </p>
+
+        <div
+          v-if="comment.images?.length"
+          :class="['grid gap-2 mb-4', comment.images.length === 1 ? 'grid-cols-1 max-w-sm' : 'grid-cols-2']"
+        >
+          <a
+            v-for="image in comment.images.slice(0, 2)"
+            :key="image.id"
+            :href="getCommentImageUrl(image)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block overflow-hidden rounded-lg bg-gray-100"
+          >
+            <img
+              :src="getCommentImageUrl(image)"
+              alt="Comment attachment"
+              class="h-32 w-full object-cover"
+              loading="lazy"
+            />
+          </a>
+        </div>
 
         <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
           <div class="flex items-center gap-2">

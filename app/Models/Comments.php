@@ -25,6 +25,12 @@ class Comments extends Model
         return $this->hasMany(CommentTranslation::class, 'comment_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(CommentImage::class, 'comment_id')
+            ->orderBy('sort_order');
+    }
+
     public function translation()
     {
         return $this->hasOne(CommentTranslation::class, 'comment_id')

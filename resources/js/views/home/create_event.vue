@@ -10,7 +10,7 @@
                     <div class="card shadow border-0 rounded-3">
                         <div class="card-body p-3 p-md-4">
                             <div class="row g-2">
-                                <div v-for="step in wizardSteps" :key="step.id" class="col-12 col-md-4">
+                                <div v-for="step in wizardSteps" :key="step.id" class="col-12 col-md-6">
                                     <button
                                         type="button"
                                         class="btn w-100 text-start rounded-3 border d-flex align-items-center gap-3 p-3"
@@ -118,9 +118,23 @@
                                 </div>
                             </div>
 
-                            <div v-if="!isPhotographyPhaseValid" class="text-danger small mt-3">
-                                Please select an event type and photography type before continuing.
+                            <div v-if="stepOneBlockingMessage && !form.photography_type" class="text-danger small mt-3">
+                                {{ stepOneBlockingMessage }}
                             </div>
+                        </div>
+                    </div>
+
+                    <div v-if="form.photography_type" class="mt-3">
+                        <PhotoUploadWizard
+                            v-model="form.media_items"
+                            :photography-type="form.photography_type"
+                            :max-photos="MAX_MEDIA"
+                            :available-tags="tags"
+                            :loading-tags="loadingTags"
+                        />
+
+                        <div v-if="stepOneBlockingMessage" class="alert alert-warning mt-3 mb-0">
+                            {{ stepOneBlockingMessage }}
                         </div>
                     </div>
                 </div>
@@ -431,20 +445,6 @@
                     </div>
                 </div>
 
-                <div v-show="currentPhase === 3" class="col-12">
-                    <PhotoUploadWizard
-                        v-model="form.media_items"
-                        :photography-type="form.photography_type"
-                        :max-photos="MAX_MEDIA"
-                        :available-tags="tags"
-                        :loading-tags="loadingTags"
-                    />
-
-                    <div v-if="photosBlockingMessage" class="alert alert-warning mt-3 mb-0">
-                        {{ photosBlockingMessage }}
-                    </div>
-                </div>
-
                 <div class="col-12 d-flex flex-column flex-sm-row justify-content-between gap-2 pt-3 pb-4">
                     <button
                         type="button"
@@ -457,7 +457,7 @@
 
                     <div class="d-flex flex-column flex-sm-row gap-2 ms-sm-auto">
                         <button
-                            v-if="currentPhase < 3"
+                            v-if="currentPhase < 2"
                             type="button"
                             class="btn btn-primary btn-md px-4 py-2 rounded-pill shadow"
                             :disabled="!currentPhaseValid"
@@ -532,13 +532,12 @@ const showTagsDropdown = ref(false);
 const eventTagSearchInput = ref(null);
 
 const wizardSteps = [
-    { id: 1, label: "Photography Type", description: "Choose mode" },
-    { id: 2, label: "Details", description: "Main form data" },
-    { id: 3, label: "Photos", description: "Upload and tag" },
+    { id: 1, label: "Photography & Photos", description: "Choose mode and upload" },
+    { id: 2, label: "Event Details", description: "Main form data" },
 ];
 
 const { currentPhase, goToPhase, nextPhase, previousPhase } = useFormWizard({
-    totalPhases: 3,
+    totalPhases: 2,
     afterPhaseChange: (phase) => {
         if (phase === 2) {
             resizeMapForDetailsPhase();
@@ -656,10 +655,22 @@ const photosBlockingMessage = computed(() => {
 
 const isPhotosPhaseValid = computed(() => photosBlockingMessage.value === "");
 
+const stepOneBlockingMessage = computed(() => {
+    if (!isEventTypeValid.value) {
+        return "Please select an event type before continuing.";
+    }
+
+    if (!["professional", "normal"].includes(form.value.photography_type)) {
+        return "Please select a photography type before continuing.";
+    }
+
+    return photosBlockingMessage.value;
+});
+
 const currentPhaseValid = computed(() => {
-    if (currentPhase.value === 1) return isPhotographyPhaseValid.value;
+    if (currentPhase.value === 1) return isPhotographyPhaseValid.value && isPhotosPhaseValid.value;
     if (currentPhase.value === 2) return isDetailsPhaseValid.value;
-    return isPhotosPhaseValid.value;
+    return false;
 });
 
 const canSubmit = computed(() =>
@@ -697,8 +708,7 @@ function photographyCardClass(type) {
 
 function canOpenStep(stepId) {
     if (stepId <= currentPhase.value) return true;
-    if (stepId === 2) return isPhotographyPhaseValid.value;
-    if (stepId === 3) return isPhotographyPhaseValid.value && isDetailsPhaseValid.value;
+    if (stepId === 2) return isPhotographyPhaseValid.value && isPhotosPhaseValid.value;
     return false;
 }
 
