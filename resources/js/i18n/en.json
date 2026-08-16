@@ -15,24 +15,27 @@
     "upload_media": "Upload Media",
     "view_all_comments": "View all comments",
     "nav": {
-        "favourites": "Favorites",
+        "favourites": "Favourites",
         "downloads": "Downloads",
-        "plans": " Plans",
-        "more": " More",
+        "plans": "Plans",
+        "more": "More",
         "dashboard": "Dashboard",
-        "scemoryGate": "Scemory Gate",
+        "scemoryGate": "ScemoryGate",
         "events": "Events",
-        "terms": "Terms and Conditions",
-        "historical": "Historical People",
+        "terms": "Terms",
+        "historical": "Historical",
         "home": "Home",
-        "about": "About Us",
+        "about": "About",
         "allEvents": "All Events",
-        "contact": "Contact Us",
+        "contact": "Contact",
         "addEvent": "Add Event",
         "wishlist": "Favorites",
         "profile": "Profile",
-        "logout": "Log Out",
-        "login": "Log In"
+        "logout": "Logout",
+        "login": "Login",
+        "cart": "Cart",
+        "scemoryHome": "Scemory home",
+        "toggleMenu": "Toggle menu"
     },
     "login_to_comment": "Please log in to leave a comment",
     "languages": {
@@ -192,7 +195,11 @@
         "verifiedTitle": "Stay updated with verified event stories",
         "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
         "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon.",
+        "errors": {
+            "emailRequired": "Please enter your email.",
+            "emailInvalid": "Please enter a valid email address."
+        }
     },
     "map": {
         "exploreMap": "Explore the Map"
@@ -547,22 +554,22 @@
         "contact_text": "If you have any questions about these Terms, please contact the platform administration."
     },
     "plans": {
-        "customPrice": "Custom Price",
-        "customPricingDescription": "FFor custom subscriptions, please contact us to receive a tailored offer that meets your needs.",
-        "contactUs": "Contact Us",
+        "customPrice": "Contact us",
+        "customPricingDescription": "Pricing tailored to your needs",
+        "contactUs": "Contact us",
         "chooseYourPlan": "Choose your plan",
-        "getStarted": "Get started for free",
+        "getStarted": "Get started",
         "perMonth": "per month",
-        "noFeatures": "No features",
+        "noFeatures": "No features yet",
         "mostPopular": "Most popular",
         "prioritySupport": "Priority support",
         "securePayments": "Secure payments",
-        "moneyBack": "Money-back guarantee",
+        "moneyBack": "30-day guarantee",
         "support247": "24/7 support",
         "subscribe": "Subscribe now",
         "free": "Free",
         "ourPlans": "Our plans",
-        "description": "Our various plans",
+        "description": "Start free or pick the plan that fits you best.",
         "noCreditCard": "No credit card required",
         "price": "Price",
         "features": "Features",
@@ -618,7 +625,8 @@
             "loadPlans": "Failed to load plans. Please try again."
         },
         "customPlanNote": "Built around your requirements",
-        "basicAccessIncluded": "Basic access included"
+        "basicAccessIncluded": "Basic access included",
+        "usd": "USD"
     },
     "free": "Free",
     "basic": "Basic",
@@ -655,7 +663,9 @@
             "emptyDescription": "Check back soon for highlighted events.",
             "views": "views",
             "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "slidesLabel": "Trending event slides",
+            "untitledEvent": "Untitled event",
+            "showSlide": "Show trending event {number}"
         },
         "map": {
             "tilesSlow": "Map tiles are taking too long to render.",
@@ -670,7 +680,12 @@
             "imageAlt": "Scemory documentation platform",
             "kicker": "Trusted Event Memory",
             "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity.",
+            "features": {
+                "upload": "Upload photos, videos, and field data",
+                "explore": "Explore events through an interactive map",
+                "preserve": "Preserve verified stories in a digital archive"
+            }
         },
         "events": {
             "showing": "Showing",
@@ -689,8 +704,8 @@
             "searchMore": "Search more tags"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "Clear",
+            "clearTags": "Clear"
         }
     },
     "photoUpload": {

@@ -29,7 +29,7 @@
               <span class="about-check grid h-9 w-9 place-items-center rounded-full">
                 <i class="bi bi-check2"></i>
               </span>
-              <span class="text-sm font-semibold text-[#0F172A]">{{ item }}</span>
+              <span class="text-sm font-semibold text-[#0F172A]">{{ $t(item) }}</span>
             </div>
           </div>
 
@@ -47,9 +47,9 @@
 
 <script setup>
 const features = [
-  "Upload photos, videos, and field data",
-  "Explore events through an interactive map",
-  "Preserve verified stories in a digital archive",
+  "homeAudit.about.features.upload",
+  "homeAudit.about.features.explore",
+  "homeAudit.about.features.preserve",
 ];
 </script>
 

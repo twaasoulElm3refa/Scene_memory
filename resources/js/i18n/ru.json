@@ -16,23 +16,26 @@
     "view_all_comments": "Показать все комментарии",
     "nav": {
         "favourites": "Избранное",
-        "plans": " Планы",
-        "more": " Больше",
-        "terms": "Общие условия",
-        "historical": "Исторические люди",
+        "plans": "Планы",
+        "more": "Еще",
+        "terms": "Условия",
+        "historical": "Историческое",
         "home": "Главная",
         "about": "О нас",
         "allEvents": "Все события",
         "events": "События",
-        "scemoryGate": "Саморазвитие",
-        "dashboard": "Панель управления",
-        "contact": "Связаться с нами",
-        "downloads": "Скачать",
+        "scemoryGate": "ScemoryGate",
+        "dashboard": "Панель",
+        "contact": "Контакты",
+        "downloads": "Загрузки",
         "addEvent": "Добавить событие",
         "wishlist": "Избранное",
         "profile": "Профиль",
         "logout": "Выйти",
-        "login": "Войти"
+        "login": "Войти",
+        "cart": "Корзина",
+        "scemoryHome": "Главная Scemory",
+        "toggleMenu": "Переключить меню"
     },
     "login_to_comment": "Пожалуйста, войдите, чтобы оставить комментарий",
     "languages": {
@@ -99,23 +102,23 @@
         "remove_selected_comment_image": "??????? ????????? ??????????? {number}"
     },
     "common": {
-        "search": "Поиск",
-        "placeholder": "Поиск событий...",
+        "search": "Искать",
+        "placeholder": "Искать события...",
         "searching": "Поиск...",
-        "details": "Подробности",
+        "details": "Подробнее",
         "notSpecified": "Не указано",
         "loadingEvents": "Загрузка событий...",
         "loading": "????????...",
-        "close": "???????",
+        "close": "Закрыть",
         "tryAgain": "?????????",
         "back": "?????",
         "remove": "???????",
-        "clear": "????????",
+        "clear": "Очистить",
         "previous": "??????????",
         "next": "?????????",
         "noResults": "??? ???????????",
         "unknownError": "??????????? ??????",
-        "learnMore": "?????????",
+        "learnMore": "Узнать больше",
         "cancel": "??????",
         "sending": "????????...",
         "show": "????????",
@@ -142,7 +145,7 @@
         "recentMemories": "Недавние воспоминания",
         "discoverAroundYou": "Узнайте, что происходит рядом с вами, и подготовьтесь к самым прекрасным моментам",
         "noEventsFound": "События не найдены",
-        "noMatchingEvents": "Не найдено событий, соответствующих вашим критериям поиска или местоположению",
+        "noMatchingEvents": "Нет событий, соответствующих критериям поиска или местоположению",
         "event": "Событие",
         "startDate": "Дата начала",
         "eventType": "Event Type",
@@ -152,7 +155,7 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "??????? ??? ????????"
+        "no_title": "Событие без названия"
     },
     "pagination": {
         "previous": "Назад",
@@ -181,16 +184,20 @@
         "description": "Получайте еженедельно советы по воспоминаниям, обновления функций и вдохновляющие истории на почту",
         "firstName": "Имя",
         "firstNamePlaceholder": "Ваше имя",
-        "email": "Электронная почта",
+        "email": "Эл. почта",
         "emailPlaceholder": "you@example.com",
         "consent": "Я согласен получать иногда советы по воспоминаниям, обновления и промо-предложения от Scene Memory. Могу отписаться в любое время.",
         "subscribe": "Подписаться на обновления воспоминаний",
         "community": "Присоединяйтесь к более чем 5000 хранителям воспоминаний в нашем сообществе",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "Рассылка",
+        "verifiedTitle": "Следите за проверенными историями событий",
+        "verifiedDescription": "Получайте подборки о популярных событиях, новых медиаархивах и важных историях, задокументированных участниками по всему миру.",
+        "subscribeShort": "Подписаться",
+        "pendingApiMessage": "Спасибо за подписку. API рассылки скоро будет подключен.",
+        "errors": {
+            "emailRequired": "Введите адрес электронной почты.",
+            "emailInvalid": "Введите действительный адрес электронной почты."
+        }
     },
     "map": {
         "exploreMap": "Исследовать карту"
@@ -540,26 +547,26 @@
         "contact_text": "Если у вас есть вопросы по поводу этих условий, пожалуйста, свяжитесь с администрацией платформы."
     },
     "plans": {
-        "customPrice": "По запросу",
-        "customPricingDescription": "Для индивидуальных подписок, пожалуйста, свяжитесь с нами, чтобы получить предложение, соответствующее вашим потребностям.",
-        "contactUs": "Связаться с нами",
-        "chooseYourPlan": "Выберите ваш план",
-        "getStarted": "Начать бесплатно",
-        "perMonth": "? ?????",
+        "customPrice": "Свяжитесь с нами",
+        "customPricingDescription": "Цена подбирается под ваши потребности",
+        "contactUs": "Свяжитесь с нами",
+        "chooseYourPlan": "Выберите план",
+        "getStarted": "Начать",
+        "perMonth": "в месяц",
         "prioritySupport": "Приоритетная поддержка",
-        "securePayments": "?????????? ???????",
-        "moneyBack": "???????? ???????? ?????",
-        "support247": "????????? 24/7",
+        "securePayments": "Безопасные платежи",
+        "moneyBack": "Гарантия 30 дней",
+        "support247": "Поддержка 24/7",
         "subscribe": "Подписаться сейчас",
-        "noFeatures": "Нет особенностей",
+        "noFeatures": "Функций пока нет",
         "mostPopular": "Самый популярный",
         "free": "Бесплатно",
         "ourPlans": "Наши планы",
         "noCreditCard": "Кредитная карта не требуется",
-        "description": "Наши различные планы",
+        "description": "Начните бесплатно или выберите подходящий план.",
         "price": "Цена",
         "features": "Особенности",
-        "cancelAnytime": "Отменить в любое время",
+        "cancelAnytime": "Отмена в любое время",
         "Monthly": "Ежемесячно",
         "Yearly": "Ежегодно",
         "unlimitedEvents": "Неограниченные события",
@@ -576,7 +583,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "План",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -610,8 +617,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "?? ??????? ????????? ??????. ?????????? ?????."
         },
-        "customPlanNote": "????????????? ??? ???? ??????????",
-        "basicAccessIncluded": "??????? ?????? ???????"
+        "customPlanNote": "Под ваши требования",
+        "basicAccessIncluded": "??????? ?????? ???????",
+        "usd": "USD"
     },
     "free": "Бесплатный",
     "basic": "Базовый",
@@ -619,7 +627,7 @@
     "premium": "Премиум",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "Ваш браузер не поддерживает тег video.",
             "badge": "Архив событий Scemory",
             "title": "Изучайте задокументированные события",
             "titleHighlight": "через карту",
@@ -629,61 +637,68 @@
             "bottomText": "Открывайте истории, места и моменты со всего мира."
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "Профиль не заполнен",
+            "message": "Ваш профиль не заполнен. Обновите:",
+            "complete": "Нажмите, чтобы заполнить",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "Телефон",
+                "country": "Страна",
+                "position": "Должность",
+                "dateOfBirth": "Дата рождения"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "Не удалось загрузить популярные события.",
+            "kicker": "В тренде",
+            "title": "Популярные события",
+            "description": "События, привлекающие внимание в архиве.",
+            "emptyTitle": "Популярных событий пока нет",
+            "emptyDescription": "Загляните позже, чтобы увидеть избранные события.",
+            "views": "просмотры",
+            "likes": "лайки",
+            "slidesLabel": "Слайды популярных событий",
+            "untitledEvent": "Событие без названия",
+            "showSlide": "Показать популярное событие {number}"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "Картографические плитки загружаются слишком долго.",
+            "loadError": "Не удалось загрузить карту.",
+            "loadMap": "Загрузить карту",
+            "loading": "Загрузка карты...",
+            "retry": "Повторить загрузку карты",
+            "openFullscreen": "Открыть карту на весь экран",
+            "closeFullscreen": "Закрыть полноэкранную карту"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Платформа документирования Scemory",
+            "kicker": "Надежная память событий",
+            "title": "О Scemory",
+            "description": "Scemory создан для журналистов, медиакоманд и очевидцев, которым нужно надежное место для документирования событий по мере их развития. Платформа связывает загруженные медиа, метаданные событий и контекст места, чтобы люди могли ясно открывать публичные истории.",
+            "features": {
+                "upload": "Загружайте фото, видео и полевые данные",
+                "explore": "Изучайте события на интерактивной карте",
+                "preserve": "Сохраняйте проверенные истории в цифровом архиве"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "Показано",
+            "of": "из",
+            "events": "события",
+            "seeMore": "Показать еще",
+            "badge": "СОБЫТИЯ"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "?????? ?????? ????"
+            "loading": "Загрузка тегов...",
+            "showingFirst": "Показаны первые",
+            "searchToFindMore": "тегов. Используйте поиск, чтобы найти больше.",
+            "none": "Теги не найдены",
+            "helper": "Выберите один или несколько тегов для фильтрации событий на карте.",
+            "clearSelected": "Очистить выбранные теги",
+            "searchMore": "Искать еще теги"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "Очистить",
+            "clearTags": "Очистить"
         }
     },
     "photoUpload": {
@@ -805,66 +820,66 @@
         "emptyHint": "????????? ????? ???????? ?????"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "ОПЫТ SCEMORY",
+        "title": "Одна платформа. Каждая сторона истории.",
+        "pathsLabel": "Пути опыта Scemory",
+        "highlightsLabel": "Ключевые моменты раздела",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "Изучать события",
+                "eyebrow": "ОТКРЫВАЙТЕ МИР ЧЕРЕЗ СОБЫТИЯ",
+                "heading": "Изучайте истории, события и места по всему миру",
+                "description": "Переходите от карты к документированным публичным событиям, личным воспоминаниям и визуальным историям, сформированным реальными местами и контекстом участников.",
+                "cta": "Изучать события",
+                "imageAlt": "Интерфейс Scemory для поиска событий с панелями документированных медиа",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "Просматривайте медиа событий по месту и времени",
+                    "discover": "Открывайте ближайшие истории через визуальный архив",
+                    "move": "Переходите от обзора к документированным деталям события"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "Живое открытие",
+                    "title": "Истории событий, связанные с картой",
+                    "stat": "Глобальный архив",
+                    "note": "Места, даты и медиа в одном виде"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "Поделиться историей",
+                "eyebrow": "ПРЕВРАЩАЙТЕ МОМЕНТЫ В ДОКУМЕНТИРОВАННЫЕ ИСТОРИИ",
+                "heading": "Документируйте важные моменты",
+                "description": "Создайте событие, загрузите фото и медиа, добавьте место и внесите свою перспективу в архив Scemory.",
+                "cta": "Загрузить свою историю",
+                "imageAlt": "Рабочая область Scemory для документирования медиа событий",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "Добавляйте медиа, описания и контекст места",
+                    "build": "Создавайте структурированную память из живых моментов",
+                    "keep": "Сохраняйте связь историй участников с архивом"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "Поток участника",
+                    "title": "Медиа, контекст и место",
+                    "stat": "Конструктор историй",
+                    "note": "Загружайте моменты со значимыми деталями"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "Лицензировать медиа",
+                "eyebrow": "ОТКРЫВАЙТЕ МЕДИА, ГОТОВЫЕ К ИСПОЛЬЗОВАНИЮ",
+                "heading": "Находите и лицензируйте медиа событий с уверенностью",
+                "description": "Просматривайте визуальный контент, предварительно изучайте доступные медиа событий и переходите к вариантам лицензирования через существующий опыт Scemory.",
+                "cta": "Открыть медиа",
+                "imageAlt": "Панели Scemory для просмотра лицензируемого контента событий",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "Просматривайте визуалы события перед открытием деталей",
+                    "use": "Используйте страницы событий как путь к медиаопциям",
+                    "keep": "Сохраняйте связь открытия и намерения лицензировать"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "Доступ к медиа",
+                    "title": "Визуалы событий готовы к просмотру",
+                    "stat": "Путь лицензирования",
+                    "note": "От открытия к страницам деталей"
                 }
             }
         }

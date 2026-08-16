@@ -9,14 +9,14 @@
         class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 shadow-md"
       >
         <span class="text-xs font-extrabold" aria-hidden="true">
-          PLAN
+          {{ $t("plans.plan") }}
         </span>
 
-        {{ $t("plans.chooseYourPlan") || "Choose your plan" }}
+        {{ $t("plans.chooseYourPlan") }}
       </div>
 
       <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-        {{ $t("plans.ourPlans") || "Our plans" }}
+        {{ $t("plans.ourPlans") }}
       </h2>
 
       <div
@@ -24,10 +24,7 @@
       ></div>
 
       <p class="text-gray-600 text-base max-w-xl mx-auto">
-        {{
-          $t("plans.description") ||
-          "Start free or pick the plan that fits you best."
-        }}
+        {{ $t("plans.description") }}
       </p>
     </div>
 
@@ -82,7 +79,7 @@
           <div
             class="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-5 py-1.5 rounded-bl-2xl"
           >
-            {{ $t("plans.mostPopular") || "Most popular" }}
+            {{ $t("plans.mostPopular") }}
           </div>
         </div>
 
@@ -220,14 +217,13 @@
               <template v-if="isCustomPlan(plan)">
                 <div class="flex items-baseline justify-center">
                   <span class="text-2xl font-extrabold text-gray-900">
-                    {{ $t("plans.customPrice") || "Contact us" }}
+                    {{ $t("plans.customPrice") }}
                   </span>
                 </div>
 
                 <p class="text-xs text-gray-500 mt-2">
                   {{
-                    $t("plans.customPricingDescription") ||
-                    "Pricing tailored to your needs"
+                    $t("plans.customPricingDescription")
                   }}
                 </p>
               </template>
@@ -239,12 +235,12 @@
                   </span>
 
                   <span class="text-gray-500 text-sm">
-                    USD
+                    {{ $t("plans.usd") }}
                   </span>
                 </div>
 
                 <p class="text-xs text-gray-500 mt-1">
-                  {{ $t("plans.perMonth") || "per month" }}
+                  {{ $t("plans.perMonth") }}
                 </p>
               </template>
             </div>
@@ -284,7 +280,7 @@
               v-if="!plan.advantges || plan.advantges.length === 0"
               class="text-gray-400 text-xs text-center py-3"
             >
-              {{ $t("plans.noFeatures") || "No features yet" }}
+              {{ $t("plans.noFeatures") }}
             </li>
           </ul>
 
@@ -298,20 +294,20 @@
             >
               {{
                 isCustomPlan(plan)
-                  ? ($t("plans.contactUs") || "Contact us")
+                  ? $t("plans.contactUs")
                   : isFreePlan(plan)
-                    ? ($t("plans.getStarted") || "Get started")
-                    : ($t("plans.subscribe") || "Subscribe now")
+                    ? $t("plans.getStarted")
+                    : $t("plans.subscribe")
               }}
             </button>
 
             <p class="text-center text-xs text-gray-500 mt-3 min-h-4">
               {{
                 isCustomPlan(plan)
-                  ? ($t("plans.customPlanNote") || "Built around your requirements")
+                  ? $t("plans.customPlanNote")
                   : isFreePlan(plan)
-                    ? ($t("plans.noCreditCard") || "No credit card required")
-                    : ($t("plans.cancelAnytime") || "Cancel anytime")
+                    ? $t("plans.noCreditCard")
+                    : $t("plans.cancelAnytime")
               }}
             </p>
           </div>
@@ -341,7 +337,7 @@
           </span>
 
           <span>
-            {{ $t("plans.securePayments") || "Secure payments" }}
+            {{ $t("plans.securePayments") }}
           </span>
         </div>
 
@@ -364,7 +360,7 @@
           </span>
 
           <span>
-            {{ $t("plans.moneyBack") || "30-day guarantee" }}
+            {{ $t("plans.moneyBack") }}
           </span>
         </div>
 
@@ -387,7 +383,7 @@
           </span>
 
           <span>
-            {{ $t("plans.support247") || "24/7 support" }}
+            {{ $t("plans.support247") }}
           </span>
         </div>
       </div>

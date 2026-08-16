@@ -3,36 +3,39 @@
         "placeholder": "Etkinlikleri ara..."
     },
     "filters": {
-        "allCategories": "Tüm Kategoriler",
+        "allCategories": "Tüm kategoriler",
         "country": "Ülke",
         "category": "Kategori",
-        "subCategory": "Alt Kategori",
+        "subCategory": "Alt kategori",
         "from": "Başlangıç",
         "to": "Bitiş",
         "city": "Şehir",
-        "allSubCategories": "Tüm Alt Kategoriler"
+        "allSubCategories": "Tüm alt kategoriler"
     },
     "upload_media": "Medya Yükle",
     "view_all_comments": "Tüm Yorumları Görüntüle",
     "nav": {
         "favourites": "Favoriler",
         "plans": "Planlar",
-        "more": "Daha Fazla",
-        "terms": "Şartlar ve Koşullar",
-        "historical": "Tarihi Kişiler",
-        "home": "Ana Sayfa",
-        "downloads": "Indirme",
-        "about": "Hakkımızda",
-        "dashboard": "Kontrol Paneli",
+        "more": "Daha fazla",
+        "terms": "Şartlar",
+        "historical": "Tarihi",
+        "home": "Ana sayfa",
+        "downloads": "İndirilenler",
+        "about": "Hakkında",
+        "dashboard": "Panel",
         "events": "Etkinlikler",
-        "scemoryGate": "Scene Memory Gate",
-        "allEvents": "Tüm Etkinlikler",
-        "contact": "Bize Ulaşın",
-        "addEvent": "Etkinlik Ekle",
+        "scemoryGate": "ScemoryGate",
+        "allEvents": "Tüm etkinlikler",
+        "contact": "İletişim",
+        "addEvent": "Etkinlik ekle",
         "wishlist": "Favoriler",
         "profile": "Profil",
-        "logout": "Çıkış Yap",
-        "login": "Giriş Yap"
+        "logout": "Çıkış yap",
+        "login": "Giriş yap",
+        "cart": "Sepet",
+        "scemoryHome": "Scemory ana sayfası",
+        "toggleMenu": "Menüyü aç/kapat"
     },
     "languages": {
         "AR": "العربية",
@@ -100,10 +103,10 @@
     },
     "common": {
         "search": "Ara",
-        "placeholder": "Etkinlikleri ara...",
+        "placeholder": "Etkinlik ara...",
         "searching": "Aranıyor...",
         "details": "Detaylar",
-        "notSpecified": "Belirtilmemiş",
+        "notSpecified": "Belirtilmedi",
         "loadingEvents": "Etkinlikler yükleniyor...",
         "loading": "Y?kleniyor...",
         "close": "Kapat",
@@ -142,9 +145,9 @@
         "recentMemories": "Son Etkinlikler",
         "discoverAroundYou": "Çevrenizde neler olduğunu keşfedin ve en güzel anlara hazırlanın",
         "noEventsFound": "Etkinlik bulunamadı",
-        "noMatchingEvents": "Arama kriterlerinize veya konumunuza uyan etkinlik bulunamadı",
+        "noMatchingEvents": "Arama ölçütlerinize veya konumunuza uyan etkinlik yok",
         "event": "Etkinlik",
-        "startDate": "Başlangıç Tarihi",
+        "startDate": "Başlangıç tarihi",
         "eventType": "Event Type",
         "types": {
             "all": "All Events",
@@ -152,7 +155,7 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "Ba?l?ks?z Etkinlik"
+        "no_title": "Başlıksız etkinlik"
     },
     "pagination": {
         "previous": "Önceki",
@@ -182,15 +185,19 @@
         "firstName": "Ad",
         "firstNamePlaceholder": "Adınız",
         "email": "E-posta",
-        "emailPlaceholder": "siz@example.com",
+        "emailPlaceholder": "you@example.com",
         "consent": "Anı ipuçları, güncellemeler ve zaman zaman promosyon teklifleri almak istiyorum. İstediğim zaman aboneliği iptal edebilirim.",
         "subscribe": "Anı Güncellemelerine Abone Ol",
         "community": "Topluluğumuzdaki 5.000'den fazla anı koruyucusuna katılın",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "Bülten",
+        "verifiedTitle": "Doğrulanmış etkinlik hikayelerinden haberdar olun",
+        "verifiedDescription": "Trend etkinlikler, yeni medya arşivleri ve dünya çapındaki katkıcılar tarafından belgelenen önemli hikayeler hakkında seçilmiş güncellemeler alın.",
+        "subscribeShort": "Abone ol",
+        "pendingApiMessage": "Abone olduğunuz için teşekkürler. Bülten API’si yakında bağlanacak.",
+        "errors": {
+            "emailRequired": "Lütfen e-posta adresinizi girin.",
+            "emailInvalid": "Lütfen geçerli bir e-posta adresi girin."
+        }
     },
     "map": {
         "exploreMap": "Haritayı Keşfet"
@@ -545,18 +552,18 @@
         "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
     },
     "plans": {
-        "customPrice": "Maßgeschneiderter Preis",
-        "customPricingDescription": "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
-        "contactUs": "Bize Ulaşın",
-        "chooseYourPlan": "Planınızı Seçin",
-        "getStarted": "Ücretsiz Başla",
-        "subscribe": "Şimdi Abone Ol",
+        "customPrice": "Bize ulaşın",
+        "customPricingDescription": "İhtiyaçlarınıza özel fiyatlandırma",
+        "contactUs": "Bize ulaşın",
+        "chooseYourPlan": "Planınızı seçin",
+        "getStarted": "Başla",
+        "subscribe": "Şimdi abone ol",
         "free": "Ücretsiz",
-        "ourPlans": "Abonelik Planları",
-        "noFeatures": "Ozellik Yok",
-        "mostPopular": "Popüler",
+        "ourPlans": "Planlarımız",
+        "noFeatures": "Henüz özellik yok",
+        "mostPopular": "En popüler",
         "noCreditCard": "Kredi kartı gerekmez",
-        "description": "Çeşitli planlarımız",
+        "description": "Ücretsiz başlayın veya size en uygun planı seçin.",
         "price": "Fiyat",
         "features": "Özellikler",
         "cancelAnytime": "İstediğiniz zaman iptal edin",
@@ -610,12 +617,13 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "Planlar y?klenemedi. L?tfen tekrar deneyin."
         },
-        "customPlanNote": "Gereksinimlerinize g?re haz?rlan?r",
+        "customPlanNote": "Gereksinimlerinize göre tasarlandı",
         "basicAccessIncluded": "Temel eri?im dahildir",
-        "moneyBack": "Para iade garantisi",
-        "perMonth": "ayl?k",
-        "securePayments": "G?venli ?demeler",
-        "support247": "7/24 destek"
+        "moneyBack": "30 gün garanti",
+        "perMonth": "aylık",
+        "securePayments": "Güvenli ödemeler",
+        "support247": "7/24 destek",
+        "usd": "USD"
     },
     "free": "Ücretsiz",
     "basic": "Temel",
@@ -623,7 +631,7 @@
     "premium": "Premium",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "Tarayıcınız video etiketini desteklemiyor.",
             "badge": "Scemory Etkinlik Arşivi",
             "title": "Belgelenmiş etkinlikleri keşfedin",
             "titleHighlight": "harita üzerinden",
@@ -633,61 +641,68 @@
             "bottomText": "Dünyanın dört bir yanından hikayeleri, yerleri ve anları keşfedin."
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "Profil tamamlanmadı",
+            "message": "Profiliniz tamamlanmadı. Lütfen güncelleyin:",
+            "complete": "Tamamlamak için tıklayın",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "Telefon",
+                "country": "Ülke",
+                "position": "Pozisyon",
+                "dateOfBirth": "Doğum tarihi"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "Trend etkinlikler şu anda yüklenemiyor.",
+            "kicker": "Trend",
+            "title": "Trend Etkinlikler",
+            "description": "Arşivde ilgi gören etkinlikler.",
+            "emptyTitle": "Henüz trend etkinlik yok",
+            "emptyDescription": "Öne çıkan etkinlikler için yakında tekrar kontrol edin.",
+            "views": "görüntüleme",
+            "likes": "beğeni",
+            "slidesLabel": "Trend etkinlik slaytları",
+            "untitledEvent": "Başlıksız etkinlik",
+            "showSlide": "Trend etkinliği göster {number}"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "Harita döşemeleri çok uzun sürede işleniyor.",
+            "loadError": "Harita şu anda yüklenemiyor.",
+            "loadMap": "Haritayı yükle",
+            "loading": "Harita yükleniyor...",
+            "retry": "Haritayı yeniden yükle",
+            "openFullscreen": "Haritayı tam ekran aç",
+            "closeFullscreen": "Tam ekran haritayı kapat"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Scemory belgeleme platformu",
+            "kicker": "Güvenilir Etkinlik Hafızası",
+            "title": "Scemory Hakkında",
+            "description": "Scemory, olaylar yaşanırken bunları belgelemek için güvenilir bir yere ihtiyaç duyan gazeteciler, medya ekipleri ve görgü tanığı katkıcılar için tasarlanmıştır. Platform, yüklenen medyayı, etkinlik meta verilerini ve konum bağlamını birleştirerek insanların kamuya açık hikayeleri net biçimde keşfetmesini sağlar.",
+            "features": {
+                "upload": "Fotoğraf, video ve saha verisi yükleyin",
+                "explore": "Etkinlikleri etkileşimli haritada keşfedin",
+                "preserve": "Doğrulanmış hikayeleri dijital arşivde koruyun"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "Gösteriliyor",
+            "of": "/",
+            "events": "etkinlik",
+            "seeMore": "Daha fazla göster",
+            "badge": "ETKİNLİKLER"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
+            "loading": "Etiketler yükleniyor...",
+            "showingFirst": "İlk",
+            "searchToFindMore": "etiket gösteriliyor. Daha fazlası için arayın.",
+            "none": "Etiket bulunamadı",
+            "helper": "Harita etkinliklerini filtrelemek için bir veya daha fazla etiket seçin.",
+            "clearSelected": "Seçili etiketleri temizle",
             "searchMore": "Daha fazla etiket ara"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "Temizle",
+            "clearTags": "Temizle"
         }
     },
     "photoUpload": {
@@ -809,66 +824,66 @@
         "emptyHint": "Sat?n ald???n?z dosyalar burada g?r?necek"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "SCEMORY DENEYİMİ",
+        "title": "Tek platform. Hikayenin her yönü.",
+        "pathsLabel": "Scemory deneyim yolları",
+        "highlightsLabel": "Bölüm öne çıkanları",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "Etkinlikleri keşfet",
+                "eyebrow": "ETKİNLİKLERLE DÜNYAYI KEŞFEDİN",
+                "heading": "Dünyanın dört bir yanındaki hikayeleri, etkinlikleri ve yerleri keşfedin",
+                "description": "Haritadan belgelenmiş kamusal etkinliklere, kişisel anılara ve gerçek konumlar ile katkıcı bağlamıyla şekillenen görsel hikayelere geçin.",
+                "cta": "Etkinlikleri keşfet",
+                "imageAlt": "Belgelenmiş medya panelleriyle Scemory etkinlik keşif arayüzü",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "Etkinlik medyasını yer ve zaman çizelgesine göre gezin",
+                    "discover": "Görsel arşiv üzerinden yakındaki hikayeleri keşfedin",
+                    "move": "Genel görünümden belgelenmiş etkinlik detayına geçin"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "Canlı keşif",
+                    "title": "Haritaya bağlı etkinlik hikayeleri",
+                    "stat": "Küresel arşiv",
+                    "note": "Yerler, tarihler ve medya tek görünümde"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "Hikayeni paylaş",
+                "eyebrow": "ANLARI BELGELENMİŞ HİKAYELERE DÖNÜŞTÜRÜN",
+                "heading": "Önemli anları belgeleyin",
+                "description": "Bir etkinlik oluşturun, fotoğraf ve medya yükleyin, konum ayrıntıları ekleyin ve Scemory arşivine kendi bakış açınızı katın.",
+                "cta": "Hikayeni yükle",
+                "imageAlt": "Etkinlik medyasını belgelemek için Scemory katkıcı alanı",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "Medya, açıklama ve konum bağlamı ekleyin",
+                    "build": "Ham anlardan yapılandırılmış bir hafıza oluşturun",
+                    "keep": "Katkıcı hikayelerini arşive bağlı tutun"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "Katkıcı akışı",
+                    "title": "Medya, bağlam ve konum",
+                    "stat": "Hikaye oluşturucu",
+                    "note": "Anları anlamlı ayrıntılarla yükleyin"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "Medyayı lisansla",
+                "eyebrow": "KULLANIMA HAZIR MEDYAYI KEŞFEDİN",
+                "heading": "Etkinlik medyasını güvenle bulun ve lisanslayın",
+                "description": "Görsel içeriği gezin, mevcut etkinlik medyasını önizleyin ve Scemory keşif deneyimi üzerinden lisans seçeneklerine ilerleyin.",
+                "cta": "Medyayı keşfet",
+                "imageAlt": "Lisanslanabilir etkinlik içeriğini gezmek için Scemory medya panelleri",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "Detayları açmadan önce etkinlik görsellerini önizleyin",
+                    "use": "Medya seçeneklerine geçiş için etkinlik sayfalarını kullanın",
+                    "keep": "Keşif ve lisanslama niyetini bağlı tutun"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "Medya erişimi",
+                    "title": "İncelemeye hazır etkinlik görselleri",
+                    "stat": "Lisans yolu",
+                    "note": "Keşiften detay sayfalarına"
                 }
             }
         }

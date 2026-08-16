@@ -3,36 +3,39 @@
         "placeholder": "ایونٹس تلاش کریں..."
     },
     "filters": {
-        "allCategories": "تمام کیٹیگریز",
+        "allCategories": "تمام زمرے",
         "country": "ملک",
-        "category": "کیٹیگری",
-        "subCategory": "ذیلی کیٹیگری",
-        "from": "من",
+        "category": "زمرہ",
+        "subCategory": "ذیلی زمرہ",
+        "from": "سے",
         "to": "تک",
         "city": "شہر",
-        "allSubCategories": "تمام ذیلی کیٹیگریز"
+        "allSubCategories": "تمام ذیلی زمرے"
     },
     "upload_media": "میڈیا اپ لوڈ کریں",
     "view_all_comments": "تمام تبصرے دیکھیں",
     "nav": {
         "favourites": "پسندیدہ",
-        "plans": " پلینز",
-        "more": " مزید",
-        "terms": "عمومی شرایط و ضوابط",
-        "historical": "ہیستوریکل پرسن",
-        "events": "ایونٹز",
-        "scemoryGate": "سکیماری گیٹ",
+        "plans": "پلانز",
+        "more": "مزید",
+        "terms": "شرائط",
+        "historical": "تاریخی",
+        "events": "ایونٹس",
+        "scemoryGate": "ScemoryGate",
         "home": "ہوم",
-        "about": "ہمارے بارے میں",
+        "about": "متعلق",
         "dashboard": "ڈیش بورڈ",
         "allEvents": "تمام ایونٹس",
-        "contact": "رابطہ کریں",
+        "contact": "رابطہ",
         "addEvent": "ایونٹ شامل کریں",
         "wishlist": "پسندیدہ",
         "profile": "پروفائل",
         "logout": "لاگ آؤٹ",
-        "downloads": "ڈاونلوڈز",
-        "login": "لاگ ان"
+        "downloads": "ڈاؤن لوڈز",
+        "login": "لاگ ان",
+        "cart": "کارٹ",
+        "scemoryHome": "Scemory ہوم",
+        "toggleMenu": "مینو ٹوگل کریں"
     },
     "login_to_comment": "لوگ ان کریں تا جواب دیں",
     "languages": {
@@ -103,19 +106,19 @@
         "placeholder": "ایونٹس تلاش کریں...",
         "searching": "تلاش ہو رہی ہے...",
         "details": "تفصیلات",
-        "notSpecified": "غیر واضح",
+        "notSpecified": "متعین نہیں",
         "loadingEvents": "ایونٹس لوڈ ہو رہے ہیں...",
         "loading": "??? ?? ??? ??...",
-        "close": "??? ????",
+        "close": "بند کریں",
         "tryAgain": "?????? ???? ????",
         "back": "????",
         "remove": "??????",
-        "clear": "??? ????",
+        "clear": "صاف کریں",
         "previous": "?????",
         "next": "????",
         "noResults": "???? ????? ????",
         "unknownError": "??????? ?????",
-        "learnMore": "???? ?????",
+        "learnMore": "مزید جانیں",
         "cancel": "????? ????",
         "sending": "????? ?? ??? ??...",
         "show": "???????",
@@ -142,9 +145,9 @@
         "recentMemories": "حالیہ ایونٹس",
         "discoverAroundYou": "اپنے اردگرد کیا ہو رہا ہے دریافت کریں اور بہترین لمحات کے لیے تیار ہو جائیں",
         "noEventsFound": "کوئی ایونٹ نہیں ملا",
-        "noMatchingEvents": "تلاش کے معیار یا مقام کے مطابق کوئی ایونٹ نہیں ملا",
+        "noMatchingEvents": "آپ کی تلاش یا مقام کے مطابق کوئی ایونٹ نہیں",
         "event": "ایونٹ",
-        "startDate": "شروع ہونے کی تاریخ",
+        "startDate": "شروع کی تاریخ",
         "eventType": "Event Type",
         "types": {
             "all": "All Events",
@@ -152,7 +155,7 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "?? ????? ?????"
+        "no_title": "بے عنوان ایونٹ"
     },
     "pagination": {
         "previous": "پچھلا",
@@ -186,11 +189,15 @@
         "consent": "میں سین میموری سے یادوں کے ٹپس، اپ ڈیٹس اور پروموشنز وقتاً فوقتاً وصول کرنے سے متفق ہوں۔ میں کسی بھی وقت ان سبسکرپشن کو منسوخ کر سکتا ہوں۔",
         "subscribe": "یادوں کی اپ ڈیٹس میں سبسکرائب کریں",
         "community": "ہمارے ٥,٠٠٠+ یادوں کے محافظ کمیونٹی میں شامل ہوں",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "نیوز لیٹر",
+        "verifiedTitle": "تصدیق شدہ ایونٹ کہانیوں سے باخبر رہیں",
+        "verifiedDescription": "رجحان ساز ایونٹس، نئے میڈیا آرکائیوز اور دنیا بھر کے معاونین کی دستاویزی اہم کہانیوں کے بارے میں منتخب اپ ڈیٹس حاصل کریں۔",
+        "subscribeShort": "سبسکرائب کریں",
+        "pendingApiMessage": "سبسکرائب کرنے کا شکریہ۔ نیوز لیٹر API جلد منسلک ہو جائے گی۔",
+        "errors": {
+            "emailRequired": "براہ کرم اپنا ای میل درج کریں۔",
+            "emailInvalid": "براہ کرم درست ای میل پتہ درج کریں۔"
+        }
     },
     "map": {
         "exploreMap": "نقشہ دریافت کریں"
@@ -545,28 +552,28 @@
         "contact_text": "ان شرائط کے بارے میں کسی بھی سوال کے لیے پلیٹ فارم انتظامیہ سے رابطہ کریں۔"
     },
     "plans": {
-        "customPrice": "Maßgeschneiderter Preis",
-        "customPricingDescription": "Für maßgeschneiderte Abonnements kontaktieren Sie uns bitte, um ein auf Ihre Bedürfnisse zugeschnittenes Angebot zu erhalten.",
+        "customPrice": "ہم سے رابطہ کریں",
+        "customPricingDescription": "آپ کی ضروریات کے مطابق قیمت",
         "contactUs": "ہم سے رابطہ کریں",
         "chooseYourPlan": "اپنا پلان منتخب کریں",
-        "getStarted": "مفت میں شروع کریں",
+        "getStarted": "شروع کریں",
         "subscribe": "ابھی سبسکرائب کریں",
-        "noFeatures": "کوئی خصوصیات نہیں",
-        "mostPopular": "سب سے مزبان پلان",
+        "noFeatures": "ابھی کوئی فیچر نہیں",
+        "mostPopular": "سب سے مقبول",
         "free": "مفت",
         "ourPlans": "ہمارے پلانز",
-        "description": "ہمارے مختلف پلانز",
+        "description": "مفت شروع کریں یا اپنے لیے بہترین پلان منتخب کریں۔",
         "price": "قیمت",
         "features": "خصوصیات",
         "Monthly": "ماہانہ",
-        "perMonth": "??????",
-        "noCreditCard": "کریڈٹ کارڈ نہیں ہے",
+        "perMonth": "ماہانہ",
+        "noCreditCard": "کریڈٹ کارڈ درکار نہیں",
         "prioritySupport": "ترجیحی مدد",
-        "securePayments": "????? ?????????",
-        "moneyBack": "??? ????? ?? ?????",
-        "support247": "24/7 ?????",
+        "securePayments": "محفوظ ادائیگیاں",
+        "moneyBack": "30 دن کی ضمانت",
+        "support247": "24/7 سپورٹ",
         "Yearly": "سالانہ",
-        "cancelAnytime": "کوئی وقت میں لغو کریں",
+        "cancelAnytime": "کسی بھی وقت منسوخ کریں",
         "unlimitedEvents": "لامحدود ایونٹس",
         "addEvents": "ایونٹس شامل کریں",
         "transparentPricing": "Simple, transparent pricing for everyone",
@@ -581,7 +588,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "پلان",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -615,8 +622,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "????? ??? ???? ?? ???? ?????? ???? ?????"
         },
-        "customPlanNote": "?? ?? ??????? ?? ????? ????? ???",
-        "basicAccessIncluded": "?????? ????? ???? ??"
+        "customPlanNote": "آپ کی ضروریات کے مطابق بنایا گیا",
+        "basicAccessIncluded": "?????? ????? ???? ??",
+        "usd": "امریکی ڈالر"
     },
     "free": "مفت",
     "basic": "بنیادی",
@@ -624,7 +632,7 @@
     "premium": "پریمیم",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "آپ کا براؤزر ویڈیو ٹیگ کو سپورٹ نہیں کرتا۔",
             "badge": "Scemory ایونٹ آرکائیو",
             "title": "دستاویزی ایونٹس دریافت کریں",
             "titleHighlight": "نقشے کے ذریعے",
@@ -634,61 +642,68 @@
             "bottomText": "دنیا بھر کی کہانیاں، مقامات اور لمحات دریافت کریں۔"
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "پروفائل مکمل نہیں",
+            "message": "آپ کا پروفائل مکمل نہیں۔ براہ کرم اپ ڈیٹ کریں:",
+            "complete": "مکمل کرنے کے لیے کلک کریں",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "فون",
+                "country": "ملک",
+                "position": "عہدہ",
+                "dateOfBirth": "تاریخ پیدائش"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "رجحان ساز ایونٹس ابھی لوڈ نہیں ہو سکے۔",
+            "kicker": "رجحان",
+            "title": "رجحان ساز ایونٹس",
+            "description": "آرکائیو میں توجہ حاصل کرنے والے ایونٹس۔",
+            "emptyTitle": "ابھی کوئی رجحان ساز ایونٹ نہیں",
+            "emptyDescription": "نمایاں ایونٹس کے لیے جلد دوبارہ دیکھیں۔",
+            "views": "مناظر",
+            "likes": "پسندیدگیاں",
+            "slidesLabel": "رجحان ساز ایونٹ سلائیڈز",
+            "untitledEvent": "بے عنوان ایونٹ",
+            "showSlide": "رجحان ساز ایونٹ {number} دکھائیں"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "نقشے کی ٹائلز ظاہر ہونے میں زیادہ وقت لے رہی ہیں۔",
+            "loadError": "نقشہ ابھی لوڈ نہیں ہو سکا۔",
+            "loadMap": "نقشہ لوڈ کریں",
+            "loading": "نقشہ لوڈ ہو رہا ہے...",
+            "retry": "نقشہ دوبارہ لوڈ کریں",
+            "openFullscreen": "نقشہ فل اسکرین کھولیں",
+            "closeFullscreen": "فل اسکرین نقشہ بند کریں"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Scemory دستاویزی پلیٹ فارم",
+            "kicker": "قابل اعتماد ایونٹ میموری",
+            "title": "Scemory کے بارے میں",
+            "description": "Scemory صحافیوں، میڈیا ٹیموں اور عینی شاہد معاونین کے لیے بنایا گیا ہے جنہیں واقعات کے وقت انہیں دستاویز کرنے کے لیے قابل اعتماد جگہ چاہیے۔ یہ پلیٹ فارم اپ لوڈ شدہ میڈیا، ایونٹ میٹا ڈیٹا اور مقام کے سیاق کو جوڑتا ہے تاکہ لوگ عوامی کہانیاں وضاحت کے ساتھ دریافت کر سکیں۔",
+            "features": {
+                "upload": "تصاویر، ویڈیوز اور فیلڈ ڈیٹا اپ لوڈ کریں",
+                "explore": "ایونٹس کو انٹرایکٹو نقشے پر دریافت کریں",
+                "preserve": "تصدیق شدہ کہانیوں کو ڈیجیٹل آرکائیو میں محفوظ کریں"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "دکھایا جا رہا ہے",
+            "of": "میں سے",
+            "events": "ایونٹس",
+            "seeMore": "مزید دیکھیں",
+            "badge": "ایونٹس"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "???? ???? ???? ????"
+            "loading": "ٹیگز لوڈ ہو رہے ہیں...",
+            "showingFirst": "پہلے دکھائے جا رہے ہیں",
+            "searchToFindMore": "ٹیگز۔ مزید تلاش کرنے کے لیے تلاش کریں۔",
+            "none": "کوئی ٹیگ نہیں ملا",
+            "helper": "نقشے کے ایونٹس فلٹر کرنے کے لیے ایک یا زیادہ ٹیگز منتخب کریں۔",
+            "clearSelected": "منتخب ٹیگز صاف کریں",
+            "searchMore": "مزید ٹیگز تلاش کریں"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "صاف کریں",
+            "clearTags": "صاف کریں"
         }
     },
     "photoUpload": {
@@ -810,66 +825,66 @@
         "emptyHint": "?? ?? ????? ??? ?????? ???? ???? ??? ??"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "SCEMORY تجربہ",
+        "title": "ایک پلیٹ فارم۔ کہانی کا ہر پہلو۔",
+        "pathsLabel": "Scemory تجربے کے راستے",
+        "highlightsLabel": "سیکشن کی جھلکیاں",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "ایونٹس دریافت کریں",
+                "eyebrow": "ایونٹس کے ذریعے دنیا دریافت کریں",
+                "heading": "دنیا بھر کی کہانیاں، ایونٹس اور مقامات دریافت کریں",
+                "description": "نقشے سے دستاویزی عوامی ایونٹس، ذاتی یادوں اور حقیقی مقامات و معاونین کے سیاق سے بنی بصری کہانیوں تک جائیں۔",
+                "cta": "ایونٹس دریافت کریں",
+                "imageAlt": "دستاویزی میڈیا پینلز کے ساتھ Scemory ایونٹ دریافت انٹرفیس",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "ایونٹ میڈیا کو مقام اور ٹائم لائن کے لحاظ سے براؤز کریں",
+                    "discover": "بصری آرکائیو کے ذریعے قریبی کہانیاں دریافت کریں",
+                    "move": "جائزے سے دستاویزی ایونٹ تفصیل تک جائیں"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "براہ راست دریافت",
+                    "title": "نقشے سے منسلک ایونٹ کہانیاں",
+                    "stat": "عالمی آرکائیو",
+                    "note": "مقامات، تاریخیں اور میڈیا ایک منظر میں"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "اپنی کہانی شیئر کریں",
+                "eyebrow": "لمحات کو دستاویزی کہانیوں میں بدلیں",
+                "heading": "اہم لمحات کو دستاویز کریں",
+                "description": "ایونٹ بنائیں، تصاویر اور میڈیا اپ لوڈ کریں، مقام کی تفصیلات شامل کریں اور Scemory آرکائیو میں اپنا نقطہ نظر شامل کریں۔",
+                "cta": "اپنی کہانی اپ لوڈ کریں",
+                "imageAlt": "ایونٹ میڈیا دستاویز کرنے کے لیے Scemory معاون ورک اسپیس",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "میڈیا، وضاحتیں اور مقام کا سیاق شامل کریں",
+                    "build": "خام لمحات سے منظم یاد بنائیں",
+                    "keep": "معاون کہانیوں کو آرکائیو سے منسلک رکھیں"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "معاون فلو",
+                    "title": "میڈیا، سیاق اور مقام",
+                    "stat": "کہانی بنانے والا",
+                    "note": "لمحات کو بامعنی تفصیل کے ساتھ اپ لوڈ کریں"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "میڈیا لائسنس کریں",
+                "eyebrow": "استعمال کے لیے تیار میڈیا دریافت کریں",
+                "heading": "ایونٹ میڈیا اعتماد کے ساتھ تلاش اور لائسنس کریں",
+                "description": "بصری مواد براؤز کریں، دستیاب ایونٹ میڈیا کا پیش منظر دیکھیں اور Scemory کے موجودہ دریافت تجربے سے لائسنسنگ اختیارات تک جائیں۔",
+                "cta": "میڈیا دریافت کریں",
+                "imageAlt": "لائسنس کے قابل ایونٹ مواد براؤز کرنے کے لیے Scemory میڈیا پینلز",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "تفصیلات کھولنے سے پہلے ایونٹ بصریات دیکھیں",
+                    "use": "میڈیا اختیارات کے راستے کے طور پر ایونٹ صفحات استعمال کریں",
+                    "keep": "دریافت اور لائسنسنگ نیت کو منسلک رکھیں"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "میڈیا رسائی",
+                    "title": "ایونٹ بصریات جائزے کے لیے تیار",
+                    "stat": "لائسنسنگ راستہ",
+                    "note": "دریافت سے تفصیل صفحات تک"
                 }
             }
         }

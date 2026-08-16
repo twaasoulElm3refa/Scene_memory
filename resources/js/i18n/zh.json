@@ -16,23 +16,26 @@
     "view_all_comments": "查看所有评论",
     "nav": {
         "favourites": "收藏",
-        "plans": "计划",
+        "plans": "方案",
         "more": "更多",
-        "terms": "通用条款和条件",
-        "dashboard": "控制面板",
-        "historical": "历史人物",
-        "scemoryGate": "記憶門",
+        "terms": "条款",
+        "dashboard": "仪表板",
+        "historical": "历史",
+        "scemoryGate": "ScemoryGate",
         "events": "活动",
         "home": "首页",
-        "about": "关于我们",
-        "allEvents": "所有事件",
+        "about": "关于",
+        "allEvents": "所有活动",
         "downloads": "下载",
-        "contact": "联系我们",
-        "addEvent": "添加事件",
+        "contact": "联系",
+        "addEvent": "添加活动",
         "wishlist": "收藏夹",
         "profile": "个人资料",
         "logout": "退出登录",
-        "login": "登录"
+        "login": "登录",
+        "cart": "购物车",
+        "scemoryHome": "Scemory 首页",
+        "toggleMenu": "切换菜单"
     },
     "login_to_comment": "请登录以发表评论",
     "languages": {
@@ -106,16 +109,16 @@
         "notSpecified": "未指定",
         "loadingEvents": "正在加载事件...",
         "loading": "????...",
-        "close": "??",
+        "close": "关闭",
         "tryAgain": "??",
         "back": "??",
         "remove": "??",
-        "clear": "??",
+        "clear": "清除",
         "previous": "???",
         "next": "???",
         "noResults": "????",
         "unknownError": "????",
-        "learnMore": "????",
+        "learnMore": "了解更多",
         "cancel": "??",
         "sending": "????...",
         "show": "??",
@@ -124,7 +127,7 @@
     "events": {
         "add_historical_event": "添加历史活动",
         "brand_footer": "世界上所有活动",
-        "no_title": "?????",
+        "no_title": "无标题活动",
         "undefined_city": "未定义",
         "from_map": "来自地图",
         "cities": "城市",
@@ -144,8 +147,8 @@
         "latestEvents": "最新活动",
         "recentMemories": "最近事件",
         "discoverAroundYou": "发现您周围正在发生的事情，准备好迎接最美好的时刻",
-        "noEventsFound": "没有找到活动",
-        "noMatchingEvents": "未找到符合搜索条件或位置的活动",
+        "noEventsFound": "未找到活动",
+        "noMatchingEvents": "没有活动符合你的搜索条件或位置",
         "event": "活动",
         "startDate": "开始日期",
         "eventType": "Event Type",
@@ -188,11 +191,15 @@
         "consent": "我同意偶尔接收 Scene Memory 的回忆建议、更新和促销信息。我可以随时取消订阅。",
         "subscribe": "订阅回忆更新",
         "community": "加入我们超过 5,000 名回忆守护者的社区",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "通讯",
+        "verifiedTitle": "及时了解已验证的活动故事",
+        "verifiedDescription": "获取有关热门活动、新媒体档案以及世界各地贡献者记录的重要故事的精选更新。",
+        "subscribeShort": "订阅",
+        "pendingApiMessage": "感谢订阅。通讯 API 将很快连接。",
+        "errors": {
+            "emailRequired": "请输入电子邮件。",
+            "emailInvalid": "请输入有效的电子邮件地址。"
+        }
     },
     "map": {
         "exploreMap": "探索地图"
@@ -547,26 +554,26 @@
         "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
     },
     "plans": {
-        "customPrice": "定制价格",
-        "customPricingDescription": "对于定制订阅，请联系我们以获取满足您需求的定制报价。",
+        "customPrice": "联系我们",
+        "customPricingDescription": "根据你的需求定价",
         "contactUs": "联系我们",
-        "chooseYourPlan": "选择您的计划",
-        "getStarted": "免费开始",
+        "chooseYourPlan": "选择你的方案",
+        "getStarted": "开始",
         "subscribe": "立即订阅",
-        "noFeatures": "无功能",
+        "noFeatures": "暂无功能",
         "mostPopular": "最受欢迎",
-        "perMonth": "??",
+        "perMonth": "每月",
         "prioritySupport": "优先支持",
         "noCreditCard": "无需信用卡",
-        "securePayments": "????",
-        "moneyBack": "????",
-        "support247": "24/7 ??",
+        "securePayments": "安全支付",
+        "moneyBack": "30 天保证",
+        "support247": "24/7 支持",
         "free": "免费",
-        "ourPlans": "我们的计划",
-        "description": "我们的多种计划",
+        "ourPlans": "我们的方案",
+        "description": "免费开始，或选择最适合你的方案。",
         "price": "价格",
         "features": "功能",
-        "cancelAnytime": "随时取消",
+        "cancelAnytime": "可随时取消",
         "Monthly": "每月",
         "Yearly": "每年",
         "unlimitedEvents": "无限事件",
@@ -583,7 +590,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "方案",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -617,8 +624,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "???????????"
         },
-        "customPlanNote": "????????",
-        "basicAccessIncluded": "????????"
+        "customPlanNote": "围绕你的需求构建",
+        "basicAccessIncluded": "????????",
+        "usd": "USD"
     },
     "free": "免费",
     "basic": "基础版",
@@ -626,7 +634,7 @@
     "premium": "高级版",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "你的浏览器不支持 video 标签。",
             "badge": "Scemory 活动档案",
             "title": "探索已记录的活动",
             "titleHighlight": "通过地图",
@@ -636,61 +644,68 @@
             "bottomText": "发现来自世界各地的故事、地点与瞬间。"
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "个人资料未完成",
+            "message": "你的个人资料未完成。请更新：",
+            "complete": "点击完成",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "电话",
+                "country": "国家",
+                "position": "职位",
+                "dateOfBirth": "出生日期"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "当前无法加载热门活动。",
+            "kicker": "趋势",
+            "title": "热门活动",
+            "description": "正在档案中获得关注的活动。",
+            "emptyTitle": "暂无热门活动",
+            "emptyDescription": "请稍后回来查看精选活动。",
+            "views": "浏览",
+            "likes": "点赞",
+            "slidesLabel": "热门活动幻灯片",
+            "untitledEvent": "无标题活动",
+            "showSlide": "显示热门活动 {number}"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "地图瓦片渲染时间过长。",
+            "loadError": "当前无法加载地图。",
+            "loadMap": "加载地图",
+            "loading": "正在加载地图...",
+            "retry": "重新加载地图",
+            "openFullscreen": "全屏打开地图",
+            "closeFullscreen": "关闭全屏地图"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Scemory 文档平台",
+            "kicker": "可信的活动记忆",
+            "title": "关于 Scemory",
+            "description": "Scemory 面向记者、媒体团队和目击者贡献者，他们需要一个可信空间来记录正在发生的活动。平台连接上传的媒体、活动元数据和地点背景，让人们能够清晰地发现公共故事。",
+            "features": {
+                "upload": "上传照片、视频和现场数据",
+                "explore": "通过互动地图探索活动",
+                "preserve": "在数字档案中保存已验证的故事"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "显示",
+            "of": "共",
+            "events": "活动",
+            "seeMore": "查看更多",
+            "badge": "活动"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "??????"
+            "loading": "正在加载标签...",
+            "showingFirst": "显示前",
+            "searchToFindMore": "个标签。搜索以查找更多。",
+            "none": "未找到标签",
+            "helper": "选择一个或多个标签来筛选地图活动。",
+            "clearSelected": "清除已选标签",
+            "searchMore": "搜索更多标签"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "清除",
+            "clearTags": "清除"
         }
     },
     "photoUpload": {
@@ -812,66 +827,66 @@
         "emptyHint": "????????????"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "SCEMORY 体验",
+        "title": "一个平台。故事的每一面。",
+        "pathsLabel": "Scemory 体验路径",
+        "highlightsLabel": "板块亮点",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "探索活动",
+                "eyebrow": "通过活动发现世界",
+                "heading": "探索世界各地的故事、活动和地点",
+                "description": "从地图进入已记录的公共活动、个人记忆，以及由真实地点和贡献者背景塑造的视觉故事。",
+                "cta": "探索活动",
+                "imageAlt": "带有已记录媒体面板的 Scemory 活动发现界面",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "按地点和时间线浏览活动媒体",
+                    "discover": "通过视觉档案发现附近故事",
+                    "move": "从概览进入已记录的活动详情"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "实时发现",
+                    "title": "与地图关联的活动故事",
+                    "stat": "全球档案",
+                    "note": "地点、日期和媒体一屏呈现"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "分享你的故事",
+                "eyebrow": "把瞬间变成已记录的故事",
+                "heading": "记录重要瞬间",
+                "description": "创建活动，上传照片和媒体，添加地点详情，并把你的视角贡献到 Scemory 档案。",
+                "cta": "上传你的故事",
+                "imageAlt": "用于记录活动媒体的 Scemory 贡献者工作区",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "添加媒体、描述和地点背景",
+                    "build": "从原始瞬间构建结构化记忆",
+                    "keep": "让贡献者故事与档案保持连接"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "贡献流程",
+                    "title": "媒体、背景和地点",
+                    "stat": "故事构建器",
+                    "note": "上传带有有意义细节的瞬间"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "许可媒体",
+                "eyebrow": "发现可使用的媒体",
+                "heading": "放心查找并许可活动媒体",
+                "description": "浏览视觉内容，预览可用的活动媒体，并通过 Scemory 现有发现体验进入许可选项。",
+                "cta": "发现媒体",
+                "imageAlt": "用于浏览可许可活动内容的 Scemory 媒体面板",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "打开详情前预览活动视觉内容",
+                    "use": "将活动页面作为进入媒体选项的路径",
+                    "keep": "保持发现与许可意图连接"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "媒体访问",
+                    "title": "可供审阅的活动视觉内容",
+                    "stat": "许可路径",
+                    "note": "从发现到详情页面"
                 }
             }
         }

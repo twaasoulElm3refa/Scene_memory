@@ -7,8 +7,8 @@
         "country": "国",
         "category": "カテゴリ",
         "subCategory": "サブカテゴリ",
-        "from": "から",
-        "to": "まで",
+        "from": "開始",
+        "to": "終了",
         "city": "都市",
         "allSubCategories": "すべてのサブカテゴリ"
     },
@@ -16,14 +16,14 @@
     "view_all_comments": "すべてのコメントを見る",
     "nav": {
         "favourites": "お気に入り",
-        "plans": " プラン",
-        "more": " 詳細",
-        "terms": "一般的な利用規約",
-        "historical": "歴史人物",
+        "plans": "プラン",
+        "more": "その他",
+        "terms": "規約",
+        "historical": "履歴",
         "events": "イベント",
-        "dashboard": "ダッシュボード",
+        "dashboard": "ダッシュボード",
         "home": "ホーム",
-        "about": "私たちについて",
+        "about": "概要",
         "allEvents": "すべてのイベント",
         "contact": "お問い合わせ",
         "addEvent": "イベントを追加",
@@ -32,7 +32,10 @@
         "profile": "プロフィール",
         "downloads": "ダウンロード",
         "logout": "ログアウト",
-        "login": "ログイン"
+        "login": "ログイン",
+        "cart": "カート",
+        "scemoryHome": "Scemoryホーム",
+        "toggleMenu": "メニューを切り替え"
     },
     "login_to_comment": "コメントを残すにはログインしてください",
     "languages": {
@@ -103,19 +106,19 @@
         "placeholder": "イベントを検索...",
         "searching": "検索中...",
         "details": "詳細",
-        "notSpecified": "未指定",
+        "notSpecified": "指定なし",
         "loadingEvents": "イベントを読み込み中...",
         "loading": "?????...",
-        "close": "???",
+        "close": "閉じる",
         "tryAgain": "??????",
         "back": "??",
         "remove": "??",
-        "clear": "???",
+        "clear": "クリア",
         "previous": "??",
         "next": "??",
         "noResults": "????????",
         "unknownError": "??????",
-        "learnMore": "?????",
+        "learnMore": "詳しく見る",
         "cancel": "?????",
         "sending": "???...",
         "show": "??",
@@ -125,7 +128,7 @@
         "add_historical_event": "イベントを追加",
         "brand_footer": "世界中のイベントを見る",
         "cities": "都市",
-        "no_title": "???????",
+        "no_title": "無題のイベント",
         "undefined_city": "未定義",
         "from_map": "地図から",
         "categories": "カテゴリ",
@@ -145,7 +148,7 @@
         "recentMemories": "最近のイベント",
         "discoverAroundYou": "あなたの周りで起こっていることを発見し、最も美しい瞬間を迎える準備をしましょう",
         "noEventsFound": "イベントが見つかりません",
-        "noMatchingEvents": "検索条件または場所に一致するイベントが見つかりませんでした",
+        "noMatchingEvents": "検索条件または場所に一致するイベントはありません",
         "event": "イベント",
         "startDate": "開始日",
         "eventType": "Event Type",
@@ -183,16 +186,20 @@
         "description": "思い出のヒント、機能アップデート、感動的なストーリーを毎週メールでお届け",
         "firstName": "名",
         "firstNamePlaceholder": "あなたの名前",
-        "email": "メールアドレス",
+        "email": "メール",
         "emailPlaceholder": "you@example.com",
         "consent": "Scene Memoryからの思い出アドバイス、アップデート、プロモーションを時折受け取ることに同意します。いつでも購読を解除できます。",
         "subscribe": "思い出アップデートを購読",
         "community": "私たちの5,000人以上の思い出を守るコミュニティに参加しましょう",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "ニュースレター",
+        "verifiedTitle": "検証済みイベントストーリーの最新情報を受け取る",
+        "verifiedDescription": "トレンドイベント、新しいメディアアーカイブ、世界中の投稿者が記録した重要なストーリーの厳選アップデートを受け取れます。",
+        "subscribeShort": "購読",
+        "pendingApiMessage": "ご購読ありがとうございます。ニュースレターAPIは近日中に接続されます。",
+        "errors": {
+            "emailRequired": "メールアドレスを入力してください。",
+            "emailInvalid": "有効なメールアドレスを入力してください。"
+        }
     },
     "map": {
         "exploreMap": "マップを探索"
@@ -547,24 +554,24 @@
         "contact_text": "これらの規約について質問がある場合は、プラットフォーム管理者までお問い合わせください。"
     },
     "plans": {
-        "customPrice": "カスタム価格",
-        "customPricingDescription": "カスタムサブスクリプションの場合は、お問い合わせください。お客様のニーズに合ったオファーをお届けします。",
+        "customPrice": "お問い合わせ",
+        "customPricingDescription": "ニーズに合わせた料金",
         "contactUs": "お問い合わせ",
-        "chooseYourPlan": "プランを選択してください",
-        "getStarted": "無料で始める",
-        "subscribe": "今すぐ登録",
+        "chooseYourPlan": "プランを選択",
+        "getStarted": "始める",
+        "subscribe": "今すぐ購読",
         "free": "無料",
-        "perMonth": "??",
+        "perMonth": "月額",
         "prioritySupport": "優先サポート",
         "noCreditCard": "クレジットカード不要",
-        "noFeatures": "機能なし",
-        "mostPopular": "人気のプラン",
-        "securePayments": "?????",
-        "moneyBack": "????",
-        "cancelAnytime": "いつでもキャンセル可能",
-        "support247": "24??????????",
+        "noFeatures": "まだ機能はありません",
+        "mostPopular": "最も人気",
+        "securePayments": "安全な支払い",
+        "moneyBack": "30日保証",
+        "cancelAnytime": "いつでもキャンセル可能",
+        "support247": "24時間年中無休サポート",
         "ourPlans": "プラン一覧",
-        "description": "さまざまなプラン",
+        "description": "無料で始めるか、最適なプランを選択してください。",
         "price": "価格",
         "features": "機能",
         "Monthly": "月額",
@@ -583,7 +590,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "プラン",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -617,8 +624,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "???????????????????????????"
         },
-        "customPlanNote": "??????????",
-        "basicAccessIncluded": "????????"
+        "customPlanNote": "要件に合わせて構築",
+        "basicAccessIncluded": "????????",
+        "usd": "USD"
     },
     "free": "無料",
     "basic": "ベーシック",
@@ -626,7 +634,7 @@
     "premium": "プレミアム",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "お使いのブラウザはvideoタグに対応していません。",
             "badge": "Scemoryイベントアーカイブ",
             "title": "記録されたイベントを探す",
             "titleHighlight": "地図から",
@@ -636,61 +644,68 @@
             "bottomText": "世界中の物語、場所、瞬間を発見しましょう。"
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "プロフィールが未完成です",
+            "message": "プロフィールが未完成です。更新してください:",
+            "complete": "クリックして完了",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "電話",
+                "country": "国",
+                "position": "役職",
+                "dateOfBirth": "生年月日"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "トレンドイベントを現在読み込めません。",
+            "kicker": "トレンド",
+            "title": "トレンドイベント",
+            "description": "アーカイブ内で注目を集めているイベント。",
+            "emptyTitle": "まだトレンドイベントはありません",
+            "emptyDescription": "注目イベントは近日中にご確認ください。",
+            "views": "閲覧",
+            "likes": "いいね",
+            "slidesLabel": "トレンドイベントのスライド",
+            "untitledEvent": "無題のイベント",
+            "showSlide": "トレンドイベント {number} を表示"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "地図タイルの表示に時間がかかりすぎています。",
+            "loadError": "地図を現在読み込めません。",
+            "loadMap": "地図を読み込む",
+            "loading": "地図を読み込み中...",
+            "retry": "地図を再読み込み",
+            "openFullscreen": "地図を全画面で開く",
+            "closeFullscreen": "全画面地図を閉じる"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Scemoryドキュメンテーションプラットフォーム",
+            "kicker": "信頼できるイベントメモリー",
+            "title": "Scemoryについて",
+            "description": "Scemoryは、出来事が起きているその時に記録する信頼できる場所を必要とするジャーナリスト、メディアチーム、目撃者の投稿者のために作られています。アップロードされたメディア、イベントメタデータ、位置情報の文脈を結びつけ、公共のストーリーを明確に発見できるようにします。",
+            "features": {
+                "upload": "写真、動画、現地データをアップロード",
+                "explore": "インタラクティブな地図でイベントを探索",
+                "preserve": "検証済みのストーリーをデジタルアーカイブに保存"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "表示",
+            "of": "中",
+            "events": "イベント",
+            "seeMore": "もっと見る",
+            "badge": "イベント"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "????????"
+            "loading": "タグを読み込み中...",
+            "showingFirst": "最初の",
+            "searchToFindMore": "件のタグを表示中。検索してさらに探せます。",
+            "none": "タグが見つかりません",
+            "helper": "地図イベントを絞り込むタグを1つ以上選択してください。",
+            "clearSelected": "選択したタグをクリア",
+            "searchMore": "さらにタグを検索"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "クリア",
+            "clearTags": "クリア"
         }
     },
     "photoUpload": {
@@ -812,66 +827,66 @@
         "emptyHint": "??????????????????"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "SCEMORY体験",
+        "title": "ひとつのプラットフォームで、物語のすべての側面を。",
+        "pathsLabel": "Scemory体験パス",
+        "highlightsLabel": "セクションのハイライト",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "イベントを探す",
+                "eyebrow": "イベントを通して世界を発見",
+                "heading": "世界中の物語、イベント、場所を探す",
+                "description": "地図から、記録された公開イベント、個人の記憶、実際の場所と投稿者の文脈によって形づくられたビジュアルストーリーへ移動できます。",
+                "cta": "イベントを探す",
+                "imageAlt": "記録済みメディアパネルを備えたScemoryイベント発見インターフェース",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "場所と時系列でイベントメディアを閲覧",
+                    "discover": "ビジュアルアーカイブで近くのストーリーを発見",
+                    "move": "概要から記録されたイベント詳細へ移動"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "ライブ発見",
+                    "title": "地図に紐づくイベントストーリー",
+                    "stat": "グローバルアーカイブ",
+                    "note": "場所、日付、メディアをひとつの画面で"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "あなたのストーリーを共有",
+                "eyebrow": "瞬間を記録されたストーリーへ",
+                "heading": "大切な瞬間を記録する",
+                "description": "イベントを作成し、写真やメディアをアップロードし、場所の詳細を追加して、Scemoryアーカイブにあなたの視点を加えましょう。",
+                "cta": "あなたのストーリーを投稿",
+                "imageAlt": "イベントメディアを記録するScemory投稿者ワークスペース",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "メディア、説明、場所の文脈を追加",
+                    "build": "生の瞬間から構造化された記憶を作成",
+                    "keep": "投稿者のストーリーをアーカイブにつなげる"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "投稿フロー",
+                    "title": "メディア、文脈、場所",
+                    "stat": "ストーリービルダー",
+                    "note": "意味のある詳細とともに瞬間をアップロード"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "メディアをライセンス",
+                "eyebrow": "利用可能なメディアを発見",
+                "heading": "イベントメディアを安心して見つけ、ライセンス",
+                "description": "ビジュアルコンテンツを閲覧し、利用可能なイベントメディアをプレビューし、Scemoryの既存の発見体験からライセンスオプションへ進めます。",
+                "cta": "メディアを発見",
+                "imageAlt": "ライセンス可能なイベントコンテンツを閲覧するScemoryメディアパネル",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "詳細を開く前にイベントビジュアルをプレビュー",
+                    "use": "メディアオプションへの経路としてイベントページを使用",
+                    "keep": "発見とライセンス意図をつなげる"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "メディアアクセス",
+                    "title": "確認準備のできたイベントビジュアル",
+                    "stat": "ライセンス経路",
+                    "note": "発見から詳細ページへ"
                 }
             }
         }

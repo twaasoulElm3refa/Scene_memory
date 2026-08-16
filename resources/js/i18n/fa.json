@@ -5,34 +5,37 @@
     "filters": {
         "allCategories": "همه دسته‌ها",
         "country": "کشور",
-        "category": "دسته‌بندی",
-        "subCategory": "زیر دسته",
+        "category": "دسته",
+        "subCategory": "زیر‌دسته",
         "from": "از",
         "to": "تا",
         "city": "شهر",
-        "allSubCategories": "همه زیر دسته‌ها"
+        "allSubCategories": "همه زیر‌دسته‌ها"
     },
     "upload_media": "بارگذاری مدیا",
     "view_all_comments": "مشاهده همه نظرات",
     "nav": {
         "favourites": "علاقه‌مندی‌ها",
-        "plans": " پلان‌ها",
-        "downloads": "دانلود‌ها",
-        "more": " بیشتر",
+        "plans": "طرح‌ها",
+        "downloads": "دانلودها",
+        "more": "بیشتر",
         "events": "رویدادها",
-        "terms": "قوانین عمومی",
+        "terms": "شرایط",
         "dashboard": "داشبورد",
-        "historical": "رویدادهای تاریخی",
+        "historical": "تاریخی",
         "home": "خانه",
-        "about": "درباره ما",
-        "scemoryGate": "بوابه سیموری",
+        "about": "درباره",
+        "scemoryGate": "ScemoryGate",
         "allEvents": "همه رویدادها",
-        "contact": "تماس با ما",
+        "contact": "تماس",
         "addEvent": "افزودن رویداد",
         "wishlist": "علاقه‌مندی‌ها",
-        "profile": "پروفایل",
+        "profile": "نمایه",
         "logout": "خروج",
-        "login": "ورود"
+        "login": "ورود",
+        "cart": "سبد خرید",
+        "scemoryHome": "خانه Scemory",
+        "toggleMenu": "تغییر منو"
     },
     "languages": {
         "AR": "العربية",
@@ -106,16 +109,16 @@
         "notSpecified": "مشخص نشده",
         "loadingEvents": "در حال بارگذاری رویدادها...",
         "loading": "?? ??? ????????...",
-        "close": "????",
+        "close": "بستن",
         "tryAgain": "?????? ???? ????",
         "back": "??????",
         "remove": "???",
-        "clear": "??? ????",
+        "clear": "پاک کردن",
         "previous": "????",
         "next": "????",
         "noResults": "???????? ???? ???",
         "unknownError": "???? ????????",
-        "learnMore": "????? ??????",
+        "learnMore": "بیشتر بدانید",
         "cancel": "???",
         "sending": "?? ??? ?????...",
         "show": "?????",
@@ -124,7 +127,7 @@
     "events": {
         "add_historical_event": "افزودن رویداد تاریخی",
         "brand_footer": "تمام رویدادهای مورد علاقه شما در جهان",
-        "no_title": "?????? ???? ?????",
+        "no_title": "رویداد بدون عنوان",
         "undefined_city": "نامشخص",
         "from_map": "از نقشه",
         "cities": "شهر",
@@ -145,7 +148,7 @@
         "recentMemories": "رویدادهای اخیر",
         "discoverAroundYou": "کشف کنید چه چیزی در اطراف شما در جریان است و برای زیباترین لحظات آماده شوید",
         "noEventsFound": "رویدادی یافت نشد",
-        "noMatchingEvents": "هیچ رویدادی مطابق با معیارهای جستجو یا مکان یافت نشد",
+        "noMatchingEvents": "هیچ رویدادی با معیارهای جستجو یا موقعیت شما مطابقت ندارد",
         "event": "رویداد",
         "startDate": "تاریخ شروع",
         "eventType": "Event Type",
@@ -188,11 +191,15 @@
         "consent": "من موافقم که گاه‌به‌گاه نکات خاطرات، به‌روزرسانی‌ها و پیشنهادهای Scene Memory را دریافت کنم. می‌توانم در هر زمان اشتراک را لغو کنم.",
         "subscribe": "اشتراک در به‌روزرسانی‌های خاطرات",
         "community": "به بیش از ۵,۰۰۰ نگهدارنده خاطرات در جامعه ما بپیوندید",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "خبرنامه",
+        "verifiedTitle": "با داستان‌های رویداد تأییدشده به‌روز بمانید",
+        "verifiedDescription": "به‌روزرسانی‌های گزینش‌شده درباره رویدادهای پرطرفدار، آرشیوهای رسانه‌ای جدید و داستان‌های مهم مستندشده توسط مشارکت‌کنندگان سراسر جهان دریافت کنید.",
+        "subscribeShort": "اشتراک",
+        "pendingApiMessage": "از اشتراک شما سپاسگزاریم. API خبرنامه به‌زودی متصل می‌شود.",
+        "errors": {
+            "emailRequired": "لطفاً ایمیل خود را وارد کنید.",
+            "emailInvalid": "لطفاً یک آدرس ایمیل معتبر وارد کنید."
+        }
     },
     "map": {
         "exploreMap": "کاوش نقشه"
@@ -547,24 +554,24 @@
         "contact_text": "در صورت داشتن هرگونه سوال درباره این شرایط با مدیریت پلتفرم تماس بگیرید."
     },
     "plans": {
-        "customPrice": "قیمت سفارشی",
-        "customPricingDescription": "برای اشتراک‌های سفارشی، لطفاً با ما تماس بگیرید تا یک پیشنهاد سفارشی که نیازهای شما را برآورده کند دریافت کنید.",
+        "customPrice": "با ما تماس بگیرید",
+        "customPricingDescription": "قیمت‌گذاری متناسب با نیازهای شما",
         "contactUs": "با ما تماس بگیرید",
         "chooseYourPlan": "طرح خود را انتخاب کنید",
-        "getStarted": "رایگان شروع کنید",
-        "subscribe": "اکنون اشتراک بگیرید",
-        "noFeatures": "هیچ ویژگی‌ای وجود ندارد",
-        "mostPopular": "پرفروش‌ترین",
+        "getStarted": "شروع کنید",
+        "subscribe": "اکنون مشترک شوید",
+        "noFeatures": "هنوز ویژگی‌ای وجود ندارد",
+        "mostPopular": "محبوب‌ترین",
         "free": "رایگان",
-        "perMonth": "?? ???",
-        "noCreditCard": "کارت اعتباری مورد نیاز نیست",
+        "perMonth": "در ماه",
+        "noCreditCard": "نیازی به کارت اعتباری نیست",
         "prioritySupport": "پشتیبانی ویژه",
-        "securePayments": "?????????? ???",
-        "cancelAnytime": "در هر زمان لغو کنید",
-        "moneyBack": "????? ?????? ???",
-        "support247": "???????? ??/?",
+        "securePayments": "پرداخت‌های امن",
+        "cancelAnytime": "هر زمان لغو کنید",
+        "moneyBack": "ضمانت ۳۰ روزه",
+        "support247": "پشتیبانی ۲۴/۷",
         "ourPlans": "طرح‌های ما",
-        "description": "طرح‌های متنوع ما",
+        "description": "رایگان شروع کنید یا طرح مناسب خود را انتخاب کنید.",
         "price": "قیمت",
         "features": "ویژگی‌ها",
         "Monthly": "ماهانه",
@@ -583,7 +590,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "طرح",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -617,8 +624,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "???????? ?????? ?????? ???. ?????? ???? ????."
         },
-        "customPlanNote": "?? ???? ??????? ??? ????? ??????",
-        "basicAccessIncluded": "?????? ???? ???? ???"
+        "customPlanNote": "بر اساس نیازهای شما ساخته شده است",
+        "basicAccessIncluded": "?????? ???? ???? ???",
+        "usd": "دلار آمریکا"
     },
     "free": "رایگان",
     "basic": "پایه",
@@ -626,7 +634,7 @@
     "premium": "پریمیوم",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "مرورگر شما از برچسب ویدئو پشتیبانی نمی‌کند.",
             "badge": "آرشیو رویدادهای Scemory",
             "title": "رویدادهای مستند را کاوش کنید",
             "titleHighlight": "از طریق نقشه",
@@ -636,61 +644,68 @@
             "bottomText": "داستان‌ها، مکان‌ها و لحظه‌هایی از سراسر جهان را کشف کنید."
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "نمایه کامل نیست",
+            "message": "نمایه شما کامل نیست. لطفاً به‌روزرسانی کنید:",
+            "complete": "برای تکمیل کلیک کنید",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "تلفن",
+                "country": "کشور",
+                "position": "سمت",
+                "dateOfBirth": "تاریخ تولد"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "رویدادهای پرطرفدار اکنون بارگذاری نمی‌شوند.",
+            "kicker": "پرطرفدار",
+            "title": "رویدادهای پرطرفدار",
+            "description": "رویدادهایی که در آرشیو توجه بیشتری می‌گیرند.",
+            "emptyTitle": "هنوز رویداد پرطرفداری وجود ندارد",
+            "emptyDescription": "برای رویدادهای برجسته دوباره سر بزنید.",
+            "views": "بازدید",
+            "likes": "پسندیدن",
+            "slidesLabel": "اسلایدهای رویدادهای پرطرفدار",
+            "untitledEvent": "رویداد بدون عنوان",
+            "showSlide": "نمایش رویداد پرطرفدار {number}"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "کاشی‌های نقشه بیش از حد طول می‌کشند.",
+            "loadError": "نقشه اکنون بارگذاری نمی‌شود.",
+            "loadMap": "بارگذاری نقشه",
+            "loading": "در حال بارگذاری نقشه...",
+            "retry": "بارگذاری دوباره نقشه",
+            "openFullscreen": "باز کردن نقشه تمام‌صفحه",
+            "closeFullscreen": "بستن نقشه تمام‌صفحه"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "پلتفرم مستندسازی Scemory",
+            "kicker": "حافظه رویداد قابل اعتماد",
+            "title": "درباره Scemory",
+            "description": "Scemory برای روزنامه‌نگاران، تیم‌های رسانه‌ای و شاهدان عینی ساخته شده است که به مکانی قابل اعتماد برای مستندسازی رویدادها در همان لحظه نیاز دارند. این پلتفرم رسانه‌های بارگذاری‌شده، فراداده رویداد و زمینه مکانی را به هم پیوند می‌دهد تا مردم بتوانند داستان‌های عمومی را با وضوح کشف کنند.",
+            "features": {
+                "upload": "عکس‌ها، ویدئوها و داده‌های میدانی را بارگذاری کنید",
+                "explore": "رویدادها را از طریق نقشه تعاملی کاوش کنید",
+                "preserve": "داستان‌های تأییدشده را در آرشیو دیجیتال حفظ کنید"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "نمایش",
+            "of": "از",
+            "events": "رویدادها",
+            "seeMore": "نمایش بیشتر",
+            "badge": "رویدادها"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "?????? ????????? ?????"
+            "loading": "در حال بارگذاری برچسب‌ها...",
+            "showingFirst": "نمایش نخستین",
+            "searchToFindMore": "برچسب. برای موارد بیشتر جستجو کنید.",
+            "none": "برچسبی یافت نشد",
+            "helper": "یک یا چند برچسب برای فیلتر کردن رویدادهای نقشه انتخاب کنید.",
+            "clearSelected": "پاک کردن برچسب‌های انتخاب‌شده",
+            "searchMore": "جستجوی برچسب‌های بیشتر"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "پاک کردن",
+            "clearTags": "پاک کردن"
         }
     },
     "photoUpload": {
@@ -812,66 +827,66 @@
         "emptyHint": "????????? ?? ??????? ??????? ????? ????? ???? ???????"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "تجربه SCEMORY",
+        "title": "یک پلتفرم. هر سوی داستان.",
+        "pathsLabel": "مسیرهای تجربه Scemory",
+        "highlightsLabel": "نکات برجسته بخش",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "کاوش رویدادها",
+                "eyebrow": "جهان را از طریق رویدادها کشف کنید",
+                "heading": "داستان‌ها، رویدادها و مکان‌های سراسر جهان را کاوش کنید",
+                "description": "از نقشه به رویدادهای عمومی مستند، خاطرات شخصی و داستان‌های تصویری بروید که با مکان‌های واقعی و زمینه مشارکت‌کنندگان شکل گرفته‌اند.",
+                "cta": "کاوش رویدادها",
+                "imageAlt": "رابط کشف رویداد Scemory با پنل‌های رسانه مستند",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "رسانه رویداد را بر اساس مکان و زمان مرور کنید",
+                    "discover": "داستان‌های نزدیک را از طریق آرشیو تصویری کشف کنید",
+                    "move": "از نمای کلی به جزئیات مستند رویداد بروید"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "کشف زنده",
+                    "title": "داستان‌های رویداد متصل به نقشه",
+                    "stat": "آرشیو جهانی",
+                    "note": "مکان‌ها، تاریخ‌ها و رسانه در یک نما"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "داستان خود را به اشتراک بگذارید",
+                "eyebrow": "لحظه‌ها را به داستان‌های مستند تبدیل کنید",
+                "heading": "لحظه‌های مهم را مستند کنید",
+                "description": "یک رویداد بسازید، عکس و رسانه بارگذاری کنید، جزئیات مکان بیفزایید و دیدگاه خود را به آرشیو Scemory اضافه کنید.",
+                "cta": "داستان خود را بارگذاری کنید",
+                "imageAlt": "فضای مشارکت‌کننده Scemory برای مستندسازی رسانه رویداد",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "رسانه، توضیحات و زمینه مکانی اضافه کنید",
+                    "build": "از لحظه‌های خام یک حافظه ساختاریافته بسازید",
+                    "keep": "داستان‌های مشارکت‌کنندگان را به آرشیو متصل نگه دارید"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "جریان مشارکت",
+                    "title": "رسانه، زمینه و مکان",
+                    "stat": "سازنده داستان",
+                    "note": "لحظه‌ها را با جزئیات معنادار بارگذاری کنید"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "مجوزدهی رسانه",
+                "eyebrow": "رسانه آماده استفاده را کشف کنید",
+                "heading": "رسانه رویداد را با اطمینان پیدا و مجوزدهی کنید",
+                "description": "محتوای تصویری را مرور کنید، رسانه‌های رویداد موجود را پیش‌نمایش کنید و از طریق تجربه کشف Scemory به گزینه‌های مجوزدهی بروید.",
+                "cta": "کشف رسانه",
+                "imageAlt": "پنل‌های رسانه Scemory برای مرور محتوای رویداد قابل مجوز",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "پیش از باز کردن جزئیات، تصاویر رویداد را پیش‌نمایش کنید",
+                    "use": "از صفحات رویداد به عنوان مسیر گزینه‌های رسانه استفاده کنید",
+                    "keep": "کشف و نیت مجوزدهی را متصل نگه دارید"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "دسترسی رسانه",
+                    "title": "تصاویر رویداد آماده بررسی",
+                    "stat": "مسیر مجوزدهی",
+                    "note": "از کشف تا صفحات جزئیات"
                 }
             }
         }

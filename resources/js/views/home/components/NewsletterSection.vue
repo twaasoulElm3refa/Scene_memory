@@ -50,7 +50,9 @@
 
 <script setup>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const email = ref("");
 const error = ref("");
 const success = ref(false);
@@ -62,12 +64,12 @@ const submit = () => {
     const value = email.value.trim();
 
     if (!value) {
-        error.value = "Please enter your email.";
+        error.value = t("newsletter.errors.emailRequired");
         return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        error.value = "Please enter a valid email address.";
+        error.value = t("newsletter.errors.emailInvalid");
         return;
     }
 

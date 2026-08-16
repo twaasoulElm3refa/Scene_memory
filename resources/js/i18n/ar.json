@@ -3,36 +3,39 @@
         "placeholder": "ابحث عن الفعاليات..."
     },
     "filters": {
-        "allCategories": "جميع الفئات",
+        "allCategories": "كل الفئات",
         "country": "الدولة",
-        "category": "الفئة",
-        "subCategory": "الفئة الفرعية",
+        "category": "الفئة",
+        "subCategory": "الفئة الفرعية",
         "from": "من",
-        "to": "إلى",
+        "to": "إلى",
         "city": "المدينة",
-        "allSubCategories": "جميع الفئات الفرعية"
+        "allSubCategories": "كل الفئات الفرعية"
     },
     "upload_media": "تحميل الميديا",
     "view_all_comments": "عرض كل التعليقات",
     "nav": {
         "favourites": "المفضلة",
         "dashboard": "لوحة التحكم",
-        "scemoryGate": "بوابة سيموري",
-        "events": "الاحداث",
-        "plans": "الخطط",
+        "scemoryGate": "بوابة Scemory",
+        "events": "الفعاليات",
+        "plans": "الباقات",
         "more": "المزيد",
-        "terms": "الشروط والاحكام",
-        "historical": "اشخاص تاريخيين",
+        "terms": "الشروط",
+        "historical": "تاريخية",
         "home": "الرئيسية",
         "about": "من نحن",
-        "allEvents": "جميع الأحداث",
-        "downloads": "التحميلات",
-        "contact": "تواصل معنا",
-        "addEvent": "إضافة حدث",
+        "allEvents": "كل الفعاليات",
+        "downloads": "التنزيلات",
+        "contact": "اتصل بنا",
+        "addEvent": "إضافة فعالية",
         "wishlist": "المفضلة",
         "profile": "الملف الشخصي",
         "logout": "تسجيل الخروج",
-        "login": "تسجيل الدخول"
+        "login": "تسجيل الدخول",
+        "cart": "السلة",
+        "scemoryHome": "صفحة Scemory الرئيسية",
+        "toggleMenu": "تبديل القائمة"
     },
     "languages": {
         "AR": "العربية",
@@ -106,16 +109,16 @@
         "notSpecified": "غير محدد",
         "loadingEvents": "جاري تحميل الفعاليات...",
         "loading": "???? ???????...",
-        "close": "?????",
+        "close": "إغلاق",
         "tryAgain": "???? ??? ????",
         "back": "????",
         "remove": "?????",
-        "clear": "???",
+        "clear": "مسح",
         "previous": "??????",
         "next": "??????",
         "noResults": "?? ???? ?????",
         "unknownError": "??? ??? ?????",
-        "learnMore": "???? ??????",
+        "learnMore": "اعرف المزيد",
         "cancel": "?????",
         "sending": "???? ???????...",
         "show": "?????",
@@ -141,10 +144,10 @@
         "latestEvents": "أحدث الفعاليات",
         "recentMemories": "الاحداث الأخيرة",
         "discoverAroundYou": "اكتشف ما يحدث حولك واستعد لأجمل اللحظات",
-        "noEventsFound": "لا توجد فعاليات",
-        "noMatchingEvents": "لم يتم العثور على فعاليات تطابق معايير البحث أو الموقع",
+        "noEventsFound": "لم يتم العثور على فعاليات",
+        "noMatchingEvents": "لا توجد فعاليات تطابق معايير البحث أو الموقع",
         "event": "فعالية",
-        "startDate": "تاريخ البداية",
+        "startDate": "تاريخ البدء",
         "eventType": "Event Type",
         "types": {
             "all": "All Events",
@@ -152,7 +155,7 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "??? ??? ?????"
+        "no_title": "فعالية بلا عنوان"
     },
     "pagination": {
         "previous": "السابق",
@@ -186,11 +189,15 @@
         "consent": "أوافق على استلام نصائح الذكريات والتحديثات والعروض الترويجية من حين لآخر. يمكنني إلغاء الاشتراك في أي وقت.",
         "subscribe": "اشترك في تحديثات الذكريات",
         "community": "انضم إلى أكثر من ٥,٠٠٠ حافظ للذكريات في مجتمعنا",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "النشرة البريدية",
+        "verifiedTitle": "ابقَ مطلعًا على قصص الفعاليات الموثقة",
+        "verifiedDescription": "احصل على تحديثات منتقاة حول الفعاليات الرائجة والأرشيفات الإعلامية الجديدة والقصص المهمة التي يوثقها المساهمون حول العالم.",
+        "subscribeShort": "اشترك",
+        "pendingApiMessage": "شكرًا لاشتراكك. سيتم ربط واجهة النشرة البريدية قريبًا.",
+        "errors": {
+            "emailRequired": "يرجى إدخال بريدك الإلكتروني.",
+            "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح."
+        }
     },
     "map": {
         "exploreMap": "استكشف الخريطة"
@@ -545,21 +552,21 @@
         "contact_text": "إذا كان لديك أي استفسار حول هذه الشروط يرجى التواصل مع إدارة المنصة."
     },
     "plans": {
-        "customPrice": "السعر حسب الطلب",
-        "customPricingDescription": "للاشتراكات المخصصة، يرجى التواصل معنا للحصول على عرض سعر مخصص يلبي احتياجاتك.",
+        "customPrice": "تواصل معنا",
+        "customPricingDescription": "تسعير مصمم حسب احتياجاتك",
         "contactUs": "تواصل معنا",
-        "chooseYourPlan": "اختر خطتك",
-        "noFeatures": "لا يوجد ميزات",
-        "mostPopular": "الاكثر شيوعا",
-        "getStarted": "ابداء مجاناً",
-        "subscribe": "اشترك الان",
+        "chooseYourPlan": "اختر باقتك",
+        "noFeatures": "لا توجد ميزات بعد",
+        "mostPopular": "الأكثر شيوعًا",
+        "getStarted": "ابدأ الآن",
+        "subscribe": "اشترك الآن",
         "free": "مجانا",
-        "ourPlans": "خطط الاشتراك",
-        "noCreditCard": "لا يوجد بطاقة ائتمان",
-        "description": "خططنا المتنوعة",
+        "ourPlans": "باقاتنا",
+        "noCreditCard": "لا حاجة إلى بطاقة ائتمان",
+        "description": "ابدأ مجانًا أو اختر الباقة الأنسب لك.",
         "price": "السعر",
         "features": "الميزات",
-        "cancelAnytime": "يلغي الاشتراك في اي وقت",
+        "cancelAnytime": "يمكنك الإلغاء في أي وقت",
         "Monthly": "شهري",
         "Yearly": "سنوي",
         "unlimitedEvents": "احداث غير محدودة",
@@ -576,7 +583,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "الباقة",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -610,12 +617,13 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "??? ????? ???????. ???? ??? ????."
         },
-        "customPlanNote": "????? ??? ????????",
+        "customPlanNote": "مصممة حول متطلباتك",
         "basicAccessIncluded": "????? ?????? ???????",
-        "moneyBack": "???? ??????? ?????",
-        "perMonth": "??????",
-        "securePayments": "??????? ????",
-        "support247": "??? 24/7"
+        "moneyBack": "ضمان 30 يومًا",
+        "perMonth": "شهريًا",
+        "securePayments": "مدفوعات آمنة",
+        "support247": "دعم على مدار الساعة",
+        "usd": "دولار أمريكي"
     },
     "free": "مجانا",
     "basic": "اساسي",
@@ -623,7 +631,7 @@
     "premium": "مميز",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "متصفحك لا يدعم وسم الفيديو.",
             "badge": "أرشيف فعاليات Scemory",
             "title": "استكشف الفعاليات الموثقة",
             "titleHighlight": "عبر الخريطة",
@@ -633,61 +641,68 @@
             "bottomText": "اكتشف القصص والأماكن واللحظات من حول العالم."
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "الملف الشخصي غير مكتمل",
+            "message": "ملفك الشخصي غير مكتمل. يرجى تحديث:",
+            "complete": "اضغط للإكمال",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "الهاتف",
+                "country": "الدولة",
+                "position": "المنصب",
+                "dateOfBirth": "تاريخ الميلاد"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "تعذر تحميل الفعاليات الرائجة الآن.",
+            "kicker": "الرائج",
+            "title": "الفعاليات الرائجة",
+            "description": "فعاليات تحظى باهتمام متزايد في الأرشيف.",
+            "emptyTitle": "لا توجد فعاليات رائجة بعد",
+            "emptyDescription": "تحقق لاحقًا لمشاهدة الفعاليات المميزة.",
+            "views": "مشاهدات",
+            "likes": "إعجابات",
+            "slidesLabel": "شرائح الفعاليات الرائجة",
+            "untitledEvent": "فعالية بلا عنوان",
+            "showSlide": "عرض الفعالية الرائجة {number}"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "تستغرق مربعات الخريطة وقتًا طويلاً للظهور.",
+            "loadError": "تعذر تحميل الخريطة الآن.",
+            "loadMap": "تحميل الخريطة",
+            "loading": "جارٍ تحميل الخريطة...",
+            "retry": "إعادة تحميل الخريطة",
+            "openFullscreen": "فتح الخريطة بملء الشاشة",
+            "closeFullscreen": "إغلاق وضع ملء الشاشة"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "منصة توثيق Scemory",
+            "kicker": "ذاكرة فعاليات موثوقة",
+            "title": "عن Scemory",
+            "description": "صُمم Scemory للصحفيين وفرق الإعلام والمساهمين شهود العيان الذين يحتاجون إلى مكان موثوق لتوثيق الفعاليات فور وقوعها. تربط المنصة الوسائط المرفوعة وبيانات الفعاليات وسياق الموقع ليتمكن الناس من اكتشاف القصص العامة بوضوح.",
+            "features": {
+                "upload": "ارفع الصور والفيديوهات وبيانات الميدان",
+                "explore": "استكشف الفعاليات عبر خريطة تفاعلية",
+                "preserve": "احفظ القصص الموثقة في أرشيف رقمي"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "عرض",
+            "of": "من",
+            "events": "فعاليات",
+            "seeMore": "عرض المزيد",
+            "badge": "فعاليات"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "???? ?? ?????? ?? ????????"
+            "loading": "جارٍ تحميل الوسوم...",
+            "showingFirst": "عرض أول",
+            "searchToFindMore": "وسوم. ابحث للعثور على المزيد.",
+            "none": "لا توجد وسوم",
+            "helper": "اختر وسمًا واحدًا أو أكثر لتصفية فعاليات الخريطة.",
+            "clearSelected": "مسح الوسوم المحددة",
+            "searchMore": "ابحث عن وسوم إضافية"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "مسح",
+            "clearTags": "مسح"
         }
     },
     "photoUpload": {
@@ -809,66 +824,66 @@
         "emptyHint": "????? ??????? ???? ??????? ???"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "تجربة SCEMORY",
+        "title": "منصة واحدة. كل جانب من القصة.",
+        "pathsLabel": "مسارات تجربة Scemory",
+        "highlightsLabel": "أبرز نقاط القسم",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "استكشف الفعاليات",
+                "eyebrow": "اكتشف العالم عبر الفعاليات",
+                "heading": "استكشف القصص والفعاليات والأماكن حول العالم",
+                "description": "انتقل من الخريطة إلى فعاليات عامة موثقة وذكريات شخصية وقصص بصرية تشكلها المواقع الحقيقية وسياق المساهمين.",
+                "cta": "استكشف الفعاليات",
+                "imageAlt": "واجهة اكتشاف فعاليات Scemory مع لوحات وسائط موثقة",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "تصفح وسائط الفعاليات حسب المكان والخط الزمني",
+                    "discover": "اكتشف القصص القريبة عبر أرشيف بصري",
+                    "move": "انتقل من النظرة العامة إلى تفاصيل الفعالية الموثقة"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "اكتشاف مباشر",
+                    "title": "قصص فعاليات مرتبطة بالخريطة",
+                    "stat": "أرشيف عالمي",
+                    "note": "الأماكن والتواريخ والوسائط في عرض واحد"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "شارك قصتك",
+                "eyebrow": "حوّل اللحظات إلى قصص موثقة",
+                "heading": "وثّق اللحظات المهمة",
+                "description": "أنشئ فعالية وارفع الصور والوسائط وأضف تفاصيل الموقع وساهم بمنظورك في أرشيف Scemory.",
+                "cta": "ارفع قصتك",
+                "imageAlt": "مساحة مساهمي Scemory لتوثيق وسائط الفعاليات",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "أضف الوسائط والأوصاف وسياق الموقع",
+                    "build": "ابنِ ذاكرة منظمة من لحظات خام",
+                    "keep": "أبقِ قصص المساهمين مرتبطة بالأرشيف"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "مسار المساهم",
+                    "title": "وسائط وسياق وموقع",
+                    "stat": "منشئ القصص",
+                    "note": "ارفع اللحظات بتفاصيل ذات معنى"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "ترخيص الوسائط",
+                "eyebrow": "اكتشف وسائط جاهزة للاستخدام",
+                "heading": "اعثر على وسائط الفعاليات ورخّصها بثقة",
+                "description": "تصفح المحتوى المرئي وعاين وسائط الفعاليات المتاحة وانتقل إلى خيارات الترخيص مباشرة عبر تجربة الاكتشاف الحالية في Scemory.",
+                "cta": "اكتشف الوسائط",
+                "imageAlt": "لوحات اكتشاف وسائط Scemory لتصفح محتوى فعاليات قابل للترخيص",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "عاين مرئيات الفعاليات قبل فتح التفاصيل",
+                    "use": "استخدم صفحات الفعاليات كمسار إلى خيارات الوسائط",
+                    "keep": "حافظ على ارتباط الاكتشاف بنية الترخيص"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "وصول إلى الوسائط",
+                    "title": "مرئيات فعاليات جاهزة للمراجعة",
+                    "stat": "مسار الترخيص",
+                    "note": "من الاكتشاف إلى صفحات التفاصيل"
                 }
             }
         }

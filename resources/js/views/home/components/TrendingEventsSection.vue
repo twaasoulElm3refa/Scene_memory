@@ -90,7 +90,7 @@
                             </div>
 
                             <h6 class="line-clamp-2 text-sm font-bold leading-5 text-[#0F172A] transition group-hover:text-[#0D4D97]">
-                                {{ truncateText(currentEvent.title || "Untitled event", 78) }}
+                                {{ truncateText(currentEvent.title || $t('homeAudit.trending.untitledEvent'), 78) }}
                             </h6>
 
                             <p
@@ -131,7 +131,7 @@
                     type="button"
                     class="trending-dot"
                     :class="{ 'is-active': index === currentIndex }"
-                    :aria-label="`Show trending event ${index + 1}`"
+                    :aria-label="$t('homeAudit.trending.showSlide', { number: index + 1 })"
                     :aria-current="index === currentIndex ? 'true' : 'false'"
                     @click.stop="goToSlide(index)"
                 ></button>

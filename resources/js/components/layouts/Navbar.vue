@@ -176,20 +176,20 @@
                     </div>
 
                     <div class="cart-wrapper">
-                        <button class="cart-btn" type="button" @click="goToCart" aria-label="Cart">
+                        <button class="cart-btn" type="button" @click="goToCart" :aria-label="$t('nav.cart')">
                             <i class="bi bi-bag"></i>
                             <span class="cart-badge">{{ count }}</span>
                         </button>
                     </div>
 
-                    <RouterLink :to="localizedPath('/home')" class="brand-mark text-decoration-none" aria-label="Scemory home">
+                    <RouterLink :to="localizedPath('/home')" class="brand-mark text-decoration-none" :aria-label="$t('nav.scemoryHome')">
                         <span class="brand-logo">
                             <img src="/images/logo.png" alt="Scemory logo" />
                         </span>
                         <span class="brand-name d-none d-lg-inline">Scemory</span>
                     </RouterLink>
 
-                    <button class="mobile-toggle d-md-none" type="button" @click="mobileMenu = !mobileMenu" aria-label="Toggle menu">
+                    <button class="mobile-toggle d-md-none" type="button" @click="mobileMenu = !mobileMenu" :aria-label="$t('nav.toggleMenu')">
                         <i class="bi" :class="mobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
                     </button>
                 </div>

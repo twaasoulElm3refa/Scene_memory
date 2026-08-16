@@ -3,36 +3,39 @@
         "placeholder": "इवेंट्स खोजें..."
     },
     "filters": {
-        "allCategories": "सभी श्रेणियाँ",
+        "allCategories": "सभी श्रेणियां",
         "country": "देश",
         "category": "श्रेणी",
-        "subCategory": "उप-श्रेणी",
+        "subCategory": "उपश्रेणी",
         "from": "से",
         "to": "तक",
         "city": "शहर",
-        "allSubCategories": "सभी उप-श्रेणियाँ"
+        "allSubCategories": "सभी उपश्रेणियां"
     },
     "upload_media": "मीडिया अपलोड करें",
     "view_all_comments": "सभी टिप्पणियाँ देखें",
     "nav": {
         "favourites": "पसंदीदा",
-        "plans": " योजना",
+        "plans": "प्लान",
         "downloads": "डाउनलोड",
-        "events": "इवेंट्स",
-        "more": " अधिक",
-        "terms": "सामान्य शर्तों और शर्तों",
+        "events": "इवेंट",
+        "more": "अधिक",
+        "terms": "शर्तें",
         "dashboard": "डैशबोर्ड",
-        "historical": "इतिहासी व्यक्तियाँ",
+        "historical": "ऐतिहासिक",
         "home": "होम",
-        "about": "हमारे बारे में",
-        "allEvents": "सभी इवेंट्स",
-        "scemoryGate": "सामरी गेट",
-        "contact": "संपर्क करें",
+        "about": "परिचय",
+        "allEvents": "सभी इवेंट",
+        "scemoryGate": "ScemoryGate",
+        "contact": "संपर्क",
         "addEvent": "इवेंट जोड़ें",
         "wishlist": "पसंदीदा",
         "profile": "प्रोफ़ाइल",
         "logout": "लॉग आउट",
-        "login": "लॉग इन"
+        "login": "लॉग इन",
+        "cart": "कार्ट",
+        "scemoryHome": "Scemory होम",
+        "toggleMenu": "मेनू टॉगल करें"
     },
     "languages": {
         "AR": "العربية",
@@ -100,22 +103,22 @@
     },
     "common": {
         "search": "खोजें",
-        "placeholder": "इवेंट्स खोजें...",
+        "placeholder": "इवेंट खोजें...",
         "searching": "खोज रहे हैं...",
         "details": "विवरण",
         "notSpecified": "निर्दिष्ट नहीं",
         "loadingEvents": "इवेंट्स लोड हो रहे हैं...",
         "loading": "??? ?? ??? ??...",
-        "close": "??? ????",
+        "close": "बंद करें",
         "tryAgain": "??? ????? ????",
         "back": "????",
         "remove": "?????",
-        "clear": "???? ????",
+        "clear": "साफ़ करें",
         "previous": "?????",
         "next": "????",
         "noResults": "??? ?????? ????",
         "unknownError": "?????? ??????",
-        "learnMore": "?? ?????",
+        "learnMore": "और जानें",
         "cancel": "???? ????",
         "sending": "???? ?? ??? ??...",
         "show": "??????",
@@ -124,7 +127,7 @@
     "events": {
         "add_historical_event": "इवेंट जोड़ें",
         "brand_footer": "दुनिया में सभी इवेंट्स",
-        "no_title": "???? ?????? ?? ?????",
+        "no_title": "शीर्षक रहित इवेंट",
         "undefined_city": "अपरिभाषित",
         "from_map": "मानचित्र से",
         "cities": "शहर",
@@ -145,9 +148,9 @@
         "recentMemories": "हाल की यादें",
         "discoverAroundYou": "अपने आसपास क्या हो रहा है जानें और सबसे खूबसूरत पलों के लिए तैयार रहें",
         "noEventsFound": "कोई इवेंट नहीं मिला",
-        "noMatchingEvents": "आपके खोज मानदंड या स्थान से मेल खाने वाला कोई इवेंट नहीं मिला",
+        "noMatchingEvents": "आपकी खोज या स्थान से मेल खाने वाला कोई इवेंट नहीं है",
         "event": "इवेंट",
-        "startDate": "प्रारंभ तिथि",
+        "startDate": "आरंभ तिथि",
         "eventType": "Event Type",
         "types": {
             "all": "All Events",
@@ -188,11 +191,15 @@
         "consent": "मैं Scene Memory से कभी-कभी यादों के टिप्स, अपडेट और प्रचार ऑफ़र प्राप्त करने के लिए सहमत हूँ। मैं किसी भी समय सदस्यता समाप्त कर सकता हूँ।",
         "subscribe": "याद अपडेट के लिए सदस्यता लें",
         "community": "हमारे समुदाय में 5,000 से अधिक यादों के संरक्षकों में शामिल हों",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "न्यूज़लेटर",
+        "verifiedTitle": "सत्यापित इवेंट कहानियों से अपडेट रहें",
+        "verifiedDescription": "ट्रेंडिंग इवेंट, नए मीडिया आर्काइव और दुनिया भर के योगदानकर्ताओं द्वारा दस्तावेज़ की गई प्रमुख कहानियों के क्यूरेटेड अपडेट पाएं.",
+        "subscribeShort": "सदस्यता लें",
+        "pendingApiMessage": "सदस्यता के लिए धन्यवाद. न्यूज़लेटर API जल्द जोड़ी जाएगी.",
+        "errors": {
+            "emailRequired": "कृपया अपना ईमेल दर्ज करें.",
+            "emailInvalid": "कृपया मान्य ईमेल पता दर्ज करें."
+        }
     },
     "map": {
         "exploreMap": "मानचित्र एक्सप्लोर करें"
@@ -547,26 +554,26 @@
         "contact_text": "इन शर्तों के बारे में प्रश्नों के लिए प्रशासन से संपर्क करें।"
     },
     "plans": {
-        "customPrice": "मानक मूल्य",
-        "customPricingDescription": "कस्टम सब्सक्रिप्शन के लिए, कृपया हमसे संपर्क करें ताकि आपकी आवश्यकताओं को पूरा करने वाला एक अनुकूलित प्रस्ताव प्राप्त किया जा सके।",
+        "customPrice": "हमसे संपर्क करें",
+        "customPricingDescription": "आपकी ज़रूरतों के अनुसार कीमत",
         "contactUs": "हमसे संपर्क करें",
-        "chooseYourPlan": "अपनी योजना चुनें",
-        "getStarted": "मुफ्त में शुरू करें",
-        "perMonth": "????? ???",
+        "chooseYourPlan": "अपना प्लान चुनें",
+        "getStarted": "शुरू करें",
+        "perMonth": "प्रति माह",
         "prioritySupport": "प्राथमिक सहायता",
-        "securePayments": "???????? ??????",
-        "moneyBack": "???? ???? ?? ??????",
-        "support247": "24/7 ??????",
+        "securePayments": "सुरक्षित भुगतान",
+        "moneyBack": "30 दिन की गारंटी",
+        "support247": "24/7 सहायता",
         "subscribe": "अभी सदस्यता लें",
-        "noCreditCard": "क्रेडिट कार्ड नहीं आवश्यक",
-        "noFeatures": "कोई विशेषताएँ नहीं",
+        "noCreditCard": "क्रेडिट कार्ड आवश्यक नहीं",
+        "noFeatures": "अभी कोई सुविधा नहीं",
         "mostPopular": "सबसे लोकप्रिय",
         "free": "मुफ्त",
-        "ourPlans": "हमारी योजनाएँ",
-        "description": "हमारी विभिन्न योजनाएँ",
+        "ourPlans": "हमारे प्लान",
+        "description": "मुफ़्त शुरू करें या अपने लिए सही प्लान चुनें.",
         "price": "कीमत",
         "features": "विशेषताएँ",
-        "cancelAnytime": "किसी भी समय से रद्द करें",
+        "cancelAnytime": "कभी भी रद्द करें",
         "Monthly": "मासिक",
         "Yearly": "वार्षिक",
         "unlimitedEvents": "असीमित इवेंट",
@@ -583,7 +590,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "प्लान",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -617,8 +624,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "????? ??? ???? ?? ???? ????? ??? ????? ?????"
         },
-        "customPlanNote": "???? ?????????? ?? ?????? ????? ???",
-        "basicAccessIncluded": "????? ?????? ????? ??"
+        "customPlanNote": "आपकी आवश्यकताओं के अनुसार बनाया गया",
+        "basicAccessIncluded": "????? ?????? ????? ??",
+        "usd": "USD"
     },
     "free": "मुफ़्त",
     "basic": "बेसिक",
@@ -626,7 +634,7 @@
     "premium": "प्रीमियम",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता।",
             "badge": "Scemory इवेंट आर्काइव",
             "title": "दस्तावेज़ित इवेंट खोजें",
             "titleHighlight": "मानचित्र के माध्यम से",
@@ -636,61 +644,68 @@
             "bottomText": "दुनिया भर की कहानियां, स्थान और क्षण खोजें."
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "प्रोफ़ाइल अधूरी है",
+            "message": "आपकी प्रोफ़ाइल अधूरी है. कृपया अपडेट करें:",
+            "complete": "पूरा करने के लिए क्लिक करें",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "फ़ोन",
+                "country": "देश",
+                "position": "पद",
+                "dateOfBirth": "जन्म तिथि"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "ट्रेंडिंग इवेंट अभी लोड नहीं हो सके.",
+            "kicker": "ट्रेंडिंग",
+            "title": "ट्रेंडिंग इवेंट",
+            "description": "आर्काइव में ध्यान आकर्षित कर रहे इवेंट.",
+            "emptyTitle": "अभी कोई ट्रेंडिंग इवेंट नहीं",
+            "emptyDescription": "हाइलाइट किए गए इवेंट के लिए जल्द वापस देखें.",
+            "views": "दृश्य",
+            "likes": "लाइक",
+            "slidesLabel": "ट्रेंडिंग इवेंट स्लाइड",
+            "untitledEvent": "शीर्षक रहित इवेंट",
+            "showSlide": "ट्रेंडिंग इवेंट {number} दिखाएं"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "मानचित्र टाइलें रेंडर होने में बहुत समय ले रही हैं.",
+            "loadError": "मानचित्र अभी लोड नहीं हो सका.",
+            "loadMap": "मानचित्र लोड करें",
+            "loading": "मानचित्र लोड हो रहा है...",
+            "retry": "मानचित्र फिर से लोड करें",
+            "openFullscreen": "मानचित्र पूर्ण स्क्रीन में खोलें",
+            "closeFullscreen": "पूर्ण स्क्रीन मानचित्र बंद करें"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Scemory दस्तावेज़ीकरण प्लेटफ़ॉर्म",
+            "kicker": "विश्वसनीय इवेंट मेमोरी",
+            "title": "Scemory के बारे में",
+            "description": "Scemory पत्रकारों, मीडिया टीमों और प्रत्यक्षदर्शी योगदानकर्ताओं के लिए बनाया गया है जिन्हें घटनाओं को उसी समय दस्तावेज़ करने के लिए भरोसेमंद जगह चाहिए. प्लेटफ़ॉर्म अपलोडेड मीडिया, इवेंट मेटाडेटा और स्थान संदर्भ को जोड़ता है ताकि लोग सार्वजनिक कहानियां स्पष्टता से खोज सकें.",
+            "features": {
+                "upload": "फ़ोटो, वीडियो और फ़ील्ड डेटा अपलोड करें",
+                "explore": "इंटरैक्टिव मानचित्र से इवेंट खोजें",
+                "preserve": "सत्यापित कहानियों को डिजिटल आर्काइव में सुरक्षित रखें"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "दिखा रहा है",
+            "of": "में से",
+            "events": "इवेंट",
+            "seeMore": "और देखें",
+            "badge": "इवेंट"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "?? ??? ?????"
+            "loading": "टैग लोड हो रहे हैं...",
+            "showingFirst": "पहले दिखा रहे हैं",
+            "searchToFindMore": "टैग. और खोजने के लिए खोजें.",
+            "none": "कोई टैग नहीं मिला",
+            "helper": "मानचित्र इवेंट फ़िल्टर करने के लिए एक या अधिक टैग चुनें.",
+            "clearSelected": "चुने गए टैग साफ़ करें",
+            "searchMore": "और टैग खोजें"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "साफ़ करें",
+            "clearTags": "साफ़ करें"
         }
     },
     "photoUpload": {
@@ -812,66 +827,66 @@
         "emptyHint": "???? ????? ?? ??????? ???? ????? ?????"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "SCEMORY अनुभव",
+        "title": "एक प्लेटफ़ॉर्म. कहानी का हर पक्ष.",
+        "pathsLabel": "Scemory अनुभव पथ",
+        "highlightsLabel": "सेक्शन हाइलाइट",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "इवेंट खोजें",
+                "eyebrow": "इवेंट के माध्यम से दुनिया खोजें",
+                "heading": "दुनिया भर की कहानियां, इवेंट और स्थान खोजें",
+                "description": "मानचित्र से दस्तावेज़ित सार्वजनिक इवेंट, निजी यादों और वास्तविक स्थानों व योगदानकर्ता संदर्भ से बनी दृश्य कहानियों तक जाएं.",
+                "cta": "इवेंट खोजें",
+                "imageAlt": "दस्तावेज़ित मीडिया पैनलों वाला Scemory इवेंट खोज इंटरफ़ेस",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "स्थान और टाइमलाइन के अनुसार इवेंट मीडिया ब्राउज़ करें",
+                    "discover": "दृश्य आर्काइव से आसपास की कहानियां खोजें",
+                    "move": "ओवरव्यू से दस्तावेज़ित इवेंट विवरण तक जाएं"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "लाइव खोज",
+                    "title": "मानचित्र से जुड़ी इवेंट कहानियां",
+                    "stat": "वैश्विक आर्काइव",
+                    "note": "स्थान, तिथियां और मीडिया एक दृश्य में"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "अपनी कहानी साझा करें",
+                "eyebrow": "क्षणों को दस्तावेज़ित कहानियों में बदलें",
+                "heading": "महत्वपूर्ण क्षणों को दस्तावेज़ करें",
+                "description": "इवेंट बनाएं, फ़ोटो और मीडिया अपलोड करें, स्थान विवरण जोड़ें और Scemory आर्काइव में अपना दृष्टिकोण दें.",
+                "cta": "अपनी कहानी अपलोड करें",
+                "imageAlt": "इवेंट मीडिया दस्तावेज़ करने के लिए Scemory योगदानकर्ता कार्यक्षेत्र",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "मीडिया, विवरण और स्थान संदर्भ जोड़ें",
+                    "build": "कच्चे क्षणों से संरचित स्मृति बनाएं",
+                    "keep": "योगदानकर्ता कहानियों को आर्काइव से जोड़े रखें"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "योगदान प्रवाह",
+                    "title": "मीडिया, संदर्भ और स्थान",
+                    "stat": "कहानी निर्माता",
+                    "note": "क्षणों को अर्थपूर्ण विवरण के साथ अपलोड करें"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "मीडिया लाइसेंस करें",
+                "eyebrow": "उपयोग के लिए तैयार मीडिया खोजें",
+                "heading": "इवेंट मीडिया को आत्मविश्वास से खोजें और लाइसेंस करें",
+                "description": "दृश्य सामग्री ब्राउज़ करें, उपलब्ध इवेंट मीडिया का पूर्वावलोकन करें और Scemory के मौजूदा खोज अनुभव से लाइसेंस विकल्पों की ओर बढ़ें.",
+                "cta": "मीडिया खोजें",
+                "imageAlt": "लाइसेंस योग्य इवेंट सामग्री ब्राउज़ करने के लिए Scemory मीडिया पैनल",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "विवरण खोलने से पहले इवेंट विजुअल देखें",
+                    "use": "मीडिया विकल्पों के रास्ते के रूप में इवेंट पेज इस्तेमाल करें",
+                    "keep": "खोज और लाइसेंसिंग इरादे को जोड़े रखें"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "मीडिया पहुंच",
+                    "title": "समीक्षा के लिए तैयार इवेंट विजुअल",
+                    "stat": "लाइसेंसिंग पथ",
+                    "note": "खोज से विवरण पेज तक"
                 }
             }
         }

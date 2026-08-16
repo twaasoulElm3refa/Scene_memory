@@ -7,8 +7,8 @@
         "country": "Pays",
         "category": "Catégorie",
         "subCategory": "Sous-catégorie",
-        "from": "Du",
-        "to": "Au",
+        "from": "De",
+        "to": "À",
         "city": "Ville",
         "allSubCategories": "Toutes les sous-catégories"
     },
@@ -16,13 +16,13 @@
     "view_all_comments": "Voir tous les commentaires",
     "nav": {
         "favourites": "Favoris",
-        "plans": " Plans",
-        "downloads": "Downloads",
-        "events": "Evénements",
-        "more": " Plus",
-        "dashboard": "Dashboard",
-        "terms": "Conditions génériales",
-        "historical": "Personnes historiques",
+        "plans": "Offres",
+        "downloads": "Téléchargements",
+        "events": "Événements",
+        "more": "Plus",
+        "dashboard": "Tableau de bord",
+        "terms": "Conditions",
+        "historical": "Historique",
         "home": "Accueil",
         "scemoryGate": "ScemoryGate",
         "about": "À propos",
@@ -31,8 +31,11 @@
         "addEvent": "Ajouter un événement",
         "wishlist": "Favoris",
         "profile": "Profil",
-        "logout": "Se déconnecter",
-        "login": "Se connecter"
+        "logout": "Déconnexion",
+        "login": "Connexion",
+        "cart": "Panier",
+        "scemoryHome": "Accueil Scemory",
+        "toggleMenu": "Basculer le menu"
     },
     "languages": {
         "AR": "العربية",
@@ -124,7 +127,7 @@
     "events": {
         "add_historical_event": "Ajouter un événement historique",
         "brand_footer": "Tous vos événements favoris autour du monde",
-        "no_title": "?v?nement sans titre",
+        "no_title": "Événement sans titre",
         "undefined_city": "Indéfini",
         "from_map": "Depuis la carte",
         "cities": "Ville",
@@ -183,16 +186,20 @@
         "description": "Recevez chaque semaine des conseils sur les souvenirs, des mises à jour de fonctionnalités et des histoires inspirantes dans votre boîte mail",
         "firstName": "Prénom",
         "firstNamePlaceholder": "Votre prénom",
-        "email": "Email",
-        "emailPlaceholder": "vous@example.com",
+        "email": "E-mail",
+        "emailPlaceholder": "you@example.com",
         "consent": "J'accepte de recevoir occasionnellement des conseils, mises à jour et offres promotionnelles de Scene Memory. Je peux me désinscrire à tout moment.",
         "subscribe": "S'abonner aux mises à jour souvenirs",
         "community": "Rejoignez plus de 5 000 passionnés de souvenirs dans notre communauté",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Stay updated with verified event stories",
-        "verifiedDescription": "Get curated updates about trending events, new media archives, and major stories documented by contributors around the world.",
-        "subscribeShort": "Subscribe",
-        "pendingApiMessage": "Thanks for subscribing. Newsletter API will be connected soon."
+        "kicker": "Infolettre",
+        "verifiedTitle": "Restez informé des récits d’événements vérifiés",
+        "verifiedDescription": "Recevez des mises à jour sélectionnées sur les événements tendance, les nouvelles archives médias et les récits importants documentés par des contributeurs du monde entier.",
+        "subscribeShort": "S’abonner",
+        "pendingApiMessage": "Merci pour votre inscription. L’API de newsletter sera bientôt connectée.",
+        "errors": {
+            "emailRequired": "Veuillez saisir votre e-mail.",
+            "emailInvalid": "Veuillez saisir une adresse e-mail valide."
+        }
     },
     "map": {
         "exploreMap": "Explorer la carte"
@@ -547,28 +554,28 @@
         "contact_text": "Pour toute question concernant ces conditions, veuillez contacter l'administration."
     },
     "plans": {
-        "customPrice": "Prix personnalisé",
-        "customPricingDescription": "Pour les abonnements personnalisés, veuillez nous contacter pour recevoir une offre sur mesure qui répond à vos besoins.",
+        "customPrice": "Contactez-nous",
+        "customPricingDescription": "Tarification adaptée à vos besoins",
         "contactUs": "Contactez-nous",
-        "chooseYourPlan": "Choisissez votre plan",
-        "getStarted": "Commencez gratuitement",
-        "subscribe": "Abonnez-vous maintenant",
+        "chooseYourPlan": "Choisissez votre offre",
+        "getStarted": "Commencer",
+        "subscribe": "S’abonner maintenant",
         "perMonth": "par mois",
         "prioritySupport": "Support prioritaire",
-        "securePayments": "Paiements s?curis?s",
-        "moneyBack": "Garantie satisfait ou rembours?",
-        "noCreditCard": "Aucune carte de crédit requise",
-        "noFeatures": "Pas de fonctionnalités",
+        "securePayments": "Paiements sécurisés",
+        "moneyBack": "Garantie 30 jours",
+        "noCreditCard": "Aucune carte bancaire requise",
+        "noFeatures": "Aucune fonctionnalité pour le moment",
         "mostPopular": "Le plus populaire",
         "support247": "Assistance 24/7",
         "free": "Gratuit",
-        "ourPlans": "Nos plans",
-        "description": "Nos différents plans",
+        "ourPlans": "Nos offres",
+        "description": "Commencez gratuitement ou choisissez l’offre qui vous convient.",
         "price": "Prix",
         "features": "Fonctionnalités",
         "Monthly": "Mensuel",
         "Yearly": "Annuel",
-        "cancelAnytime": "Annuler tout moment",
+        "cancelAnytime": "Annulation à tout moment",
         "unlimitedEvents": "Événements illimités",
         "addEvents": "Ajouter des événements",
         "transparentPricing": "Simple, transparent pricing for everyone",
@@ -583,7 +590,7 @@
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
+        "plan": "Offre",
         "billing": "Billing",
         "secureSsl": "Secure 256-bit SSL encryption",
         "users": "Users",
@@ -617,8 +624,9 @@
             "subscribeFailed": "Subscription failed. Please try again.",
             "loadPlans": "Impossible de charger les offres. R?essayez."
         },
-        "customPlanNote": "Con?u selon vos besoins",
-        "basicAccessIncluded": "Acc?s de base inclus"
+        "customPlanNote": "Conçue selon vos besoins",
+        "basicAccessIncluded": "Acc?s de base inclus",
+        "usd": "USD"
     },
     "free": "Gratuit",
     "basic": "Basique",
@@ -626,7 +634,7 @@
     "premium": "Premium",
     "homeAudit": {
         "home": {
-            "videoUnsupported": "Your browser does not support the video tag.",
+            "videoUnsupported": "Votre navigateur ne prend pas en charge la balise vidéo.",
             "badge": "Archives d’événements Scemory",
             "title": "Explorez les événements documentés",
             "titleHighlight": "à travers la carte",
@@ -636,61 +644,68 @@
             "bottomText": "Découvrez des histoires, des lieux et des moments du monde entier."
         },
         "profileToast": {
-            "title": "Profile not complete",
-            "message": "Your profile is not complete. Please update:",
-            "complete": "Click to complete",
+            "title": "Profil incomplet",
+            "message": "Votre profil est incomplet. Veuillez mettre à jour :",
+            "complete": "Cliquez pour compléter",
             "fields": {
-                "phone": "Phone",
-                "country": "Country",
-                "position": "Position",
-                "dateOfBirth": "Date of birth"
+                "phone": "Téléphone",
+                "country": "Pays",
+                "position": "Poste",
+                "dateOfBirth": "Date de naissance"
             }
         },
         "trending": {
-            "loadError": "Unable to load trending events right now.",
-            "kicker": "Trending",
-            "title": "Trending Events",
-            "description": "Events gaining attention across the archive.",
-            "emptyTitle": "No trending events yet",
-            "emptyDescription": "Check back soon for highlighted events.",
-            "views": "views",
-            "likes": "likes",
-            "slidesLabel": "Trending event slides"
+            "loadError": "Impossible de charger les événements tendance pour le moment.",
+            "kicker": "Tendance",
+            "title": "Événements tendance",
+            "description": "Événements qui gagnent en visibilité dans les archives.",
+            "emptyTitle": "Aucun événement tendance pour le moment",
+            "emptyDescription": "Revenez bientôt pour découvrir les événements mis en avant.",
+            "views": "vues",
+            "likes": "mentions J’aime",
+            "slidesLabel": "Diapositives des événements tendance",
+            "untitledEvent": "Événement sans titre",
+            "showSlide": "Afficher l’événement tendance {number}"
         },
         "map": {
-            "tilesSlow": "Map tiles are taking too long to render.",
-            "loadError": "Unable to load map right now.",
-            "loadMap": "Load Map",
-            "loading": "Loading map...",
-            "retry": "Retry loading map",
-            "openFullscreen": "Open fullscreen map",
-            "closeFullscreen": "Close fullscreen map"
+            "tilesSlow": "Les tuiles de la carte mettent trop de temps à s’afficher.",
+            "loadError": "Impossible de charger la carte pour le moment.",
+            "loadMap": "Charger la carte",
+            "loading": "Chargement de la carte...",
+            "retry": "Réessayer le chargement de la carte",
+            "openFullscreen": "Ouvrir la carte en plein écran",
+            "closeFullscreen": "Fermer la carte en plein écran"
         },
         "about": {
-            "imageAlt": "Scemory documentation platform",
-            "kicker": "Trusted Event Memory",
-            "title": "About Scemory",
-            "description": "Scemory is built for journalists, media teams, and eyewitness contributors who need a trusted place to document events as they happen. The platform connects uploaded media, event metadata, and location context so people can discover public stories with clarity."
+            "imageAlt": "Plateforme de documentation Scemory",
+            "kicker": "Mémoire d’événement fiable",
+            "title": "À propos de Scemory",
+            "description": "Scemory est conçu pour les journalistes, les équipes médias et les témoins contributeurs qui ont besoin d’un lieu fiable pour documenter les événements au moment où ils se produisent. La plateforme relie les médias téléversés, les métadonnées d’événements et le contexte géographique afin que chacun puisse découvrir les récits publics avec clarté.",
+            "features": {
+                "upload": "Téléversez des photos, des vidéos et des données de terrain",
+                "explore": "Explorez les événements grâce à une carte interactive",
+                "preserve": "Préservez les récits vérifiés dans une archive numérique"
+            }
         },
         "events": {
-            "showing": "Showing",
-            "of": "of",
-            "events": "events",
-            "seeMore": "See More",
-            "badge": "EVENTS"
+            "showing": "Affichage",
+            "of": "sur",
+            "events": "événements",
+            "seeMore": "Voir plus",
+            "badge": "ÉVÉNEMENTS"
         },
         "tags": {
-            "loading": "Loading tags...",
-            "showingFirst": "Showing first",
-            "searchToFindMore": "tags. Search to find more.",
-            "none": "No tags found",
-            "helper": "Select one or more tags to filter map events.",
-            "clearSelected": "Clear selected tags",
-            "searchMore": "Rechercher plus de tags"
+            "loading": "Chargement des étiquettes...",
+            "showingFirst": "Affichage des premières",
+            "searchToFindMore": "étiquettes. Recherchez pour en trouver davantage.",
+            "none": "Aucune étiquette trouvée",
+            "helper": "Sélectionnez une ou plusieurs étiquettes pour filtrer les événements de la carte.",
+            "clearSelected": "Effacer les étiquettes sélectionnées",
+            "searchMore": "Rechercher plus d’étiquettes"
         },
         "search": {
-            "clearText": "Clear text",
-            "clearTags": "Clear tags"
+            "clearText": "Effacer",
+            "clearTags": "Effacer"
         }
     },
     "photoUpload": {
@@ -812,66 +827,66 @@
         "emptyHint": "Les fichiers que vous achetez appara?tront ici"
     },
     "experience": {
-        "kicker": "SCEMORY EXPERIENCE",
-        "title": "One platform. Every side of the story.",
-        "pathsLabel": "Scemory experience paths",
-        "highlightsLabel": "Section highlights",
+        "kicker": "EXPÉRIENCE SCEMORY",
+        "title": "Une plateforme. Chaque facette de l’histoire.",
+        "pathsLabel": "Parcours d’expérience Scemory",
+        "highlightsLabel": "Points forts de la section",
         "tabs": {
             "explore": {
-                "label": "Explore Events",
-                "eyebrow": "DISCOVER THE WORLD THROUGH EVENTS",
-                "heading": "Explore stories, events and places around the world",
-                "description": "Move from the map into documented public events, personal memories, and visual stories shaped by real locations and contributor context.",
-                "cta": "Explore Events",
-                "imageAlt": "Scemory event discovery interface with documented media panels",
+                "label": "Explorer les événements",
+                "eyebrow": "DÉCOUVREZ LE MONDE À TRAVERS LES ÉVÉNEMENTS",
+                "heading": "Explorez des histoires, des événements et des lieux du monde entier",
+                "description": "Passez de la carte à des événements publics documentés, des souvenirs personnels et des récits visuels façonnés par des lieux réels et le contexte des contributeurs.",
+                "cta": "Explorer les événements",
+                "imageAlt": "Interface de découverte d’événements Scemory avec panneaux médias documentés",
                 "features": {
-                    "browse": "Browse event media by place and timeline",
-                    "discover": "Discover nearby stories through a visual archive",
-                    "move": "Move from overview to documented event detail"
+                    "browse": "Parcourez les médias d’événements par lieu et chronologie",
+                    "discover": "Découvrez des récits proches grâce à une archive visuelle",
+                    "move": "Passez de la vue d’ensemble au détail documenté de l’événement"
                 },
                 "visual": {
-                    "kicker": "Live discovery",
-                    "title": "Map-linked event stories",
-                    "stat": "Global archive",
-                    "note": "Places, dates and media in one view"
+                    "kicker": "Découverte en direct",
+                    "title": "Récits d’événements liés à la carte",
+                    "stat": "Archive mondiale",
+                    "note": "Lieux, dates et médias dans une seule vue"
                 }
             },
             "share": {
-                "label": "Share Your Story",
-                "eyebrow": "TURN MOMENTS INTO DOCUMENTED STORIES",
-                "heading": "Document the moments that matter",
-                "description": "Create an event, upload photos and media, add location details, and contribute your perspective to the Scemory archive.",
-                "cta": "Upload Your Story",
-                "imageAlt": "Scemory contributor workspace for documenting event media",
+                "label": "Partagez votre histoire",
+                "eyebrow": "TRANSFORMEZ LES MOMENTS EN RÉCITS DOCUMENTÉS",
+                "heading": "Documentez les moments qui comptent",
+                "description": "Créez un événement, téléversez des photos et des médias, ajoutez des détails de localisation et apportez votre perspective aux archives Scemory.",
+                "cta": "Téléversez votre histoire",
+                "imageAlt": "Espace contributeur Scemory pour documenter les médias d’événements",
                 "features": {
-                    "add": "Add media, descriptions and location context",
-                    "build": "Build a structured memory from raw moments",
-                    "keep": "Keep contributor stories connected to the archive"
+                    "add": "Ajoutez médias, descriptions et contexte géographique",
+                    "build": "Construisez une mémoire structurée à partir de moments bruts",
+                    "keep": "Gardez les récits des contributeurs reliés aux archives"
                 },
                 "visual": {
-                    "kicker": "Contributor flow",
-                    "title": "Media, context and location",
-                    "stat": "Story builder",
-                    "note": "Upload moments with meaningful detail"
+                    "kicker": "Parcours contributeur",
+                    "title": "Médias, contexte et localisation",
+                    "stat": "Créateur de récit",
+                    "note": "Téléversez des moments avec des détails utiles"
                 }
             },
             "license": {
-                "label": "License Media",
-                "eyebrow": "DISCOVER MEDIA READY TO USE",
-                "heading": "Find and license event media with confidence",
-                "description": "Browse visual content, preview available event media, and move toward licensing options directly through Scemory's existing discovery experience.",
-                "cta": "Discover Media",
-                "imageAlt": "Scemory media discovery panels for browsing licensable event content",
+                "label": "Licencier des médias",
+                "eyebrow": "DÉCOUVREZ DES MÉDIAS PRÊTS À L’EMPLOI",
+                "heading": "Trouvez et licenciez des médias d’événements en toute confiance",
+                "description": "Parcourez du contenu visuel, prévisualisez les médias d’événements disponibles et avancez vers les options de licence directement depuis l’expérience de découverte Scemory.",
+                "cta": "Découvrir les médias",
+                "imageAlt": "Panneaux de découverte média Scemory pour parcourir du contenu d’événement licenciable",
                 "features": {
-                    "preview": "Preview event visuals before opening details",
-                    "use": "Use event pages as the path into media options",
-                    "keep": "Keep discovery and licensing intent connected"
+                    "preview": "Prévisualisez les visuels d’événements avant d’ouvrir les détails",
+                    "use": "Utilisez les pages d’événements comme accès aux options médias",
+                    "keep": "Gardez découverte et intention de licence connectées"
                 },
                 "visual": {
-                    "kicker": "Media access",
-                    "title": "Event visuals ready to review",
-                    "stat": "Licensing path",
-                    "note": "From discovery to detail pages"
+                    "kicker": "Accès média",
+                    "title": "Visuels d’événements prêts à examiner",
+                    "stat": "Parcours de licence",
+                    "note": "De la découverte aux pages de détail"
                 }
             }
         }
