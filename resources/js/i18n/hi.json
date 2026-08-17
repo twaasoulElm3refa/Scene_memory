@@ -3,6 +3,7 @@
         "placeholder": "इवेंट्स खोजें..."
     },
     "filters": {
+        "title": "फ़िल्टर",
         "allCategories": "सभी श्रेणियां",
         "country": "देश",
         "category": "श्रेणी",

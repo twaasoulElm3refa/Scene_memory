@@ -3,6 +3,7 @@
         "placeholder": "ابحث عن الفعاليات..."
     },
     "filters": {
+        "title": "تصفية النتائج",
         "allCategories": "كل الفئات",
         "country": "الدولة",
         "category": "الفئة",

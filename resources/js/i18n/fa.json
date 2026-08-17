@@ -3,6 +3,7 @@
         "placeholder": "جستجوی رویدادها..."
     },
     "filters": {
+        "title": "فیلترها",
         "allCategories": "همه دسته‌ها",
         "country": "کشور",
         "category": "دسته",

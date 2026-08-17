@@ -3,6 +3,7 @@
         "placeholder": "イベントを検索..."
     },
     "filters": {
+        "title": "フィルター",
         "allCategories": "すべてのカテゴリ",
         "country": "国",
         "category": "カテゴリ",

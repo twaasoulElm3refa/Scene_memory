@@ -3,6 +3,7 @@
         "placeholder": "ایونٹس تلاش کریں..."
     },
     "filters": {
+        "title": "فلٹرز",
         "allCategories": "تمام زمرے",
         "country": "ملک",
         "category": "زمرہ",

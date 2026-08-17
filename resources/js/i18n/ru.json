@@ -3,6 +3,7 @@
         "placeholder": "Поиск событий..."
     },
     "filters": {
+        "title": "Фильтры",
         "allCategories": "Все категории",
         "country": "Страна",
         "category": "Категория",

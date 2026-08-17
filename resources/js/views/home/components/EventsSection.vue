@@ -1,7 +1,9 @@
 <template>
-<section v-if="searched" class="scemory-events-section home-events-results max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-    <div class="flex flex-col gap-5 md:flex-row md:justify-between md:items-end mb-10">
+<section v-if="searched" class="scemory-events-section home-events-results">
+    <div class="home-results-toolbar flex flex-col gap-5 md:flex-row md:justify-between md:items-end mb-10">
       <div>
+        <span class="home-results-kicker">{{ $t('homeAudit.events.badge') }}</span>
+        <h2 class="home-results-title">{{ $t('homeAudit.events.badge') }}</h2>
         <p v-if="totalResults > 0" class="mt-2 text-sm font-medium text-gray-500">
           {{ $t('homeAudit.events.showing') }} {{ resultFrom || 0 }} - {{ resultTo || 0 }} {{ $t('homeAudit.events.of') }} {{ totalResults || 0 }} {{ $t('homeAudit.events.events') }}
         </p>
@@ -18,13 +20,13 @@
       </button>
     </div>
 
-    <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+    <div v-if="loading" class="home-results-grid">
       <div
         v-for="i in Number(perPage) || 8"
         :key="`event-skeleton-${i}`"
         class="event-skeleton-card overflow-hidden animate-pulse"
       >
-        <div class="aspect-[4/3] bg-gray-200"></div>
+        <div class="home-event-media bg-gray-200"></div>
         <div class="p-5 space-y-3">
           <div class="h-4 w-2/3 bg-gray-200 rounded"></div>
           <div class="h-4 w-full bg-gray-200 rounded"></div>
@@ -44,13 +46,13 @@
     </div>
 
     <template v-else>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+      <div class="home-results-grid">
         <div
           v-for="(event, index) in paginatedEvents"
           :key="event.slug || event.id"
           class="home-event-card group rounded-2xl overflow-hidden transition-all duration-300"
         >
-          <div class="aspect-[4/3] relative overflow-hidden bg-gray-100">
+          <div class="home-event-media relative overflow-hidden bg-gray-100">
             <picture>
               <source v-if="event.image_webp_url" :srcset="event.image_webp_url" type="image/webp" />
               <img
@@ -70,7 +72,7 @@
               </span>
             </div>
           </div>
-          <div class="p-5">
+          <div class="home-event-body p-5">
             <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
               <span class="text-blue-600">&#128197;</span>
               <span class="font-medium">
@@ -207,20 +209,43 @@ const emitPageChange = (page) => {
 <style scoped>
 .home-events-results {
   color: var(--scemory-text);
+  margin: 0;
+  padding: 0;
 }
 
-.home-events-results > div:first-child {
+.home-results-toolbar {
   border: 1px solid var(--scemory-border-soft);
-  border-radius: 24px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(247, 250, 253, 0.92));
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.88);
   padding: 24px;
-  box-shadow: var(--scemory-shadow-sm);
+  box-shadow: 0 12px 28px rgba(13, 77, 151, 0.06);
 }
 
-.home-events-results .inline-flex.bg-blue-50 {
+.home-results-kicker {
+  display: inline-flex;
+  margin-bottom: 8px;
   border: 1px solid var(--scemory-border);
+  border-radius: 999px;
   background: var(--scemory-active) !important;
+  padding: 5px 10px;
   color: var(--scemory-primary) !important;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.home-results-title {
+  margin: 0;
+  color: var(--scemory-heading);
+  font-size: clamp(24px, 2vw, 34px);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.home-results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
 }
 
 .home-events-results h2,
@@ -239,8 +264,8 @@ const emitPageChange = (page) => {
 .home-event-card,
 .empty-events-state {
   border: 1px solid var(--scemory-border-soft);
-  border-radius: 24px;
-  background: linear-gradient(145deg, #FFFFFF, var(--scemory-surface));
+  border-radius: 20px;
+  background: #FFFFFF;
   box-shadow: 0 8px 26px rgba(13, 77, 151, 0.06);
 }
 
@@ -248,6 +273,14 @@ const emitPageChange = (page) => {
   transform: translateY(-2px);
   border-color: var(--scemory-border);
   box-shadow: var(--scemory-shadow-hover);
+}
+
+.home-event-media {
+  aspect-ratio: 16 / 9;
+}
+
+.home-event-body {
+  min-height: 160px;
 }
 
 .home-event-card .bg-white\/90 {
@@ -323,5 +356,28 @@ const emitPageChange = (page) => {
 
 .see-more-arrow {
   margin-inline-start: 0.45rem;
+}
+
+@media (min-width: 1680px) {
+  .home-results-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .home-results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .home-results-toolbar {
+    padding: 18px;
+  }
+
+  .home-results-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 </style>

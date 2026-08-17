@@ -110,46 +110,50 @@
             </section>
 
             <!-- MAP + TRENDING + FILTERS -->
-            <section id="explore-events" class="home-after-hero relative pb-10 pt-10">
-                <div class="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-                    <div
-                        class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
-                        <div class="space-y-5">
-                            <div class="home-discovery-panel">
-                                <section id="events-search-section" ref="eventsSearchSectionRef"
-                                    class="home-events-search-target">
-                                    <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" :tags="tags"
-                                        :selected-tags="selectedTags" :loading="loadingTags"
-                                        :tag-suggestions="tagSuggestions" :loading-suggestions="loadingTagSuggestions"
-                                        @update:selected-tags="handleTagsUpdate"
-                                        @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
-                                </section>
+            <section id="explore-events" class="home-discovery-section">
+                <div class="home-discovery-container">
+                    <section id="events-search-section" ref="eventsSearchSectionRef"
+                        class="home-events-search-target home-discovery-search">
+                        <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" :tags="tags"
+                            :selected-tags="selectedTags" :loading="loadingTags" :tag-suggestions="tagSuggestions"
+                            :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
+                            @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
+                    </section>
 
-                                <div class="home-discovery-divider"></div>
+                    <button type="button" class="home-mobile-filter-toggle"
+                        :aria-expanded="mobileFiltersOpen ? 'true' : 'false'" aria-controls="filters-section"
+                        @click="mobileFiltersOpen = !mobileFiltersOpen">
+                        <span>{{ $t('filters.title') }}</span>
+                        <span aria-hidden="true">{{ mobileFiltersOpen ? '-' : '+' }}</span>
+                    </button>
 
-                                <section id="filters-section" ref="filtersSectionRef" class="home-discovery-filters">
-                                    <FiltersSection :categories="categories" :selected-category="selectedCategory"
-                                        :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
-                                        :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
-                                        :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
-                                        :selected-country="selectedCountry" :cities="cities"
-                                        :selected-city="selectedCity" :from-date="fromDate" :to-date="toDate"
-                                        @update:selected-category="handleCategoryUpdate"
-                                        @update:selected-sub-category="handleSubCategoryUpdate"
-                                        @update:country-search="countrySearch = $event"
-                                        @update:selected-city="handleCityUpdate"
-                                        @update:from-date="handleFromDateUpdate" @update:to-date="handleToDateUpdate"
-                                        @country-focus="onCountryFocus" @select-country="selectCountry"
-                                        @category-changed="handleMainCategoryChange" @search="handleSearchClick" />
-                                </section>
-                            </div>
+                    <div class="home-discovery-workspace">
+                        <aside class="home-discovery-filters-column" :class="{ 'is-open': mobileFiltersOpen }">
+                            <section id="filters-section" ref="filtersSectionRef" class="home-discovery-filters">
+                                <FiltersSection :categories="categories" :selected-category="selectedCategory"
+                                    :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
+                                    :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
+                                    :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
+                                    :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
+                                    :from-date="fromDate" :to-date="toDate"
+                                    @update:selected-category="handleCategoryUpdate"
+                                    @update:selected-sub-category="handleSubCategoryUpdate"
+                                    @update:country-search="countrySearch = $event"
+                                    @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
+                                    @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
+                                    @select-country="selectCountry" @category-changed="handleMainCategoryChange"
+                                    @search="handleSearchClick" />
+                            </section>
+                        </aside>
+
+                        <main class="home-discovery-map-column">
                             <MapSection :fullscreen="fullscreen" :is-map-ready="isMapReady"
                                 :is-map-loading="isMapLoading" :map-error="mapError" :can-init-map="canInitMap"
                                 @map-viewport-enter="handleMapViewportEnter" @load-map="handleManualMapLoad"
                                 @open-fullscreen="openFullscreen" @close-fullscreen="closeFullscreen" />
-                        </div>
+                        </main>
 
-                        <aside class="xl:sticky xl:top-24">
+                        <aside class="home-discovery-trending-column">
                             <TrendingEventsSection :events="trendingEvents" :loading="loadingTrendingEvents"
                                 :error="trendingEventsError" :fallback-image="fallbackImage" :format-date="formatDate"
                                 :lang="lang" />
@@ -159,8 +163,8 @@
             </section>
 
             <!-- EVENTS RESULTS -->
-            <section id="events-results" class="home-results-band py-10">
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <section id="events-results" class="home-results-band">
+                <div class="home-results-container">
                     <EventsSection :searched="searched" :loading="loading" :displayed-events="displayedEvents"
                         :paginated-events="paginatedEvents" :visible-pages="visiblePages" :current-page="currentPage"
                         :total-pages="totalPages" :total-results="totalResults" :result-from="resultFrom"
@@ -271,6 +275,7 @@ const hasTriedUserLocation = ref(false);
 const eventsSearchSectionRef = ref(null);
 const eventsSearchRef = ref(null);
 const filtersSectionRef = ref(null);
+const mobileFiltersOpen = ref(false);
 const fullscreen = ref(false);
 const isMapReady = ref(false);
 const isMapLoading = ref(false);
@@ -397,6 +402,16 @@ const normalizeTrendingEvent = (ev = {}) => {
         description: ev.translation?.description || "",
         start_date: ev.start_date,
         image_url: toMediaUrl(imagePath) || fallbackImage,
+        location_name:
+            ev.city?.translation?.name ||
+            ev.country?.translation?.name ||
+            ev.location ||
+            "",
+        category_name:
+            ev.sub_categorey?.translation?.name ||
+            ev.sub_category?.translation?.name ||
+            ev.category?.translation?.name ||
+            "",
         user_name: ev.user?.name || "",
         likes_count: ev.likes_count ?? 0,
         views_count: ev.views_count ?? 0,
@@ -1125,49 +1140,165 @@ onUnmounted(() => {
     top: auto !important;
 }
 
-.home-discovery-panel {
+.home-discovery-section {
     position: relative;
-    z-index: 20;
-    margin-bottom: 1%;
-    overflow: visible;
-    border: 1px solid rgba(220, 232, 245, 0.86);
-    border-radius: 24px;
-    background:
-        radial-gradient(circle at 88% 10%, rgba(48, 168, 255, 0.06), transparent 30%),
-        linear-gradient(145deg, #F7FAFD, #EDF4FA);
-    box-shadow: 0 14px 38px rgba(13, 77, 151, 0.06);
-    padding: 20px;
+    width: 100%;
+    padding: 44px 0 48px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F4F9FE 100%);
 }
 
-.home-discovery-divider {
-    height: 1px;
-    margin: 16px 0;
-    background:
-        linear-gradient(90deg,
-            transparent,
-            #DCE8F5 12%,
-            #C9DDEF 50%,
-            #DCE8F5 88%,
-            transparent);
+.home-discovery-container,
+.home-results-container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1760px;
+    margin-inline: auto;
+    padding-inline: 40px;
 }
 
 .home-events-search-target {
     scroll-margin-top: 110px;
 }
 
-.home-discovery-filters {
+.home-discovery-search {
     position: relative;
-    z-index: 1;
+    z-index: 30;
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto 28px;
 }
 
-@media (max-width: 640px) {
-    .home-discovery-panel {
-        border-radius: 20px;
-        padding: 14px;
+.home-discovery-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+    direction: inherit;
+}
+
+.home-discovery-filters-column,
+.home-discovery-map-column,
+.home-discovery-trending-column {
+    width: 100%;
+    min-width: 0;
+}
+
+.home-discovery-filters-column,
+.home-discovery-trending-column {
+    position: static;
+}
+
+.home-discovery-filters {
+    position: relative;
+    z-index: 30;
+}
+
+.home-mobile-filter-toggle {
+    display: none;
+    width: 100%;
+    min-height: 48px;
+    margin: 0 0 14px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid var(--scemory-border);
+    border-radius: 16px;
+    background: #FFFFFF;
+    color: var(--scemory-primary);
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: var(--scemory-shadow-sm);
+}
+
+.home-results-band {
+    padding: 48px 0 56px;
+    background:
+        radial-gradient(circle at 85% 0%, rgba(48, 168, 255, 0.08), transparent 26rem),
+        linear-gradient(180deg, #F4F9FE 0%, var(--scemory-surface-soft) 100%);
+}
+
+@media (min-width: 1400px) {
+    .home-discovery-workspace {
+        grid-template-columns: 270px minmax(0, 1fr) 300px;
+        gap: 24px;
     }
 
-    .home-discovery-divider {
-        margin: 14px 0;
+    .home-discovery-filters-column,
+    .home-discovery-trending-column {
+        position: sticky;
+        top: 104px;
+        z-index: 25;
+    }
+
+    .home-discovery-trending-column {
+        display: flex;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1399px) {
+    .home-discovery-container,
+    .home-results-container {
+        padding-inline: 28px;
+    }
+
+    .home-discovery-workspace {
+        grid-template-columns: 250px minmax(0, 1fr);
+        gap: 22px;
+    }
+
+    .home-discovery-filters-column {
+        position: sticky;
+        top: 104px;
+        z-index: 25;
+    }
+
+    .home-discovery-trending-column {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 991px) {
+    .home-discovery-section {
+        padding: 34px 0 34px;
+    }
+
+    .home-discovery-container,
+    .home-results-container {
+        padding-inline: 20px;
+    }
+
+    .home-discovery-search {
+        margin-bottom: 16px;
+    }
+
+    .home-mobile-filter-toggle {
+        display: flex;
+    }
+
+    .home-discovery-workspace {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .home-discovery-filters-column {
+        display: none;
+        position: static;
+    }
+
+    .home-discovery-filters-column.is-open {
+        display: block;
+    }
+
+    .home-discovery-trending-column {
+        position: static;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-discovery-container,
+    .home-results-container {
+        padding-inline: 14px;
     }
 }
 

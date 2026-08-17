@@ -3,6 +3,7 @@
         "placeholder": "搜索活动..."
     },
     "filters": {
+        "title": "筛选",
         "allCategories": "所有类别",
         "country": "国家",
         "category": "类别",

@@ -3,6 +3,7 @@
         "placeholder": "Rechercher des événements..."
     },
     "filters": {
+        "title": "Filtres",
         "allCategories": "Toutes les catégories",
         "country": "Pays",
         "category": "Catégorie",

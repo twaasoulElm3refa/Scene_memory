@@ -3,6 +3,7 @@
         "placeholder": "Etkinlikleri ara..."
     },
     "filters": {
+        "title": "Filtreler",
         "allCategories": "Tüm kategoriler",
         "country": "Ülke",
         "category": "Kategori",

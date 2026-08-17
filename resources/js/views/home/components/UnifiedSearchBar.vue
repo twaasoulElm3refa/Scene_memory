@@ -1,31 +1,20 @@
 <template>
-    <section
-        ref="wrapperRef"
-        class="scemory-search-bar unified-search-control relative z-[9999] overflow-visible rounded-2xl p-4 backdrop-blur"
-    >
-        <div class="relative z-[10000] overflow-visible">
+    <section ref="wrapperRef" class="scemory-search-bar unified-search-control">
+        <div class="unified-search-main">
             <div
-                class="unified-search-field flex min-h-[50px] w-full items-center gap-2 rounded-xl border px-3 py-2 text-sm transition"
+                class="unified-search-field"
                 @click="focusInput"
             >
-                <span class="shrink-0 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700">
-                    <span class="shrink-0 text-gray-400">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            stroke-width="2"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                        </svg>
-                    </span>
-                </span>
+                <button
+                    type="button"
+                    class="unified-search-submit"
+                    :aria-label="$t('common.search')"
+                    @click.stop="emit('search')"
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
 
                 <input
                     id="events-search-input"
@@ -33,7 +22,7 @@
                     :value="modelValue"
                     type="text"
                     :placeholder="$t('common.placeholder')"
-                    class="min-w-0 flex-1 bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400"
+                    class="unified-search-input"
                     @input="handleInput"
                     @focus="handleFocus"
                     @keydown.enter.prevent="emit('search')"
@@ -43,7 +32,7 @@
                 <button
                     v-if="modelValue"
                     type="button"
-                    class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+                    class="unified-search-clear"
                     @click.stop="clearText"
                 >
                     {{ $t('homeAudit.search.clearText') }}
@@ -52,7 +41,7 @@
                 <button
                     v-if="selectedTags.length"
                     type="button"
-                    class="shrink-0 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition hover:bg-red-50 hover:text-red-500"
+                    class="unified-search-clear unified-search-clear-tags"
                     @click.stop="clearTags"
                 >
                     {{ $t('homeAudit.search.clearTags') }}
@@ -61,11 +50,11 @@
 
             <div
                 v-if="showDropdown && hasSearch"
-                class="unified-search-dropdown absolute left-0 right-0 top-full z-[99999] mt-2 max-h-72 overflow-y-auto rounded-xl border py-2"
+                class="unified-search-dropdown"
             >
                 <div
                     v-if="loading || loadingSuggestions"
-                    class="px-3 py-3 text-sm text-gray-400"
+                    class="unified-search-message"
                 >
                     {{ $t('homeAudit.tags.loading') }}
                 </div>
@@ -75,8 +64,8 @@
                         v-for="tag in visibleSuggestions"
                         :key="tag.id"
                         type="button"
-                        class="tag-option-row w-full px-3 py-2 text-left text-sm text-gray-700 transition hover:bg-blue-50"
-                        :class="{ 'bg-blue-50': isTagSelected(tag.id) }"
+                        class="tag-option-row"
+                        :class="{ 'is-selected': isTagSelected(tag.id) }"
                         @click="selectTag(tag)"
                     >
                         <input
@@ -95,7 +84,7 @@
 
                     <div
                         v-if="visibleSuggestions.length === 0"
-                        class="px-3 py-3 text-sm text-gray-400"
+                        class="unified-search-message"
                     >
                         {{ $t('homeAudit.tags.none') }}
                     </div>
@@ -103,20 +92,19 @@
             </div>
         </div>
 
-        <div class="mt-3 min-h-[36px]">
+        <div v-if="selectedTagObjects.length" class="selected-tags-tray">
             <div
-                v-if="selectedTagObjects.length"
-                class="flex flex-wrap gap-2"
+                class="selected-tags-list"
             >
                 <button
                     v-for="tag in selectedTagObjects"
                     :key="tag.id"
                     type="button"
-                    class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-blue-100"
+                    class="selected-tag-chip"
                     @click="removeTag(tag.id)"
                 >
                     <span>#{{ tag.name }}</span>
-                    <span class="text-sm leading-none text-blue-400">x</span>
+                    <span class="selected-tag-remove" aria-hidden="true">x</span>
                 </button>
             </div>
         </div>
@@ -407,31 +395,96 @@ onUnmounted(() => {
 
 <style scoped>
 .unified-search-control {
-    border-color: var(--scemory-border);
-    border-radius: 24px;
-    background: linear-gradient(145deg, var(--scemory-surface), var(--scemory-surface-soft));
-    box-shadow: 0 12px 32px rgba(13, 77, 151, 0.08);
+    position: relative;
+    z-index: 60;
+    width: 100%;
+    overflow: visible;
 }
 
-:global(.home-discovery-panel) .unified-search-control {
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
+.unified-search-main {
+    position: relative;
+    z-index: 61;
+    overflow: visible;
 }
 
 .unified-search-field {
-    border-color: var(--scemory-border-soft);
+    display: flex;
+    width: 100%;
+    min-height: 64px;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    border: 1px solid rgba(13, 77, 151, 0.16);
+    border-radius: 999px;
     background: #FFFFFF;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    padding: 7px 16px 7px 8px;
+    box-shadow: 0 18px 42px rgba(13, 77, 151, 0.15);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
-:global(.home-discovery-panel) .unified-search-field {
-    min-height: 54px;
-    border-color: var(--scemory-border-soft);
-    border-radius: 16px;
-    background: #FFFFFF;
+.unified-search-submit {
+    display: inline-flex;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    background: var(--scemory-primary);
+    color: #FFFFFF;
+    box-shadow: 0 10px 24px rgba(13, 77, 151, 0.22);
+    cursor: pointer;
+    transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.unified-search-submit:hover {
+    transform: translateY(-1px);
+    background: var(--scemory-blue);
+    box-shadow: 0 12px 28px rgba(13, 77, 151, 0.28);
+}
+
+.unified-search-submit svg {
+    width: 22px;
+    height: 22px;
+    color: #FFFFFF;
+}
+
+.unified-search-input {
+    min-width: 0;
+    flex: 1 1 auto;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--scemory-heading);
+    font-size: 15px;
+}
+
+.unified-search-input::placeholder {
+    color: #94A3B8;
+}
+
+.unified-search-clear {
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    padding: 7px 9px;
+    color: #64748B;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 180ms ease, color 180ms ease;
+}
+
+.unified-search-clear:hover {
+    background: #EFF6FF;
+    color: var(--scemory-primary);
+}
+
+.unified-search-clear-tags:hover {
+    background: #FFF1F2;
+    color: #E11D48;
 }
 
 .unified-search-field:focus-within {
@@ -440,98 +493,130 @@ onUnmounted(() => {
     box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.08);
 }
 
-.unified-search-control svg,
-.unified-search-control .text-blue-400,
-.unified-search-control .text-blue-700 {
-    color: var(--scemory-primary) !important;
-}
-
-.unified-search-control input {
-    color: var(--scemory-heading);
-}
-
-.unified-search-control input::placeholder {
-    color: #94A3B8;
-}
-
-.unified-search-control button {
-    transition: var(--scemory-transition);
-}
-
-.unified-search-control button:hover {
-    transform: translateY(-1px);
-}
-
-.unified-search-control .border-blue-100,
-.unified-search-control .bg-blue-50 {
-    border-color: rgba(22, 119, 255, 0.24) !important;
-    background: var(--scemory-active) !important;
-    color: var(--scemory-primary) !important;
-}
-
 .unified-search-dropdown {
-    border-color: var(--scemory-border);
-    background: linear-gradient(145deg, var(--scemory-surface), var(--scemory-surface-soft));
-    box-shadow: var(--scemory-shadow-strong);
+    position: absolute;
+    inset-inline: 0;
+    top: calc(100% + 10px);
+    z-index: 100;
+    max-height: 288px;
+    overflow-y: auto;
+    border: 1px solid var(--scemory-border);
+    border-radius: 18px;
+    background: #FFFFFF;
+    padding: 8px;
+    box-shadow: 0 18px 45px rgba(13, 77, 151, 0.12);
 }
 
-:global(.home-discovery-panel) .unified-search-dropdown {
-    z-index: 100000;
-    box-shadow: 0 18px 45px rgba(13, 77, 151, 0.12);
+.unified-search-message {
+    padding: 12px;
+    color: #94A3B8;
+    font-size: 14px;
 }
 
 .tag-option-row {
     display: flex;
+    width: 100%;
     align-items: center;
     gap: 10px;
-    color: var(--scemory-text) !important;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    padding: 10px 12px;
+    color: var(--scemory-text);
+    font-size: 14px;
+    text-align: start;
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease;
 }
 
 .tag-option-row:hover,
-.tag-option-row.bg-blue-50 {
-    background: var(--scemory-hover) !important;
-    color: var(--scemory-primary) !important;
+.tag-option-row.is-selected {
+    background: var(--scemory-hover);
+    color: var(--scemory-primary);
 }
 
 .tag-option-checkbox {
     accent-color: var(--scemory-blue);
 }
 
+.selected-tags-tray {
+    margin-top: 12px;
+}
+
+.selected-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.selected-tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(22, 119, 255, 0.18);
+    border-radius: 999px;
+    background: #FFFFFF;
+    padding: 7px 12px;
+    color: var(--scemory-primary);
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 5px 14px rgba(13, 77, 151, 0.07);
+    cursor: pointer;
+}
+
+.selected-tag-chip:hover {
+    border-color: rgba(22, 119, 255, 0.34);
+    background: var(--scemory-active);
+}
+
+.selected-tag-remove {
+    color: var(--scemory-blue);
+    font-size: 14px;
+    line-height: 1;
+}
+
 @media (max-width: 640px) {
     .unified-search-control {
-        border-radius: 20px;
-        padding: 12px;
+        width: 100%;
     }
 
-    :global(.home-discovery-panel) .unified-search-control {
-        padding: 0;
+    .unified-search-field {
+        min-height: 56px;
+        gap: 7px;
+        padding: 6px 10px 6px 6px;
     }
 
-    :global(.home-discovery-panel) .unified-search-field {
-        min-height: 52px;
+    .unified-search-submit {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+    .unified-search-clear {
+        max-width: 72px;
+        padding-inline: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
-</style>
 
-<style scoped>
 .tag-option-row {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 10px !important;
+    flex-direction: row;
 }
 
 .tag-option-checkbox {
-    width: 16px !important;
-    height: 16px !important;
-    margin: 0 !important;
-    flex: 0 0 auto !important;
-    display: inline-block !important;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+    margin: 0;
 }
 
 .tag-option-name {
-    display: inline-block !important;
-    flex: 1 1 auto !important;
+    display: inline-block;
+    flex: 1 1 auto;
     min-width: 0;
     white-space: nowrap;
     overflow: hidden;
