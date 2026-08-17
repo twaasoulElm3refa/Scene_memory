@@ -81,14 +81,7 @@
                         <div class="mt-8 flex flex-wrap
                        items-center justify-center gap-3">
 
-                            <button type="button" @click="scrollToEventsSearch" class="inline-flex items-center justify-center
-                           rounded-full bg-[#1597D4]
-                           px-8 py-3.5
-                           text-sm font-bold text-white
-                           shadow-[0_12px_30px_rgba(21,151,212,0.30)]
-                           transition duration-300
-                           hover:-translate-y-1
-                           hover:bg-[#28A9E6]">
+                            <button type="button" @click="scrollToEventsSearch" class="search-events-btn">
                                 {{ $t('homeAudit.home.searchEvents') }}
                             </button>
 
@@ -119,14 +112,17 @@
             <!-- MAP + TRENDING + FILTERS -->
             <section id="explore-events" class="home-after-hero relative pb-10 pt-10">
                 <div class="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
-                    <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+                    <div
+                        class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
                         <div class="space-y-5">
                             <div class="home-discovery-panel">
-                                <section id="events-search-section" ref="eventsSearchSectionRef" class="home-events-search-target">
-                                    <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
-                                    :loading="loadingTags" :tag-suggestions="tagSuggestions"
-                                    :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
-                                    @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
+                                <section id="events-search-section" ref="eventsSearchSectionRef"
+                                    class="home-events-search-target">
+                                    <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" :tags="tags"
+                                        :selected-tags="selectedTags" :loading="loadingTags"
+                                        :tag-suggestions="tagSuggestions" :loading-suggestions="loadingTagSuggestions"
+                                        @update:selected-tags="handleTagsUpdate"
+                                        @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
                                 </section>
 
                                 <div class="home-discovery-divider"></div>
@@ -136,15 +132,15 @@
                                         :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
                                         :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
                                         :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
-                                        :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
-                                        :from-date="fromDate" :to-date="toDate"
+                                        :selected-country="selectedCountry" :cities="cities"
+                                        :selected-city="selectedCity" :from-date="fromDate" :to-date="toDate"
                                         @update:selected-category="handleCategoryUpdate"
                                         @update:selected-sub-category="handleSubCategoryUpdate"
                                         @update:country-search="countrySearch = $event"
-                                        @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
-                                        @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
-                                        @select-country="selectCountry" @category-changed="handleMainCategoryChange"
-                                        @search="handleSearchClick" />
+                                        @update:selected-city="handleCityUpdate"
+                                        @update:from-date="handleFromDateUpdate" @update:to-date="handleToDateUpdate"
+                                        @country-focus="onCountryFocus" @select-country="selectCountry"
+                                        @category-changed="handleMainCategoryChange" @search="handleSearchClick" />
                                 </section>
                             </div>
                             <MapSection :fullscreen="fullscreen" :is-map-ready="isMapReady"
@@ -214,7 +210,8 @@
                         </li>
                     </ul>
 
-                    <p class="mt-2 text-[11px] font-medium text-blue-600">{{ $t('homeAudit.profileToast.complete') }}</p>
+                    <p class="mt-2 text-[11px] font-medium text-blue-600">{{ $t('homeAudit.profileToast.complete') }}
+                    </p>
                 </div>
 
                 <div class="h-1 bg-gray-100">
@@ -1146,14 +1143,12 @@ onUnmounted(() => {
     height: 1px;
     margin: 16px 0;
     background:
-        linear-gradient(
-            90deg,
+        linear-gradient(90deg,
             transparent,
             #DCE8F5 12%,
             #C9DDEF 50%,
             #DCE8F5 88%,
-            transparent
-        );
+            transparent);
 }
 
 .home-events-search-target {
@@ -1174,5 +1169,46 @@ onUnmounted(() => {
     .home-discovery-divider {
         margin: 14px 0;
     }
+}
+
+.search-events-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+    padding: 0 32px;
+
+    border: 1px solid #1597d4;
+    border-radius: 999px;
+
+    background: #1597d4;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 12px 30px rgba(21, 151, 212, 0.3);
+
+    transition:
+        transform 0.3s ease,
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.search-events-btn:hover {
+    background: #28a9e6;
+    border-color: #28a9e6;
+    transform: translateY(-2px);
+
+    box-shadow: 0 14px 34px rgba(21, 151, 212, 0.36);
+}
+
+.search-events-btn:focus-visible {
+    outline: 3px solid rgba(21, 151, 212, 0.25);
+    outline-offset: 3px;
 }
 </style>

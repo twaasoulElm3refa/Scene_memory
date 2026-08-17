@@ -9,19 +9,9 @@ On See More Show Filter (from date to date) & (Countries - Cities) & (Categorey 
 
 collection button hidden when only 1 photo
 
-Edit historical creation
-
 trending button in admin add event
 
 test mobile functionallity
 
-add everything then make the check in backend
-
-search button in header
-translations
-
 contact us as plan
 
-media in comment section
-
-upload button
