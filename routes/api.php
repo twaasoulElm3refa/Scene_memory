@@ -297,9 +297,9 @@ Route::prefix('v1')->group(function () {
     // Comments
     Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
         Route::get('/{slug}', [CommentController::class, 'allPaginated']);
-        Route::post('/{id}/support', [CommentInteractionController::class, 'support']);
-        Route::post('/{id}/Exhibitions', [CommentInteractionController::class, 'exhibitions']);
-        Route::post('/{id}/neutral', [CommentInteractionController::class, 'neutral']);
+        Route::post('/{id}/support', [CommentInteractionController::class, 'support'])->middleware('auth:sanctum');
+        Route::post('/{id}/Exhibitions', [CommentInteractionController::class, 'exhibitions'])->middleware('auth:sanctum');
+        Route::post('/{id}/neutral', [CommentInteractionController::class, 'neutral'])->middleware('auth:sanctum');
         Route::post('/{id}/report', [CommentInteractionController::class, 'report']);
         Route::post('{id}/create', [CommentController::class, 'create'])->middleware('auth:sanctum');
         Route::delete('/{id}/delete', [CommentController::class, 'destroy'])->middleware('auth:sanctum');

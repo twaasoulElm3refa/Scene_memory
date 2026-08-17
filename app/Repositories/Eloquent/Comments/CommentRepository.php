@@ -42,9 +42,58 @@ class CommentRepository implements CommentRepositoryInterface
         return CommentReplies::create($data);
     }
 
-    public function firstOrCreateInteraction(array $data)
+    public function updateOrCreateInteraction(array $identity, array $values)
     {
-        return CommentInteractions::firstOrCreate($data);
+        return CommentInteractions::withTrashed()->updateOrCreate(
+            $identity,
+            [...$values, 'deleted_at' => null]
+        );
+    }
+
+    public function reactionSummary(int $commentId, int $userId): array
+    {
+        $counts = CommentInteractions::query()
+            ->where('comment_id', $commentId)
+            ->selectRaw("SUM(CASE WHEN type = 'support' THEN 1 ELSE 0 END) as support_count")
+            ->selectRaw("SUM(CASE WHEN type = 'neutral' THEN 1 ELSE 0 END) as neutral_count")
+            ->selectRaw("SUM(CASE WHEN type = 'Exhibitions' THEN 1 ELSE 0 END) as exhibitions_count")
+            ->first();
+
+        $currentReaction = CommentInteractions::query()
+            ->where('comment_id', $commentId)
+            ->where('user_id', $userId)
+            ->value('type');
+
+        return [
+            'current_user_reaction' => $this->normalizeReactionType($currentReaction),
+            'support_count' => (int) ($counts?->support_count ?? 0),
+            'neutral_count' => (int) ($counts?->neutral_count ?? 0),
+            'exhibitions_count' => (int) ($counts?->exhibitions_count ?? 0),
+        ];
+    }
+
+    public function attachCurrentUserReactions(iterable $comments, ?int $userId): void
+    {
+        $commentCollection = collect($comments);
+        $commentIds = $commentCollection
+            ->pluck('id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->values();
+
+        $userReactions = $userId && $commentIds->isNotEmpty()
+            ? CommentInteractions::query()
+                ->where('user_id', $userId)
+                ->whereIn('comment_id', $commentIds)
+                ->pluck('type', 'comment_id')
+            : collect();
+
+        $commentCollection->each(function ($comment) use ($userReactions): void {
+            $comment->setAttribute(
+                'current_user_reaction',
+                $this->normalizeReactionType($userReactions->get($comment->id))
+            );
+        });
     }
 
     public function firstOrCreateReport(array $data)
@@ -60,5 +109,10 @@ class CommentRepository implements CommentRepositoryInterface
     public function findReportOrFail(int $id)
     {
         return CommentReport::findOrFail($id);
+    }
+
+    private function normalizeReactionType(?string $type): ?string
+    {
+        return $type === 'Exhibitions' ? 'exhibitions' : $type;
     }
 }

@@ -55,8 +55,19 @@ const CommentService = {
      * reactionType: 'support' | 'Exhibitions' | 'neutral'
      */
     reactToComment(commentId, reactionType) {
+        const endpoints = {
+            support: 'support',
+            neutral: 'neutral',
+            exhibitions: 'Exhibitions',
+        };
+        const endpoint = endpoints[reactionType];
+
+        if (!endpoint) {
+            return Promise.reject(new Error('Invalid comment reaction type.'));
+        }
+
         return api
-            .post(`/comments/${commentId}/${reactionType}`)
+            .post(`/comments/${commentId}/${endpoint}`)
             .catch((err) => {
                 throw err;
             });

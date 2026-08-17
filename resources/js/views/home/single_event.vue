@@ -50,7 +50,142 @@
                 <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
 
                     <!-- ══════════════════════════════════════════════════════════ -->
-                    <!-- Media Gallery — FULL WIDTH above the grid                  -->
+                    <!-- Main + Sidebar Grid                                        -->
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-0">
+
+                        <!-- Main Content (3/4) -->
+                        <div class="lg:col-span-3 p-8 md:p-12 lg:p-16">
+
+                            <!-- Title + Like -->
+                            <div class="flex items-center justify-between mb-6">
+                                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                                    {{ event?.translation?.title || '' }}
+                                </h1>
+                                <button @click="toggleLike" :disabled="likeLoading || isLiked"
+                                    class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ml-4 shrink-0"
+                                    :class="{
+                                        'bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100': isLiked,
+                                        'bg-gray-100 text-gray-600 hover:bg-pink-50 hover:text-pink-600 border border-gray-300': !isLiked,
+                                    }">
+                                    <svg class="w-6 h-6 transition-transform" :class="{ 'scale-110': isLiked }"
+                                        fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                    <span class="text-base font-semibold">{{ likesCount }}</span>
+                                    <span v-if="likeLoading" class="text-sm animate-pulse">...</span>
+                                </button>
+                            </div>
+
+                            <!-- Like Error -->
+                            <p v-if="likeError"
+                                class="mb-4 text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg text-sm">
+                                {{ likeError }}
+                            </p>
+
+                            <p class="text-lg md:text-xl text-gray-700 mb-10 leading-relaxed">
+                                {{ event?.translation?.description || '' }}
+                            </p>
+
+                            <!-- About -->
+                            <div class="mb-12">
+                                <h2
+                                    class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">
+                                    {{ $t('event.about_event_title') }}
+                                </h2>
+                                <p class="text-gray-700 mb-8 text-lg leading-relaxed">
+                                    {{ event?.translation?.des || '' }}
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Sidebar (1/4) — compact -->
+                        <div
+                            class="bg-gray-50/60 p-6 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+                            <div class="space-y-6">
+
+                                <!-- Event Info -->
+                                <div>
+                                    <h3 class="text-base font-bold text-gray-900 mb-4">
+                                        {{ $t('event.event_info_title') }}
+                                    </h3>
+                                    <div class="space-y-3 text-gray-700 text-sm">
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-[11px] font-bold mt-0.5">FROM</span>
+                                            <div>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.from_date')
+                                                }}</p>
+                                                <p class="font-medium">{{ formatDate(event?.start_date) }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-[11px] font-bold mt-0.5">TO</span>
+                                            <div>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.to_date') }}
+                                                </p>
+                                                <p class="font-medium">{{ formatDate(event?.end_date) }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-[11px] font-bold mt-0.5">TIME</span>
+                                            <div>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.time_label')
+                                                }}</p>
+                                                <p class="font-medium">{{ event?.time || $t('event.time_default') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start gap-2">
+                                            <span class="text-[11px] font-bold mt-0.5">LOC</span>
+                                            <div>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.location')
+                                                }}</p>
+                                                <p class="font-medium">{{ event?.city?.translation?.name ||
+                                                    $t('event.city_default') }}</p>
+                                            </div>
+                                        </div>
+                                        <div v-if="event?.user?.name" class="flex items-start gap-2">
+                                            <span class="text-[11px] font-bold mt-0.5">USER</span>
+                                            <div>
+                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
+                                                }}</p>
+                                                <p class="font-medium">{{ event.user.name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Wishlist -->
+                                <div class="pt-5 border-t border-gray-200 space-y-3">
+                                    <button @click="addToWishlist" :disabled="wishlistLoading || isInWishlist"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 px-5 rounded-lg transition shadow flex items-center justify-center gap-2"
+                                        :class="{ 'opacity-70 cursor-not-allowed': wishlistLoading || isInWishlist }">
+                                        <span v-if="wishlistLoading" class="animate-pulse">{{
+                                            $t('event.adding_to_wishlist') }}</span>
+                                        <template v-else>
+                                            ♥
+                                            {{ isInWishlist ? $t('event.already_in_wishlist') :
+                                                $t('event.add_to_wishlist') }}
+                                        </template>
+                                    </button>
+                                    <p v-if="wishlistError"
+                                        class="text-red-600 text-center text-xs mt-1 bg-red-50 border border-red-200 p-2 rounded-lg">
+                                        {{ wishlistError }}
+                                    </p>
+                                    <p v-if="wishlistSuccess"
+                                        class="text-green-600 text-center text-xs mt-1 bg-green-50 border border-green-200 p-2 rounded-lg">
+                                        {{ $t('event.wishlist_success') }}
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ══════════════════════════════════════════════════════════ -->
+                    <!-- Media Gallery — FULL WIDTH below the details grid          -->
                     <!-- ══════════════════════════════════════════════════════════ -->
 
                     <div class="p-8 md:p-12 border-b border-gray-100">
@@ -214,56 +349,7 @@
                         </div>
                     </div>
 
-                    <!-- ══════════════════════════════════════════════════════════ -->
-                    <!-- Main + Sidebar Grid                                        -->
-                    <!-- ══════════════════════════════════════════════════════════ -->
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-0">
-
-                        <!-- Main Content (3/4) -->
-                        <div class="lg:col-span-3 p-8 md:p-12 lg:p-16">
-
-                            <!-- Title + Like -->
-                            <div class="flex items-center justify-between mb-6">
-                                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                                    {{ event?.translation?.title || '' }}
-                                </h1>
-                                <button @click="toggleLike" :disabled="likeLoading || isLiked"
-                                    class="flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ml-4 shrink-0"
-                                    :class="{
-                                        'bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100': isLiked,
-                                        'bg-gray-100 text-gray-600 hover:bg-pink-50 hover:text-pink-600 border border-gray-300': !isLiked,
-                                    }">
-                                    <svg class="w-6 h-6 transition-transform" :class="{ 'scale-110': isLiked }"
-                                        fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                    </svg>
-                                    <span class="text-base font-semibold">{{ likesCount }}</span>
-                                    <span v-if="likeLoading" class="text-sm animate-pulse">...</span>
-                                </button>
-                            </div>
-
-                            <!-- Like Error -->
-                            <p v-if="likeError"
-                                class="mb-4 text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg text-sm">
-                                {{ likeError }}
-                            </p>
-
-                            <p class="text-lg md:text-xl text-gray-700 mb-10 leading-relaxed">
-                                {{ event?.translation?.description || '' }}
-                            </p>
-
-                            <!-- About -->
-                            <div class="mb-12">
-                                <h2
-                                    class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 border-b border-gray-200 pb-4">
-                                    {{ $t('event.about_event_title') }}
-                                </h2>
-                                <p class="text-gray-700 mb-8 text-lg leading-relaxed">
-                                    {{ event?.translation?.des || '' }}
-                                </p>
-                            </div>
-
+                    <div class="event-lower-content border-t border-gray-100 px-5 py-8 sm:px-8 md:py-10 lg:px-12">
                             <!-- Comments Section -->
                             <div class="comments-section mt-12">
                                 <h2
@@ -280,22 +366,16 @@
 
                                 <!-- Comment List -->
                                 <div v-for="comment in (event?.comments || [])" :key="comment?.id"
-                                    class="comment-box mb-6 bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
+                                    class="comment-box mb-5 bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200">
 
                                     <p class="text-gray-700 text-sm leading-relaxed mb-3">
                                         {{ comment?.translation?.comment || comment?.comment || '' }}
                                     </p>
 
-                                    <div v-if="comment?.images?.length"
-                                        :class="['grid gap-2 mb-4', comment.images.length === 1 ? 'grid-cols-1 max-w-sm' : 'grid-cols-2']">
-                                        <a v-for="image in comment.images.slice(0, 2)" :key="image.id"
-                                            :href="getMediaUrl(image)" target="_blank" rel="noopener noreferrer"
-                                            class="block overflow-hidden rounded-lg bg-gray-100">
-                                            <img :src="getMediaUrl(image)" :alt="$t('commentsPage.attachmentAlt')"
-                                                class="h-32 w-full object-cover" loading="lazy"
-                                                @error="onMediaImageError" />
-                                        </a>
-                                    </div>
+                                    <CommentAttachments
+                                        :images="comment?.images || []"
+                                        :resolve-url="getMediaUrl"
+                                    />
 
                                     <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
                                         <div class="flex items-center gap-2">
@@ -360,56 +440,12 @@
                                         {{ deleteCommentErrors[comment.id] }}
                                     </p>
 
-                                    <!-- Reactions -->
-                                    <div class="flex items-center gap-2.5 flex-wrap mt-1" dir="rtl">
-                                        <button @click="setReaction(comment?.id, 'support')"
-                                            :disabled="comment && reactionLoading[comment.id]" :class="[
-                                                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-                                                comment && commentReactions[comment.id] === 'support'
-                                                    ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
-                                                    : 'bg-white border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-400',
-                                                comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-                                            ]">
-                                            <span class="text-[11px] font-bold">YES</span>
-                                            {{ $t('commentsPage.reactions.support') }}
-                                            <span
-                                                class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                {{ comment?.support_count ?? 0 }}
-                                            </span>
-                                        </button>
-
-                                        <button @click="setReaction(comment?.id, 'neutral')"
-                                            :disabled="comment && reactionLoading[comment.id]" :class="[
-                                                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-                                                comment && commentReactions[comment.id] === 'neutral'
-                                                    ? 'bg-amber-500 border-amber-500 text-white shadow-sm'
-                                                    : 'bg-white border-gray-300 text-gray-700 hover:bg-amber-50 hover:border-amber-400',
-                                                comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-                                            ]">
-                                            <span class="text-[11px] font-bold">MID</span>
-                                            {{ $t('commentsPage.reactions.neutral') }}
-                                            <span
-                                                class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                {{ comment?.neutral_count ?? 0 }}
-                                            </span>
-                                        </button>
-
-                                        <button @click="setReaction(comment?.id, 'exhibitions')"
-                                            :disabled="comment && reactionLoading[comment.id]" :class="[
-                                                'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[110px] justify-center',
-                                                comment && commentReactions[comment.id] === 'exhibitions'
-                                                    ? 'bg-rose-600 border-rose-600 text-white shadow-sm'
-                                                    : 'bg-white border-gray-300 text-gray-700 hover:bg-rose-50 hover:border-rose-400',
-                                                comment && reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-                                            ]">
-                                            <span class="text-[11px] font-bold">NO</span>
-                                            {{ $t('commentsPage.reactions.oppose') }}
-                                            <span
-                                                class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-                                                {{ comment?.exhibitions_count ?? 0 }}
-                                            </span>
-                                        </button>
-                                    </div>
+                                    <CommentReactionButtons
+                                        :comment="comment"
+                                        :selected-reaction="commentReactions[comment.id]"
+                                        :loading="reactionLoading[comment.id]"
+                                        @select="setReaction(comment, $event)"
+                                    />
 
                                     <!-- Reaction Error per comment -->
                                     <p v-if="comment && reactionErrors[comment.id]"
@@ -469,11 +505,11 @@
 
                                 <!-- Add Comment Form -->
                                 <div v-if="isAuthenticated"
-                                    class="comment-form mt-12 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                                    class="comment-form mt-8 bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
                                     <h3 class="text-xl font-bold text-gray-900 mb-6">
                                         {{ $t('event.add_comment_title') }}
                                     </h3>
-                                    <form @submit.prevent="addComment">
+                                    <form @submit.prevent="addComment" class="space-y-4">
                                         <textarea v-model="newComment" rows="4"
                                             class="w-full border border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                             :placeholder="$t('event.comment_placeholder')"
@@ -533,89 +569,6 @@
                                     </RouterLink>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Sidebar (1/4) — compact -->
-                        <div
-                            class="bg-gray-50/60 p-6 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
-                            <div class="space-y-6">
-
-                                <!-- Event Info -->
-                                <div>
-                                    <h3 class="text-base font-bold text-gray-900 mb-4">
-                                        {{ $t('event.event_info_title') }}
-                                    </h3>
-                                    <div class="space-y-3 text-gray-700 text-sm">
-                                        <div class="flex items-start gap-2">
-                                            <span class="text-[11px] font-bold mt-0.5">FROM</span>
-                                            <div>
-                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.from_date')
-                                                }}</p>
-                                                <p class="font-medium">{{ formatDate(event?.start_date) }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start gap-2">
-                                            <span class="text-[11px] font-bold mt-0.5">TO</span>
-                                            <div>
-                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.to_date') }}
-                                                </p>
-                                                <p class="font-medium">{{ formatDate(event?.end_date) }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start gap-2">
-                                            <span class="text-[11px] font-bold mt-0.5">TIME</span>
-                                            <div>
-                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.time_label')
-                                                }}</p>
-                                                <p class="font-medium">{{ event?.time || $t('event.time_default') }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-start gap-2">
-                                            <span class="text-[11px] font-bold mt-0.5">LOC</span>
-                                            <div>
-                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.location')
-                                                }}</p>
-                                                <p class="font-medium">{{ event?.city?.translation?.name ||
-                                                    $t('event.city_default') }}</p>
-                                            </div>
-                                        </div>
-                                        <div v-if="event?.user?.name" class="flex items-start gap-2">
-                                            <span class="text-[11px] font-bold mt-0.5">USER</span>
-                                            <div>
-                                                <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
-                                                }}</p>
-                                                <p class="font-medium">{{ event.user.name }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Wishlist -->
-                                <div class="pt-5 border-t border-gray-200 space-y-3">
-                                    <button @click="addToWishlist" :disabled="wishlistLoading || isInWishlist"
-                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm py-3 px-5 rounded-lg transition shadow flex items-center justify-center gap-2"
-                                        :class="{ 'opacity-70 cursor-not-allowed': wishlistLoading || isInWishlist }">
-                                        <span v-if="wishlistLoading" class="animate-pulse">{{
-                                            $t('event.adding_to_wishlist') }}</span>
-                                        <template v-else>
-                                            ♥
-                                            {{ isInWishlist ? $t('event.already_in_wishlist') :
-                                                $t('event.add_to_wishlist') }}
-                                        </template>
-                                    </button>
-                                    <p v-if="wishlistError"
-                                        class="text-red-600 text-center text-xs mt-1 bg-red-50 border border-red-200 p-2 rounded-lg">
-                                        {{ wishlistError }}
-                                    </p>
-                                    <p v-if="wishlistSuccess"
-                                        class="text-green-600 text-center text-xs mt-1 bg-green-50 border border-green-200 p-2 rounded-lg">
-                                        {{ $t('event.wishlist_success') }}
-                                    </p>
-                                </div>
-
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -785,6 +738,9 @@ import { AuthService } from "../../services/AuthService/AuthService";
 import { LikeService } from "../../services/LikeService/LikeService";
 import { WishlistService } from "../../services/WishlistService/WishlistService";
 import { MediaRequestService } from "../../services/MediaRequestService/MediaRequestService";
+import CommentAttachments from "../../components/comments/CommentAttachments.vue";
+import CommentReactionButtons from "../../components/comments/CommentReactionButtons.vue";
+import { useCommentReactions } from "../../composables/useCommentReactions";
 
 const cartLoading = ref(false);
 const collectionLoading = ref(false);
@@ -836,6 +792,7 @@ const deleteCommentErrors = ref({});
 const refreshEvent = async () => {
     const response = await EventService.getSingleEvent(slug);
     event.value = response?.data?.data || response || null;
+    initializeReactions(event.value?.comments || []);
 };
 
 const ensureEventImagesArray = () => {
@@ -877,15 +834,13 @@ const normalizeUploadedMedia = (payload) => {
 };
 
 // ─── Reactions ────────────────────────────────────────────────────────────────
-const commentReactions = ref({});
-const reactionLoading = ref({});
-const reactionErrors = ref({});
-
-const reactionEndpointMap = {
-    support: "support",
-    exhibitions: "Exhibitions",
-    neutral: "neutral",
-};
+const {
+    reactions: commentReactions,
+    reactionLoading,
+    reactionErrors,
+    initializeReactions,
+    setReaction,
+} = useCommentReactions();
 const cartSuccess = ref(false);
 const cartError = ref("");
 
@@ -1079,49 +1034,6 @@ const addCollectionToCart = async () => {
         };
     } finally {
         collectionLoading.value = false;
-    }
-};
-
-const setReaction = async (commentId, type) => {
-    if (!commentId || reactionLoading.value[commentId]) return;
-    const comment = event.value?.comments?.find((c) => c?.id === commentId);
-    if (!comment) return;
-
-    const previousReaction = commentReactions.value[commentId];
-    const isToggle = previousReaction === type;
-
-    const snap = {
-        support: comment.support_count ?? 0,
-        exhibitions: comment.exhibitions_count ?? 0,
-        neutral: comment.neutral_count ?? 0,
-    };
-
-    commentReactions.value[commentId] = isToggle ? null : type;
-
-    if (isToggle) {
-        comment[`${previousReaction}_count`] = Math.max(0, snap[previousReaction] - 1);
-    } else {
-        if (previousReaction) {
-            comment[`${previousReaction}_count`] = Math.max(0, snap[previousReaction] - 1);
-        }
-        comment[`${type}_count`] = snap[type] + 1;
-    }
-
-    reactionLoading.value[commentId] = true;
-    reactionErrors.value[commentId] = "";
-
-    try {
-        const endpoint = reactionEndpointMap[type];
-        await CommentService.reactToComment(commentId, endpoint);
-    } catch (err) {
-        commentReactions.value[commentId] = previousReaction;
-        comment.support_count = snap.support;
-        comment.exhibitions_count = snap.exhibitions;
-        comment.neutral_count = snap.neutral;
-        reactionErrors.value[commentId] = extractErrorMessage(err);
-        setTimeout(() => (reactionErrors.value[commentId] = ""), 5000);
-    } finally {
-        reactionLoading.value[commentId] = false;
     }
 };
 
@@ -1685,7 +1597,9 @@ onMounted(async () => {
 }
 
 .comments-section {
-    margin-bottom: 40px;
+    width: 100%;
+    max-width: 1040px;
+    margin: 0 auto 40px;
 }
 
 .comments-title {
@@ -1697,17 +1611,18 @@ onMounted(async () => {
 }
 
 .comment-box {
-    background: #f9fafb;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    margin-top: 10px;
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 18px;
+    border: 1px solid #e5edf6;
+    margin-top: 0.75rem;
     position: relative;
-    transition: 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .comment-box:hover {
-    background: #f3f4f6;
+    background: #fff;
+    border-color: #cfe0f3;
 }
 
 .comment-content {
@@ -1761,7 +1676,7 @@ onMounted(async () => {
 }
 
 .comment-form {
-    margin-top: 30px;
+    margin-top: 2rem;
 }
 
 .form-title {
@@ -1877,5 +1792,21 @@ onMounted(async () => {
 .view-all-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 14px 30px rgba(22, 119, 255, 0.20);
+}
+
+@media (max-width: 640px) {
+    .event-lower-content {
+        padding-inline: 1rem;
+    }
+
+    .comment-box {
+        padding: 1rem;
+        border-radius: 16px;
+    }
+
+    .comment-content,
+    .comment-header {
+        min-width: 0;
+    }
 }
 </style>

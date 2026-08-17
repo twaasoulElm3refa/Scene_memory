@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CityNomination;
 use App\Models\Events;
 use App\Repositories\Contracts\Cities\CityRepositoryInterface;
+use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use Carbon\Carbon;
@@ -29,7 +30,8 @@ class EventController extends Controller
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly CityRepositoryInterface $cityRepository,
-        private readonly EventImageRepositoryInterface $eventImageRepository
+        private readonly EventImageRepositoryInterface $eventImageRepository,
+        private readonly CommentRepositoryInterface $commentRepository
     ) {
     }
 
@@ -318,7 +320,7 @@ class EventController extends Controller
         ]);
     }
 
-    public function single()
+    public function single(Request $request)
     {
         $slug = request('slug');
         if (! $slug || ! is_string($slug)) {
@@ -333,8 +335,17 @@ class EventController extends Controller
         if (! $event) {
             return $this->error('Event not found', 404);
         }
+        $event = clone $event;
+        $event->setRelation(
+            'comments',
+            $event->comments->map(fn ($comment) => clone $comment)
+        );
         $this->eventRepository->firstOrCreateView($event->id, (string) request()->getClientIp());
         $this->normalizeEventMedia($event);
+        $this->commentRepository->attachCurrentUserReactions(
+            $event->comments ?? [],
+            $request->user('sanctum')?->id
+        );
 
         return $this->success($event, 'Event data');
     }

@@ -3,6 +3,9 @@ import { computed, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import CommentService from '../../services/CommentService/CommentService';
+import CommentAttachments from '../../components/comments/CommentAttachments.vue';
+import CommentReactionButtons from '../../components/comments/CommentReactionButtons.vue';
+import { useCommentReactions } from '../../composables/useCommentReactions';
 
 const route = useRoute();
 const { t, locale } = useI18n();
@@ -15,8 +18,13 @@ const pagination = ref({
 const loading = ref(false);
 const errorMsg = ref(null);
 const slug = route.params.slug;
-const reactions = ref({});
-const reactionLoading = ref({});
+const {
+  reactions,
+  reactionLoading,
+  reactionErrors,
+  initializeReactions,
+  setReaction,
+} = useCommentReactions();
 
 const getCommentImageUrl = (image) => {
   const rawPath = image?.url || image?.path || '';
@@ -92,6 +100,7 @@ const fetchComments = async (page = 1) => {
   try {
     const response = await CommentService.getAllComments(slug, page);
     comments.value = response.data.data || [];
+    initializeReactions(comments.value);
     pagination.value = {
       current_page: response.data.current_page || 1,
       last_page: response.data.last_page || 1,
@@ -115,58 +124,10 @@ const goToPage = (page) => {
   fetchComments(page);
 };
 
-const reactionEndpointMap = {
-  support: 'support',
-  exhibitions: 'Exhibitions',
-  neutral: 'neutral',
-};
-
-const setReaction = async (commentId, type) => {
-  if (reactionLoading.value[commentId]) return;
-  const commentIndex = comments.value.findIndex(c => c.id === commentId);
-  if (commentIndex === -1) return;
-  const comment = comments.value[commentIndex];
-  const previousReaction = reactions.value[commentId];
-  const isToggle = previousReaction === type;
-
-  const oldReaction = previousReaction;
-  const oldSupport = comment.support_count || 0;
-  const oldExhibitions = comment.exhibitions_count || 0;
-  const oldNeutral = comment.neutral_count || 0;
-
-  reactions.value[commentId] = isToggle ? null : type;
-
-  if (isToggle) {
-    if (previousReaction === 'support') comment.support_count = Math.max(0, oldSupport - 1);
-    if (previousReaction === 'exhibitions') comment.exhibitions_count = Math.max(0, oldExhibitions - 1);
-    if (previousReaction === 'neutral') comment.neutral_count = Math.max(0, oldNeutral - 1);
-  } else {
-    if (previousReaction === 'support') comment.support_count = Math.max(0, oldSupport - 1);
-    if (previousReaction === 'exhibitions') comment.exhibitions_count = Math.max(0, oldExhibitions - 1);
-    if (previousReaction === 'neutral') comment.neutral_count = Math.max(0, oldNeutral - 1);
-    if (type === 'support') comment.support_count = (oldSupport + 1);
-    if (type === 'exhibitions') comment.exhibitions_count = (oldExhibitions + 1);
-    if (type === 'neutral') comment.neutral_count = (oldNeutral + 1);
-  }
-
-  reactionLoading.value[commentId] = true;
-  try {
-    const endpoint = reactionEndpointMap[type];
-    await CommentService.reactToComment(commentId, endpoint);
-  } catch (error) {
-    console.error('فشل في إرسال الـ reaction:', error);
-    reactions.value[commentId] = oldReaction;
-    comment.support_count = oldSupport;
-    comment.exhibitions_count = oldExhibitions;
-    comment.neutral_count = oldNeutral;
-  } finally {
-    reactionLoading.value[commentId] = false;
-  }
-};
 </script>
 
 <template>
-<div class="scemory-page comments-page comments-section max-w-2xl mx-auto px-4 py-8" dir="rtl">
+<div class="scemory-page comments-page comments-section max-w-5xl mx-auto px-4 py-6 sm:px-6 sm:py-8" dir="rtl">
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-6">
@@ -216,32 +177,13 @@ const setReaction = async (commentId, type) => {
       <li
         v-for="comment in comments"
         :key="comment.id"
-        class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200"
+        class="comment-card bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-indigo-100 transition-all duration-200"
       >
         <p class="text-gray-700 text-sm leading-relaxed mb-3">
           {{ comment.translation?.comment || comment.comment }}
         </p>
 
-        <div
-          v-if="comment.images?.length"
-          :class="['grid gap-2 mb-4', comment.images.length === 1 ? 'grid-cols-1 max-w-sm' : 'grid-cols-2']"
-        >
-          <a
-            v-for="image in comment.images.slice(0, 2)"
-            :key="image.id"
-            :href="getCommentImageUrl(image)"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="block overflow-hidden rounded-lg bg-gray-100"
-          >
-            <img
-              :src="getCommentImageUrl(image)"
-              :alt="$t('commentsPage.attachmentAlt')"
-              class="h-32 w-full object-cover"
-              loading="lazy"
-            />
-          </a>
-        </div>
+        <CommentAttachments :images="comment.images || []" :resolve-url="getCommentImageUrl" />
 
         <div class="flex items-center justify-between mb-4 text-xs text-gray-500">
           <div class="flex items-center gap-2">
@@ -269,65 +211,15 @@ const setReaction = async (commentId, type) => {
           </div>
         </div>
 
-        <!-- Reaction Buttons -->
-        <div class="flex items-center gap-2.5 flex-wrap mt-1">
-          <!-- موافق -->
-          <button
-            @click="setReaction(comment.id, 'support')"
-            :disabled="reactionLoading[comment.id]"
-            :class="[
-              'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-              reactions[comment.id] === 'support'
-                ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-emerald-50 hover:border-emerald-400',
-              reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-            ]"
-          >
-            <span class="text-[11px] font-bold">YES</span>
-            {{ $t('commentsPage.reactions.support') }}
-            <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-              {{ comment.support_count ?? 0 }}
-            </span>
-          </button>
-
-          <!-- محايد -->
-          <button
-            @click="setReaction(comment.id, 'neutral')"
-            :disabled="reactionLoading[comment.id]"
-            :class="[
-              'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[90px] justify-center',
-              reactions[comment.id] === 'neutral'
-                ? 'bg-amber-500 border-amber-500 text-white shadow-sm'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-amber-50 hover:border-amber-400',
-              reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-            ]"
-          >
-            <span class="text-[11px] font-bold">MID</span>
-            {{ $t('commentsPage.reactions.neutral') }}
-            <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-              {{ comment.neutral_count ?? 0 }}
-            </span>
-          </button>
-
-          <!-- غير موافق -->
-          <button
-            @click="setReaction(comment.id, 'exhibitions')"
-            :disabled="reactionLoading[comment.id]"
-            :class="[
-              'flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all duration-150 min-w-[110px] justify-center',
-              reactions[comment.id] === 'exhibitions'
-                ? 'bg-rose-600 border-rose-600 text-white shadow-sm'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-rose-50 hover:border-rose-400',
-              reactionLoading[comment.id] ? 'opacity-60 cursor-not-allowed' : ''
-            ]"
-          >
-            <span class="text-[11px] font-bold">NO</span>
-            {{ $t('commentsPage.reactions.oppose') }}
-            <span class="text-[11px] font-semibold bg-white/30 px-1.5 py-0.5 rounded ml-1">
-              {{ comment.exhibitions_count ?? 0 }}
-            </span>
-          </button>
-        </div>
+        <CommentReactionButtons
+          :comment="comment"
+          :selected-reaction="reactions[comment.id]"
+          :loading="reactionLoading[comment.id]"
+          @select="setReaction(comment, $event)"
+        />
+        <p v-if="reactionErrors[comment.id]" class="mt-2 text-xs text-red-600">
+          {{ reactionErrors[comment.id] }}
+        </p>
       </li>
     </ul>
 

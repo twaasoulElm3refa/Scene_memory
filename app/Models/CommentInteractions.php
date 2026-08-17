@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CommentInteractions extends Model
 {
-    protected $table = "comment_interactions";
+    use SoftDeletes;
+
+    protected $table = 'comment_interactions';
+
     protected $guarded = [];
 
     public function user()
@@ -16,6 +20,6 @@ class CommentInteractions extends Model
 
     public function comments()
     {
-        return $this->belongsTo(Comments::class,'comment_id');
+        return $this->belongsTo(Comments::class, 'comment_id');
     }
 }

@@ -135,7 +135,7 @@ class CommentController extends Controller
         }
     }
 
-    public function allPaginated()
+    public function allPaginated(Request $request)
     {
         try {
             $event = $this->eventRepository->findBySlugOrFail((string) request('slug'));
@@ -145,6 +145,14 @@ class CommentController extends Controller
             $comments = Cache::tags(['comments'])->remember($cacheKey, $this->cacheTime, function () use ($event) {
                 return $this->commentRepository->paginatedByEventId((int) $event->id, 5);
             });
+            $comments = clone $comments;
+            $comments->setCollection(
+                $comments->getCollection()->map(fn ($comment) => clone $comment)
+            );
+            $this->commentRepository->attachCurrentUserReactions(
+                $comments->getCollection(),
+                $request->user('sanctum')?->id
+            );
 
             return $this->success($comments, 'All comments');
         } catch (Throwable $th) {
