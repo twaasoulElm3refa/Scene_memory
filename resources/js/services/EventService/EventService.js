@@ -14,8 +14,8 @@ export const EventService = {
     return api.get("/events/trending");
   },
 
-  getAll(page = 1, isReal = null) {
-    const params = { page };
+  getAll(page = 1, isReal = null, filters = {}) {
+    const params = { ...filters, page };
 
     if (isReal === true || isReal === 1 || isReal === "1" || isReal === "true" || isReal === "real") {
       params.is_real = 1;
@@ -26,8 +26,8 @@ export const EventService = {
     return api.get("/events", { params });
   },
 
-  getHistorical(page = 1) {
-    return api.get("/events/historical", { params: { page } });
+  getHistorical(page = 1, filters = {}) {
+    return api.get("/events/historical", { params: { ...filters, page } });
   },
 
   getSingleEvent(slug) {

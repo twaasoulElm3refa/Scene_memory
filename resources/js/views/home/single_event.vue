@@ -52,7 +52,7 @@
                     <!-- ══════════════════════════════════════════════════════════ -->
                     <!-- Main + Sidebar Grid                                        -->
                     <!-- ══════════════════════════════════════════════════════════ -->
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-0">
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-0 items-start">
 
                         <!-- Main Content (3/4) -->
                         <div class="lg:col-span-3 p-8 md:p-12 lg:p-16">
@@ -103,7 +103,7 @@
 
                         <!-- Sidebar (1/4) — compact -->
                         <div
-                            class="bg-gray-50/60 p-6 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">
+                            class="bg-gray-50/60 p-6 border-t lg:border-t-0 lg:border-l border-gray-200 lg:sticky lg:top-24 lg:self-start lg:h-auto">
                             <div class="space-y-6">
 
                                 <!-- Event Info -->

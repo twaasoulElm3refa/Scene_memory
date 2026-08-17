@@ -17,6 +17,7 @@ import zh from "./i18n/zh.json";
 import fa from "./i18n/fa.json";
 import ur from "./i18n/ur.json";
 import tr from "./i18n/tr.json";
+import eventDirectoryMessages from "./i18n/eventDirectory";
 
 // styles
 import "../css/app.css";
@@ -48,6 +49,13 @@ const messages = {
     ur,
     tr,
 };
+
+Object.entries(eventDirectoryMessages).forEach(([lang, directory]) => {
+    messages[lang].events = {
+        ...messages[lang].events,
+        directory,
+    };
+});
 
 const DEFAULT_LANG = "en";
 const RTL_LANGS = ["ar", "fa", "ur"];

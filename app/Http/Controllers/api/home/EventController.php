@@ -35,11 +35,11 @@ class EventController extends Controller
     ) {
     }
 
-    public function all()
+    public function all(Request $request)
     {
-        $page = request()->get('page', 1);
+        $page = max(1, $request->integer('page', 1));
         $perPage = 8;
-        $isRealValue = request()->get('is_real');
+        $isRealValue = $request->query('is_real');
         $normalizedIsReal = null;
 
         if ($isRealValue !== null && $isRealValue !== '' && $isRealValue !== 'all') {
@@ -56,11 +56,14 @@ class EventController extends Controller
             }
         }
 
-        $isRealCacheValue = $normalizedIsReal === null ? 'all' : ($normalizedIsReal ? '1' : '0');
-        $cacheKey = "events_page_{$page}_per_{$perPage}_is_real_{$isRealCacheValue}_".app()->getLocale();
+        $filters = $this->directoryFilters($request);
+        $cacheKey = $this->directoryCacheKey('normal', $page, $perPage, [
+            ...$filters,
+            'is_real' => $normalizedIsReal,
+        ]);
 
-        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage, $normalizedIsReal) {
-            return $this->eventRepository->allActivePaginated($perPage, $normalizedIsReal);
+        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage, $normalizedIsReal, $filters) {
+            return $this->eventRepository->allActivePaginated($perPage, $normalizedIsReal, $filters);
         });
 
         return $this->success($events, 'All events');
@@ -77,18 +80,60 @@ class EventController extends Controller
         return $this->success($events, 'Trending events');
     }
 
-    public function historical()
+    public function historical(Request $request)
     {
-        $page = request()->get('page', 1);
+        $page = max(1, $request->integer('page', 1));
         $perPage = 8;
+        $filters = $this->directoryFilters($request);
 
-        $cacheKey = "events_historical_page_{$page}_per_{$perPage}_".app()->getLocale();
+        $cacheKey = $this->directoryCacheKey('historical', $page, $perPage, $filters);
 
-        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage) {
-            return $this->eventRepository->historicalActivePaginated($perPage);
+        $events = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($perPage, $filters) {
+            return $this->eventRepository->historicalActivePaginated($perPage, $filters);
         });
 
         return $this->success($events, 'All events');
+    }
+
+    private function directoryFilters(Request $request): array
+    {
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:255'],
+            'country_id' => ['nullable', 'integer', 'min:1'],
+            'city_id' => ['nullable', 'integer', 'min:1'],
+            'category_id' => ['nullable', 'integer', 'min:1'],
+            'sub_category_id' => ['nullable', 'integer', 'min:1'],
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date', 'after_or_equal:from'],
+            'sort' => ['nullable', 'in:newest,oldest,title'],
+            'page' => ['nullable', 'integer', 'min:1'],
+        ]);
+
+        return [
+            'q' => trim((string) ($validated['q'] ?? '')),
+            'country_id' => $validated['country_id'] ?? null,
+            'city_id' => $validated['city_id'] ?? null,
+            'category_id' => $validated['category_id'] ?? null,
+            'sub_category_id' => $validated['sub_category_id'] ?? null,
+            'from' => $validated['from'] ?? null,
+            'to' => $validated['to'] ?? null,
+            'sort' => $validated['sort'] ?? 'newest',
+        ];
+    }
+
+    private function directoryCacheKey(string $mode, int $page, int $perPage, array $filters): string
+    {
+        ksort($filters);
+
+        $identity = json_encode([
+            'locale' => app()->getLocale(),
+            'mode' => $mode,
+            'page' => $page,
+            'per_page' => $perPage,
+            'filters' => $filters,
+        ], JSON_THROW_ON_ERROR);
+
+        return "events_directory_{$mode}_".hash('sha256', $identity);
     }
 
     public function index(Request $request)

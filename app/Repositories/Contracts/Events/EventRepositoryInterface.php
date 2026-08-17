@@ -16,8 +16,8 @@ interface EventRepositoryInterface
     public function countByUserId(int $userId): int;
     public function countByCityIds($cityIds): int;
     public function whereInCityIds($cityIds);
-    public function allActivePaginated(int $perPage, ?bool $isReal = null);
-    public function historicalActivePaginated(int $perPage);
+    public function allActivePaginated(int $perPage, ?bool $isReal = null, array $filters = []);
+    public function historicalActivePaginated(int $perPage, array $filters = []);
     public function filteredActive(array $filters);
     public function randomActive(int $take = 8);
     public function gateEventsByCityIds($cityIds);

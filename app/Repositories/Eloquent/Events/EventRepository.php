@@ -6,6 +6,7 @@ use App\Models\EventViews;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class EventRepository implements EventRepositoryInterface
@@ -84,28 +85,83 @@ class EventRepository implements EventRepositoryInterface
         return Events::whereIn('city_id', $cityIds);
     }
 
-    public function allActivePaginated(int $perPage, ?bool $isReal = null)
+    public function allActivePaginated(int $perPage, ?bool $isReal = null, array $filters = [])
     {
-        $query = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,preview_url'])
+        $query = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage'])
             ->where('is_active', 1)
-            ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id','is_real')
-            ->orderBy('created_at', 'desc');
+            ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id', 'is_real', 'is_historical', 'created_at');
 
         if ($isReal !== null) {
             $query->where('is_real', $isReal ? 1 : 0);
         }
 
-        return $query->paginate($perPage);
+        return $this->applyDirectoryFilters($query, $filters)->paginate($perPage);
     }
 
-    public function historicalActivePaginated(int $perPage)
+    public function historicalActivePaginated(int $perPage, array $filters = [])
     {
-        return Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url'])
+        $query = Events::with(['city.translation', 'sub_categorey.translation', 'translation', 'firstImage'])
             ->where('is_active', 1)
             ->where('is_historical', 1)
-            ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id')
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->select('id', 'slug', 'title', 'start_date', 'city_id', 'sub_categorey_id', 'is_real', 'is_historical', 'created_at');
+
+        return $this->applyDirectoryFilters($query, $filters)->paginate($perPage);
+    }
+
+    private function applyDirectoryFilters(Builder $query, array $filters): Builder
+    {
+        $search = trim((string) ($filters['q'] ?? ''));
+        $countryId = $filters['country_id'] ?? null;
+        $cityId = $filters['city_id'] ?? null;
+        $categoryId = $filters['category_id'] ?? null;
+        $subCategoryId = $filters['sub_category_id'] ?? null;
+        $from = $filters['from'] ?? null;
+        $to = $filters['to'] ?? null;
+
+        if ($search !== '') {
+            $likeSearch = '%'.str_replace(['%', '_'], ['\\%', '\\_'], $search).'%';
+
+            $query->where(function ($eventQuery) use ($likeSearch) {
+                $eventQuery->where('title', 'like', $likeSearch)
+                    ->orWhereHas('translation', function ($translationQuery) use ($likeSearch) {
+                        $translationQuery->where('title', 'like', $likeSearch);
+                    });
+            });
+        }
+
+        if ($countryId) {
+            $query->whereHas('city', function ($cityQuery) use ($countryId) {
+                $cityQuery->where('country_id', (int) $countryId);
+            });
+        }
+
+        if ($cityId) {
+            $query->where('city_id', (int) $cityId);
+        }
+
+        if ($categoryId) {
+            $query->whereHas('sub_categorey', function ($categoryQuery) use ($categoryId) {
+                $categoryQuery->where('category_id', (int) $categoryId);
+            });
+        }
+
+        if ($subCategoryId) {
+            $query->where('sub_categorey_id', (int) $subCategoryId);
+        }
+
+        if ($from) {
+            $query->whereDate('start_date', '>=', $from);
+        }
+
+        if ($to) {
+            $query->whereDate('start_date', '<=', $to);
+        }
+
+        return match ($filters['sort'] ?? 'newest') {
+            'oldest' => $query->orderByRaw('start_date IS NULL ASC')->orderBy('start_date')->orderBy('id'),
+            'title' => $query->orderByRaw('title IS NULL ASC')->orderBy('title')->orderBy('id'),
+            default => $query->orderByRaw('start_date IS NULL ASC')->orderByDesc('start_date')->orderByDesc('id'),
+        };
     }
 
     public function filteredActive(array $filters, int $perPage = 20, int $page = 1)
