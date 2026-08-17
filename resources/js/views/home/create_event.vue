@@ -493,6 +493,13 @@ import { CategoryService } from "../../services/CategoryService/CategoryService"
 import { EventService } from "../../services/EventService/EventService";
 import { TagService } from "../../services/TagService/TagService";
 
+const props = defineProps({
+    historical: {
+        type: Boolean,
+        default: false,
+    },
+});
+
 const MAX_MEDIA = 8;
 
 const { t, te } = useI18n();
@@ -919,6 +926,7 @@ async function createEvent() {
 
     // is_real: {{ $t('eventForm.eventType') }}
     fd.append("is_real", form.value.is_real ? "1" : "0");
+    if (props.historical) fd.append("is_historical", "1");
     fd.append("photography_type", form.value.photography_type);
     fd.append("title", form.value.title);
     fd.append("description", form.value.description);
@@ -943,13 +951,21 @@ async function createEvent() {
     form.value.media_items.forEach((item) => appendPhotoFields(fd, item));
 
     try {
-        await EventService.createUser(fd);
+        const createRequest = props.historical
+            ? EventService.createHistoricUser
+            : EventService.createUser;
 
-        alert(t("eventForm.success.created"));
+        await createRequest(fd);
+
+        alert(t(props.historical ? "eventForm.success.historicalCreated" : "eventForm.success.created"));
         window.location.href = "/";
     } catch (err) {
         console.error(err);
-        alert(t("eventForm.errors.createFailed") + " " + (err.response?.data?.message || t("common.unknownError")));
+        const errorKey = props.historical
+            ? "eventForm.errors.historicalCreateFailed"
+            : "eventForm.errors.createFailed";
+
+        alert(t(errorKey) + " " + (err.response?.data?.message || t("common.unknownError")));
     } finally {
         loading.value = false;
     }

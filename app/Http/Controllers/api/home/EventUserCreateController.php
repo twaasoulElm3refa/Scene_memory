@@ -38,10 +38,21 @@ class EventUserCreateController extends Controller
 
     public function create(EventsRequest $request)
     {
+        return $this->createEvent($request, false);
+    }
+
+    public function historic(EventsRequest $request)
+    {
+        return $this->createEvent($request, true);
+    }
+
+    private function createEvent(EventsRequest $request, bool $isHistorical)
+    {
         $photoValidationResults = $this->validateUserPhotoPayload($request);
         $data = $request->validated();
         // is_real: normalize boolean from FormData
         $data['is_real'] = $request->boolean('is_real');
+        $data['is_historical'] = $isHistorical;
         $this->stripUploadOnlyData($data);
         $imageJobs = [];
         $videoJobs = [];
@@ -69,6 +80,7 @@ class EventUserCreateController extends Controller
                     foreach ($uploadedFiles as $index => $file) {
                         if (! $file instanceof UploadedFile) {
                             \Log::error('Invalid uploaded item in urls', ['type' => gettype($file)]);
+
                             continue;
                         }
                         $mime = (string) $file->getMimeType();
@@ -94,6 +106,7 @@ class EventUserCreateController extends Controller
                                     'name' => $file->getClientOriginalName(),
                                     'mime' => $mime,
                                 ]);
+
                                 continue;
                             }
                             $manualPrice = $request->input("media_prices.$index");
@@ -139,160 +152,17 @@ class EventUserCreateController extends Controller
                         }
                     }
                 }
+
                 return $event;
             });
             $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
-            $this->clearEventsCache($event->slug);
-            return $this->success(
-                $event->load('translations', 'photos'),
-                'Event Created Successfully'
-            );
-        } catch (\Throwable $th) {
-            \Log::error('Event create failed', [
-                'message' => $th->getMessage(),
-                'file' => $th->getFile(),
-                'line' => $th->getLine(),
-                'trace' => $th->getTraceAsString(),
-            ]);
-            return $this->error($th->getMessage());
-        }
-    }
-
-    public function historic(EventsRequest $request)
-    {
-        $photoValidationResults = $this->validateUserPhotoPayload($request);
-        $data = $request->validated();
-        $this->stripUploadOnlyData($data);
-        $imageJobs = [];
-        $videoJobs = [];
-
-        try {
-            $event = DB::transaction(function () use (
-                $data,
-                $request,
-                $photoValidationResults,
-                &$imageJobs,
-                &$videoJobs
-            ) {
-                // لاحظ: مش محتاجين $imageAnalysisService جوه الـ transaction دلوقتي
-                $data['user_id'] = auth()->id();
-                $data['is_active'] = 0;
-                $data['is_historical'] = 1;
-
-                $event = $this->eventRepository->create($data);
-
-                $this->requestRepository->createEventRequest(['event_id' => $event->id]);
-                $event->update(['slug' => 'event'.'-'.Str::slug($data['title']).'-'.$event->id]);
-                $event->translations()->create([
-                    'locale' => 'ar',
-                    'title' => $data['title'],
-                    'description' => $data['description'],
-                ]);
-
-                $this->syncEventTags($event->id, $request);
-
-                $uploadedFiles = $this->uploadedMediaFiles($request);
-
-                if (! empty($uploadedFiles)) {
-                    foreach ($uploadedFiles as $index => $file) {
-                        if (! $file instanceof UploadedFile) {
-                            \Log::error('Invalid uploaded item in urls', ['type' => gettype($file)]);
-
-                            continue;
-                        }
-
-                        $mime = (string) $file->getMimeType();
-
-                        $supportedImageMimes = [
-                            'image/jpeg',
-                            'image/jpg',
-                            'image/png',
-                            'image/webp',
-                            'image/gif',
-                            'image/bmp',
-                            'image/x-ms-bmp',
-                            'image/avif',
-                            'image/heic',
-                            'image/heif',
-                            'image/tiff',
-                            'image/x-tiff',
-                        ];
-
-                        if (in_array($mime, $supportedImageMimes, true)) {
-                            // ✅ بس نخزن temp ونـ dispatch — مفيش processing هنا
-                            $tempPath = $file->store('images_temp', 'public');
-
-                            if (! $tempPath || trim($tempPath) === '') {
-                                \Log::error('Image temp store failed', [
-                                    'event_id' => $event->id,
-                                    'name' => $file->getClientOriginalName(),
-                                    'mime' => $mime,
-                                ]);
-
-                                continue;
-                            }
-
-                            $manualPrice = $request->input("media_prices.$index");
-                            $manualPrice = is_numeric($manualPrice) && (float) $manualPrice > 0
-                                ? (float) $manualPrice
-                                : 0;
-                            $photoMetadata = $this->photoMetadataForIndex(
-                                $request,
-                                $index,
-                                $photoValidationResults[$index] ?? null
-                            );
-
-                            \Log::info('Preparing ProcessEventImageJob', [
-                                'event_id' => $event->id,
-                                'temp_path' => $tempPath,
-                                'manual_price' => $manualPrice,
-                                'file_name' => $file->getClientOriginalName(),
-                            ]);
-
-                            $imageJobs[] = new ProcessEventImageJob(
-                                $event->id,
-                                $tempPath,
-                                $manualPrice,
-                                $photoMetadata
-                            );
-
-                        } elseif (str_starts_with($mime, 'video/')) {
-                            try {
-                                $path = $file->store('videos_temp', 'public');
-                                $videoJobs[] = new ProcessEventVideoJob($event->id, $path);
-                            } catch (\Throwable $e) {
-                                \Log::error('Video processing dispatch failed', [
-                                    'name' => $file->getClientOriginalName(),
-                                    'mime' => $mime,
-                                    'message' => $e->getMessage(),
-                                    'file' => $e->getFile(),
-                                    'line' => $e->getLine(),
-                                ]);
-                                throw $e;
-                            }
-                        } else {
-                            \Log::warning('Unsupported upload type skipped', [
-                                'name' => $file->getClientOriginalName(),
-                                'mime' => $mime,
-                            ]);
-                        }
-                    }
-                }
-
-                return $event;
-            });
-
-            $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
-            TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
-
             $this->clearEventsCache($event->slug);
 
             return $this->success(
                 $event->load('translations', 'photos'),
                 'Event Created Successfully'
             );
-
         } catch (\Throwable $th) {
             \Log::error('Event create failed', [
                 'message' => $th->getMessage(),

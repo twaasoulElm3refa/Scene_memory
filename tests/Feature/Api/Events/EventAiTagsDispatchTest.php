@@ -5,7 +5,10 @@ namespace Tests\Feature\Api\Events;
 use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\TranslateEventJob;
+use App\Models\Tags;
 use App\Models\User;
+use App\Services\ImageAnalysisService;
+use App\Services\TagResolverService;
 use Illuminate\Bus\Batch;
 use Illuminate\Bus\PendingBatch;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -44,15 +47,20 @@ class EventAiTagsDispatchTest extends TestCase
 
     public function test_create_dispatches_an_image_batch_and_ai_once_from_its_finally_callback(): void
     {
-        $this->assertEndpointDispatchesBatch('/api/v1/events/create/user', false);
+        $this->assertEndpointDispatchesBatch('/api/v1/events/create/user', false, true);
     }
 
-    public function test_historic_dispatches_an_image_batch_and_ai_once_from_its_finally_callback(): void
+    public function test_historic_public_event_dispatches_the_same_pipeline(): void
     {
-        $this->assertEndpointDispatchesBatch('/api/v1/events/historic/user', true);
+        $this->assertEndpointDispatchesBatch('/api/v1/events/historic/user', true, true);
     }
 
-    private function assertEndpointDispatchesBatch(string $uri, bool $historical): void
+    public function test_historic_personal_event_preserves_is_real_and_dispatches_the_same_pipeline(): void
+    {
+        $this->assertEndpointDispatchesBatch('/api/v1/events/historic/user', true, false);
+    }
+
+    private function assertEndpointDispatchesBatch(string $uri, bool $historical, bool $isReal): void
     {
         Bus::fake();
 
@@ -84,6 +92,16 @@ class EventAiTagsDispatchTest extends TestCase
             'created_at' => $now,
             'updated_at' => $now,
         ]);
+        $existingEventTag = Tags::create([
+            'name' => 'Existing event tag',
+            'slug' => 'existing-event-tag',
+            'mode' => 'user',
+        ]);
+        $existingPhotoTag = Tags::create([
+            'name' => 'Existing photo tag',
+            'slug' => 'existing-photo-tag',
+            'mode' => 'user',
+        ]);
         $testTransactionLevel = DB::transactionLevel();
 
         $response = $this->post($uri, [
@@ -91,6 +109,8 @@ class EventAiTagsDispatchTest extends TestCase
             'description' => 'The response must not call OpenRouter.',
             'city_id' => $cityId,
             'sub_categorey_id' => $subCategoryId,
+            'is_real' => $isReal ? '1' : '0',
+            'is_historical' => $historical ? '0' : '1',
             'photography_type' => 'normal',
             'urls' => [UploadedFile::fake()->createWithContent(
                 'event.png',
@@ -99,13 +119,18 @@ class EventAiTagsDispatchTest extends TestCase
                 )
             )],
             'start_date' => now()->toDateString(),
+            'end_date' => now()->addDay()->toDateString(),
+            'time' => '09:30',
+            'lattitude' => '30.0444',
+            'langitude' => '31.2357',
             'photo_descriptions' => ['Manual photo description'],
             'photo_tags_json' => [json_encode([
+                'tags_id' => [$existingPhotoTag->id],
                 'new_tags' => ['Manual photo tag'],
-                'mode' => 'ai',
             ])],
+            'media_prices' => ['25.50'],
+            'tags_id' => [$existingEventTag->id],
             'new_tags' => ['Manual event tag'],
-            'mode' => 'ai',
         ]);
 
         $response->assertOk();
@@ -113,6 +138,18 @@ class EventAiTagsDispatchTest extends TestCase
         $this->assertDatabaseHas('events', [
             'id' => $eventId,
             'is_historical' => $historical ? 1 : 0,
+            'is_real' => $isReal ? 1 : 0,
+            'lattitude' => '30.0444',
+            'langitude' => '31.2357',
+        ]);
+        $this->assertSame("event-queued-event{$eventId}", $response->json('data.slug'));
+        $this->assertIsArray($response->json('data.translations'));
+        $this->assertIsArray($response->json('data.photos'));
+        $this->assertDatabaseHas('event_request_creates', ['event_id' => $eventId]);
+        $this->assertDatabaseHas('event_translations', [
+            'event_id' => $eventId,
+            'locale' => 'ar',
+            'title' => 'Queued event',
         ]);
         $this->assertDatabaseHas('tags', [
             'name' => 'Manual event tag',
@@ -129,18 +166,49 @@ class EventAiTagsDispatchTest extends TestCase
         $this->assertDatabaseMissing('tags', [
             'name' => 'Manual photo tag',
             'mode' => 'ai',
+        ]);
+        $manualEventTagId = (int) Tags::query()
+            ->where('name', 'Manual event tag')
+            ->where('mode', 'user')
+            ->value('id');
+        $manualPhotoTagId = (int) Tags::query()
+            ->where('name', 'Manual photo tag')
+            ->where('mode', 'user')
+            ->value('id');
+        $this->assertDatabaseHas('event__tags', [
+            'event_id' => $eventId,
+            'tag_id' => $existingEventTag->id,
+            'deleted_at' => null,
+        ]);
+        $this->assertDatabaseHas('event__tags', [
+            'event_id' => $eventId,
+            'tag_id' => $manualEventTagId,
+            'deleted_at' => null,
         ]);
 
         $finallyCallback = null;
+        $capturedImageJob = null;
 
         Bus::assertBatched(function (PendingBatch $batch) use (
             $eventId,
             $testTransactionLevel,
-            &$finallyCallback
+            $existingPhotoTag,
+            $manualPhotoTagId,
+            &$finallyCallback,
+            &$capturedImageJob
         ) {
             $this->assertSame("event-images:{$eventId}", $batch->name);
             $this->assertCount(1, $batch->jobs);
-            $this->assertInstanceOf(ProcessEventImageJob::class, $batch->jobs->first());
+            $imageJob = $batch->jobs->first();
+            $this->assertInstanceOf(ProcessEventImageJob::class, $imageJob);
+            $this->assertSame($eventId, $imageJob->eventId);
+            $this->assertSame(25.5, $imageJob->manualPrice);
+            $this->assertSame('Manual photo description', $imageJob->metadata['description']);
+            $this->assertEqualsCanonicalizing(
+                [$existingPhotoTag->id, $manualPhotoTagId],
+                $imageJob->metadata['tag_ids']
+            );
+            $capturedImageJob = $imageJob;
             $this->assertSame($testTransactionLevel, DB::transactionLevel());
             $finallyCallback = $batch->finallyCallbacks()[0] ?? null;
 
@@ -149,6 +217,27 @@ class EventAiTagsDispatchTest extends TestCase
 
         Bus::assertNotDispatched(GenerateEventAiTagsJob::class);
         Bus::assertDispatched(TranslateEventJob::class);
+        $this->assertInstanceOf(ProcessEventImageJob::class, $capturedImageJob);
+        if (extension_loaded('gd') || extension_loaded('imagick')) {
+            $capturedImageJob->handle(
+                app(ImageAnalysisService::class),
+                app(TagResolverService::class)
+            );
+            $storedImage = DB::table('events_imges')->where('event_id', $eventId)->first();
+            $this->assertNotNull($storedImage);
+            $this->assertSame('Manual photo description', $storedImage->description);
+            $this->assertSame(25.5, (float) $storedImage->price);
+            $this->assertTrue(Storage::disk('public')->exists($storedImage->full_url));
+            $this->assertTrue(Storage::disk('public')->exists($storedImage->preview_url));
+            $this->assertDatabaseHas('images_tags', [
+                'events_imges_id' => $storedImage->id,
+                'tags_id' => $existingPhotoTag->id,
+            ]);
+            $this->assertDatabaseHas('images_tags', [
+                'events_imges_id' => $storedImage->id,
+                'tags_id' => $manualPhotoTagId,
+            ]);
+        }
         $this->assertIsCallable($finallyCallback);
 
         $finallyCallback(Mockery::mock(Batch::class));
