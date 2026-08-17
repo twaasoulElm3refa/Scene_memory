@@ -81,7 +81,7 @@
                         <div class="mt-8 flex flex-wrap
                        items-center justify-center gap-3">
 
-                            <a href="#filters-section" class="inline-flex items-center justify-center
+                            <button type="button" @click="scrollToEventsSearch" class="inline-flex items-center justify-center
                            rounded-full bg-[#1597D4]
                            px-8 py-3.5
                            text-sm font-bold text-white
@@ -90,7 +90,7 @@
                            hover:-translate-y-1
                            hover:bg-[#28A9E6]">
                                 {{ $t('homeAudit.home.searchEvents') }}
-                            </a>
+                            </button>
 
                             <RouterLink :to="`/${lang}/add_event`" class="inline-flex items-center justify-center
                            rounded-full border border-white/35
@@ -122,10 +122,12 @@
                     <div class="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px] 2xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
                         <div class="space-y-5">
                             <div class="home-discovery-panel">
-                                <UnifiedSearchBar v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
+                                <section id="events-search-section" ref="eventsSearchSectionRef" class="home-events-search-target">
+                                    <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" :tags="tags" :selected-tags="selectedTags"
                                     :loading="loadingTags" :tag-suggestions="tagSuggestions"
                                     :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
                                     @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
+                                </section>
 
                                 <div class="home-discovery-divider"></div>
 
@@ -269,6 +271,8 @@ const lang = localStorage.getItem("language") || "en";
 const DEFAULT_LOCATION = { lat: 30.0444, lng: 31.2357 };
 const marker = ref({ ...DEFAULT_LOCATION });
 const hasTriedUserLocation = ref(false);
+const eventsSearchSectionRef = ref(null);
+const eventsSearchRef = ref(null);
 const filtersSectionRef = ref(null);
 const fullscreen = ref(false);
 const isMapReady = ref(false);
@@ -544,6 +548,19 @@ const handleSearchClick = () => {
     closeCountryDropdown();
     currentPage.value = 1;
     search(true, 1);
+};
+
+const scrollToEventsSearch = async () => {
+    await nextTick();
+
+    eventsSearchSectionRef.value?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+    });
+
+    window.setTimeout(() => {
+        eventsSearchRef.value?.focusInput?.();
+    }, 550);
 };
 
 const buildHomeEventSearchQuery = () => eventFiltersToQuery({
@@ -1137,6 +1154,10 @@ onUnmounted(() => {
             #DCE8F5 88%,
             transparent
         );
+}
+
+.home-events-search-target {
+    scroll-margin-top: 110px;
 }
 
 .home-discovery-filters {

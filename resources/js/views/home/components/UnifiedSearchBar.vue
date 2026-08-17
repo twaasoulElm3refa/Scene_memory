@@ -28,6 +28,7 @@
                 </span>
 
                 <input
+                    id="events-search-input"
                     ref="inputRef"
                     :value="modelValue"
                     type="text"
@@ -378,6 +379,10 @@ const clearTags = () => {
     emit("update:selected-tags", []);
     inputRef.value?.focus();
 };
+
+defineExpose({
+    focusInput,
+});
 
 const handleOutsideClick = (event) => {
     if (!wrapperRef.value?.contains(event.target)) {
