@@ -34,5 +34,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('events_imges');
+        Schema::dropIfExists('events_images');
     }
 };
