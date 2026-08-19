@@ -707,6 +707,22 @@
         "search": {
             "clearText": "Clear",
             "clearTags": "Clear"
+        },
+        "specialCoverage": {
+            "badge": "Special Coverage",
+            "title": "Have an event worth covering?",
+            "description": "Tell Scemory about an event that deserves dedicated coverage, and help bring its story to a wider audience.",
+            "contactUs": "Contact Us",
+            "modal": {
+                "title": "Special Coverage",
+                "eventName": "Event Name",
+                "eventNamePlaceholder": "Enter the event name",
+                "description": "Event Description",
+                "descriptionPlaceholder": "Tell us about the event and why it deserves coverage",
+                "cancel": "Cancel",
+                "send": "Send",
+                "close": "Close"
+            }
         }
     },
     "photoUpload": {

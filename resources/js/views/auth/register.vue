@@ -287,6 +287,20 @@ const resetForm = ref({
 });
 
 const getLang = () => route.params.lang || "en";
+const POST_AUTH_REDIRECT_KEY = "post_auth_redirect";
+
+const getSafePostAuthRedirect = () => {
+    const lang = String(getLang() || "en").toLowerCase();
+    const requestedRedirect = typeof route.query.redirect === "string"
+        ? route.query.redirect
+        : "";
+
+    if (requestedRedirect.startsWith(`/${lang}/`) && !requestedRedirect.startsWith("//")) {
+        return requestedRedirect;
+    }
+
+    return `/${lang}/home`;
+};
 
 const countries = ref([
     { name: "أفغانستان", en: "Afghanistan", code: "AF" },
@@ -314,9 +328,12 @@ const saveTokenAndRedirect = (token, role, user = null) => {
     const lang = getLang();
 
     if (normalizedRole === "admin") {
+        sessionStorage.removeItem(POST_AUTH_REDIRECT_KEY);
         router.push("/admin");
     } else {
-        router.push(`/${lang}/home`);
+        const destination = getSafePostAuthRedirect();
+        sessionStorage.removeItem(POST_AUTH_REDIRECT_KEY);
+        router.push(destination);
     }
 };
 
@@ -574,8 +591,10 @@ const handleReset = async () => {
 
 const handleGoogleLogin = () => {
     const currentLang = String(getLang() || "en").toLowerCase();
+    const destination = getSafePostAuthRedirect();
     localStorage.setItem("lang", currentLang);
     localStorage.setItem("language", currentLang);
+    sessionStorage.setItem(POST_AUTH_REDIRECT_KEY, destination);
     document.cookie = `oauth_lang=${encodeURIComponent(currentLang)}; path=/; max-age=600`;
     window.location.href = `/api/v1/users/google-login?lang=${encodeURIComponent(currentLang)}`;
 };

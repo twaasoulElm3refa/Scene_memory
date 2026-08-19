@@ -707,6 +707,22 @@
         "search": {
             "clearText": "クリア",
             "clearTags": "クリア"
+        },
+        "specialCoverage": {
+            "badge": "特別取材",
+            "title": "取材する価値のあるイベントはありますか？",
+            "description": "特別な取材に値するイベントをScemoryにお知らせいただき、そのストーリーをより多くの人に届けるお手伝いをしてください。",
+            "contactUs": "お問い合わせ",
+            "modal": {
+                "title": "特別取材",
+                "eventName": "イベント名",
+                "eventNamePlaceholder": "イベント名を入力してください",
+                "description": "イベントの説明",
+                "descriptionPlaceholder": "イベントの内容と取材に値する理由をお聞かせください",
+                "cancel": "キャンセル",
+                "send": "送信",
+                "close": "閉じる"
+            }
         }
     },
     "photoUpload": {

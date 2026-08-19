@@ -174,6 +174,9 @@
                 </div>
             </section>
 
+            <!-- SPECIAL COVERAGE -->
+            <SpecialCoverageSection />
+
             <!-- SCEMORY EXPERIENCE -->
             <ScemoryExperienceTabs />
 
@@ -262,6 +265,7 @@ const FiltersSection = defineAsyncComponent(() => import("./components/FiltersSe
 const EventsSection = defineAsyncComponent(() => import("./components/EventsSection.vue"));
 const PlansSection = defineAsyncComponent(() => import("./components/PlansSection.vue"));
 const TrendingEventsSection = defineAsyncComponent(() => import("./components/TrendingEventsSection.vue"));
+const SpecialCoverageSection = defineAsyncComponent(() => import("./components/SpecialCoverageSection.vue"));
 const ScemoryExperienceTabs = defineAsyncComponent(() => import("./components/ScemoryExperienceTabs.vue"));
 const NewsletterSection = defineAsyncComponent(() => import("./components/NewsletterSection.vue"));
 

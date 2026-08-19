@@ -704,6 +704,22 @@
         "search": {
             "clearText": "مسح",
             "clearTags": "مسح"
+        },
+        "specialCoverage": {
+            "badge": "تغطية خاصة",
+            "title": "هل لديك حدث يستحق التغطية؟",
+            "description": "أخبر Scemory عن حدث يستحق تغطية مخصصة، وساعد في إيصال قصته إلى جمهور أوسع.",
+            "contactUs": "راسلنا",
+            "modal": {
+                "title": "تغطية خاصة",
+                "eventName": "اسم الحدث",
+                "eventNamePlaceholder": "أدخل اسم الحدث",
+                "description": "وصف الحدث",
+                "descriptionPlaceholder": "أخبرنا عن الحدث ولماذا يستحق التغطية",
+                "cancel": "إلغاء",
+                "send": "إرسال",
+                "close": "إغلاق"
+            }
         }
     },
     "photoUpload": {

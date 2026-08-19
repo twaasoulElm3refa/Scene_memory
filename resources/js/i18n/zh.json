@@ -707,6 +707,22 @@
         "search": {
             "clearText": "清除",
             "clearTags": "清除"
+        },
+        "specialCoverage": {
+            "badge": "特别报道",
+            "title": "您有值得报道的活动吗？",
+            "description": "向 Scemory 告知值得特别报道的活动，帮助它的故事触达更广泛的受众。",
+            "contactUs": "联系我们",
+            "modal": {
+                "title": "特别报道",
+                "eventName": "活动名称",
+                "eventNamePlaceholder": "请输入活动名称",
+                "description": "活动描述",
+                "descriptionPlaceholder": "请告诉我们活动详情以及它值得报道的原因",
+                "cancel": "取消",
+                "send": "发送",
+                "close": "关闭"
+            }
         }
     },
     "photoUpload": {

@@ -36,6 +36,7 @@ const route = useRoute();
 const router = useRouter();
 const loading = ref(true);
 const error = ref("");
+const POST_AUTH_REDIRECT_KEY = "post_auth_redirect";
 
 const currentLang = computed(() => String(route.params.lang || localStorage.getItem("lang") || "en").toLowerCase());
 
@@ -43,6 +44,16 @@ const normalizeBoolean = (value) => {
     if (typeof value === "boolean") return value;
     const normalized = String(value || "").toLowerCase();
     return normalized === "true" || normalized === "1" || normalized === "yes";
+};
+
+const getSafePostAuthRedirect = () => {
+    const requestedRedirect = sessionStorage.getItem(POST_AUTH_REDIRECT_KEY) || "";
+
+    if (requestedRedirect.startsWith(`/${currentLang.value}/`) && !requestedRedirect.startsWith("//")) {
+        return requestedRedirect;
+    }
+
+    return `/${currentLang.value}/home`;
 };
 
 const processCallback = async () => {
@@ -85,11 +96,14 @@ const processCallback = async () => {
     window.dispatchEvent(new Event("login"));
 
     if (role === "admin") {
+        sessionStorage.removeItem(POST_AUTH_REDIRECT_KEY);
         await router.replace("/admin");
         return;
     }
 
-    await router.replace(`/${currentLang.value}/home`);
+    const destination = getSafePostAuthRedirect();
+    sessionStorage.removeItem(POST_AUTH_REDIRECT_KEY);
+    await router.replace(destination);
 };
 
 onMounted(processCallback);

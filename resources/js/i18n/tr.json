@@ -704,6 +704,22 @@
         "search": {
             "clearText": "Temizle",
             "clearTags": "Temizle"
+        },
+        "specialCoverage": {
+            "badge": "Özel Haber",
+            "title": "Haber yapılmaya değer bir etkinliğiniz mi var?",
+            "description": "Özel olarak ele alınmayı hak eden bir etkinliği Scemory’ye bildirin ve hikâyesinin daha geniş bir kitleye ulaşmasına yardımcı olun.",
+            "contactUs": "Bize Ulaşın",
+            "modal": {
+                "title": "Özel Haber",
+                "eventName": "Etkinlik Adı",
+                "eventNamePlaceholder": "Etkinlik adını girin",
+                "description": "Etkinlik Açıklaması",
+                "descriptionPlaceholder": "Bize etkinliği ve neden haberleştirilmesi gerektiğini anlatın",
+                "cancel": "İptal",
+                "send": "Gönder",
+                "close": "Kapat"
+            }
         }
     },
     "photoUpload": {

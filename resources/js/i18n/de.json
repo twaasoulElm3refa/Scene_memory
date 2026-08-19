@@ -707,6 +707,22 @@
         "search": {
             "clearText": "Löschen",
             "clearTags": "Löschen"
+        },
+        "specialCoverage": {
+            "badge": "Sonderberichterstattung",
+            "title": "Haben Sie ein berichtenswertes Ereignis?",
+            "description": "Informieren Sie Scemory über ein Ereignis, das eine besondere Berichterstattung verdient, und helfen Sie, seine Geschichte einem größeren Publikum zugänglich zu machen.",
+            "contactUs": "Kontakt aufnehmen",
+            "modal": {
+                "title": "Sonderberichterstattung",
+                "eventName": "Veranstaltungsname",
+                "eventNamePlaceholder": "Veranstaltungsnamen eingeben",
+                "description": "Veranstaltungsbeschreibung",
+                "descriptionPlaceholder": "Erzählen Sie uns von der Veranstaltung und warum sie eine Berichterstattung verdient",
+                "cancel": "Abbrechen",
+                "send": "Senden",
+                "close": "Schließen"
+            }
         }
     },
     "photoUpload": {

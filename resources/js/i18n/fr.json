@@ -707,6 +707,22 @@
         "search": {
             "clearText": "Effacer",
             "clearTags": "Effacer"
+        },
+        "specialCoverage": {
+            "badge": "Couverture spéciale",
+            "title": "Vous avez un événement qui mérite d’être couvert ?",
+            "description": "Parlez à Scemory d’un événement qui mérite une couverture dédiée et contribuez à faire connaître son histoire à un public plus large.",
+            "contactUs": "Nous contacter",
+            "modal": {
+                "title": "Couverture spéciale",
+                "eventName": "Nom de l’événement",
+                "eventNamePlaceholder": "Saisissez le nom de l’événement",
+                "description": "Description de l’événement",
+                "descriptionPlaceholder": "Présentez-nous l’événement et dites-nous pourquoi il mérite d’être couvert",
+                "cancel": "Annuler",
+                "send": "Envoyer",
+                "close": "Fermer"
+            }
         }
     },
     "photoUpload": {

@@ -707,6 +707,22 @@
         "search": {
             "clearText": "Cancella",
             "clearTags": "Cancella"
+        },
+        "specialCoverage": {
+            "badge": "Copertura speciale",
+            "title": "Hai un evento che merita di essere raccontato?",
+            "description": "Segnala a Scemory un evento che merita una copertura dedicata e aiuta la sua storia a raggiungere un pubblico più ampio.",
+            "contactUs": "Contattaci",
+            "modal": {
+                "title": "Copertura speciale",
+                "eventName": "Nome dell’evento",
+                "eventNamePlaceholder": "Inserisci il nome dell’evento",
+                "description": "Descrizione dell’evento",
+                "descriptionPlaceholder": "Raccontaci l’evento e perché merita di essere seguito",
+                "cancel": "Annulla",
+                "send": "Invia",
+                "close": "Chiudi"
+            }
         }
     },
     "photoUpload": {

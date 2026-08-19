@@ -707,6 +707,22 @@
         "search": {
             "clearText": "پاک کردن",
             "clearTags": "پاک کردن"
+        },
+        "specialCoverage": {
+            "badge": "پوشش ویژه",
+            "title": "رویدادی دارید که ارزش پوشش خبری دارد؟",
+            "description": "Scemory را از رویدادی که شایسته پوشش اختصاصی است آگاه کنید و به رساندن داستان آن به مخاطبان گسترده‌تر کمک کنید.",
+            "contactUs": "تماس با ما",
+            "modal": {
+                "title": "پوشش ویژه",
+                "eventName": "نام رویداد",
+                "eventNamePlaceholder": "نام رویداد را وارد کنید",
+                "description": "توضیحات رویداد",
+                "descriptionPlaceholder": "درباره رویداد و دلیل شایستگی آن برای پوشش به ما بگویید",
+                "cancel": "لغو",
+                "send": "ارسال",
+                "close": "بستن"
+            }
         }
     },
     "photoUpload": {
