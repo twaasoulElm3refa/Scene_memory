@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EventsImges extends Model
 {
-    protected $table = 'events_imges';
+    protected $table = 'events_images';
 
     protected $guarded =[];
 

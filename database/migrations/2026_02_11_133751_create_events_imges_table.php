@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events_imges', function (Blueprint $table) {
+        Schema::create('events_images', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Events::class,'event_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('preview_url')->nullable();

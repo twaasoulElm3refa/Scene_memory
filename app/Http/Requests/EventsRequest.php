@@ -27,8 +27,8 @@ class EventsRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'city_id' => 'required|exists:cities,id',
-            'sub_categorey_id' => 'required|exists:sub_categoreys,id',
+            'city_id' => 'nullable|exists:cities,id',
+            'sub_categorey_id' => 'nullable|exists:sub_categoreys,id',
             // is_real: Event Type
             'is_real' => ['required', 'boolean'],
             'photography_type' => ['nullable', 'in:normal,professional'],
@@ -36,7 +36,7 @@ class EventsRequest extends FormRequest
             'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
             'photos' => ['nullable', 'array', 'min:1', 'max:8'],
             'photos.*' => 'nullable|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
-            'start_date' => 'required',
+            'start_date' => 'nullable',
             'lattitude' => 'nullable',
             'langitude' => 'nullable',
             'end_date' => 'nullable',
