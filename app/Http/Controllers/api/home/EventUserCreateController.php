@@ -46,8 +46,12 @@ class EventUserCreateController extends Controller
         return $this->createEvent($request, true);
     }
 
-    private function createEvent(EventsRequest $request, bool $isHistorical)
-    {
+    protected function createEvent(
+        EventsRequest $request,
+        bool $isHistorical,
+        bool $requiresModeration = true,
+        bool $isTrending = false
+    ) {
         $photoValidationResults = $this->validateUserPhotoPayload($request);
         $data = $request->validated();
         // is_real: normalize boolean from FormData
@@ -61,13 +65,18 @@ class EventUserCreateController extends Controller
                 $data,
                 $request,
                 $photoValidationResults,
+                $requiresModeration,
+                $isTrending,
                 &$imageJobs,
                 &$videoJobs
             ) {
                 $data['user_id'] = auth()->id();
-                $data['is_active'] = 0;
+                $data['is_active'] = ! $requiresModeration;
+                $data['is_trending'] = ! $requiresModeration && $isTrending;
                 $event = $this->eventRepository->create($data);
-                $this->requestRepository->createEventRequest(['event_id' => $event->id]);
+                if ($requiresModeration) {
+                    $this->requestRepository->createEventRequest(['event_id' => $event->id]);
+                }
                 $event->update(['slug' => 'event'.'-'.Str::slug($data['title']).$event->id]);
                 $event->translations()->create([
                     'locale' => 'ar',
@@ -157,7 +166,7 @@ class EventUserCreateController extends Controller
             });
             $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
-            $this->clearEventsCache($event->slug);
+            $this->clearEventsCache($event->slug, $requiresModeration);
 
             return $this->success(
                 $event->load('translations', 'photos'),
@@ -633,26 +642,12 @@ class EventUserCreateController extends Controller
     /**
      * Clear event-related cache safely using Redis tags
      */
-    private function clearEventsCache($slug = null)
+    private function clearEventsCache($slug = null, bool $clearRequests = true)
     {
-        $perPage = 8;
+        Cache::tags(['events'])->flush();
 
-        // Clear paginated caches
-        for ($page = 1; $page <= 10; $page++) {
-            Cache::tags(['events'])->forget("events_page_{$page}_per_{$perPage}");
+        if ($clearRequests) {
+            Cache::tags(['requests'])->flush();
         }
-
-        // Clear single event cache
-        if ($slug) {
-            $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-            foreach ($locales as $locale) {
-                Cache::tags(['events'])->forget("events_single_{$slug}_{$locale}");
-            }
-        }
-
-        // Clear general counts & memories
-        Cache::tags(['events'])->forget('events_count');
-        Cache::tags(['events'])->forget('memories');
-        Cache::tags(['requests'])->flush();
     }
 }

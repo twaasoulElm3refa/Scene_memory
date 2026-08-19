@@ -2,7 +2,9 @@
     <div class="scemory-page create-event-page min-vh-100 py-4">
         <div class="container px-3 px-md-4">
             <div class="mb-4">
-                <h1 class="display-6 fw-bold text-dark">{{ tr("eventForm.title", "Create event") }}</h1>
+                <h1 class="display-6 fw-bold text-dark">
+                    {{ props.admin ? $t("eventForm.admin.title") : tr("eventForm.title", "Create event") }}
+                </h1>
             </div>
 
             <form @submit.prevent="createEvent" class="row g-3 g-md-4">
@@ -380,6 +382,18 @@
                                             <small class="text-muted d-block mt-1">
                                   {{ $t('eventForm.tagHelper') }}
                                             </small>
+
+                                            <div v-if="props.admin" class="d-flex flex-column flex-sm-row align-items-sm-center gap-2 mt-3">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-outline-primary rounded-pill px-4"
+                                                    :disabled="aiTagsLoading || !canGenerateAiTags"
+                                                    @click="generateAiTags"
+                                                >
+                                                    {{ aiTagsLoading ? $t("eventForm.admin.generatingTags") : $t("eventForm.admin.generateTags") }}
+                                                </button>
+                                                <small class="text-muted">{{ $t("eventForm.admin.generateTagsHelp") }}</small>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -442,6 +456,26 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div v-if="props.admin" class="col-12">
+                            <div class="card shadow border-0 rounded-3">
+                                <div class="card-body p-4">
+                                    <div class="form-check form-switch d-flex align-items-start gap-3 p-0 m-0">
+                                        <input
+                                            id="admin-event-trending"
+                                            v-model="form.is_trending"
+                                            class="form-check-input ms-0 mt-1 flex-shrink-0"
+                                            type="checkbox"
+                                            role="switch"
+                                        />
+                                        <label class="form-check-label" for="admin-event-trending">
+                                            <span class="d-block fw-semibold text-dark">{{ $t("eventForm.admin.trending") }}</span>
+                                            <small class="text-muted">{{ $t("eventForm.admin.trendingHelp") }}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -494,6 +528,10 @@ import { EventService } from "../../services/EventService/EventService";
 import { TagService } from "../../services/TagService/TagService";
 
 const props = defineProps({
+    admin: {
+        type: Boolean,
+        default: false,
+    },
     historical: {
         type: Boolean,
         default: false,
@@ -519,6 +557,7 @@ const form = ref({
     media_items: [],
     latitude: null,
     longitude: null,
+    is_trending: false,
 });
 
 const countries = ref([]);
@@ -534,6 +573,7 @@ const locationError = ref(null);
 const tags = ref([]);
 const selectedTags = ref([]);
 const loadingTags = ref(false);
+const aiTagsLoading = ref(false);
 const tagSearch = ref("");
 const showTagsDropdown = ref(false);
 const eventTagSearchInput = ref(null);
@@ -601,6 +641,13 @@ const canAddNewTag = computed(() => {
 
     return !existsInAllTags && !existsInSelected;
 });
+
+const canGenerateAiTags = computed(() =>
+    Boolean(
+        form.value.title?.trim() &&
+        form.value.media_items.some((item) => item.file instanceof File)
+    )
+);
 
 // is_real: {{ $t('eventForm.eventType') }}
 const isEventTypeValid = computed(() =>
@@ -882,6 +929,75 @@ function clearTags() {
     tagSearch.value = "";
 }
 
+function tagOptionFromName(name) {
+    const normalizedName = normalizeTagName(name);
+
+    if (!normalizedName) return null;
+
+    const existingTag = tags.value.find(
+        (tag) => normalizeTagName(tag.name).toLowerCase() === normalizedName.toLowerCase()
+    );
+
+    return existingTag
+        ? { id: existingTag.id, name: existingTag.name, isNew: false }
+        : { id: `ai-${Date.now()}-${Math.random()}`, name: normalizedName, isNew: true };
+}
+
+function mergeSuggestedTags(currentTags, suggestedNames, maxTags = 10) {
+    const merged = Array.isArray(currentTags) ? [...currentTags] : [];
+
+    suggestedNames.forEach((name) => {
+        const option = tagOptionFromName(name);
+
+        if (!option || merged.length >= maxTags) return;
+
+        const exists = merged.some(
+            (tag) => normalizeTagName(tag.name).toLowerCase() === option.name.toLowerCase()
+        );
+
+        if (!exists) merged.push(option);
+    });
+
+    return merged;
+}
+
+async function generateAiTags() {
+    if (!props.admin || !canGenerateAiTags.value || aiTagsLoading.value) return;
+
+    aiTagsLoading.value = true;
+    const fd = new FormData();
+    fd.append("title", form.value.title.trim());
+    fd.append("description", form.value.description?.trim() || "");
+
+    const currentLanguage = String(localStorage.getItem("language") || "en").toLowerCase();
+    const supportedAiLanguages = ["ar", "en", "fr", "ru", "zh"];
+    fd.append("language", supportedAiLanguages.includes(currentLanguage) ? currentLanguage : "en");
+
+    form.value.media_items
+        .filter((item) => item.file instanceof File)
+        .slice(0, 5)
+        .forEach((item) => fd.append("images[]", item.file));
+
+    try {
+        const response = await TagService.generateImageTags(fd);
+        const result = response?.data?.data || {};
+        selectedTags.value = mergeSuggestedTags(selectedTags.value, result.event_tags || []);
+
+        const suggestionsByImage = new Map(
+            (result.images || []).map((image) => [Number(image.image_index) - 1, image.tags || []])
+        );
+
+        form.value.media_items = form.value.media_items.map((item, index) => ({
+            ...item,
+            tags: mergeSuggestedTags(item.tags, suggestionsByImage.get(index) || []),
+        }));
+    } catch (err) {
+        alert(err.response?.data?.message || t("eventForm.admin.generateTagsError"));
+    } finally {
+        aiTagsLoading.value = false;
+    }
+}
+
 function appendPhotoFields(fd, item) {
     const metrics = item.metrics || {};
     const validationMessage = item.errors?.length
@@ -940,6 +1056,10 @@ async function createEvent() {
     fd.append("lattitude", form.value.latitude);
     fd.append("langitude", form.value.longitude);
 
+    if (props.admin) {
+        fd.append("is_trending", form.value.is_trending ? "1" : "0");
+    }
+
     selectedTags.value.forEach((tag) => {
         if (tag.isNew) {
             fd.append("new_tags[]", tag.name);
@@ -951,14 +1071,20 @@ async function createEvent() {
     form.value.media_items.forEach((item) => appendPhotoFields(fd, item));
 
     try {
-        const createRequest = props.historical
-            ? EventService.createHistoricUser
-            : EventService.createUser;
+        const createRequest = props.admin
+            ? EventService.create
+            : props.historical
+                ? EventService.createHistoricUser
+                : EventService.createUser;
 
         await createRequest(fd);
 
-        alert(t(props.historical ? "eventForm.success.historicalCreated" : "eventForm.success.created"));
-        window.location.href = "/";
+        alert(t(props.admin
+            ? "eventForm.admin.created"
+            : props.historical
+                ? "eventForm.success.historicalCreated"
+                : "eventForm.success.created"));
+        window.location.href = props.admin ? "/admin/events" : "/";
     } catch (err) {
         console.error(err);
         const errorKey = props.historical

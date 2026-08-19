@@ -415,6 +415,16 @@
         }
     },
     "eventForm": {
+        "admin": {
+            "title": "管理员添加活动",
+            "trending": "热门活动",
+            "trendingHelp": "将此活动标记为热门活动",
+            "generateTags": "生成 AI 标签",
+            "generatingTags": "正在生成标签...",
+            "generateTagsHelp": "使用现有 AI 服务为活动和照片推荐标签。发布前可检查或删除这些标签。",
+            "generateTagsError": "目前无法生成 AI 标签。",
+            "created": "活动已成功创建并发布。"
+        },
         "chooseFiles": "选择文件",
         "mediaCount": "媒体数量",
         "title": "添加新事件",

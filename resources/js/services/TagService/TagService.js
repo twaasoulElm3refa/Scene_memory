@@ -13,4 +13,12 @@ export const TagService = {
             },
         });
     },
+
+    async generateImageTags(formData) {
+        return api.post("/tools/image-tags", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
 };

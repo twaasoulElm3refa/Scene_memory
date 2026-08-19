@@ -170,8 +170,8 @@ Route::prefix('v1')->group(function () {
         //48
 
         // Events CRUD
-        Route::post('/create', [EventAdminCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
-        Route::post('/historic', [EventAdminCreateController::class,  'historic'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/create', [EventAdminCreateController::class, 'createAdmin'])->middleware(AdminMiddleware::class, 'auth:sanctum');
+        Route::post('/historic', [EventAdminCreateController::class, 'historicAdmin'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/create/user', [EventUserCreateController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/historic/user', [EventUserCreateController::class,  'historic'])->middleware('auth:sanctum');
         Route::post('/{id}/update', [EventAdminController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');

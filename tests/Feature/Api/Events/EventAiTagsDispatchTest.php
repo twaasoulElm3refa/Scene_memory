@@ -60,12 +60,45 @@ class EventAiTagsDispatchTest extends TestCase
         $this->assertEndpointDispatchesBatch('/api/v1/events/historic/user', true, false);
     }
 
-    private function assertEndpointDispatchesBatch(string $uri, bool $historical, bool $isReal): void
+    public function test_admin_event_uses_the_same_media_pipeline_and_is_published_immediately(): void
     {
+        $this->assertEndpointDispatchesBatch('/api/v1/events/create', false, true, true);
+    }
+
+    public function test_admin_can_publish_an_event_as_trending(): void
+    {
+        $this->assertEndpointDispatchesBatch('/api/v1/events/create', false, true, true, true);
+    }
+
+    public function test_public_creation_cannot_inject_the_trending_or_active_state(): void
+    {
+        $this->assertEndpointDispatchesBatch('/api/v1/events/create/user', false, true, false, true);
+    }
+
+    public function test_non_admin_cannot_use_the_admin_creation_endpoint(): void
+    {
+        Sanctum::actingAs(User::factory()->create(['role' => 'user']));
+
+        $this->post('/api/v1/events/create', [])->assertUnauthorized();
+    }
+
+    private function assertEndpointDispatchesBatch(
+        string $uri,
+        bool $historical,
+        bool $isReal,
+        bool $admin = false,
+        bool $requestedTrending = false
+    ): void {
         Bus::fake();
 
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => $admin ? 'admin' : 'user']);
         Sanctum::actingAs($user);
+
+        if ($admin) {
+            // Prime the endpoint cache so the post-create assertion also
+            // proves the creation flow invalidates trending data.
+            $this->getJson('/api/v1/events/trending')->assertOk();
+        }
 
         $now = now();
         $countryId = DB::table('countries')->insertGetId([
@@ -123,6 +156,9 @@ class EventAiTagsDispatchTest extends TestCase
             'time' => '09:30',
             'lattitude' => '30.0444',
             'langitude' => '31.2357',
+            'is_active' => '1',
+            'is_trending' => $requestedTrending ? '1' : '0',
+            'status' => 'approved',
             'photo_descriptions' => ['Manual photo description'],
             'photo_tags_json' => [json_encode([
                 'tags_id' => [$existingPhotoTag->id],
@@ -139,13 +175,34 @@ class EventAiTagsDispatchTest extends TestCase
             'id' => $eventId,
             'is_historical' => $historical ? 1 : 0,
             'is_real' => $isReal ? 1 : 0,
+            'is_active' => $admin ? 1 : 0,
+            'is_trending' => $admin && $requestedTrending ? 1 : 0,
             'lattitude' => '30.0444',
             'langitude' => '31.2357',
         ]);
         $this->assertSame("event-queued-event{$eventId}", $response->json('data.slug'));
         $this->assertIsArray($response->json('data.translations'));
         $this->assertIsArray($response->json('data.photos'));
-        $this->assertDatabaseHas('event_request_creates', ['event_id' => $eventId]);
+        if ($admin) {
+            $this->assertDatabaseMissing('event_request_creates', ['event_id' => $eventId]);
+
+            $trendingEventIds = collect(
+                $this->getJson('/api/v1/events/trending')
+                    ->assertOk()
+                    ->json('data')
+            )->pluck('id')->map(fn ($id) => (int) $id)->all();
+
+            if ($requestedTrending) {
+                $this->assertContains($eventId, $trendingEventIds);
+            } else {
+                $this->assertNotContains($eventId, $trendingEventIds);
+            }
+        } else {
+            $this->assertDatabaseHas('event_request_creates', [
+                'event_id' => $eventId,
+                'status' => 'pending',
+            ]);
+        }
         $this->assertDatabaseHas('event_translations', [
             'event_id' => $eventId,
             'locale' => 'ar',

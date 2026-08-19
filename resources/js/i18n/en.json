@@ -415,6 +415,16 @@
         }
     },
     "eventForm": {
+        "admin": {
+            "title": "Admin Add Event",
+            "trending": "Trending Event",
+            "trendingHelp": "Mark this event as trending",
+            "generateTags": "Generate AI Tags",
+            "generatingTags": "Generating tags...",
+            "generateTagsHelp": "Suggest event and photo tags using the existing AI service. You can review or remove them before publishing.",
+            "generateTagsError": "Unable to generate AI tags right now.",
+            "created": "Event created and published successfully."
+        },
         "chooseFiles": "Choose Files",
         "mediaCount": "Media Count",
         "title": "Add New Event",

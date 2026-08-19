@@ -415,6 +415,16 @@
         }
     },
     "eventForm": {
+        "admin": {
+            "title": "Veranstaltung als Admin hinzufügen",
+            "trending": "Trendveranstaltung",
+            "trendingHelp": "Diese Veranstaltung als Trend markieren",
+            "generateTags": "KI-Tags generieren",
+            "generatingTags": "Tags werden generiert...",
+            "generateTagsHelp": "Lassen Sie mit dem bestehenden KI-Dienst Tags für Veranstaltung und Fotos vorschlagen. Vor der Veröffentlichung können Sie sie prüfen oder entfernen.",
+            "generateTagsError": "KI-Tags können derzeit nicht generiert werden.",
+            "created": "Die Veranstaltung wurde erfolgreich erstellt und veröffentlicht."
+        },
         "chooseFiles": "Dateien auswählen",
         "mediaCount": "Anzahl der Medien: {count}",
         "title": "Neues Event hinzufügen",

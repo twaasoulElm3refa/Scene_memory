@@ -415,6 +415,16 @@
         }
     },
     "eventForm": {
+        "admin": {
+            "title": "Aggiungi evento come amministratore",
+            "trending": "Evento di tendenza",
+            "trendingHelp": "Contrassegna questo evento come di tendenza",
+            "generateTags": "Genera tag con l’IA",
+            "generatingTags": "Generazione dei tag...",
+            "generateTagsHelp": "Suggerisci tag per l’evento e le foto tramite il servizio IA esistente. Puoi rivederli o rimuoverli prima della pubblicazione.",
+            "generateTagsError": "Impossibile generare i tag con l’IA in questo momento.",
+            "created": "L’evento è stato creato e pubblicato correttamente."
+        },
         "chooseFiles": "Scegli File",
         "mediaCount": "Conteggio Media",
         "title": "Aggiungi Nuovo Evento",

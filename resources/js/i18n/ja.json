@@ -415,6 +415,16 @@
         }
     },
     "eventForm": {
+        "admin": {
+            "title": "管理者としてイベントを追加",
+            "trending": "トレンドイベント",
+            "trendingHelp": "このイベントをトレンドに設定します",
+            "generateTags": "AIタグを生成",
+            "generatingTags": "タグを生成中...",
+            "generateTagsHelp": "既存のAIサービスでイベントと写真のタグを提案します。公開前に確認または削除できます。",
+            "generateTagsError": "現在AIタグを生成できません。",
+            "created": "イベントを作成し、公開しました。"
+        },
         "chooseFiles": "ファイルを選択",
         "mediaCount": "メディア数",
         "title": "新しいイベントを追加",

@@ -413,6 +413,16 @@
         }
     },
     "eventForm": {
+        "admin": {
+            "title": "Yönetici Olarak Etkinlik Ekle",
+            "trending": "Trend Etkinlik",
+            "trendingHelp": "Bu etkinliği trend olarak işaretle",
+            "generateTags": "Yapay Zekâ Etiketleri Oluştur",
+            "generatingTags": "Etiketler oluşturuluyor...",
+            "generateTagsHelp": "Mevcut yapay zekâ hizmetiyle etkinlik ve fotoğraf etiketleri önerin. Yayınlamadan önce inceleyebilir veya kaldırabilirsiniz.",
+            "generateTagsError": "Yapay zekâ etiketleri şu anda oluşturulamıyor.",
+            "created": "Etkinlik başarıyla oluşturuldu ve yayınlandı."
+        },
         "chooseFiles": "Fotoğraflar / Videolar Seç",
         "mediaCount": "Medya Sayısı",
         "title": "Yeni Etkinlik Ekle",
