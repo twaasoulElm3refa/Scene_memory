@@ -4,13 +4,12 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Mail\ApproveMail;
-use App\Mail\RejectMail;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
+use App\Services\EventModeration\EventRequestModerationService;
+use App\Services\EventTagCacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
@@ -20,9 +19,10 @@ class RequestController extends Controller
 
     public function __construct(
         private readonly RequestRepositoryInterface $requestRepository,
-        private readonly EventRepositoryInterface $eventRepository
-    ) {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly EventRequestModerationService $moderationService,
+        private readonly EventTagCacheService $cacheService,
+    ) {}
 
     /**
      * عرض كل الـ requests مع pagination + counts
@@ -56,7 +56,7 @@ class RequestController extends Controller
                     'pending' => $counts['pending'],
                     'approved' => $counts['approved'],
                     'rejected' => $counts['rejected'],
-                ]
+                ],
             ]);
 
         } catch (\Exception $e) {
@@ -109,17 +109,7 @@ class RequestController extends Controller
     public function approve($request_id)
     {
         try {
-            $request = $this->requestRepository->findOrFail((int) $request_id);
-            $request->status = 'approved';
-            $request->save();
-
-            $event = $this->eventRepository->findByIdOrFail((int) $request->event_id);
-            $event->is_active = 1;
-            $event->save();
-
-            $this->clearEventsCache();
-
-            Mail::to($event->user->email)->send(new ApproveMail($event));
+            $request = $this->moderationService->approveManually((int) $request_id);
 
             return $this->success($request, 'Request Approved Successfully');
         } catch (\Exception $e) {
@@ -133,16 +123,13 @@ class RequestController extends Controller
     public function decline(Request $req, $request_id)
     {
         try {
-            $request = $this->requestRepository->findOrFail((int) $request_id);
-            $request->status = 'rejected';
-            $request->save();
-
-            $event = $this->eventRepository->findByIdOrFail((int) $request->event_id);
-
-            $this->clearEventsCache();
-
-            $reason = $req->reason ?? '';
-            Mail::to($event->user->email)->send(new RejectMail($event, $reason));
+            $validated = $req->validate([
+                'reason' => ['nullable', 'string', 'max:5000'],
+            ]);
+            $request = $this->moderationService->rejectManually(
+                (int) $request_id,
+                trim((string) ($validated['reason'] ?? ''))
+            );
 
             return $this->success($request, 'Request Declined Successfully');
         } catch (\Exception $e) {
@@ -162,26 +149,11 @@ class RequestController extends Controller
             $event->delete();
             $request->delete();
 
-            $this->clearEventsCache();
+            $this->cacheService->invalidateModerationState((int) $event->id);
 
             return $this->success($request, 'Request Deleted Successfully');
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
     }
-
-    /**
-     * مسح كل الكاش المتعلق بالـ events و requests
-     */
-    private function clearEventsCache()
-    {
-        Cache::tags(['events'])->flush();
-        Cache::tags(['requests'])->flush();
-        $locales=['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-        foreach ($locales as $locale) {
-           Cache::forget('daily_events_'.$locale);
-        }
-    }
-
-
 }

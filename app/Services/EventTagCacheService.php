@@ -101,6 +101,16 @@ class EventTagCacheService
         $this->flushTaggedCache('requests');
     }
 
+    public function invalidateModerationState(?int $eventId = null): void
+    {
+        $this->invalidateEvent($eventId);
+        $this->invalidateRequests();
+
+        foreach ($this->locales() as $locale) {
+            $this->forget('daily_events_'.$locale);
+        }
+    }
+
     private function flushTaggedCache(string $tag): void
     {
         try {

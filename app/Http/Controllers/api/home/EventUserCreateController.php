@@ -8,6 +8,7 @@ use App\Http\Requests\EventsRequest;
 use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\ProcessEventVideoJob;
+use App\Jobs\ReviewEventRequestWithAi;
 use App\Jobs\TranslateEventJob;
 use App\Models\Event_Tags;
 use App\Models\Tags;
@@ -58,6 +59,7 @@ class EventUserCreateController extends Controller
         $this->stripUploadOnlyData($data);
         $imageJobs = [];
         $videoJobs = [];
+        $eventRequestId = null;
         try {
             $event = DB::transaction(function () use (
                 $data,
@@ -65,14 +67,18 @@ class EventUserCreateController extends Controller
                 $requiresModeration,
                 $isTrending,
                 &$imageJobs,
-                &$videoJobs
+                &$videoJobs,
+                &$eventRequestId
             ) {
                 $data['user_id'] = auth()->id();
                 $data['is_active'] = ! $requiresModeration;
                 $data['is_trending'] = ! $requiresModeration && $isTrending;
                 $event = $this->eventRepository->create($data);
                 if ($requiresModeration) {
-                    $this->requestRepository->createEventRequest(['event_id' => $event->id]);
+                    $eventRequest = $this->requestRepository->createEventRequest([
+                        'event_id' => $event->id,
+                    ]);
+                    $eventRequestId = (int) $eventRequest->id;
                 }
                 $event->update(['slug' => 'event'.'-'.Str::slug($data['title']).$event->id]);
                 $event->translations()->create([
@@ -164,7 +170,12 @@ class EventUserCreateController extends Controller
 
                 return $event;
             });
-            $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
+            $this->dispatchPostCommitJobs(
+                $event->id,
+                $imageJobs,
+                $videoJobs,
+                $eventRequestId
+            );
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
             $this->clearEventsCache((int) $event->id, $requiresModeration);
 
@@ -438,8 +449,12 @@ class EventUserCreateController extends Controller
      * @param  array<int, ProcessEventImageJob>  $imageJobs
      * @param  array<int, ProcessEventVideoJob>  $videoJobs
      */
-    private function dispatchPostCommitJobs(int $eventId, array $imageJobs, array $videoJobs): void
-    {
+    private function dispatchPostCommitJobs(
+        int $eventId,
+        array $imageJobs,
+        array $videoJobs,
+        ?int $eventRequestId
+    ): void {
         try {
             $mediaJobs = [...$imageJobs, ...$videoJobs];
 
@@ -447,12 +462,20 @@ class EventUserCreateController extends Controller
                 Bus::batch($mediaJobs)
                     ->name("event-media:{$eventId}")
                     ->allowFailures()
-                    ->finally(function (Batch $batch) use ($eventId): void {
+                    ->finally(function (Batch $batch) use ($eventId, $eventRequestId): void {
                         GenerateEventAiTagsJob::dispatch($eventId);
+
+                        if ($eventRequestId !== null) {
+                            ReviewEventRequestWithAi::dispatch($eventRequestId);
+                        }
                     })
                     ->dispatch();
             } else {
                 GenerateEventAiTagsJob::dispatch($eventId);
+
+                if ($eventRequestId !== null) {
+                    ReviewEventRequestWithAi::dispatch($eventRequestId);
+                }
             }
         } catch (\Throwable $exception) {
             Log::error('Event media batch dispatch failed', [

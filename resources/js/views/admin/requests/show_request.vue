@@ -92,6 +92,52 @@
                             </p>
                         </section>
 
+                        <section v-if="hasAiReview"
+                            class="bg-white rounded-xl shadow-sm border border-violet-100 p-4"
+                            aria-labelledby="ai-review-heading">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                                <h2 id="ai-review-heading" class="text-sm font-bold text-gray-900">
+                                    AI Moderation Review
+                                </h2>
+
+                                <span :class="aiDecisionClasses"
+                                    class="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wide border">
+                                    {{ aiDecisionLabel }}
+                                </span>
+                            </div>
+
+                            <dl class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                                <div>
+                                    <dt class="text-[11px] text-gray-500">Decision</dt>
+                                    <dd class="font-semibold text-gray-900 capitalize">
+                                        {{ (apiData.request.ai_decision || "Not completed").replaceAll("_", " ") }}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt class="text-[11px] text-gray-500">Confidence</dt>
+                                    <dd class="font-semibold text-gray-900">
+                                        {{ formatConfidence(apiData.request.ai_confidence) }}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt class="text-[11px] text-gray-500">Reviewed At</dt>
+                                    <dd class="font-semibold text-gray-900">
+                                        {{ formatDate(apiData.request.ai_reviewed_at) }}
+                                    </dd>
+                                </div>
+                            </dl>
+
+                            <div v-if="apiData.request.ai_reason"
+                                class="mt-3 rounded-lg bg-violet-50 border border-violet-100 p-3">
+                                <p class="text-[11px] font-semibold uppercase tracking-wide text-violet-700 mb-1">
+                                    AI Reason
+                                </p>
+                                <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                                    {{ apiData.request.ai_reason }}
+                                </p>
+                            </div>
+                        </section>
+
                         <!-- Small Data Cards -->
                         <section class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
                             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 min-h-[78px]">
@@ -384,6 +430,43 @@ const statusClasses = {
     rejected: "bg-red-50 text-red-800 border-red-200",
 };
 
+const hasAiReview = computed(() => {
+    const request = apiData.value?.request;
+
+    return Boolean(
+        request?.ai_decision ||
+        request?.ai_review_status
+    );
+});
+
+const aiDecisionLabel = computed(() => {
+    const request = apiData.value?.request;
+
+    if (request?.ai_decision === "manual_review") {
+        return "AI requires manual review";
+    }
+
+    if (request?.ai_decision) {
+        return `AI ${request.ai_decision.replaceAll("_", " ")}`;
+    }
+
+    return `AI ${request?.ai_review_status || "pending"}`;
+});
+
+const aiDecisionClasses = computed(() => {
+    const decision = apiData.value?.request?.ai_decision;
+
+    if (decision === "approved") {
+        return "bg-green-50 text-green-800 border-green-200";
+    }
+
+    if (decision === "rejected") {
+        return "bg-red-50 text-red-800 border-red-200";
+    }
+
+    return "bg-amber-50 text-amber-800 border-amber-200";
+});
+
 const normalizeTagMode = (mode) => {
     return String(mode || "").trim().toLowerCase();
 };
@@ -532,6 +615,20 @@ const formatDateOnly = (dateStr) => {
     });
 };
 
+const formatConfidence = (value) => {
+    if (value === null || value === undefined || value === "") {
+        return "—";
+    }
+
+    const confidence = Number(value);
+
+    if (!Number.isFinite(confidence)) {
+        return "—";
+    }
+
+    return `${(confidence * 100).toFixed(1)}%`;
+};
+
 const handleImageError = (event) => {
     event.target.src =
         "https://placehold.co/900x400/1f2937/9ca3af?text=No+Image+Available";
@@ -546,7 +643,6 @@ const fetchRequest = async () => {
             await RequestService.getSingle(
                 route.params.id
             );
-        console.log("Fetched request data:", data);
         apiData.value = {
             request: data.data.request,
             event: data.data.event,

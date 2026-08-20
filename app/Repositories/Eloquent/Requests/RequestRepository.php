@@ -27,7 +27,19 @@ class RequestRepository implements RequestRepositoryInterface
 
     public function find(int $id)
     {
-        return EventRequestCreate::select('id', 'event_id', 'status')->find($id);
+        return EventRequestCreate::select([
+            'id',
+            'event_id',
+            'status',
+            'ai_flagged',
+            'ai_decision',
+            'ai_confidence',
+            'ai_reason',
+            'ai_reviewed_at',
+            'ai_review_status',
+            'ai_attempts',
+            'ai_workflow_execution_id',
+        ])->find($id);
     }
 
     public function findOrFail(int $id)

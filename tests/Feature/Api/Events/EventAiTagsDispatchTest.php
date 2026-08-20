@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\Events;
 
 use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
+use App\Jobs\ReviewEventRequestWithAi;
 use App\Jobs\TranslateEventJob;
 use App\Models\EventsImges;
 use App\Models\Tags;
@@ -173,6 +174,7 @@ class EventAiTagsDispatchTest extends TestCase
 
         $response->assertOk();
         $eventId = (int) $response->json('data.id');
+        $eventRequestId = null;
         $this->assertDatabaseHas('events', [
             'id' => $eventId,
             'is_historical' => $historical ? 1 : 0,
@@ -204,6 +206,9 @@ class EventAiTagsDispatchTest extends TestCase
                 'event_id' => $eventId,
                 'status' => 'pending',
             ]);
+            $eventRequestId = (int) DB::table('event_request_creates')
+                ->where('event_id', $eventId)
+                ->value('id');
         }
         $this->assertDatabaseHas('event_translations', [
             'event_id' => $eventId,
@@ -275,6 +280,7 @@ class EventAiTagsDispatchTest extends TestCase
         });
 
         Bus::assertNotDispatched(GenerateEventAiTagsJob::class);
+        Bus::assertNotDispatched(ReviewEventRequestWithAi::class);
         Bus::assertDispatched(TranslateEventJob::class);
         $this->assertInstanceOf(ProcessEventImageJob::class, $capturedImageJob);
         if (extension_loaded('gd') || extension_loaded('imagick')) {
@@ -309,5 +315,15 @@ class EventAiTagsDispatchTest extends TestCase
             GenerateEventAiTagsJob::class,
             fn (GenerateEventAiTagsJob $job) => $job->eventId === $eventId
         );
+
+        if ($admin) {
+            Bus::assertNotDispatched(ReviewEventRequestWithAi::class);
+        } else {
+            Bus::assertDispatchedTimes(ReviewEventRequestWithAi::class, 1);
+            Bus::assertDispatched(
+                ReviewEventRequestWithAi::class,
+                fn (ReviewEventRequestWithAi $job) => $job->requestId === $eventRequestId
+            );
+        }
     }
 }
