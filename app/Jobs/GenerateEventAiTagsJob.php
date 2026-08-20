@@ -6,6 +6,7 @@ use App\Models\Events;
 use App\Models\EventsImges;
 use App\Services\EventAiTagsPersistenceService;
 use App\Services\GenerateImageTagsService;
+use App\Services\VideoFrameExtractor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -51,7 +52,8 @@ class GenerateEventAiTagsJob implements ShouldQueue
 
     public function handle(
         GenerateImageTagsService $tagsService,
-        EventAiTagsPersistenceService $persistenceService
+        EventAiTagsPersistenceService $persistenceService,
+        VideoFrameExtractor $videoFrameExtractor
     ): void {
         $event = Events::query()->find($this->eventId);
 
@@ -63,26 +65,53 @@ class GenerateEventAiTagsJob implements ShouldQueue
             return;
         }
 
-        $images = $event->images()
-            ->orderBy('id')
-            ->get()
-            ->filter(fn (EventsImges $image) => $this->isStoredImage($image))
-            ->take(max(0, (int) config('ai_tags.images_limit', 5)))
-            ->values();
+        $visualInputLimit = max(0, (int) config('ai_tags.images_limit', 5));
+        $analysisBatches = [];
+        $temporaryFramePaths = [];
+        $media = $event->images()->orderBy('id')->get();
+        $imagePaths = [];
+        $imageMediaByIndex = [];
 
-        $imagesByIndex = [];
-        $storedPaths = [];
-
-        foreach ($images as $offset => $image) {
-            $imageIndex = $offset + 1;
-            $imagesByIndex[$imageIndex] = $image;
-            $storedPaths[] = (string) $image->full_url;
+        foreach ($media->filter(fn (EventsImges $item) => $this->isStoredImage($item))->take($visualInputLimit) as $image) {
+            $imagePaths[] = (string) $image->full_url;
+            $imageMediaByIndex[count($imagePaths)] = $image;
         }
 
-        if ($storedPaths === []) {
-            Log::warning('event_ai_tags_no_stored_images', [
+        if ($imagePaths !== []) {
+            $analysisBatches[] = [
+                'paths' => $imagePaths,
+                'media_by_index' => $imageMediaByIndex,
+            ];
+        }
+
+        foreach ($media->filter(fn (EventsImges $item) => $this->isStoredVideo($item)) as $video) {
+            $frames = $videoFrameExtractor->extract(
+                $video,
+                max(1, (int) config('ai_tags.video_frames_limit', 5))
+            );
+            $temporaryFramePaths = [...$temporaryFramePaths, ...$frames];
+            $videoMediaByIndex = [];
+
+            foreach ($frames as $index => $framePath) {
+                $videoMediaByIndex[$index + 1] = $video;
+            }
+
+            if ($frames !== []) {
+                $analysisBatches[] = [
+                    'paths' => $frames,
+                    'media_by_index' => $videoMediaByIndex,
+                ];
+            }
+        }
+
+        if ($analysisBatches === []) {
+            Log::warning('event_ai_tags_no_visual_inputs', [
                 'event_id' => $this->eventId,
             ]);
+            $analysisBatches[] = [
+                'paths' => [],
+                'media_by_index' => [],
+            ];
         }
 
         $eventRequestCreate = $event->requests()->first();
@@ -128,35 +157,46 @@ class GenerateEventAiTagsJob implements ShouldQueue
 
         Log::info('GenerateEventAiTagsJob: AI request started', [
             'event_id' => $this->eventId,
-            'images_count' => count($storedPaths),
+            'images_count' => collect($analysisBatches)->sum(fn (array $batch) => count($batch['paths'])),
             'model' => config('services.openrouter.model'),
         ]);
 
-        $result = $tagsService->handleStoredImages(
-            title: (string) $event->title,
-            description: $event->description,
-            storedPaths: $storedPaths,
-            language: (string) config('ai_tags.language', 'ar'),
-            eventId: $this->eventId
-        );
-
-        Log::info('GenerateEventAiTagsJob: AI request completed', [
-            'event_id' => $this->eventId,
-            'event_tags_count' => count($result['event_tags'] ?? []),
-            'images_results_count' => count($result['images'] ?? []),
-        ]);
-
         try {
-            $persistenceService->persist($event, $result, $imagesByIndex);
-        } catch (Throwable $exception) {
-            Log::error('GenerateEventAiTagsJob: tags persistence failed', [
-                'event_id' => $this->eventId,
-                'message' => $exception->getMessage(),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-            ]);
+            $eventTagsCount = 0;
+            $mediaResultsCount = 0;
 
-            throw $exception;
+            foreach ($analysisBatches as $batch) {
+                $result = $tagsService->handleStoredImages(
+                    title: (string) $event->title,
+                    description: $event->description,
+                    storedPaths: $batch['paths'],
+                    language: (string) config('ai_tags.language', 'ar'),
+                    eventId: $this->eventId
+                );
+                $eventTagsCount += count($result['event_tags'] ?? []);
+                $mediaResultsCount += count($result['images'] ?? []);
+
+                try {
+                    $persistenceService->persist($event, $result, $batch['media_by_index']);
+                } catch (Throwable $exception) {
+                    Log::error('GenerateEventAiTagsJob: tags persistence failed', [
+                        'event_id' => $this->eventId,
+                        'message' => $exception->getMessage(),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                    ]);
+
+                    throw $exception;
+                }
+            }
+
+            Log::info('GenerateEventAiTagsJob: AI request completed', [
+                'event_id' => $this->eventId,
+                'event_tags_count' => $eventTagsCount,
+                'images_results_count' => $mediaResultsCount,
+            ]);
+        } finally {
+            $videoFrameExtractor->cleanup($temporaryFramePaths);
         }
     }
 
@@ -205,5 +245,27 @@ class GenerateEventAiTagsJob implements ShouldQueue
         } catch (Throwable) {
             return true;
         }
+    }
+
+    private function isStoredVideo(EventsImges $media): bool
+    {
+        $path = ltrim((string) $media->full_url, '/');
+
+        if ($path === '' || $media->type !== 'video') {
+            return false;
+        }
+
+        $disk = Storage::disk('public');
+
+        if (! $disk->exists($path)) {
+            Log::warning('event_ai_tags_video_missing', [
+                'event_id' => $this->eventId,
+                'events_imges_id' => $media->getKey(),
+            ]);
+
+            return false;
+        }
+
+        return true;
     }
 }

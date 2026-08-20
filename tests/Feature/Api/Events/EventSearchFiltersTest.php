@@ -87,7 +87,7 @@ class EventSearchFiltersTest extends TestCase
     {
         Schema::dropIfExists('images_tags');
         Schema::dropIfExists('event__tags');
-        Schema::dropIfExists('events_imges');
+        Schema::dropIfExists('events_images');
         Schema::dropIfExists('event_translations');
         Schema::dropIfExists('sub_categorey_translations');
         Schema::dropIfExists('sub_categoreys');
@@ -153,7 +153,7 @@ class EventSearchFiltersTest extends TestCase
             $table->timestamps();
         });
 
-        Schema::create('events_imges', function (Blueprint $table) {
+        Schema::create('events_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id')->nullable();
             $table->string('full_url')->nullable();

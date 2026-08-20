@@ -23,12 +23,12 @@ class DownloadController extends Controller
             ->groupBy('media_id');
 
         $media = EventsImges::query()
-            ->select(['events_imges.id', 'events_imges.preview_url', 'events_imges.type', 'events_imges.width', 'events_imges.height'])
+            ->select(['events_images.id', 'events_images.preview_url', 'events_images.type', 'events_images.width', 'events_images.height'])
             ->joinSub($latestEntitlements, 'user_entitlements', function ($join) {
-                $join->on('user_entitlements.media_id', '=', 'events_imges.id');
+                $join->on('user_entitlements.media_id', '=', 'events_images.id');
             })
             ->orderByDesc('user_entitlements.latest_granted_at')
-            ->orderByDesc('events_imges.id')
+            ->orderByDesc('events_images.id')
             ->get()
             ->map(fn (EventsImges $item) => [
                 'id' => $item->id,

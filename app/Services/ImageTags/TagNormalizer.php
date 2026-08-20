@@ -2,8 +2,12 @@
 
 namespace App\Services\ImageTags;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
+
 class TagNormalizer
 {
+    public function __construct(private readonly ConfigRepository $config) {}
+
     /**
      * @param  array<mixed>  $tags
      * @return array<string>
@@ -25,6 +29,10 @@ class TagNormalizer
             $tag = preg_replace('/\s+/u', ' ', trim($tag));
 
             if ($tag === '') {
+                continue;
+            }
+
+            if (mb_strlen($tag) > (int) $this->config->get('ai_tags.tag_max_length', 50)) {
                 continue;
             }
 

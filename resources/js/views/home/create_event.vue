@@ -5,6 +5,9 @@
                 <h1 class="display-6 fw-bold text-dark">
                     {{ props.admin ? $t("eventForm.admin.title") : tr("eventForm.title", "Create event") }}
                 </h1>
+                <p class="text-muted small mb-0 mt-2">
+                    {{ $t("eventForm.minimumRequirementsHint") }}
+                </p>
             </div>
 
             <form @submit.prevent="createEvent" class="row g-3 g-md-4">
@@ -194,7 +197,6 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.country", "Country") }}
-                                                <span v-if="!props.admin" class="text-danger">*</span>
                                             </label>
                                             <input
                                                 v-model="countrySearch"
@@ -205,7 +207,6 @@
                                             <select
                                                 v-model="selectedCountryId"
                                                 class="form-select form-select-md rounded-3"
-                                                :required="!props.admin"
                                                 @change="loadCities"
                                             >
                                                 <option value="" disabled>{{ tr("eventForm.selectCountry", "Select country") }}</option>
@@ -218,13 +219,11 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.city", "City") }}
-                                                <span v-if="!props.admin" class="text-danger">*</span>
                                             </label>
                                             <select
                                                 v-model="form.city_id"
                                                 :disabled="!selectedCountryId || cities.length === 0"
                                                 class="form-select form-select-md rounded-3"
-                                                :required="!props.admin"
                                             >
                                                 <option value="" disabled>
                                                     {{ selectedCountryId ? tr("eventForm.selectCity", "Select city") : tr("eventForm.selectCityFirst", "Select country first") }}
@@ -238,12 +237,10 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.mainCategory", "Main category") }}
-                                                <span v-if="!props.admin" class="text-danger">*</span>
                                             </label>
                                             <select
                                                 v-model="selectedCategoryId"
                                                 class="form-select form-select-md rounded-3"
-                                                :required="!props.admin"
                                                 @change="loadSubCategories"
                                             >
                                                 <option value="" disabled>{{ tr("commons.choose", "Choose") }}</option>
@@ -256,13 +253,11 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.subCategory", "Sub category") }}
-                                                <span v-if="!props.admin" class="text-danger">*</span>
                                             </label>
                                             <select
                                                 v-model="form.sub_categorey_id"
                                                 :disabled="!selectedCategoryId || subCategories.length === 0"
                                                 class="form-select form-select-md rounded-3"
-                                                :required="!props.admin"
                                             >
                                                 <option value="" disabled>{{ tr("eventForm.selectSubFirst", "Select sub category") }}</option>
                                                 <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
@@ -273,7 +268,7 @@
 
                                         <div class="col-12">
                                             <label class="form-label fw-medium d-flex align-items-center justify-content-between">
-                                                <span>{{ $t('eventForm.tags') }} <span v-if="!props.admin" class="text-danger">*</span></span>
+                                                <span>{{ $t('eventForm.tags') }}</span>
                                                 <small class="text-muted">{{ selectedTags.length }} {{ $t('eventForm.tagsSelected') }}</small>
                                             </label>
 
@@ -400,7 +395,6 @@
                                     <div class="mt-3">
                                         <label class="form-label fw-medium d-block mb-2">
                                             {{ tr("eventForm.selectLocationMap", "Select location on map") }}
-                                            <span v-if="!props.admin" class="text-danger">*</span>
                                         </label>
 
                                         <div
@@ -422,9 +416,6 @@
                                             <strong>{{ tr("eventForm.lng", "Lng") }}: {{ form.longitude.toFixed(6) }}</strong>
                                         </div>
 
-                                        <div v-else-if="!props.admin" class="mt-2 small text-danger">
-                                            {{ tr("eventForm.pleaseSelectLocation", "Please select a location") }}
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -440,9 +431,8 @@
                                         <div class="col-12 col-sm-4">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.startDate", "Start date") }}
-                                                <span v-if="!props.admin" class="text-danger">*</span>
                                             </label>
-                                            <input v-model="form.start_date" type="date" class="form-control rounded-3" :required="!props.admin" />
+                                            <input v-model="form.start_date" type="date" class="form-control rounded-3" />
                                         </div>
                                         <div class="col-12 col-sm-4">
                                             <label class="form-label fw-medium">{{ tr("eventForm.endDate", "End date") }}</label>
@@ -545,8 +535,8 @@ const tr = (key, fallback) => (te(key) ? t(key) : fallback);
 
 const form = ref({
     // is_real: {{ $t('eventForm.eventType') }}
-    is_real: null,
-    photography_type: "",
+    is_real: false,
+    photography_type: "normal",
     title: "",
     description: "",
     city_id: "",
@@ -645,7 +635,7 @@ const canAddNewTag = computed(() => {
 const canGenerateAiTags = computed(() =>
     Boolean(
         form.value.title?.trim() &&
-        form.value.media_items.some((item) => item.file instanceof File)
+        form.value.media_items.some((item) => item.file instanceof File && item.file.type.startsWith("image/"))
     )
 );
 
@@ -654,10 +644,7 @@ const isEventTypeValid = computed(() =>
     form.value.is_real === true || form.value.is_real === false
 );
 
-const isPhotographyPhaseValid = computed(() =>
-    isEventTypeValid.value &&
-    ["professional", "normal"].includes(form.value.photography_type)
-);
+const isPhotographyPhaseValid = computed(() => isEventTypeValid.value);
 
 const isDetailsPhaseValid = computed(() => {
     const hasBasicInfo = Boolean(
@@ -665,60 +652,16 @@ const isDetailsPhaseValid = computed(() => {
         form.value.description?.trim()
     );
 
-    // Admin can create immediately after completing the upload step
-    // and entering only the event title + description.
-    if (props.admin) return hasBasicInfo;
-
-    // Keep the existing stricter requirements for normal users.
-    return Boolean(
-        hasBasicInfo &&
-        form.value.city_id &&
-        form.value.sub_categorey_id &&
-        form.value.start_date &&
-        hasSelectedLocation.value &&
-        selectedTags.value.length > 0
-    );
+    return hasBasicInfo;
 });
 
 const photosBlockingMessage = computed(() => {
-    const photos = form.value.media_items;
+    const media = form.value.media_items;
 
-    if (photos.length === 0) return "Please upload at least one photo.";
+    if (media.length === 0) return t("eventForm.errors.mediaRequired");
 
-    /*
-     * Admin:
-     * photo description and photo tags are OPTIONAL.
-     *
-     * Normal users:
-     * keep the existing required validation unchanged.
-     */
-    if (!props.admin && photos.some((item) => !item.description?.trim())) {
-        return "Every photo must have a description.";
-    }
-
-    if (!props.admin && photos.some((item) => !Array.isArray(item.tags) || item.tags.length === 0)) {
-        return "Every photo must have at least one tag.";
-    }
-
-    if (photos.some((item) => !item.custom_price || Number(item.custom_price) <= 0)) {
-        return "Please add a valid price for every photo.";
-    }
-
-    if (photos.some((item) => item.status === "checking")) {
-        return "Please wait until all photo checks finish.";
-    }
-
-    const rejected = photos.find((item) => item.status === "rejected");
-
-    if (rejected) {
-        return rejected.errors?.length
-            ? rejected.errors.join("; ")
-            : t("eventForm.errors.rejectedPhotosEvent");
-    }
-
-    if (form.value.photography_type === "professional" && photos.some((item) => item.status !== "accepted")) {
-        return "All professional photos must be at least 720px by 720px and pass backend quality validation.";
-    }
+    const invalid = media.find((item) => item.invalidFile);
+    if (invalid) return invalid.errors?.join("; ") || t("photoUpload.allowedTypes");
 
     return "";
 });
@@ -726,14 +669,6 @@ const photosBlockingMessage = computed(() => {
 const isPhotosPhaseValid = computed(() => photosBlockingMessage.value === "");
 
 const stepOneBlockingMessage = computed(() => {
-    if (!isEventTypeValid.value) {
-        return "Please select an event type before continuing.";
-    }
-
-    if (!["professional", "normal"].includes(form.value.photography_type)) {
-        return t("eventForm.selectPhotographyBeforeContinue");
-    }
-
     return photosBlockingMessage.value;
 });
 
@@ -990,7 +925,7 @@ async function generateAiTags() {
     fd.append("language", supportedAiLanguages.includes(currentLanguage) ? currentLanguage : "en");
 
     form.value.media_items
-        .filter((item) => item.file instanceof File)
+        .filter((item) => item.file instanceof File && item.file.type.startsWith("image/"))
         .slice(0, 5)
         .forEach((item) => fd.append("images[]", item.file));
 
@@ -1076,29 +1011,13 @@ async function createEvent() {
     fd.append("photography_type", form.value.photography_type);
     fd.append("title", form.value.title);
     fd.append("description", form.value.description);
-    // Normal users keep the original required payload.
-    // Admin may create with only the completed upload step + title + description,
-    // so the remaining details are appended only when provided.
-    if (props.admin) {
-        if (form.value.city_id) fd.append("city_id", form.value.city_id);
-        if (form.value.sub_categorey_id) fd.append("sub_categorey_id", form.value.sub_categorey_id);
-        if (form.value.start_date) fd.append("start_date", form.value.start_date);
+    if (form.value.city_id) fd.append("city_id", form.value.city_id);
+    if (form.value.sub_categorey_id) fd.append("sub_categorey_id", form.value.sub_categorey_id);
+    if (form.value.start_date) fd.append("start_date", form.value.start_date);
+    if (form.value.end_date) fd.append("end_date", form.value.end_date);
+    if (form.value.time) fd.append("time", form.value.time);
 
-        if (form.value.end_date) fd.append("end_date", form.value.end_date);
-        if (form.value.time) fd.append("time", form.value.time);
-
-        if (hasSelectedLocation.value) {
-            fd.append("lattitude", form.value.latitude);
-            fd.append("langitude", form.value.longitude);
-        }
-    } else {
-        fd.append("city_id", form.value.city_id);
-        fd.append("sub_categorey_id", form.value.sub_categorey_id);
-        fd.append("start_date", form.value.start_date);
-
-        if (form.value.end_date) fd.append("end_date", form.value.end_date);
-        if (form.value.time) fd.append("time", form.value.time);
-
+    if (hasSelectedLocation.value) {
         fd.append("lattitude", form.value.latitude);
         fd.append("langitude", form.value.longitude);
     }

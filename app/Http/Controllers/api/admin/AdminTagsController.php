@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TagRequest;
 use App\Repositories\Contracts\Tags\TagRepositoryInterface as TagsRepository;
+use App\Services\EventTagCacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
@@ -14,14 +15,12 @@ class AdminTagsController extends Controller
 {
     use ApiResponse;
 
-    private const CACHE_VERSION_KEY = 'tags:cache_version';
-
     private const CACHE_TTL_HOURS = 24;
 
     public function __construct(
-        private readonly TagsRepository $tagsRepository
-    ) {
-    }
+        private readonly TagsRepository $tagsRepository,
+        private readonly EventTagCacheService $tagCache
+    ) {}
 
     /**
      * Display a paginated list of tags.
@@ -38,7 +37,7 @@ class AdminTagsController extends Controller
             (int) $request->query('page', 1)
         );
 
-        $cacheVersion = $this->getCacheVersion();
+        $cacheVersion = $this->tagCache->tagCacheVersion();
 
         $cacheKey = sprintf(
             'tags:v%s:paginated:per_page:%d:page:%d',
@@ -64,7 +63,7 @@ class AdminTagsController extends Controller
      */
     public function single($id)
     {
-        $cacheVersion = $this->getCacheVersion();
+        $cacheVersion = $this->tagCache->tagCacheVersion();
         $cacheKey = "tags:v{$cacheVersion}:single:{$id}";
 
         $tag = Cache::remember(
@@ -73,7 +72,7 @@ class AdminTagsController extends Controller
             fn () => $this->tagsRepository->getTagById($id)
         );
 
-        if (!$tag) {
+        if (! $tag) {
             return $this->error('Tag not found', 404);
         }
 
@@ -92,8 +91,6 @@ class AdminTagsController extends Controller
             $tag = $this->tagsRepository->createTag(
                 $request->validated()
             );
-
-            $this->clearTagsCache();
 
             return $this->success(
                 $tag,
@@ -120,11 +117,9 @@ class AdminTagsController extends Controller
                 $request->validated()
             );
 
-            if (!$tag) {
+            if (! $tag) {
                 return $this->error('Tag not found', 404);
             }
-
-            $this->clearTagsCache();
 
             return $this->success(
                 $tag,
@@ -148,11 +143,9 @@ class AdminTagsController extends Controller
         try {
             $deleted = $this->tagsRepository->deleteTag($id);
 
-            if (!$deleted) {
+            if (! $deleted) {
                 return $this->error('Tag not found', 404);
             }
-
-            $this->clearTagsCache();
 
             return $this->success(
                 null,
@@ -173,43 +166,11 @@ class AdminTagsController extends Controller
      */
     public function clearCache()
     {
-        $this->clearTagsCache();
+        $this->tagCache->invalidate();
 
         return $this->success(
             null,
             'Tags cache cleared successfully'
-        );
-    }
-
-    /**
-     * Get the current tags cache version.
-     */
-    private function getCacheVersion(): int
-    {
-        $version = Cache::get(self::CACHE_VERSION_KEY);
-
-        if ($version === null) {
-            $version = 1;
-
-            Cache::forever(
-                self::CACHE_VERSION_KEY,
-                $version
-            );
-        }
-
-        return (int) $version;
-    }
-
-    /**
-     * Invalidate all cached tags by changing the version.
-     */
-    private function clearTagsCache(): void
-    {
-        $currentVersion = $this->getCacheVersion();
-
-        Cache::forever(
-            self::CACHE_VERSION_KEY,
-            $currentVersion + 1
         );
     }
 }

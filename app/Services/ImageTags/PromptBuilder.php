@@ -41,6 +41,7 @@ Instructions:
 8. Return no more than {$eventTagsLimit} event_tags.
 9. Return no more than {$imageTagsLimit} tags for each image.
 10. The number of image objects must be exactly {$imagesCount}.
+11. Keep every tag at 50 characters or fewer.
 
 Return exactly in this JSON structure:
 {

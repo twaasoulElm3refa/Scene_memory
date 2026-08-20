@@ -53,6 +53,7 @@ return [
 
     'ffmpeg' => [
         'binary' => env('FFMPEG_BIN', 'ffmpeg'),
+        'ffprobe_binary' => env('FFPROBE_BIN', 'ffprobe'),
     ],
 
     'slack' => [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Jobs\GenerateEventAiTagsJob;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\Request;
@@ -20,8 +21,7 @@ class EventImageController extends Controller
     public function __construct(
         private readonly EventImageRepositoryInterface $eventImageRepository,
         private readonly EventRepositoryInterface $eventRepository
-    ) {
-    }
+    ) {}
 
     public function allPerEvent()
     {
@@ -75,6 +75,7 @@ class EventImageController extends Controller
 
             $eventImage = $this->eventImageRepository->create($data);
             $this->clearCache($event->id, $event->slug);
+            GenerateEventAiTagsJob::dispatch((int) $event->id);
 
             return $this->success(
                 $this->normalizeMedia($eventImage),
@@ -114,7 +115,7 @@ class EventImageController extends Controller
 
         foreach ($locales as $locale) {
             Cache::forget("events_single_{$slug}_{$locale}");
-            $this->forgetEventsCache('event_' . strtolower(trim($slug)) . "_{$locale}");
+            $this->forgetEventsCache('event_'.strtolower(trim($slug))."_{$locale}");
         }
     }
 

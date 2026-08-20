@@ -381,14 +381,14 @@ class EventRepository implements EventRepositoryInterface
 
                 $tagQuery->orWhereExists(function ($subQuery) use ($tagsArray) {
                     $subQuery->selectRaw('1')
-                        ->from('events_imges')
+                        ->from('events_images')
                         ->join(
                             'images_tags',
                             'images_tags.events_imges_id',
                             '=',
-                            'events_imges.id'
+                            'events_images.id'
                         )
-                        ->whereColumn('events_imges.event_id', 'events.id')
+                        ->whereColumn('events_images.event_id', 'events.id')
                         ->whereIn('images_tags.tags_id', $tagsArray);
                 });
             });

@@ -262,7 +262,7 @@ Route::prefix('v1')->group(function () {
         //95
 
         // Create Event
-        Route::post('/create/Event', [UserDashboardController::class,  'create'])->middleware('auth:sanctum');
+        Route::post('/create/Event', [EventUserCreateController::class,  'create'])->middleware('auth:sanctum');
         Route::post('/{slug}/update/Event', [UserDashboardController::class,  'update'])->middleware(OwnEvent::class, 'auth:sanctum');
         Route::delete('/{id}/destroy', [UserDashboardController::class, 'delete'])->middleware(OwnEvent::class);
         //98
@@ -288,7 +288,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('create')->middleware(['auth:sanctum'])->group(function () {
-        Route::post('/', [HomeController::class, 'create']);
+        Route::post('/', [EventUserCreateController::class, 'create']);
         Route::post('/{id}', [HomeController::class, 'update']);
         Route::delete('/{id}', [HomeController::class, 'destroy']);
         //108

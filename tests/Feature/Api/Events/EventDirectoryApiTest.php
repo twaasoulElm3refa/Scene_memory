@@ -129,7 +129,7 @@ class EventDirectoryApiTest extends TestCase
             $table->timestamps();
         });
 
-        Schema::create('events_imges', function (Blueprint $table) {
+        Schema::create('events_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
             $table->string('preview_url')->nullable();

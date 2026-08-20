@@ -50,14 +50,14 @@ export function getMediaRawPath(mediaOrPath) {
     if (typeof mediaOrPath === "string") return mediaOrPath;
 
     return (
+        mediaOrPath.full_url ||
+        mediaOrPath.fullUrl ||
         mediaOrPath.preview_url ||
         mediaOrPath.previewUrl ||
         mediaOrPath.image_url ||
         mediaOrPath.imageUrl ||
         mediaOrPath.webp_url ||
         mediaOrPath.webpUrl ||
-        mediaOrPath.full_url ||
-        mediaOrPath.fullUrl ||
         mediaOrPath.full_url_webp ||
         mediaOrPath.fullUrlWebp ||
         mediaOrPath.url ||
@@ -67,6 +67,7 @@ export function getMediaRawPath(mediaOrPath) {
         mediaOrPath.filePath ||
         mediaOrPath.file ||
         mediaOrPath.src ||
+        (typeof mediaOrPath.video === "string" ? mediaOrPath.video : "") ||
         ""
     );
 }
@@ -92,6 +93,28 @@ export function getStorageUrl(mediaOrPath) {
     }
 
     return `${backendOrigin}/storage/${path.replace(/^\/+/, "")}`;
+}
+
+export function isVideoUrl(url) {
+    if (!url || typeof url !== "string") return false;
+
+    const cleanUrl = url.split("?")[0].split("#")[0].toLowerCase();
+
+    return [".mp4", ".webm", ".ogg", ".mov", ".m4v"].some((extension) =>
+        cleanUrl.endsWith(extension)
+    );
+}
+
+export function isMediaVideo(media) {
+    if (!media) return false;
+
+    const type = String(media?.type || "").trim().toLowerCase();
+
+    if (type === "video" || media.video === true || media.is_video === true || media.isVideo === true) {
+        return true;
+    }
+
+    return isVideoUrl(getMediaRawPath(media));
 }
 
 export function getEventImageCandidate(event) {

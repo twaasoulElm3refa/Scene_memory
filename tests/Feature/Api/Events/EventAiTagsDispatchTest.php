@@ -5,8 +5,10 @@ namespace Tests\Feature\Api\Events;
 use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\TranslateEventJob;
+use App\Models\EventsImges;
 use App\Models\Tags;
 use App\Models\User;
+use App\Services\EventTagCacheService;
 use App\Services\ImageAnalysisService;
 use App\Services\TagResolverService;
 use Illuminate\Bus\Batch;
@@ -254,7 +256,7 @@ class EventAiTagsDispatchTest extends TestCase
             &$finallyCallback,
             &$capturedImageJob
         ) {
-            $this->assertSame("event-images:{$eventId}", $batch->name);
+            $this->assertSame("event-media:{$eventId}", $batch->name);
             $this->assertCount(1, $batch->jobs);
             $imageJob = $batch->jobs->first();
             $this->assertInstanceOf(ProcessEventImageJob::class, $imageJob);
@@ -278,9 +280,12 @@ class EventAiTagsDispatchTest extends TestCase
         if (extension_loaded('gd') || extension_loaded('imagick')) {
             $capturedImageJob->handle(
                 app(ImageAnalysisService::class),
-                app(TagResolverService::class)
+                app(TagResolverService::class),
+                app(EventTagCacheService::class)
             );
-            $storedImage = DB::table('events_imges')->where('event_id', $eventId)->first();
+            $storedImage = DB::table((new EventsImges)->getTable())
+                ->where('event_id', $eventId)
+                ->first();
             $this->assertNotNull($storedImage);
             $this->assertSame('Manual photo description', $storedImage->description);
             $this->assertSame(25.5, (float) $storedImage->price);

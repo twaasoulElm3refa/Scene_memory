@@ -11,6 +11,7 @@ use App\Models\EventsImges;
 use App\Models\Tags;
 use App\Services\EventAiTagsPersistenceService;
 use App\Services\GenerateImageTagsService;
+use App\Services\VideoFrameExtractor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\DB;
@@ -177,6 +178,75 @@ class GenerateEventAiTagsJobTest extends TestCase
             ->twice();
     }
 
+    public function test_video_frames_use_the_image_vision_pipeline_and_attach_tags_to_the_video(): void
+    {
+        $event = Events::create([
+            'title' => 'Video event',
+            'description' => 'Representative frame analysis',
+        ]);
+        Storage::disk('public')->put('videos/event.mp4', 'video-bytes');
+        $video = EventsImges::create([
+            'event_id' => $event->id,
+            'type' => 'video',
+            'full_url' => 'videos/event.mp4',
+            'preview_url' => 'videos/event.mp4',
+            'is_active' => 1,
+        ]);
+
+        $frameBytes = base64_decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
+        );
+        Storage::disk('public')->put('ai-video-frames/frame-1.png', $frameBytes);
+        Storage::disk('public')->put('ai-video-frames/frame-2.png', $frameBytes);
+
+        $extractor = Mockery::mock(VideoFrameExtractor::class);
+        $extractor->shouldReceive('extract')
+            ->once()
+            ->with(Mockery::on(fn (EventsImges $media) => $media->is($video)), 5)
+            ->andReturn([
+                'ai-video-frames/frame-1.png',
+                'ai-video-frames/frame-2.png',
+            ]);
+        $extractor->shouldReceive('cleanup')
+            ->once()
+            ->with([
+                'ai-video-frames/frame-1.png',
+                'ai-video-frames/frame-2.png',
+            ]);
+
+        Http::fake([
+            '*' => Http::response([
+                'choices' => [[
+                    'message' => [
+                        'content' => json_encode([
+                            'event_tags' => ['Documentary'],
+                            'images' => [
+                                ['image_index' => 1, 'tags' => ['Crowd']],
+                                ['image_index' => 2, 'tags' => ['Stage', 'Crowd']],
+                            ],
+                        ]),
+                    ],
+                ]],
+            ]),
+        ]);
+
+        (new GenerateEventAiTagsJob($event->id))->handle(
+            app(GenerateImageTagsService::class),
+            app(EventAiTagsPersistenceService::class),
+            $extractor
+        );
+
+        $this->assertEqualsCanonicalizing(
+            ['Crowd', 'Stage'],
+            $video->fresh()->tags()->pluck('tags.name')->all()
+        );
+        $this->assertEqualsCanonicalizing(
+            ['Documentary'],
+            $event->fresh()->tags()->pluck('tags.name')->all()
+        );
+        $this->assertSame(1, Tags::where('slug', 'crowd')->where('mode', 'ai')->count());
+    }
+
     public function test_it_sends_only_the_first_five_existing_images_and_excludes_video(): void
     {
         $event = Events::create([
@@ -254,7 +324,7 @@ class GenerateEventAiTagsJobTest extends TestCase
         }
 
         $this->assertDatabaseHas('events', ['id' => $event->id]);
-        $this->assertDatabaseHas('events_imges', ['id' => $image->id]);
+        $this->assertDatabaseHas('events_images', ['id' => $image->id]);
         $this->assertDatabaseCount('event__tags', 0);
         $this->assertDatabaseCount('images_tags', 0);
 
@@ -380,7 +450,11 @@ class GenerateEventAiTagsJobTest extends TestCase
         $job = new GenerateEventAiTagsJob($event->id);
 
         try {
-            $job->handle(app(GenerateImageTagsService::class), $persistence);
+            $job->handle(
+                app(GenerateImageTagsService::class),
+                $persistence,
+                app(VideoFrameExtractor::class)
+            );
             $this->fail('The persistence exception should be rethrown.');
         } catch (RuntimeException $exception) {
             $this->assertSame($persistenceException, $exception);
@@ -629,7 +703,8 @@ class GenerateEventAiTagsJobTest extends TestCase
     {
         (new GenerateEventAiTagsJob($eventId))->handle(
             app(GenerateImageTagsService::class),
-            app(EventAiTagsPersistenceService::class)
+            app(EventAiTagsPersistenceService::class),
+            app(VideoFrameExtractor::class)
         );
     }
 

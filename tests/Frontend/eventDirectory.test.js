@@ -16,6 +16,9 @@ import {
     formatEventDate,
     getEventImageCandidate,
     getEventImageUrl,
+    getMediaRawPath,
+    getStorageUrl,
+    isMediaVideo,
 } from "../../resources/js/services/EventService/eventMedia";
 
 describe("event directory requests", () => {
@@ -55,6 +58,26 @@ describe("shared event directory presentation helpers", () => {
         expect(getEventImageCandidate(event)).toBe("events/preview/photo.webp");
         expect(getEventImageUrl(event)).toContain("/storage/events/preview/photo.webp");
         expect(getEventImageUrl({})).toBe(EVENT_FALLBACK_IMAGE);
+    });
+
+    it("prioritizes full_url so playable video files are not hidden behind previews", () => {
+        const media = {
+            type: "video",
+            preview_url: "events/previews/poster.jpg",
+            full_url: "events/videos/clip.mp4",
+        };
+
+        expect(getMediaRawPath(media)).toBe("events/videos/clip.mp4");
+        expect(getStorageUrl(media)).toContain("/storage/events/videos/clip.mp4");
+    });
+
+    it("detects videos by normalized type, explicit flags, and legacy URL extensions", () => {
+        expect(isMediaVideo({ type: " VIDEO ", full_url: "events/videos/clip.mov?token=123" })).toBe(true);
+        expect(isMediaVideo({ is_video: true, full_url: "events/media/file.bin" })).toBe(true);
+        expect(isMediaVideo({ full_url: "events/videos/archive.m4v#fragment" })).toBe(true);
+        expect(isMediaVideo({ video: "events/videos/legacy.webm" })).toBe(true);
+        expect(isMediaVideo({ type: "image", full_url: "events/images/photo.mp4.jpg" })).toBe(false);
+        expect(isMediaVideo({ preview_url: "events/images/photo.webp" })).toBe(false);
     });
 
     it("formats valid dates through Intl for every supported locale", () => {

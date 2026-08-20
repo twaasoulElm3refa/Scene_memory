@@ -5,11 +5,14 @@ namespace App\Http\Controllers\api\userDshboard;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadMediaRequest;
+use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventVideoJob;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Services\ImageAnalysisService;
 use Illuminate\Support\Facades\Cache;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class MediaRequestController extends Controller
 {
@@ -20,14 +23,13 @@ class MediaRequestController extends Controller
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventImageRepositoryInterface $eventImageRepository
-    ) {
-    }
+    ) {}
 
     public function all()
     {
         $cacheKey = 'mediaRequest_'.request()->input('page', 1);
         $mediaRequest = Cache::remember($cacheKey, $this->cacheTime, function () {
-             return $this->eventImageRepository->findActiveByEventIdPaginated((int) request('id'), 10);
+            return $this->eventImageRepository->findActiveByEventIdPaginated((int) request('id'), 10);
         });
 
         return $this->success($mediaRequest, 'get media request successfully');
@@ -38,8 +40,8 @@ class MediaRequestController extends Controller
         $event = $this->eventRepository->findByIdOrFail((int) $request->id);
         $createdMedia = [];
 
-        $manager = new \Intervention\Image\ImageManager(
-            new \Intervention\Image\Drivers\Gd\Driver()
+        $manager = new ImageManager(
+            new Driver
         );
 
         if ($request->hasFile('url')) {
@@ -56,9 +58,9 @@ class MediaRequestController extends Controller
                     $price = $analysis['price'];
                     $plan = $analysis['plan'];
 
-                    $filename = uniqid() . '.jpg';
-                    $fullPath = 'events/full/' . $filename;
-                    $previewPath = 'events/preview/' . $filename;
+                    $filename = uniqid().'.jpg';
+                    $fullPath = 'events/full/'.$filename;
+                    $previewPath = 'events/preview/'.$filename;
 
                     // Save both full and preview images
                     \Storage::disk('public')->put(
@@ -72,37 +74,37 @@ class MediaRequestController extends Controller
                     );
 
                     $media = $this->eventImageRepository->create([
-                        'event_id'     => $event->id,
-                        'preview_url'  => $previewPath,
-                        'full_url'     => $fullPath,
-                        'width'        => $width,
-                        'height'       => $height,
-                        'size'         => $width * $height,
-                        'price'        => $price,
+                        'event_id' => $event->id,
+                        'preview_url' => $previewPath,
+                        'full_url' => $fullPath,
+                        'width' => $width,
+                        'height' => $height,
+                        'size' => $width * $height,
+                        'price' => $price,
                         'licence_type' => $plan,
-                        'is_active'    => 1
+                        'is_active' => 1,
                     ]);
 
                     $createdMedia[] = $media;
                 } elseif (str_starts_with($mime, 'video/')) {
                     $path = $file->store('events/videos', 'public');
-                    ProcessEventVideoJob::dispatch($event->id, $path);
-
-                    $media = $this->eventImageRepository->create([
-                        'event_id'  => $event->id,
-                        'full_url'  => $path,
-                        'is_active' => 1
-                    ]);
-
-                    $createdMedia[] = $media;
+                    ProcessEventVideoJob::dispatch($event->id, $path, true);
                 }
             }
 
-            Cache::tags(['events'])->flush();
+            if ($createdMedia !== []) {
+                GenerateEventAiTagsJob::dispatch((int) $event->id);
+            }
+
+            try {
+                Cache::tags(['events'])->flush();
+            } catch (\Throwable) {
+                // Non-tagged cache stores are used in tests/local setups.
+            }
         }
 
         return $this->success([
-            'media' => $createdMedia
+            'media' => $createdMedia,
         ], '?? ????? ??????? ?????');
     }
 }

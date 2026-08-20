@@ -13,17 +13,15 @@ use App\Models\Event_Tags;
 use App\Models\Tags;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\Requests\RequestRepositoryInterface;
-use App\Services\PhotoQualityService;
+use App\Services\EventTagCacheService;
 use App\Services\TagResolverService;
 use Illuminate\Bus\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class EventUserCreateController extends Controller
 {
@@ -32,8 +30,8 @@ class EventUserCreateController extends Controller
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly RequestRepositoryInterface $requestRepository,
-        private readonly PhotoQualityService $photoQualityService,
-        private readonly TagResolverService $tagResolver
+        private readonly TagResolverService $tagResolver,
+        private readonly EventTagCacheService $cache
     ) {}
 
     public function create(EventsRequest $request)
@@ -52,10 +50,10 @@ class EventUserCreateController extends Controller
         bool $requiresModeration = true,
         bool $isTrending = false
     ) {
-        $photoValidationResults = $this->validateUserPhotoPayload($request);
         $data = $request->validated();
-        // is_real: normalize boolean from FormData
-        $data['is_real'] = $request->boolean('is_real');
+        $data['is_real'] = $request->has('is_real')
+            ? $request->boolean('is_real')
+            : false;
         $data['is_historical'] = $isHistorical;
         $this->stripUploadOnlyData($data);
         $imageJobs = [];
@@ -64,7 +62,6 @@ class EventUserCreateController extends Controller
             $event = DB::transaction(function () use (
                 $data,
                 $request,
-                $photoValidationResults,
                 $requiresModeration,
                 $isTrending,
                 &$imageJobs,
@@ -84,7 +81,7 @@ class EventUserCreateController extends Controller
                     'description' => $data['description'],
                 ]);
                 $this->syncEventTags($event->id, $request);
-                $uploadedFiles = $this->uploadedMediaFiles($request);
+                $uploadedFiles = $request->uploadedMediaFiles();
                 if (! empty($uploadedFiles)) {
                     foreach ($uploadedFiles as $index => $file) {
                         if (! $file instanceof UploadedFile) {
@@ -124,8 +121,7 @@ class EventUserCreateController extends Controller
                                 : 0;
                             $photoMetadata = $this->photoMetadataForIndex(
                                 $request,
-                                $index,
-                                $photoValidationResults[$index] ?? null
+                                $index
                             );
                             \Log::info('Preparing ProcessEventImageJob', [
                                 'event_id' => $event->id,
@@ -162,11 +158,15 @@ class EventUserCreateController extends Controller
                     }
                 }
 
+                if ($imageJobs === [] && $videoJobs === []) {
+                    throw new \RuntimeException('The uploaded media could not be stored.');
+                }
+
                 return $event;
             });
             $this->dispatchPostCommitJobs($event->id, $imageJobs, $videoJobs);
             TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
-            $this->clearEventsCache($event->slug, $requiresModeration);
+            $this->clearEventsCache((int) $event->id, $requiresModeration);
 
             return $this->success(
                 $event->load('translations', 'photos'),
@@ -184,149 +184,13 @@ class EventUserCreateController extends Controller
         }
     }
 
-    private function validateUserPhotoPayload(Request $request): array
-    {
-        $request->validate([
-            'photography_type' => ['required', 'in:normal,professional'],
-            'urls' => ['required_without:photos', 'array', 'min:1', 'max:8'],
-            'urls.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
-            'photos' => ['nullable', 'array', 'min:1', 'max:8'],
-            'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
-            'photo_descriptions' => ['required', 'array', 'min:1'],
-            'photo_descriptions.*' => ['required', 'string', 'max:2000'],
-            'photo_tags_json' => ['required', 'array', 'min:1'],
-            'photo_tags_json.*' => ['required', 'json'],
-            'photo_widths' => ['nullable', 'array'],
-            'photo_heights' => ['nullable', 'array'],
-            'photo_quality_scores' => ['nullable', 'array'],
-            'photo_sharpness_scores' => ['nullable', 'array'],
-            'photo_blur_scores' => ['nullable', 'array'],
-            'photo_validation_statuses' => ['nullable', 'array'],
-            'photo_validation_messages' => ['nullable', 'array'],
-            'media_prices' => ['nullable', 'array'],
-            'media_widths' => ['nullable', 'array'],
-            'media_heights' => ['nullable', 'array'],
-            'media_quality_scores' => ['nullable', 'array'],
-            'media_sharpness_scores' => ['nullable', 'array'],
-            'media_contrast_scores' => ['nullable', 'array'],
-            'media_brightness_scores' => ['nullable', 'array'],
-            'media_file_sizes_mb' => ['nullable', 'array'],
-        ]);
-
-        $uploadedFiles = $this->uploadedMediaFiles($request);
-        $photoCount = count($uploadedFiles);
-
-        if ($photoCount < 1) {
-            throw ValidationException::withMessages([
-                'urls' => ['At least one photo is required.'],
-            ]);
-        }
-
-        $errors = [];
-        $descriptions = $request->input('photo_descriptions', []);
-        $photoTags = $request->input('photo_tags_json', []);
-
-        if (count($descriptions) !== $photoCount) {
-            $errors['photo_descriptions'] = ['Every photo must have a description.'];
-        }
-
-        if (count($photoTags) !== $photoCount) {
-            $errors['photo_tags_json'] = ['Every photo must have at least one tag.'];
-        }
-
-        $this->addMetadataAlignmentErrors($request, $photoCount, $errors);
-
-        foreach ($uploadedFiles as $index => $file) {
-            if (! $file instanceof UploadedFile) {
-                $errors["urls.$index"] = ['Uploaded photo is invalid.'];
-
-                continue;
-            }
-
-            $description = trim((string) ($descriptions[$index] ?? ''));
-
-            if ($description === '') {
-                $errors["photo_descriptions.$index"] = ['Photo description is required.'];
-            }
-
-            $tags = $this->decodePhotoTags($photoTags[$index] ?? null);
-
-            if (empty($tags)) {
-                $errors["photo_tags_json.$index"] = ['Every photo must have at least one tag.'];
-            }
-
-            if (count($tags) > 10) {
-                $errors["photo_tags_json.$index"] = ['Each photo can have up to 10 tags.'];
-            }
-        }
-
-        if (! empty($errors)) {
-            throw ValidationException::withMessages($errors);
-        }
-
-        $validationResults = [];
-        $photographyType = (string) $request->input('photography_type');
-
-        foreach ($uploadedFiles as $index => $file) {
-            $result = $this->photoQualityService->validate($file, $photographyType);
-            $validationResults[$index] = $result;
-
-            if (! $result['accepted']) {
-                $validationErrors = $result['errors'] ?: [$result['message']];
-
-                if ($photographyType === 'professional') {
-                    $errors["urls.$index"] = $validationErrors;
-                } else {
-                    $errors["urls.$index"] = ['Photo is invalid or unreadable.'];
-                }
-            }
-        }
-
-        if (! empty($errors)) {
-            throw ValidationException::withMessages($errors);
-        }
-
-        return $validationResults;
-    }
-
-    private function addMetadataAlignmentErrors(Request $request, int $photoCount, array &$errors): void
-    {
-        foreach ([
-            'photo_widths',
-            'photo_heights',
-            'photo_quality_scores',
-            'photo_sharpness_scores',
-            'photo_blur_scores',
-            'photo_validation_statuses',
-            'photo_validation_messages',
-            'media_prices',
-            'media_widths',
-            'media_heights',
-            'media_quality_scores',
-            'media_sharpness_scores',
-            'media_contrast_scores',
-            'media_brightness_scores',
-            'media_file_sizes_mb',
-        ] as $key) {
-            if (! $request->has($key)) {
-                continue;
-            }
-
-            $values = $request->input($key);
-
-            if (is_array($values) && count($values) === $photoCount) {
-                continue;
-            }
-
-            $errors[$key] = ['Photo metadata must match the uploaded photo count.'];
-        }
-    }
-
     private function stripUploadOnlyData(array &$data): void
     {
         foreach ([
             'urls',
             'photos',
+            'media',
+            'image',
             'tags_id',
             'new_tags',
             'photo_descriptions',
@@ -351,38 +215,11 @@ class EventUserCreateController extends Controller
         }
     }
 
-    private function uploadedMediaFiles(Request $request): array
+    private function photoMetadataForIndex(Request $request, int|string $index): array
     {
-        $files = $request->file('urls');
-
-        if (empty($files)) {
-            $files = $request->file('photos');
-        }
-
-        if ($files instanceof UploadedFile) {
-            return [$files];
-        }
-
-        if (! is_array($files)) {
-            return [];
-        }
-
-        return array_values($files);
-    }
-
-    private function photoMetadataForIndex(Request $request, int|string $index, ?array $validationResult = null): array
-    {
-        $metrics = $validationResult['metrics'] ?? [];
         $tags = $this->normalizePhotoTagsPayload($request->input("photo_tags_json.$index"));
         $photoTagIds = $this->resolvePhotoTagIds($tags);
-        $validationErrors = $validationResult['errors'] ?? [];
-        $validationMessage = $validationResult['message']
-            ?? $request->input("photo_validation_messages.$index")
-            ?? null;
-
-        if (! empty($validationErrors)) {
-            $validationMessage = implode('; ', $validationErrors);
-        }
+        $validationMessage = $request->input("photo_validation_messages.$index");
 
         return [
             'description' => trim((string) $request->input("photo_descriptions.$index")),
@@ -391,17 +228,12 @@ class EventUserCreateController extends Controller
                 'new_tags' => $tags['new_tags'],
             ]),
             'tag_ids' => $photoTagIds,
-            'quality_score' => $metrics['quality_score']
-                ?? $request->input("photo_quality_scores.$index"),
-            'sharpness_score' => $metrics['sharpness_score']
-                ?? $request->input("photo_sharpness_scores.$index"),
-            'blur_score' => $metrics['blur_score']
-                ?? $request->input("photo_blur_scores.$index"),
-            'megapixels' => $metrics['megapixels'] ?? null,
-            'file_size_mb' => $metrics['file_size_mb']
-                ?? $request->input("media_file_sizes_mb.$index"),
-            'validation_status' => $validationResult['status']
-                ?? $request->input("photo_validation_statuses.$index"),
+            'quality_score' => $request->input("photo_quality_scores.$index"),
+            'sharpness_score' => $request->input("photo_sharpness_scores.$index"),
+            'blur_score' => $request->input("photo_blur_scores.$index"),
+            'megapixels' => null,
+            'file_size_mb' => $request->input("media_file_sizes_mb.$index"),
+            'validation_status' => $request->input("photo_validation_statuses.$index"),
             'validation_message' => $validationMessage,
         ];
     }
@@ -609,9 +441,11 @@ class EventUserCreateController extends Controller
     private function dispatchPostCommitJobs(int $eventId, array $imageJobs, array $videoJobs): void
     {
         try {
-            if ($imageJobs !== []) {
-                Bus::batch($imageJobs)
-                    ->name("event-images:{$eventId}")
+            $mediaJobs = [...$imageJobs, ...$videoJobs];
+
+            if ($mediaJobs !== []) {
+                Bus::batch($mediaJobs)
+                    ->name("event-media:{$eventId}")
                     ->allowFailures()
                     ->finally(function (Batch $batch) use ($eventId): void {
                         GenerateEventAiTagsJob::dispatch($eventId);
@@ -621,33 +455,22 @@ class EventUserCreateController extends Controller
                 GenerateEventAiTagsJob::dispatch($eventId);
             }
         } catch (\Throwable $exception) {
-            Log::error('Event image batch dispatch failed', [
+            Log::error('Event media batch dispatch failed', [
                 'event_id' => $eventId,
                 'message' => $exception->getMessage(),
             ]);
-        }
-
-        foreach ($videoJobs as $videoJob) {
-            try {
-                dispatch($videoJob);
-            } catch (\Throwable $exception) {
-                Log::error('Event video job dispatch failed', [
-                    'event_id' => $eventId,
-                    'message' => $exception->getMessage(),
-                ]);
-            }
         }
     }
 
     /**
      * Clear event-related cache safely using Redis tags
      */
-    private function clearEventsCache($slug = null, bool $clearRequests = true)
+    private function clearEventsCache(?int $eventId = null, bool $clearRequests = true)
     {
-        Cache::tags(['events'])->flush();
+        $this->cache->invalidateEvent($eventId);
 
         if ($clearRequests) {
-            Cache::tags(['requests'])->flush();
+            $this->cache->invalidateRequests();
         }
     }
 }

@@ -27,7 +27,7 @@
                 <input
                     ref="fileInput"
                     type="file"
-                    accept="image/png,image/jpeg,image/webp"
+                    accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/avif,image/heic,image/heif,image/tiff,video/mp4,video/webm,video/ogg,video/quicktime"
                     multiple
                     hidden
                     @change="handleSelect"
@@ -41,7 +41,7 @@
                 <button
                     type="button"
                     class="btn btn-primary btn-md px-4 py-2 rounded-pill"
-                    :disabled="!photographyType || hasReachedLimit || uploading"
+                    :disabled="hasReachedLimit || uploading"
                     @click="choosePhoto"
                 >
                     {{ uploading ? $t('photoUpload.checking') : $t('photoUpload.choosePhotos') }}
@@ -69,8 +69,17 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-4">
                             <div class="position-relative">
+                                <video
+                                    v-if="item.isVideo && previewSource(item)"
+                                    :src="previewSource(item)"
+                                    class="img-fluid rounded-3 shadow-sm w-100"
+                                    style="height: 210px; object-fit: cover"
+                                    controls
+                                    preload="metadata"
+                                ></video>
+
                                 <img
-                                    v-if="previewSource(item)"
+                                    v-else-if="previewSource(item)"
                                     :src="previewSource(item)"
                                     :alt="$t('photoUpload.photoAlt', { number: index + 1 })"
                                     class="img-fluid rounded-3 shadow-sm w-100"
@@ -114,7 +123,7 @@
                         <div class="col-12 col-md-8">
                             <div class="mb-3">
                                 <label class="form-label fw-medium">
-                                    {{ $t('photoUpload.photoDescription') }} <span class="text-danger">*</span>
+                                    {{ $t('photoUpload.photoDescription') }}
                                 </label>
                                 <textarea
                                     v-model="item.description"
@@ -127,7 +136,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-medium d-flex justify-content-between">
-                                    <span>{{ $t('photoUpload.photoTags') }} <span class="text-danger">*</span></span>
+                                    <span>{{ $t('photoUpload.photoTags') }}</span>
                                     <small class="text-muted">{{ item.tags.length }} / {{ maxTags }}</small>
                                 </label>
 
@@ -224,7 +233,7 @@
                                     <input
                                         v-model.number="item.custom_price"
                                         type="number"
-                                        min="1"
+                                        min="0"
                                         step="1"
                                         class="form-control rounded-3"
                                         :placeholder="$t('photoUpload.pricePlaceholder')"
@@ -302,7 +311,23 @@ const uploadLimitMessage = ref("");
 const objectUrls = new Set();
 let ignoreNextModelSync = false;
 
-const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "image/bmp",
+    "image/x-ms-bmp",
+    "image/avif",
+    "image/heic",
+    "image/heif",
+    "image/tiff",
+    "image/x-tiff",
+    "video/mp4",
+    "video/webm",
+    "video/ogg",
+    "video/quicktime",
+];
 const maxFileSize = 20 * 1024 * 1024;
 
 const hasReachedLimit = computed(() => items.value.length >= props.maxPhotos);
@@ -343,11 +368,6 @@ onUnmounted(() => {
 });
 
 function choosePhoto() {
-    if (!props.photographyType) {
-        alert(t("photoUpload.selectPhotographyFirst"));
-        return;
-    }
-
     if (hasReachedLimit.value) {
         alert(t("photoUpload.maxPhotos", { max: props.maxPhotos }));
         return;
@@ -370,12 +390,6 @@ async function addFiles(files) {
     const selectedFiles = Array.isArray(files) ? files.filter(Boolean) : [];
 
     if (selectedFiles.length === 0) {
-        return;
-    }
-
-    if (!props.photographyType) {
-        uploadLimitMessage.value = t("photoUpload.selectPhotographyFirst");
-        alert(uploadLimitMessage.value);
         return;
     }
 
@@ -403,11 +417,6 @@ async function addFiles(files) {
 }
 
 async function addFile(file) {
-    if (!props.photographyType) {
-        alert(t("photoUpload.selectPhotographyFirst"));
-        return;
-    }
-
     if (hasReachedLimit.value) {
         alert(t("photoUpload.maxPhotos", { max: props.maxPhotos }));
         return;
@@ -420,8 +429,16 @@ async function addFile(file) {
 
     if (basicErrors.length) {
         item.status = "rejected";
+        item.invalidFile = true;
         item.errors = basicErrors;
         item.validationMessage = t("photoUpload.photoRejected");
+        emitUpdate();
+        return;
+    }
+
+    if (item.isVideo) {
+        item.status = "accepted";
+        item.validationMessage = t("photoUpload.videoReady");
         emitUpdate();
         return;
     }
@@ -430,9 +447,9 @@ async function addFile(file) {
         uploading.value = true;
         await validatePhotoItem(item);
     } catch (error) {
-        item.status = "rejected";
+        item.status = "warning";
         item.errors = [error.message || t("photoUpload.unableToValidate")];
-        item.validationMessage = t("photoUpload.photoRejected");
+        item.validationMessage = t("photoUpload.qualityWarning");
     } finally {
         uploading.value = false;
         emitUpdate();
@@ -443,6 +460,7 @@ function createPhotoItem(file) {
     return {
         id: Date.now() + Math.random(),
         file,
+        isVideo: file.type.startsWith("video/"),
         preview_url: createPreviewUrl(file),
         preview: "",
         description: "",
@@ -451,6 +469,7 @@ function createPhotoItem(file) {
         showTagsDropdown: false,
         status: "idle",
         errors: [],
+        invalidFile: false,
         validationMessage: "",
         metrics: emptyMetrics(),
         suggested_price: "",
@@ -525,15 +544,15 @@ async function validatePhotoItem(item) {
         if (error.response?.data) {
             applyValidationResult(item, error.response.data);
         } else {
-            item.status = "rejected";
-            item.validationMessage = t("photoUpload.photoRejected");
+            item.status = "warning";
+            item.validationMessage = t("photoUpload.qualityWarning");
             item.errors = [t("photoUpload.validationFailed")];
             item.metrics = emptyMetrics();
         }
     } finally {
         if (item.status === "checking") {
-            item.status = "rejected";
-            item.validationMessage = t("photoUpload.photoRejected");
+            item.status = "warning";
+            item.validationMessage = t("photoUpload.qualityWarning");
             item.errors = [t("photoUpload.validationFailed")];
         }
 
@@ -545,8 +564,8 @@ function applyValidationResult(item, result) {
     const accepted = Boolean(result?.accepted) || result?.status === "accepted";
     const metrics = normalizeMetrics(result?.metrics || {});
 
-    item.status = accepted ? "accepted" : "rejected";
-    item.validationMessage = result?.message || (accepted ? t("photoUpload.photoAccepted") : t("photoUpload.photoRejected"));
+    item.status = accepted ? "accepted" : "warning";
+    item.validationMessage = result?.message || (accepted ? t("photoUpload.photoAccepted") : t("photoUpload.qualityWarning"));
     item.errors = Array.isArray(result?.errors) ? result.errors : [];
     item.metrics = metrics;
 
@@ -560,7 +579,7 @@ function applyValidationResult(item, result) {
     }
 
     if (item.status === "checking") {
-        item.status = accepted ? "accepted" : "rejected";
+        item.status = accepted ? "accepted" : "warning";
     }
 }
 
@@ -609,6 +628,8 @@ function normalizeMediaItem(item) {
         status: source.status || "idle",
         metrics: source.metrics || emptyMetrics(),
         errors: Array.isArray(source.errors) ? source.errors : [],
+        isVideo: Boolean(source.isVideo || source.file?.type?.startsWith("video/")),
+        invalidFile: Boolean(source.invalidFile),
     };
 }
 
@@ -792,6 +813,7 @@ function statusBadgeClass(status) {
     if (status === "accepted") return "text-bg-success";
     if (status === "rejected") return "text-bg-danger";
     if (status === "checking") return "text-bg-warning";
+    if (status === "warning") return "text-bg-warning";
     return "text-bg-secondary";
 }
 
@@ -799,6 +821,7 @@ function statusLabel(status) {
     if (status === "accepted") return t("photoUpload.status.accepted");
     if (status === "rejected") return t("photoUpload.status.rejected");
     if (status === "checking") return t("photoUpload.status.checking");
+    if (status === "warning") return t("photoUpload.status.warning");
     return t("photoUpload.status.idle");
 }
 

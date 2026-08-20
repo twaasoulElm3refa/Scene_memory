@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Log;
 class EventAiTagsPersistenceService
 {
     public function __construct(
-        private readonly TagResolverService $tagResolver
+        private readonly TagResolverService $tagResolver,
+        private readonly EventTagCacheService $cache
     ) {}
 
     /**
@@ -69,5 +70,14 @@ class EventAiTagsPersistenceService
                 }
             }
         });
+
+        $mediaIds = collect($imagesByIndex)
+            ->filter(fn ($media) => $media instanceof EventsImges)
+            ->map(fn (EventsImges $media) => (int) $media->getKey())
+            ->unique()
+            ->values()
+            ->all();
+
+        $this->cache->invalidate((int) $event->getKey(), $mediaIds);
     }
 }

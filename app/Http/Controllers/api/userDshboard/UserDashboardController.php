@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api\userDshboard;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsMediaRequest;
-use App\Http\Requests\EventsRequest;
+use App\Jobs\GenerateEventAiTagsJob;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Illuminate\Http\JsonResponse;
@@ -22,8 +22,7 @@ class UserDashboardController extends Controller
     public function __construct(
         private readonly EventRepositoryInterface $eventRepository,
         private readonly EventImageRepositoryInterface $eventImageRepository
-    ) {
-    }
+    ) {}
 
     public function myEvents()
     {
@@ -54,10 +53,13 @@ class UserDashboardController extends Controller
         if ($request->hasFile('url')) {
             foreach ($request->file('url') as $file) {
                 $path = $file->store('EventMedia', 'public');
+                $type = str_starts_with((string) $file->getMimeType(), 'video/') ? 'video' : 'image';
                 $media = $this->eventImageRepository->create([
                     'event_id' => $event->id,
-                    'url' => $path,
-
+                    'preview_url' => $path,
+                    'full_url' => $path,
+                    'type' => $type,
+                    'is_active' => 1,
                 ]);
                 $createdMedia[] = $media;
             }
@@ -65,27 +67,11 @@ class UserDashboardController extends Controller
 
         $this->clearCache($event->user_id, $event->slug);
 
-        return $this->success($createdMedia, 'تم إضافة الوسائط بنجاح');
-    }
-
-    public function create(EventsRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-        try {
-            $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $data['image'] = $image->store('events', 'public');
-            }
-            $data['user_id'] = auth()->user()->id;
-            $event = $this->eventRepository->create($data);
-            $this->clearEventsCache();
-            $this->clearCache($event->user_id);
-
-            return $this->success($event, 'Event Created Successfully');
-        } catch (\Throwable $th) {
-            return $this->error($th->getMessage());
+        if ($createdMedia !== []) {
+            GenerateEventAiTagsJob::dispatch((int) $event->id);
         }
+
+        return $this->success($createdMedia, 'تم إضافة الوسائط بنجاح');
     }
 
     public function delete()

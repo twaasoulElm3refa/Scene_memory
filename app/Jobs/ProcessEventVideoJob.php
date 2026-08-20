@@ -4,19 +4,20 @@ namespace App\Jobs;
 
 use App\Models\Events;
 use App\Models\EventsImges;
+use App\Services\EventTagCacheService;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProcessEventVideoJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
 
@@ -28,14 +29,17 @@ class ProcessEventVideoJob implements ShouldQueue
 
     public string $debugId;
 
-    public function __construct($eventId, $filePath)
+    public bool $dispatchAiAfterProcessing;
+
+    public function __construct($eventId, $filePath, bool $dispatchAiAfterProcessing = false)
     {
         $this->eventId = $eventId;
         $this->filePath = $filePath;
         $this->debugId = (string) Str::uuid();
+        $this->dispatchAiAfterProcessing = $dispatchAiAfterProcessing;
     }
 
-    public function handle(): void
+    public function handle(EventTagCacheService $cache): void
     {
         $event = Events::find($this->eventId);
 
@@ -73,10 +77,13 @@ class ProcessEventVideoJob implements ShouldQueue
             $previewWatermarkedPath = $this->makeWatermarkedPreviewVideo($finalFilename, $this->debugId);
 
             if (! $previewWatermarkedPath) {
-                throw new \RuntimeException('Watermarked preview video generation returned null.');
+                Log::warning('Video preview generation failed; leaving preview unavailable', [
+                    'event_id' => $this->eventId,
+                    'video_path' => $finalFilename,
+                ]);
             }
 
-            EventsImges::create([
+            $media = EventsImges::create([
                 'event_id' => $this->eventId,
                 'type' => 'video',
                 'preview_url' => $previewWatermarkedPath,
@@ -85,7 +92,11 @@ class ProcessEventVideoJob implements ShouldQueue
                 'is_active' => 1,
             ]);
 
-            $this->clearEventsCache($event->slug);
+            $cache->invalidateEvent((int) $event->id, [(int) $media->id]);
+
+            if ($this->dispatchAiAfterProcessing) {
+                GenerateEventAiTagsJob::dispatch((int) $event->id);
+            }
 
         } catch (\Throwable $e) {
             throw $e;
@@ -266,28 +277,5 @@ class ProcessEventVideoJob implements ShouldQueue
     public function failed(\Throwable $exception): void
     {
         Storage::disk('public')->delete($this->filePath);
-    }
-
-    private function clearEventsCache(?string $slug = null): void
-    {
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-
-        if ($slug) {
-            Cache::forget("events_single_{$slug}");
-
-            foreach ($locales as $locale) {
-                Cache::forget("events_single_{$slug}_{$locale}");
-            }
-
-            try {
-                Cache::tags(['events'])->forget(
-                    'event_'.strtolower(trim($slug)).'_'.app()->getLocale()
-                );
-            } catch (\Throwable $e) {
-                //
-            }
-        }
-
-        Cache::flush();
     }
 }

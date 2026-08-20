@@ -20,8 +20,9 @@
             <!-- Hero -->
             <div class="relative">
                 <component :is="heroMediaComponent" v-if="heroMedia" :src="getMediaUrl(heroMedia)"
-                    class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" controls autoplay muted loop
-                    playsinline />
+                    :alt="heroMediaComponent === 'img' ? (event?.translation?.title || '') : undefined"
+                    class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover"
+                    v-bind="heroMediaAttrs" />
                 <img v-else :src="placeholderImage" :alt="event?.translation?.title || ''"
                     class="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover" />
 
@@ -210,16 +211,22 @@
                                 class="aspect-[16/10] overflow-hidden rounded-2xl shadow hover:shadow-lg transition-shadow cursor-pointer relative group"
                                 @click="openLightbox(index)">
 
+                                <!-- VIDEO -->
+                                <video v-if="isMediaVideo(media) && getMediaUrl(media)" :src="getMediaUrl(media)"
+                                    class="w-full h-full object-cover" autoplay muted loop playsinline
+                                    preload="metadata">
+                                </video>
+
                                 <!-- IMAGE -->
-                                <img v-if="!isMediaVideo(media)" :src="getMediaUrl(media) || placeholderImage"
+                                <img v-else-if="!isMediaVideo(media)" :src="getMediaUrl(media) || placeholderImage"
                                     :alt="media?.title || media?.name || $t('event.media_alt')" @error="onMediaImageError"
                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     loading="lazy" />
 
-                                <!-- VIDEO -->
-                                <video v-else :src="getMediaUrl(media)" class="w-full h-full object-cover"
-                                    autoplay muted loop playsinline preload="metadata">
-                                </video>
+                                <div v-else
+                                    class="flex h-full w-full items-center justify-center bg-gray-100 px-4 text-center text-sm font-semibold text-gray-500">
+                                    {{ $t('event.no_media') }}
+                                </div>
 
                                 <!-- DARK OVERLAY -->
                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition z-10"></div>
@@ -637,6 +644,48 @@
         </div>
     </div>
 
+    <!-- Media Lightbox -->
+    <Teleport to="body">
+        <Transition name="modal">
+            <div v-if="lightboxOpen && currentMedia" class="fixed inset-0 z-[9998] bg-black/90 p-4"
+                @click.self="lightboxOpen = false">
+                <button type="button" @click="lightboxOpen = false"
+                    class="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-2xl leading-none text-white transition hover:bg-white/25"
+                    :aria-label="$t('common.close') || 'Close'">
+                    &times;
+                </button>
+
+                <button v-if="eventImages.length > 1" type="button" @click.stop="lightboxPrev"
+                    class="absolute left-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white transition hover:bg-white/25"
+                    aria-label="Previous media">
+                    &lt;
+                </button>
+
+                <button v-if="eventImages.length > 1" type="button" @click.stop="lightboxNext"
+                    class="absolute right-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-3xl leading-none text-white transition hover:bg-white/25"
+                    aria-label="Next media">
+                    &gt;
+                </button>
+
+                <div class="flex h-full w-full items-center justify-center">
+                    <video v-if="isMediaVideo(currentMedia) && currentMediaUrl" :src="currentMediaUrl"
+                        class="max-h-full max-w-full object-contain" controls autoplay muted playsinline
+                        preload="metadata">
+                    </video>
+
+                    <img v-else-if="!isMediaVideo(currentMedia)" :src="currentMediaUrl || placeholderImage"
+                        :alt="currentMedia?.title || currentMedia?.name || $t('event.media_alt')"
+                        class="max-h-full max-w-full object-contain" @error="onMediaImageError" />
+
+                    <div v-else
+                        class="rounded-lg bg-white px-6 py-4 text-center text-sm font-semibold text-gray-600 shadow">
+                        {{ $t('event.no_media') }}
+                    </div>
+                </div>
+            </div>
+        </Transition>
+    </Teleport>
+
     <!-- Report Modal -->
     <Teleport to="body">
         <Transition name="modal">
@@ -738,6 +787,11 @@ import { AuthService } from "../../services/AuthService/AuthService";
 import { LikeService } from "../../services/LikeService/LikeService";
 import { WishlistService } from "../../services/WishlistService/WishlistService";
 import { MediaRequestService } from "../../services/MediaRequestService/MediaRequestService";
+import {
+    getMediaRawPath as resolveMediaRawPath,
+    getStorageUrl,
+    isMediaVideo as detectMediaVideo,
+} from "@/services/EventService/eventMedia";
 import CommentAttachments from "../../components/comments/CommentAttachments.vue";
 import CommentReactionButtons from "../../components/comments/CommentReactionButtons.vue";
 import { useCommentReactions } from "../../composables/useCommentReactions";
@@ -864,79 +918,18 @@ const showCartAlert = (type, message) => {
 
 const placeholderImage = 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png';
 
-const getBackendOrigin = () => {
-    const apiUrl =
-        import.meta.env?.VITE_API_URL ||
-        import.meta.env?.VITE_API_BASE_URL ||
-        '';
-
-    if (!apiUrl) {
-        return window.location.origin;
-    }
-
-    try {
-        return new URL(apiUrl).origin;
-    } catch {
-        return window.location.origin;
-    }
-};
-
 const getMediaRawPath = (mediaOrPath) => {
-    if (!mediaOrPath) return '';
-
-    if (typeof mediaOrPath === 'string') {
-        return mediaOrPath;
-    }
-
-    return (
-        mediaOrPath.image_url ||
-        mediaOrPath.preview_url ||
-        mediaOrPath.url ||
-        mediaOrPath.path ||
-        mediaOrPath.image ||
-        mediaOrPath.file_path ||
-        mediaOrPath.file ||
-        mediaOrPath.src ||
-        ''
-    );
+    return resolveMediaRawPath(mediaOrPath);
 };
 
 const getMediaUrl = (mediaOrPath) => {
     const rawPath = getMediaRawPath(mediaOrPath);
 
-    if (!rawPath || typeof rawPath !== 'string') {
+    if (!rawPath || typeof rawPath !== 'string' || !rawPath.replace(/\\/g, '/').trim()) {
         return '';
     }
 
-    const path = rawPath.replace(/\\/g, '/').trim();
-
-    if (path.startsWith('http://') || path.startsWith('https://')) {
-        return path;
-    }
-
-    const backendOrigin = getBackendOrigin();
-
-    if (path.startsWith('/storage/')) {
-        return `${backendOrigin}${path}`;
-    }
-
-    if (path.startsWith('storage/')) {
-        return `${backendOrigin}/${path}`;
-    }
-
-    if (path.startsWith('public/')) {
-        return `${backendOrigin}/storage/${path.replace(/^public\//, '')}`;
-    }
-
-    if (path.startsWith('/uploads/')) {
-        return `${backendOrigin}${path}`;
-    }
-
-    if (path.startsWith('uploads/')) {
-        return `${backendOrigin}/${path}`;
-    }
-
-    return `${backendOrigin}/storage/${path.replace(/^\/+/, '')}`;
+    return getStorageUrl(rawPath);
 };
 
 const onMediaImageError = (e) => {
@@ -1483,33 +1476,32 @@ const collectionDiscountedPrice = computed(() => {
 const heroMedia = computed(() => {
     return (
         eventImages.value.find((item) => {
-            return item && !isMediaVideo(item) && getMediaUrl(item);
+            return item && getMediaUrl(item);
         }) || null
     );
 });
 const heroMediaComponent = computed(() =>
     isMediaVideo(heroMedia.value) ? "video" : "img"
 );
-const currentMedia = computed(() => eventImages.value[lightboxIndex.value] || null);
-
-const isVideoUrl = (url) => {
-    if (!url || typeof url !== 'string') return false;
-
-    const cleanUrl = url.split('?')[0].toLowerCase();
-
-    return ['.mp4', '.webm', '.ogg', '.mov', '.m4v'].some((ext) =>
-        cleanUrl.endsWith(ext)
-    );
-};
-
-const isMediaVideo = (media) => {
-    if (!media) return false;
-
-    if (media.video === true || media.type === 'video') {
-        return true;
+const heroMediaAttrs = computed(() => {
+    if (!isMediaVideo(heroMedia.value)) {
+        return {};
     }
 
-    return isVideoUrl(getMediaRawPath(media));
+    return {
+        controls: true,
+        autoplay: true,
+        muted: true,
+        loop: true,
+        playsinline: true,
+        preload: "metadata",
+    };
+});
+const currentMedia = computed(() => eventImages.value[lightboxIndex.value] || null);
+const currentMediaUrl = computed(() => getMediaUrl(currentMedia.value));
+
+const isMediaVideo = (media) => {
+    return detectMediaVideo(media);
 };
 
 // ─── Date Helpers ─────────────────────────────────────────────────────────────

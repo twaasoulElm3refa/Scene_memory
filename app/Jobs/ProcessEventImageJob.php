@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\EventsImges;
+use App\Services\EventTagCacheService;
 use App\Services\ImageAnalysisService;
 use App\Services\TagResolverService;
 use Illuminate\Bus\Batchable;
@@ -23,11 +24,17 @@ class ProcessEventImageJob implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
+
     public int $timeout = 120;
+
     public int $eventId;
+
     public string $tempPath;
+
     public float $manualPrice = 0;
+
     public array $metadata = [];
+
     public function __construct(
         int $eventId,
         string $tempPath,
@@ -41,9 +48,11 @@ class ProcessEventImageJob implements ShouldQueue
             : 0;
         $this->metadata = $metadata;
     }
+
     public function handle(
         ImageAnalysisService $imageAnalysisService,
-        TagResolverService $tagResolver
+        TagResolverService $tagResolver,
+        EventTagCacheService $cache
     ): void {
         \Log::info('ProcessEventImageJob started', [
             'event_id' => $this->eventId,
@@ -129,8 +138,9 @@ class ProcessEventImageJob implements ShouldQueue
                 'validation_message' => $this->metadata['validation_message'] ?? null,
             ]);
 
-            // dispatch the image translation job
-            TranslateImageJob::dispatch($eventImage->id, $this->metadata['description'] ?? 'description');
+            if (filled($this->metadata['description'] ?? null)) {
+                TranslateImageJob::dispatch($eventImage->id, $this->metadata['description']);
+            }
             $photoTagsJson = $this->metadata['tags_json'] ?? null;
 
             $decodedTags = [];
@@ -162,6 +172,8 @@ class ProcessEventImageJob implements ShouldQueue
             if (! empty($tagIds)) {
                 $eventImage->tags()->syncWithoutDetaching($tagIds);
             }
+
+            $cache->invalidateEvent($this->eventId, [(int) $eventImage->id]);
 
         } catch (\Throwable $e) {
             \Log::error('ProcessEventImageJob: failed', [

@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\UploadedFile;
 
 class EventsRequest extends FormRequest
 {
@@ -25,25 +26,29 @@ class EventsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
             'city_id' => 'nullable|exists:cities,id',
             'sub_categorey_id' => 'nullable|exists:sub_categoreys,id',
-            // is_real: Event Type
-            'is_real' => ['required', 'boolean'],
+            // The database has a safe default; choosing a type is optional.
+            'is_real' => ['nullable', 'boolean'],
             'photography_type' => ['nullable', 'in:normal,professional'],
-            'urls' => ['required_without:photos', 'array', 'min:1', 'max:8'],
-            'urls.*' => 'required|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
-            'photos' => ['nullable', 'array', 'min:1', 'max:8'],
-            'photos.*' => 'nullable|file|mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg|max:20460',
+            'urls' => ['nullable', 'array', 'max:8'],
+            'urls.*' => $this->mediaFileRules(),
+            'photos' => ['nullable', 'array', 'max:8'],
+            'photos.*' => $this->mediaFileRules(),
+            'media' => ['nullable', 'array', 'max:8'],
+            'media.*' => $this->mediaFileRules(),
+            // Backwards compatibility for the legacy dashboard creation form.
+            'image' => ['nullable', ...$this->mediaFileRules()],
             'start_date' => 'nullable',
             'lattitude' => 'nullable',
             'langitude' => 'nullable',
             'end_date' => 'nullable',
             'time' => 'nullable',
-            'tags_id' => ['nullable', 'array'],
+            'tags_id' => ['nullable', 'array', 'max:10'],
             'tags_id.*' => ['nullable', 'integer', 'exists:tags,id'],
-            'new_tags' => ['nullable', 'array'],
+            'new_tags' => ['nullable', 'array', 'max:10'],
             'new_tags.*' => ['nullable', 'string', 'max:50'],
             'photo_descriptions' => ['nullable', 'array'],
             'photo_descriptions.*' => ['nullable', 'string', 'max:2000'],
@@ -79,6 +84,69 @@ class EventsRequest extends FormRequest
             'media_brightness_scores.*' => ['nullable', 'numeric'],
             'media_file_sizes_mb' => ['nullable', 'array'],
             'media_file_sizes_mb.*' => ['nullable', 'numeric'],
+        ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator): void {
+            $mediaCount = count($this->uploadedMediaFiles());
+
+            if ($mediaCount === 0) {
+                $validator->errors()->add(
+                    'media',
+                    app()->getLocale() === 'ar'
+                        ? 'يجب رفع صورة أو فيديو واحد على الأقل.'
+                        : 'At least one image or video must be uploaded.'
+                );
+            }
+
+            if ($mediaCount > 8) {
+                $validator->errors()->add(
+                    'media',
+                    app()->getLocale() === 'ar'
+                        ? 'يمكن رفع 8 ملفات وسائط كحد أقصى.'
+                        : 'No more than 8 media files may be uploaded.'
+                );
+            }
+        });
+    }
+
+    /**
+     * Return every supported media input using one stable ordering.
+     *
+     * @return array<int, UploadedFile>
+     */
+    public function uploadedMediaFiles(): array
+    {
+        $files = [];
+
+        foreach (['urls', 'photos', 'media', 'image'] as $key) {
+            $value = $this->file($key);
+
+            if ($value instanceof UploadedFile) {
+                $files[] = $value;
+            } elseif (is_array($value)) {
+                foreach ($value as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $files[] = $file;
+                    }
+                }
+            }
+        }
+
+        return array_values($files);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function mediaFileRules(): array
+    {
+        return [
+            'file',
+            'mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg,mov',
+            'max:20460',
         ];
     }
 
