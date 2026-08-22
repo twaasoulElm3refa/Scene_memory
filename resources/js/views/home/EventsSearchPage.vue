@@ -20,10 +20,31 @@
                     @fetch-tag-suggestions="fetchTagSuggestions"
                     @search="handleSearchSubmit"
                 />
+            </div>
+        </section>
 
-                <div class="home-discovery-divider"></div>
+        <section class="events-search-content mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <button
+                type="button"
+                class="events-mobile-filter-toggle"
+                :aria-expanded="mobileFiltersOpen ? 'true' : 'false'"
+                aria-controls="events-search-filters"
+                @click="mobileFiltersOpen = !mobileFiltersOpen"
+            >
+                <span>{{ $t("filters.title") }}</span>
+                <span aria-hidden="true">{{ mobileFiltersOpen ? "-" : "+" }}</span>
+            </button>
 
-                <section ref="filtersSectionRef">
+            <div class="events-search-workspace">
+                <aside
+                    class="home-discovery-filters-column events-search-filters-column"
+                    :class="{ 'is-open': mobileFiltersOpen }"
+                >
+                    <section
+                        id="events-search-filters"
+                        ref="filtersSectionRef"
+                        class="home-discovery-filters"
+                    >
                     <FiltersSection
                         :categories="categories"
                         :selected-category="selectedCategory"
@@ -48,37 +69,38 @@
                         @select-country="selectCountry"
                         @search="handleSearchSubmit"
                     />
-                </section>
-            </div>
-        </section>
+                    </section>
+                </aside>
 
-        <section class="events-search-results mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div v-if="error" class="events-search-error">
-                <h2>{{ $t('searchResults.loadError') }}</h2>
-                <p>{{ error }}</p>
-                <button type="button" @click="fetchEventsFromRoute">{{ $t('common.tryAgain') }}</button>
-            </div>
+                <main class="events-search-results-column">
+                    <div v-if="error" class="events-search-error">
+                        <h2>{{ $t('searchResults.loadError') }}</h2>
+                        <p>{{ error }}</p>
+                        <button type="button" @click="fetchEventsFromRoute">{{ $t('common.tryAgain') }}</button>
+                    </div>
 
-            <DiscoveryResultsSection
-                v-else
-                :searched="true"
-                :loading="loading"
-                :results="paginatedResults"
-                :active-type="selectedType"
-                :visible-pages="visiblePages"
-                :current-page="currentPage"
-                :total-pages="totalPages"
-                :total-results="totalResults"
-                :result-from="resultFrom"
-                :result-to="resultTo"
-                :per-page="perPage"
-                :fallback-image="fallbackImage"
-                :format-date="formatDate"
-                :lang="lang"
-                show-pagination
-                @update:active-type="handleTypeChange"
-                @update:current-page="handlePageChange"
-            />
+                    <DiscoveryResultsSection
+                        v-else
+                        :searched="true"
+                        :loading="loading"
+                        :results="paginatedResults"
+                        :active-type="selectedType"
+                        :visible-pages="visiblePages"
+                        :current-page="currentPage"
+                        :total-pages="totalPages"
+                        :total-results="totalResults"
+                        :result-from="resultFrom"
+                        :result-to="resultTo"
+                        :per-page="perPage"
+                        :fallback-image="fallbackImage"
+                        :format-date="formatDate"
+                        :lang="lang"
+                        show-pagination
+                        @update:active-type="handleTypeChange"
+                        @update:current-page="handlePageChange"
+                    />
+                </main>
+            </div>
         </section>
     </div>
 </template>
@@ -133,6 +155,7 @@ const displayedResults = shallowRef([]);
 const countrySearch = ref("");
 const showDropdown = ref(false);
 const filtersSectionRef = ref(null);
+const mobileFiltersOpen = ref(false);
 
 const loading = ref(false);
 const loadingSubCategories = ref(false);
@@ -626,20 +649,59 @@ onUnmounted(() => {
     padding: 22px;
 }
 
-.home-discovery-divider {
-    height: 1px;
-    margin: 18px 0;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(13, 77, 151, 0.13),
-        transparent
-    );
+.events-search-content {
+    padding-top: 24px;
+    padding-bottom: 70px;
 }
 
-.events-search-results {
-    padding-top: 34px;
-    padding-bottom: 70px;
+.events-search-workspace {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.events-search-filters-column,
+.events-search-results-column {
+    width: 100%;
+    min-width: 0;
+}
+
+.events-search-filters-column {
+    position: sticky;
+    top: 104px;
+    z-index: 25;
+    align-self: start;
+}
+
+.home-discovery-filters {
+    position: relative;
+    z-index: 30;
+}
+
+.events-search-results-column :deep(.discovery-results-header) {
+    display: none;
+}
+
+.events-search-results-column :deep(.discovery-tabs) {
+    margin-bottom: 20px;
+}
+
+.events-mobile-filter-toggle {
+    display: none;
+    width: 100%;
+    min-height: 48px;
+    margin: 0 0 14px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--scemory-border);
+    border-radius: 12px;
+    background: #FFFFFF;
+    padding: 11px 14px;
+    color: var(--scemory-heading);
+    font-size: 14px;
+    font-weight: 850;
+    box-shadow: 0 8px 22px rgba(13, 77, 151, 0.07);
 }
 
 .events-search-error {
@@ -672,6 +734,27 @@ onUnmounted(() => {
     font-weight: 800;
 }
 
+@media (max-width: 991px) {
+    .events-mobile-filter-toggle {
+        display: flex;
+    }
+
+    .events-search-workspace {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .events-search-filters-column {
+        display: none;
+        position: static;
+    }
+
+    .events-search-filters-column.is-open {
+        display: block;
+    }
+
+}
+
 @media (max-width: 640px) {
     .events-search-hero {
         padding-top: 96px;
@@ -682,12 +765,13 @@ onUnmounted(() => {
         padding: 14px;
     }
 
-    .home-discovery-divider {
-        margin: 14px 0;
-    }
-
     .events-search-hero h1 {
         font-size: 30px;
+    }
+
+    .events-search-content {
+        padding-top: 18px;
+        padding-bottom: 48px;
     }
 }
 </style>
