@@ -165,12 +165,13 @@
             <!-- EVENTS RESULTS -->
             <section id="events-results" class="home-results-band">
                 <div class="home-results-container">
-                    <EventsSection :searched="searched" :loading="loading" :displayed-events="displayedEvents"
-                        :paginated-events="paginatedEvents" :visible-pages="visiblePages" :current-page="currentPage"
+                    <DiscoveryResultsSection :searched="searched" :loading="loading" :results="paginatedResults"
+                        :active-type="selectedType" :visible-pages="visiblePages" :current-page="currentPage"
                         :total-pages="totalPages" :total-results="totalResults" :result-from="resultFrom"
                         :result-to="resultTo" :per-page="perPage" :fallback-image="fallbackImage"
                         :format-date="formatDate" :lang="lang" :show-see-more="canSeeMoreSearchResults"
-                        @update:current-page="handlePageChange" @see-more="goToMoreSearchResults" />
+                        @update:active-type="handleTypeChange" @update:current-page="handlePageChange"
+                        @see-more="goToMoreSearchResults" />
                 </div>
             </section>
 
@@ -250,8 +251,10 @@ import { TagService } from "@/services/TagService/TagService";
 import { LocationService } from "@/services/LocationService/LocationService";
 import { EventService } from "@/services/EventService/EventService";
 import {
+    createDiscoverySeed,
+    discoveryResultsToMapEvents,
     eventFiltersToQuery,
-    normalizeEvent,
+    normalizeDiscoveryResult,
     normalizePaginatedResponse,
     toMediaUrl,
 } from "@/services/EventService/eventSearchHelpers";
@@ -262,7 +265,7 @@ import Navbar from "@/components/layouts/Navbar.vue";
 const MapSection = defineAsyncComponent(() => import("./components/MapSection.vue"));
 const UnifiedSearchBar = defineAsyncComponent(() => import("./components/UnifiedSearchBar.vue"));
 const FiltersSection = defineAsyncComponent(() => import("./components/FiltersSection.vue"));
-const EventsSection = defineAsyncComponent(() => import("./components/EventsSection.vue"));
+const DiscoveryResultsSection = defineAsyncComponent(() => import("./components/DiscoveryResultsSection.vue"));
 const PlansSection = defineAsyncComponent(() => import("./components/PlansSection.vue"));
 const TrendingEventsSection = defineAsyncComponent(() => import("./components/TrendingEventsSection.vue"));
 const SpecialCoverageSection = defineAsyncComponent(() => import("./components/SpecialCoverageSection.vue"));
@@ -291,7 +294,7 @@ const licenceName = ref("free");
 const isLoggedIn = ref(false);
 const searchQuery = ref("");
 
-const displayedEvents = shallowRef([]);
+const displayedResults = shallowRef([]);
 const categories = shallowRef([]);
 const countries = shallowRef([]);
 const cities = shallowRef([]);
@@ -311,6 +314,8 @@ const fromDate = ref("");
 const toDate = ref("");
 const selectedSubCategory = ref("");
 const selectedTags = ref([]);
+const selectedType = ref("all");
+const discoverySeed = ref(createDiscoverySeed());
 
 const loadingSubCategories = ref(false);
 const loadingTags = ref(false);
@@ -357,15 +362,17 @@ const visiblePages = computed(() => {
     return pages;
 });
 
-const paginatedEvents = computed(() => {
-    return displayedEvents.value;
+const paginatedResults = computed(() => {
+    return displayedResults.value;
 });
+
+const mapEvents = computed(() => discoveryResultsToMapEvents(displayedResults.value));
 
 const canSeeMoreSearchResults = computed(() => {
     return searched.value
         && !loading.value
-        && displayedEvents.value.length > 0
-        && totalResults.value > displayedEvents.value.length;
+        && displayedResults.value.length > 0
+        && totalResults.value > displayedResults.value.length;
 });
 
 const missingFieldsList = computed(() => {
@@ -511,13 +518,15 @@ const onCountryFocus = () => {
 };
 
 const selectCountry = (country) => {
-    if (String(selectedCountry.value) !== String(country.id)) {
+    const countryId = country?.id || "";
+
+    if (String(selectedCountry.value) !== String(countryId)) {
         selectedCity.value = "";
         cities.value = [];
     }
 
-    selectedCountry.value = country.id;
-    countrySearch.value = country.translation?.name || "";
+    selectedCountry.value = countryId;
+    countrySearch.value = country?.translation?.name || "";
     showDropdown.value = false;
 };
 
@@ -580,6 +589,8 @@ const scrollToEventsSearch = async () => {
 };
 
 const buildHomeEventSearchQuery = () => eventFiltersToQuery({
+    type: selectedType.value,
+    seed: discoverySeed.value,
     searchQuery: searchQuery.value,
     categoryId: selectedCategory.value,
     subCategoryId: selectedSubCategory.value,
@@ -595,6 +606,14 @@ const goToMoreSearchResults = () => {
         path: `/${lang}/events`,
         query: buildHomeEventSearchQuery(),
     });
+};
+
+const handleTypeChange = (value) => {
+    if (value === selectedType.value || loading.value) return;
+
+    selectedType.value = value;
+    currentPage.value = 1;
+    void search(true, 1);
 };
 
 const handleClickOutsideFilters = (event) => {
@@ -749,8 +768,8 @@ const ensureMapInitialized = async () => {
             isMapReady.value = true;
         }
 
-        if (displayedEvents.value.length > 0) {
-            renderMarkersOnMaps(displayedEvents.value);
+        if (displayedResults.value.length > 0) {
+            renderMarkersOnMaps(mapEvents.value);
         }
     } catch (error) {
         console.error("Error loading map:", error);
@@ -780,6 +799,8 @@ const search = async (isInitial = false, page = currentPage.value) => {
     try {
         const requestedPage = Number(page) || 1;
         const response = await EventService.searchEvents({
+            type: selectedType.value,
+            seed: discoverySeed.value,
             countryId: selectedCountry.value || null,
             cityId: selectedCity.value || null,
             categoryId: selectedCategory.value || null,
@@ -793,7 +814,8 @@ const search = async (isInitial = false, page = currentPage.value) => {
         });
         const paginator = normalizePaginatedResponse(response, perPage.value);
 
-        displayedEvents.value = paginator.events.map(normalizeEvent);
+        displayedResults.value = paginator.results.map(normalizeDiscoveryResult);
+        discoverySeed.value = paginator.seed || discoverySeed.value;
         currentPage.value = paginator.currentPage;
         totalPages.value = paginator.lastPage;
         totalResults.value = paginator.total;
@@ -802,10 +824,10 @@ const search = async (isInitial = false, page = currentPage.value) => {
 
         await nextTick();
 
-        renderMarkersOnMaps(displayedEvents.value);
+        renderMarkersOnMaps(mapEvents.value);
     } catch (error) {
         console.error("Search error:", error);
-        displayedEvents.value = [];
+        displayedResults.value = [];
         resetPaginationMeta();
         renderMarkersOnMaps([]);
     } finally {
@@ -833,15 +855,16 @@ const handlePageChange = async (page) => {
 const handleMarkerEvents = (event) => {
     const eventsFromMap = event.detail?.events || [];
 
-    displayedEvents.value = eventsFromMap.map(normalizeEvent);
+    selectedType.value = "event";
+    displayedResults.value = eventsFromMap.map(normalizeDiscoveryResult);
 
-    renderMarkersOnMaps(displayedEvents.value);
+    renderMarkersOnMaps(mapEvents.value);
 
     currentPage.value = 1;
     totalPages.value = 1;
-    totalResults.value = displayedEvents.value.length;
-    resultFrom.value = displayedEvents.value.length ? 1 : null;
-    resultTo.value = displayedEvents.value.length;
+    totalResults.value = displayedResults.value.length;
+    resultFrom.value = displayedResults.value.length ? 1 : null;
+    resultTo.value = displayedResults.value.length;
     searched.value = true;
     loading.value = false;
 };
@@ -874,8 +897,8 @@ const openFullscreen = async () => {
     await mapService.openFullscreen(fullContainer, 6);
     mapService.refreshFullscreenMap();
 
-    if (displayedEvents.value.length > 0 && mapService.fullMap) {
-        mapService.addEventMarkers(displayedEvents.value, mapService.fullMap, true);
+    if (displayedResults.value.length > 0 && mapService.fullMap) {
+        mapService.addEventMarkers(mapEvents.value, mapService.fullMap, true);
     }
 };
 

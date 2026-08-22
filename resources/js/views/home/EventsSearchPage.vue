@@ -1,34 +1,85 @@
 <template>
     <div class="events-search-page scemory-page">
+        <header class="events-search-hero">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <h1>{{ $t("discovery.title") }}</h1>
+                <p>{{ $t("discovery.description") }}</p>
+            </div>
+        </header>
 
-        <section v-if="error" class="events-search-error mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div>
-                <h2>{{ $t('searchResults.loadError') }}</h2>
-                <p>{{ error }}</p>
-                <button type="button" @click="fetchEventsFromRoute">
-                    {{ $t('common.tryAgain') }}
-                </button>
+        <section class="events-search-controls mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="home-discovery-panel">
+                <UnifiedSearchBar
+                    v-model="searchQuery"
+                    :tags="tags"
+                    :selected-tags="selectedTags"
+                    :loading="loadingTags"
+                    :tag-suggestions="tagSuggestions"
+                    :loading-suggestions="loadingTagSuggestions"
+                    @update:selected-tags="handleTagsUpdate"
+                    @fetch-tag-suggestions="fetchTagSuggestions"
+                    @search="handleSearchSubmit"
+                />
+
+                <div class="home-discovery-divider"></div>
+
+                <section ref="filtersSectionRef">
+                    <FiltersSection
+                        :categories="categories"
+                        :selected-category="selectedCategory"
+                        :sub-categories="subCategories"
+                        :selected-sub-category="selectedSubCategory"
+                        :loading-sub-categories="loadingSubCategories"
+                        :country-search="countrySearch"
+                        :show-dropdown="showDropdown"
+                        :filtered-countries="filteredCountries"
+                        :selected-country="selectedCountry"
+                        :cities="cities"
+                        :selected-city="selectedCity"
+                        :from-date="fromDate"
+                        :to-date="toDate"
+                        @update:selected-category="handleCategoryUpdate"
+                        @update:selected-sub-category="handleSubCategoryUpdate"
+                        @update:country-search="countrySearch = $event"
+                        @update:selected-city="handleCityUpdate"
+                        @update:from-date="handleFromDateUpdate"
+                        @update:to-date="handleToDateUpdate"
+                        @country-focus="onCountryFocus"
+                        @select-country="selectCountry"
+                        @search="handleSearchSubmit"
+                    />
+                </section>
             </div>
         </section>
 
-        <EventsSection
-            v-else
-            :searched="true"
-            :loading="loading"
-            :displayed-events="displayedEvents"
-            :paginated-events="paginatedEvents"
-            :visible-pages="visiblePages"
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            :total-results="totalResults"
-            :result-from="resultFrom"
-            :result-to="resultTo"
-            :per-page="perPage"
-            :fallback-image="fallbackImage"
-            :format-date="formatDate"
-            :lang="lang"
-            @update:current-page="handlePageChange"
-        />
+        <section class="events-search-results mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div v-if="error" class="events-search-error">
+                <h2>{{ $t('searchResults.loadError') }}</h2>
+                <p>{{ error }}</p>
+                <button type="button" @click="fetchEventsFromRoute">{{ $t('common.tryAgain') }}</button>
+            </div>
+
+            <DiscoveryResultsSection
+                v-else
+                :searched="true"
+                :loading="loading"
+                :results="paginatedResults"
+                :active-type="selectedType"
+                :visible-pages="visiblePages"
+                :current-page="currentPage"
+                :total-pages="totalPages"
+                :total-results="totalResults"
+                :result-from="resultFrom"
+                :result-to="resultTo"
+                :per-page="perPage"
+                :fallback-image="fallbackImage"
+                :format-date="formatDate"
+                :lang="lang"
+                show-pagination
+                @update:active-type="handleTypeChange"
+                @update:current-page="handlePageChange"
+            />
+        </section>
     </div>
 </template>
 
@@ -42,14 +93,15 @@ import { EventService } from "@/services/EventService/EventService";
 import {
     DEFAULT_EVENT_FALLBACK_IMAGE,
     compactQuery,
+    createDiscoverySeed,
     eventFiltersToQuery,
-    normalizeEvent,
+    normalizeDiscoveryResult,
     normalizePaginatedResponse,
     queryToEventFilters,
 } from "@/services/EventService/eventSearchHelpers";
 import { LocationService } from "@/services/LocationService/LocationService";
 import { TagService } from "@/services/TagService/TagService";
-import EventsSection from "./components/EventsSection.vue";
+import DiscoveryResultsSection from "./components/DiscoveryResultsSection.vue";
 import FiltersSection from "./components/FiltersSection.vue";
 import UnifiedSearchBar from "./components/UnifiedSearchBar.vue";
 
@@ -66,6 +118,8 @@ const selectedCity = ref("");
 const fromDate = ref("");
 const toDate = ref("");
 const selectedTags = ref([]);
+const selectedType = ref("all");
+const seed = ref(createDiscoverySeed());
 
 const categories = shallowRef([]);
 const subCategories = shallowRef([]);
@@ -74,7 +128,7 @@ const filteredCountries = shallowRef([]);
 const cities = shallowRef([]);
 const tags = shallowRef([]);
 const tagSuggestions = shallowRef([]);
-const displayedEvents = shallowRef([]);
+const displayedResults = shallowRef([]);
 
 const countrySearch = ref("");
 const showDropdown = ref(false);
@@ -100,7 +154,7 @@ const isSyncingRoute = ref(false);
 let baseOptionsPromise = null;
 let activeRequestId = 0;
 
-const paginatedEvents = computed(() => displayedEvents.value);
+const paginatedResults = computed(() => displayedResults.value);
 
 const visiblePages = computed(() => {
     const total = Number(totalPages.value) || 1;
@@ -120,18 +174,6 @@ const visiblePages = computed(() => {
     }
 
     return pages;
-});
-
-const resultsSummary = computed(() => {
-    if (loading.value) {
-        return "Loading matching events...";
-    }
-
-    if (totalResults.value > 0) {
-        return `Showing ${resultFrom.value || 0} - ${resultTo.value || 0} of ${totalResults.value} events`;
-    }
-
-    return "Use the filters below to refine the full event archive.";
 });
 
 const formatDate = (dateStr) => {
@@ -286,6 +328,8 @@ const closeCountryDropdown = () => {
 };
 
 const getCurrentControlFilters = (page = 1) => ({
+    type: selectedType.value,
+    seed: seed.value,
     searchQuery: searchQuery.value,
     categoryId: selectedCategory.value,
     subCategoryId: selectedSubCategory.value,
@@ -316,6 +360,13 @@ const updateRouteFromState = async (page = 1) => {
 
 const handleSearchSubmit = () => {
     closeCountryDropdown();
+    void updateRouteFromState(1);
+};
+
+const handleTypeChange = (value) => {
+    if (value === selectedType.value || loading.value) return;
+
+    selectedType.value = value;
     void updateRouteFromState(1);
 };
 
@@ -375,7 +426,7 @@ const handlePageChange = (page) => {
     void updateRouteFromState(nextPage).then(() => {
         nextTick(() => {
             document
-                .querySelector(".home-events-results")
+                .querySelector(".discovery-results-section")
                 ?.scrollIntoView({ behavior: "smooth", block: "start" });
         });
     });
@@ -387,6 +438,8 @@ const syncControlsFromFilters = async (filters) => {
     await loadBaseOptions();
 
     searchQuery.value = filters.searchQuery || "";
+    selectedType.value = filters.type || "all";
+    seed.value = filters.seed || createDiscoverySeed();
     selectedCategory.value = filters.categoryId || "";
     selectedSubCategory.value = "";
     selectedCountry.value = filters.countryId || "";
@@ -428,7 +481,8 @@ const fetchEvents = async (filters) => {
 
         const paginator = normalizePaginatedResponse(response, filters.perPage);
 
-        displayedEvents.value = paginator.events.map(normalizeEvent);
+        displayedResults.value = paginator.results.map(normalizeDiscoveryResult);
+        seed.value = paginator.seed || filters.seed || seed.value;
         currentPage.value = paginator.currentPage;
         totalPages.value = paginator.lastPage;
         totalResults.value = paginator.total;
@@ -440,7 +494,7 @@ const fetchEvents = async (filters) => {
         }
 
         console.error("Search results error:", searchError);
-        displayedEvents.value = [];
+        displayedResults.value = [];
         resetPaginationMeta();
         error.value = searchError.response?.data?.message || searchError.message || "Unable to load events.";
     } finally {
@@ -454,6 +508,22 @@ const fetchEventsFromRoute = async () => {
     const filters = queryToEventFilters(route.query, {
         defaultPerPage: perPage.value || 12,
     });
+
+    if (!filters.seed) {
+        const seededFilters = {
+            ...filters,
+            seed: createDiscoverySeed(),
+        };
+
+        await router.replace({
+            path: `/${lang.value}/events`,
+            query: eventFiltersToQuery(seededFilters, {
+                includePagination: true,
+                defaultPerPage: seededFilters.perPage,
+            }),
+        });
+        return;
+    }
 
     await syncControlsFromFilters(filters);
     await fetchEvents(filters);
@@ -501,13 +571,13 @@ onUnmounted(() => {
 <style scoped>
 .events-search-page {
     min-height: 100vh;
-    background:
-        radial-gradient(circle at top left, rgba(48, 168, 255, 0.10), transparent 34rem),
-        linear-gradient(180deg, var(--scemory-surface), #FFFFFF 45%, var(--scemory-surface));
+    background: var(--scemory-surface);
 }
 
 .events-search-hero {
-    padding: 120px 0 34px;
+    padding: 112px 0 28px;
+    border-bottom: 1px solid var(--scemory-border-soft);
+    background: #fff;
 }
 
 .events-search-eyebrow {
@@ -524,9 +594,9 @@ onUnmounted(() => {
 }
 
 .events-search-hero h1 {
-    margin: 1rem 0 0;
+    margin: 0;
     color: var(--scemory-heading);
-    font-size: clamp(2rem, 4vw, 4rem);
+    font-size: 36px;
     font-weight: 850;
     letter-spacing: 0;
     line-height: 1.08;
@@ -543,6 +613,7 @@ onUnmounted(() => {
 .events-search-controls {
     position: relative;
     z-index: 30;
+    padding-top: 28px;
 }
 
 .home-discovery-panel {
@@ -550,9 +621,7 @@ onUnmounted(() => {
     overflow: visible;
     border: none;
     border-radius: 24px;
-    background:
-        radial-gradient(circle at 88% 10%, rgba(48, 168, 255, 0.06), transparent 30%),
-        linear-gradient(145deg, #F7FAFD, #EDF4FA);
+    background: #eef4fa;
     box-shadow: 0 12px 34px rgba(13, 77, 151, 0.07);
     padding: 22px;
 }
@@ -568,11 +637,12 @@ onUnmounted(() => {
     );
 }
 
-.events-search-error {
-    padding-top: 44px;
+.events-search-results {
+    padding-top: 34px;
+    padding-bottom: 70px;
 }
 
-.events-search-error > div {
+.events-search-error {
     border: 1px solid var(--scemory-border-soft);
     border-radius: 24px;
     background: #FFFFFF;
@@ -614,6 +684,10 @@ onUnmounted(() => {
 
     .home-discovery-divider {
         margin: 14px 0;
+    }
+
+    .events-search-hero h1 {
+        font-size: 30px;
     }
 }
 </style>

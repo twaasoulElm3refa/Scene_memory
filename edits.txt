@@ -9,9 +9,5 @@ On See More Show Filter (from date to date) & (Countries - Cities) & (Categorey 
 
 collection button hidden when only 1 photo
 
-trending button in admin add event
-
 test mobile functionallity
-
-contact us as plan
 

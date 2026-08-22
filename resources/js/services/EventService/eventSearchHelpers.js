@@ -1,6 +1,10 @@
 export const DEFAULT_EVENT_FALLBACK_IMAGE =
     "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
 
+export const DISCOVERY_RESULT_TYPES = ["all", "event", "image", "video"];
+
+export const createDiscoverySeed = () => Math.floor(Math.random() * 2147483645) + 1;
+
 const isFilled = (value) => value !== undefined && value !== null && value !== "" && value !== "all";
 
 const firstValue = (...values) => values.find((value) => isFilled(value));
@@ -45,6 +49,10 @@ export const normalizeEventSearchFilters = (filters = {}, options = {}) => {
         .filter(Boolean);
 
     return {
+        type: DISCOVERY_RESULT_TYPES.includes(String(filters.type || "").toLowerCase())
+            ? String(filters.type).toLowerCase()
+            : (options.defaultType || "all"),
+        seed: toPositiveNumber(firstValue(filters.seed), options.defaultSeed ?? null),
         searchQuery: String(firstValue(filters.searchQuery, filters.q, filters.search) || "").trim(),
         categoryId: firstValue(filters.categoryId, filters.category_id) || null,
         subCategoryId: firstValue(filters.subCategoryId, filters.sub_category_id) || null,
@@ -64,6 +72,8 @@ export const eventFiltersToQuery = (filters = {}, options = {}) => {
     });
 
     return compactQuery({
+        type: normalized.type,
+        seed: normalized.seed || undefined,
         q: normalized.searchQuery || undefined,
         category_id: normalized.categoryId || undefined,
         sub_category_id: normalized.subCategoryId || undefined,
@@ -81,6 +91,8 @@ export const queryToEventFilters = (query = {}, options = {}) => {
     return normalizeEventSearchFilters(
         {
             searchQuery: query.q || query.searchQuery || query.search,
+            type: query.type,
+            seed: query.seed,
             categoryId: query.category_id || query.categoryId,
             subCategoryId: query.sub_category_id || query.subCategoryId,
             countryId: query.country_id || query.countryId,
@@ -98,44 +110,120 @@ export const queryToEventFilters = (query = {}, options = {}) => {
 export const toMediaUrl = (pathValue) => {
     if (!pathValue) return null;
     if (/^https?:\/\//i.test(pathValue)) return pathValue;
+    if (String(pathValue).startsWith("/")) return pathValue;
 
     return `/storage/${pathValue}`;
 };
 
-export const normalizeEvent = (ev = {}) => ({
-    id: ev.id || ev._id,
-    slug: ev.slug,
-    translation: ev.translation,
-    title: ev.title || "Untitled event",
-    start_date: ev.start_date,
-    city: ev.city?.translation?.name || ev.city || "Not specified",
-    category_name: ev.sub_categorey?.translation?.name || "Event",
-    image_url: toMediaUrl(ev.first_image?.full_url || ev.firstImage?.full_url),
-    image_webp_url: toMediaUrl(
-        ev.first_image?.webp_url ||
-        ev.first_image?.full_url_webp ||
-        ev.firstImage?.webp_url ||
-        ev.firstImage?.full_url_webp
-    ),
-    lattitude: ev.lattitude,
-    langitude: ev.langitude,
-});
-
-const buildPaginationPayload = (paginator, fallbackPerPage = 8) => {
-    const events = Array.isArray(paginator?.data) ? paginator.data : [];
+export const normalizeDiscoveryResult = (result = {}) => {
+    const resultType = ["event", "image", "video"].includes(result.result_type)
+        ? result.result_type
+        : "event";
+    const eventSlug = result.event_slug || result.slug;
+    const title = result.title || result.translation?.title || "Untitled event";
+    const description = result.description || result.translation?.description || "";
+    const mediaUrl = toMediaUrl(
+        result.media_url ||
+        result.first_image?.full_url ||
+        result.firstImage?.full_url
+    );
+    const thumbnailUrl = toMediaUrl(
+        result.thumbnail_url ||
+        result.first_image?.preview_url ||
+        result.first_image?.full_url ||
+        result.firstImage?.preview_url ||
+        result.firstImage?.full_url
+    );
+    const cityName = result.city?.translation?.name || result.city?.name || result.city || "Not specified";
+    const subCategory = result.sub_category || result.sub_categorey;
+    const categoryName = result.category?.translation?.name ||
+        result.category?.name ||
+        subCategory?.translation?.name ||
+        subCategory?.name ||
+        "Event";
 
     return {
-        events,
+        ...result,
+        result_type: resultType,
+        id: result.id || result._id,
+        event_id: result.event_id || result.id || result._id,
+        event_slug: eventSlug,
+        slug: eventSlug,
+        title,
+        description,
+        translation: {
+            ...(result.translation || {}),
+            title,
+            description: result.translation?.description || description,
+        },
+        media_url: mediaUrl,
+        thumbnail_url: thumbnailUrl || mediaUrl,
+        image_url: thumbnailUrl || mediaUrl,
+        image_webp_url: null,
+        city_name: cityName,
+        category_name: categoryName,
+    };
+};
+
+export const normalizeEvent = (event = {}) => {
+    const normalized = normalizeDiscoveryResult(event);
+
+    return {
+        ...normalized,
+        city: normalized.city_name,
+    };
+};
+
+export const discoveryResultsToMapEvents = (results = []) => {
+    const events = new Map();
+
+    for (const rawResult of results) {
+        const result = normalizeDiscoveryResult(rawResult);
+        const eventId = result.event_id;
+
+        if (!eventId || events.has(String(eventId))) {
+            continue;
+        }
+
+        events.set(String(eventId), {
+            id: eventId,
+            slug: result.event_slug,
+            title: result.title,
+            description: result.translation?.description || result.description,
+            translation: result.translation,
+            start_date: result.start_date,
+            city: rawResult.city,
+            sub_categorey: rawResult.sub_category || rawResult.sub_categorey,
+            first_image: rawResult.first_image || {
+                full_url: rawResult.thumbnail_url || rawResult.media_url,
+            },
+            lattitude: result.lattitude,
+            langitude: result.langitude,
+        });
+    }
+
+    return [...events.values()];
+};
+
+const buildPaginationPayload = (paginator, fallbackPerPage = 8) => {
+    const results = Array.isArray(paginator?.data) ? paginator.data : [];
+
+    return {
+        results,
+        events: results,
         currentPage: Number(paginator?.current_page ?? 1),
         lastPage: Number(paginator?.last_page ?? 1),
         perPage: Number(paginator?.per_page ?? fallbackPerPage),
-        total: Number(paginator?.total ?? events.length),
-        from: paginator?.from ?? (events.length ? 1 : null),
-        to: paginator?.to ?? events.length,
+        total: Number(paginator?.total ?? results.length),
+        from: paginator?.from ?? (results.length ? 1 : null),
+        to: paginator?.to ?? results.length,
+        type: paginator?.type || "all",
+        seed: toPositiveNumber(paginator?.seed),
     };
 };
 
 const buildArrayPaginationPayload = (events = []) => ({
+    results: events,
     events,
     currentPage: 1,
     lastPage: 1,
@@ -143,7 +231,13 @@ const buildArrayPaginationPayload = (events = []) => ({
     total: events.length,
     from: events.length ? 1 : null,
     to: events.length,
+    type: "all",
+    seed: null,
 });
+
+export const normalizeDiscoverySearchFilters = normalizeEventSearchFilters;
+export const discoveryFiltersToQuery = eventFiltersToQuery;
+export const queryToDiscoveryFilters = queryToEventFilters;
 
 export function normalizePaginatedResponse(response, fallbackPerPage = 8) {
     const candidates = [

@@ -36,8 +36,12 @@
                         :placeholder="$t('filters.country')"
                         class="filter-field" />
 
-                    <div v-if="showDropdown && filteredCountries.length"
+                    <div v-if="showDropdown"
                         class="filter-country-options">
+                        <button type="button" class="filter-country-option"
+                            @click="$emit('select-country', null)">
+                            {{ $t("discovery.filters.allCountries") }}
+                        </button>
                         <button v-for="country in filteredCountries" :key="country.id" type="button"
                             @click="$emit('select-country', country)"
                             class="filter-country-option">
@@ -51,7 +55,7 @@
                     <select :value="selectedCity" :disabled="!selectedCountry"
                         @change="$emit('update:selectedCity', $event.target.value)"
                         class="filter-field">
-                        <option value="">{{ $t("filters.city") }}</option>
+                        <option value="">{{ $t("discovery.filters.allCities") }}</option>
                         <option v-for="city in cities" :key="city.id" :value="city.id">
                             {{ city.translation.name }}
                         </option>

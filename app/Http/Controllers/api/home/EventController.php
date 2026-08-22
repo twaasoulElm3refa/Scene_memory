@@ -4,12 +4,13 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DiscoverySearchRequest;
 use App\Models\CityNomination;
 use App\Models\Events;
 use App\Repositories\Contracts\Cities\CityRepositoryInterface;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
-use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
+use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,8 +33,7 @@ class EventController extends Controller
         private readonly CityRepositoryInterface $cityRepository,
         private readonly EventImageRepositoryInterface $eventImageRepository,
         private readonly CommentRepositoryInterface $commentRepository
-    ) {
-    }
+    ) {}
 
     public function all(Request $request)
     {
@@ -71,7 +71,7 @@ class EventController extends Controller
 
     public function trending()
     {
-        $cacheKey = "events_trending_".app()->getLocale();
+        $cacheKey = 'events_trending_'.app()->getLocale();
 
         $events = Cache::tags(['events'])->remember($cacheKey, 60, function () {
             return $this->eventRepository->trendingEvents();
@@ -143,7 +143,7 @@ class EventController extends Controller
                 return;
             }
 
-            if (!filter_var($value, FILTER_VALIDATE_INT) || (int) $value < 1) {
+            if (! filter_var($value, FILTER_VALIDATE_INT) || (int) $value < 1) {
                 $fail("The {$attribute} field must be a valid id.");
             }
         };
@@ -204,7 +204,7 @@ class EventController extends Controller
             $request->query('tagsIds', $request->query('tags', []))
         );
 
-        if (!is_array($tagsIds)) {
+        if (! is_array($tagsIds)) {
             $tagsIds = explode(',', (string) $tagsIds);
         }
 
@@ -233,31 +233,31 @@ class EventController extends Controller
         ];
 
         if ($countryId) {
-            $filters[] = 'country_id:=' . $countryId;
+            $filters[] = 'country_id:='.$countryId;
         }
 
-        if (!empty($tagsIds)) {
-            $filters[] = 'tags_id:=[' . implode(',', $tagsIds) . ']';
+        if (! empty($tagsIds)) {
+            $filters[] = 'tags_id:=['.implode(',', $tagsIds).']';
         }
 
         if ($cityId) {
-            $filters[] = 'city_id:=' . $cityId;
+            $filters[] = 'city_id:='.$cityId;
         }
 
         if ($categoryId) {
-            $filters[] = 'category_id:=' . $categoryId;
+            $filters[] = 'category_id:='.$categoryId;
         }
 
         if ($subCategoryId) {
-            $filters[] = 'sub_category_id:=' . $subCategoryId;
+            $filters[] = 'sub_category_id:='.$subCategoryId;
         }
 
         if ($from) {
-            $filters[] = 'start_date:>=' . Carbon::parse($from)->toDateString();
+            $filters[] = 'start_date:>='.Carbon::parse($from)->toDateString();
         }
 
         if ($to) {
-            $filters[] = 'start_date:<=' . Carbon::parse($to)->toDateString();
+            $filters[] = 'start_date:<='.Carbon::parse($to)->toDateString();
         }
 
         if ($searchQuery !== '') {
@@ -271,6 +271,25 @@ class EventController extends Controller
         );
 
         return $this->success($events, 'Events');
+    }
+
+    public function discovery(DiscoverySearchRequest $request)
+    {
+        $seed = $request->seed();
+        $type = $request->resultType();
+        $results = $this->eventRepository->searchDiscovery(
+            filters: $request->filters(),
+            type: $type,
+            perPage: $request->perPage(),
+            page: $request->pageNumber(),
+            seed: $seed,
+        );
+
+        return $this->success([
+            ...$results->toArray(),
+            'type' => $type,
+            'seed' => $seed,
+        ], 'Discovery results');
     }
 
     public function MarkerSearch()
@@ -292,8 +311,8 @@ class EventController extends Controller
             }
 
             return $DBCITY->events()
-                ->with('city.translation', 'sub_categorey.translation', 'translation','firstImage:id,event_id,full_url')
-                ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id','langitude','lattitude')
+                ->with('city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url')
+                ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id', 'langitude', 'lattitude')
                 ->where('is_active', 1)
                 ->latest()
                 ->get();
@@ -374,7 +393,7 @@ class EventController extends Controller
 
         $cacheKey = $this->eventCacheKey($slug);
 
-            $event = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($slug) {
+        $event = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($slug) {
             return $this->eventRepository->findSingleDetailedBySlug($slug);
         });
         if (! $event) {
@@ -437,7 +456,7 @@ class EventController extends Controller
 
     private function eventCacheKey(string $slug): string
     {
-        return 'event_' . strtolower(trim($slug)) . '_' . app()->getLocale();
+        return 'event_'.strtolower(trim($slug)).'_'.app()->getLocale();
     }
 
     private function normalizeEventMedia($event): void

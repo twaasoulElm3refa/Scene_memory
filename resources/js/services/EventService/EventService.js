@@ -60,6 +60,8 @@ export const EventService = {
       });
 
       const params = {
+        type: normalizedFilters.type,
+        seed: normalizedFilters.seed,
         country_id: normalizedFilters.countryId || "all",
         city_id: normalizedFilters.cityId || "all",
         category_id: normalizedFilters.categoryId || "all",
@@ -75,7 +77,7 @@ export const EventService = {
         params.tags_id = normalizedFilters.tagsIds;
       }
 
-      const url = `/events/${params.city_id}/${params.sub_category_id}`;
+      const url = "/events/discovery/search";
 
       const res = await api.get(url, {
         params,

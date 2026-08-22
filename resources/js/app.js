@@ -18,6 +18,7 @@ import fa from "./i18n/fa.json";
 import ur from "./i18n/ur.json";
 import tr from "./i18n/tr.json";
 import eventDirectoryMessages from "./i18n/eventDirectory";
+import discoverySearchMessages from "./i18n/discoverySearch";
 
 // styles
 import "../css/app.css";
@@ -55,6 +56,10 @@ Object.entries(eventDirectoryMessages).forEach(([lang, directory]) => {
         ...messages[lang].events,
         directory,
     };
+});
+
+Object.entries(discoverySearchMessages).forEach(([lang, discovery]) => {
+    messages[lang].discovery = discovery;
 });
 
 const DEFAULT_LANG = "en";
