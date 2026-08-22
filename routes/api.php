@@ -93,7 +93,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
-        ->middleware(['auth:sanctum', 'throttle:30,1']);
+        ->middleware(['auth:sanctum', 'throttle:60,1']);
 
     // CATEGORIES CRUD
     Route::prefix('categories')->group(function () {
@@ -108,7 +108,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // SUB CATEGORIES CRUD
-    Route::prefix('sub_categories')->middleware(['throttle:30,1'])->group(function () {
+    Route::prefix('sub_categories')->middleware(['throttle:90,1'])->group(function () {
         Route::get('/', [SubCategoryController::class,  'index']);
         Route::get('/all/paginated', [SubCategoryController::class,  'paginated']);
         Route::get('/{id}', [SubCategoryController::class,  'single']);
@@ -120,10 +120,10 @@ Route::prefix('v1')->group(function () {
 
     // Tags
     Route::prefix('tags')->group(function () {
-        Route::get('/search', [TagsController::class,  'search'])->middleware('throttle:60,1');
+        Route::get('/search', [TagsController::class,  'search'])->middleware('throttle:90,1');
         Route::get('/', [TagsController::class,  'index']);
         Route::get('/all/paginated', [AdminTagsController::class,  'paginated']);
-        Route::get('/{id}', [AdminTagsController::class,  'single'])->middleware('throttle:60,1');
+        Route::get('/{id}', [AdminTagsController::class,  'single'])->middleware('throttle:90,1');
         Route::post('/create', [AdminTagsController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/update/{id}', [AdminTagsController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/delete/{id}', [AdminTagsController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -133,10 +133,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('countries')->group(function () {
         Route::get('/', [CountriesController::class,  'index']);
         Route::get('/all/get', [CountriesController::class,  'all']);
-        Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:60,1');
-        Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:60,1');
-        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:60,1');
-        Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:60,1');
+        Route::get('/paginated/get', [CountriesController::class,  'paginated'])->middleware('throttle:90,1');
+        Route::get('/all/count', [CountriesController::class,  'count'])->middleware('throttle:90,1');
+        Route::get('/{id}/cities', [CountriesController::class,  'cities'])->middleware('throttle:90,1');
+        Route::get('/{id}', [CountriesController::class,  'single'])->middleware('throttle:90,1');
         Route::post('/create', [CountriesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CountriesController::class,  'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CountriesController::class,  'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -145,9 +145,9 @@ Route::prefix('v1')->group(function () {
 
     // CITIES CRUD
     Route::prefix('cities')->group(function () {
-        Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:60,1');
-        Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:60,1');
-        Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:60,1');
+        Route::get('/', [CitiesController::class,  'index'])->middleware('throttle:90,1');
+        Route::get('/paginated/get', [CitiesController::class,  'paginated'])->middleware('throttle:90,1');
+        Route::get('/{id}', [CitiesController::class,  'single'])->middleware('throttle:90,1');
         Route::post('/create', [CitiesCreateController::class,  'create'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::post('/{id}/update', [CitiesController::class, 'update'])->middleware(AdminMiddleware::class, 'auth:sanctum');
         Route::delete('/{id}/delete', [CitiesController::class, 'delete'])->middleware(AdminMiddleware::class, 'auth:sanctum');
@@ -155,7 +155,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Events
-    Route::prefix('events')->middleware(['throttle:60,1'])->group(function () {
+    Route::prefix('events')->middleware(['throttle:90,1'])->group(function () {
         // Home Events
         Route::get('/', [EventController::class, 'all']);
         Route::get('/trending', [EventController::class, 'trending']);
@@ -180,14 +180,14 @@ Route::prefix('v1')->group(function () {
         //54
     });
 
-    Route::prefix('media')->middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
+    Route::prefix('media')->middleware(['auth:sanctum', 'throttle:90,1'])->group(function () {
         Route::post('/validate-photo', [MediaValidationController::class, 'validatePhoto']);
     });
 
     // Purchases CRUD
     Route::prefix('purchases')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/', [PurchasesController::class, 'index']);
-        Route::get('/all/count', [PurchasesController::class,  'count'])->middleware('throttle:60,1');
+        Route::get('/all/count', [PurchasesController::class,  'count'])->middleware('throttle:90,1');
         Route::get('/type/{type}', [PurchasesController::class, 'filter']);
         Route::get('/status/{status}', [PurchasesController::class, 'status']);
         Route::get('/show/{id}', [PurchasesController::class, 'show']);
@@ -196,7 +196,7 @@ Route::prefix('v1')->group(function () {
         //61
     });
      // withdrawals
-    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class,'throttle:60,1'])->group(function () {
+    Route::prefix('withdraw')->middleware(['auth:sanctum', AdminMiddleware::class,'throttle:90,1'])->group(function () {
         Route::get('/', [WithdrawlController::class, 'index']);
         Route::get('/all/count', [WithdrawlController::class,  'count']);
         Route::get('/status/{status}', [WithdrawlController::class, 'status']);
@@ -296,7 +296,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Comments
-    Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
+    Route::prefix('comments')->middleware('throttle:90,1')->group(function () {
         Route::get('/{slug}', [CommentController::class, 'allPaginated']);
         Route::post('/{id}/support', [CommentInteractionController::class, 'support'])->middleware('auth:sanctum');
         Route::post('/{id}/Exhibitions', [CommentInteractionController::class, 'exhibitions'])->middleware('auth:sanctum');
@@ -308,14 +308,14 @@ Route::prefix('v1')->group(function () {
     });
 
     // Comments
-    Route::prefix('comments')->middleware('throttle:50,1')->group(function () {
+    Route::prefix('comments')->middleware('throttle:90,1')->group(function () {
         Route::get('/reports/all', [ReportController::class, 'reports'])->middleware(AdminMiddleware::class);
         Route::delete('/reports/{id}/delete', [ReportController::class, 'delete'])->middleware(AdminMiddleware::class);
         //117
     });
 
     // Likes
-    Route::prefix('likes')->middleware('throttle:10,1')->group(function () {
+    Route::prefix('likes')->middleware('throttle:25,1')->group(function () {
         Route::get('/{id}', [LikesController::class, 'count']);
         Route::post('{id}/create', [LikesController::class, 'create']);
         //119
@@ -437,7 +437,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::post('/tools/image-tags', [ImageTagsController::class, 'generate'])
-    ->middleware(['auth:sanctum', 'throttle:10,1'])
+    ->middleware(['auth:sanctum', 'throttle:30,1'])
     ->name('tools.image-tags');
 
     // 162 EndPoint till now
