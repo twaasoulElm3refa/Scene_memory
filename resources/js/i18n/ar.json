@@ -730,7 +730,11 @@
                 "descriptionPlaceholder": "أخبرنا عن الحدث ولماذا يستحق التغطية",
                 "cancel": "إلغاء",
                 "send": "إرسال",
-                "close": "إغلاق"
+                "sending": "جاري الإرسال...",
+                "close": "إغلاق",
+                "eventNameRequired": "يرجى إدخال اسم الحدث.",
+                "descriptionRequired": "يرجى إدخال وصف الحدث.",
+                "success": "تم إرسال طلب التغطية الخاصة بنجاح."
             }
         }
     },

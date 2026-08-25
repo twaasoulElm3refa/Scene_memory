@@ -54,6 +54,8 @@ const show_contact = () => import("../views/admin/settings/show_contact.vue");
 const create_event = () => import("../views/home/create_event.vue");
 const requests = () => import("../views/admin/requests/requests.vue");
 const show_request = () => import("../views/admin/requests/show_request.vue");
+const special_coverage_requests = () => import("../views/admin/special-coverage/SpecialCoverageRequests.vue");
+const special_coverage_request_show = () => import("../views/admin/special-coverage/SpecialCoverageRequestShow.vue");
 const wishlist = () => import("../views/home/wishlist.vue");
 const MediaUploadRequest = () => import("../views/admin/requests/MediaUploadRequest.vue");
 const all_comments = () => import("../views/home/all_comments.vue");
@@ -392,6 +394,16 @@ const routes = [
     {
         path: "/admin/requests/:id",
         component: show_request,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/special-coverage",
+        component: special_coverage_requests,
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
+        path: "/admin/special-coverage/:id",
+        component: special_coverage_request_show,
         meta: { hideNavbar: true, hideFooter: true },
     },
 

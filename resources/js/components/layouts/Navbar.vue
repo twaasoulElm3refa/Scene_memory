@@ -82,13 +82,13 @@
                                     {{ $t('nav.contact') }}
                                 </RouterLink>
 
-                                <RouterLink class="dropdown-item" :to="localizedPath('/terms')">
+                                <!-- <RouterLink class="dropdown-item" :to="localizedPath('/terms')">
                                     {{ $t('nav.terms') }}
                                 </RouterLink>
 
                                 <RouterLink class="dropdown-item" :to="localizedPath('/who')">
                                     {{ $t('nav.about') }}
-                                </RouterLink>
+                                </RouterLink> -->
                             </div>
                         </transition>
                     </div>

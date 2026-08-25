@@ -137,4 +137,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(RegistrationOtp::class);
     }
+
+    public function specialCoverageRequests(): HasMany
+    {
+        return $this->hasMany(SpecialCoverageRequest::class, 'user_id');
+    }
+
+    public function reviewedSpecialCoverageRequests(): HasMany
+    {
+        return $this->hasMany(SpecialCoverageRequest::class, 'reviewed_by');
+    }
 }

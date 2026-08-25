@@ -101,6 +101,11 @@
                         <DocumentTextIcon class="w-5 h-5" />
                         Events Requests
                     </RouterLink>
+                    <RouterLink to="/admin/special-coverage" class="sidebar-btn dropdown-item"
+                        :class="{ active: route.path.startsWith('/admin/special-coverage') }">
+                        <SparklesIcon class="w-5 h-5" />
+                        Special Coverage
+                    </RouterLink>
                 </div>
             </Transition>
         </div>
@@ -324,6 +329,7 @@ import {
     ArrowUpRightIcon,
     ArrowPathIcon,
     CreditCardIcon,
+    SparklesIcon,
 } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
@@ -337,7 +343,7 @@ const open = reactive({
     settings: route.path.startsWith("/admin/settings"),
     plans: route.path.startsWith("/admin/plans"),
     purchases: route.path.startsWith("/admin/purchases"),   // جديد
-    requests: route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media"),
+    requests: route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media") || route.path.startsWith("/admin/special-coverage"),
     tags: route.path.startsWith("/admin/tags"),
 });
 
@@ -349,7 +355,7 @@ const toggle = (key) => {
 const plansActive = computed(() => route.path.startsWith("/admin/plans"));
 const purchasesActive = computed(() => route.path.startsWith("/admin/purchases")); // جديد
 const requestsActive = computed(() =>
-    route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media")
+    route.path.startsWith("/admin/requests") || route.path.startsWith("/admin/media") || route.path.startsWith("/admin/special-coverage")
 );
 const usersActive = computed(() => route.path.startsWith("/admin/users"));
 const categoriesActive = computed(() => route.path.startsWith("/admin/categories"));

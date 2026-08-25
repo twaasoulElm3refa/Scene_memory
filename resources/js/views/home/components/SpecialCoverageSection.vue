@@ -67,7 +67,7 @@
                         </button>
                     </div>
 
-                    <form class="special-coverage-modal__form" @submit.prevent>
+                    <form class="special-coverage-modal__form" @submit.prevent="submitRequest">
                         <div class="special-coverage-modal__field">
                             <label for="special-coverage-event-name">
                                 {{ $t("homeAudit.specialCoverage.modal.eventName") }}
@@ -79,8 +79,19 @@
                                 v-model="eventName"
                                 type="text"
                                 required
+                                maxlength="255"
+                                :disabled="isSubmitting"
+                                :aria-invalid="Boolean(errors.event_name)"
+                                aria-describedby="special-coverage-event-name-error"
                                 :placeholder="$t('homeAudit.specialCoverage.modal.eventNamePlaceholder')"
                             />
+                            <p
+                                v-if="errors.event_name"
+                                id="special-coverage-event-name-error"
+                                class="special-coverage-modal__error"
+                            >
+                                {{ errors.event_name }}
+                            </p>
                         </div>
 
                         <div class="special-coverage-modal__field">
@@ -93,16 +104,40 @@
                                 v-model="eventDescription"
                                 rows="5"
                                 required
+                                maxlength="5000"
+                                :disabled="isSubmitting"
+                                :aria-invalid="Boolean(errors.event_description)"
+                                aria-describedby="special-coverage-event-description-error"
                                 :placeholder="$t('homeAudit.specialCoverage.modal.descriptionPlaceholder')"
                             ></textarea>
+                            <p
+                                v-if="errors.event_description"
+                                id="special-coverage-event-description-error"
+                                class="special-coverage-modal__error"
+                            >
+                                {{ errors.event_description }}
+                            </p>
                         </div>
 
                         <div class="special-coverage-modal__actions">
-                            <button type="button" class="special-coverage-modal__cancel" @click="closeModal">
+                            <button
+                                type="button"
+                                class="special-coverage-modal__cancel"
+                                :disabled="isSubmitting"
+                                @click="closeModal"
+                            >
                                 {{ $t("homeAudit.specialCoverage.modal.cancel") }}
                             </button>
-                            <button type="submit" class="special-coverage-modal__send">
-                                {{ $t("homeAudit.specialCoverage.modal.send") }}
+                            <button
+                                type="submit"
+                                class="special-coverage-modal__send"
+                                :disabled="isSubmitting"
+                            >
+                                {{
+                                    isSubmitting
+                                        ? $t("homeAudit.specialCoverage.modal.sending")
+                                        : $t("homeAudit.specialCoverage.modal.send")
+                                }}
                             </button>
                         </div>
                     </form>
@@ -115,15 +150,21 @@
 <script setup>
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { showSafeToast } from "../../../services/ApiClient";
+import { SpecialCoverageRequestService } from "../../../services/SpecialCoverageRequestService";
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 
 const sectionTitleId = "special-coverage-title";
 const modalTitleId = "special-coverage-modal-title";
 const isModalOpen = ref(false);
 const eventName = ref("");
 const eventDescription = ref("");
+const isSubmitting = ref(false);
+const errors = ref({});
 const ctaButtonRef = ref(null);
 const eventNameInputRef = ref(null);
 
@@ -138,9 +179,70 @@ const openModal = async () => {
 };
 
 const closeModal = async () => {
+    if (isSubmitting.value) return;
+
     isModalOpen.value = false;
     await nextTick();
     ctaButtonRef.value?.focus();
+};
+
+const resetForm = () => {
+    eventName.value = "";
+    eventDescription.value = "";
+    errors.value = {};
+};
+
+const firstError = (fieldErrors) => {
+    if (Array.isArray(fieldErrors)) {
+        return fieldErrors[0] || "";
+    }
+
+    return fieldErrors || "";
+};
+
+const submitRequest = async () => {
+    errors.value = {};
+
+    const name = eventName.value.trim();
+    const description = eventDescription.value.trim();
+
+    if (!name || !description) {
+        errors.value = {
+            event_name: !name ? t("homeAudit.specialCoverage.modal.eventNameRequired") : "",
+            event_description: !description ? t("homeAudit.specialCoverage.modal.descriptionRequired") : "",
+        };
+
+        return;
+    }
+
+    try {
+        isSubmitting.value = true;
+
+        await SpecialCoverageRequestService.create({
+            event_name: name,
+            event_description: description,
+        });
+
+        resetForm();
+        isModalOpen.value = false;
+        showSafeToast(
+            "success",
+            t("homeAudit.specialCoverage.modal.success"),
+            "Your special coverage request has been submitted successfully."
+        );
+
+        await nextTick();
+        ctaButtonRef.value?.focus();
+    } catch (error) {
+        const validationErrors = error.response?.data?.errors || {};
+
+        errors.value = {
+            event_name: firstError(validationErrors.event_name),
+            event_description: firstError(validationErrors.event_description),
+        };
+    } finally {
+        isSubmitting.value = false;
+    }
 };
 
 const handleContactClick = async () => {
@@ -456,6 +558,20 @@ onUnmounted(() => {
     font: inherit;
     line-height: 1.55;
     transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.special-coverage-modal__field input:disabled,
+.special-coverage-modal__field textarea:disabled,
+.special-coverage-modal__actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.special-coverage-modal__error {
+    margin: 0;
+    color: #dc2626;
+    font-size: 0.82rem;
+    line-height: 1.4;
 }
 
 .special-coverage-modal__field textarea {

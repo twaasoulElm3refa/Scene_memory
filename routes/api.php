@@ -18,6 +18,7 @@ use App\Http\Controllers\api\admin\NotificationController;
 use App\Http\Controllers\api\admin\PurchasesController;
 use App\Http\Controllers\api\admin\ReportController;
 use App\Http\Controllers\api\admin\RequestController;
+use App\Http\Controllers\api\admin\SpecialCoverageRequestController as AdminSpecialCoverageRequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
@@ -42,6 +43,7 @@ use App\Http\Controllers\api\webhook\WalletWebhookController;
 use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\PlanController;
+use App\Http\Controllers\api\home\SpecialCoverageRequestController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\TagsController;
 use App\Http\Controllers\api\home\WhisListController;
@@ -90,10 +92,20 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/dashboard/stats', [AdminDashboardController::class, 'stats']);
+
+        Route::prefix('special-coverage-requests')->group(function () {
+            Route::get('/', [AdminSpecialCoverageRequestController::class, 'index']);
+            Route::get('/{id}', [AdminSpecialCoverageRequestController::class, 'show']);
+            Route::post('/{id}/approve', [AdminSpecialCoverageRequestController::class, 'approve']);
+            Route::post('/{id}/reject', [AdminSpecialCoverageRequestController::class, 'reject']);
+        });
     });
 
     Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
         ->middleware(['auth:sanctum', 'throttle:60,1']);
+
+    Route::post('/special-coverage-requests', [SpecialCoverageRequestController::class, 'store'])
+        ->middleware(['auth:sanctum', 'throttle:30,1']);
 
     // CATEGORIES CRUD
     Route::prefix('categories')->group(function () {

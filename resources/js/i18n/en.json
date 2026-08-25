@@ -733,7 +733,11 @@
                 "descriptionPlaceholder": "Tell us about the event and why it deserves coverage",
                 "cancel": "Cancel",
                 "send": "Send",
-                "close": "Close"
+                "sending": "Sending...",
+                "close": "Close",
+                "eventNameRequired": "Please enter the event name.",
+                "descriptionRequired": "Please enter the event description.",
+                "success": "Your special coverage request has been submitted successfully."
             }
         }
     },

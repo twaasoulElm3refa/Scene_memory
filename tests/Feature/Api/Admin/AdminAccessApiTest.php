@@ -13,6 +13,7 @@ class AdminAccessApiTest extends TestCase
             '/api/v1/withdraw',
             '/api/v1/users',
             '/api/v1/requests/all/paginated',
+            '/api/v1/admin/special-coverage-requests',
             '/api/v1/event-images/1',
         ];
 
