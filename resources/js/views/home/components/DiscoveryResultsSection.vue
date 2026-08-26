@@ -1,5 +1,6 @@
 <template>
     <section v-if="searched" class="discovery-results-section">
+        <!-- Header -->
         <header class="discovery-results-header">
             <div class="discovery-results-copy">
                 <h2>{{ $t("discovery.title") }}</h2>
@@ -46,7 +47,7 @@
             </button>
         </div>
 
-        <!-- Loading Skeleton -->
+        <!-- Loading -->
         <div
             v-if="loading"
             class="discovery-grid"
@@ -96,47 +97,46 @@
                     <!-- Media -->
                     <div class="result-media">
 
-                        <!-- ============================= -->
+                        <!-- ================================= -->
                         <!-- VIDEO -->
-                        <!-- ============================= -->
-
+                        <!-- ================================= -->
                         <template v-if="result.result_type === 'video'">
 
-                            <!-- Video Thumbnail -->
-                            <img
-                                v-if="result.thumbnail_url"
-                                :src="result.thumbnail_url"
-                                :alt="result.title"
-                                :loading="index === 0 ? 'eager' : 'lazy'"
-                                :fetchpriority="index === 0 ? 'high' : 'auto'"
-                                decoding="async"
-                            />
-
-                            <!-- Actual Video if thumbnail does not exist -->
+                            <!--
+                                IMPORTANT:
+                                لا نستخدم thumbnail_url هنا نهائيًا.
+                                نعرض الفيديو نفسه ونأخذ أول Frame.
+                            -->
                             <video
-                                v-else-if="result.media_url"
+                                v-if="
+                                    videoSource(result) &&
+                                    !isVideoFailed(result)
+                                "
                                 class="result-video"
-                                :src="result.media_url"
-                                :poster="fallbackImage || undefined"
+                                :src="videoSource(result)"
                                 muted
                                 playsinline
-                                preload="metadata"
+                                preload="auto"
                                 aria-hidden="true"
+                                @loadedmetadata="prepareVideoFrame"
+                                @loadeddata="prepareVideoFrame"
+                                @error="markVideoFailed(result)"
                             ></video>
 
-                            <!-- Final fallback -->
+                            <!-- Fallback image -->
                             <img
                                 v-else-if="fallbackImage"
                                 :src="fallbackImage"
-                                :alt="result.title"
+                                :alt="result.title || ''"
                                 loading="lazy"
                                 decoding="async"
+                                @error="handleFallbackImageError"
                             />
 
-                            <!-- Empty fallback if nothing exists -->
+                            <!-- Final fallback -->
                             <div
                                 v-else
-                                class="result-media-empty"
+                                class="result-media-empty is-video-empty"
                                 aria-hidden="true"
                             >
                                 <PlayIcon />
@@ -144,22 +144,19 @@
 
                         </template>
 
-                        <!-- ============================= -->
+                        <!-- ================================= -->
                         <!-- IMAGE / EVENT -->
-                        <!-- ============================= -->
-
+                        <!-- ================================= -->
                         <template v-else>
+
                             <img
-                                v-if="result.thumbnail_url || result.media_url || fallbackImage"
-                                :src="
-                                    result.thumbnail_url ||
-                                    result.media_url ||
-                                    fallbackImage
-                                "
-                                :alt="result.title"
+                                v-if="imageSource(result)"
+                                :src="imageSource(result)"
+                                :alt="result.title || ''"
                                 :loading="index === 0 ? 'eager' : 'lazy'"
                                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                                 decoding="async"
+                                @error="handleImageError"
                             />
 
                             <div
@@ -167,6 +164,7 @@
                                 class="result-media-empty"
                                 aria-hidden="true"
                             ></div>
+
                         </template>
 
                         <!-- Type Badge -->
@@ -186,7 +184,7 @@
                             }}
                         </span>
 
-                        <!-- Play button -->
+                        <!-- Video Play Indicator -->
                         <span
                             v-if="result.result_type === 'video'"
                             class="video-play-indicator"
@@ -304,6 +302,8 @@
 
 
 <script setup>
+import { reactive } from "vue";
+
 import {
     ArrowRightIcon,
     CalendarDaysIcon,
@@ -412,31 +412,217 @@ defineEmits([
 ]);
 
 
-/**
- * Event Details URL
- */
+/*
+|--------------------------------------------------------------------------
+| Failed videos
+|--------------------------------------------------------------------------
+*/
+
+const failedVideos = reactive(new Set());
+
+
+/*
+|--------------------------------------------------------------------------
+| Event URL
+|--------------------------------------------------------------------------
+*/
+
 const eventUrl = (result) => {
     return `/${props.lang}/single_event/${
-        result.event_slug || result.slug
+        result.event_slug ||
+        result.slug ||
+        ""
     }`;
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| Video Source
+|--------------------------------------------------------------------------
+|
+| نحاول أكثر من field تحسبًا لاختلاف Response الـ API.
+|
+*/
+
+const videoSource = (result) => {
+    if (!result) {
+        return "";
+    }
+
+    return (
+        result.video_url ||
+        result.media_url ||
+        result.file_url ||
+        result.url ||
+        ""
+    );
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| Image Source
+|--------------------------------------------------------------------------
+*/
+
+const imageSource = (result) => {
+    if (!result) {
+        return props.fallbackImage || "";
+    }
+
+    return (
+        result.thumbnail_url ||
+        result.media_url ||
+        result.image_url ||
+        props.fallbackImage ||
+        ""
+    );
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| Create unique result key
+|--------------------------------------------------------------------------
+*/
+
+const resultKey = (result) => {
+    return `${result?.result_type || "result"}-${result?.id || videoSource(result)}`;
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| Video Error
+|--------------------------------------------------------------------------
+*/
+
+const markVideoFailed = (result) => {
+    const key = resultKey(result);
+
+    failedVideos.add(key);
+
+    console.error(
+        "Discovery video failed to load:",
+        {
+            id: result?.id,
+            source: videoSource(result),
+            result,
+        }
+    );
+};
+
+
+const isVideoFailed = (result) => {
+    return failedVideos.has(
+        resultKey(result)
+    );
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| Show first frame of video
+|--------------------------------------------------------------------------
+|
+| بعد تحميل Metadata نحرك الفيديو لـ 0.1 ثانية.
+| كده المتصفح يعرض Frame حقيقي بدل صورة thumbnail مكسورة.
+|
+*/
+
+const prepareVideoFrame = (event) => {
+    const video = event?.target;
+
+    if (!video) {
+        return;
+    }
+
+    try {
+        video.muted = true;
+
+        /*
+         * لو الفيديو أطول من 0.1 ثانية
+         * نجيب Frame قريب من البداية.
+         */
+        if (
+            Number.isFinite(video.duration) &&
+            video.duration > 0.15
+        ) {
+            if (
+                video.currentTime === 0 ||
+                video.currentTime < 0.05
+            ) {
+                video.currentTime = 0.1;
+            }
+        }
+
+        video.pause();
+    } catch (error) {
+        console.error(
+            "Unable to prepare video frame:",
+            error
+        );
+    }
+};
+
+
+/*
+|--------------------------------------------------------------------------
+| Broken normal image fallback
+|--------------------------------------------------------------------------
+*/
+
+const handleImageError = (event) => {
+    const image = event?.target;
+
+    if (!image) {
+        return;
+    }
+
+    /*
+     * لو عندنا fallback مختلف عن الصورة الحالية
+     * استخدمه.
+     */
+    if (
+        props.fallbackImage &&
+        image.src !== props.fallbackImage
+    ) {
+        image.src = props.fallbackImage;
+        return;
+    }
+
+    /*
+     * لو حتى fallback مكسور
+     */
+    image.style.display = "none";
+};
+
+
+const handleFallbackImageError = (event) => {
+    const image = event?.target;
+
+    if (image) {
+        image.style.display = "none";
+    }
 };
 </script>
 
 
 <style scoped>
 
-/* ============================= */
-/* Main Section */
-/* ============================= */
+/* =========================================================
+   MAIN
+========================================================= */
 
 .discovery-results-section {
     color: var(--scemory-text);
 }
 
 
-/* ============================= */
-/* Header */
-/* ============================= */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .discovery-results-header {
     display: flex;
@@ -473,9 +659,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* See More */
-/* ============================= */
+/* =========================================================
+   SEE MORE
+========================================================= */
 
 .discovery-see-more {
     display: inline-flex;
@@ -509,9 +695,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Tabs */
-/* ============================= */
+/* =========================================================
+   TABS
+========================================================= */
 
 .discovery-tabs {
     display: inline-flex;
@@ -560,29 +746,40 @@ const eventUrl = (result) => {
 
     color: var(--scemory-primary);
 
-    box-shadow: 0 2px 8px rgba(13, 77, 151, 0.1);
+    box-shadow: 0 2px 8px rgba(
+        13,
+        77,
+        151,
+        0.1
+    );
 }
 
 
-/* ============================= */
-/* Grid */
-/* ============================= */
+.discovery-tabs button:disabled {
+    cursor: wait;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
 
 .discovery-grid {
     display: grid;
 
-    grid-template-columns: repeat(
-        3,
-        minmax(0, 1fr)
-    );
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
 
     gap: 20px;
 }
 
 
-/* ============================= */
-/* Card */
-/* ============================= */
+/* =========================================================
+   CARD
+========================================================= */
 
 .discovery-card,
 .result-skeleton {
@@ -595,7 +792,9 @@ const eventUrl = (result) => {
 
     background: #fff;
 
-    box-shadow: 0 8px 24px rgba(13, 77, 151, 0.06);
+    box-shadow:
+        0 8px 24px
+        rgba(13, 77, 151, 0.06);
 }
 
 
@@ -627,9 +826,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Media Container */
-/* ============================= */
+/* =========================================================
+   MEDIA
+========================================================= */
 
 .result-media {
     position: relative;
@@ -644,9 +843,7 @@ const eventUrl = (result) => {
 
 /*
 |--------------------------------------------------------------------------
-| IMPORTANT FIX
-|--------------------------------------------------------------------------
-| Apply same layout to images AND videos.
+| Image + Video
 |--------------------------------------------------------------------------
 */
 
@@ -659,29 +856,52 @@ const eventUrl = (result) => {
 
     object-fit: cover;
 
-    transition: transform 240ms ease;
+    transition:
+        transform 240ms ease;
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| Video
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   VIDEO
+========================================================= */
 
 .result-video {
+    position: absolute;
+
+    inset: 0;
+
     width: 100%;
     height: 100%;
 
-    object-fit: cover;
+    border: 0;
 
-    background: #111;
+    background:
+        #e9eef4;
+
+    object-fit: cover;
 
     pointer-events: none;
 }
 
 
-/* Hover */
+/*
+ * IMPORTANT:
+ * نخفي أي native controls
+ */
+
+.result-video::-webkit-media-controls {
+    display: none !important;
+}
+
+
+.result-video::-webkit-media-controls-panel {
+    display: none !important;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
 
 .discovery-card:hover .result-media img,
 .discovery-card:hover .result-media video {
@@ -689,9 +909,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Empty Media */
-/* ============================= */
+/* =========================================================
+   EMPTY MEDIA
+========================================================= */
 
 .result-media-empty {
     display: grid;
@@ -707,15 +927,25 @@ const eventUrl = (result) => {
 }
 
 
+.result-media-empty.is-video-empty {
+    background:
+        linear-gradient(
+            135deg,
+            #e9eef4,
+            #dce5ef
+        );
+}
+
+
 .result-media-empty svg {
     width: 42px;
     height: 42px;
 }
 
 
-/* ============================= */
-/* Result Type Badge */
-/* ============================= */
+/* =========================================================
+   TYPE BADGE
+========================================================= */
 
 .result-type-badge {
     position: absolute;
@@ -724,7 +954,7 @@ const eventUrl = (result) => {
 
     inset-inline-start: 12px;
 
-    z-index: 3;
+    z-index: 5;
 
     display: inline-flex;
 
@@ -748,22 +978,20 @@ const eventUrl = (result) => {
     font-size: 11px;
     font-weight: 900;
 
-    box-shadow: 0 4px 12px rgba(
-        4,
-        17,
-        29,
-        0.12
-    );
+    box-shadow:
+        0 4px 12px
+        rgba(4, 17, 29, 0.12);
 }
 
 
 .result-type-badge.is-video {
-    background: rgba(
-        4,
-        17,
-        29,
-        0.9
-    );
+    background:
+        rgba(
+            4,
+            17,
+            29,
+            0.9
+        );
 
     color: #fff;
 }
@@ -780,16 +1008,17 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Video Play Button */
-/* ============================= */
+/* =========================================================
+   PLAY INDICATOR
+========================================================= */
 
 .video-play-indicator {
     position: absolute;
 
-    inset: 50% auto auto 50%;
+    top: 50%;
+    left: 50%;
 
-    z-index: 4;
+    z-index: 6;
 
     display: grid;
 
@@ -798,26 +1027,27 @@ const eventUrl = (result) => {
 
     place-items: center;
 
-    transform: translate(
-        -50%,
-        -50%
-    );
+    transform:
+        translate(-50%, -50%);
 
-    border: 1px solid rgba(
-        255,
-        255,
-        255,
-        0.55
-    );
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
 
     border-radius: 50%;
 
-    background: rgba(
-        4,
-        17,
-        29,
-        0.72
-    );
+    background:
+        rgba(
+            4,
+            17,
+            29,
+            0.72
+        );
 
     color: #fff;
 
@@ -833,9 +1063,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Card Body */
-/* ============================= */
+/* =========================================================
+   BODY
+========================================================= */
 
 .result-card-body {
     display: flex;
@@ -848,9 +1078,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Meta */
-/* ============================= */
+/* =========================================================
+   META
+========================================================= */
 
 .result-meta {
     display: flex;
@@ -886,9 +1116,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Title */
-/* ============================= */
+/* =========================================================
+   TITLE
+========================================================= */
 
 .result-card-body h3 {
     display: -webkit-box;
@@ -911,9 +1141,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Description */
-/* ============================= */
+/* =========================================================
+   DESCRIPTION
+========================================================= */
 
 .result-description {
     display: -webkit-box;
@@ -933,9 +1163,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Footer */
-/* ============================= */
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .result-card-footer {
     display: flex;
@@ -950,7 +1180,9 @@ const eventUrl = (result) => {
 
     padding-top: 14px;
 
-    border-top: 1px solid var(--scemory-border-soft);
+    border-top:
+        1px solid
+        var(--scemory-border-soft);
 
     color: var(--scemory-muted);
 
@@ -971,13 +1203,17 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Skeleton */
-/* ============================= */
+/* =========================================================
+   SKELETON
+========================================================= */
 
 .result-skeleton .result-media,
 .result-skeleton-body span {
-    animation: result-pulse 1.4s ease-in-out infinite;
+    animation:
+        result-pulse
+        1.4s
+        ease-in-out
+        infinite;
 
     background: #e8edf3;
 }
@@ -1009,15 +1245,20 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Empty */
-/* ============================= */
+/* =========================================================
+   EMPTY RESULTS
+========================================================= */
 
 .discovery-empty {
     padding: 64px 20px;
 
-    border-top: 1px solid var(--scemory-border-soft);
-    border-bottom: 1px solid var(--scemory-border-soft);
+    border-top:
+        1px solid
+        var(--scemory-border-soft);
+
+    border-bottom:
+        1px solid
+        var(--scemory-border-soft);
 
     text-align: center;
 }
@@ -1040,9 +1281,9 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Pagination */
-/* ============================= */
+/* =========================================================
+   PAGINATION
+========================================================= */
 
 .discovery-pagination {
     display: flex;
@@ -1065,7 +1306,10 @@ const eventUrl = (result) => {
 
     place-items: center;
 
-    border: 1px solid var(--scemory-border);
+    border:
+        1px solid
+        var(--scemory-border);
+
     border-radius: 6px;
 
     background: #fff;
@@ -1079,9 +1323,11 @@ const eventUrl = (result) => {
 
 
 .discovery-pagination button.is-active {
-    border-color: var(--scemory-primary);
+    border-color:
+        var(--scemory-primary);
 
-    background: var(--scemory-primary);
+    background:
+        var(--scemory-primary);
 
     color: #fff;
 }
@@ -1094,60 +1340,54 @@ const eventUrl = (result) => {
 }
 
 
-/* ============================= */
-/* Skeleton Animation */
-/* ============================= */
+/* =========================================================
+   ANIMATION
+========================================================= */
 
 @keyframes result-pulse {
-
     50% {
         opacity: 0.55;
     }
-
 }
 
 
-/* ============================= */
-/* Large Screens */
-/* ============================= */
+/* =========================================================
+   LARGE SCREEN
+========================================================= */
 
 @media (min-width: 1680px) {
-
     .discovery-grid {
-        grid-template-columns: repeat(
-            4,
-            minmax(0, 1fr)
-        );
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
     }
-
 }
 
 
-/* ============================= */
-/* Tablets */
-/* ============================= */
+/* =========================================================
+   TABLET
+========================================================= */
 
-@media (
-    min-width: 700px
-)
-and
-(
-    max-width: 1100px
-) {
-
+@media
+    (min-width: 700px)
+    and
+    (max-width: 1100px)
+{
     .discovery-grid {
-        grid-template-columns: repeat(
-            2,
-            minmax(0, 1fr)
-        );
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
     }
-
 }
 
 
-/* ============================= */
-/* Mobile */
-/* ============================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 699px) {
 
@@ -1171,10 +1411,11 @@ and
     .discovery-tabs {
         display: grid;
 
-        grid-template-columns: repeat(
-            4,
-            minmax(74px, 1fr)
-        );
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(74px, 1fr)
+            );
 
         width: 100%;
     }
@@ -1192,7 +1433,6 @@ and
 
         gap: 14px;
     }
-
 }
 
 </style>
