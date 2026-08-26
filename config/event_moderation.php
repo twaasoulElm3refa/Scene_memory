@@ -2,7 +2,7 @@
 
 return [
     'enabled' => (bool) env('AI_EVENT_MODERATION_ENABLED', true),
-    'auto_decision_threshold' => (float) env('AI_EVENT_MODERATION_AUTO_DECISION_THRESHOLD', 0.85),
+    'auto_decision_threshold' => (float) env('AI_EVENT_MODERATION_AUTO_DECISION_THRESHOLD', 0.70),
     'queue' => env('AI_EVENT_MODERATION_QUEUE', 'default'),
     'overlap_expire_after' => (int) env('AI_EVENT_MODERATION_OVERLAP_EXPIRE_AFTER', 300),
     'admin_email' => env('SCEMORY_ADMIN_EMAIL'),

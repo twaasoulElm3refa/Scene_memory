@@ -61,7 +61,7 @@ class AiModerationResponseValidator
 
         $threshold = min(1, max(0, (float) $this->config->get(
             'event_moderation.auto_decision_threshold',
-            0.85
+            0.70
         )));
 
         if ($decision !== 'manual_review' && $confidence < $threshold) {

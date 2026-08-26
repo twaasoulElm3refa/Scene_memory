@@ -33,16 +33,16 @@ class EventRequestModerationTest extends TestCase
         Mail::fake();
         Bus::fake([ReviewEventRequestWithAi::class]);
         config()->set('event_moderation.admin_email', 'admin@example.com');
-        config()->set('event_moderation.auto_decision_threshold', 0.85);
+        config()->set('event_moderation.auto_decision_threshold', 0.70);
     }
 
-    public function test_ai_approval_activates_event_and_queues_existing_approval_mail(): void
+    public function test_ai_approval_at_70_percent_activates_event_and_queues_existing_approval_mail(): void
     {
         [$event, $request] = $this->pendingRequest();
 
         $applied = $this->service()->applyAiDecision(
             $request->id,
-            $this->decision('approved', 0.94, 'The event is coherent and suitable.')
+            $this->decision('approved', 0.70, 'The event is coherent and suitable.')
         );
 
         $this->assertTrue($applied);
@@ -104,12 +104,12 @@ class EventRequestModerationTest extends TestCase
         Bus::assertNotDispatched(ReviewEventRequestWithAi::class);
     }
 
-    public function test_low_confidence_automatic_decision_is_converted_to_manual_review(): void
+    public function test_confidence_below_70_percent_is_converted_to_manual_review(): void
     {
         [$event, $request] = $this->pendingRequest();
         $decision = app(AiModerationResponseValidator::class)->validate([
             'decision' => 'approved',
-            'confidence' => 0.70,
+            'confidence' => 0.69,
             'reason' => 'The submission appears acceptable.',
             'flags' => [],
         ]);

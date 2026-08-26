@@ -14,6 +14,7 @@ class EventModerationWorkflowBuilderTest extends TestCase
         config()->set('event_moderation.openrouter.api_url', 'https://openrouter.ai/api/v1');
         config()->set('event_moderation.openrouter.model', 'test/model');
         config()->set('event_moderation.openrouter.translation_model', 'test/translation-model');
+        config()->set('event_moderation.auto_decision_threshold', 0.70);
         config()->set('event_moderation.laravel.base_url', 'https://laravel.test');
         config()->set('event_moderation.n8n.webhook_secret', 'must-not-be-embedded');
         config()->set('event_moderation.openrouter.api_key', 'also-must-not-be-embedded');
@@ -48,6 +49,10 @@ class EventModerationWorkflowBuilderTest extends TestCase
         $this->assertStringContainsString('openrouter-credential', $encoded);
         $this->assertStringNotContainsString('must-not-be-embedded', $encoded);
         $this->assertStringNotContainsString('also-must-not-be-embedded', $encoded);
+        $this->assertStringContainsString(
+            '>= 0.7',
+            $nodes['Is Approved for Publication']['parameters']['conditions']['conditions'][0]['leftValue']
+        );
 
         $approvedOutputs = $workflow['connections']['Is Approved for Publication']['main'];
         $this->assertSame('Return Approval to Laravel', $approvedOutputs[0][0]['node']);
