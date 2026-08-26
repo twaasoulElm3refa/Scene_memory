@@ -27,14 +27,16 @@ class ReviewEventRequestWithAi implements ShouldBeUnique, ShouldQueue
 
     public int $uniqueFor = 3600;
 
-    public function __construct(public readonly int $requestId)
-    {
+    public function __construct(
+        public readonly int $requestId,
+        public readonly bool $translationOnly = false,
+    ) {
         $this->onQueue((string) config('event_moderation.queue', 'default'));
     }
 
     public function uniqueId(): string
     {
-        return (string) $this->requestId;
+        return ($this->translationOnly ? 'translation:' : 'moderation:').$this->requestId;
     }
 
     /**
@@ -66,6 +68,12 @@ class ReviewEventRequestWithAi implements ShouldBeUnique, ShouldQueue
         N8nEventModerationClient $n8n,
         AiModerationResponseValidator $validator,
     ): void {
+        if ($this->translationOnly) {
+            $this->requestTranslation($payloadBuilder, $n8n);
+
+            return;
+        }
+
         if (! (bool) config('event_moderation.enabled', true)) {
             Log::info('AI event moderation skipped because it is disabled', [
                 'request_id' => $this->requestId,
@@ -137,6 +145,18 @@ class ReviewEventRequestWithAi implements ShouldBeUnique, ShouldQueue
 
     public function failed(Throwable $exception): void
     {
+        if ($this->translationOnly) {
+            Log::error('n8n event translation request permanently failed', [
+                'request_id' => $this->requestId,
+                'job_id' => $this->job?->getJobId(),
+                'attempts' => $this->attempts(),
+                'exception' => $exception::class,
+                'message' => $exception->getMessage(),
+            ]);
+
+            return;
+        }
+
         app(EventRequestModerationService::class)->markFailed($this->requestId);
 
         Log::error('AI event moderation permanently failed', [
@@ -146,5 +166,41 @@ class ReviewEventRequestWithAi implements ShouldBeUnique, ShouldQueue
             'exception' => $exception::class,
             'message' => $exception->getMessage(),
         ]);
+    }
+
+    private function requestTranslation(
+        EventModerationPayloadBuilder $payloadBuilder,
+        N8nEventModerationClient $n8n,
+    ): void {
+        $request = EventRequestCreate::query()->find($this->requestId);
+
+        if ($request === null || $request->status !== 'approved') {
+            Log::info('n8n event translation request skipped', [
+                'request_id' => $this->requestId,
+                'reason' => 'missing or not approved',
+            ]);
+
+            return;
+        }
+
+        try {
+            $payload = $payloadBuilder->build($request);
+            $n8n->requestTranslation($payload);
+
+            Log::info('n8n event translation request accepted', [
+                'request_id' => $request->id,
+                'event_id' => $request->event_id,
+            ]);
+        } catch (Throwable $exception) {
+            Log::error('n8n event translation request failed', [
+                'request_id' => $request->id,
+                'event_id' => $request->event_id,
+                'attempt' => $this->attempts(),
+                'exception' => $exception::class,
+                'message' => $exception->getMessage(),
+            ]);
+
+            throw $exception;
+        }
     }
 }

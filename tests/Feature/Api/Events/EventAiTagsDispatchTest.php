@@ -5,7 +5,6 @@ namespace Tests\Feature\Api\Events;
 use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\ReviewEventRequestWithAi;
-use App\Jobs\TranslateEventJob;
 use App\Models\EventsImges;
 use App\Models\Tags;
 use App\Models\User;
@@ -210,10 +209,9 @@ class EventAiTagsDispatchTest extends TestCase
                 ->where('event_id', $eventId)
                 ->value('id');
         }
-        $this->assertDatabaseHas('event_translations', [
+        $this->assertDatabaseMissing('event_translations', [
             'event_id' => $eventId,
             'locale' => 'ar',
-            'title' => 'Queued event',
         ]);
         $this->assertDatabaseHas('tags', [
             'name' => 'Manual event tag',
@@ -281,7 +279,6 @@ class EventAiTagsDispatchTest extends TestCase
 
         Bus::assertNotDispatched(GenerateEventAiTagsJob::class);
         Bus::assertNotDispatched(ReviewEventRequestWithAi::class);
-        Bus::assertDispatched(TranslateEventJob::class);
         $this->assertInstanceOf(ProcessEventImageJob::class, $capturedImageJob);
         if (extension_loaded('gd') || extension_loaded('imagick')) {
             $capturedImageJob->handle(

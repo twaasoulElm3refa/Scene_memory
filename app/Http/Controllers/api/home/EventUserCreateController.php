@@ -9,7 +9,6 @@ use App\Jobs\GenerateEventAiTagsJob;
 use App\Jobs\ProcessEventImageJob;
 use App\Jobs\ProcessEventVideoJob;
 use App\Jobs\ReviewEventRequestWithAi;
-use App\Jobs\TranslateEventJob;
 use App\Models\Event_Tags;
 use App\Models\Tags;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
@@ -81,11 +80,6 @@ class EventUserCreateController extends Controller
                     $eventRequestId = (int) $eventRequest->id;
                 }
                 $event->update(['slug' => 'event'.'-'.Str::slug($data['title']).$event->id]);
-                $event->translations()->create([
-                    'locale' => 'ar',
-                    'title' => $data['title'],
-                    'description' => $data['description'],
-                ]);
                 $this->syncEventTags($event->id, $request);
                 $uploadedFiles = $request->uploadedMediaFiles();
                 if (! empty($uploadedFiles)) {
@@ -176,7 +170,6 @@ class EventUserCreateController extends Controller
                 $videoJobs,
                 $eventRequestId
             );
-            TranslateEventJob::dispatch($event->id, $data['title'], $data['description']);
             $this->clearEventsCache((int) $event->id, $requiresModeration);
 
             return $this->success(

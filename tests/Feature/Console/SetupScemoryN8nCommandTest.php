@@ -18,6 +18,8 @@ class SetupScemoryN8nCommandTest extends TestCase
         config()->set('event_moderation.openrouter.api_key', 'openrouter-api-key');
         config()->set('event_moderation.openrouter.api_url', 'https://openrouter.ai/api/v1');
         config()->set('event_moderation.openrouter.model', 'test/model');
+        config()->set('event_moderation.openrouter.translation_model', 'test/translation-model');
+        config()->set('event_moderation.laravel.base_url', 'https://laravel.test');
         config()->set('event_moderation.admin_email', 'admin@example.com');
 
         $state = [
@@ -119,6 +121,6 @@ class SetupScemoryN8nCommandTest extends TestCase
         $this->assertSame(1, $state['workflow_updates']);
         $this->assertTrue($state['workflow']['active']);
         $this->assertCount(2, $state['credentials']);
-        $this->assertCount(5, $state['workflow']['nodes']);
+        $this->assertCount(13, $state['workflow']['nodes']);
     }
 }

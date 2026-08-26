@@ -15,6 +15,8 @@ use App\Services\EventModeration\EventRequestModerationService;
 use App\Services\EventModeration\ModerationDecision;
 use App\Services\EventModeration\N8nEventModerationClient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\Request as HttpRequest;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use RuntimeException;
@@ -29,6 +31,7 @@ class EventRequestModerationTest extends TestCase
         parent::setUp();
 
         Mail::fake();
+        Bus::fake([ReviewEventRequestWithAi::class]);
         config()->set('event_moderation.admin_email', 'admin@example.com');
         config()->set('event_moderation.auto_decision_threshold', 0.85);
     }
@@ -70,6 +73,7 @@ class EventRequestModerationTest extends TestCase
             fn (RejectMail $mail): bool => $mail->reason === $reason
         );
         Mail::assertNotQueued(ApproveMail::class);
+        Bus::assertNotDispatched(ReviewEventRequestWithAi::class);
     }
 
     public function test_manual_review_leaves_request_pending_and_emails_only_the_admin(): void
@@ -97,6 +101,7 @@ class EventRequestModerationTest extends TestCase
         );
         Mail::assertNotQueued(ApproveMail::class);
         Mail::assertNotQueued(RejectMail::class);
+        Bus::assertNotDispatched(ReviewEventRequestWithAi::class);
     }
 
     public function test_low_confidence_automatic_decision_is_converted_to_manual_review(): void
@@ -158,6 +163,44 @@ class EventRequestModerationTest extends TestCase
         $this->assertSame('An administrator must verify the event claim.', $updated->ai_reason);
         $this->assertTrue($event->fresh()->is_active);
         Mail::assertQueued(ApproveMail::class, 1);
+        Bus::assertDispatched(
+            ReviewEventRequestWithAi::class,
+            fn (ReviewEventRequestWithAi $job): bool => $job->requestId === $request->id
+                && $job->translationOnly
+        );
+    }
+
+    public function test_translation_only_mode_asks_n8n_and_never_changes_the_approved_state(): void
+    {
+        [$event, $request] = $this->pendingRequest();
+        $request->update(['status' => 'approved']);
+        $event->update(['is_active' => true]);
+        $secret = str_repeat('s', 32);
+
+        config()->set('event_moderation.n8n.webhook_secret', $secret);
+        config()->set('event_moderation.n8n.webhook_url', 'https://n8n.test/webhook/scemory-event-moderation');
+        Http::fake([
+            'https://n8n.test/*' => Http::response(['accepted' => true], 202),
+        ]);
+
+        $job = new ReviewEventRequestWithAi($request->id, translationOnly: true);
+        $job->handle(
+            $this->service(),
+            app(EventModerationPayloadBuilder::class),
+            app(N8nEventModerationClient::class),
+            app(AiModerationResponseValidator::class),
+        );
+
+        $this->assertSame('approved', $request->fresh()->status);
+        $this->assertTrue($event->fresh()->is_active);
+        $this->assertDatabaseCount('event_translations', 0);
+        Http::assertSent(
+            fn (HttpRequest $sent): bool => $sent->url() === 'https://n8n.test/webhook/scemory-event-moderation'
+                && $sent['mode'] === 'translation'
+                && $sent['request_id'] === $request->id
+                && $sent['event']['id'] === $event->id
+                && $sent->hasHeader('X-Scemory-Webhook-Secret', $secret)
+        );
     }
 
     public function test_malformed_ai_response_never_changes_request_or_event_state(): void

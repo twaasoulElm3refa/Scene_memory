@@ -21,6 +21,28 @@ class N8nEventModerationClient
      */
     public function review(array $payload): array
     {
+        return $this->send($payload, 'moderation');
+    }
+
+    /** @param array<string, mixed> $payload */
+    public function requestTranslation(array $payload): void
+    {
+        $response = $this->send(
+            array_merge($payload, ['mode' => 'translation']),
+            'translation'
+        );
+
+        if (($response['accepted'] ?? false) !== true) {
+            throw new RuntimeException('n8n did not accept the event translation request.');
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function send(array $payload, string $operation): array
+    {
         $secret = $this->secretResolver->resolve();
 
         try {
@@ -40,14 +62,14 @@ class N8nEventModerationClient
         } catch (RequestException $exception) {
             throw new RuntimeException(
                 sprintf(
-                    'n8n event moderation returned HTTP %d.',
+                    "n8n event {$operation} returned HTTP %d.",
                     $exception->response?->status() ?? 0
                 ),
                 previous: $exception
             );
         } catch (\Throwable $exception) {
             throw new RuntimeException(
-                'n8n event moderation request failed.',
+                "n8n event {$operation} request failed.",
                 previous: $exception
             );
         }
@@ -55,7 +77,7 @@ class N8nEventModerationClient
         $body = $response->json();
 
         if (! is_array($body)) {
-            throw new RuntimeException('n8n event moderation returned malformed JSON.');
+            throw new RuntimeException("n8n event {$operation} returned malformed JSON.");
         }
 
         return $body;

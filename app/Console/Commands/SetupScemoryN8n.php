@@ -248,6 +248,8 @@ class SetupScemoryN8n extends Command
             'N8N_API_KEY' => config('event_moderation.n8n.api_key'),
             'OPENROUTER_API_KEY' => config('event_moderation.openrouter.api_key'),
             'OPENROUTER_MODERATION_MODEL' => config('event_moderation.openrouter.model'),
+            'OPENROUTER_TRANSLATION_MODEL' => config('event_moderation.openrouter.translation_model'),
+            'N8N_LARAVEL_CALLBACK_BASE_URL' => config('event_moderation.laravel.base_url'),
             'SCEMORY_ADMIN_EMAIL' => config('event_moderation.admin_email'),
         ];
 
@@ -260,6 +262,7 @@ class SetupScemoryN8n extends Command
         $baseUrl = (string) config('event_moderation.n8n.base_url');
         $openRouterUrl = (string) config('event_moderation.openrouter.api_url');
         $adminEmail = (string) config('event_moderation.admin_email');
+        $laravelCallbackUrl = (string) config('event_moderation.laravel.base_url');
         $threshold = (float) config('event_moderation.auto_decision_threshold');
 
         if ($baseUrl !== '' && filter_var($baseUrl, FILTER_VALIDATE_URL) === false) {
@@ -268,6 +271,10 @@ class SetupScemoryN8n extends Command
 
         if ($openRouterUrl !== '' && filter_var($openRouterUrl, FILTER_VALIDATE_URL) === false) {
             $errors[] = 'OPENROUTER_API_URL must be a valid URL.';
+        }
+
+        if ($laravelCallbackUrl !== '' && filter_var($laravelCallbackUrl, FILTER_VALIDATE_URL) === false) {
+            $errors[] = 'N8N_LARAVEL_CALLBACK_BASE_URL must be a valid URL.';
         }
 
         try {

@@ -2,6 +2,7 @@
 
 namespace App\Services\EventModeration;
 
+use App\Jobs\ReviewEventRequestWithAi;
 use App\Mail\ApproveMail;
 use App\Mail\EventNeedsManualReviewMail;
 use App\Mail\RejectMail;
@@ -183,6 +184,13 @@ class EventRequestModerationService
                 : new RejectMail($event, $reason);
 
             $this->queueOwnerMail($request, $event, $mail);
+
+            if ($decision === 'approved') {
+                ReviewEventRequestWithAi::dispatch(
+                    (int) $request->id,
+                    translationOnly: true
+                )->afterCommit();
+            }
         }
 
         return $request->fresh();
