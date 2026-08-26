@@ -49,6 +49,7 @@ class EventRequestModerationTest extends TestCase
         $this->assertSame('approved', $request->fresh()->status);
         $this->assertSame('approved', $request->fresh()->ai_decision);
         $this->assertTrue($event->fresh()->is_active);
+        $this->assertDatabaseCount('event_translations', 0);
         Mail::assertQueued(ApproveMail::class, 1);
         Mail::assertNotQueued(RejectMail::class);
     }
@@ -68,6 +69,7 @@ class EventRequestModerationTest extends TestCase
         $this->assertSame('rejected', $request->ai_decision);
         $this->assertSame($reason, $request->ai_reason);
         $this->assertFalse($event->fresh()->is_active);
+        $this->assertDatabaseCount('event_translations', 0);
         Mail::assertQueued(
             RejectMail::class,
             fn (RejectMail $mail): bool => $mail->reason === $reason
@@ -94,6 +96,7 @@ class EventRequestModerationTest extends TestCase
         $this->assertSame('manual_review', $request->ai_decision);
         $this->assertNotNull($request->ai_reviewed_at);
         $this->assertFalse($event->fresh()->is_active);
+        $this->assertDatabaseCount('event_translations', 0);
         Mail::assertQueued(
             EventNeedsManualReviewMail::class,
             fn (EventNeedsManualReviewMail $mail): bool => $mail->requestId === $request->id

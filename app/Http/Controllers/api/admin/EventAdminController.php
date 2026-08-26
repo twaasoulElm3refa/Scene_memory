@@ -57,14 +57,6 @@ class EventAdminController extends Controller
 
             $event->update($data);
 
-            $event->translations()->updateOrCreate(
-                ['locale' => app()->getLocale()],
-                [
-                    'title' => $event->title,
-                    'description' => $event->description,
-                ]
-            );
-
             $this->clearEventsCache($oldSlug);
             $this->clearEventsCache($event->slug);
 

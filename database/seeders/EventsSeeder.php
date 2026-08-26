@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Jobs\TranslateEventJob;
 use App\Models\Events;
-use App\Models\EventTranslations;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -278,14 +276,7 @@ class EventsSeeder extends Seeder
 
         foreach ($events as $event) {
             $event['slug'] = 'event - '.Str::slug($event['title']).'-'.$event['id'];
-            $event = Events::create($event);
-            EventTranslations::create([
-                'event_id' => $event->id,
-                'title' => $event->title,
-                'description' => $event->description,
-                'locale' => 'ar',
-            ]);
-            TranslateEventJob::dispatch($event->id, $event->title, $event->description);
+            Events::create($event);
         }
 
     }
