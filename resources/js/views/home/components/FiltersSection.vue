@@ -12,7 +12,7 @@
                         class="filter-field">
                         <option value="">{{ $t("filters.allCategories") }}</option>
                         <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-                            {{ cat.translation.name }}
+                            {{ getFilterOptionLabel(cat) }}
                         </option>
                     </select>
                 </div>
@@ -24,7 +24,7 @@
                         class="filter-field">
                         <option value="">{{ $t("filters.allSubCategories") }}</option>
                         <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
-                            {{ sub.translation.name }}
+                            {{ getFilterOptionLabel(sub) }}
                         </option>
                     </select>
                 </div>
@@ -45,7 +45,7 @@
                         <button v-for="country in filteredCountries" :key="country.id" type="button"
                             @click="$emit('select-country', country)"
                             class="filter-country-option">
-                            {{ country.translation.name }}
+                            {{ getFilterOptionLabel(country) }}
                         </button>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                         class="filter-field">
                         <option value="">{{ $t("discovery.filters.allCities") }}</option>
                         <option v-for="city in cities" :key="city.id" :value="city.id">
-                            {{ city.translation.name }}
+                            {{ getFilterOptionLabel(city) }}
                         </option>
                     </select>
                 </div>
@@ -85,6 +85,8 @@
 </template>
 
 <script setup>
+import { getFilterOptionLabel } from "./filterOptionLabel";
+
 defineProps({
     categories: {
         type: Array,
