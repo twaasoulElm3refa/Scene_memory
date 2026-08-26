@@ -16,9 +16,7 @@ class CategoriesCreateController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository)
-    {
-    }
+    public function __construct(private readonly CategoryRepositoryInterface $categoryRepository) {}
 
     public function create(categoreyRequest $request): JsonResponse
     {
@@ -31,14 +29,14 @@ class CategoriesCreateController extends Controller
                 }
 
                 return $this->categoryRepository->create([
-                    'name'  => $data['name'] ?? '',
+                    'name' => $data['name'] ?? '',
                     'image' => $data['image'] ?? '',
-                    'slug'  => Str::slug($data['name']) . '-' . time(),
+                    'slug' => Str::slug($data['name']).'-'.time(),
                 ]);
             });
 
             // Dispatch translation job
-            TranslateCategoryJob::dispatch($category->id, $data['name']);
+            TranslateCategoryJob::dispatch($category->id, $data['name'])->afterCommit();
 
             // Clear cache after creation
             $this->clearAllCategoriesCache();

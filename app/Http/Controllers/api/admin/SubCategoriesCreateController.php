@@ -16,9 +16,7 @@ class SubCategoriesCreateController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly SubCategoryRepositoryInterface $subCategoryRepository)
-    {
-    }
+    public function __construct(private readonly SubCategoryRepositoryInterface $subCategoryRepository) {}
 
     public function create(categoreyRequest $request): JsonResponse
     {
@@ -39,7 +37,7 @@ class SubCategoriesCreateController extends Controller
             });
 
             // Dispatch job for translation
-            TranslateSubCategoryJob::dispatch($subCategory->id, $data['name']);
+            TranslateSubCategoryJob::dispatch($subCategory->id, $data['name'])->afterCommit();
 
             // مسح كل كاش التصنيفات
             $this->clearAllCategoriesCache();

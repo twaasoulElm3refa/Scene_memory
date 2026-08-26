@@ -15,6 +15,7 @@ class TranslateSubCategoryJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $subCategoryId;
+
     protected $text;
 
     public function __construct($subCategoryId, $text)
@@ -32,20 +33,23 @@ class TranslateSubCategoryJob implements ShouldQueue
             return;
         }
 
-        $locales = ['ar','en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi','tr'];
+        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi', 'tr'];
 
         foreach ($locales as $locale) {
 
             try {
-                $tr = new GoogleTranslate($locale);
-                $tr->setSource('ar');
-
-                $translated = $tr->translate($this->text);
+                if ($locale === 'ar') {
+                    $translated = $this->text;
+                } else {
+                    $tr = new GoogleTranslate($locale);
+                    $tr->setSource('ar');
+                    $translated = $tr->translate($this->text);
+                }
 
                 if ($translated) {
                     $subCategory->translations()->updateOrCreate(
                         ['locale' => $locale],
-                        ['name'   => $translated]
+                        ['name' => $translated]
                     );
                 }
 

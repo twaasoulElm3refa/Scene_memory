@@ -5,19 +5,18 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CountriesRequest;
+use App\Jobs\TranslateCountryJob;
 use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Intl;
 
 class CountriesCreateController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly CountryRepositoryInterface $countryRepository)
-    {
-    }
+    public function __construct(private readonly CountryRepositoryInterface $countryRepository) {}
 
     public function create(CountriesRequest $request)
     {
@@ -36,23 +35,16 @@ class CountriesCreateController extends Controller
                         'image' => $request->file('image')->store('countries', 'public'),
                     ]);
                 }
-                $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-                foreach ($locales as $locale) {
-                    $name = Countries::getName($code, $locale);
-                    if ($name) {
-                        $country->translations()->create([
-                            'locale' => $locale,
-                            'name' => $name,
-                        ]);
-                    }
-                }
 
                 return $country;
             });
 
+            $arabicName = $this->arabicCountryName($country->code);
+            TranslateCountryJob::dispatch($country->id, $arabicName)->afterCommit();
+
             Cache::forget('countries_count');
             Cache::forget('countries_index');
-            for( $i = 0; $i < 10; $i++ ) {
+            for ($i = 0; $i < 10; $i++) {
                 Cache::forget("countries_index_page_{$i}");
             }
 
@@ -64,5 +56,12 @@ class CountriesCreateController extends Controller
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
+    }
+
+    private function arabicCountryName(string $code): string
+    {
+        $countryNames = require Intl::getDataDirectory().'/regions/ar.php';
+
+        return $countryNames['Names'][$code] ?? $code;
     }
 }

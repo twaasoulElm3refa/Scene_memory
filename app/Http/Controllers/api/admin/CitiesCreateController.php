@@ -15,9 +15,7 @@ class CitiesCreateController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly CityRepositoryInterface $cityRepository)
-    {
-    }
+    public function __construct(private readonly CityRepositoryInterface $cityRepository) {}
 
     public function create(CityRequest $request)
     {
@@ -25,15 +23,16 @@ class CitiesCreateController extends Controller
         try {
             $city = DB::transaction(function () use ($data) {
                 $city = $this->cityRepository->create([
-                    'name'       => $data['name'] ?? '',
+                    'name' => $data['name'] ?? '',
                     'country_id' => $data['country_id'] ?? null,
-                    'slug'       => Str::slug($data['name']) . '-' . time(),
+                    'slug' => Str::slug($data['name']).'-'.time(),
                 ]);
+
                 return $city;
             });
 
             // Job لترجمة المدينة
-            TranslateCityJob::dispatch($city->id, $data['name']);
+            TranslateCityJob::dispatch($city->id, $data['name'])->afterCommit();
 
             // مسح كل الكاش المرتبط بالمدن بعد إنشاء مدينة جديدة
             $this->clearCache();

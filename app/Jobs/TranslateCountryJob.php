@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Cities;
+use App\Models\Countries;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,33 +10,31 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 
-class TranslateCityJob implements ShouldQueue
+class TranslateCountryJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $cityId;
+    protected $countryId;
 
     protected $text;
 
-    public function __construct($cityId, $text)
+    public function __construct($countryId, $text)
     {
-        $this->cityId = $cityId;
+        $this->countryId = $countryId;
         $this->text = $text;
     }
 
     public function handle(): void
     {
+        $country = Countries::find($this->countryId);
 
-        $city = Cities::find($this->cityId);
-
-        if (! $city) {
+        if (! $country) {
             return;
         }
 
         $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi', 'tr'];
 
         foreach ($locales as $locale) {
-
             try {
                 if ($locale === 'ar') {
                     $translated = $this->text;
@@ -47,14 +45,13 @@ class TranslateCityJob implements ShouldQueue
                 }
 
                 if ($translated) {
-                    $city->translations()->updateOrCreate(
+                    $country->translations()->updateOrCreate(
                         ['locale' => $locale],
                         ['name' => $translated]
                     );
                 }
-
             } catch (\Exception $e) {
-                \Log::error('City Translate Error: '.$e->getMessage());
+                \Log::error('Country Translate Error: '.$e->getMessage());
             }
         }
     }
