@@ -1299,26 +1299,31 @@ onUnmounted(() => {
         margin-bottom: 16px;
     }
 
-    .home-mobile-filter-toggle {
-        display: flex;
-    }
-
     .home-discovery-workspace {
         grid-template-columns: 1fr;
         gap: 16px;
     }
 
     .home-discovery-filters-column {
-        display: none;
         position: static;
-    }
-
-    .home-discovery-filters-column.is-open {
-        display: block;
     }
 
     .home-discovery-trending-column {
         position: static;
+    }
+}
+
+@media (max-width: 640px) {
+    .home-mobile-filter-toggle {
+        display: flex;
+    }
+
+    .home-discovery-filters-column {
+        display: none;
+    }
+
+    .home-discovery-filters-column.is-open {
+        display: block;
     }
 }
 
