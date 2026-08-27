@@ -277,17 +277,17 @@
         "contact": "تماس با ما",
         "copyright": "© ۲۰۲۴ Scene Memory. تمامی حقوق محفوظ است.",
         "made_with": "ساخته شده با عشق برای حفظ خاطرات شما",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "quickLinks": "پیوندهای سریع",
+        "supportContact": "پشتیبانی و تماس",
+        "logoAlt": "لوگو",
+        "googlePlayAlt": "دانلود از Google Play",
+        "appStoreAlt": "دانلود از App Store",
+        "copyright2025": "© 2025 Scene Memory. تمامی حقوق محفوظ است.",
+        "services": "خدمات",
+        "copyrightLink": "حق نشر",
+        "termsOfService": "شرایط استفاده از خدمات",
+        "privacyPolicy": "سیاست حفظ حریم خصوصی",
+        "dataProtection": "حفاظت از داده‌ها"
     },
     "contact": {
         "hero": {

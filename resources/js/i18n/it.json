@@ -277,17 +277,17 @@
         "contact": "Contattaci",
         "copyright": "© 2024 Scene Memory. Tutti i diritti riservati.",
         "made_with": "Fatto con ♥ per preservare i tuoi ricordi",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
+        "quickLinks": "Link rapidi",
+        "supportContact": "Supporto e contatti",
         "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
+        "googlePlayAlt": "Scarica da Google Play",
+        "appStoreAlt": "Scarica dall’App Store",
+        "copyright2025": "© 2025 Scene Memory. Tutti i diritti riservati.",
+        "services": "Servizi",
         "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "termsOfService": "Termini di servizio",
+        "privacyPolicy": "Informativa sulla privacy",
+        "dataProtection": "Protezione dei dati"
     },
     "contact": {
         "hero": {

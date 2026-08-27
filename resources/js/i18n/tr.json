@@ -275,17 +275,17 @@
         "contact": "Bize Ulaşın",
         "copyright": "© 2024 Scene Memory. Tüm hakları saklıdır.",
         "made_with": "Anılarınızı korumak için yapıldı",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
+        "quickLinks": "Hızlı Bağlantılar",
+        "supportContact": "Destek ve İletişim",
         "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "googlePlayAlt": "Google Play'den indirin",
+        "appStoreAlt": "App Store'dan indirin",
+        "copyright2025": "© 2025 Scene Memory. Tüm hakları saklıdır.",
+        "services": "Hizmetler",
+        "copyrightLink": "Telif Hakkı",
+        "termsOfService": "Hizmet Şartları",
+        "privacyPolicy": "Gizlilik Politikası",
+        "dataProtection": "Veri Koruma"
     },
     "contact": {
         "hero": {

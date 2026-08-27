@@ -275,17 +275,17 @@
         "contact": "Связаться с нами",
         "copyright": "© 2024 Scene Memory. Все права защищены.",
         "made_with": "Сделано с ♥ для сохранения ваших воспоминаний",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "quickLinks": "Быстрые ссылки",
+        "supportContact": "Поддержка и контакты",
+        "logoAlt": "Логотип",
+        "googlePlayAlt": "Скачать в Google Play",
+        "appStoreAlt": "Скачать в App Store",
+        "copyright2025": "© 2025 Scene Memory. Все права защищены.",
+        "services": "Услуги",
+        "copyrightLink": "Авторские права",
+        "termsOfService": "Условия использования",
+        "privacyPolicy": "Политика конфиденциальности",
+        "dataProtection": "Защита данных"
     },
     "contact": {
         "hero": {

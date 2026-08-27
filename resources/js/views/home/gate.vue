@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="scemory-page gate-page min-h-screen bg-gray-50 p-6"
-    :class="{ rtl: isRtl }"
-    :dir="isRtl ? 'rtl' : 'ltr'"
-  >
+  <div class="scemory-page gate-page min-h-screen bg-gray-50 p-6">
 
     <!-- Search Bar -->
     <div class="relative max-w-lg mx-auto mb-10">
@@ -159,10 +155,6 @@ export default {
   },
 
   computed: {
-    isRtl() {
-      return ['ar', 'fa', 'ur'].includes(this.$route.params.lang);
-    },
-
     filteredCountries() {
       if (!this.searchQuery.trim()) return [];
       const q = this.searchQuery.toLowerCase();

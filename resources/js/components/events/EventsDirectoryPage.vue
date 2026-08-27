@@ -19,8 +19,6 @@ const props = defineProps({
 });
 
 const { locale, t } = useI18n();
-const rtlLocales = new Set(["ar", "fa", "ur"]);
-
 const events = ref([]);
 const countries = ref([]);
 const cities = ref([]);
@@ -54,7 +52,6 @@ let mounted = false;
 let previousBodyOverflow = "";
 
 const isHistorical = computed(() => props.mode === "historical");
-const pageDirection = computed(() => (rtlLocales.has(String(locale.value).toLowerCase()) ? "rtl" : "ltr"));
 const createRoute = computed(() =>
     `/${locale.value}/add_event${isHistorical.value ? "/historical" : ""}`
 );
@@ -291,7 +288,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <main class="events-directory" :dir="pageDirection">
+    <main class="events-directory">
         <div class="events-directory__container">
             <header class="events-directory__hero">
                 <div class="events-directory__hero-copy">
@@ -421,6 +418,10 @@ onBeforeUnmount(() => {
 <style scoped>
 .events-directory {
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
     background: #f8fafc;
     color: #06142a;
     padding: 28px 0 70px;
@@ -433,6 +434,8 @@ onBeforeUnmount(() => {
 
 .events-directory__container {
     width: min(100% - 32px, 1400px);
+    max-width: 1400px;
+    min-width: 0;
     margin-inline: auto;
 }
 
@@ -441,6 +444,7 @@ onBeforeUnmount(() => {
     display: flex;
     overflow: hidden;
     min-height: 210px;
+    min-width: 0;
     align-items: center;
     justify-content: space-between;
     gap: 28px;
@@ -448,7 +452,11 @@ onBeforeUnmount(() => {
     border-radius: 24px;
     padding: 38px 42px;
     background:
-        radial-gradient(circle at 88% 20%, rgba(22, 119, 255, 0.14), transparent 30%),
+        radial-gradient(
+            circle at 88% 20%,
+            rgba(22, 119, 255, 0.14),
+            transparent 30%
+        ),
         linear-gradient(135deg, #fff 0%, #f3f8ff 100%);
     box-shadow: 0 14px 38px rgba(13, 77, 151, 0.06);
 }
@@ -468,6 +476,7 @@ onBeforeUnmount(() => {
     position: relative;
     z-index: 1;
     max-width: 760px;
+    min-width: 0;
 }
 
 .events-directory__eyebrow,
@@ -520,27 +529,129 @@ onBeforeUnmount(() => {
     line-height: 1;
 }
 
+/* =========================
+   MAIN LAYOUT
+========================= */
+
 .events-directory__layout {
     display: grid;
     grid-template-columns: minmax(260px, 290px) minmax(0, 1fr);
     gap: 28px;
     margin-top: 30px;
     align-items: start;
+    min-width: 0;
 }
 
 .events-directory__sidebar {
     position: sticky;
     top: 96px;
     z-index: 4;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    overflow-x: hidden;
 }
 
 .events-directory__results {
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
 }
+
+/* =========================
+   SIDEBAR OVERFLOW FIX
+========================= */
+
+.events-directory__sidebar :deep(*) {
+    box-sizing: border-box;
+}
+
+.events-directory__sidebar :deep(form),
+.events-directory__sidebar :deep(fieldset),
+.events-directory__sidebar :deep(label),
+.events-directory__sidebar :deep(.form-group),
+.events-directory__sidebar :deep(.filter-group),
+.events-directory__sidebar :deep(.filter-field) {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* جميع الحقول داخل الفلتر */
+.events-directory__sidebar :deep(input),
+.events-directory__sidebar :deep(select),
+.events-directory__sidebar :deep(textarea) {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* إصلاح الـ date inputs */
+.events-directory__sidebar :deep(input[type="date"]) {
+    display: block;
+    width: 92%;
+    inline-size: 92%;
+    max-width: 100%;
+    max-inline-size: 100%;
+    min-width: 0;
+    min-inline-size: 0;
+
+    padding-inline: 10px;
+    box-sizing: border-box;
+
+    font-size: 0.72rem;
+}
+
+/* Chrome / Edge calendar icon */
+.events-directory__sidebar
+    :deep(input[type="date"]::-webkit-calendar-picker-indicator) {
+    margin: 0;
+    padding: 2px;
+    cursor: pointer;
+}
+
+/* أي label يحتوي date */
+.events-directory__sidebar :deep(label:has(input[type="date"])) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+/*
+   لو الـ component عامل حقلي التاريخ في Grid
+   نخلي كل عمود قابل للانكماش فعلاً
+*/
+.events-directory__sidebar :deep(.date-grid),
+.events-directory__sidebar :deep(.dates-grid),
+.events-directory__sidebar :deep(.date-range),
+.events-directory__sidebar :deep(.date-fields),
+.events-directory__sidebar :deep(.date-filters) {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* عناصر حقول التاريخ نفسها */
+.events-directory__sidebar :deep(.date-grid > *),
+.events-directory__sidebar :deep(.dates-grid > *),
+.events-directory__sidebar :deep(.date-range > *),
+.events-directory__sidebar :deep(.date-fields > *),
+.events-directory__sidebar :deep(.date-filters > *) {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* =========================
+   RESULTS HEADER
+========================= */
 
 .events-directory__results-header {
     display: flex;
     min-height: 64px;
+    min-width: 0;
     align-items: flex-end;
     justify-content: space-between;
     gap: 20px;
@@ -564,14 +675,20 @@ onBeforeUnmount(() => {
     font-size: 0.84rem;
 }
 
+/* =========================
+   EVENTS GRID
+========================= */
+
 .events-directory__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 22px;
+    min-width: 0;
 }
 
 .event-skeleton {
     overflow: hidden;
+    min-width: 0;
     border: 1px solid #e2ebf4;
     border-radius: 20px;
     background: #fff;
@@ -579,7 +696,12 @@ onBeforeUnmount(() => {
 
 .event-skeleton__image,
 .event-skeleton__body span {
-    background: linear-gradient(90deg, #edf2f7 25%, #f8fafc 50%, #edf2f7 75%);
+    background: linear-gradient(
+        90deg,
+        #edf2f7 25%,
+        #f8fafc 50%,
+        #edf2f7 75%
+    );
     background-size: 200% 100%;
     animation: events-directory-shimmer 1.35s infinite linear;
 }
@@ -610,12 +732,19 @@ onBeforeUnmount(() => {
 }
 
 @keyframes events-directory-shimmer {
-    to { background-position: -200% 0; }
+    to {
+        background-position: -200% 0;
+    }
 }
+
+/* =========================
+   STATES
+========================= */
 
 .events-directory__state {
     display: flex;
     min-height: 390px;
+    min-width: 0;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -667,6 +796,10 @@ onBeforeUnmount(() => {
     color: #dc2626;
 }
 
+/* =========================
+   MOBILE TOOLBAR
+========================= */
+
 .events-directory__mobile-toolbar,
 .events-directory__overlay {
     display: none;
@@ -680,6 +813,10 @@ onBeforeUnmount(() => {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
 }
+
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 1279px) {
     .events-directory__grid {
@@ -745,8 +882,13 @@ onBeforeUnmount(() => {
         bottom: 0;
         inset-inline-start: 0;
         z-index: 1002;
+
         width: min(88vw, 350px);
+        max-width: 100%;
+
+        overflow-x: hidden;
         overflow-y: auto;
+
         background: #fff;
         transform: translateX(-105%);
         transition: transform 220ms ease;
@@ -810,6 +952,18 @@ onBeforeUnmount(() => {
         gap: 7px;
         margin-bottom: 16px;
     }
+
+    /*
+       في السايدبار الضيق على الموبايل:
+       التاريخ تحت بعض أفضل
+    */
+    .events-directory__sidebar :deep(.date-grid),
+    .events-directory__sidebar :deep(.dates-grid),
+    .events-directory__sidebar :deep(.date-range),
+    .events-directory__sidebar :deep(.date-fields),
+    .events-directory__sidebar :deep(.date-filters) {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
 }
 
 @media (max-width: 575px) {
@@ -829,12 +983,19 @@ onBeforeUnmount(() => {
     .events-directory__filter-trigger,
     .events-directory__mobile-sort {
         flex: 1;
+        min-width: 0;
     }
 
     .events-directory__mobile-sort select {
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
     }
 }
+
+/* =========================
+   REDUCED MOTION
+========================= */
 
 @media (prefers-reduced-motion: reduce) {
     .event-skeleton__image,

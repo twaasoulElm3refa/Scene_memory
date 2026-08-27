@@ -275,17 +275,17 @@
         "contact": "اتصل بنا",
         "copyright": "© 2024 Scene Memory. جميع الحقوق محفوظة.",
         "made_with": "صنع ب  لحفظ ذكرياتك",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "quickLinks": "روابط سريعة",
+        "supportContact": "الدعم والتواصل",
+        "logoAlt": "الشعار",
+        "googlePlayAlt": "حمّله من Google Play",
+        "appStoreAlt": "حمّله من App Store",
+        "copyright2025": "© 2025 Scene Memory. جميع الحقوق محفوظة.",
+        "services": "الخدمات",
+        "copyrightLink": "حقوق النشر",
+        "termsOfService": "شروط الخدمة",
+        "privacyPolicy": "سياسة الخصوصية",
+        "dataProtection": "حماية البيانات"
     },
     "contact": {
         "hero": {

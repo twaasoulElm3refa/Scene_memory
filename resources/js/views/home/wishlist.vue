@@ -1,5 +1,5 @@
 <template>
-    <div class="scemory-page wishlist-page container mx-auto px-4 py-8" dir="rtl">
+    <div class="scemory-page wishlist-page container mx-auto px-4 py-8">
 
         <h1 class="mb-8 text-center text-3xl font-bold text-gray-800 md:text-4xl">
             {{ $t('wishlist.title') }}

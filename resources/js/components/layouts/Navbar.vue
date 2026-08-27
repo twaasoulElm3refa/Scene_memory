@@ -1025,7 +1025,7 @@ const goToCart = () => {
 
     gap: 8px;
 
-    margin-left: auto;
+    margin-inline-start: auto;
 
 }
 

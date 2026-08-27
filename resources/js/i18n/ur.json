@@ -275,17 +275,17 @@
         "contact": "رابطہ کریں",
         "copyright": "© 2024 سین میموری۔ جميع حقوق محفوظ ہیں۔",
         "made_with": "محبت سے بنایا گیا — آپ کی یادوں کو محفوظ رکھنے کے لیے",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "quickLinks": "فوری روابط",
+        "supportContact": "مدد اور رابطہ",
+        "logoAlt": "لوگو",
+        "googlePlayAlt": "Google Play سے ڈاؤن لوڈ کریں",
+        "appStoreAlt": "App Store سے ڈاؤن لوڈ کریں",
+        "copyright2025": "© 2025 Scene Memory. جملہ حقوق محفوظ ہیں۔",
+        "services": "خدمات",
+        "copyrightLink": "حقوقِ اشاعت",
+        "termsOfService": "سروس کی شرائط",
+        "privacyPolicy": "رازداری کی پالیسی",
+        "dataProtection": "ڈیٹا کا تحفظ"
     },
     "contact": {
         "hero": {

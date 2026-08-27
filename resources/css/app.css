@@ -847,3 +847,34 @@ html[dir="rtl"] .scemory-page,
 html[dir="rtl"] .home-page-shell {
     scale: 1;
 }
+
+html,
+body,
+#app {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+}
+
+body {
+    margin: 0;
+}
+
+#app {
+    position: relative;
+}
+
+main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.scemory-page,
+.gate-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}

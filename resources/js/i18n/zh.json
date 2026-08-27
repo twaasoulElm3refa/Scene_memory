@@ -277,17 +277,17 @@
         "contact": "联系我们",
         "copyright": "© 2024 Scene Memory. 保留所有权利。",
         "made_with": "用心打造，为保存您的回忆",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "quickLinks": "快速链接",
+        "supportContact": "支持与联系",
+        "logoAlt": "徽标",
+        "googlePlayAlt": "在 Google Play 下载",
+        "appStoreAlt": "在 App Store 下载",
+        "copyright2025": "© 2025 Scene Memory。版权所有。",
+        "services": "服务",
+        "copyrightLink": "版权",
+        "termsOfService": "服务条款",
+        "privacyPolicy": "隐私政策",
+        "dataProtection": "数据保护"
     },
     "contact": {
         "hero": {

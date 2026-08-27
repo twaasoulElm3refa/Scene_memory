@@ -277,17 +277,17 @@
         "contact": "संपर्क करें",
         "copyright": "© 2024 Scene Memory। सर्वाधिकार सुरक्षित।",
         "made_with": "आपकी यादों को संरक्षित करने के लिए ♥ के साथ बनाया गया",
-        "quickLinks": "Quick Links",
-        "supportContact": "Support & Contact",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Get it on Google Play",
-        "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
-        "services": "Services",
-        "copyrightLink": "Copyright",
-        "termsOfService": "Terms of Service",
-        "privacyPolicy": "Privacy Policy",
-        "dataProtection": "Data Protection"
+        "quickLinks": "त्वरित लिंक",
+        "supportContact": "सहायता और संपर्क",
+        "logoAlt": "लोगो",
+        "googlePlayAlt": "Google Play से डाउनलोड करें",
+        "appStoreAlt": "App Store से डाउनलोड करें",
+        "copyright2025": "© 2025 Scene Memory. सर्वाधिकार सुरक्षित।",
+        "services": "सेवाएँ",
+        "copyrightLink": "कॉपीराइट",
+        "termsOfService": "सेवा की शर्तें",
+        "privacyPolicy": "गोपनीयता नीति",
+        "dataProtection": "डेटा संरक्षण"
     },
     "contact": {
         "hero": {
