@@ -40,6 +40,20 @@
 
                     </RouterLink>
 
+                    <button
+
+                        type="button"
+
+                        class="nav-link premium-nav-link nav-dropdown-trigger"
+
+                        @click="openSpecialCoverage"
+
+                    >
+
+                        {{ $t('nav.specialCoverage') }}
+
+                    </button>
+
                     <!-- Events Dropdown -->
 
                     <div class="navbar-dropdown-wrap">
@@ -396,6 +410,20 @@
 
                         </RouterLink>
 
+                        <button
+
+                            type="button"
+
+                            class="mobile-nav-link mobile-special-coverage-button"
+
+                            @click="openSpecialCoverage"
+
+                        >
+
+                            {{ $t('nav.specialCoverage') }}
+
+                        </button>
+
                     </div>
 
                     <div class="mobile-section">
@@ -613,6 +641,44 @@ const links = computed(() => {
     return allLinks;
 
 });
+
+const openSpecialCoverage = async () => {
+
+    mobileMenu.value = false;
+
+    const destination = {
+
+        path: localizedPath("/home"),
+
+        query: {
+
+            ...(route.path === localizedPath("/home") ? route.query : {}),
+
+            openSpecialCoverage: "1",
+
+        },
+
+    };
+
+    if (localStorage.getItem("auth_token")) {
+
+        await router.push(destination);
+
+        return;
+
+    }
+
+    await router.push({
+
+        name: "auth",
+
+        params: { lang: routeLang.value },
+
+        query: { redirect: router.resolve(destination).fullPath },
+
+    });
+
+};
 
 /\* USER \*/
 
@@ -1493,6 +1559,20 @@ const goToCart = () => {
     text-decoration: none;
 
     transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+
+}
+
+.mobile-special-coverage-button {
+
+    width: 100%;
+
+    background: transparent;
+
+    font-family: inherit;
+
+    text-align: inherit;
+
+    cursor: pointer;
 
 }
 
