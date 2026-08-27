@@ -522,7 +522,7 @@ const route = useRoute();
 
 const { locale } = useI18n();
 
-/\* STATE \*/
+/*** STATE ***/
 
 const isLoggedIn = ref(false);
 
@@ -544,11 +544,11 @@ const languageDropdownOpen = ref(false);
 
 const eventsOpen = ref(false);
 
-/\* Languages \*/
+/*** Languages ***/
 
 const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH", "UR", "TR"];
 
-/\* ROUTE LANG \*/
+/*** ROUTE LANG ***/
 
 const routeLang = computed(() => (route.params.lang || "en").toLowerCase());
 
@@ -556,7 +556,7 @@ const currentLanguage = computed(() => routeLang.value.toUpperCase());
 
 const isArabic = computed(() => routeLang.value === "ar");
 
-/\* Sync i18n + axios + localStorage with URL \*/
+/*** Sync i18n + axios + localStorage with URL ***/
 
 watch(
 
@@ -610,7 +610,7 @@ const selectLanguage = async (lang) => {
 
 };
 
-/\* NAV \*/
+/*** NAV ***/
 
 const allLinks = [
 
@@ -680,7 +680,7 @@ const openSpecialCoverage = async () => {
 
 };
 
-/\* USER \*/
+/*** USER ***/
 
 const userInitial = computed(() => {
 
@@ -736,7 +736,7 @@ const logout = () => {
 
 };
 
-/\* PROFILE \*/
+/*** PROFILE ***/
 
 const fetchProfile = async () => {
 
@@ -1612,14 +1612,19 @@ const goToCart = () => {
 
 }
 
-.is-arabic .desktop-nav,
+.is-arabic .desktop-nav {
+    direction: ltr !important;
+}
 
 .is-arabic .dropdown-item,
-
 .is-arabic .mobile-menu-panel {
-
     direction: rtl;
+    text-align: right;
+}
 
+.is-arabic .mobile-nav-link,
+.is-arabic .mobile-section-title {
+    text-align: right;
 }
 
 .is-arabic .dropdown-item:hover,
@@ -1669,213 +1674,336 @@ const goToCart = () => {
 }
 
 @media (max-width: 767.98px) {
-    /*
-     * MOBILE ONLY
-     * Left: login / user account
-     * Right cluster: language -> cart -> logo -> menu
-     * Desktop layout above 768px is untouched.
-     */
+
+
     .navbar-wrap {
+
         padding-top: 10px;
+
     }
 
     .navbar-shell {
+
         width: calc(100% - 24px);
+
     }
 
     .navbar-inner {
+
         min-height: 64px;
+
         padding: 9px;
+
         border-radius: 26px;
+
     }
 
     .navbar-actions {
+
         width: 100%;
+
         min-width: 0;
+
         margin-left: 0;
+
         display: flex;
+
         align-items: center;
+
         justify-content: flex-start;
+
         flex-wrap: nowrap;
+
         gap: 6px;
+
     }
 
-    /* Login / user stays at the far LEFT on mobile only */
+
     .user-control {
+
         order: 1;
+
         min-width: 0;
+
         flex: 0 0 auto;
+
         margin-right: auto;
+
     }
 
-    /* Language comes first in the right-side controls */
     .navbar-actions > .navbar-dropdown-wrap:not(.user-control) {
+
         order: 2;
+
         flex: 0 0 auto;
+
     }
 
     .cart-wrapper {
+
         order: 3;
+
         flex: 0 0 auto;
+
     }
 
     .brand-mark {
+
         order: 4;
+
         flex: 0 0 auto;
+
         height: 42px;
+
         padding: 4px;
+
     }
 
     .mobile-toggle {
+
         order: 5;
+
         flex: 0 0 auto;
+
     }
 
     .control-btn {
+
         height: 40px;
+
         min-height: 40px;
+
         padding: 0 10px;
+
         font-size: 12px;
+
     }
 
     .language-btn {
+
         min-width: 68px;
+
     }
 
     .user-menu-button {
+
         max-width: 118px;
+
         padding-right: 9px;
+
     }
 
     .user-name {
+
         max-width: 46px;
+
     }
 
     .login-btn {
+
         min-width: 68px;
+
     }
 
     .cart-btn,
+
     .mobile-toggle {
+
         width: 40px;
+
         height: 40px;
+
         min-height: 40px;
+
     }
 
     .brand-logo {
+
         width: 34px;
+
         height: 34px;
+
     }
 
     .brand-logo img {
+
         width: 27px;
+
         height: 27px;
+
     }
 
-    /* The account dropdown is left-anchored so it never escapes the screen */
+
     .user-control .navbar-dropdown {
+
         left: 0;
+
         right: auto;
+
         min-width: 180px;
+
     }
 
-    /* Language dropdown remains anchored toward the right-side group */
+
     .language-dropdown {
+
         left: auto;
+
         right: 0;
+
         min-width: 150px;
+
     }
 
-    /* Keep the expanded mobile menu aligned with the pill navbar */
+
     .navbar-mobile-menu {
+
         width: calc(100% - 24px);
+
         max-width: none;
+
         margin: 10px auto 0;
+
         padding-left: 0;
+
         padding-right: 0;
+
     }
+
 }
 
 @media (max-width: 420px) {
+
     .navbar-shell {
+
         width: calc(100% - 16px);
+
     }
 
     .navbar-inner {
+
         padding: 7px;
+
         border-radius: 23px;
+
     }
 
     .navbar-actions {
+
         gap: 4px;
+
     }
 
     .control-btn {
+
         height: 38px;
+
         min-height: 38px;
+
         padding: 0 8px;
+
         font-size: 11px;
+
     }
 
-    /* Save width on very small screens without changing desktop */
     .language-btn {
+
         min-width: 46px;
+
         width: 46px;
+
         padding: 0 6px;
+
     }
 
     .language-btn .bi-globe2,
+
     .language-btn .chevron,
+
     .user-menu-button .chevron {
+
         display: none;
+
     }
 
     .user-menu-button {
+
         width: 40px;
+
         max-width: 40px;
+
         min-width: 40px;
+
         padding: 0;
+
     }
 
     .user-name {
+
         display: none;
+
     }
 
     .login-btn {
+
         min-width: 64px;
+
         max-width: 88px;
+
         padding: 0 9px;
+
         overflow: hidden;
+
         text-overflow: ellipsis;
+
     }
 
     .cart-btn,
+
     .mobile-toggle {
+
         width: 38px;
+
         height: 38px;
+
         min-height: 38px;
+
     }
 
     .brand-mark {
+
         width: 40px;
+
         height: 40px;
+
         padding: 3px;
+
         justify-content: center;
+
     }
 
     .brand-logo {
+
         width: 32px;
+
         height: 32px;
+
     }
 
     .brand-logo img {
+
         width: 25px;
+
         height: 25px;
+
     }
 
     .navbar-mobile-menu {
+
         width: calc(100% - 16px);
+
     }
+
 }
 
 </style>
