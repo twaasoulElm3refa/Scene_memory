@@ -51,10 +51,17 @@
                                 : 'discovery.media.playVideo'
                         )
                     "
-                    @click.stop="toggleVideo"
+                    @click="toggleVideo"
                 >
-                    <PauseIcon v-if="isPlaying" aria-hidden="true" />
-                    <PlayIcon v-else aria-hidden="true" />
+                    <PauseIcon
+                        v-if="isPlaying"
+                        aria-hidden="true"
+                    />
+
+                    <PlayIcon
+                        v-else
+                        aria-hidden="true"
+                    />
                 </button>
             </template>
 
@@ -76,26 +83,24 @@
                     aria-hidden="true"
                 ></div>
             </template>
-
-            <!-- subtle overlay -->
-            <div class="discovery-media-card__media-overlay"></div>
         </div>
 
         <!-- =========================
              FOOTER
         ========================== -->
         <footer class="discovery-media-card__footer">
-            <!-- PRICE ROW -->
+            <!-- PRICE -->
             <div class="discovery-media-card__price">
-                <span class="discovery-media-card__price-label">
+                <span>
                     {{ $t("discovery.media.price") }}
                 </span>
 
-                <strong class="discovery-media-card__price-value">
+                <strong>
                     {{ formattedPrice }} $
                 </strong>
             </div>
 
+            <!-- DIVIDER -->
             <div class="discovery-media-card__divider"></div>
 
             <!-- ADD TO CART -->
@@ -109,18 +114,21 @@
                 :disabled="isAdding || isAdded"
                 @click="addToCart"
             >
+                <!-- LOADING -->
                 <span
                     v-if="isAdding"
                     class="discovery-media-card__spinner"
                     aria-hidden="true"
                 ></span>
 
+                <!-- ADDED -->
                 <CheckIcon
                     v-else-if="isAdded"
                     class="discovery-media-card__cart-icon"
                     aria-hidden="true"
                 />
 
+                <!-- CART -->
                 <ShoppingCartIcon
                     v-else
                     class="discovery-media-card__cart-icon"
@@ -137,52 +145,77 @@
 
 <script setup>
 import { computed, ref } from "vue";
+
 import {
     CheckIcon,
     PauseIcon,
     PlayIcon,
     ShoppingCartIcon,
 } from "@heroicons/vue/24/solid";
+
 import { useI18n } from "vue-i18n";
 
 import { CartService } from "@/services/CartService/CartService";
 import { showSafeToast } from "@/services/ApiClient";
+
+
+/* =====================================================
+   PROPS
+===================================================== */
 
 const props = defineProps({
     result: {
         type: Object,
         required: true,
     },
+
     index: {
         type: Number,
         default: 0,
     },
+
     fallbackImage: {
         type: String,
         default: "",
     },
 });
 
+
+/* =====================================================
+   I18N
+===================================================== */
+
 const { t } = useI18n();
 
+
+/* =====================================================
+   STATE
+===================================================== */
+
 const videoRef = ref(null);
+
 const videoFailed = ref(false);
 
 const isPlaying = ref(false);
+
 const isAdding = ref(false);
+
 const isAdded = ref(false);
 
-/* =========================
+
+/* =====================================================
    MEDIA TYPE
-========================= */
+===================================================== */
 
 const isVideo = computed(() => {
     return props.result?.result_type === "video";
 });
 
-/* =========================
+
+/* =====================================================
    VIDEO SOURCE
-========================= */
+   نفس الكود القديم بدون تغيير
+===================================================== */
 
 const videoSource = computed(() => {
     if (!isVideo.value) return "";
@@ -196,9 +229,11 @@ const videoSource = computed(() => {
     );
 });
 
-/* =========================
+
+/* =====================================================
    THUMBNAIL
-========================= */
+   نفس الكود القديم بدون تغيير
+===================================================== */
 
 const thumbnailSource = computed(() => {
     return (
@@ -210,42 +245,57 @@ const thumbnailSource = computed(() => {
     );
 });
 
-/* =========================
+
+/* =====================================================
    PRICE
-========================= */
+===================================================== */
 
 const formattedPrice = computed(() => {
-    const price = Number(props.result?.price);
+    const price = Number(
+        props.result?.price
+    );
 
     return Number.isFinite(price)
         ? price.toFixed(2)
         : "0.00";
 });
 
-/* =========================
-   CART BUTTON TEXT
-========================= */
+
+/* =====================================================
+   CART BUTTON LABEL
+===================================================== */
 
 const cartButtonLabel = computed(() => {
     if (isAdded.value) {
-        return t("discovery.media.added");
+        return t(
+            "discovery.media.added"
+        );
     }
 
     if (isAdding.value) {
-        return t("discovery.media.adding");
+        return t(
+            "discovery.media.adding"
+        );
     }
 
-    return t("discovery.media.addToCart");
+    return t(
+        "discovery.media.addToCart"
+    );
 });
 
-/* =========================
-   VIDEO
-========================= */
+
+/* =====================================================
+   PREPARE VIDEO FRAME
+   نفس الكود القديم
+===================================================== */
 
 const prepareVideoFrame = (event) => {
     const video = event?.target;
 
-    if (!video || isPlaying.value) {
+    if (
+        !video ||
+        isPlaying.value
+    ) {
         return;
     }
 
@@ -267,6 +317,12 @@ const prepareVideoFrame = (event) => {
     }
 };
 
+
+/* =====================================================
+   PLAY / PAUSE VIDEO
+   نفس الكود القديم
+===================================================== */
+
 const toggleVideo = async () => {
     const video = videoRef.value;
 
@@ -277,6 +333,7 @@ const toggleVideo = async () => {
     try {
         if (video.paused) {
             await video.play();
+
             return;
         }
 
@@ -289,11 +346,14 @@ const toggleVideo = async () => {
     }
 };
 
-/* =========================
-   IMAGE ERROR
-========================= */
 
-const handleImageError = (event) => {
+/* =====================================================
+   IMAGE FALLBACK
+===================================================== */
+
+const handleImageError = (
+    event
+) => {
     const image = event?.target;
 
     if (!image) {
@@ -304,16 +364,20 @@ const handleImageError = (event) => {
         props.fallbackImage &&
         image.src !== props.fallbackImage
     ) {
-        image.src = props.fallbackImage;
+        image.src =
+            props.fallbackImage;
+
         return;
     }
 
-    image.style.display = "none";
+    image.style.display =
+        "none";
 };
 
-/* =========================
+
+/* =====================================================
    ADD TO CART
-========================= */
+===================================================== */
 
 const addToCart = async () => {
     const mediaId =
@@ -328,11 +392,19 @@ const addToCart = async () => {
         return;
     }
 
-    if (!localStorage.getItem("auth_token")) {
+    if (
+        !localStorage.getItem(
+            "auth_token"
+        )
+    ) {
         showSafeToast(
             "error",
-            t("event.comment_login_required"),
-            t("cart.errors.addFailed")
+            t(
+                "event.comment_login_required"
+            ),
+            t(
+                "cart.errors.addFailed"
+            )
         );
 
         return;
@@ -341,18 +413,24 @@ const addToCart = async () => {
     isAdding.value = true;
 
     try {
-        await CartService.addToCart(mediaId);
+        await CartService.addToCart(
+            mediaId
+        );
 
         isAdded.value = true;
 
         showSafeToast(
             "success",
-            t("cart.messages.added"),
+            t(
+                "cart.messages.added"
+            ),
             "Added to cart successfully."
         );
 
         window.dispatchEvent(
-            new CustomEvent("cart-updated")
+            new CustomEvent(
+                "cart-updated"
+            )
         );
     } catch (error) {
         console.error(
@@ -378,71 +456,98 @@ const addToCart = async () => {
 
     overflow: hidden;
 
-    border:
-        1px solid
-        rgba(13, 77, 151, 0.12);
+    border: 1px solid
+        rgba(
+            13,
+            77,
+            151,
+            0.12
+        );
 
     border-radius: 20px;
 
-    background:
-        linear-gradient(
-            180deg,
-            #ffffff 0%,
-            #ffffff 100%
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 20px
+            rgba(
+                15,
+                23,
+                42,
+                0.04
+            ),
+        0 18px 42px
+            rgba(
+                13,
+                77,
+                151,
+                0.08
+            );
+
+    transition:
+        transform
+            0.3s
+            cubic-bezier(
+                0.22,
+                1,
+                0.36,
+                1
+            ),
+        border-color
+            0.3s ease,
+        box-shadow
+            0.3s ease;
+}
+
+
+.discovery-media-card:hover {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(
+            48,
+            168,
+            255,
+            0.28
         );
 
     box-shadow:
-        0 8px 20px rgba(15, 23, 42, 0.04),
-        0 18px 45px rgba(13, 77, 151, 0.06);
-
-    transition:
-        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-        border-color 0.32s ease;
-}
-
-.discovery-media-card:hover {
-    transform: translateY(-6px);
-
-    border-color:
-        rgba(48, 168, 255, 0.28);
-
-    box-shadow:
-        0 14px 28px rgba(15, 23, 42, 0.06),
-        0 26px 60px rgba(13, 77, 151, 0.14);
+        0 14px 28px
+            rgba(
+                15,
+                23,
+                42,
+                0.06
+            ),
+        0 24px 55px
+            rgba(
+                13,
+                77,
+                151,
+                0.15
+            );
 }
 
 
 /* =====================================================
    MEDIA
+   نفس طريقة الكود القديم
 ===================================================== */
 
 .discovery-media-card__media {
     position: relative;
 
-    width: 100%;
-
     aspect-ratio: 16 / 10;
 
     overflow: hidden;
 
-    background:
-        linear-gradient(
-            135deg,
-            #e8eff6,
-            #f4f8fc
-        );
+    background: #e9eef4;
 }
 
 
-/* Image + Video */
-
 .discovery-media-card__media img,
 .discovery-media-card__media video {
-    position: relative;
-
-    z-index: 1;
-
     display: block;
 
     width: 100%;
@@ -450,79 +555,46 @@ const addToCart = async () => {
 
     object-fit: cover;
 
-    transform: scale(1);
-
     transition:
-        transform 0.6s
-        cubic-bezier(0.22, 1, 0.36, 1),
-        filter 0.4s ease;
+        transform
+            0.4s
+            cubic-bezier(
+                0.22,
+                1,
+                0.36,
+                1
+            );
 }
 
-
-/* Hover media zoom */
 
 .discovery-media-card:hover
 .discovery-media-card__media img,
+
 .discovery-media-card:hover
 .discovery-media-card__media video {
-    transform: scale(1.045);
+    transform:
+        scale(1.035);
 }
 
 
-/* Slight overlay */
-
-.discovery-media-card__media-overlay {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 2;
-
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            180deg,
-            transparent 65%,
-            rgba(4, 17, 29, 0.04) 100%
-        );
-
-    opacity: 0;
-
-    transition:
-        opacity 0.3s ease;
-}
-
-.discovery-media-card:hover
-.discovery-media-card__media-overlay {
-    opacity: 1;
-}
-
-
-/* Video */
+/* =====================================================
+   VIDEO
+===================================================== */
 
 .discovery-media-card__video {
     cursor: pointer;
 }
 
 
-/* Empty media */
+/* =====================================================
+   EMPTY
+===================================================== */
 
 .discovery-media-card__empty {
     width: 100%;
     height: 100%;
 
-    background:
-        radial-gradient(
-            circle at 25% 28%,
-            rgba(255, 255, 255, 0.9) 0 7%,
-            transparent 7.5%
-        ),
-        linear-gradient(
-            135deg,
-            #dce5ee,
-            #eef3f8
-        );
+    background: #e9eef4;
 }
 
 
@@ -536,69 +608,108 @@ const addToCart = async () => {
     top: 50%;
     left: 50%;
 
-    z-index: 5;
+    z-index: 4;
 
-    display: flex;
+    display: grid;
 
-    width: 62px;
-    height: 62px;
+    width: 58px;
+    height: 58px;
 
-    align-items: center;
-    justify-content: center;
+    place-items: center;
 
     transform:
-        translate(-50%, -50%)
-        scale(1);
+        translate(
+            -50%,
+            -50%
+        );
 
-    border:
-        2px solid
-        rgba(255, 255, 255, 0.85);
+    border: 2px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.78
+        );
 
     border-radius: 50%;
 
-    color: #ffffff;
-
     background:
-        rgba(5, 21, 43, 0.76);
+        rgba(
+            4,
+            17,
+            29,
+            0.75
+        );
+
+    color: #ffffff;
 
     cursor: pointer;
 
     box-shadow:
-        0 10px 28px
-        rgba(4, 17, 29, 0.28);
+        0 8px 24px
+            rgba(
+                4,
+                17,
+                29,
+                0.3
+            );
 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter:
+        blur(7px);
+
+    -webkit-backdrop-filter:
+        blur(7px);
 
     transition:
-        transform 0.25s
-        cubic-bezier(0.22, 1, 0.36, 1),
-        background 0.25s ease,
-        box-shadow 0.25s ease;
+        transform
+            0.25s ease,
+        background
+            0.25s ease,
+        box-shadow
+            0.25s ease;
 }
+
 
 .discovery-media-card__play:hover {
     transform:
-        translate(-50%, -50%)
-        scale(1.1);
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1.08);
 
     background:
-        rgba(13, 77, 151, 0.9);
+        rgba(
+            13,
+            77,
+            151,
+            0.9
+        );
 
     box-shadow:
-        0 14px 34px
-        rgba(13, 77, 151, 0.35);
+        0 12px 30px
+            rgba(
+                13,
+                77,
+                151,
+                0.35
+            );
 }
+
 
 .discovery-media-card__play:active {
     transform:
-        translate(-50%, -50%)
+        translate(
+            -50%,
+            -50%
+        )
         scale(0.96);
 }
 
+
 .discovery-media-card__play svg {
-    width: 27px;
-    height: 27px;
+    width: 25px;
+    height: 25px;
 }
 
 
@@ -607,18 +718,15 @@ const addToCart = async () => {
 ===================================================== */
 
 .discovery-media-card__footer {
-    position: relative;
-
-    z-index: 3;
-
     display: flex;
 
     flex-direction: column;
 
-    gap: 14px;
+    gap: 13px;
 
     padding:
-        18px 18px 20px;
+        17px 18px
+        19px;
 
     background:
         linear-gradient(
@@ -630,7 +738,7 @@ const addToCart = async () => {
 
 
 /* =====================================================
-   PRICE
+   PRICE ROW
 ===================================================== */
 
 .discovery-media-card__price {
@@ -639,58 +747,70 @@ const addToCart = async () => {
     width: 100%;
 
     align-items: center;
-    justify-content: space-between;
+    justify-content:
+        space-between;
 
     gap: 16px;
 
-    min-height: 36px;
+    min-height: 34px;
 }
 
 
-/* Price label */
+.discovery-media-card__price span {
+    color: #64748b;
 
-.discovery-media-card__price-label {
-    color:
-        #64748b;
+    font-size: 13px;
 
-    font-size: 14px;
     font-weight: 700;
 
-    line-height: 1.2;
+    line-height: 1;
 }
 
 
-/* Price amount */
+.discovery-media-card__price strong {
+    color: #071c2d;
 
-.discovery-media-card__price-value {
-    color:
-        #071c2d;
+    font-size: 20px;
 
-    font-size: 21px;
     font-weight: 900;
 
     line-height: 1;
 
     letter-spacing:
-        -0.35px;
+        -0.3px;
 
     white-space: nowrap;
 }
 
 
-/* Divider */
+/* =====================================================
+   DIVIDER
+===================================================== */
 
 .discovery-media-card__divider {
     width: 100%;
+
     height: 1px;
 
     background:
         linear-gradient(
             90deg,
-            transparent,
-            rgba(13, 77, 151, 0.14) 12%,
-            rgba(13, 77, 151, 0.14) 88%,
-            transparent
+            transparent 0%,
+            rgba(
+                    13,
+                    77,
+                    151,
+                    0.13
+                )
+                12%,
+            rgba(
+                    13,
+                    77,
+                    151,
+                    0.13
+                )
+                88%,
+            transparent 100%
         );
 }
 
@@ -720,9 +840,13 @@ const addToCart = async () => {
     padding:
         12px 18px;
 
-    border:
-        1px solid
-        rgba(48, 168, 255, 0.42);
+    border: 1px solid
+        rgba(
+            48,
+            168,
+            255,
+            0.48
+        );
 
     border-radius: 13px;
 
@@ -732,14 +856,19 @@ const addToCart = async () => {
         linear-gradient(
             110deg,
             #0d4d97 0%,
-            #1677ff 48%,
+            #1267d2 30%,
+            #1677ff 58%,
             #30a8ff 100%
         );
 
     background-size:
-        180% 180%;
+        190% 190%;
+
+    background-position:
+        0% 50%;
 
     font-size: 14px;
+
     font-weight: 850;
 
     line-height: 1;
@@ -748,23 +877,51 @@ const addToCart = async () => {
 
     box-shadow:
         0 9px 20px
-        rgba(22, 119, 255, 0.20),
+            rgba(
+                22,
+                119,
+                255,
+                0.22
+            ),
         0 4px 10px
-        rgba(48, 168, 255, 0.13),
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.25);
+            rgba(
+                48,
+                168,
+                255,
+                0.15
+            ),
+        inset
+            0 1px 0
+            rgba(
+                255,
+                255,
+                255,
+                0.28
+            );
 
     transition:
-        transform 0.25s
-        cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.25s ease,
-        border-color 0.25s ease,
-        filter 0.25s ease,
-        background-position 0.45s ease;
+        transform
+            0.25s
+            cubic-bezier(
+                0.22,
+                1,
+                0.36,
+                1
+            ),
+        box-shadow
+            0.25s ease,
+        border-color
+            0.25s ease,
+        background-position
+            0.45s ease,
+        filter
+            0.25s ease;
 }
 
 
-/* Shine layer */
+/* =====================================================
+   BUTTON SHINE
+===================================================== */
 
 .discovery-media-card__cart::before {
     content: "";
@@ -772,31 +929,44 @@ const addToCart = async () => {
     position: absolute;
 
     top: 0;
+
     left: -120%;
 
     z-index: -1;
 
     width: 80%;
+
     height: 100%;
 
-    transform: skewX(-22deg);
+    transform:
+        skewX(-22deg);
 
     background:
         linear-gradient(
             90deg,
             transparent,
-            rgba(255, 255, 255, 0.22),
+            rgba(
+                255,
+                255,
+                255,
+                0.22
+            ),
             transparent
         );
 
     transition:
-        left 0.55s ease;
+        left
+            0.55s ease;
 }
 
 
-/* Hover */
+/* =====================================================
+   CART HOVER
+===================================================== */
 
-.discovery-media-card__cart:hover:not(:disabled) {
+.discovery-media-card__cart:hover:not(
+        :disabled
+    ) {
     transform:
         translateY(-2px);
 
@@ -804,64 +974,110 @@ const addToCart = async () => {
         100% 50%;
 
     border-color:
-        rgba(80, 191, 255, 0.75);
+        rgba(
+            83,
+            195,
+            255,
+            0.85
+        );
 
     box-shadow:
         0 14px 28px
-        rgba(22, 119, 255, 0.28),
-        0 7px 16px
-        rgba(48, 168, 255, 0.18),
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.30);
+            rgba(
+                22,
+                119,
+                255,
+                0.28
+            ),
+        0 7px 18px
+            rgba(
+                48,
+                168,
+                255,
+                0.2
+            ),
+        inset
+            0 1px 0
+            rgba(
+                255,
+                255,
+                255,
+                0.32
+            );
 
     filter:
-        saturate(1.06)
-        brightness(1.04);
+        brightness(1.04)
+        saturate(1.08);
 }
 
-.discovery-media-card__cart:hover:not(:disabled)::before {
+
+.discovery-media-card__cart:hover:not(
+        :disabled
+    )::before {
     left: 140%;
 }
 
 
-/* Active click */
+/* =====================================================
+   CART ACTIVE
+===================================================== */
 
-.discovery-media-card__cart:active:not(:disabled) {
+.discovery-media-card__cart:active:not(
+        :disabled
+    ) {
     transform:
         translateY(0)
         scale(0.985);
 
     box-shadow:
         0 6px 14px
-        rgba(22, 119, 255, 0.20);
+            rgba(
+                22,
+                119,
+                255,
+                0.2
+            );
 }
 
 
-/* Focus */
+/* =====================================================
+   FOCUS
+===================================================== */
 
 .discovery-media-card__cart:focus-visible {
-    outline:
-        3px solid
-        rgba(48, 168, 255, 0.24);
+    outline: 3px solid
+        rgba(
+            48,
+            168,
+            255,
+            0.24
+        );
 
     outline-offset: 3px;
 }
 
 
-/* Icons */
+/* =====================================================
+   CART ICON
+===================================================== */
 
 .discovery-media-card__cart-icon {
     width: 20px;
+
     height: 20px;
 
     flex: 0 0 auto;
 
     transition:
-        transform 0.25s ease;
+        transform
+            0.25s ease;
 }
 
-.discovery-media-card__cart:hover:not(:disabled)
-.discovery-media-card__cart-icon {
+
+.discovery-media-card__cart:hover:not(
+        :disabled
+    )
+    .discovery-media-card__cart-icon {
     transform:
         translateY(-1px)
         scale(1.08);
@@ -875,21 +1091,24 @@ const addToCart = async () => {
 .discovery-media-card__cart.is-loading {
     cursor: wait;
 
-    opacity: 0.9;
+    opacity: 0.92;
 }
 
 
-/* Spinner */
-
 .discovery-media-card__spinner {
     width: 18px;
+
     height: 18px;
 
     flex: 0 0 auto;
 
-    border:
-        2px solid
-        rgba(255, 255, 255, 0.34);
+    border: 2px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.35
+        );
 
     border-top-color:
         #ffffff;
@@ -898,8 +1117,11 @@ const addToCart = async () => {
 
     animation:
         discovery-cart-spin
-        0.72s linear infinite;
+            0.7s
+            linear
+            infinite;
 }
+
 
 @keyframes discovery-cart-spin {
     to {
@@ -910,14 +1132,19 @@ const addToCart = async () => {
 
 
 /* =====================================================
-   ADDED STATE
+   ADDED
 ===================================================== */
 
 .discovery-media-card__cart.is-added {
     cursor: default;
 
     border-color:
-        rgba(22, 163, 74, 0.32);
+        rgba(
+            22,
+            163,
+            74,
+            0.35
+        );
 
     background:
         linear-gradient(
@@ -929,9 +1156,20 @@ const addToCart = async () => {
 
     box-shadow:
         0 9px 22px
-        rgba(22, 163, 74, 0.20),
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.25);
+            rgba(
+                22,
+                163,
+                74,
+                0.2
+            ),
+        inset
+            0 1px 0
+            rgba(
+                255,
+                255,
+                255,
+                0.25
+            );
 }
 
 
@@ -945,10 +1183,12 @@ const addToCart = async () => {
 
 
 /* =====================================================
-   RESPONSIVE
+   TABLET / MOBILE
 ===================================================== */
 
-@media (max-width: 767.98px) {
+@media (
+    max-width: 767.98px
+) {
     .discovery-media-card {
         border-radius: 17px;
     }
@@ -957,14 +1197,15 @@ const addToCart = async () => {
         gap: 12px;
 
         padding:
-            15px 15px 17px;
+            15px 15px
+            17px;
     }
 
-    .discovery-media-card__price-label {
-        font-size: 13px;
+    .discovery-media-card__price span {
+        font-size: 12px;
     }
 
-    .discovery-media-card__price-value {
+    .discovery-media-card__price strong {
         font-size: 19px;
     }
 
@@ -977,28 +1218,35 @@ const addToCart = async () => {
     }
 
     .discovery-media-card__play {
-        width: 54px;
-        height: 54px;
+        width: 52px;
+
+        height: 52px;
     }
 
     .discovery-media-card__play svg {
-        width: 24px;
-        height: 24px;
+        width: 23px;
+
+        height: 23px;
     }
 }
 
 
-@media (max-width: 480px) {
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (
+    max-width: 480px
+) {
     .discovery-media-card {
         border-radius: 15px;
     }
 
     .discovery-media-card__footer {
-        padding:
-            14px;
+        padding: 14px;
     }
 
-    .discovery-media-card__price-value {
+    .discovery-media-card__price strong {
         font-size: 18px;
     }
 
@@ -1015,7 +1263,10 @@ const addToCart = async () => {
    REDUCED MOTION
 ===================================================== */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
     .discovery-media-card,
     .discovery-media-card__media img,
     .discovery-media-card__media video,
