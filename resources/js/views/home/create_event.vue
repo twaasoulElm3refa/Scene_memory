@@ -145,6 +145,21 @@
                 </div>
 
                 <div v-show="currentPhase === 2" class="col-12">
+                    <div class="required-details-notice alert alert-warning border-0 rounded-4 shadow-sm mb-3" role="alert">
+                        <strong class="d-block fs-6 text-dark mb-2">
+                            {{ $t("eventForm.errors.requiredFields") }}
+                        </strong>
+
+                        <ul class="mb-0 ps-3 fw-semibold text-dark">
+                            <li>{{ tr("eventForm.eventTitle", "Event title") }}</li>
+                            <li>{{ tr("eventForm.description", "Description") }}</li>
+                            <li>{{ tr("eventForm.country", "Country") }}</li>
+                            <li>{{ tr("eventForm.city", "City") }}</li>
+                            <li>{{ tr("eventForm.mainCategory", "Main category") }}</li>
+                            <li>{{ tr("eventForm.subCategory", "Sub category") }}</li>
+                        </ul>
+                    </div>
+
                     <div class="row g-3 g-md-4">
                         <div class="col-12">
                             <div class="card shadow border-0 rounded-3">
@@ -197,6 +212,7 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.country", "Country") }}
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <input
                                                 v-model="countrySearch"
@@ -207,6 +223,8 @@
                                             <select
                                                 v-model="selectedCountryId"
                                                 class="form-select form-select-md rounded-3"
+                                                required
+                                                aria-required="true"
                                                 @change="loadCities"
                                             >
                                                 <option value="" disabled>{{ tr("eventForm.selectCountry", "Select country") }}</option>
@@ -219,11 +237,14 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.city", "City") }}
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <select
                                                 v-model="form.city_id"
                                                 :disabled="!selectedCountryId || cities.length === 0"
                                                 class="form-select form-select-md rounded-3"
+                                                required
+                                                aria-required="true"
                                             >
                                                 <option value="" disabled>
                                                     {{ selectedCountryId ? tr("eventForm.selectCity", "Select city") : tr("eventForm.selectCityFirst", "Select country first") }}
@@ -237,10 +258,13 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.mainCategory", "Main category") }}
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <select
                                                 v-model="selectedCategoryId"
                                                 class="form-select form-select-md rounded-3"
+                                                required
+                                                aria-required="true"
                                                 @change="loadSubCategories"
                                             >
                                                 <option value="" disabled>{{ tr("commons.choose", "Choose") }}</option>
@@ -253,11 +277,14 @@
                                         <div class="col-12 col-sm-6 col-lg-3">
                                             <label class="form-label fw-medium">
                                                 {{ tr("eventForm.subCategory", "Sub category") }}
+                                                <span class="text-danger">*</span>
                                             </label>
                                             <select
                                                 v-model="form.sub_categorey_id"
                                                 :disabled="!selectedCategoryId || subCategories.length === 0"
                                                 class="form-select form-select-md rounded-3"
+                                                required
+                                                aria-required="true"
                                             >
                                                 <option value="" disabled>{{ tr("eventForm.selectSubFirst", "Select sub category") }}</option>
                                                 <option v-for="sub in subCategories" :key="sub.id" :value="sub.id">
@@ -652,7 +679,14 @@ const isDetailsPhaseValid = computed(() => {
         form.value.description?.trim()
     );
 
-    return hasBasicInfo;
+    const hasRequiredSelections = Boolean(
+        selectedCountryId.value &&
+        form.value.city_id &&
+        selectedCategoryId.value &&
+        form.value.sub_categorey_id
+    );
+
+    return hasBasicInfo && hasRequiredSelections;
 });
 
 const photosBlockingMessage = computed(() => {
@@ -1249,6 +1283,25 @@ function patchLanguage(activeMap, isAr) {
 .event-type-input:checked + .event-type-radio::after {
     opacity: 1;
     transform: scale(1);
+}
+
+.required-details-notice {
+    border: 1px solid rgba(245, 158, 11, 0.28) !important;
+    background:
+        linear-gradient(135deg, rgba(255, 248, 230, 0.98), rgba(255, 252, 242, 0.98));
+    box-shadow: 0 10px 28px rgba(146, 94, 12, 0.08) !important;
+}
+
+.required-details-notice ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem 1.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .required-details-notice ul {
+        grid-template-columns: 1fr;
+    }
 }
 
 .create-event-page {
