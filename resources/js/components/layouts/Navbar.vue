@@ -1,6 +1,6 @@
 <template>
 
-    <header class="navbar-wrap" :class="{ 'is-arabic': isArabic }" :dir="isArabic ? 'rtl' : 'ltr'">
+    <header class="navbar-wrap">
 
         <div class="container-fluid navbar-shell">
 
@@ -553,9 +553,6 @@ const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "
 const routeLang = computed(() => (route.params.lang || "en").toLowerCase());
 
 const currentLanguage = computed(() => routeLang.value.toUpperCase());
-
-const isArabic = computed(() => routeLang.value === "ar");
-
 /*** Sync i18n + axios + localStorage with URL ***/
 
 watch(
@@ -569,11 +566,6 @@ watch(
         localStorage.setItem("language", lang);
 
         axios.defaults.headers.common["Accept-Language"] = lang;
-
-        document.documentElement.lang = lang;
-
-        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-
     },
 
     { immediate: true }
@@ -903,9 +895,6 @@ const goToCart = () => {
     gap: 16px;
 
     padding: 10px 14px 10px 20px;
-
-    direction: ltr;
-
     overflow: visible !important;
 
     border: 1px solid var(--glass-border);
@@ -1612,29 +1601,6 @@ const goToCart = () => {
 
 }
 
-.is-arabic .desktop-nav {
-    direction: ltr !important;
-}
-
-.is-arabic .dropdown-item,
-.is-arabic .mobile-menu-panel {
-    direction: rtl;
-    text-align: right;
-}
-
-.is-arabic .mobile-nav-link,
-.is-arabic .mobile-section-title {
-    text-align: right;
-}
-
-.is-arabic .dropdown-item:hover,
-
-.is-arabic .dropdown-item:focus {
-
-    transform: translateX(-2px);
-
-}
-
 @media (max-width: 1199.98px) {
 
     .navbar-shell {
@@ -1674,7 +1640,6 @@ const goToCart = () => {
 }
 
 @media (max-width: 767.98px) {
-
 
     .navbar-wrap {
 
@@ -1717,7 +1682,6 @@ const goToCart = () => {
         gap: 6px;
 
     }
-
 
     .user-control {
 
@@ -1833,7 +1797,6 @@ const goToCart = () => {
 
     }
 
-
     .user-control .navbar-dropdown {
 
         left: 0;
@@ -1844,7 +1807,6 @@ const goToCart = () => {
 
     }
 
-
     .language-dropdown {
 
         left: auto;
@@ -1854,7 +1816,6 @@ const goToCart = () => {
         min-width: 150px;
 
     }
-
 
     .navbar-mobile-menu {
 
