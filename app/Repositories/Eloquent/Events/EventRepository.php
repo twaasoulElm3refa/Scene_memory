@@ -731,6 +731,10 @@ class EventRepository implements EventRepositoryInterface
         return [
             'result_type' => $resultType,
             'id' => $resultType === 'event' ? $event->id : $media?->id,
+            'media_id' => $resultType === 'event' ? null : $media?->id,
+            'media_type' => $resultType === 'event' ? null : $media?->type,
+            'type' => $resultType === 'event' ? 'event' : $media?->type,
+            'price' => $resultType === 'event' ? null : $media?->price,
             'event_id' => $event->id,
             'event_slug' => $event->slug,
             'slug' => $event->slug,
@@ -738,6 +742,7 @@ class EventRepository implements EventRepositoryInterface
             'description' => $description,
             'media_url' => $mediaUrl,
             'thumbnail_url' => $thumbnailUrl,
+            'video_url' => $resultType === 'video' ? $mediaUrl : null,
             'start_date' => $event->start_date,
             'city' => $cityPayload,
             'category' => $categoryPayload,

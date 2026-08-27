@@ -150,7 +150,9 @@ class EventSearchFiltersTest extends TestCase
         $this->getJson('/api/v1/events/discovery/search?type=image&seed=10')
             ->assertOk()
             ->assertJsonPath('data.total', 2)
-            ->assertJsonPath('data.data.0.result_type', 'image');
+            ->assertJsonPath('data.data.0.result_type', 'image')
+            ->assertJsonPath('data.data.0.media_type', 'image')
+            ->assertJsonPath('data.data.0.price', 12.5);
 
         $this->getJson('/api/v1/events/discovery/search?type=video&seed=10')
             ->assertOk()
@@ -298,6 +300,7 @@ class EventSearchFiltersTest extends TestCase
             $table->string('preview_url')->nullable();
             $table->string('full_url')->nullable();
             $table->string('type')->nullable();
+            $table->decimal('price', 10, 2)->default(0);
             $table->string('is_active')->default('1');
             $table->text('description')->nullable();
             $table->timestamps();
@@ -381,6 +384,7 @@ class EventSearchFiltersTest extends TestCase
             'preview_url' => $type === 'video' ? "{$url}.jpg" : $url,
             'full_url' => $url,
             'type' => $type,
+            'price' => 12.50,
             'is_active' => '1',
             'created_at' => now(),
             'updated_at' => now(),

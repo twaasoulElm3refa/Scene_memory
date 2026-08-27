@@ -508,7 +508,7 @@
 
 <script setup>
 
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 
 import axios from "axios";
 
@@ -778,11 +778,27 @@ const fetchProfile = async () => {
 
 };
 
+const handleCartUpdated = () => {
+
+    void fetchProfile();
+
+};
+
 onMounted(() => {
 
     fetchProfile();
 
     window.addEventListener("login", fetchProfile);
+
+    window.addEventListener("cart-updated", handleCartUpdated);
+
+});
+
+onUnmounted(() => {
+
+    window.removeEventListener("login", fetchProfile);
+
+    window.removeEventListener("cart-updated", handleCartUpdated);
 
 });
 

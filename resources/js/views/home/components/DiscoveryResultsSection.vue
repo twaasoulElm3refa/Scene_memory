@@ -85,9 +85,12 @@
             v-else
             class="discovery-grid"
         >
-            <article
+            <template
                 v-for="(result, index) in results"
                 :key="`${result.result_type}-${result.id}`"
+            >
+            <article
+                v-if="result.result_type === 'event'"
                 class="discovery-card"
             >
                 <a
@@ -251,6 +254,14 @@
                     </div>
                 </a>
             </article>
+
+            <DiscoveryMediaCard
+                v-else
+                :result="result"
+                :index="index"
+                :fallback-image="fallbackImage"
+            />
+            </template>
         </div>
 
         <!-- Pagination -->
@@ -310,6 +321,8 @@ import {
     MapPinIcon,
     PlayIcon,
 } from "@heroicons/vue/24/outline";
+
+import DiscoveryMediaCard from "./DiscoveryMediaCard.vue";
 
 
 const props = defineProps({

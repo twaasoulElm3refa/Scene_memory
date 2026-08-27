@@ -103,6 +103,8 @@ describe("discovery URL and response helpers", () => {
                         event_id: 4,
                         event_slug: "city-final",
                         title: "City final",
+                        type: "video",
+                        price: "17.50",
                         media_url: "events/video.mp4",
                         thumbnail_url: "events/poster.jpg",
                         city: { name: "Cairo" },
@@ -128,6 +130,9 @@ describe("discovery URL and response helpers", () => {
             event_id: 4,
             event_slug: "city-final",
             city_name: "Cairo",
+            media_id: 8,
+            media_type: "video",
+            price: "17.50",
         });
         expect(result.media_url).toBe("/storage/events/video.mp4");
     });
