@@ -36,6 +36,16 @@ export default {
         },
     },
 
+    watch: {
+        "$route.params.lang": {
+            immediate: true,
+
+            handler(newLang) {
+                this.applyLanguage(newLang);
+            },
+        },
+    },
+
     created() {
         this.setupAxios();
     },
@@ -53,27 +63,94 @@ export default {
     },
 
     methods: {
-        setupAxios() {
-            const csrfToken = document.querySelector(
-                'meta[name="csrf-token"]'
-            );
-
-            if (csrfToken) {
-                window.axios.defaults.headers.common["X-CSRF-TOKEN"] =
-                    csrfToken.content;
-            }
-
-            window.axios.defaults.baseURL = "/api";
-            window.axios.defaults.withCredentials = true;
-
-            const lang = (
-                this.$route.params.lang || "en"
+        applyLanguage(langValue) {
+            const lang = String(
+                langValue ||
+                this.$route.params.lang ||
+                localStorage.getItem("language") ||
+                "en"
             ).toLowerCase();
 
-            window.axios.defaults.headers.common["Accept-Language"] = lang;
+            this.currentLang = lang;
+
+            localStorage.setItem(
+                "language",
+                lang
+            );
 
             if (this.$i18n.locale !== lang) {
                 this.$i18n.locale = lang;
+            }
+
+            if (window.axios) {
+                window.axios.defaults.headers.common[
+                    "Accept-Language"
+                ] = lang;
+            }
+
+            const isArabic =
+                lang === "ar";
+
+            document.documentElement.lang =
+                lang;
+
+            document.documentElement.dir =
+                isArabic
+                    ? "rtl"
+                    : "ltr";
+
+            document.body.setAttribute(
+                "dir",
+                isArabic
+                    ? "rtl"
+                    : "ltr"
+            );
+
+            document.body.classList.toggle(
+                "is-rtl",
+                isArabic
+            );
+
+            document.body.classList.toggle(
+                "is-ltr",
+                !isArabic
+            );
+        },
+
+        setupAxios() {
+            const csrfToken =
+                document.querySelector(
+                    'meta[name="csrf-token"]'
+                );
+
+            if (csrfToken) {
+                window.axios.defaults.headers.common[
+                    "X-CSRF-TOKEN"
+                ] = csrfToken.content;
+            }
+
+            window.axios.defaults.baseURL =
+                "/api";
+
+            window.axios.defaults.withCredentials =
+                true;
+
+            const lang = (
+                this.$route.params.lang ||
+                localStorage.getItem("language") ||
+                "en"
+            ).toLowerCase();
+
+            window.axios.defaults.headers.common[
+                "Accept-Language"
+            ] = lang;
+
+            if (
+                this.$i18n.locale !==
+                lang
+            ) {
+                this.$i18n.locale =
+                    lang;
             }
 
             this.setupAuthInterceptor();
@@ -81,19 +158,27 @@ export default {
 
         setupAuthInterceptor() {
             window.axios.interceptors.response.use(
-                (response) => response,
+                (response) =>
+                    response,
+
                 (error) => {
                     if (
                         error.response &&
-                        error.response.status === 401
+                        error.response.status ===
+                            401
                     ) {
                         const lang =
-                            this.$route.params.lang || "en";
+                            this.$route.params.lang ||
+                            "en";
 
-                        this.$router.push(`/${lang}/auth`);
+                        this.$router.push(
+                            `/${lang}/auth`
+                        );
                     }
 
-                    return Promise.reject(error);
+                    return Promise.reject(
+                        error
+                    );
                 }
             );
         },
@@ -103,7 +188,9 @@ export default {
 
 <style scoped>
 .layout-fade-enter-active {
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
 }
 
 .layout-fade-enter-from {
