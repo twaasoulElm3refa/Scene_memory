@@ -1,15 +1,18 @@
 <template>
     <div class="d-flex flex-column min-vh-100">
+        <!-- Navbar -->
         <transition name="layout-fade">
             <navbar-component
                 v-if="layoutReady && showNavbar"
             />
         </transition>
 
+        <!-- Page Content -->
         <main class="flex-fill">
             <router-view />
         </main>
 
+        <!-- Footer -->
         <transition name="layout-fade">
             <footer-component
                 v-if="layoutReady && !$route.meta.hideFooter"
@@ -37,6 +40,13 @@ export default {
     },
 
     watch: {
+        /*
+         * Watch language in URL.
+         *
+         * Example:
+         * /en/home
+         * /ar/home
+         */
         "$route.params.lang": {
             immediate: true,
 
@@ -59,10 +69,25 @@ export default {
     beforeUnmount() {
         if (this.layoutTimer) {
             clearTimeout(this.layoutTimer);
+            this.layoutTimer = null;
         }
     },
 
     methods: {
+        /*
+         * =====================================================
+         * APPLY LANGUAGE
+         * =====================================================
+         *
+         * Important:
+         * This ONLY defines language + direction.
+         *
+         * It does NOT:
+         * - mirror the page
+         * - reverse flex layouts
+         * - use scaleX(-1)
+         * - override page-specific RTL
+         */
         applyLanguage(langValue) {
             const lang = String(
                 langValue ||
@@ -73,51 +98,74 @@ export default {
 
             this.currentLang = lang;
 
+            /*
+             * Save current language
+             */
             localStorage.setItem(
                 "language",
                 lang
             );
 
-            if (this.$i18n.locale !== lang) {
+            /*
+             * Sync Vue i18n
+             */
+            if (
+                this.$i18n &&
+                this.$i18n.locale !== lang
+            ) {
                 this.$i18n.locale = lang;
             }
 
-            if (window.axios) {
+            /*
+             * Sync Axios language header
+             */
+            if (
+                window.axios
+            ) {
                 window.axios.defaults.headers.common[
                     "Accept-Language"
                 ] = lang;
             }
 
-            const isArabic =
-                lang === "ar";
+            /*
+             * HTML language
+             */
+            document.documentElement.setAttribute(
+                "lang",
+                lang
+            );
 
-            document.documentElement.lang =
-                lang;
-
-            document.documentElement.dir =
-                isArabic
-                    ? "rtl"
-                    : "ltr";
-
-            document.body.setAttribute(
+            /*
+             * Direction
+             *
+             * Arabic = RTL
+             * Everything else = LTR
+             */
+            document.documentElement.setAttribute(
                 "dir",
-                isArabic
+                lang === "ar"
                     ? "rtl"
                     : "ltr"
             );
-
-            document.body.classList.toggle(
-                "is-rtl",
-                isArabic
-            );
-
-            document.body.classList.toggle(
-                "is-ltr",
-                !isArabic
-            );
         },
 
+        /*
+         * =====================================================
+         * AXIOS SETUP
+         * =====================================================
+         */
         setupAxios() {
+            if (!window.axios) {
+                console.warn(
+                    "Axios is not available on window."
+                );
+
+                return;
+            }
+
+            /*
+             * CSRF Token
+             */
             const csrfToken =
                 document.querySelector(
                     'meta[name="csrf-token"]'
@@ -129,13 +177,19 @@ export default {
                 ] = csrfToken.content;
             }
 
+            /*
+             * API Config
+             */
             window.axios.defaults.baseURL =
                 "/api";
 
             window.axios.defaults.withCredentials =
                 true;
 
-            const lang = (
+            /*
+             * Current Language
+             */
+            const lang = String(
                 this.$route.params.lang ||
                 localStorage.getItem("language") ||
                 "en"
@@ -145,35 +199,67 @@ export default {
                 "Accept-Language"
             ] = lang;
 
+            /*
+             * Sync Vue i18n
+             */
             if (
-                this.$i18n.locale !==
-                lang
+                this.$i18n &&
+                this.$i18n.locale !== lang
             ) {
                 this.$i18n.locale =
                     lang;
             }
 
+            /*
+             * Setup authentication interceptor
+             */
             this.setupAuthInterceptor();
         },
 
+        /*
+         * =====================================================
+         * AUTH INTERCEPTOR
+         * =====================================================
+         */
         setupAuthInterceptor() {
-            window.axios.interceptors.response.use(
-                (response) =>
-                    response,
+            if (!window.axios) {
+                return;
+            }
 
+            window.axios.interceptors.response.use(
+                /*
+                 * Successful Response
+                 */
+                (response) => {
+                    return response;
+                },
+
+                /*
+                 * Error Response
+                 */
                 (error) => {
                     if (
                         error.response &&
-                        error.response.status ===
-                            401
+                        error.response.status === 401
                     ) {
-                        const lang =
+                        const lang = String(
                             this.$route.params.lang ||
-                            "en";
+                            localStorage.getItem("language") ||
+                            "en"
+                        ).toLowerCase();
 
-                        this.$router.push(
-                            `/${lang}/auth`
-                        );
+                        /*
+                         * Avoid redirect loop
+                         */
+                        if (
+                            !this.$route.path.includes(
+                                "/auth"
+                            )
+                        ) {
+                            this.$router.push(
+                                `/${lang}/auth`
+                            );
+                        }
                     }
 
                     return Promise.reject(
@@ -187,7 +273,12 @@ export default {
 </script>
 
 <style scoped>
-.layout-fade-enter-active {
+/* =====================================================
+   LAYOUT TRANSITION
+===================================================== */
+
+.layout-fade-enter-active,
+.layout-fade-leave-active {
     transition:
         opacity 0.4s ease,
         transform 0.4s ease;
@@ -201,5 +292,15 @@ export default {
 .layout-fade-enter-to {
     opacity: 1;
     transform: translateY(0);
+}
+
+.layout-fade-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.layout-fade-leave-to {
+    opacity: 0;
+    transform: translateY(-6px);
 }
 </style>
