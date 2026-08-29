@@ -5,13 +5,11 @@
         ========================== -->
         <div class="discovery-media-card__media">
             <!-- VIDEO -->
-            <template v-if="isVideo">
+            <template v-if="isVideoResult">
                 <video
-                    v-if="videoSource && !videoFailed"
+                    v-if="resolvedVideoUrl"
                     ref="videoRef"
                     class="discovery-media-card__video"
-                    :src="videoSource"
-                    :poster="thumbnailSource || undefined"
                     muted
                     playsinline
                     preload="metadata"
@@ -21,17 +19,10 @@
                     @playing="isPlaying = true"
                     @pause="isPlaying = false"
                     @ended="isPlaying = false"
-                    @error="videoFailed = true"
-                ></video>
-
-                <img
-                    v-else-if="thumbnailSource"
-                    :src="thumbnailSource"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    @error="handleImageError"
-                />
+                    @error="handleVideoError"
+                >
+                    <source :src="resolvedVideoUrl" />
+                </video>
 
                 <div
                     v-else
@@ -41,7 +32,7 @@
 
                 <!-- PLAY / PAUSE -->
                 <button
-                    v-if="videoSource && !videoFailed"
+                    v-if="resolvedVideoUrl"
                     type="button"
                     class="discovery-media-card__play"
                     :aria-label="
@@ -194,8 +185,6 @@ const { t } = useI18n();
 
 const videoRef = ref(null);
 
-const videoFailed = ref(false);
-
 const isPlaying = ref(false);
 
 const isAdding = ref(false);
@@ -207,20 +196,98 @@ const isAdded = ref(false);
    MEDIA TYPE
 ===================================================== */
 
-const isVideo = computed(() => {
+const isVideoResult = computed(() => {
     return props.result?.result_type === "video";
 });
 
 
 /* =====================================================
-   VIDEO SOURCE
-   نفس الكود القديم بدون تغيير
+   MEDIA PATH / URL
 ===================================================== */
 
-const videoSource = computed(() => {
-    if (!isVideo.value) return "";
+const getMediaRawPath = (mediaOrPath) => {
+    if (!mediaOrPath) return "";
+
+    if (typeof mediaOrPath === "string") {
+        return mediaOrPath;
+    }
 
     return (
+        mediaOrPath.image_url ||
+        mediaOrPath.full_url ||
+        mediaOrPath.url ||
+        mediaOrPath.preview_url ||
+        ""
+    );
+};
+
+
+const getStorageUrl = (mediaOrPath) => {
+    const rawPath = getMediaRawPath(mediaOrPath);
+
+    if (!rawPath || typeof rawPath !== "string") {
+        return "";
+    }
+
+    const path = rawPath.replace(/\\/g, "/").trim();
+
+    if (path.startsWith("http://") || path.startsWith("https://")) {
+        try {
+            const url = new URL(path);
+
+            if (
+                url.pathname.startsWith("/storage/") ||
+                url.pathname.startsWith("/uploads/")
+            ) {
+                return `${url.pathname}${url.search}`;
+            }
+        } catch {
+            return path;
+        }
+
+        return path;
+    }
+
+    if (path.startsWith("/storage/")) {
+        return path;
+    }
+
+    if (path.startsWith("storage/")) {
+        return `/${path}`;
+    }
+
+    if (path.startsWith("public/")) {
+        return `/storage/${path.replace(/^public\//, "")}`;
+    }
+
+    if (path.startsWith("/uploads/")) {
+        return path;
+    }
+
+    if (path.startsWith("uploads/")) {
+        return `/${path}`;
+    }
+
+    return `/storage/${path.replace(/^\/+/, "")}`;
+};
+
+
+const isVideo = (path) => {
+    const rawPath = getMediaRawPath(path);
+
+    if (!rawPath || typeof rawPath !== "string") {
+        return false;
+    }
+
+    return /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(rawPath);
+};
+
+
+const resolvedVideoPath = computed(() => {
+    if (!isVideoResult.value) return "";
+
+    return (
+        props.result?.full_url ||
         props.result?.video_url ||
         props.result?.media_url ||
         props.result?.file_url ||
@@ -230,20 +297,46 @@ const videoSource = computed(() => {
 });
 
 
+const resolvedVideoUrl = computed(() => {
+    if (!isVideo(resolvedVideoPath.value)) {
+        return "";
+    }
+
+    return getStorageUrl(resolvedVideoPath.value);
+});
+
+
 /* =====================================================
    THUMBNAIL
-   نفس الكود القديم بدون تغيير
 ===================================================== */
 
 const thumbnailSource = computed(() => {
-    return (
+    const imagePath =
         props.result?.thumbnail_url ||
         props.result?.image_url ||
         props.result?.media_url ||
         props.fallbackImage ||
-        ""
-    );
+        "";
+
+    return imagePath
+        ? getStorageUrl(imagePath)
+        : "";
 });
+
+
+const handleVideoError = (event) => {
+    const video = event?.target;
+
+    console.error(
+        "Unable to load discovery video:",
+        {
+            id: props.result?.id,
+            path: resolvedVideoPath.value,
+            url: resolvedVideoUrl.value,
+            error: video?.error || null,
+        }
+    );
+};
 
 
 /* =====================================================
