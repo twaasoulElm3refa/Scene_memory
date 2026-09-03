@@ -569,10 +569,17 @@ const handleMainCategoryChange = async () => {
     await onMainCategoryChange();
 };
 
-const handleSearchClick = () => {
+const handleSearchClick = async () => {
     closeCountryDropdown();
     currentPage.value = 1;
-    search(true, 1);
+    await search(true, 1);
+    await nextTick();
+    document
+        .querySelector("#events-results")
+        ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
 };
 
 const scrollToEventsSearch = async () => {
