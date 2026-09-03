@@ -51,43 +51,58 @@ class ProcessEventVideoJob implements ShouldQueue
 
         $disk = Storage::disk('public');
         $tempAbsPath = $disk->path($this->filePath);
+        $finalFilename = 'videos/'.basename($this->filePath);
+        $finalAbsPath = $disk->path($finalFilename);
 
-        if (! file_exists($tempAbsPath)) {
+        $existingMedia = EventsImges::query()
+            ->where('event_id', $this->eventId)
+            ->where('type', 'video')
+            ->where('full_url', $finalFilename)
+            ->first();
+
+        if (
+            $existingMedia &&
+            $existingMedia->preview_url &&
+            $disk->exists($existingMedia->preview_url)
+        ) {
+            $cache->invalidateEvent((int) $event->id, [(int) $existingMedia->id]);
+
+            if ($this->dispatchAiAfterProcessing) {
+                GenerateEventAiTagsJob::dispatch((int) $event->id);
+            }
+
             return;
         }
 
         try {
-            $finalFilename = 'videos/'.basename($this->filePath);
-            $finalAbsPath = $disk->path($finalFilename);
-
             if (! is_dir(dirname($finalAbsPath))) {
                 mkdir(dirname($finalAbsPath), 0775, true);
             }
 
-            $renameResult = @rename($tempAbsPath, $finalAbsPath);
+            if ($this->filePath !== $finalFilename && file_exists($tempAbsPath)) {
+                $renameResult = @rename($tempAbsPath, $finalAbsPath);
 
-            if (! $renameResult) {
-                $disk->move($this->filePath, $finalFilename);
+                if (! $renameResult) {
+                    $disk->move($this->filePath, $finalFilename);
+                }
             }
 
             if (! file_exists($finalAbsPath)) {
-                throw new \RuntimeException('Final video file does not exist after move/rename.');
+                throw new \RuntimeException('Video source is unavailable for watermark processing.');
             }
 
             $previewWatermarkedPath = $this->makeWatermarkedPreviewVideo($finalFilename, $this->debugId);
 
             if (! $previewWatermarkedPath) {
-                Log::warning('Video preview generation failed; leaving preview unavailable', [
-                    'event_id' => $this->eventId,
-                    'video_path' => $finalFilename,
-                ]);
+                throw new \RuntimeException('Watermarked preview video generation failed.');
             }
 
-            $media = EventsImges::create([
+            $media = EventsImges::updateOrCreate([
                 'event_id' => $this->eventId,
                 'type' => 'video',
-                'preview_url' => $previewWatermarkedPath,
                 'full_url' => $finalFilename,
+            ], [
+                'preview_url' => $previewWatermarkedPath,
                 'price' => 15,
                 'is_active' => 1,
             ]);
@@ -98,12 +113,19 @@ class ProcessEventVideoJob implements ShouldQueue
                 GenerateEventAiTagsJob::dispatch((int) $event->id);
             }
 
-        } catch (\Throwable $e) {
-            throw $e;
+        } catch (\Throwable $exception) {
+            Log::error('ProcessEventVideoJob: failed', [
+                'event_id' => $this->eventId,
+                'source_path' => $this->filePath,
+                'final_path' => $finalFilename,
+                'message' => $exception->getMessage(),
+            ]);
+
+            throw $exception;
         }
     }
 
-    private function makeWatermarkedPreviewVideo(string $videoPath, string $debugId): ?string
+    protected function makeWatermarkedPreviewVideo(string $videoPath, string $debugId): ?string
     {
         $disk = Storage::disk('public');
         $inputPath = $disk->path($videoPath);
