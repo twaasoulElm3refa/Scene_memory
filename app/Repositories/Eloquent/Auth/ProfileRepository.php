@@ -123,8 +123,6 @@ class ProfileRepository implements AuthProfileRepositoryInterface
 
                 $activities=$activities->merge($wishlist);
 
-
-
                 return $activities
                     ->sortByDesc('created_at')
                     ->values()

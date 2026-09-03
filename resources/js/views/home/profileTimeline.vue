@@ -1,147 +1,276 @@
 <template>
-    <div class="profile-timeline-page">
-
-        <!-- Header -->
-        <section class="timeline-header">
-
-            <div>
-                <h1>
-                    {{ $t("nav.timeline") }}
-                </h1>
-
-                <p>
-                    {{ $t("profile.timelineDescription") }}
-                </p>
-            </div>
-
-            <div class="timeline-icon">
-                ⏱
-            </div>
-
-        </section>
+<div class="profile-timeline-page">
 
 
-        <!-- Loading -->
-        <section 
-            v-if="loading"
-            class="timeline-card empty-state"
+    <!-- Header -->
+    <section class="timeline-header">
+
+        <div>
+            <h1>
+                Timeline
+            </h1>
+
+            <p>
+                Your activity history on Scemory
+            </p>
+        </div>
+
+
+        <div class="timeline-icon">
+            ⏱
+        </div>
+
+    </section>
+
+
+
+    <!-- Tabs -->
+
+    <div class="timeline-tabs">
+
+        <button
+            v-for="tab in tabs"
+            :key="tab.key"
+            @click="activeTab = tab.key"
+            :class="[
+                'timeline-tab',
+                activeTab === tab.key ? 'active':'' 
+            ]"
         >
-            Loading...
-        </section>
+
+            <span>
+                {{tab.icon}}
+            </span>
+
+            {{tab.label}}
+
+        </button>
+
+    </div>
 
 
-        <!-- Timeline -->
-        <section 
-            v-else-if="timeline.length"
-            class="timeline-card"
+
+
+    <!-- Loading -->
+
+    <div
+        v-if="loading"
+        class="timeline-card empty-state"
+    >
+
+        Loading...
+
+    </div>
+
+
+
+
+    <!-- Timeline -->
+
+    <section
+        v-else
+        class="timeline-card"
+    >
+
+
+        <div
+            v-for="item in filteredTimeline"
+            :key="item.type + item.created_at"
+            class="timeline-row"
         >
+
+
+            <!-- icon -->
 
             <div
-                v-for="item in timeline"
-                :key="`${item.type}-${item.data.id}-${item.created_at}`"
-                class="timeline-item"
+                class="timeline-marker"
+                :class="item.type"
             >
 
-                <div class="timeline-dot"></div>
+                {{ getIcon(item.type) }}
+
+            </div>
 
 
-                <div class="timeline-content">
 
 
-                    <div class="timeline-top">
+            <!-- Card -->
+
+            <div class="activity-card">
+
+
+                <div class="activity-head">
+
+
+                    <div>
 
                         <h3>
-                            {{ item.title }}
+                            {{item.title}}
                         </h3>
 
 
                         <span>
-                            {{ formatDate(item.created_at) }}
+                            {{formatDate(item.created_at)}}
                         </span>
 
                     </div>
 
 
-
-                    <!-- Event -->
-                    <div
-                        v-if="item.type === 'event_created'"
-                        class="activity-box"
-                    >
-
-                        <strong>
-                            Event
-                        </strong>
-
-
-                        <p>
-                            {{ item.data.title }}
-                        </p>
-
-
-                        <small>
-                            ID: {{ item.data.id }}
-                        </small>
-
-                    </div>
-
-
-
-                    <!-- Future Types -->
-                    <div
-                        v-else
-                        class="activity-box"
-                    >
-
-                        <p>
-                            {{ item.data }}
-                        </p>
-
+                    <div class="arrow">
+                        →
                     </div>
 
 
                 </div>
 
 
+
+
+
+                <!-- Event -->
+
+                <template v-if="item.type==='event_created'">
+
+                    <div class="event-content">
+
+
+                        <div class="event-image">
+
+                            <img
+                                v-if="item.data.image"
+                                :src="item.data.image"
+                            />
+
+                            <div v-else>
+                                🎫
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4>
+                                {{item.data.title}}
+                            </h4>
+
+                            <small>
+                                Event ID:
+                                {{item.data.id}}
+                            </small>
+
+                        </div>
+
+
+                    </div>
+
+                </template>
+
+
+
+
+
+                <!-- Comment -->
+
+                <template v-else-if="item.type==='comment_created'">
+
+                    <div class="comment-box">
+
+                        {{item.data.comment}}
+
+                    </div>
+
+                </template>
+
+
+
+
+
+
+                <!-- Like -->
+
+                <template v-else-if="item.type==='event_liked'">
+
+                    <div class="simple-box">
+
+                        ❤️
+                        {{item.data.title}}
+
+                    </div>
+
+                </template>
+
+
+
+
+
+                <!-- Wishlist -->
+
+                <template v-else-if="item.type==='wishlist_added'">
+
+
+                    <div class="simple-box">
+
+                        🔖
+                        {{item.data.title}}
+
+                    </div>
+
+
+                </template>
+
+
+
+
+
+
+                <template v-else>
+
+                    <div class="simple-box">
+
+                        {{item.data}}
+
+                    </div>
+
+                </template>
+
+
+
             </div>
 
 
-        </section>
+
+        </div>
 
 
 
-        <!-- Empty -->
-        <section
-            v-else
-            class="timeline-card empty-state"
-        >
-
-            <div class="empty-icon">
-                📭
-            </div>
+    </section>
 
 
-            <h3>
-                No activity yet
-            </h3>
 
 
-            <p>
-                Your interactions will appear here.
-            </p>
-
-        </section>
-
-
-    </div>
+</div>
 </template>
+
+
 
 
 
 <script setup>
 
-import { ref, onMounted } from "vue";
-import { profileTimeline } from "@/services/profileTimeline/profileTimeline";
+import {
+    ref,
+    computed,
+    onMounted
+}
+from "vue";
+
+
+import {
+    profileTimeline
+}
+from "@/services/profileTimeline/profileTimeline";
+
 
 
 const timeline = ref([]);
@@ -149,60 +278,169 @@ const timeline = ref([]);
 const loading = ref(false);
 
 
-
-const loadTimeline = async () => {
-
-    loading.value = true;
+const activeTab = ref("all");
 
 
-    try {
 
-        const response = await profileTimeline.getTimeline();
+const tabs = [
+
+{
+    key:"all",
+    label:"All",
+    icon:"▦"
+},
+
+{
+    key:"event_created",
+    label:"Events",
+    icon:"📅"
+},
+
+{
+    key:"comment_created",
+    label:"Comments",
+    icon:"💬"
+},
+
+{
+    key:"event_liked",
+    label:"Likes",
+    icon:"♡"
+},
+
+{
+    key:"wishlist_added",
+    label:"Wishlist",
+    icon:"🔖"
+},
+
+{
+    key:"purchase",
+    label:"Purchases",
+    icon:"🛒"
+}
+
+];
 
 
-        timeline.value = response.data.data || [];
 
 
-        console.log(
-            "Timeline:",
-            timeline.value
-        );
+
+const filteredTimeline = computed(()=>{
 
 
-    } catch(error) {
-
-        console.error(
-            "Timeline Error:",
-            error
-        );
+    if(activeTab.value==="all")
+        return timeline.value;
 
 
-    } finally {
+    return timeline.value.filter(
+        item =>
+        item.type === activeTab.value
+    );
 
-        loading.value = false;
+});
 
-    }
+
+
+
+
+
+
+const loadTimeline = async()=>{
+
+
+loading.value=true;
+
+
+try{
+
+
+const response =
+await profileTimeline.getTimeline();
+
+
+timeline.value =
+response.data.data || [];
+
+
+}
+catch(error){
+
+console.log(error);
+
+}
+finally{
+
+loading.value=false;
+
+}
+
+
 
 };
 
 
 
-const formatDate = (date)=>{
-
-    if(!date)
-        return "";
 
 
-    return new Date(date)
-        .toLocaleDateString();
+
+
+
+const getIcon=(type)=>{
+
+
+const icons={
+
+event_created:"📅",
+
+comment_created:"💬",
+
+event_liked:"❤️",
+
+wishlist_added:"🔖",
+
+purchase:"🛒"
 
 };
+
+
+return icons[type] || "•";
+
+
+};
+
+
+
+
+
+
+
+
+const formatDate=(date)=>{
+
+
+return new Date(date)
+.toLocaleDateString(
+"en",
+{
+year:"numeric",
+month:"short",
+day:"numeric"
+}
+);
+
+
+};
+
+
+
+
 
 
 
 onMounted(()=>{
 
-    loadTimeline();
+loadTimeline();
 
 });
 
@@ -212,292 +450,444 @@ onMounted(()=>{
 
 
 
+
+
+
+
+
 <style scoped>
 
-.profile-timeline-page {
 
-    max-width: 1000px;
-    margin: 120px auto 60px;
-    padding: 0 20px;
+.profile-timeline-page{
 
-}
-
-
-
-.timeline-header {
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    background:white;
-
-    border:1px solid #e5edf7;
-
-    border-radius:24px;
-
-    padding:32px;
-
-    margin-bottom:32px;
-
-    box-shadow:
-    0 15px 40px rgba(13,77,151,.08);
+max-width:1100px;
+margin:120px auto 60px;
+padding:0 20px;
 
 }
 
 
 
-.timeline-header h1 {
-
-    margin:0;
-
-    font-size:36px;
-
-    font-weight:900;
-
-    color:#0d4d97;
-
-}
 
 
-
-.timeline-header p {
-
-    margin-top:10px;
-
-    color:#64748b;
-
-}
+.timeline-header{
 
 
+background:white;
 
-.timeline-icon {
+border:1px solid #e5edf7;
 
-    width:60px;
-    height:60px;
+border-radius:28px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+padding:32px;
 
-    border-radius:50%;
+display:flex;
 
-    background:#eaf4ff;
+justify-content:space-between;
 
-    font-size:28px;
+align-items:center;
+
+box-shadow:
+0 15px 40px rgba(13,77,151,.08);
 
 }
 
 
 
-.timeline-card {
-
-    background:white;
-
-    border-radius:24px;
-
-    padding:35px;
-
-    box-shadow:
-    0 15px 40px rgba(13,77,151,.08);
-
-}
 
 
+.timeline-header h1{
 
-.timeline-item {
 
-    position:relative;
+font-size:38px;
 
-    display:flex;
+font-weight:900;
 
-    gap:20px;
+color:#0d4d97;
 
-    padding-bottom:30px;
+margin:0;
 
 }
 
 
 
-.timeline-item:not(:last-child)::before {
 
-    content:"";
 
-    position:absolute;
+.timeline-header p{
 
-    left:7px;
 
-    top:18px;
+color:#64748b;
 
-    height:100%;
-
-    width:2px;
-
-    background:#dbeafe;
+margin-top:10px;
 
 }
 
 
 
-.timeline-dot {
-
-    width:16px;
-
-    height:16px;
-
-    background:#0d4d97;
-
-    border-radius:50%;
-
-    margin-top:5px;
-
-    flex-shrink:0;
-
-}
 
 
-
-.timeline-content {
-
-    flex:1;
-
-}
+.timeline-icon{
 
 
+width:65px;
 
-.timeline-top {
+height:65px;
 
-    display:flex;
+border-radius:50%;
 
-    justify-content:space-between;
+background:#eaf4ff;
 
-    gap:15px;
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:30px;
 
 }
 
 
 
-.timeline-top h3 {
-
-    margin:0;
-
-    color:#0f172a;
-
-    font-size:18px;
-
-}
 
 
 
-.timeline-top span {
-
-    color:#94a3b8;
-
-    font-size:13px;
-
-}
+.timeline-tabs{
 
 
+margin:30px 0;
 
-.activity-box {
+background:#fff;
 
-    margin-top:15px;
+border:1px solid #dbeafe;
 
-    padding:18px;
+border-radius:14px;
 
-    border-radius:16px;
+padding:5px;
 
-    background:#f8fafc;
+display:flex;
 
-    border:1px solid #e2e8f0;
+gap:5px;
+
+overflow:auto;
 
 }
 
 
 
-.activity-box strong {
-
-    color:#0d4d97;
-
-}
 
 
-
-.activity-box p {
-
-    margin:10px 0;
-
-    color:#334155;
-
-}
+.timeline-tab{
 
 
+border:0;
 
-.empty-state {
+background:white;
 
-    min-height:250px;
+padding:14px 30px;
 
-    display:flex;
+border-radius:10px;
 
-    flex-direction:column;
+font-weight:800;
 
-    align-items:center;
+color:#64748b;
 
-    justify-content:center;
+cursor:pointer;
 
-    text-align:center;
+display:flex;
+
+gap:8px;
+
+align-items:center;
+
+white-space:nowrap;
 
 }
 
 
 
-.empty-icon {
-
-    font-size:50px;
-
-    margin-bottom:15px;
-
-}
 
 
+.timeline-tab.active{
 
-.empty-state h3 {
 
-    color:#0f172a;
+background:#fff;
+
+color:#0d4d97;
+
+box-shadow:
+0 5px 20px rgba(13,77,151,.15);
 
 }
 
 
 
-.empty-state p {
 
-    color:#64748b;
+
+.timeline-card{
+
+
+background:white;
+
+padding:35px;
+
+border-radius:28px;
+
+box-shadow:
+0 15px 40px rgba(13,77,151,.08);
 
 }
+
+
+
+
+
+.timeline-row{
+
+
+display:flex;
+
+gap:25px;
+
+position:relative;
+
+padding-bottom:35px;
+
+}
+
+
+
+
+
+.timeline-row:not(:last-child)::before{
+
+
+content:"";
+
+position:absolute;
+
+left:22px;
+
+top:50px;
+
+height:100%;
+
+width:2px;
+
+background:#dbeafe;
+
+}
+
+
+
+
+
+.timeline-marker{
+
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+background:#0d4d97;
+
+color:white;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+z-index:2;
+
+}
+
+
+
+
+
+.activity-card{
+
+
+flex:1;
+
+background:#fff;
+
+border:1px solid #edf2f7;
+
+border-radius:22px;
+
+padding:22px;
+
+box-shadow:
+0 8px 25px rgba(0,0,0,.04);
+
+}
+
+
+
+
+
+.activity-head{
+
+
+display:flex;
+
+justify-content:space-between;
+
+}
+
+
+
+
+
+.activity-head h3{
+
+
+margin:0;
+
+color:#0f172a;
+
+font-size:18px;
+
+}
+
+
+
+
+
+.activity-head span{
+
+
+color:#94a3b8;
+
+font-size:13px;
+
+}
+
+
+
+
+
+.arrow{
+
+font-size:25px;
+
+color:#94a3b8;
+
+}
+
+
+
+
+
+
+.event-content{
+
+
+display:flex;
+
+gap:15px;
+
+margin-top:20px;
+
+align-items:center;
+
+}
+
+
+
+
+
+.event-image{
+
+
+width:90px;
+
+height:70px;
+
+border-radius:15px;
+
+background:#eaf4ff;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+overflow:hidden;
+
+}
+
+
+
+
+
+.event-image img{
+
+width:100%;
+height:100%;
+object-fit:cover;
+
+}
+
+
+
+
+
+.comment-box,
+.simple-box{
+
+
+margin-top:20px;
+
+padding:15px;
+
+border-radius:14px;
+
+background:#f8fafc;
+
+color:#334155;
+
+}
+
+
+
+
+.empty-state{
+
+
+height:300px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
 
 
 
 @media(max-width:700px){
 
-    .timeline-header {
+.timeline-header{
 
-        padding:20px;
+padding:20px;
 
-    }
+}
 
+.timeline-row{
 
-    .timeline-header h1 {
+gap:12px;
 
-        font-size:28px;
-
-    }
-
-
-    .timeline-top {
-
-        flex-direction:column;
-
-    }
+}
 
 }
 
