@@ -7,13 +7,17 @@ export function normalizeCitySearch(value) {
 }
 
 export function filterCityOptions(cities, value, locale = "en") {
+    return filterLocationOptions(cities, value, locale);
+}
+
+export function filterLocationOptions(locations, value, locale = "en") {
     const search = normalizeCitySearch(value).toLocaleLowerCase(locale);
 
-    if (!search) return cities;
+    if (!search) return locations;
 
-    return cities.filter((city) => {
-        const translatedName = getLocationName(city).toLocaleLowerCase(locale);
-        const storedName = String(city.name || "").toLocaleLowerCase(locale);
+    return locations.filter((location) => {
+        const translatedName = getLocationName(location).toLocaleLowerCase(locale);
+        const storedName = String(location.name || "").toLocaleLowerCase(locale);
 
         return translatedName.includes(search) || storedName.includes(search);
     });

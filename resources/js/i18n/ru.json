@@ -738,6 +738,7 @@
                 "selectCountry": "Выберите страну",
                 "selectCity": "Выберите город",
                 "noCitiesFound": "Города не найдены",
+                "noCountriesFound": "Страны не найдены",
                 "countryRequired": "Выберите страну.",
                 "cityRequired": "Выберите город.",
                 "startDateRequired": "Выберите дату начала.",

@@ -745,6 +745,7 @@
                 "selectCountry": "اختر الدولة",
                 "selectCity": "اختر المدينة",
                 "noCitiesFound": "لم يتم العثور على مدن",
+                "noCountriesFound": "لم يتم العثور على دول",
                 "countryRequired": "يرجى اختيار الدولة.",
                 "cityRequired": "يرجى اختيار المدينة.",
                 "startDateRequired": "يرجى اختيار تاريخ البدء.",

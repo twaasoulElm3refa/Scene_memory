@@ -95,27 +95,53 @@
                         </div>
 
                         <div class="special-coverage-modal__field-grid">
-                            <div class="special-coverage-modal__field">
-                                <label for="special-coverage-country">
+                            <div ref="countryDropdownRef" class="special-coverage-modal__field special-coverage-city-select">
+                                <label for="special-coverage-country-search">
                                     {{ $t("homeAudit.specialCoverage.modal.country") }}
                                     <span class="special-coverage-modal__required" aria-hidden="true">*</span>
                                 </label>
-                                <select
-                                    id="special-coverage-country"
-                                    v-model="countryId"
+                                <input
+                                    id="special-coverage-country-search"
+                                    v-model="countrySearch"
+                                    type="search"
+                                    role="combobox"
                                     required
+                                    autocomplete="off"
                                     :disabled="isSubmitting || isLoadingCountries"
+                                    :aria-expanded="isCountryDropdownOpen"
                                     :aria-invalid="Boolean(errors.country_id)"
+                                    aria-controls="special-coverage-country-options"
                                     aria-describedby="special-coverage-country-error"
-                                    @change="handleCountryChange"
+                                    :placeholder="$t('homeAudit.specialCoverage.modal.selectCountry')"
+                                    @focus="handleCountryFocus"
+                                    @input="handleCountrySearchInput"
+                                />
+
+                                <div
+                                    v-if="isCountryDropdownOpen"
+                                    id="special-coverage-country-options"
+                                    class="special-coverage-city-select__menu"
+                                    role="listbox"
                                 >
-                                    <option value="" disabled>
-                                        {{ $t("homeAudit.specialCoverage.modal.selectCountry") }}
-                                    </option>
-                                    <option v-for="country in countries" :key="country.id" :value="String(country.id)">
+                                    <button
+                                        v-for="country in filteredCountries"
+                                        :key="country.id"
+                                        type="button"
+                                        class="special-coverage-city-select__option"
+                                        role="option"
+                                        :aria-selected="String(country.id) === countryId"
+                                        @click="selectCountry(country)"
+                                    >
                                         {{ locationName(country) }}
-                                    </option>
-                                </select>
+                                    </button>
+
+                                    <p
+                                        v-if="!isLoadingCountries && filteredCountries.length === 0"
+                                        class="special-coverage-city-select__empty"
+                                    >
+                                        {{ $t("homeAudit.specialCoverage.modal.noCountriesFound") }}
+                                    </p>
+                                </div>
                                 <p
                                     v-if="errors.country_id"
                                     id="special-coverage-country-error"
@@ -320,6 +346,7 @@ import { SpecialCoverageRequestService } from "../../../services/SpecialCoverage
 import {
     cityNameExists,
     filterCityOptions,
+    filterLocationOptions,
     getLocationName,
     normalizeCitySearch,
 } from "./specialCoverageCityOptions";
@@ -336,6 +363,7 @@ const eventDescription = ref("");
 const countries = ref([]);
 const cities = ref([]);
 const countryId = ref("");
+const countrySearch = ref("");
 const cityId = ref("");
 const citySearch = ref("");
 const startDate = ref("");
@@ -343,11 +371,13 @@ const eventType = ref("");
 const isLoadingCountries = ref(false);
 const isLoadingCities = ref(false);
 const isCreatingCity = ref(false);
+const isCountryDropdownOpen = ref(false);
 const isCityDropdownOpen = ref(false);
 const isSubmitting = ref(false);
 const errors = ref({});
 const ctaButtonRef = ref(null);
 const eventNameInputRef = ref(null);
+const countryDropdownRef = ref(null);
 const cityDropdownRef = ref(null);
 
 let previousBodyOverflow = "";
@@ -357,6 +387,25 @@ const isAuthenticated = () => Boolean(localStorage.getItem("auth_token"));
 const locationName = getLocationName;
 
 const normalizedCitySearch = computed(() => normalizeCitySearch(citySearch.value));
+
+const selectedCountry = computed(() =>
+    countries.value.find((country) => String(country.id) === countryId.value)
+);
+
+const filteredCountries = computed(() => {
+    if (
+        selectedCountry.value
+        && normalizeCitySearch(countrySearch.value).localeCompare(
+            locationName(selectedCountry.value),
+            locale.value,
+            { sensitivity: "base" }
+        ) === 0
+    ) {
+        return countries.value;
+    }
+
+    return filterLocationOptions(countries.value, countrySearch.value, locale.value);
+});
 
 const filteredCities = computed(() => filterCityOptions(cities.value, citySearch.value, locale.value));
 
@@ -414,11 +463,13 @@ const resetForm = () => {
     eventName.value = "";
     eventDescription.value = "";
     countryId.value = "";
+    countrySearch.value = "";
     cityId.value = "";
     citySearch.value = "";
     startDate.value = "";
     eventType.value = "";
     cities.value = [];
+    isCountryDropdownOpen.value = false;
     isCityDropdownOpen.value = false;
     errors.value = {};
 };
@@ -429,6 +480,26 @@ const handleCountryChange = async () => {
     errors.value.city_id = "";
     isCityDropdownOpen.value = false;
     await loadCities();
+};
+
+const handleCountryFocus = (event) => {
+    isCountryDropdownOpen.value = true;
+    event.target?.select();
+};
+
+const handleCountrySearchInput = () => {
+    countryId.value = "";
+    errors.value.country_id = "";
+    void handleCountryChange();
+    isCountryDropdownOpen.value = true;
+};
+
+const selectCountry = async (country) => {
+    countryId.value = String(country.id);
+    countrySearch.value = locationName(country);
+    errors.value.country_id = "";
+    isCountryDropdownOpen.value = false;
+    await handleCountryChange();
 };
 
 const handleCityFocus = (event) => {
@@ -577,6 +648,11 @@ const openFromRoute = async () => {
 
 const handleEscape = (event) => {
     if (event.key === "Escape" && isModalOpen.value) {
+        if (isCountryDropdownOpen.value) {
+            isCountryDropdownOpen.value = false;
+            return;
+        }
+
         if (isCityDropdownOpen.value) {
             isCityDropdownOpen.value = false;
             return;
@@ -587,6 +663,10 @@ const handleEscape = (event) => {
 };
 
 const handleDocumentClick = (event) => {
+    if (countryDropdownRef.value && !countryDropdownRef.value.contains(event.target)) {
+        isCountryDropdownOpen.value = false;
+    }
+
     if (cityDropdownRef.value && !cityDropdownRef.value.contains(event.target)) {
         isCityDropdownOpen.value = false;
     }

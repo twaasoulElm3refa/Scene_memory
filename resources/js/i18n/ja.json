@@ -745,6 +745,7 @@
                 "selectCountry": "国を選択",
                 "selectCity": "都市を選択",
                 "noCitiesFound": "都市が見つかりません",
+                "noCountriesFound": "国が見つかりません",
                 "countryRequired": "国を選択してください。",
                 "cityRequired": "都市を選択してください。",
                 "startDateRequired": "開始日を選択してください。",

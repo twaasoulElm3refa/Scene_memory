@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import {
     cityNameExists,
     filterCityOptions,
+    filterLocationOptions,
     normalizeCitySearch,
 } from "../../resources/js/views/home/components/specialCoverageCityOptions";
 
@@ -21,6 +22,7 @@ const requiredKeys = [
     "selectCountry",
     "selectCity",
     "noCitiesFound",
+    "noCountriesFound",
 ];
 
 describe("special coverage form", () => {
@@ -36,6 +38,18 @@ describe("special coverage form", () => {
         expect(cityNameExists(cities, "alexandria", "en")).toBe(true);
         expect(cityNameExists(cities, "Luxor", "en")).toBe(false);
         expect(normalizeCitySearch("  New   Cairo  ")).toBe("New Cairo");
+    });
+
+    it("filters existing country names on the frontend", () => {
+        const countries = [
+            { id: 1, name: "Egypt", translation: { name: "مصر" } },
+            { id: 2, name: "United Arab Emirates", translation: { name: "الإمارات العربية المتحدة" } },
+            { id: 3, name: "France", translation: { name: "France" } },
+        ];
+
+        expect(filterLocationOptions(countries, "egy", "en")).toEqual([countries[0]]);
+        expect(filterLocationOptions(countries, "الإمارات", "ar")).toEqual([countries[1]]);
+        expect(filterLocationOptions(countries, "", "en")).toEqual(countries);
     });
 
     it("defines every new label in all 13 locales", () => {
@@ -60,6 +74,7 @@ describe("special coverage form", () => {
         );
 
         expect(source).toContain("LocationService.getCitiesByCountry(requestedCountryId)");
+        expect(source).toContain("filterLocationOptions(countries.value, countrySearch.value, locale.value)");
         expect(source).toContain("SpecialCoverageRequestService.createCity");
         expect(source).toContain("city_id: Number(cityId.value)");
         expect(source).toContain("start_date: startDate.value");

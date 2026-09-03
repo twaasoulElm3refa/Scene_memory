@@ -742,6 +742,7 @@
                 "selectCountry": "Ülke seçin",
                 "selectCity": "Şehir seçin",
                 "noCitiesFound": "Şehir bulunamadı",
+                "noCountriesFound": "Ülke bulunamadı",
                 "countryRequired": "Lütfen bir ülke seçin.",
                 "cityRequired": "Lütfen bir şehir seçin.",
                 "startDateRequired": "Lütfen bir başlangıç tarihi seçin.",

@@ -745,6 +745,7 @@
                 "selectCountry": "देश चुनें",
                 "selectCity": "शहर चुनें",
                 "noCitiesFound": "कोई शहर नहीं मिला",
+                "noCountriesFound": "कोई देश नहीं मिला",
                 "countryRequired": "कृपया एक देश चुनें।",
                 "cityRequired": "कृपया एक शहर चुनें।",
                 "startDateRequired": "कृपया आरंभ तिथि चुनें।",

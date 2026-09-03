@@ -746,6 +746,7 @@
                 "selectCountry": "Land auswählen",
                 "selectCity": "Stadt auswählen",
                 "noCitiesFound": "Keine Städte gefunden",
+                "noCountriesFound": "Keine Länder gefunden",
                 "countryRequired": "Bitte wählen Sie ein Land aus.",
                 "cityRequired": "Bitte wählen Sie eine Stadt aus.",
                 "startDateRequired": "Bitte wählen Sie ein Startdatum aus.",
