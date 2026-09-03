@@ -648,8 +648,8 @@
     <Teleport to="body">
         <Transition name="modal">
             <div v-if="lightboxOpen && currentMedia" class="fixed inset-0 z-[9998] bg-black/90 p-4"
-                @click.self="lightboxOpen = false">
-                <button type="button" @click="lightboxOpen = false"
+                @click.self="closeLightbox">
+                <button type="button" @click.stop.prevent="closeLightbox"
                     class="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-2xl leading-none text-white transition hover:bg-white/25"
                     :aria-label="$t('common.close') || 'Close'">
                     &times;
@@ -930,6 +930,16 @@ const getMediaUrl = (mediaOrPath) => {
     }
 
     return getStorageUrl(rawPath);
+};
+
+const getMediaPreviewUrl = (media) => {
+    const previewPath = media?.preview_url || media?.previewUrl;
+
+    if (previewPath && typeof previewPath === 'string' && previewPath.replace(/\\/g, '/').trim()) {
+        return getStorageUrl(previewPath);
+    }
+
+    return getMediaUrl(media);
 };
 
 const onMediaImageError = (e) => {
@@ -1498,7 +1508,7 @@ const heroMediaAttrs = computed(() => {
     };
 });
 const currentMedia = computed(() => eventImages.value[lightboxIndex.value] || null);
-const currentMediaUrl = computed(() => getMediaUrl(currentMedia.value));
+const currentMediaUrl = computed(() => getMediaPreviewUrl(currentMedia.value));
 
 const isMediaVideo = (media) => {
     return detectMediaVideo(media);
@@ -1537,6 +1547,10 @@ const openLightbox = (index) => {
     lightboxOpen.value = true;
 };
 
+const closeLightbox = () => {
+    lightboxOpen.value = false;
+};
+
 // Navigation inside lightbox
 const lightboxPrev = () => {
     const total = eventImages.value.length;
@@ -1550,8 +1564,16 @@ const lightboxNext = () => {
     lightboxIndex.value = (lightboxIndex.value + 1) % total;
 };
 
+const handleLightboxKeydown = (event) => {
+    if (event.key === "Escape" && lightboxOpen.value) {
+        closeLightbox();
+    }
+};
+
 // ─── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(async () => {
+    window.addEventListener("keydown", handleLightboxKeydown);
+
     await fetchCurrentUser();
     checkAuth();
     if (!slug) { loading.value = false; return; }
@@ -1566,6 +1588,10 @@ onMounted(async () => {
     } finally {
         loading.value = false;
     }
+});
+
+onUnmounted(() => {
+    window.removeEventListener("keydown", handleLightboxKeydown);
 });
 </script>
 
