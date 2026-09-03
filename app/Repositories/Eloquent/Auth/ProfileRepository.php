@@ -102,7 +102,7 @@ class ProfileRepository implements AuthProfileRepositoryInterface
 
 
                 // Wishlist
-                $wishlist = Wishlist::with('events')
+                $wishlist = Wishlist::with('event')
                     ->where('user_id',$userId)
                     ->latest()
                     ->get()
@@ -113,7 +113,7 @@ class ProfileRepository implements AuthProfileRepositoryInterface
                             'title'=>'Added to wishlist',
                             'data'=>[
                                 'event_id'=>$item->event_id,
-                                'title'=>$item->events?->title
+                                'title'=>$item->event?->title
                             ],
                             'created_at'=>$item->created_at
                         ];

@@ -18,8 +18,8 @@ class Wishlist extends Model
         return $this->belongsTo(User::class,"user_id");
     }
 
-    public function events()
+    public function event()
     {
-        return $this->hasMany(Events::class,"event_id");
+        return $this->belongsTo(Events::class,"event_id");
     }
 }
