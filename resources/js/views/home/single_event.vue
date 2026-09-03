@@ -775,7 +775,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { PhotoIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -813,6 +813,7 @@ const event = ref(null);
 const loading = ref(true);
 const lightboxOpen = ref(false);
 const lightboxIndex = ref(0);
+const lightboxKeyboardActive = ref(false);
 const newComment = ref("");
 const commentImageInput = ref(null);
 const commentImages = ref([]);
@@ -1564,16 +1565,54 @@ const lightboxNext = () => {
     lightboxIndex.value = (lightboxIndex.value + 1) % total;
 };
 
+const isRtlLayout = () => document.documentElement.dir === "rtl";
+
 const handleLightboxKeydown = (event) => {
-    if (event.key === "Escape" && lightboxOpen.value) {
+    if (!lightboxOpen.value) return;
+
+    if (event.key === "Escape") {
+        event.preventDefault();
         closeLightbox();
+        return;
+    }
+
+    if (event.key === "ArrowRight") {
+        event.preventDefault();
+        isRtlLayout() ? lightboxPrev() : lightboxNext();
+        return;
+    }
+
+    if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        isRtlLayout() ? lightboxNext() : lightboxPrev();
     }
 };
 
+const enableLightboxKeyboard = () => {
+    if (lightboxKeyboardActive.value) return;
+
+    window.addEventListener("keydown", handleLightboxKeydown);
+    lightboxKeyboardActive.value = true;
+};
+
+const disableLightboxKeyboard = () => {
+    if (!lightboxKeyboardActive.value) return;
+
+    window.removeEventListener("keydown", handleLightboxKeydown);
+    lightboxKeyboardActive.value = false;
+};
+
+watch(lightboxOpen, (isOpen) => {
+    if (isOpen) {
+        enableLightboxKeyboard();
+        return;
+    }
+
+    disableLightboxKeyboard();
+});
+
 // ─── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(async () => {
-    window.addEventListener("keydown", handleLightboxKeydown);
-
     await fetchCurrentUser();
     checkAuth();
     if (!slug) { loading.value = false; return; }
@@ -1591,7 +1630,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-    window.removeEventListener("keydown", handleLightboxKeydown);
+    disableLightboxKeyboard();
 });
 </script>
 

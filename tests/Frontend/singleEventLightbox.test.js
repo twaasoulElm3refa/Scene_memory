@@ -18,8 +18,18 @@ describe("single event lightbox", () => {
     it("closes from the close button, backdrop, and Escape key", () => {
         expect(source).toContain('@click.self="closeLightbox"');
         expect(source).toContain('@click.stop.prevent="closeLightbox"');
-        expect(source).toContain('event.key === "Escape" && lightboxOpen.value');
+        expect(source).toContain('event.key === "Escape"');
+        expect(source).toContain("watch(lightboxOpen, (isOpen) => {");
         expect(source).toContain('window.addEventListener("keydown", handleLightboxKeydown)');
         expect(source).toContain('window.removeEventListener("keydown", handleLightboxKeydown)');
+    });
+
+    it("supports keyboard image navigation while respecting page direction", () => {
+        expect(source).toContain('event.key === "ArrowRight"');
+        expect(source).toContain('event.key === "ArrowLeft"');
+        expect(source).toContain('const isRtlLayout = () => document.documentElement.dir === "rtl";');
+        expect(source).toContain("isRtlLayout() ? lightboxPrev() : lightboxNext();");
+        expect(source).toContain("isRtlLayout() ? lightboxNext() : lightboxPrev();");
+        expect(source).toContain("const lightboxKeyboardActive = ref(false);");
     });
 });
