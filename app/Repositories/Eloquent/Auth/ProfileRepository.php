@@ -113,7 +113,7 @@ class ProfileRepository implements AuthProfileRepositoryInterface
                             'title'=>'Added to wishlist',
                             'data'=>[
                                 'event_id'=>$item->event_id,
-                                'title'=>$item->event?->title
+                                'title'=>$item->events?->title
                             ],
                             'created_at'=>$item->created_at
                         ];
