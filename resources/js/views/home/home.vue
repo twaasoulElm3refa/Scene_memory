@@ -82,7 +82,7 @@
                                     :placeholder="$t('homeAudit.home.searchPlaceholder')" />
 
                                 <button type="button" @click="handleHeroSearch"
-                                    class="rounded-full bg-[#38AEEA] px-6 py-2 font-bold text-white transition hover:scale-105">
+                                    class="rounded bg-[#38AEEA] px-6 py-2 font-bold text-white transition hover:scale-105">
                                     {{ $t('common.search') }}
                                 </button>
 
