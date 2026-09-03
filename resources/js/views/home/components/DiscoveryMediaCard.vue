@@ -3,7 +3,11 @@
         <!-- =========================
              MEDIA
         ========================== -->
-        <div class="discovery-media-card__media">
+        <div
+            class="discovery-media-card__media"
+            :class="{ 'is-previewable': previewEnabled && hasMediaSource }"
+            @click="handleMediaClick"
+        >
             <!-- VIDEO -->
             <template v-if="isVideoResult">
                 <video
@@ -13,7 +17,6 @@
                     muted
                     playsinline
                     preload="metadata"
-                    @click="toggleVideo"
                     @loadedmetadata="prepareVideoFrame"
                     @loadeddata="prepareVideoFrame"
                     @playing="isPlaying = true"
@@ -42,7 +45,7 @@
                                 : 'discovery.media.playVideo'
                         )
                     "
-                    @click="toggleVideo"
+                    @click.stop="handleMediaClick"
                 >
                     <PauseIcon
                         v-if="isPlaying"
@@ -169,7 +172,15 @@ const props = defineProps({
         type: String,
         default: "",
     },
+
+    previewEnabled: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+
+const emit = defineEmits(["preview"]);
 
 
 /* =====================================================
@@ -324,6 +335,13 @@ const thumbnailSource = computed(() => {
 });
 
 
+const hasMediaSource = computed(() => {
+    return isVideoResult.value
+        ? Boolean(resolvedVideoUrl.value)
+        : Boolean(thumbnailSource.value);
+});
+
+
 const handleVideoError = (event) => {
     const video = event?.target;
 
@@ -436,6 +454,21 @@ const toggleVideo = async () => {
             "Unable to play discovery video:",
             error
         );
+    }
+};
+
+
+const handleMediaClick = () => {
+    if (props.previewEnabled) {
+        if (hasMediaSource.value) {
+            emit("preview", props.result);
+        }
+
+        return;
+    }
+
+    if (isVideoResult.value) {
+        toggleVideo();
     }
 };
 
@@ -636,6 +669,11 @@ const addToCart = async () => {
     overflow: hidden;
 
     background: #e9eef4;
+}
+
+
+.discovery-media-card__media.is-previewable {
+    cursor: zoom-in;
 }
 
 

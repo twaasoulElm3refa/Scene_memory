@@ -260,6 +260,8 @@
                 :result="result"
                 :index="index"
                 :fallback-image="fallbackImage"
+                :preview-enabled="enableMediaPreview && Boolean(mediaPreviewSource(result))"
+                @preview="openMediaPreview"
             />
             </template>
         </div>
@@ -309,11 +311,73 @@
             </button>
         </nav>
     </section>
+
+    <Teleport to="body">
+        <Transition name="media-preview">
+            <div
+                v-if="isPreviewOpen && currentPreviewMedia"
+                class="media-preview"
+                role="dialog"
+                aria-modal="true"
+                :aria-label="currentPreviewMedia.title || $t('discovery.title')"
+                @click.self="closeMediaPreview"
+            >
+                <button
+                    type="button"
+                    class="media-preview__control media-preview__close"
+                    :aria-label="$t('common.close')"
+                    @click="closeMediaPreview"
+                >
+                    &times;
+                </button>
+
+                <button
+                    v-if="mediaItems.length > 1"
+                    type="button"
+                    class="media-preview__control media-preview__previous"
+                    :aria-label="$t('common.previous')"
+                    @click="showPreviousMedia"
+                >
+                    &#8249;
+                </button>
+
+                <button
+                    v-if="mediaItems.length > 1"
+                    type="button"
+                    class="media-preview__control media-preview__next"
+                    :aria-label="$t('common.next')"
+                    @click="showNextMedia"
+                >
+                    &#8250;
+                </button>
+
+                <video
+                    v-if="currentPreviewMedia.result_type === 'video'"
+                    :key="previewMediaKey"
+                    class="media-preview__media"
+                    :src="mediaPreviewSource(currentPreviewMedia)"
+                    controls
+                    autoplay
+                    playsinline
+                    preload="metadata"
+                ></video>
+
+                <img
+                    v-else
+                    :key="previewMediaKey"
+                    class="media-preview__media"
+                    :src="mediaPreviewSource(currentPreviewMedia)"
+                    :alt="currentPreviewMedia.title || ''"
+                    @error="handlePreviewImageError"
+                />
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
 
 <script setup>
-import { reactive } from "vue";
+import { computed, onUnmounted, reactive, ref, watch } from "vue";
 
 import {
     ArrowRightIcon,
@@ -415,6 +479,11 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+
+    enableMediaPreview: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 
@@ -432,6 +501,149 @@ defineEmits([
 */
 
 const failedVideos = reactive(new Set());
+
+
+/*
+|--------------------------------------------------------------------------
+| Media preview
+|--------------------------------------------------------------------------
+*/
+
+const isPreviewOpen = ref(false);
+const previewIndex = ref(0);
+
+const mediaPreviewSource = (result) => {
+    if (!result || !["image", "video"].includes(result.result_type)) {
+        return "";
+    }
+
+    if (result.result_type === "video") {
+        return (
+            result.full_url ||
+            result.video_url ||
+            result.media_url ||
+            result.file_url ||
+            result.url ||
+            ""
+        );
+    }
+
+    return (
+        result.media_url ||
+        result.full_url ||
+        result.image_url ||
+        result.thumbnail_url ||
+        result.file_url ||
+        result.url ||
+        ""
+    );
+};
+
+const mediaItems = computed(() => {
+    return props.results.filter((result) => {
+        return (
+            ["image", "video"].includes(result?.result_type) &&
+            Boolean(mediaPreviewSource(result))
+        );
+    });
+});
+
+const currentPreviewMedia = computed(() => {
+    return mediaItems.value[previewIndex.value] || null;
+});
+
+const previewMediaKey = computed(() => {
+    const media = currentPreviewMedia.value;
+
+    return `${media?.result_type || "media"}-${media?.id || mediaPreviewSource(media)}`;
+});
+
+const openMediaPreview = (result) => {
+    if (!props.enableMediaPreview) {
+        return;
+    }
+
+    const index = mediaItems.value.indexOf(result);
+
+    if (index < 0) {
+        return;
+    }
+
+    previewIndex.value = index;
+    isPreviewOpen.value = true;
+};
+
+const closeMediaPreview = () => {
+    isPreviewOpen.value = false;
+};
+
+const showPreviousMedia = () => {
+    const total = mediaItems.value.length;
+
+    if (!total) {
+        return;
+    }
+
+    previewIndex.value = (previewIndex.value - 1 + total) % total;
+};
+
+const showNextMedia = () => {
+    const total = mediaItems.value.length;
+
+    if (!total) {
+        return;
+    }
+
+    previewIndex.value = (previewIndex.value + 1) % total;
+};
+
+const handleMediaPreviewKeydown = (event) => {
+    if (!isPreviewOpen.value) {
+        return;
+    }
+
+    if (event.key === "Escape") {
+        event.preventDefault();
+        closeMediaPreview();
+        return;
+    }
+
+    if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showNextMedia();
+        return;
+    }
+
+    if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showPreviousMedia();
+    }
+};
+
+const handlePreviewImageError = (event) => {
+    const image = event?.target;
+
+    if (!image) {
+        return;
+    }
+
+    if (props.fallbackImage && image.src !== props.fallbackImage) {
+        image.src = props.fallbackImage;
+    }
+};
+
+watch(isPreviewOpen, (isOpen) => {
+    if (isOpen) {
+        window.addEventListener("keydown", handleMediaPreviewKeydown);
+        return;
+    }
+
+    window.removeEventListener("keydown", handleMediaPreviewKeydown);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("keydown", handleMediaPreviewKeydown);
+});
 
 
 /*
@@ -1354,6 +1566,129 @@ const handleFallbackImageError = (event) => {
 
 
 /* =========================================================
+   MEDIA PREVIEW
+========================================================= */
+
+.media-preview {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9998;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: clamp(56px, 7vw, 88px);
+
+    background: rgba(0, 0, 0, 0.9);
+}
+
+
+.media-preview__media {
+    display: block;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    border-radius: 8px;
+
+    background: #000;
+
+    object-fit: contain;
+
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+
+
+.media-preview__control {
+    position: absolute;
+
+    z-index: 2;
+
+    display: grid;
+
+    width: 44px;
+    height: 44px;
+
+    place-items: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.14);
+
+    color: #fff;
+
+    font-size: 30px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(5px);
+
+    transition:
+        background 180ms ease,
+        transform 180ms ease;
+}
+
+
+.media-preview__control:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+.media-preview__control:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 3px;
+}
+
+
+.media-preview__close {
+    top: 16px;
+    inset-inline-end: 16px;
+}
+
+
+.media-preview__previous,
+.media-preview__next {
+    top: 50%;
+
+    transform: translateY(-50%);
+}
+
+
+.media-preview__previous:hover,
+.media-preview__next:hover {
+    transform: translateY(-50%) scale(1.06);
+}
+
+
+.media-preview__previous {
+    left: 16px;
+}
+
+
+.media-preview__next {
+    right: 16px;
+}
+
+
+.media-preview-enter-active,
+.media-preview-leave-active {
+    transition: opacity 180ms ease;
+}
+
+
+.media-preview-enter-from,
+.media-preview-leave-to {
+    opacity: 0;
+}
+
+
+/* =========================================================
    ANIMATION
 ========================================================= */
 
@@ -1403,6 +1738,26 @@ const handleFallbackImageError = (event) => {
 ========================================================= */
 
 @media (max-width: 699px) {
+
+    .media-preview {
+        padding: 64px 12px;
+    }
+
+
+    .media-preview__control {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .media-preview__previous {
+        left: 8px;
+    }
+
+
+    .media-preview__next {
+        right: 8px;
+    }
 
     .discovery-results-header {
         align-items: stretch;

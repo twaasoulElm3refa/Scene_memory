@@ -95,6 +95,7 @@
                         :fallback-image="fallbackImage"
                         :format-date="formatDate"
                         :lang="lang"
+                        enable-media-preview
                         show-pagination
                         @update:active-type="handleTypeChange"
                         @update:current-page="handlePageChange"
