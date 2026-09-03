@@ -41,6 +41,7 @@ use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\home\PlanController;
+use App\Http\Controllers\api\home\ProfileController;
 use App\Http\Controllers\api\home\SpecialCoverageCityController;
 use App\Http\Controllers\api\home\SpecialCoverageRequestController;
 use App\Http\Controllers\api\home\SubCategoryController;
@@ -86,6 +87,7 @@ Route::prefix('v1')->group(function () {
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
+            Route::get('/timeline',[ProfileController::class , 'activity']);
             Route::get('/wallet', [AuthController::class, 'wallet']);
             Route::get('/downloads', [DownloadController::class, 'downloads']);
             Route::post('/update-profile', [AuthController::class, 'updateProfile']);

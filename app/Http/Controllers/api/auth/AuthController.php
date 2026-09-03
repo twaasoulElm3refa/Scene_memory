@@ -369,4 +369,12 @@ class AuthController extends Controller
     {
         return LicenceType::query()->whereKey(1)->exists() ? 1 : null;
     }
+
+    public function userTimeline(Request $request)
+    {
+        $user = $request->user();
+
+        $timeline = $this->timelineRepository->getUserTimeline($user);
+        return $this->success($timeline, 'Timeline fetched successfully.');
+    }
 }

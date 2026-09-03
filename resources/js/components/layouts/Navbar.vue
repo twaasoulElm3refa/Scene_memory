@@ -8,47 +8,22 @@
 
                 <nav class="desktop-nav d-none d-md-flex align-items-center">
 
-                    <RouterLink
-
-                        v-for="link in links"
-
-                        :key="link.active"
-
-                        :to="localizedPath(link.path)"
-
-                        class="nav-link premium-nav-link"
-
-                        :class="{ active: isActive(link.active) }"
-
-                    >
+                    <RouterLink v-for="link in links" :key="link.active" :to="localizedPath(link.path)"
+                        class="nav-link premium-nav-link" :class="{ active: isActive(link.active) }">
 
                         {{ $t(link.labelKey) }}
 
                     </RouterLink>
 
-                    <RouterLink
-
-                        :to="localizedPath('/plans')"
-
-                        class="nav-link premium-nav-link"
-
-                        :class="{ active: isActive('plans') }"
-
-                    >
+                    <RouterLink :to="localizedPath('/plans')" class="nav-link premium-nav-link"
+                        :class="{ active: isActive('plans') }">
 
                         {{ $t('nav.plans') }}
 
                     </RouterLink>
 
-                    <button
-
-                        type="button"
-
-                        class="nav-link premium-nav-link nav-dropdown-trigger"
-
-                        @click="openSpecialCoverage"
-
-                    >
+                    <button type="button" class="nav-link premium-nav-link nav-dropdown-trigger"
+                        @click="openSpecialCoverage">
 
                         {{ $t('nav.specialCoverage') }}
 
@@ -58,13 +33,8 @@
 
                     <div class="navbar-dropdown-wrap">
 
-                        <button
-
-                            class="nav-link premium-nav-link nav-dropdown-trigger d-flex align-items-center gap-1"
-
-                            @click="eventsOpen = !eventsOpen"
-
-                        >
+                        <button class="nav-link premium-nav-link nav-dropdown-trigger d-flex align-items-center gap-1"
+                            @click="eventsOpen = !eventsOpen">
 
                             {{ $t('nav.events') }}
 
@@ -74,13 +44,7 @@
 
                         <transition name="fade-slide">
 
-                            <div
-
-                                v-if="eventsOpen"
-
-                                class="dropdown-menu show navbar-dropdown"
-
-                            >
+                            <div v-if="eventsOpen" class="dropdown-menu show navbar-dropdown">
 
                                 <RouterLink class="dropdown-item" :to="localizedPath('/all_events')">
 
@@ -88,29 +52,13 @@
 
                                 </RouterLink>
 
-                                <RouterLink
-
-                                    v-if="isLoggedIn"
-
-                                    class="dropdown-item"
-
-                                    :to="localizedPath('/add_event')"
-
-                                >
+                                <RouterLink v-if="isLoggedIn" class="dropdown-item" :to="localizedPath('/add_event')">
 
                                     {{ $t('nav.addEvent') }}
 
                                 </RouterLink>
 
-                                <RouterLink
-
-                                    v-if="isLoggedIn"
-
-                                    class="dropdown-item"
-
-                                    :to="localizedPath('/historical')"
-
-                                >
+                                <RouterLink v-if="isLoggedIn" class="dropdown-item" :to="localizedPath('/historical')">
 
                                     {{ $t('nav.historical') }}
 
@@ -126,13 +74,8 @@
 
                     <div class="navbar-dropdown-wrap">
 
-                        <button
-
-                            class="nav-link premium-nav-link nav-dropdown-trigger d-flex align-items-center gap-1"
-
-                            @click="moreOpen = !moreOpen"
-
-                        >
+                        <button class="nav-link premium-nav-link nav-dropdown-trigger d-flex align-items-center gap-1"
+                            @click="moreOpen = !moreOpen">
 
                             {{ $t('nav.more') }}
 
@@ -142,13 +85,7 @@
 
                         <transition name="fade-slide">
 
-                            <div
-
-                                v-if="moreOpen"
-
-                                class="dropdown-menu show navbar-dropdown"
-
-                            >
+                            <div v-if="moreOpen" class="dropdown-menu show navbar-dropdown">
 
                                 <RouterLink class="dropdown-item" :to="localizedPath('/WishList')">
 
@@ -188,43 +125,25 @@
 
                     <div class="navbar-dropdown-wrap">
 
-                        <button
-
-                            class="control-btn language-btn d-flex align-items-center gap-1"
-
-                            @click="languageDropdownOpen = !languageDropdownOpen"
-
-                        >
+                        <button class="control-btn language-btn d-flex align-items-center gap-1"
+                            @click="languageDropdownOpen = !languageDropdownOpen">
 
                             <i class="bi bi-globe2"></i>
 
                             <span>{{ currentLanguage }}</span>
 
-                            <i class="bi chevron" :class="languageDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                            <i class="bi chevron"
+                                :class="languageDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 
                         </button>
 
                         <transition name="fade-slide">
 
-                            <div
+                            <div v-if="languageDropdownOpen"
+                                class="dropdown-menu show navbar-dropdown language-dropdown">
 
-                                v-if="languageDropdownOpen"
-
-                                class="dropdown-menu show navbar-dropdown language-dropdown"
-
-                            >
-
-                                <button
-
-                                    class="dropdown-item"
-
-                                    v-for="lang in languages"
-
-                                    :key="lang"
-
-                                    @click="selectLanguage(lang)"
-
-                                >
+                                <button class="dropdown-item" v-for="lang in languages" :key="lang"
+                                    @click="selectLanguage(lang)">
 
                                     {{ $t(`languages.${lang}`) }}
 
@@ -242,13 +161,8 @@
 
                         <template v-if="isLoggedIn">
 
-                            <button
-
-                                class="control-btn user-menu-button d-flex align-items-center gap-2"
-
-                                @click="toggleDropdown"
-
-                            >
+                            <button class="control-btn user-menu-button d-flex align-items-center gap-2"
+                                @click="toggleDropdown">
 
                                 <span class="user-initial">{{ userInitial }}</span>
 
@@ -260,18 +174,17 @@
 
                             <transition name="fade-slide">
 
-                                <div
-
-                                    v-if="dropdownOpen"
-
-                                    class="dropdown-menu show navbar-dropdown user-dropdown"
-
-                                >
+                                <div v-if="dropdownOpen" class="dropdown-menu show navbar-dropdown user-dropdown">
 
                                     <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
 
                                         {{ $t("nav.profile") }}
 
+                                    </RouterLink>
+
+                                    <RouterLink class="dropdown-item" :to="localizedPath('/profile/timeline')">
+                                        <i class="bi bi-clock-history"></i>
+                                        {{ $t("nav.timeline") }}
                                     </RouterLink>
 
                                     <RouterLink class="dropdown-item" :to="localizedPath('/downloads')">
@@ -280,15 +193,8 @@
 
                                     </RouterLink>
 
-                                    <RouterLink
-
-                                        v-if="eventCount > 0"
-
-                                        class="dropdown-item"
-
-                                        :to="localizedPath('/creator/events')"
-
-                                    >
+                                    <RouterLink v-if="eventCount > 0" class="dropdown-item"
+                                        :to="localizedPath('/creator/events')">
 
                                         {{ $t("nav.dashboard") }}
 
@@ -310,13 +216,7 @@
 
                         <template v-else>
 
-                            <RouterLink
-
-                                :to="localizedPath('/auth')"
-
-                                class="control-btn login-btn text-decoration-none"
-
-                            >
+                            <RouterLink :to="localizedPath('/auth')" class="control-btn login-btn text-decoration-none">
 
                                 {{ $t("nav.login") }}
 
@@ -338,7 +238,8 @@
 
                     </div>
 
-                    <RouterLink :to="localizedPath('/home')" class="brand-mark text-decoration-none" :aria-label="$t('nav.scemoryHome')">
+                    <RouterLink :to="localizedPath('/home')" class="brand-mark text-decoration-none"
+                        :aria-label="$t('nav.scemoryHome')">
 
                         <span class="brand-logo">
 
@@ -350,7 +251,8 @@
 
                     </RouterLink>
 
-                    <button class="mobile-toggle d-md-none" type="button" @click="mobileMenu = !mobileMenu" :aria-label="$t('nav.toggleMenu')">
+                    <button class="mobile-toggle d-md-none" type="button" @click="mobileMenu = !mobileMenu"
+                        :aria-label="$t('nav.toggleMenu')">
 
                         <i class="bi" :class="mobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
 
@@ -366,59 +268,28 @@
 
         <transition name="fade-slide">
 
-            <div
-
-                v-if="mobileMenu"
-
-                class="container d-md-none navbar-mobile-menu"
-
-            >
+            <div v-if="mobileMenu" class="container d-md-none navbar-mobile-menu">
 
                 <div class="mobile-menu-panel">
 
                     <div class="mobile-section">
 
-                        <RouterLink
-
-                            v-for="link in links"
-
-                            :key="link.active"
-
-                            :to="localizedPath(link.path)"
-
-                            class="mobile-nav-link"
-
-                            :class="{ active: isActive(link.active) }"
-
-                        >
+                        <RouterLink v-for="link in links" :key="link.active" :to="localizedPath(link.path)"
+                            class="mobile-nav-link" :class="{ active: isActive(link.active) }">
 
                             {{ $t(link.labelKey) }}
 
                         </RouterLink>
 
-                        <RouterLink
-
-                            :to="localizedPath('/plans')"
-
-                            class="mobile-nav-link"
-
-                            :class="{ active: isActive('plans') }"
-
-                        >
+                        <RouterLink :to="localizedPath('/plans')" class="mobile-nav-link"
+                            :class="{ active: isActive('plans') }">
 
                             {{ $t('nav.plans') }}
 
                         </RouterLink>
 
-                        <button
-
-                            type="button"
-
-                            class="mobile-nav-link mobile-special-coverage-button"
-
-                            @click="openSpecialCoverage"
-
-                        >
+                        <button type="button" class="mobile-nav-link mobile-special-coverage-button"
+                            @click="openSpecialCoverage">
 
                             {{ $t('nav.specialCoverage') }}
 
@@ -436,29 +307,13 @@
 
                         </RouterLink>
 
-                        <RouterLink
-
-                            v-if="isLoggedIn"
-
-                            class="mobile-nav-link"
-
-                            :to="localizedPath('/add_event')"
-
-                        >
+                        <RouterLink v-if="isLoggedIn" class="mobile-nav-link" :to="localizedPath('/add_event')">
 
                             {{ $t('nav.addEvent') }}
 
                         </RouterLink>
 
-                        <RouterLink
-
-                            v-if="isLoggedIn"
-
-                            class="mobile-nav-link"
-
-                            :to="localizedPath('/historical')"
-
-                        >
+                        <RouterLink v-if="isLoggedIn" class="mobile-nav-link" :to="localizedPath('/historical')">
 
                             {{ $t('nav.historical') }}
 
@@ -803,7 +658,6 @@ const goToCart = () => {
 </script>
 
 <style scoped>
-
 .fade-slide-enter-active,
 
 .fade-slide-leave-active {
@@ -1519,7 +1373,7 @@ const goToCart = () => {
 
 }
 
-.mobile-section + .mobile-section {
+.mobile-section+.mobile-section {
 
     border-top: 1px solid #dce8f5;
 
@@ -1695,7 +1549,7 @@ const goToCart = () => {
 
     }
 
-    .navbar-actions > .navbar-dropdown-wrap:not(.user-control) {
+    .navbar-actions>.navbar-dropdown-wrap:not(.user-control) {
 
         order: 2;
 
@@ -1966,5 +1820,4 @@ const goToCart = () => {
     }
 
 }
-
 </style>

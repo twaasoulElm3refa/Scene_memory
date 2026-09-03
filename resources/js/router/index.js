@@ -91,7 +91,7 @@ const CreatorWithdrawalShow = () => import("../views/creator/CreatorWithdrawalSh
 const CreatorWithdrawalRequest = () => import("../views/creator/CreatorWithdrawalRequest.vue");
 const CreatorWithdrawalUpdate = () => import("../views/creator/CreatorWithdrawalUpdate.vue");
 const AdminLogin = () => import("../views/admin/auth/login.vue");
-
+const profileTimeline = () => import("../views/home/profileTimeline.vue");
 const getCurrentLang = () => localStorage.getItem("lang") || "en";
 
 const all_tags = () => import("../views/admin/tags/all_tags.vue");
@@ -294,6 +294,11 @@ const routes = [
     {
         path: "/:lang/profile",
         component: profile,
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/:lang/profile/timeline",
+        component: profileTimeline,
         meta: { hideNavbar: false, hideFooter: false },
     },
     {

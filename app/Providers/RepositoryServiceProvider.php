@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\Contracts\Auth\AdminAuthRepositoryInterface;
 use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
+use App\Repositories\Contracts\Auth\ProfileRepositoryInterface;
 use App\Repositories\Contracts\Benefits\BenefitRepositoryInterface;
 use App\Repositories\Contracts\Carts\CartRepositoryInterface;
 use App\Repositories\Contracts\Categories\CategoryRepositoryInterface;
@@ -30,6 +31,7 @@ use App\Repositories\Contracts\Wallets\WalletRepositoryInterface;
 use App\Repositories\Contracts\Wishlists\WishlistRepositoryInterface;
 use App\Repositories\Eloquent\Auth\AdminAuthRepository;
 use App\Repositories\Eloquent\Auth\AuthRepository;
+use App\Repositories\Eloquent\Auth\ProfileRepository;
 use App\Repositories\Eloquent\Benefits\BenefitRepository;
 use App\Repositories\Eloquent\Carts\CartRepository;
 use App\Repositories\Eloquent\Categories\CategoryRepository;
@@ -105,6 +107,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AdminAuthRepositoryInterface::class, AdminAuthRepository::class);
 
         $this->app->bind(TagRepositoryInterface::class, TagsRespository::class);
+
+        $this->app->bind(ProfileRepositoryInterface::class , ProfileRepository::class);
     }
 
     public function boot(): void
