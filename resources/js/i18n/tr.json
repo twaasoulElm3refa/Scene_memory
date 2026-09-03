@@ -729,7 +729,24 @@
                 "descriptionPlaceholder": "Bize etkinliği ve neden haberleştirilmesi gerektiğini anlatın",
                 "cancel": "İptal",
                 "send": "Gönder",
-                "close": "Kapat"
+                "close": "Kapat",
+                "country": "Ülke",
+                "city": "Şehir",
+                "searchCity": "Şehir ara",
+                "addNewCity": "Yeni şehir ekle",
+                "createCity": "Şehir oluştur",
+                "startDate": "Başlangıç tarihi",
+                "eventType": "Etkinlik türü",
+                "personalEvent": "Kişisel etkinlik",
+                "publicEvent": "Halka açık etkinlik",
+                "selectCountry": "Ülke seçin",
+                "selectCity": "Şehir seçin",
+                "noCitiesFound": "Şehir bulunamadı",
+                "countryRequired": "Lütfen bir ülke seçin.",
+                "cityRequired": "Lütfen bir şehir seçin.",
+                "startDateRequired": "Lütfen bir başlangıç tarihi seçin.",
+                "eventTypeRequired": "Lütfen bir etkinlik türü seçin.",
+                "cityCreateFailed": "Şehir oluşturulamadı. Lütfen tekrar deneyin."
             }
         }
     },

@@ -46,4 +46,22 @@ class CityRepository implements CityRepositoryInterface
     {
         return Cities::query()->where('name', 'LIKE', "%{$cityName}%")->first();
     }
+
+    public function findByNormalizedName(string $name, bool $lockForUpdate = false)
+    {
+        $normalizedName = mb_strtolower($name);
+        $query = Cities::query()
+            ->where(function ($query) use ($normalizedName) {
+                $query->whereRaw('LOWER(TRIM(name)) = ?', [$normalizedName])
+                    ->orWhereHas('translations', function ($translationQuery) use ($normalizedName) {
+                        $translationQuery->whereRaw('LOWER(TRIM(name)) = ?', [$normalizedName]);
+                    });
+            });
+
+        if ($lockForUpdate) {
+            $query->lockForUpdate();
+        }
+
+        return $query->first();
+    }
 }

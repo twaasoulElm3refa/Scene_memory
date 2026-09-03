@@ -94,6 +94,169 @@
                             </p>
                         </div>
 
+                        <div class="special-coverage-modal__field-grid">
+                            <div class="special-coverage-modal__field">
+                                <label for="special-coverage-country">
+                                    {{ $t("homeAudit.specialCoverage.modal.country") }}
+                                    <span class="special-coverage-modal__required" aria-hidden="true">*</span>
+                                </label>
+                                <select
+                                    id="special-coverage-country"
+                                    v-model="countryId"
+                                    required
+                                    :disabled="isSubmitting || isLoadingCountries"
+                                    :aria-invalid="Boolean(errors.country_id)"
+                                    aria-describedby="special-coverage-country-error"
+                                    @change="handleCountryChange"
+                                >
+                                    <option value="" disabled>
+                                        {{ $t("homeAudit.specialCoverage.modal.selectCountry") }}
+                                    </option>
+                                    <option v-for="country in countries" :key="country.id" :value="String(country.id)">
+                                        {{ locationName(country) }}
+                                    </option>
+                                </select>
+                                <p
+                                    v-if="errors.country_id"
+                                    id="special-coverage-country-error"
+                                    class="special-coverage-modal__error"
+                                >
+                                    {{ errors.country_id }}
+                                </p>
+                            </div>
+
+                            <div ref="cityDropdownRef" class="special-coverage-modal__field special-coverage-city-select">
+                                <label for="special-coverage-city-search">
+                                    {{ $t("homeAudit.specialCoverage.modal.city") }}
+                                    <span class="special-coverage-modal__required" aria-hidden="true">*</span>
+                                </label>
+                                <input
+                                    id="special-coverage-city-search"
+                                    v-model="citySearch"
+                                    type="search"
+                                    role="combobox"
+                                    autocomplete="off"
+                                    maxlength="255"
+                                    :disabled="!countryId || isLoadingCities || isCreatingCity || isSubmitting"
+                                    :aria-expanded="isCityDropdownOpen"
+                                    :aria-invalid="Boolean(errors.city_id)"
+                                    aria-controls="special-coverage-city-options"
+                                    aria-describedby="special-coverage-city-error"
+                                    :placeholder="countryId
+                                        ? $t('homeAudit.specialCoverage.modal.searchCity')
+                                        : $t('homeAudit.specialCoverage.modal.selectCountry')"
+                                    @focus="handleCityFocus"
+                                    @input="handleCitySearchInput"
+                                />
+
+                                <div
+                                    v-if="isCityDropdownOpen && countryId"
+                                    id="special-coverage-city-options"
+                                    class="special-coverage-city-select__menu"
+                                    role="listbox"
+                                >
+                                    <button
+                                        v-for="city in filteredCities"
+                                        :key="city.id"
+                                        type="button"
+                                        class="special-coverage-city-select__option"
+                                        role="option"
+                                        :aria-selected="String(city.id) === cityId"
+                                        @click="selectCity(city)"
+                                    >
+                                        {{ locationName(city) }}
+                                    </button>
+
+                                    <p
+                                        v-if="!isLoadingCities && filteredCities.length === 0"
+                                        class="special-coverage-city-select__empty"
+                                    >
+                                        {{ $t("homeAudit.specialCoverage.modal.noCitiesFound") }}
+                                    </p>
+
+                                    <button
+                                        v-if="canAddCity"
+                                        type="button"
+                                        class="special-coverage-city-select__option special-coverage-city-select__add"
+                                        :disabled="isCreatingCity"
+                                        @click="createCity"
+                                    >
+                                        <span>
+                                            {{ isCreatingCity
+                                                ? $t("homeAudit.specialCoverage.modal.createCity")
+                                                : $t("homeAudit.specialCoverage.modal.addNewCity") }}
+                                        </span>
+                                        <strong>{{ normalizedCitySearch }}</strong>
+                                    </button>
+                                </div>
+
+                                <p
+                                    v-if="errors.city_id"
+                                    id="special-coverage-city-error"
+                                    class="special-coverage-modal__error"
+                                >
+                                    {{ errors.city_id }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="special-coverage-modal__field-grid">
+                            <div class="special-coverage-modal__field">
+                                <label for="special-coverage-start-date">
+                                    {{ $t("homeAudit.specialCoverage.modal.startDate") }}
+                                    <span class="special-coverage-modal__required" aria-hidden="true">*</span>
+                                </label>
+                                <input
+                                    id="special-coverage-start-date"
+                                    v-model="startDate"
+                                    type="date"
+                                    required
+                                    :disabled="isSubmitting"
+                                    :aria-invalid="Boolean(errors.start_date)"
+                                    aria-describedby="special-coverage-start-date-error"
+                                />
+                                <p
+                                    v-if="errors.start_date"
+                                    id="special-coverage-start-date-error"
+                                    class="special-coverage-modal__error"
+                                >
+                                    {{ errors.start_date }}
+                                </p>
+                            </div>
+
+                            <div class="special-coverage-modal__field">
+                                <label for="special-coverage-event-type">
+                                    {{ $t("homeAudit.specialCoverage.modal.eventType") }}
+                                    <span class="special-coverage-modal__required" aria-hidden="true">*</span>
+                                </label>
+                                <select
+                                    id="special-coverage-event-type"
+                                    v-model="eventType"
+                                    required
+                                    :disabled="isSubmitting"
+                                    :aria-invalid="Boolean(errors.event_type)"
+                                    aria-describedby="special-coverage-event-type-error"
+                                >
+                                    <option value="" disabled>
+                                        {{ $t("homeAudit.specialCoverage.modal.eventType") }}
+                                    </option>
+                                    <option value="personal">
+                                        {{ $t("homeAudit.specialCoverage.modal.personalEvent") }}
+                                    </option>
+                                    <option value="public">
+                                        {{ $t("homeAudit.specialCoverage.modal.publicEvent") }}
+                                    </option>
+                                </select>
+                                <p
+                                    v-if="errors.event_type"
+                                    id="special-coverage-event-type-error"
+                                    class="special-coverage-modal__error"
+                                >
+                                    {{ errors.event_type }}
+                                </p>
+                            </div>
+                        </div>
+
                         <div class="special-coverage-modal__field">
                             <label for="special-coverage-event-description">
                                 {{ $t("homeAudit.specialCoverage.modal.description") }}
@@ -148,32 +311,93 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { showSafeToast } from "../../../services/ApiClient";
+import { LocationService } from "../../../services/LocationService/LocationService";
 import { SpecialCoverageRequestService } from "../../../services/SpecialCoverageRequestService";
+import {
+    cityNameExists,
+    filterCityOptions,
+    getLocationName,
+    normalizeCitySearch,
+} from "./specialCoverageCityOptions";
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const sectionTitleId = "special-coverage-title";
 const modalTitleId = "special-coverage-modal-title";
 const isModalOpen = ref(false);
 const eventName = ref("");
 const eventDescription = ref("");
+const countries = ref([]);
+const cities = ref([]);
+const countryId = ref("");
+const cityId = ref("");
+const citySearch = ref("");
+const startDate = ref("");
+const eventType = ref("");
+const isLoadingCountries = ref(false);
+const isLoadingCities = ref(false);
+const isCreatingCity = ref(false);
+const isCityDropdownOpen = ref(false);
 const isSubmitting = ref(false);
 const errors = ref({});
 const ctaButtonRef = ref(null);
 const eventNameInputRef = ref(null);
+const cityDropdownRef = ref(null);
 
 let previousBodyOverflow = "";
 
 const isAuthenticated = () => Boolean(localStorage.getItem("auth_token"));
 
+const locationName = getLocationName;
+
+const normalizedCitySearch = computed(() => normalizeCitySearch(citySearch.value));
+
+const filteredCities = computed(() => filterCityOptions(cities.value, citySearch.value, locale.value));
+
+const hasExactCity = computed(() => cityNameExists(cities.value, citySearch.value, locale.value));
+
+const canAddCity = computed(() => normalizedCitySearch.value.length > 0 && !hasExactCity.value);
+
+const loadCountries = async () => {
+    isLoadingCountries.value = true;
+
+    try {
+        countries.value = await LocationService.getAllCountries();
+    } finally {
+        isLoadingCountries.value = false;
+    }
+};
+
+const loadCities = async () => {
+    const requestedCountryId = countryId.value;
+    cities.value = [];
+
+    if (!requestedCountryId) return;
+
+    isLoadingCities.value = true;
+
+    try {
+        const loadedCities = await LocationService.getCitiesByCountry(requestedCountryId);
+
+        if (countryId.value === requestedCountryId) {
+            cities.value = loadedCities;
+        }
+    } finally {
+        isLoadingCities.value = false;
+    }
+};
+
 const openModal = async () => {
     isModalOpen.value = true;
+    if (countries.value.length === 0) {
+        await loadCountries();
+    }
     await nextTick();
     eventNameInputRef.value?.focus();
 };
@@ -189,7 +413,65 @@ const closeModal = async () => {
 const resetForm = () => {
     eventName.value = "";
     eventDescription.value = "";
+    countryId.value = "";
+    cityId.value = "";
+    citySearch.value = "";
+    startDate.value = "";
+    eventType.value = "";
+    cities.value = [];
+    isCityDropdownOpen.value = false;
     errors.value = {};
+};
+
+const handleCountryChange = async () => {
+    cityId.value = "";
+    citySearch.value = "";
+    errors.value.city_id = "";
+    isCityDropdownOpen.value = false;
+    await loadCities();
+};
+
+const handleCityFocus = (event) => {
+    isCityDropdownOpen.value = true;
+    event.target?.select();
+};
+
+const handleCitySearchInput = () => {
+    cityId.value = "";
+    errors.value.city_id = "";
+    isCityDropdownOpen.value = true;
+};
+
+const selectCity = (city) => {
+    cityId.value = String(city.id);
+    citySearch.value = locationName(city);
+    errors.value.city_id = "";
+    isCityDropdownOpen.value = false;
+};
+
+const createCity = async () => {
+    const name = normalizedCitySearch.value;
+
+    if (!countryId.value || !name || isCreatingCity.value) return;
+
+    try {
+        isCreatingCity.value = true;
+        const response = await SpecialCoverageRequestService.createCity({
+            country_id: Number(countryId.value),
+            name,
+        });
+        const city = response.data.data;
+
+        if (!cities.value.some((item) => String(item.id) === String(city.id))) {
+            cities.value = [...cities.value, city];
+        }
+
+        selectCity(city);
+    } catch {
+        errors.value.city_id = t("homeAudit.specialCoverage.modal.cityCreateFailed");
+    } finally {
+        isCreatingCity.value = false;
+    }
 };
 
 const firstError = (fieldErrors) => {
@@ -206,10 +488,14 @@ const submitRequest = async () => {
     const name = eventName.value.trim();
     const description = eventDescription.value.trim();
 
-    if (!name || !description) {
+    if (!name || !description || !countryId.value || !cityId.value || !startDate.value || !eventType.value) {
         errors.value = {
             event_name: !name ? t("homeAudit.specialCoverage.modal.eventNameRequired") : "",
             event_description: !description ? t("homeAudit.specialCoverage.modal.descriptionRequired") : "",
+            country_id: !countryId.value ? t("homeAudit.specialCoverage.modal.countryRequired") : "",
+            city_id: !cityId.value ? t("homeAudit.specialCoverage.modal.cityRequired") : "",
+            start_date: !startDate.value ? t("homeAudit.specialCoverage.modal.startDateRequired") : "",
+            event_type: !eventType.value ? t("homeAudit.specialCoverage.modal.eventTypeRequired") : "",
         };
 
         return;
@@ -221,6 +507,10 @@ const submitRequest = async () => {
         await SpecialCoverageRequestService.create({
             event_name: name,
             event_description: description,
+            country_id: Number(countryId.value),
+            city_id: Number(cityId.value),
+            start_date: startDate.value,
+            event_type: eventType.value,
         });
 
         resetForm();
@@ -239,6 +529,10 @@ const submitRequest = async () => {
         errors.value = {
             event_name: firstError(validationErrors.event_name),
             event_description: firstError(validationErrors.event_description),
+            country_id: firstError(validationErrors.country_id),
+            city_id: firstError(validationErrors.city_id),
+            start_date: firstError(validationErrors.start_date),
+            event_type: firstError(validationErrors.event_type),
         };
     } finally {
         isSubmitting.value = false;
@@ -283,7 +577,18 @@ const openFromRoute = async () => {
 
 const handleEscape = (event) => {
     if (event.key === "Escape" && isModalOpen.value) {
+        if (isCityDropdownOpen.value) {
+            isCityDropdownOpen.value = false;
+            return;
+        }
+
         void closeModal();
+    }
+};
+
+const handleDocumentClick = (event) => {
+    if (cityDropdownRef.value && !cityDropdownRef.value.contains(event.target)) {
+        isCityDropdownOpen.value = false;
     }
 };
 
@@ -306,11 +611,13 @@ watch(
 
 onMounted(() => {
     document.addEventListener("keydown", handleEscape);
+    document.addEventListener("click", handleDocumentClick);
     void openFromRoute();
 });
 
 onUnmounted(() => {
     document.removeEventListener("keydown", handleEscape);
+    document.removeEventListener("click", handleDocumentClick);
     document.body.style.overflow = previousBodyOverflow;
 });
 </script>
@@ -447,6 +754,7 @@ onUnmounted(() => {
 .special-coverage__cta:focus-visible,
 .special-coverage-modal button:focus-visible,
 .special-coverage-modal input:focus-visible,
+.special-coverage-modal select:focus-visible,
 .special-coverage-modal textarea:focus-visible {
     outline: 3px solid rgba(48, 168, 255, 0.32);
     outline-offset: 3px;
@@ -536,6 +844,12 @@ onUnmounted(() => {
     gap: 9px;
 }
 
+.special-coverage-modal__field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
 .special-coverage-modal__field label {
     color: var(--scemory-heading);
     font-size: 0.91rem;
@@ -547,6 +861,7 @@ onUnmounted(() => {
 }
 
 .special-coverage-modal__field input,
+.special-coverage-modal__field select,
 .special-coverage-modal__field textarea {
     width: 100%;
     box-sizing: border-box;
@@ -561,7 +876,9 @@ onUnmounted(() => {
 }
 
 .special-coverage-modal__field input:disabled,
+.special-coverage-modal__field select:disabled,
 .special-coverage-modal__field textarea:disabled,
+.special-coverage-city-select__option:disabled,
 .special-coverage-modal__actions button:disabled {
     cursor: not-allowed;
     opacity: 0.65;
@@ -586,10 +903,71 @@ onUnmounted(() => {
 }
 
 .special-coverage-modal__field input:focus,
+.special-coverage-modal__field select:focus,
 .special-coverage-modal__field textarea:focus {
     border-color: var(--scemory-blue);
     background: var(--scemory-white);
     box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.09);
+}
+
+.special-coverage-city-select {
+    position: relative;
+}
+
+.special-coverage-city-select__menu {
+    position: absolute;
+    z-index: 10;
+    inset-block-start: calc(100% - 1px);
+    inset-inline: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--scemory-border);
+    border-radius: 14px;
+    padding: 6px;
+    background: var(--scemory-white);
+    box-shadow: 0 16px 35px rgba(2, 8, 23, 0.15);
+}
+
+.special-coverage-city-select__option {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 11px;
+    color: var(--scemory-body);
+    background: transparent;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.special-coverage-city-select__option:hover,
+.special-coverage-city-select__option[aria-selected="true"] {
+    color: var(--scemory-primary);
+    background: var(--scemory-hover);
+}
+
+.special-coverage-city-select__add {
+    border-top: 1px solid var(--scemory-border-soft);
+    border-radius: 0 0 10px 10px;
+    color: var(--scemory-primary);
+}
+
+.special-coverage-city-select__add strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.special-coverage-city-select__empty {
+    margin: 0;
+    padding: 11px;
+    color: var(--scemory-muted);
+    font-size: 0.85rem;
+    text-align: center;
 }
 
 .special-coverage-modal__actions {
@@ -713,6 +1091,10 @@ onUnmounted(() => {
     .special-coverage-modal__form {
         gap: 18px;
         padding: 22px 20px 24px;
+    }
+
+    .special-coverage-modal__field-grid {
+        grid-template-columns: 1fr;
     }
 
     .special-coverage-modal__actions {

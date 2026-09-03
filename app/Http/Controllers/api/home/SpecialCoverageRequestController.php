@@ -4,29 +4,30 @@ namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreSpecialCoverageRequest;
 use App\Models\SpecialCoverageRequest;
-use Illuminate\Http\Request;
 
 class SpecialCoverageRequestController extends Controller
 {
     use ApiResponse;
 
-    public function store(Request $request)
+    public function store(StoreSpecialCoverageRequest $request)
     {
-        $validated = $request->validate([
-            'event_name' => ['required', 'string', 'max:255'],
-            'event_description' => ['required', 'string', 'max:5000'],
-        ]);
+        $validated = $request->validated();
 
         $specialCoverageRequest = SpecialCoverageRequest::query()->create([
             'user_id' => $request->user()->id,
-            'event_name' => trim($validated['event_name']),
-            'event_description' => trim($validated['event_description']),
+            'event_name' => $validated['event_name'],
+            'event_description' => $validated['event_description'],
+            'country_id' => $validated['country_id'],
+            'city_id' => $validated['city_id'],
+            'start_date' => $validated['start_date'],
+            'event_type' => $validated['event_type'],
             'status' => SpecialCoverageRequest::STATUS_PENDING,
         ]);
 
         return $this->success(
-            $specialCoverageRequest->load('user'),
+            $specialCoverageRequest->load(['user', 'country.translation', 'city.translation']),
             'Your special coverage request has been submitted successfully.'
         );
     }

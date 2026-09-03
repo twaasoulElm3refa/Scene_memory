@@ -732,7 +732,24 @@
                 "descriptionPlaceholder": "イベントの内容と取材に値する理由をお聞かせください",
                 "cancel": "キャンセル",
                 "send": "送信",
-                "close": "閉じる"
+                "close": "閉じる",
+                "country": "国",
+                "city": "都市",
+                "searchCity": "都市を検索",
+                "addNewCity": "新しい都市を追加",
+                "createCity": "都市を作成",
+                "startDate": "開始日",
+                "eventType": "イベントの種類",
+                "personalEvent": "個人イベント",
+                "publicEvent": "公開イベント",
+                "selectCountry": "国を選択",
+                "selectCity": "都市を選択",
+                "noCitiesFound": "都市が見つかりません",
+                "countryRequired": "国を選択してください。",
+                "cityRequired": "都市を選択してください。",
+                "startDateRequired": "開始日を選択してください。",
+                "eventTypeRequired": "イベントの種類を選択してください。",
+                "cityCreateFailed": "都市を作成できませんでした。もう一度お試しください。"
             }
         }
     },

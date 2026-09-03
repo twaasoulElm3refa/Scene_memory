@@ -730,7 +730,24 @@
                 "descriptionPlaceholder": "ہمیں ایونٹ اور اس کی کوریج کی اہمیت کے بارے میں بتائیں",
                 "cancel": "منسوخ کریں",
                 "send": "بھیجیں",
-                "close": "بند کریں"
+                "close": "بند کریں",
+                "country": "ملک",
+                "city": "شہر",
+                "searchCity": "شہر تلاش کریں",
+                "addNewCity": "نیا شہر شامل کریں",
+                "createCity": "شہر بنائیں",
+                "startDate": "آغاز کی تاریخ",
+                "eventType": "ایونٹ کی قسم",
+                "personalEvent": "ذاتی ایونٹ",
+                "publicEvent": "عوامی ایونٹ",
+                "selectCountry": "ملک منتخب کریں",
+                "selectCity": "شہر منتخب کریں",
+                "noCitiesFound": "کوئی شہر نہیں ملا",
+                "countryRequired": "براہ کرم ملک منتخب کریں۔",
+                "cityRequired": "براہ کرم شہر منتخب کریں۔",
+                "startDateRequired": "براہ کرم آغاز کی تاریخ منتخب کریں۔",
+                "eventTypeRequired": "براہ کرم ایونٹ کی قسم منتخب کریں۔",
+                "cityCreateFailed": "شہر نہیں بنایا جا سکا۔ براہ کرم دوبارہ کوشش کریں۔"
             }
         }
     },

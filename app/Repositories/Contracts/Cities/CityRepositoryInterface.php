@@ -12,4 +12,5 @@ interface CityRepositoryInterface
     public function count(): int;
     public function byCountryId(int $countryId);
     public function firstByNameLike(string $cityName);
+    public function findByNormalizedName(string $name, bool $lockForUpdate = false);
 }

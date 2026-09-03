@@ -36,7 +36,7 @@ class SpecialCoverageRequestService
                 'reviewed_at' => now(),
             ])->save();
 
-            return $request->fresh(['user', 'reviewer']);
+            return $request->fresh(['user', 'reviewer', 'country.translation', 'city.translation']);
         });
 
         $this->queueMail($request, new SpecialCoverageApprovedMail($request));
@@ -65,7 +65,7 @@ class SpecialCoverageRequestService
                 'reviewed_at' => now(),
             ])->save();
 
-            return $request->fresh(['user', 'reviewer']);
+            return $request->fresh(['user', 'reviewer', 'country.translation', 'city.translation']);
         });
 
         $this->queueMail($request, new SpecialCoverageRejectedMail($request));

@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Cities;
+use App\Services\LocationCacheService;
+use App\Support\EventTranslationLocales;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -18,13 +20,16 @@ class TranslateCityJob implements ShouldQueue
 
     protected $text;
 
-    public function __construct($cityId, $text)
+    protected $sourceLocale;
+
+    public function __construct($cityId, $text, $sourceLocale = 'ar')
     {
         $this->cityId = $cityId;
         $this->text = $text;
+        $this->sourceLocale = $sourceLocale;
     }
 
-    public function handle(): void
+    public function handle(LocationCacheService $cache): void
     {
 
         $city = Cities::find($this->cityId);
@@ -33,16 +38,14 @@ class TranslateCityJob implements ShouldQueue
             return;
         }
 
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi', 'tr'];
-
-        foreach ($locales as $locale) {
+        foreach (EventTranslationLocales::ALL as $locale) {
 
             try {
-                if ($locale === 'ar') {
+                if ($locale === $this->sourceLocale) {
                     $translated = $this->text;
                 } else {
                     $tr = new GoogleTranslate($locale);
-                    $tr->setSource('ar');
+                    $tr->setSource($this->sourceLocale);
                     $translated = $tr->translate($this->text);
                 }
 
@@ -57,5 +60,7 @@ class TranslateCityJob implements ShouldQueue
                 \Log::error('City Translate Error: '.$e->getMessage());
             }
         }
+
+        $cache->invalidate();
     }
 }

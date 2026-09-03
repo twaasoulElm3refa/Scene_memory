@@ -732,7 +732,24 @@
                 "descriptionPlaceholder": "Présentez-nous l’événement et dites-nous pourquoi il mérite d’être couvert",
                 "cancel": "Annuler",
                 "send": "Envoyer",
-                "close": "Fermer"
+                "close": "Fermer",
+                "country": "Pays",
+                "city": "Ville",
+                "searchCity": "Rechercher une ville",
+                "addNewCity": "Ajouter une nouvelle ville",
+                "createCity": "Créer une ville",
+                "startDate": "Date de début",
+                "eventType": "Type d’événement",
+                "personalEvent": "Événement personnel",
+                "publicEvent": "Événement public",
+                "selectCountry": "Sélectionner un pays",
+                "selectCity": "Sélectionner une ville",
+                "noCitiesFound": "Aucune ville trouvée",
+                "countryRequired": "Veuillez sélectionner un pays.",
+                "cityRequired": "Veuillez sélectionner une ville.",
+                "startDateRequired": "Veuillez sélectionner une date de début.",
+                "eventTypeRequired": "Veuillez sélectionner un type d’événement.",
+                "cityCreateFailed": "La ville n’a pas pu être créée. Veuillez réessayer."
             }
         }
     },

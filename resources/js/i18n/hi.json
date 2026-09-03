@@ -732,7 +732,24 @@
                 "descriptionPlaceholder": "हमें इवेंट के बारे में और यह क्यों कवरेज के योग्य है, बताएं",
                 "cancel": "रद्द करें",
                 "send": "भेजें",
-                "close": "बंद करें"
+                "close": "बंद करें",
+                "country": "देश",
+                "city": "शहर",
+                "searchCity": "शहर खोजें",
+                "addNewCity": "नया शहर जोड़ें",
+                "createCity": "शहर बनाएँ",
+                "startDate": "आरंभ तिथि",
+                "eventType": "इवेंट का प्रकार",
+                "personalEvent": "व्यक्तिगत इवेंट",
+                "publicEvent": "सार्वजनिक इवेंट",
+                "selectCountry": "देश चुनें",
+                "selectCity": "शहर चुनें",
+                "noCitiesFound": "कोई शहर नहीं मिला",
+                "countryRequired": "कृपया एक देश चुनें।",
+                "cityRequired": "कृपया एक शहर चुनें।",
+                "startDateRequired": "कृपया आरंभ तिथि चुनें।",
+                "eventTypeRequired": "कृपया इवेंट का प्रकार चुनें।",
+                "cityCreateFailed": "शहर नहीं बनाया जा सका। कृपया फिर से प्रयास करें।"
             }
         }
     },

@@ -9,7 +9,7 @@ class CountryRepository implements CountryRepositoryInterface
 {
     public function allWithTranslation()
     {
-        return Countries::with('translation')->get(['id', 'code', 'image']);
+        return Countries::with('translation')->get(['id', 'name', 'code', 'image']);
     }
 
     public function allForGate()

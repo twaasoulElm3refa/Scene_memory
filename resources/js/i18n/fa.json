@@ -732,7 +732,24 @@
                 "descriptionPlaceholder": "درباره رویداد و دلیل شایستگی آن برای پوشش به ما بگویید",
                 "cancel": "لغو",
                 "send": "ارسال",
-                "close": "بستن"
+                "close": "بستن",
+                "country": "کشور",
+                "city": "شهر",
+                "searchCity": "جستجوی شهر",
+                "addNewCity": "افزودن شهر جدید",
+                "createCity": "ایجاد شهر",
+                "startDate": "تاریخ شروع",
+                "eventType": "نوع رویداد",
+                "personalEvent": "رویداد شخصی",
+                "publicEvent": "رویداد عمومی",
+                "selectCountry": "کشور را انتخاب کنید",
+                "selectCity": "شهر را انتخاب کنید",
+                "noCitiesFound": "شهری یافت نشد",
+                "countryRequired": "لطفاً یک کشور انتخاب کنید.",
+                "cityRequired": "لطفاً یک شهر انتخاب کنید.",
+                "startDateRequired": "لطفاً تاریخ شروع را انتخاب کنید.",
+                "eventTypeRequired": "لطفاً نوع رویداد را انتخاب کنید.",
+                "cityCreateFailed": "ایجاد شهر ممکن نشد. لطفاً دوباره تلاش کنید."
             }
         }
     },

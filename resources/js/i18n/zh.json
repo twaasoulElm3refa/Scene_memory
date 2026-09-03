@@ -732,7 +732,24 @@
                 "descriptionPlaceholder": "请告诉我们活动详情以及它值得报道的原因",
                 "cancel": "取消",
                 "send": "发送",
-                "close": "关闭"
+                "close": "关闭",
+                "country": "国家",
+                "city": "城市",
+                "searchCity": "搜索城市",
+                "addNewCity": "添加新城市",
+                "createCity": "创建城市",
+                "startDate": "开始日期",
+                "eventType": "活动类型",
+                "personalEvent": "个人活动",
+                "publicEvent": "公开活动",
+                "selectCountry": "选择国家",
+                "selectCity": "选择城市",
+                "noCitiesFound": "未找到城市",
+                "countryRequired": "请选择国家。",
+                "cityRequired": "请选择城市。",
+                "startDateRequired": "请选择开始日期。",
+                "eventTypeRequired": "请选择活动类型。",
+                "cityCreateFailed": "无法创建城市，请重试。"
             }
         }
     },

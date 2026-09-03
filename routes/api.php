@@ -41,6 +41,7 @@ use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\home\PlanController;
+use App\Http\Controllers\api\home\SpecialCoverageCityController;
 use App\Http\Controllers\api\home\SpecialCoverageRequestController;
 use App\Http\Controllers\api\home\SubCategoryController;
 use App\Http\Controllers\api\home\TagsController;
@@ -110,8 +111,10 @@ Route::prefix('v1')->group(function () {
     Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
         ->middleware(['auth:sanctum', 'throttle:60,1']);
 
-    Route::post('/special-coverage-requests', [SpecialCoverageRequestController::class, 'store'])
-        ->middleware(['auth:sanctum', 'throttle:30,1']);
+    Route::prefix('special-coverage-requests')->middleware('auth:sanctum')->group(function () {
+        Route::post('/', [SpecialCoverageRequestController::class, 'store'])->middleware('throttle:30,1');
+        Route::post('/cities', [SpecialCoverageCityController::class, 'store'])->middleware('throttle:10,1');
+    });
 
     // CATEGORIES CRUD
     Route::prefix('categories')->group(function () {

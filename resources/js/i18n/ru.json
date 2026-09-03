@@ -725,7 +725,24 @@
                 "descriptionPlaceholder": "Расскажите о событии и почему оно заслуживает освещения",
                 "cancel": "Отмена",
                 "send": "Отправить",
-                "close": "Закрыть"
+                "close": "Закрыть",
+                "country": "Страна",
+                "city": "Город",
+                "searchCity": "Поиск города",
+                "addNewCity": "Добавить новый город",
+                "createCity": "Создать город",
+                "startDate": "Дата начала",
+                "eventType": "Тип события",
+                "personalEvent": "Личное событие",
+                "publicEvent": "Публичное событие",
+                "selectCountry": "Выберите страну",
+                "selectCity": "Выберите город",
+                "noCitiesFound": "Города не найдены",
+                "countryRequired": "Выберите страну.",
+                "cityRequired": "Выберите город.",
+                "startDateRequired": "Выберите дату начала.",
+                "eventTypeRequired": "Выберите тип события.",
+                "cityCreateFailed": "Не удалось создать город. Повторите попытку."
             }
         }
     },

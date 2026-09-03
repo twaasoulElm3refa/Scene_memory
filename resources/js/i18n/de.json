@@ -733,7 +733,24 @@
                 "descriptionPlaceholder": "Erzählen Sie uns von der Veranstaltung und warum sie eine Berichterstattung verdient",
                 "cancel": "Abbrechen",
                 "send": "Senden",
-                "close": "Schließen"
+                "close": "Schließen",
+                "country": "Land",
+                "city": "Stadt",
+                "searchCity": "Stadt suchen",
+                "addNewCity": "Neue Stadt hinzufügen",
+                "createCity": "Stadt erstellen",
+                "startDate": "Startdatum",
+                "eventType": "Veranstaltungstyp",
+                "personalEvent": "Private Veranstaltung",
+                "publicEvent": "Öffentliche Veranstaltung",
+                "selectCountry": "Land auswählen",
+                "selectCity": "Stadt auswählen",
+                "noCitiesFound": "Keine Städte gefunden",
+                "countryRequired": "Bitte wählen Sie ein Land aus.",
+                "cityRequired": "Bitte wählen Sie eine Stadt aus.",
+                "startDateRequired": "Bitte wählen Sie ein Startdatum aus.",
+                "eventTypeRequired": "Bitte wählen Sie einen Veranstaltungstyp aus.",
+                "cityCreateFailed": "Die Stadt konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
             }
         }
     },

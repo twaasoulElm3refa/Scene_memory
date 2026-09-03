@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CountriesRequest;
 use App\Jobs\TranslateCountryJob;
 use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
-use Illuminate\Support\Facades\Cache;
+use App\Services\LocationCacheService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\Intl\Intl;
@@ -16,7 +16,10 @@ class CountriesCreateController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly CountryRepositoryInterface $countryRepository) {}
+    public function __construct(
+        private readonly CountryRepositoryInterface $countryRepository,
+        private readonly LocationCacheService $locationCache
+    ) {}
 
     public function create(CountriesRequest $request)
     {
@@ -42,11 +45,7 @@ class CountriesCreateController extends Controller
             $arabicName = $this->arabicCountryName($country->code);
             TranslateCountryJob::dispatch($country->id, $arabicName)->afterCommit();
 
-            Cache::forget('countries_count');
-            Cache::forget('countries_index');
-            for ($i = 0; $i < 10; $i++) {
-                Cache::forget("countries_index_page_{$i}");
-            }
+            $this->locationCache->invalidate();
 
             return $this->success(
                 $country->load('translations'),

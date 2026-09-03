@@ -38,7 +38,7 @@ class GateController extends Controller
     public function countries()
     {
         $locale = app()->getLocale();
-        $countries = Cache::remember("gate:countries:locale:{$locale}", now()->addHours(24), function () {
+        $countries = Cache::tags(['countries'])->remember("gate:countries:locale:{$locale}", now()->addHours(24), function () {
             return $this->countryRepository->allForGate();
         });
 
@@ -54,17 +54,17 @@ class GateController extends Controller
         $countryKey = "gate:country:{$code}:locale:{$locale}";
         $citiesKey = "gate:country:{$code}:cities";
         $eventsKey = "gate:country:{$code}:locale:{$locale}:events:page:{$page}";
-        $country = Cache::remember($countryKey, now()->addHours(24), function () use ($code) {
+        $country = Cache::tags(['countries'])->remember($countryKey, now()->addHours(24), function () use ($code) {
             return $this->countryRepository->findByCode($code);
         });
         if (!$country) {
             return $this->error('Country not found', 404)
                 ->header('Vary', 'Accept-Language');
         }
-        $cityIds = Cache::remember($citiesKey, now()->addHours(24), function () use ($country) {
+        $cityIds = Cache::tags(['countries', 'cities'])->remember($citiesKey, now()->addHours(24), function () use ($country) {
             return $this->cityRepository->byCountryId((int) $country->id)->pluck('id');
         });
-        $events = Cache::remember($eventsKey, now()->addHours(6), function () use ($cityIds) {
+        $events = Cache::tags(['countries', 'cities', 'events'])->remember($eventsKey, now()->addHours(6), function () use ($cityIds) {
             return $this->eventRepository->gateEventsByCityIds($cityIds);
         });
 

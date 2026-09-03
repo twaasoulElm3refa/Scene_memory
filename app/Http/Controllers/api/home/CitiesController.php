@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\Cities\CityRepositoryInterface;
 use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
+use App\Services\LocationCacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -17,7 +18,8 @@ class CitiesController extends Controller
 
     public function __construct(
         private readonly CityRepositoryInterface $cityRepository,
-        private readonly CountryRepositoryInterface $countryRepository
+        private readonly CountryRepositoryInterface $countryRepository,
+        private readonly LocationCacheService $locationCache
     ) {
     }
 
@@ -113,6 +115,6 @@ class CitiesController extends Controller
 
     private function clearCache()
     {
-        Cache::tags(['cities'])->flush();
+        $this->locationCache->invalidate();
     }
 }

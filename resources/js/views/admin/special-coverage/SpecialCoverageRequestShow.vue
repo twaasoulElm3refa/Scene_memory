@@ -36,6 +36,25 @@
                     </div>
 
                     <p class="mt-5 whitespace-pre-wrap text-gray-700 leading-relaxed">{{ item.event_description }}</p>
+
+                    <dl class="mt-5 grid grid-cols-1 gap-4 border-t border-gray-100 pt-5 text-sm sm:grid-cols-2 lg:grid-cols-4">
+                        <div>
+                            <dt class="text-gray-500">{{ $t("homeAudit.specialCoverage.modal.country") }}</dt>
+                            <dd class="font-semibold text-gray-900">{{ locationName(item.country) }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-gray-500">{{ $t("homeAudit.specialCoverage.modal.city") }}</dt>
+                            <dd class="font-semibold text-gray-900">{{ locationName(item.city) }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-gray-500">{{ $t("homeAudit.specialCoverage.modal.startDate") }}</dt>
+                            <dd class="font-semibold text-gray-900">{{ formatDateOnly(item.start_date) }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-gray-500">{{ $t("homeAudit.specialCoverage.modal.eventType") }}</dt>
+                            <dd class="font-semibold text-gray-900">{{ eventTypeLabel(item.event_type) }}</dd>
+                        </div>
+                    </dl>
                 </section>
 
                 <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -144,12 +163,14 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import toastr from "toastr";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { specialCoverageRequestsService } from "../../../services/admin/specialCoverageRequestsService";
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 const item = ref(null);
 const loading = ref(true);
 const error = ref("");
@@ -241,6 +262,27 @@ function formatDate(dateString) {
         hour: "2-digit",
         minute: "2-digit",
     });
+}
+
+function formatDateOnly(dateString) {
+    if (!dateString) return "-";
+
+    return new Date(`${dateString}T00:00:00`).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+}
+
+function locationName(location) {
+    return location?.translation?.name || location?.name || "-";
+}
+
+function eventTypeLabel(type) {
+    if (type === "personal") return t("homeAudit.specialCoverage.modal.personalEvent");
+    if (type === "public") return t("homeAudit.specialCoverage.modal.publicEvent");
+
+    return "-";
 }
 
 onMounted(fetchRequest);

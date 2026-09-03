@@ -8,6 +8,7 @@ use App\Repositories\Contracts\Cities\CityRepositoryInterface;
 use App\Repositories\Contracts\Countries\CountryRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\Users\UserRepositoryInterface;
+use App\Services\LocationCacheService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -21,7 +22,8 @@ class CountriesController extends Controller
         private readonly CountryRepositoryInterface $countryRepository,
         private readonly CityRepositoryInterface $cityRepository,
         private readonly EventRepositoryInterface $eventRepository,
-        private readonly UserRepositoryInterface $userRepository
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly LocationCacheService $locationCache
     ) {
     }
 
@@ -156,12 +158,6 @@ class CountriesController extends Controller
 
     private function clearCache($id = null)
     {
-        // مسح كل الكاشات المتعلقة بالدول
-        Cache::tags(['countries'])->flush();
-
-        if ($id) {
-            // مسح الكاشات المرتبطة بالمدن الخاصة بالدولة
-            Cache::tags(['cities'])->flush();
-        }
+        $this->locationCache->invalidate();
     }
 }

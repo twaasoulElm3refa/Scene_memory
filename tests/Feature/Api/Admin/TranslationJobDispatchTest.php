@@ -80,8 +80,9 @@ class TranslationJobDispatchTest extends TestCase
 
     public function test_creating_a_city_dispatches_its_translation_job(): void
     {
+        Cache::shouldReceive('tags')->once()->with(['countries'])->andReturnSelf();
         Cache::shouldReceive('tags')->once()->with(['cities'])->andReturnSelf();
-        Cache::shouldReceive('flush')->once()->andReturnTrue();
+        Cache::shouldReceive('flush')->twice()->andReturnTrue();
 
         $country = Countries::create([
             'code' => 'TR',
@@ -104,7 +105,9 @@ class TranslationJobDispatchTest extends TestCase
 
     public function test_creating_a_country_dispatches_its_translation_job(): void
     {
-        Cache::shouldReceive('forget')->times(12)->andReturnTrue();
+        Cache::shouldReceive('tags')->once()->with(['countries'])->andReturnSelf();
+        Cache::shouldReceive('tags')->once()->with(['cities'])->andReturnSelf();
+        Cache::shouldReceive('flush')->twice()->andReturnTrue();
 
         $response = $this->postJson('/api/v1/countries/create', [
             'code' => 'TR',

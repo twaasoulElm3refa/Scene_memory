@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Countries;
+use App\Services\LocationCacheService;
+use App\Support\EventTranslationLocales;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,7 +26,7 @@ class TranslateCountryJob implements ShouldQueue
         $this->text = $text;
     }
 
-    public function handle(): void
+    public function handle(LocationCacheService $cache): void
     {
         $country = Countries::find($this->countryId);
 
@@ -32,9 +34,7 @@ class TranslateCountryJob implements ShouldQueue
             return;
         }
 
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi', 'tr'];
-
-        foreach ($locales as $locale) {
+        foreach (EventTranslationLocales::ALL as $locale) {
             try {
                 if ($locale === 'ar') {
                     $translated = $this->text;
@@ -54,5 +54,7 @@ class TranslateCountryJob implements ShouldQueue
                 \Log::error('Country Translate Error: '.$e->getMessage());
             }
         }
+
+        $cache->invalidate();
     }
 }

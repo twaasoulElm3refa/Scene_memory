@@ -31,7 +31,12 @@ class SpecialCoverageRequestController extends Controller
         ]);
 
         $query = SpecialCoverageRequest::query()
-            ->with(['user:id,name,email', 'reviewer:id,name,email'])
+            ->with([
+                'user:id,name,email',
+                'reviewer:id,name,email',
+                'country.translation',
+                'city.translation',
+            ])
             ->latest();
 
         if (! empty($validated['status'])) {
@@ -55,7 +60,12 @@ class SpecialCoverageRequestController extends Controller
     public function show(int $id)
     {
         $request = SpecialCoverageRequest::query()
-            ->with(['user:id,name,email,phone,country', 'reviewer:id,name,email'])
+            ->with([
+                'user:id,name,email,phone,country',
+                'reviewer:id,name,email',
+                'country.translation',
+                'city.translation',
+            ])
             ->find($id);
 
         if (! $request) {
