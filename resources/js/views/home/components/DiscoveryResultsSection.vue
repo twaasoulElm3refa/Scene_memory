@@ -517,24 +517,9 @@ const mediaPreviewSource = (result) => {
         return "";
     }
 
-    if (result.result_type === "video") {
-        return (
-            result.full_url ||
-            result.video_url ||
-            result.media_url ||
-            result.file_url ||
-            result.url ||
-            ""
-        );
-    }
-
     return (
-        result.media_url ||
-        result.full_url ||
-        result.image_url ||
+        result.preview_url ||
         result.thumbnail_url ||
-        result.file_url ||
-        result.url ||
         ""
     );
 };
