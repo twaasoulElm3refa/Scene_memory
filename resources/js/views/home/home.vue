@@ -23,14 +23,6 @@
                     class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(13,77,151,0.20),transparent_55%)]">
                 </div>
 
-                <!-- Bottom Fade
-                <div class="absolute inset-x-0 bottom-0 h-40
-               bg-gradient-to-t
-               from-[#F8FAFC]
-               via-[#F8FAFC]/35
-               to-transparent">
-                </div> -->
-
                 <!-- Hero Navbar -->
                 <div class="hero-navbar absolute inset-x-0 top-2 z-30">
                     <Navbar />
@@ -76,6 +68,26 @@
                        md:text-lg">
                             {{ $t('homeAudit.home.description') }}
                         </p>
+
+                        <!-- Hero Search -->
+                        <div class="mt-8 w-full max-w-3xl">
+                            <div class="flex items-center gap-3 rounded-full
+        border border-white/20
+        bg-white/10
+        px-5 py-3
+        shadow-xl backdrop-blur-md">
+
+                                <input v-model="searchQuery" @keyup.enter="handleHeroSearch" type="text"
+                                    class="w-full bg-transparent text-white placeholder-white/60 outline-none"
+                                    :placeholder="$t('homeAudit.home.searchPlaceholder')" />
+
+                                <button type="button" @click="handleHeroSearch"
+                                    class="rounded-full bg-[#38AEEA] px-6 py-2 font-bold text-white transition hover:scale-105">
+                                    {{ $t('common.search') }}
+                                </button>
+
+                            </div>
+                        </div>
 
                         <!-- Buttons -->
                         <div class="mt-8 flex flex-wrap
@@ -574,6 +586,21 @@ const handleSearchClick = async () => {
     currentPage.value = 1;
     await search(true, 1);
     await nextTick();
+    document
+        .querySelector("#events-results")
+        ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+};
+
+const handleHeroSearch = async () => {
+    currentPage.value = 1;
+
+    await search(true, 1);
+
+    await nextTick();
+
     document
         .querySelector("#events-results")
         ?.scrollIntoView({
@@ -1271,6 +1298,7 @@ onUnmounted(() => {
 }
 
 @media (min-width: 992px) and (max-width: 1399px) {
+
     .home-discovery-container,
     .home-results-container {
         padding-inline: 28px;
@@ -1335,6 +1363,7 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
+
     .home-discovery-container,
     .home-results-container {
         padding-inline: 14px;

@@ -653,7 +653,8 @@
             "description": "Scopri i contenuti multimediali degli eventi caricati da giornalisti, team media e testimoni contributori in tutto il mondo.",
             "searchEvents": "Cerca eventi",
             "uploadStory": "Carica la tua storia",
-            "bottomText": "Scopri storie, luoghi e momenti da tutto il mondo."
+            "bottomText": "Scopri storie, luoghi e momenti da tutto il mondo.",
+            "searchPlaceholder": "  Cerca eventi, città o tag"
         },
         "profileToast": {
             "title": "Profilo incompleto",

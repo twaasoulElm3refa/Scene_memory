@@ -653,7 +653,8 @@
             "description": "发现由世界各地的记者、媒体团队和目击者贡献者上传的活动媒体。",
             "searchEvents": "搜索活动",
             "uploadStory": "上传你的故事",
-            "bottomText": "发现来自世界各地的故事、地点与瞬间。"
+            "bottomText": "发现来自世界各地的故事、地点与瞬间。",
+            "searchPlaceholder": "  搜索活动、地点或标签..."
         },
         "profileToast": {
             "title": "个人资料未完成",

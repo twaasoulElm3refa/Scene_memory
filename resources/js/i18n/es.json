@@ -653,7 +653,8 @@
             "description": "Descubre contenido multimedia de eventos subido por periodistas, equipos de medios y testigos colaboradores de todo el mundo.",
             "searchEvents": "Buscar eventos",
             "uploadStory": "Sube tu historia",
-            "bottomText": "Descubre historias, lugares y momentos de todo el mundo."
+            "bottomText": "Descubre historias, lugares y momentos de todo el mundo.",
+            "searchPlaceholder": "Buscar eventos, lugares o personas..."
         },
         "profileToast": {
             "title": "Perfil incompleto",

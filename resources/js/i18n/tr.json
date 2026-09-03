@@ -650,7 +650,8 @@
             "description": "Dünyanın dört bir yanındaki gazeteciler, medya ekipleri ve görgü tanığı katkıcılar tarafından yüklenen etkinlik medyalarını keşfedin.",
             "searchEvents": "Etkinlik Ara",
             "uploadStory": "Hikayeni Yükle",
-            "bottomText": "Dünyanın dört bir yanından hikayeleri, yerleri ve anları keşfedin."
+            "bottomText": "Dünyanın dört bir yanından hikayeleri, yerleri ve anları keşfedin.",
+            "searchPlaceholder": "  "
         },
         "profileToast": {
             "title": "Profil tamamlanmadı",

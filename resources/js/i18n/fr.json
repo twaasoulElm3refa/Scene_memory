@@ -653,7 +653,8 @@
             "description": "Découvrez les médias d’événements téléversés par des journalistes, des équipes médias et des témoins contributeurs du monde entier.",
             "searchEvents": "Rechercher des événements",
             "uploadStory": "Téléversez votre histoire",
-            "bottomText": "Découvrez des histoires, des lieux et des moments du monde entier."
+            "bottomText": "Découvrez des histoires, des lieux et des moments du monde entier.",
+            "searchPlaceholder": "  Rechercher des événements par nom, lieu ou date..."
         },
         "profileToast": {
             "title": "Profil incomplet",

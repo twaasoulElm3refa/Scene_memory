@@ -654,7 +654,8 @@
             "description": "Entdecken Sie Veranstaltungsmedien, die von Journalistinnen und Journalisten, Medienteams und Augenzeugen aus aller Welt hochgeladen wurden.",
             "searchEvents": "Veranstaltungen suchen",
             "uploadStory": "Ihre Geschichte hochladen",
-            "bottomText": "Entdecken Sie Geschichten, Orte und Momente aus aller Welt."
+            "bottomText": "Entdecken Sie Geschichten, Orte und Momente aus aller Welt.",
+            "searchPlaceholder": "Nach Veranstaltungen suchen..."
         },
         "profileToast": {
             "title": "Profil unvollständig",

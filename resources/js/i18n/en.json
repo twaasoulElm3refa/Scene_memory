@@ -655,7 +655,8 @@
             "description": "Discover event media uploaded by journalists, media teams, and eyewitness contributors around the world.",
             "searchEvents": "Search Events",
             "uploadStory": "Upload Your Story",
-            "bottomText": "Discover stories, places and moments from around the world."
+            "bottomText": "Discover stories, places and moments from around the world.",
+            "searchPlaceholder": " Search for events, locations, or tags..."
         },
         "profileToast": {
             "title": "Profile not complete",
