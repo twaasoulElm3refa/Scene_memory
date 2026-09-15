@@ -183,7 +183,6 @@
                                     </RouterLink>
 
                                     <RouterLink class="dropdown-item" :to="localizedPath('/profile/timeline')">
-                                        <i class="bi bi-clock-history"></i>
                                         {{ $t("nav.timeline") }}
                                     </RouterLink>
 
