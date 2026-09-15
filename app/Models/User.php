@@ -42,6 +42,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'is_active' => 'boolean',
+            'total_points' => 'integer',
             'password' => 'hashed',
         ];
     }
@@ -178,6 +179,16 @@ class User extends Authenticatable
     public function specialCoverageRequests(): HasMany
     {
         return $this->hasMany(SpecialCoverageRequest::class, 'user_id');
+    }
+
+    public function dailyPoints(): HasMany
+    {
+        return $this->hasMany(UserDailyPoint::class);
+    }
+
+    public function pointsHistory(): HasMany
+    {
+        return $this->hasMany(UserPointHistory::class);
     }
 
     public function reviewedSpecialCoverageRequests(): HasMany

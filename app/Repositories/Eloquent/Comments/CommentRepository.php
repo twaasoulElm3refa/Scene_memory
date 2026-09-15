@@ -7,12 +7,28 @@ use App\Models\CommentReplies;
 use App\Models\CommentReport;
 use App\Models\Comments;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
+use App\Services\PointService;
+use Illuminate\Support\Facades\DB;
 
 class CommentRepository implements CommentRepositoryInterface
 {
+    public function __construct(private readonly PointService $pointService) {}
+
     public function create(array $data)
     {
-        return Comments::create($data);
+        return DB::transaction(function () use ($data) {
+            $comment = Comments::create($data);
+
+            if ($comment->user) {
+                $this->pointService->award(
+                    $comment->user,
+                    PointService::COMMENT_CREATED,
+                    $comment
+                );
+            }
+
+            return $comment;
+        });
     }
 
     public function findOrFail(int $id)
@@ -39,15 +55,43 @@ class CommentRepository implements CommentRepositoryInterface
 
     public function createReply(array $data)
     {
-        return CommentReplies::create($data);
+        return DB::transaction(function () use ($data) {
+            $reply = CommentReplies::create($data);
+
+            if ($reply->user) {
+                $this->pointService->award(
+                    $reply->user,
+                    PointService::COMMENT_REPLY,
+                    $reply
+                );
+            }
+
+            return $reply;
+        });
     }
 
     public function updateOrCreateInteraction(array $identity, array $values)
     {
-        return CommentInteractions::withTrashed()->updateOrCreate(
-            $identity,
-            [...$values, 'deleted_at' => null]
-        );
+        return DB::transaction(function () use ($identity, $values) {
+            $interaction = CommentInteractions::withTrashed()->updateOrCreate(
+                $identity,
+                [...$values, 'deleted_at' => null]
+            );
+
+            if ($interaction->user && $interaction->comment) {
+                $this->pointService->award(
+                    $interaction->user,
+                    PointService::COMMENT_INTERACTION,
+                    $interaction->comment,
+                    [
+                        'interaction_id' => $interaction->id,
+                        'type' => $interaction->type,
+                    ]
+                );
+            }
+
+            return $interaction;
+        });
     }
 
     public function reactionSummary(int $commentId, int $userId): array

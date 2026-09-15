@@ -6,6 +6,7 @@ use App\Models\Events;
 use App\Models\EventsImges;
 use App\Models\EventViews;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Services\PointService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -14,9 +15,23 @@ use Illuminate\Support\Facades\DB;
 
 class EventRepository implements EventRepositoryInterface
 {
+    public function __construct(private readonly PointService $pointService) {}
+
     public function create(array $data)
     {
-        return Events::create($data);
+        return DB::transaction(function () use ($data) {
+            $event = Events::create($data);
+
+            if ($event->user_id && $event->user) {
+                $this->pointService->award(
+                    $event->user,
+                    PointService::EVENT_CREATED,
+                    $event
+                );
+            }
+
+            return $event;
+        });
     }
 
     public function trendingEvents()

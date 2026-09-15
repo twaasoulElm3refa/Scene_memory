@@ -242,7 +242,8 @@ class AuthController extends Controller
                     'event_count' => $EventCount,
                     'role' => $user->role,
                     'items' => $items,
-                    'points' => $user->points,
+                    'points' => $user->total_points,
+                    'total_points' => $user->total_points,
                     'last_login_at' => $user->last_login_at,
                     'wallet' => $user->wallet,
                     'licenceType' => [
@@ -375,6 +376,7 @@ class AuthController extends Controller
         $user = $request->user();
 
         $timeline = $this->timelineRepository->getUserTimeline($user);
+
         return $this->success($timeline, 'Timeline fetched successfully.');
     }
 }

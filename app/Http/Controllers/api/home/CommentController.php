@@ -8,6 +8,7 @@ use App\Http\Requests\CommentRequest;
 use App\Jobs\TranslateCommentJob;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Services\PointService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -28,9 +29,9 @@ class CommentController extends Controller
 
     public function __construct(
         private readonly CommentRepositoryInterface $commentRepository,
-        private readonly EventRepositoryInterface $eventRepository
-    ) {
-    }
+        private readonly EventRepositoryInterface $eventRepository,
+        private readonly PointService $pointService
+    ) {}
 
     public function create(CommentRequest $request)
     {
@@ -61,7 +62,7 @@ class CommentController extends Controller
 
                 $storedPaths[] = ['disk' => $disk, 'path' => $path];
 
-                $comment->images()->create([
+                $commentImage = $comment->images()->create([
                     'path' => $path,
                     'disk' => $disk,
                     'original_name' => $image->getClientOriginalName(),
@@ -69,6 +70,13 @@ class CommentController extends Controller
                     'size' => $image->getSize() ?: null,
                     'sort_order' => $sortOrder,
                 ]);
+
+                $this->pointService->award(
+                    $request->user(),
+                    PointService::COMMENT_IMAGE,
+                    $commentImage,
+                    ['comment_id' => $comment->id]
+                );
             }
 
             DB::commit();

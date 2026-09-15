@@ -87,7 +87,7 @@ Route::prefix('v1')->group(function () {
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
-            Route::get('/timeline',[ProfileController::class , 'activity']);
+            Route::get('/timeline', [ProfileController::class, 'activity']);
             Route::get('/wallet', [AuthController::class, 'wallet']);
             Route::get('/downloads', [DownloadController::class, 'downloads']);
             Route::post('/update-profile', [AuthController::class, 'updateProfile']);
@@ -340,7 +340,7 @@ Route::prefix('v1')->group(function () {
     // Likes
     Route::prefix('likes')->middleware('throttle:25,1')->group(function () {
         Route::get('/{id}', [LikesController::class, 'count']);
-        Route::post('{id}/create', [LikesController::class, 'create']);
+        Route::post('{id}/create', [LikesController::class, 'create'])->middleware('auth:sanctum');
         // 119
     });
 
