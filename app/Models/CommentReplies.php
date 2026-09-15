@@ -7,15 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class CommentReplies extends Model
 {
     protected $table = 'comment_replies';
+
     protected $guarded = [];
 
     public function comment()
     {
-        return $this->belongsTo(Comments::class,'comment_id');
+        return $this->belongsTo(Comments::class, 'comment_id');
+    }
+
+    public function commentRelation()
+    {
+        return $this->belongsTo(Comments::class, 'comment_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

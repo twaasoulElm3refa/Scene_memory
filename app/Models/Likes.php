@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Likes extends Model
 {
     protected $guarded = [];
-    protected $tble = 'likes';
+
+    protected $table = 'likes';
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -15,6 +17,6 @@ class Likes extends Model
 
     public function event()
     {
-        return $this->belongsTo(Events::class,'event_id');
+        return $this->belongsTo(Events::class, 'event_id');
     }
 }

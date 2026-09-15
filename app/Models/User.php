@@ -53,9 +53,14 @@ class User extends Authenticatable
      *
      * @return mixed
      */
+    public function events()
+    {
+        return $this->hasMany(Events::class, 'user_id');
+    }
+
     public function event()
     {
-        return $this->belongsTo(Events::class, 'user_id');
+        return $this->events();
     }
 
     public function user_interactions()
@@ -63,9 +68,14 @@ class User extends Authenticatable
         return $this->hasMany(UserInteractions::class, 'user_id');
     }
 
-    public function whishlist()
+    public function wishlists()
     {
         return $this->hasMany(Wishlist::class, 'user_id');
+    }
+
+    public function whishlist()
+    {
+        return $this->wishlists();
     }
 
     public function contacts()
@@ -78,9 +88,36 @@ class User extends Authenticatable
         return $this->hasMany(MediaRequest::class, 'user_id');
     }
 
-    public function comment()
+    public function comments()
     {
         return $this->hasMany(Comments::class, 'user_id');
+    }
+
+    public function comment()
+    {
+        return $this->comments();
+    }
+
+    public function commentReplies()
+    {
+        return $this->hasMany(CommentReplies::class, 'user_id');
+    }
+
+    public function commentInteractions()
+    {
+        return $this->hasMany(CommentInteractions::class, 'user_id');
+    }
+
+    public function commentImages()
+    {
+        return $this->hasManyThrough(
+            CommentImage::class,
+            Comments::class,
+            'user_id',
+            'comment_id',
+            'id',
+            'id'
+        );
     }
 
     public function likes()

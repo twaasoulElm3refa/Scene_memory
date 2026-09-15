@@ -94,6 +94,13 @@ class Events extends Model
         return $this->hasOne(EventsImges::class, 'event_id');
     }
 
+    public function coverImage()
+    {
+        return $this->hasOne(EventsImges::class, 'event_id')
+            ->where('events_images.is_active', 1)
+            ->oldestOfMany();
+    }
+
     public function comments()
     {
         return $this->hasMany(Comments::class, 'event_id');

@@ -299,7 +299,7 @@ const routes = [
     {
         path: "/:lang/profile/timeline",
         component: profileTimeline,
-        meta: { hideNavbar: false, hideFooter: false },
+        meta: { hideNavbar: false, hideFooter: false, requiresAuth: true },
     },
     {
         path: "/:lang/contact",
@@ -577,6 +577,10 @@ router.beforeEach((to, from, next) => {
     const isAdminRoute = to.path.startsWith("/admin");
     const isAdminLoginRoute = to.path === "/admin/login" || to.name === "admin-login";
     const isAdmin = role === "admin" || adminRole === "admin";
+
+    if (to.meta.requiresAuth && !authToken) {
+        return next(`/${lang}/auth`);
+    }
 
     if (isAdminLoginRoute) {
         if (adminToken && isAdmin) {

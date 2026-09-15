@@ -22,4 +22,9 @@ class CommentInteractions extends Model
     {
         return $this->belongsTo(Comments::class, 'comment_id');
     }
+
+    public function comment()
+    {
+        return $this->belongsTo(Comments::class, 'comment_id');
+    }
 }

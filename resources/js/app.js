@@ -19,6 +19,7 @@ import ur from "./i18n/ur.json";
 import tr from "./i18n/tr.json";
 import eventDirectoryMessages from "./i18n/eventDirectory";
 import discoverySearchMessages from "./i18n/discoverySearch";
+import profileTimelineMessages from "./i18n/profileTimeline";
 
 // styles
 import "../css/app.css";
@@ -60,6 +61,10 @@ Object.entries(eventDirectoryMessages).forEach(([lang, directory]) => {
 
 Object.entries(discoverySearchMessages).forEach(([lang, discovery]) => {
     messages[lang].discovery = discovery;
+});
+
+Object.entries(profileTimelineMessages).forEach(([lang, timeline]) => {
+    messages[lang].timeline = timeline;
 });
 
 const DEFAULT_LANG = "en";

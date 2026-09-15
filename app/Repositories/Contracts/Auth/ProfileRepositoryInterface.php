@@ -6,9 +6,8 @@ interface ProfileRepositoryInterface
 {
     public function getProfileActivity(
         int $userId,
-        int $page = 1,
-        int $perPage = 20
-    );
+        array $filters = []
+    ): array;
 
     public function clearUserProfileCache(int $userId): void;
 }

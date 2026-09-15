@@ -2,13 +2,12 @@ import api from "../ApiClient";
 
 export const profileTimeline = {
 
-    async getTimeline(params = {}) {
+    async getTimeline(params = {}, options = {}) {
 
         const response = await api.get("/users/timeline", {
-            params
+            params,
+            signal: options.signal,
         });
-
-        console.log("Timeline Response:", response);
 
         return response;
 
