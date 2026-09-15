@@ -16,6 +16,7 @@
     "upload_media": "Upload Media",
     "view_all_comments": "View all comments",
     "nav": {
+        "timeline": "My Timeline",
         "favourites": "Favourites",
         "downloads": "Downloads",
         "plans": "Plans",

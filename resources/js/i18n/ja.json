@@ -16,6 +16,7 @@
     "upload_media": "メディアをアップロード",
     "view_all_comments": "すべてのコメントを見る",
     "nav": {
+        "timeline": "タイムライン",
         "favourites": "お気に入り",
         "plans": "プラン",
         "specialCoverage": "特別取材",

@@ -16,6 +16,7 @@
     "upload_media": "Загрузить медиа",
     "view_all_comments": "Показать все комментарии",
     "nav": {
+        "timeline": "Временная лента",
         "favourites": "Избранное",
         "plans": "Планы",
         "specialCoverage": "Специальное освещение",

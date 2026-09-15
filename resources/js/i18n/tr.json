@@ -16,6 +16,7 @@
     "upload_media": "Medya Yükle",
     "view_all_comments": "Tüm Yorumları Görüntüle",
     "nav": {
+        "timeline": "Takvim",
         "favourites": "Favoriler",
         "plans": "Planlar",
         "specialCoverage": "Özel Haber",

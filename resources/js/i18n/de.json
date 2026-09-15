@@ -16,6 +16,7 @@
     "upload_media": "Media hochladen",
     "view_all_comments": "Alle Kommentare anzeigen",
     "nav": {
+        "timeline": "Mein Zeitstrahl",
         "favourites": "Favoriten",
         "downloads": "Downloads",
         "dashboard": "Dashboard",

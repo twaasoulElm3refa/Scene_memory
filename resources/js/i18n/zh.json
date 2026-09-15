@@ -16,6 +16,7 @@
     "upload_media": "上传媒体",
     "view_all_comments": "查看所有评论",
     "nav": {
+        "timeline": "我的时间线",
         "favourites": "收藏",
         "plans": "方案",
         "specialCoverage": "特别报道",
