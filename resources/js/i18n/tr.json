@@ -96,13 +96,13 @@
         "save_discount": "10% OFF",
         "total_images": "Total Images",
         "buy_collection_title": "Buy Full Collection",
-        "upload_media_to_event": "Etkinli?e medya y?kle",
+        "upload_media_to_event": "Etkinliğe medya yükle",
         "media_alt": "Event media",
         "send_reply": "Send reply",
-        "comment_add_images": "G?rsel ekle ({count}/{max})",
-        "comment_image_limit": "En fazla 2 g?rsel, her biri 5 MB",
-        "selected_comment_image_alt": "Se?ilen g?rsel {number}",
-        "remove_selected_comment_image": "Se?ilen g?rsel {number} ??esini kald?r"
+        "comment_add_images": "Görsel ekle ({count}/{max})",
+        "comment_image_limit": "En fazla 2 görsel, her biri 5 MB",
+        "selected_comment_image_alt": "Seçilen görsel {number}",
+        "remove_selected_comment_image": "Seçilen görsel {number} öğesini kaldır"
     },
     "common": {
         "search": "Ara",
@@ -111,20 +111,20 @@
         "details": "Detaylar",
         "notSpecified": "Belirtilmedi",
         "loadingEvents": "Etkinlikler yükleniyor...",
-        "loading": "Y?kleniyor...",
+        "loading": "Yükleniyor...",
         "close": "Kapat",
         "tryAgain": "Tekrar dene",
         "back": "Geri",
-        "remove": "Kald?r",
+        "remove": "Kaldır",
         "clear": "Temizle",
-        "previous": "?nceki",
+        "previous": "Önceki",
         "next": "Sonraki",
-        "noResults": "Sonu? yok",
+        "noResults": "Sonuç yok",
         "unknownError": "Bilinmeyen hata",
         "learnMore": "Daha fazla bilgi",
-        "cancel": "?ptal",
-        "sending": "G?nderiliyor...",
-        "show": "G?ster",
+        "cancel": "İptal",
+        "sending": "Gönderiliyor...",
+        "show": "Göster",
         "hide": "Gizle"
     },
     "events": {
@@ -158,7 +158,58 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "Başlıksız etkinlik"
+        "no_title": "Başlıksız etkinlik",
+        "directory": {
+            "eyebrow": "Scemory’yi keşfedin",
+            "eventsTitle": "Etkinlikler",
+            "eventsDescription": "Dünyanın dört bir yanındaki güncel ve yaklaşan etkinlikleri keşfedin.",
+            "historicalTitle": "Tarihi Etkinlikler",
+            "historicalDescription": "Geçmişten belgelenmiş etkinlikleri ve korunmuş anıları keşfedin.",
+            "events": "etkinlik",
+            "historicalEvents": "tarihi etkinlik",
+            "collection": "Etkinlik koleksiyonu",
+            "filters": "Filtreler",
+            "refine": "Sonuçları daralt",
+            "closeFilters": "Filtreleri kapat",
+            "searchLabel": "Ara",
+            "searchPlaceholder": "Etkinlik ara...",
+            "eventType": "Etkinlik türü",
+            "types": {
+                "all": "Tüm etkinlikler",
+                "real": "Gerçek etkinlikler",
+                "general": "Genel etkinlikler"
+            },
+            "country": "Ülke",
+            "allCountries": "Tüm ülkeler",
+            "category": "Kategori",
+            "allCategories": "Tüm kategoriler",
+            "city": "Şehir",
+            "allCities": "Tüm şehirler",
+            "subcategory": "Alt kategori",
+            "allSubcategories": "Tüm alt kategoriler",
+            "fromDate": "Başlangıç tarihi",
+            "toDate": "Bitiş tarihi",
+            "clearFilters": "Filtreleri temizle",
+            "createEvent": "Etkinlik oluştur",
+            "createHistorical": "Tarihi etkinlik ekle",
+            "results": "{count} etkinlik",
+            "showing": "{total} sonuçtan {from}–{to} arası gösteriliyor",
+            "errorTitle": "Etkinlikler yüklenemedi",
+            "errorDescription": "Etkinlikler yüklenirken bir hata oluştu. Lütfen tekrar deneyin.",
+            "emptyTitle": "Etkinlik bulunamadı",
+            "historicalEmptyTitle": "Tarihi etkinlik bulunamadı",
+            "emptyDescription": "Filtrelerinizi değiştirmeyi veya temizlemeyi deneyin.",
+            "eventBadge": "Etkinlik",
+            "historicalBadge": "Tarihi",
+            "unknownLocation": "Bilinmeyen konum",
+            "uncategorized": "Kategorisiz",
+            "viewEvent": "Etkinliği görüntüle",
+            "pagination": "Etkinlik sayfaları",
+            "previous": "Önceki",
+            "next": "Sonraki"
+        },
+        "from_map": "Haritadan",
+        "undefined_city": "Belirtilmemiş"
     },
     "pagination": {
         "previous": "Önceki",
@@ -495,12 +546,14 @@
             "maxFourTags": "You can select up to 4 tags only",
             "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
             "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+            "mediaRequired": "Lütfen en az bir görsel veya video yükleyin."
         },
         "success": {
             "created": "Event created successfully!",
             "historicalCreated": "Historical event created successfully!"
-        }
+        },
+        "minimumRequirementsHint": "Bir etkinlik oluşturmak için yalnızca başlık, açıklama ve en az bir görsel veya video gerekir. Diğer tüm alanlar isteğe bağlıdır."
     },
     "commons": {
         "required": "Zorunlu",
@@ -592,7 +645,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -628,15 +681,16 @@
         "errors": {
             "loadPlan": "Failed to load plan. Please try again.",
             "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "Planlar y?klenemedi. L?tfen tekrar deneyin."
+            "loadPlans": "Planlar yüklenemedi. Lütfen tekrar deneyin."
         },
         "customPlanNote": "Gereksinimlerinize göre tasarlandı",
-        "basicAccessIncluded": "Temel eri?im dahildir",
+        "basicAccessIncluded": "Temel erişim dahildir",
         "moneyBack": "30 gün garanti",
         "perMonth": "aylık",
         "securePayments": "Güvenli ödemeler",
         "support247": "7/24 destek",
-        "usd": "USD"
+        "usd": "USD",
+        "prioritySupport": "Öncelikli destek"
     },
     "free": "Ücretsiz",
     "basic": "Temel",
@@ -749,7 +803,11 @@
                 "cityRequired": "Lütfen bir şehir seçin.",
                 "startDateRequired": "Lütfen bir başlangıç tarihi seçin.",
                 "eventTypeRequired": "Lütfen bir etkinlik türü seçin.",
-                "cityCreateFailed": "Şehir oluşturulamadı. Lütfen tekrar deneyin."
+                "cityCreateFailed": "Şehir oluşturulamadı. Lütfen tekrar deneyin.",
+                "sending": "Gönderiliyor...",
+                "eventNameRequired": "Lütfen etkinlik adını girin.",
+                "descriptionRequired": "Lütfen etkinlik açıklamasını girin.",
+                "success": "Özel haber talebiniz başarıyla gönderildi."
             }
         }
     },
@@ -798,8 +856,11 @@
             "accepted": "accepted",
             "rejected": "rejected",
             "checking": "checking",
-            "idle": "idle"
-        }
+            "idle": "idle",
+            "warning": "kalite uyarısı"
+        },
+        "videoReady": "Video yüklemeye hazır.",
+        "qualityWarning": "Kalite kontrolleri bilgilendirme amaçlıdır ve etkinlik oluşturmayı engellemez."
     },
     "cart": {
         "title": "Shopping Cart",
@@ -832,7 +893,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -869,7 +930,7 @@
         "downloadSuccess": "{filename} downloaded successfully!",
         "downloadFailed": "Download failed. Please try again.",
         "empty": "No downloads found",
-        "emptyHint": "Sat?n ald???n?z dosyalar burada g?r?necek"
+        "emptyHint": "Satın aldığınız dosyalar burada görünecek"
     },
     "experience": {
         "kicker": "SCEMORY DENEYİMİ",
@@ -1059,132 +1120,218 @@
             "mapLoadFailed": "Harita yüklenirken bir hata oluştu."
         }
     },
-    "cancel": "?ptal",
-    "login": "Giri? yap",
-    "sending": "G?nderiliyor...",
-    "send_reply": "Yan?t g?nder",
+    "cancel": "İptal et",
+    "login": "Giriş yap",
+    "sending": "Gönderiliyor...",
+    "send_reply": "Yanıtı gönder",
     "report": {
-        "action": "Report",
-        "commentTitle": "Report this comment",
-        "modalTitle": "Report comment",
-        "reasonPrompt": "Choose the reason for reporting this comment:",
-        "submit": "Submit report",
-        "submitting": "Submitting...",
-        "successTitle": "Report submitted",
-        "successMessage": "Thank you. We will review this comment soon.",
+        "action": "Şikayet et",
+        "commentTitle": "Bu yorumu şikayet et",
+        "modalTitle": "Yorumu şikayet et",
+        "reasonPrompt": "Bu yorumu şikayet etme nedeninizi seçin:",
+        "submit": "Şikayeti gönder",
+        "submitting": "Gönderiliyor...",
+        "successTitle": "Şikayet gönderildi",
+        "successMessage": "Teşekkürler. Bu yorumu yakında inceleyeceğiz.",
         "errors": {
-            "selectReason": "Please choose a report reason.",
-            "submitFailed": "An error occurred while submitting the report. Please try again."
+            "selectReason": "Lütfen bir şikayet nedeni seçin.",
+            "submitFailed": "Şikayet gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
         },
         "reasons": {
             "spam": "Spam",
-            "offensive": "Offensive content",
-            "inappropriate": "Inappropriate",
-            "illegal": "Illegal content",
-            "untrue": "False content",
-            "falseInformation": "Misleading information",
-            "other": "Other reason"
+            "offensive": "Saldırgan içerik",
+            "inappropriate": "Uygunsuz",
+            "illegal": "Yasadışı içerik",
+            "untrue": "Yanlış içerik",
+            "falseInformation": "Yanıltıcı bilgi",
+            "other": "Diğer neden"
         }
     },
     "commentsPage": {
-        "title": "Comments",
-        "emptyLabel": "Comments",
-        "emptyMessage": "No comments yet. Be the first to comment.",
-        "attachmentAlt": "Comment attachment",
-        "pageInfo": "Page {current} of {total}",
-        "confirmDelete": "Are you sure you want to delete this comment?",
+        "title": "Yorumlar",
+        "emptyLabel": "Yorumlar",
+        "emptyMessage": "Henüz yorum yok. İlk yorumu yapan siz olun.",
+        "attachmentAlt": "Yorum eki",
+        "pageInfo": "Sayfa {current} / {total}",
+        "confirmDelete": "Bu yorumu silmek istediğinizden emin misiniz?",
         "errors": {
-            "loadFailed": "An error occurred while loading comments."
+            "loadFailed": "Yorumlar yüklenirken bir hata oluştu."
         },
         "reactions": {
-            "support": "Agree",
-            "neutral": "Neutral",
-            "oppose": "Disagree"
+            "support": "Katılıyorum",
+            "neutral": "Nötr",
+            "oppose": "Katılmıyorum"
         },
-        "you": "You"
+        "you": "Sen"
     },
     "profilePage": {
-        "title": "My Profile",
-        "subtitle": "Manage your account information and update your password",
-        "noPlan": "No plan",
-        "lastLogin": "Last login",
-        "accountInfo": "Account information",
-        "systemInfo": "System information",
-        "currentPlan": "Current plan",
-        "planType": "Plan type",
-        "editAccount": "Edit account details",
-        "saving": "Saving...",
-        "saveChanges": "Save changes",
+        "title": "Profilim",
+        "subtitle": "Hesap bilgilerinizi yönetin ve şifrenizi güncelleyin",
+        "noPlan": "Plan yok",
+        "lastLogin": "Son giriş",
+        "accountInfo": "Hesap bilgileri",
+        "systemInfo": "Sistem bilgileri",
+        "currentPlan": "Mevcut plan",
+        "planType": "Plan türü",
+        "editAccount": "Hesap detaylarını düzenle",
+        "saving": "Kaydediliyor...",
+        "saveChanges": "Değişiklikleri kaydet",
         "tabs": {
-            "userInfo": "User information",
-            "editData": "Edit data",
-            "password": "Update password",
-            "wallet": "Wallet"
+            "userInfo": "Kullanıcı bilgileri",
+            "editData": "Verileri düzenle",
+            "password": "Şifreyi güncelle",
+            "wallet": "Cüzdan"
         },
         "fields": {
-            "name": "Name",
-            "fullName": "Full name",
-            "email": "Email",
-            "phone": "Phone",
-            "phoneNumber": "Phone number",
-            "country": "Country",
-            "position": "Position",
-            "positionJob": "Position / Job",
-            "birthDate": "Date of birth",
-            "role": "Role",
-            "status": "Status",
-            "points": "Points",
-            "price": "Price"
+            "name": "İsim",
+            "fullName": "Tam isim",
+            "email": "E-posta",
+            "phone": "Telefon",
+            "phoneNumber": "Telefon numarası",
+            "country": "Ülke",
+            "position": "Pozisyon",
+            "positionJob": "Pozisyon / İş",
+            "birthDate": "Doğum tarihi",
+            "role": "Rol",
+            "status": "Durum",
+            "points": "Puanlar",
+            "price": "Fiyat"
         },
         "placeholders": {
-            "fullName": "Enter your full name",
-            "countrySearch": "Search for a country",
-            "position": "Software engineer"
+            "fullName": "Tam adınızı girin",
+            "countrySearch": "Bir ülke arayın",
+            "position": "Yazılım mühendisi"
         },
         "status": {
-            "active": "Active"
+            "active": "Aktif"
         },
         "password": {
-            "title": "Update password",
-            "current": "Current password",
-            "new": "New password",
-            "confirm": "Confirm password",
-            "updating": "Updating...",
-            "update": "Update password"
+            "title": "Şifreyi güncelle",
+            "current": "Mevcut şifre",
+            "new": "Yeni şifre",
+            "confirm": "Şifreyi onayla",
+            "updating": "Güncelleniyor...",
+            "update": "Şifreyi güncelle"
         },
         "messages": {
-            "fillAllFields": "Please fill in all fields.",
-            "passwordMismatch": "Passwords do not match.",
-            "passwordUpdated": "Password updated successfully.",
-            "passwordUpdateFailed": "An error occurred while updating the password.",
-            "chooseCountry": "Please choose a country from the list.",
-            "noChanges": "You have not made any changes.",
-            "profileUpdated": "Your profile has been updated successfully.",
-            "profileUpdateFailed": "An error occurred while updating your profile."
+            "fillAllFields": "Lütfen tüm alanları doldurun.",
+            "passwordMismatch": "Şifreler uyuşmuyor.",
+            "passwordUpdated": "Şifre başarıyla güncellendi.",
+            "passwordUpdateFailed": "Şifre güncellenirken bir hata oluştu.",
+            "chooseCountry": "Lütfen listeden bir ülke seçin.",
+            "noChanges": "Herhangi bir değişiklik yapmadınız.",
+            "profileUpdated": "Profiliniz başarıyla güncellendi.",
+            "profileUpdateFailed": "Profiliniz güncellenirken bir hata oluştu."
         },
         "wallet": {
-            "title": "Wallet",
-            "availableBalance": "Available balance",
-            "deposit": "Add funds",
-            "recentTransactions": "Recent transactions",
-            "depositType": "Deposit",
-            "withdrawType": "Withdrawal",
-            "noTransactions": "No transactions yet",
-            "withdrawComingSoon": "The withdrawal window will open soon."
+            "title": "Cüzdan",
+            "availableBalance": "Mevcut bakiye",
+            "deposit": "Para ekle",
+            "recentTransactions": "Son işlemler",
+            "depositType": "Para yatırma",
+            "withdrawType": "Para çekme",
+            "noTransactions": "Henüz işlem yok",
+            "withdrawComingSoon": "Para çekme özelliği yakında kullanıma sunulacak."
         }
     },
     "eventUpload": {
-        "maxPerFile": "Maximum per file: 100 MB",
-        "dragFiles": "Drag files here or",
-        "clickToChoose": "click to choose",
-        "supportedFiles": "Images and videos (max 100 MB per file)",
-        "selectedFiles": "Selected files ({count})",
-        "uploading": "Uploading...",
-        "uploadFiles": "Upload files",
-        "success": "Files uploaded successfully!",
+        "maxPerFile": "Dosya başına maksimum: 100 MB",
+        "dragFiles": "Dosyaları buraya sürükleyin veya",
+        "clickToChoose": "seçmek için tıklayın",
+        "supportedFiles": "Görseller ve videolar (dosya başına maksimum 100 MB)",
+        "selectedFiles": "Seçilen dosyalar ({count})",
+        "uploading": "Yükleniyor...",
+        "uploadFiles": "Dosya yükle",
+        "success": "Dosyalar başarıyla yüklendi!",
         "errors": {
-            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
-            "unsupportedType": "File type \"{name}\" is not supported."
+            "fileTooLarge": "\"{name}\" dosyası 100 MB'tan büyük.",
+            "unsupportedType": "\"{name}\" dosya türü desteklenmiyor."
+        }
+    },
+    "discovery": {
+        "title": "Arama sonuçları",
+        "description": "Scemory genelindeki etkinlikleri, görselleri ve videoları keşfedin.",
+        "showing": "Gösteriliyor",
+        "of": "/",
+        "results": "sonuç",
+        "details": "Ayrıntıları görüntüle",
+        "noResultsTitle": "Sonuç bulunamadı",
+        "noResultsDescription": "Aramanızı veya filtrelerinizi değiştirmeyi deneyin.",
+        "filters": {
+            "allCities": "Tüm şehirler",
+            "allCountries": "Tüm ülkeler"
+        },
+        "tabs": {
+            "all": "Tümü",
+            "event": "Etkinlikler",
+            "image": "Görseller",
+            "video": "Videolar"
+        },
+        "resultLabels": {
+            "event": "Etkinlik",
+            "image": "Görsel",
+            "video": "Video"
+        },
+        "media": {
+            "price": "Fiyat",
+            "addToCart": "Sepete ekle",
+            "added": "Eklendi",
+            "adding": "Ekleniyor...",
+            "playVideo": "Videoyu oynat",
+            "pauseVideo": "Videoyu duraklat"
+        }
+    },
+    "timeline": {
+        "title": "Etkinlik zaman çizelgeniz",
+        "subtitle": "Etkinliklerinizi, tepkilerinizi, yorumlarınızı ve kaydettiklerinizi tek yerde inceleyin.",
+        "totalActivity": "Toplam etkinlik",
+        "latestActivity": "Son etkinlik",
+        "noLatestActivity": "Henüz etkinlik yok",
+        "loading": "Etkinlikler yükleniyor...",
+        "loadError": "Etkinlikleriniz yüklenemedi.",
+        "retry": "Tekrar dene",
+        "viewAll": "Tümünü görüntüle",
+        "empty": "Bu bölümde etkinlik yok.",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "pageOf": "Sayfa {current} / {last}",
+        "unknownEvent": "Bilinmeyen etkinlik",
+        "parentComment": "Şuna yanıt: {comment}",
+        "reactionTo": "Şuna tepki: {comment}",
+        "onEvent": "{event} etkinliğinde",
+        "tabs": {
+            "all": "Tüm etkinlikler",
+            "events": "Etkinlikler",
+            "likes": "Beğeniler",
+            "comments": "Yorumlar",
+            "replies": "Yanıtlar",
+            "comment_images": "Yorum görselleri",
+            "comment_interactions": "Yorum tepkileri",
+            "wishlists": "Favoriler"
+        },
+        "filters": {
+            "label": "Dönem",
+            "all": "Tüm zamanlar",
+            "today": "Bugün",
+            "this_week": "Bu hafta",
+            "this_month": "Bu ay",
+            "custom": "Özel aralık",
+            "from": "Başlangıç",
+            "to": "Bitiş",
+            "apply": "Uygula",
+            "invalidRange": "Geçerli bir tarih aralığı seçin."
+        },
+        "reactions": {
+            "support": "Destek",
+            "neutral": "Tarafsız",
+            "exhibitions": "Karşı"
+        },
+        "status": {
+            "pending": "Beklemede",
+            "approved": "Onaylandı",
+            "rejected": "Reddedildi",
+            "active": "Aktif",
+            "inactive": "Pasif"
         }
     }
 }

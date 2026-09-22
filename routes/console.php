@@ -16,3 +16,7 @@ Schedule::command('queue:work --stop-when-empty --tries=3 --timeout=1200')
     ->everyThirtySeconds()
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('leaderboard:archive-month')
+    ->monthlyOn(1, '00:00')
+    ->withoutOverlapping();

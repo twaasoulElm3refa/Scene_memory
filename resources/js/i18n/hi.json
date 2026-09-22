@@ -96,13 +96,13 @@
         "collection_benefit_2": "स्वचालित 10% छूट",
         "collection_benefit_3": "✓ समय और पैसे बचाएं",
         "collection_benefit_4": "✓ तुरंत सभी इवेंट यादें प्राप्त करें",
-        "upload_media_to_event": "????? ??? ?????? ????? ????",
+        "upload_media_to_event": "इवेंट में मीडिया अपलोड करें",
         "media_alt": "Event media",
         "send_reply": "Send reply",
-        "comment_add_images": "????? ?????? ({count}/{max})",
-        "comment_image_limit": "?????? 2 ?????, ???????? 5 MB",
-        "selected_comment_image_alt": "????? ????? {number}",
-        "remove_selected_comment_image": "????? ????? {number} ?????"
+        "comment_add_images": "चित्र जोड़ें ({count}/{max})",
+        "comment_image_limit": "अधिकतम 2 चित्र, प्रत्येक 5 MB",
+        "selected_comment_image_alt": "चुना गया चित्र {number}",
+        "remove_selected_comment_image": "चुना गया चित्र {number} हटाएँ"
     },
     "common": {
         "search": "खोजें",
@@ -111,21 +111,21 @@
         "details": "विवरण",
         "notSpecified": "निर्दिष्ट नहीं",
         "loadingEvents": "इवेंट्स लोड हो रहे हैं...",
-        "loading": "??? ?? ??? ??...",
+        "loading": "लोड हो रहा है...",
         "close": "बंद करें",
-        "tryAgain": "??? ????? ????",
-        "back": "????",
-        "remove": "?????",
+        "tryAgain": "फिर से प्रयास करें",
+        "back": "वापस",
+        "remove": "हटाएँ",
         "clear": "साफ़ करें",
-        "previous": "?????",
-        "next": "????",
-        "noResults": "??? ?????? ????",
-        "unknownError": "?????? ??????",
+        "previous": "पिछला",
+        "next": "अगला",
+        "noResults": "कोई परिणाम नहीं",
+        "unknownError": "अज्ञात त्रुटि",
         "learnMore": "और जानें",
-        "cancel": "???? ????",
-        "sending": "???? ?? ??? ??...",
-        "show": "??????",
-        "hide": "??????"
+        "cancel": "रद्द करें",
+        "sending": "भेजा जा रहा है...",
+        "show": "दिखाएँ",
+        "hide": "छिपाएँ"
     },
     "events": {
         "add_historical_event": "इवेंट जोड़ें",
@@ -160,7 +160,56 @@
             "real": "Real Events",
             "general": "General Events"
         },
-        "emptyAvailable": "No events are currently available."
+        "emptyAvailable": "No events are currently available.",
+        "directory": {
+            "eyebrow": "Scemory देखें",
+            "eventsTitle": "इवेंट",
+            "eventsDescription": "दुनिया भर के वर्तमान और आगामी इवेंट खोजें।",
+            "historicalTitle": "ऐतिहासिक इवेंट",
+            "historicalDescription": "अतीत के दस्तावेज़ीकृत इवेंट और सुरक्षित यादें देखें।",
+            "events": "इवेंट",
+            "historicalEvents": "ऐतिहासिक इवेंट",
+            "collection": "इवेंट संग्रह",
+            "filters": "फ़िल्टर",
+            "refine": "परिणाम सीमित करें",
+            "closeFilters": "फ़िल्टर बंद करें",
+            "searchLabel": "खोजें",
+            "searchPlaceholder": "इवेंट खोजें...",
+            "eventType": "इवेंट का प्रकार",
+            "types": {
+                "all": "सभी इवेंट",
+                "real": "वास्तविक इवेंट",
+                "general": "सामान्य इवेंट"
+            },
+            "country": "देश",
+            "allCountries": "सभी देश",
+            "category": "श्रेणी",
+            "allCategories": "सभी श्रेणियाँ",
+            "city": "शहर",
+            "allCities": "सभी शहर",
+            "subcategory": "उपश्रेणी",
+            "allSubcategories": "सभी उपश्रेणियाँ",
+            "fromDate": "आरंभ तिथि",
+            "toDate": "समाप्ति तिथि",
+            "clearFilters": "फ़िल्टर हटाएँ",
+            "createEvent": "इवेंट बनाएँ",
+            "createHistorical": "ऐतिहासिक इवेंट जोड़ें",
+            "results": "{count} इवेंट",
+            "showing": "{total} में से {from}–{to} दिखाए जा रहे हैं",
+            "errorTitle": "इवेंट लोड नहीं हो सके",
+            "errorDescription": "इवेंट लोड करते समय कुछ गलत हुआ। फिर से प्रयास करें।",
+            "emptyTitle": "कोई इवेंट नहीं मिला",
+            "historicalEmptyTitle": "कोई ऐतिहासिक इवेंट नहीं मिला",
+            "emptyDescription": "फ़िल्टर बदलकर या हटाकर देखें।",
+            "eventBadge": "इवेंट",
+            "historicalBadge": "ऐतिहासिक",
+            "unknownLocation": "अज्ञात स्थान",
+            "uncategorized": "अवर्गीकृत",
+            "viewEvent": "इवेंट देखें",
+            "pagination": "इवेंट पृष्ठांकन",
+            "previous": "पिछला",
+            "next": "अगला"
+        }
     },
     "pagination": {
         "previous": "पिछला",
@@ -497,12 +546,14 @@
             "maxFourTags": "You can select up to 4 tags only",
             "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
             "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+            "mediaRequired": "कम से कम एक चित्र या वीडियो अपलोड करें।"
         },
         "success": {
             "created": "Event created successfully!",
             "historicalCreated": "Historical event created successfully!"
-        }
+        },
+        "minimumRequirementsHint": "इवेंट बनाने के लिए केवल शीर्षक, विवरण और कम से कम एक चित्र या वीडियो चाहिए। अन्य सभी फ़ील्ड वैकल्पिक हैं।"
     },
     "commons": {
         "required": "आवश्यक",
@@ -599,7 +650,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -635,10 +686,10 @@
         "errors": {
             "loadPlan": "Failed to load plan. Please try again.",
             "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "????? ??? ???? ?? ???? ????? ??? ????? ?????"
+            "loadPlans": "प्लान लोड नहीं हो सके। फिर से प्रयास करें।"
         },
         "customPlanNote": "आपकी आवश्यकताओं के अनुसार बनाया गया",
-        "basicAccessIncluded": "????? ?????? ????? ??",
+        "basicAccessIncluded": "बुनियादी एक्सेस शामिल है",
         "usd": "USD"
     },
     "free": "मुफ़्त",
@@ -752,7 +803,11 @@
                 "cityRequired": "कृपया एक शहर चुनें।",
                 "startDateRequired": "कृपया आरंभ तिथि चुनें।",
                 "eventTypeRequired": "कृपया इवेंट का प्रकार चुनें।",
-                "cityCreateFailed": "शहर नहीं बनाया जा सका। कृपया फिर से प्रयास करें।"
+                "cityCreateFailed": "शहर नहीं बनाया जा सका। कृपया फिर से प्रयास करें।",
+                "sending": "भेजा जा रहा है...",
+                "eventNameRequired": "इवेंट का नाम दर्ज करें।",
+                "descriptionRequired": "इवेंट का विवरण दर्ज करें।",
+                "success": "विशेष कवरेज का अनुरोध सफलतापूर्वक भेज दिया गया है।"
             }
         }
     },
@@ -801,8 +856,11 @@
             "accepted": "accepted",
             "rejected": "rejected",
             "checking": "checking",
-            "idle": "idle"
-        }
+            "idle": "idle",
+            "warning": "गुणवत्ता चेतावनी"
+        },
+        "videoReady": "वीडियो अपलोड के लिए तैयार है।",
+        "qualityWarning": "गुणवत्ता जाँच केवल सलाह के लिए है और इवेंट बनाने से नहीं रोकती।"
     },
     "cart": {
         "title": "Shopping Cart",
@@ -835,7 +893,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -872,7 +930,7 @@
         "downloadSuccess": "{filename} downloaded successfully!",
         "downloadFailed": "Download failed. Please try again.",
         "empty": "No downloads found",
-        "emptyHint": "???? ????? ?? ??????? ???? ????? ?????"
+        "emptyHint": "आपकी खरीदी हुई फ़ाइलें यहाँ दिखाई देंगी"
     },
     "experience": {
         "kicker": "SCEMORY अनुभव",
@@ -985,7 +1043,7 @@
             "reasonLabel": "Possible reason",
             "noteLabel": "Note",
             "noCharge": "No amount was charged to your account",
-            "retry": "??? ????? ????",
+            "retry": "फिर से प्रयास करें",
             "contactSupport": "Contact support",
             "statusShort": "Payment failed",
             "noChargeShort": "No amount was charged",
@@ -1062,132 +1120,218 @@
             "mapLoadFailed": "मैप लोड करते समय एक त्रुटि हुई."
         }
     },
-    "cancel": "???? ????",
-    "login": "??? ?? ????",
-    "sending": "???? ?? ??? ??...",
-    "send_reply": "???? ?????",
+    "cancel": "रद्द करें",
+    "login": "लॉग इन",
+    "sending": "भेजा जा रहा है...",
+    "send_reply": "उत्तर भेजें",
     "report": {
-        "action": "Report",
-        "commentTitle": "Report this comment",
-        "modalTitle": "Report comment",
-        "reasonPrompt": "Choose the reason for reporting this comment:",
-        "submit": "Submit report",
-        "submitting": "Submitting...",
-        "successTitle": "Report submitted",
-        "successMessage": "Thank you. We will review this comment soon.",
+        "action": "रिपोर्ट करें",
+        "commentTitle": "इस टिप्पणी की रिपोर्ट करें",
+        "modalTitle": "टिप्पणी की रिपोर्ट करें",
+        "reasonPrompt": "इस टिप्पणी की रिपोर्ट करने का कारण चुनें:",
+        "submit": "रिपोर्ट सबमिट करें",
+        "submitting": "सबमिट हो रहा है...",
+        "successTitle": "रिपोर्ट सबमिट की गई",
+        "successMessage": "धन्यवाद। हम शीघ्र ही इस टिप्पणी की समीक्षा करेंगे।",
         "errors": {
-            "selectReason": "Please choose a report reason.",
-            "submitFailed": "An error occurred while submitting the report. Please try again."
+            "selectReason": "कृपया रिपोर्ट का कारण चुनें।",
+            "submitFailed": "रिपोर्ट सबमिट करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।"
         },
         "reasons": {
-            "spam": "Spam",
-            "offensive": "Offensive content",
-            "inappropriate": "Inappropriate",
-            "illegal": "Illegal content",
-            "untrue": "False content",
-            "falseInformation": "Misleading information",
-            "other": "Other reason"
+            "spam": "स्पैम",
+            "offensive": "आपत्तिजनक सामग्री",
+            "inappropriate": "अनुपयुक्त",
+            "illegal": "अवैध सामग्री",
+            "untrue": "गलत सामग्री",
+            "falseInformation": "भ्रामक जानकारी",
+            "other": "अन्य कारण"
         }
     },
     "commentsPage": {
-        "title": "Comments",
-        "emptyLabel": "Comments",
-        "emptyMessage": "No comments yet. Be the first to comment.",
-        "attachmentAlt": "Comment attachment",
-        "pageInfo": "Page {current} of {total}",
-        "confirmDelete": "Are you sure you want to delete this comment?",
+        "title": "टिप्पणियाँ",
+        "emptyLabel": "टिप्पणियाँ",
+        "emptyMessage": "अभी तक कोई टिप्पणी नहीं। पहले टिप्पणी करने वाले बनें।",
+        "attachmentAlt": "टिप्पणी संलग्नक",
+        "pageInfo": "पृष्ठ {current} का {total}",
+        "confirmDelete": "क्या आप वाकई इस टिप्पणी को हटाना चाहते हैं?",
         "errors": {
-            "loadFailed": "An error occurred while loading comments."
+            "loadFailed": "टिप्पणियाँ लोड करते समय एक त्रुटि हुई।"
         },
         "reactions": {
-            "support": "Agree",
-            "neutral": "Neutral",
-            "oppose": "Disagree"
+            "support": "सहमत",
+            "neutral": "तटस्थ",
+            "oppose": "असहमत"
         },
-        "you": "You"
+        "you": "आप"
     },
     "profilePage": {
-        "title": "My Profile",
-        "subtitle": "Manage your account information and update your password",
-        "noPlan": "No plan",
-        "lastLogin": "Last login",
-        "accountInfo": "Account information",
-        "systemInfo": "System information",
-        "currentPlan": "Current plan",
-        "planType": "Plan type",
-        "editAccount": "Edit account details",
-        "saving": "Saving...",
-        "saveChanges": "Save changes",
+        "title": "मेरी प्रोफ़ाइल",
+        "subtitle": "अपने खाता जानकारी प्रबंधित करें और पासवर्ड अपडेट करें",
+        "noPlan": "कोई योजना नहीं",
+        "lastLogin": "अंतिम लॉगिन",
+        "accountInfo": "खाता जानकारी",
+        "systemInfo": "सिस्टम जानकारी",
+        "currentPlan": "वर्तमान योजना",
+        "planType": "योजना प्रकार",
+        "editAccount": "खाता विवरण संपादित करें",
+        "saving": "सहेजा जा रहा है...",
+        "saveChanges": "परिवर्तन सहेजें",
         "tabs": {
-            "userInfo": "User information",
-            "editData": "Edit data",
-            "password": "Update password",
-            "wallet": "Wallet"
+            "userInfo": "उपयोगकर्ता जानकारी",
+            "editData": "डेटा संपादित करें",
+            "password": "पासवर्ड अपडेट करें",
+            "wallet": "वॉलेट"
         },
         "fields": {
-            "name": "Name",
-            "fullName": "Full name",
-            "email": "Email",
-            "phone": "Phone",
-            "phoneNumber": "Phone number",
-            "country": "Country",
-            "position": "Position",
-            "positionJob": "Position / Job",
-            "birthDate": "Date of birth",
-            "role": "Role",
-            "status": "Status",
-            "points": "Points",
-            "price": "Price"
+            "name": "नाम",
+            "fullName": "पूरा नाम",
+            "email": "ईमेल",
+            "phone": "फ़ोन",
+            "phoneNumber": "फ़ोन नंबर",
+            "country": "देश",
+            "position": "पद",
+            "positionJob": "पद / नौकरी",
+            "birthDate": "जन्म तिथि",
+            "role": "भूमिका",
+            "status": "स्थिति",
+            "points": "अंक",
+            "price": "मूल्य"
         },
         "placeholders": {
-            "fullName": "Enter your full name",
-            "countrySearch": "Search for a country",
-            "position": "Software engineer"
+            "fullName": "अपना पूरा नाम दर्ज करें",
+            "countrySearch": "किसी देश की तलाश करें",
+            "position": "सॉफ़्टवेयर इंजीनियर"
         },
         "status": {
-            "active": "Active"
+            "active": "सक्रिय"
         },
         "password": {
-            "title": "Update password",
-            "current": "Current password",
-            "new": "New password",
-            "confirm": "Confirm password",
-            "updating": "Updating...",
-            "update": "Update password"
+            "title": "पासवर्ड अपडेट करें",
+            "current": "वर्तमान पासवर्ड",
+            "new": "नया पासवर्ड",
+            "confirm": "पासवर्ड की पुष्टि करें",
+            "updating": "अपडेट हो रहा है...",
+            "update": "पासवर्ड अपडेट करें"
         },
         "messages": {
-            "fillAllFields": "Please fill in all fields.",
-            "passwordMismatch": "Passwords do not match.",
-            "passwordUpdated": "Password updated successfully.",
-            "passwordUpdateFailed": "An error occurred while updating the password.",
-            "chooseCountry": "Please choose a country from the list.",
-            "noChanges": "You have not made any changes.",
-            "profileUpdated": "Your profile has been updated successfully.",
-            "profileUpdateFailed": "An error occurred while updating your profile."
+            "fillAllFields": "कृपया सभी फील्ड भरें।",
+            "passwordMismatch": "पासवर्ड मेल नहीं खाते।",
+            "passwordUpdated": "पासवर्ड सफलतापूर्वक अपडेट हो गया।",
+            "passwordUpdateFailed": "पासवर्ड अपडेट करते समय त्रुटि हुई।",
+            "chooseCountry": "कृपया सूची से एक देश चुनें।",
+            "noChanges": "आपने कोई बदलाव नहीं किया है।",
+            "profileUpdated": "आपका प्रोफ़ाइल सफलतापूर्वक अपडेट हो गया।",
+            "profileUpdateFailed": "आपका प्रोफ़ाइल अपडेट करते समय त्रुटि हुई।"
         },
         "wallet": {
-            "title": "Wallet",
-            "availableBalance": "Available balance",
-            "deposit": "Add funds",
-            "recentTransactions": "Recent transactions",
-            "depositType": "Deposit",
-            "withdrawType": "Withdrawal",
-            "noTransactions": "No transactions yet",
-            "withdrawComingSoon": "The withdrawal window will open soon."
+            "title": "वॉलेट",
+            "availableBalance": "उपलब्ध शेष राशि",
+            "deposit": "फंड जोड़ें",
+            "recentTransactions": "हालिया लेनदेन",
+            "depositType": "जमा",
+            "withdrawType": "निकासी",
+            "noTransactions": "अभी तक कोई लेनदेन नहीं",
+            "withdrawComingSoon": "निकासी की सुविधा जल्द उपलब्ध होगी।"
         }
     },
     "eventUpload": {
-        "maxPerFile": "Maximum per file: 100 MB",
-        "dragFiles": "Drag files here or",
-        "clickToChoose": "click to choose",
-        "supportedFiles": "Images and videos (max 100 MB per file)",
-        "selectedFiles": "Selected files ({count})",
-        "uploading": "Uploading...",
-        "uploadFiles": "Upload files",
-        "success": "Files uploaded successfully!",
+        "maxPerFile": "प्रति फ़ाइल अधिकतम: 100 MB",
+        "dragFiles": "फ़ाइलें यहाँ खींचें या",
+        "clickToChoose": "चुनने के लिए क्लिक करें",
+        "supportedFiles": "छवियाँ और वीडियो (प्रति फ़ाइल अधिकतम 100 MB)",
+        "selectedFiles": "चयनित फ़ाइलें ({count})",
+        "uploading": "अपलोड हो रहा है...",
+        "uploadFiles": "फाइलें अपलोड करें",
+        "success": "फाइलें सफलतापूर्वक अपलोड हो गईं!",
         "errors": {
-            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
-            "unsupportedType": "File type \"{name}\" is not supported."
+            "fileTooLarge": "फाइल \"{name}\" 100 MB से बड़ी है।",
+            "unsupportedType": "फाइल प्रकार \"{name}\" समर्थित नहीं है।"
+        }
+    },
+    "discovery": {
+        "title": "खोज परिणाम",
+        "description": "Scemory पर इवेंट, चित्र और वीडियो खोजें।",
+        "showing": "दिखाए जा रहे हैं",
+        "of": "में से",
+        "results": "परिणाम",
+        "details": "विवरण देखें",
+        "noResultsTitle": "कोई परिणाम नहीं मिला",
+        "noResultsDescription": "अपनी खोज या फ़िल्टर बदलकर देखें।",
+        "filters": {
+            "allCities": "सभी शहर",
+            "allCountries": "सभी देश"
+        },
+        "tabs": {
+            "all": "सभी",
+            "event": "इवेंट",
+            "image": "चित्र",
+            "video": "वीडियो"
+        },
+        "resultLabels": {
+            "event": "इवेंट",
+            "image": "चित्र",
+            "video": "वीडियो"
+        },
+        "media": {
+            "price": "कीमत",
+            "addToCart": "कार्ट में जोड़ें",
+            "added": "जोड़ा गया",
+            "adding": "जोड़ा जा रहा है...",
+            "playVideo": "वीडियो चलाएँ",
+            "pauseVideo": "वीडियो रोकें"
+        }
+    },
+    "timeline": {
+        "title": "आपकी गतिविधि समयरेखा",
+        "subtitle": "अपने इवेंट, प्रतिक्रियाएँ, टिप्पणियाँ और सुरक्षित आइटम एक ही स्थान पर देखें।",
+        "totalActivity": "कुल गतिविधि",
+        "latestActivity": "नवीनतम गतिविधि",
+        "noLatestActivity": "अभी कोई गतिविधि नहीं",
+        "loading": "गतिविधि लोड हो रही है...",
+        "loadError": "आपकी गतिविधि लोड नहीं हो सकी।",
+        "retry": "फिर से प्रयास करें",
+        "viewAll": "सभी देखें",
+        "empty": "इस अनुभाग में कोई गतिविधि नहीं है।",
+        "previous": "पिछला",
+        "next": "अगला",
+        "pageOf": "पृष्ठ {current}, कुल {last}",
+        "unknownEvent": "अज्ञात इवेंट",
+        "parentComment": "इसके जवाब में: {comment}",
+        "reactionTo": "इस पर प्रतिक्रिया: {comment}",
+        "onEvent": "{event} पर",
+        "tabs": {
+            "all": "सभी गतिविधि",
+            "events": "इवेंट",
+            "likes": "पसंद",
+            "comments": "टिप्पणियाँ",
+            "replies": "जवाब",
+            "comment_images": "टिप्पणी चित्र",
+            "comment_interactions": "टिप्पणी प्रतिक्रियाएँ",
+            "wishlists": "पसंदीदा"
+        },
+        "filters": {
+            "label": "अवधि",
+            "all": "सभी समय",
+            "today": "आज",
+            "this_week": "इस सप्ताह",
+            "this_month": "इस महीने",
+            "custom": "मनचाही अवधि",
+            "from": "से",
+            "to": "तक",
+            "apply": "लागू करें",
+            "invalidRange": "मान्य तिथि सीमा चुनें।"
+        },
+        "reactions": {
+            "support": "समर्थन",
+            "neutral": "तटस्थ",
+            "exhibitions": "विरोध"
+        },
+        "status": {
+            "pending": "लंबित",
+            "approved": "स्वीकृत",
+            "rejected": "अस्वीकृत",
+            "active": "सक्रिय",
+            "inactive": "निष्क्रिय"
         }
     }
 }

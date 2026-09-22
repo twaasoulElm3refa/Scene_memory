@@ -77,7 +77,7 @@
         "comment_added_success": "آپ کا تبصرہ کامیابی سے شامل ہو گیا!",
         "delete_comment_title": "تبصرہ حذف کریں",
         "event_info_title": "ایونٹ کی معلومات",
-        "from_date": "من",
+        "from_date": "سے",
         "to_date": "تک",
         "time_label": "وقت",
         "time_default": "غیر واضح",
@@ -96,13 +96,13 @@
         "save_discount": "10% OFF",
         "total_images": "Total Images",
         "buy_collection_title": "Buy Full Collection",
-        "upload_media_to_event": "????? ??? ????? ?? ??? ????",
+        "upload_media_to_event": "ایونٹ میں میڈیا اپ لوڈ کریں",
         "media_alt": "Event media",
         "send_reply": "Send reply",
-        "comment_add_images": "?????? ???? ???? ({count}/{max})",
-        "comment_image_limit": "????? ?? ????? 2 ??????? ?? ??? 5 MB",
-        "selected_comment_image_alt": "????? ????? {number}",
-        "remove_selected_comment_image": "????? ????? {number} ??????"
+        "comment_add_images": "تصاویر شامل کریں ({count}/{max})",
+        "comment_image_limit": "زیادہ سے زیادہ 2 تصاویر، ہر ایک 5 MB",
+        "selected_comment_image_alt": "منتخب تصویر {number}",
+        "remove_selected_comment_image": "منتخب تصویر {number} ہٹائیں"
     },
     "common": {
         "search": "تلاش",
@@ -111,21 +111,21 @@
         "details": "تفصیلات",
         "notSpecified": "متعین نہیں",
         "loadingEvents": "ایونٹس لوڈ ہو رہے ہیں...",
-        "loading": "??? ?? ??? ??...",
+        "loading": "لوڈ ہو رہا ہے...",
         "close": "بند کریں",
-        "tryAgain": "?????? ???? ????",
-        "back": "????",
-        "remove": "??????",
+        "tryAgain": "دوبارہ کوشش کریں",
+        "back": "واپس",
+        "remove": "ہٹائیں",
         "clear": "صاف کریں",
-        "previous": "?????",
-        "next": "????",
-        "noResults": "???? ????? ????",
-        "unknownError": "??????? ?????",
+        "previous": "پچھلا",
+        "next": "اگلا",
+        "noResults": "کوئی نتیجہ نہیں",
+        "unknownError": "نامعلوم خرابی",
         "learnMore": "مزید جانیں",
-        "cancel": "????? ????",
-        "sending": "????? ?? ??? ??...",
-        "show": "???????",
-        "hide": "???????"
+        "cancel": "منسوخ کریں",
+        "sending": "بھیجا جا رہا ہے...",
+        "show": "دکھائیں",
+        "hide": "چھپائیں"
     },
     "events": {
         "add_historical_event": "ایونٹ شامل کریں",
@@ -158,7 +158,58 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "بے عنوان ایونٹ"
+        "no_title": "بے عنوان ایونٹ",
+        "directory": {
+            "eyebrow": "Scemory دریافت کریں",
+            "eventsTitle": "ایونٹس",
+            "eventsDescription": "دنیا بھر کے موجودہ اور آنے والے ایونٹس دریافت کریں۔",
+            "historicalTitle": "تاریخی ایونٹس",
+            "historicalDescription": "ماضی کے دستاویزی ایونٹس اور محفوظ یادیں دریافت کریں۔",
+            "events": "ایونٹس",
+            "historicalEvents": "تاریخی ایونٹس",
+            "collection": "ایونٹس کا مجموعہ",
+            "filters": "فلٹرز",
+            "refine": "نتائج محدود کریں",
+            "closeFilters": "فلٹرز بند کریں",
+            "searchLabel": "تلاش",
+            "searchPlaceholder": "ایونٹس تلاش کریں...",
+            "eventType": "ایونٹ کی قسم",
+            "types": {
+                "all": "تمام ایونٹس",
+                "real": "حقیقی ایونٹس",
+                "general": "عمومی ایونٹس"
+            },
+            "country": "ملک",
+            "allCountries": "تمام ممالک",
+            "category": "زمرہ",
+            "allCategories": "تمام زمرے",
+            "city": "شہر",
+            "allCities": "تمام شہر",
+            "subcategory": "ذیلی زمرہ",
+            "allSubcategories": "تمام ذیلی زمرے",
+            "fromDate": "ابتدائی تاریخ",
+            "toDate": "آخری تاریخ",
+            "clearFilters": "فلٹرز صاف کریں",
+            "createEvent": "ایونٹ بنائیں",
+            "createHistorical": "تاریخی ایونٹ شامل کریں",
+            "results": "{count} ایونٹس",
+            "showing": "{total} میں سے {from}–{to} دکھائے جا رہے ہیں",
+            "errorTitle": "ایونٹس لوڈ نہیں ہو سکے",
+            "errorDescription": "ایونٹس لوڈ کرتے وقت خرابی پیش آئی۔ دوبارہ کوشش کریں۔",
+            "emptyTitle": "کوئی ایونٹ نہیں ملا",
+            "historicalEmptyTitle": "کوئی تاریخی ایونٹ نہیں ملا",
+            "emptyDescription": "فلٹرز تبدیل یا صاف کر کے دیکھیں۔",
+            "eventBadge": "ایونٹ",
+            "historicalBadge": "تاریخی",
+            "unknownLocation": "نامعلوم مقام",
+            "uncategorized": "بلا زمرہ",
+            "viewEvent": "ایونٹ دیکھیں",
+            "pagination": "ایونٹس کی صفحہ بندی",
+            "previous": "پچھلا",
+            "next": "اگلا"
+        },
+        "from_map": "نقشے سے",
+        "undefined_city": "غیر واضح"
     },
     "pagination": {
         "previous": "پچھلا",
@@ -495,12 +546,14 @@
             "maxFourTags": "You can select up to 4 tags only",
             "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
             "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+            "mediaRequired": "کم از کم ایک تصویر یا ویڈیو اپ لوڈ کریں۔"
         },
         "success": {
             "created": "Event created successfully!",
             "historicalCreated": "Historical event created successfully!"
-        }
+        },
+        "minimumRequirementsHint": "ایونٹ بنانے کے لیے صرف عنوان، تفصیل اور کم از کم ایک تصویر یا ویڈیو درکار ہے۔ باقی تمام خانے اختیاری ہیں۔"
     },
     "commons": {
         "required": "ضروری",
@@ -597,7 +650,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -633,10 +686,10 @@
         "errors": {
             "loadPlan": "Failed to load plan. Please try again.",
             "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "????? ??? ???? ?? ???? ?????? ???? ?????"
+            "loadPlans": "پلان لوڈ نہیں ہو سکے۔ دوبارہ کوشش کریں۔"
         },
         "customPlanNote": "آپ کی ضروریات کے مطابق بنایا گیا",
-        "basicAccessIncluded": "?????? ????? ???? ??",
+        "basicAccessIncluded": "بنیادی رسائی شامل ہے",
         "usd": "امریکی ڈالر"
     },
     "free": "مفت",
@@ -750,7 +803,11 @@
                 "cityRequired": "براہ کرم شہر منتخب کریں۔",
                 "startDateRequired": "براہ کرم آغاز کی تاریخ منتخب کریں۔",
                 "eventTypeRequired": "براہ کرم ایونٹ کی قسم منتخب کریں۔",
-                "cityCreateFailed": "شہر نہیں بنایا جا سکا۔ براہ کرم دوبارہ کوشش کریں۔"
+                "cityCreateFailed": "شہر نہیں بنایا جا سکا۔ براہ کرم دوبارہ کوشش کریں۔",
+                "sending": "بھیجا جا رہا ہے...",
+                "eventNameRequired": "ایونٹ کا نام درج کریں۔",
+                "descriptionRequired": "ایونٹ کی تفصیل درج کریں۔",
+                "success": "خصوصی کوریج کی درخواست کامیابی سے بھیج دی گئی ہے۔"
             }
         }
     },
@@ -799,8 +856,11 @@
             "accepted": "accepted",
             "rejected": "rejected",
             "checking": "checking",
-            "idle": "idle"
-        }
+            "idle": "idle",
+            "warning": "معیار کا انتباہ"
+        },
+        "videoReady": "ویڈیو اپ لوڈ کے لیے تیار ہے۔",
+        "qualityWarning": "معیار کی جانچ صرف رہنمائی کے لیے ہے اور ایونٹ بنانے سے نہیں روکتی۔"
     },
     "cart": {
         "title": "Shopping Cart",
@@ -833,7 +893,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -870,7 +930,7 @@
         "downloadSuccess": "{filename} downloaded successfully!",
         "downloadFailed": "Download failed. Please try again.",
         "empty": "No downloads found",
-        "emptyHint": "?? ?? ????? ??? ?????? ???? ???? ??? ??"
+        "emptyHint": "آپ کی خریدی ہوئی فائلیں یہاں دکھائی دیں گی"
     },
     "experience": {
         "kicker": "SCEMORY تجربہ",
@@ -983,7 +1043,7 @@
             "reasonLabel": "Possible reason",
             "noteLabel": "Note",
             "noCharge": "No amount was charged to your account",
-            "retry": "?????? ???? ????",
+            "retry": "دوبارہ کوشش کریں",
             "contactSupport": "Contact support",
             "statusShort": "Payment failed",
             "noChargeShort": "No amount was charged",
@@ -1060,132 +1120,218 @@
             "mapLoadFailed": "میپ لوڈ کرتے وقت ایک خرابی پیش آئی۔"
         }
     },
-    "cancel": "????? ????",
-    "login": "??? ?? ????",
-    "sending": "????? ?? ??? ??...",
-    "send_reply": "???? ??????",
+    "cancel": "منسوخ کریں",
+    "login": "لاگ ان کریں",
+    "sending": "بھیج رہا ہے...",
+    "send_reply": "جواب بھیجیں",
     "report": {
-        "action": "Report",
-        "commentTitle": "Report this comment",
-        "modalTitle": "Report comment",
-        "reasonPrompt": "Choose the reason for reporting this comment:",
-        "submit": "Submit report",
-        "submitting": "Submitting...",
-        "successTitle": "Report submitted",
-        "successMessage": "Thank you. We will review this comment soon.",
+        "action": "رپورٹ کریں",
+        "commentTitle": "اس تبصرے کی رپورٹ کریں",
+        "modalTitle": "تبصرے کی رپورٹ کریں",
+        "reasonPrompt": "اس تبصرے کی رپورٹ کرنے کی وجہ منتخب کریں:",
+        "submit": "رپورٹ جمع کریں",
+        "submitting": "جمع کر رہا ہے...",
+        "successTitle": "رپورٹ جمع کر دی گئی",
+        "successMessage": "شکریہ۔ ہم جلد ہی اس تبصرے کا جائزہ لیں گے۔",
         "errors": {
-            "selectReason": "Please choose a report reason.",
-            "submitFailed": "An error occurred while submitting the report. Please try again."
+            "selectReason": "براہ کرم رپورٹ کی وجہ منتخب کریں۔",
+            "submitFailed": "رپورٹ جمع کراتے وقت ایک خرابی پیش آئی۔ براہ کرم دوبارہ کوشش کریں۔"
         },
         "reasons": {
-            "spam": "Spam",
-            "offensive": "Offensive content",
-            "inappropriate": "Inappropriate",
-            "illegal": "Illegal content",
-            "untrue": "False content",
-            "falseInformation": "Misleading information",
-            "other": "Other reason"
+            "spam": "اسپام",
+            "offensive": "فحش مواد",
+            "inappropriate": "غیر موزوں",
+            "illegal": "غیر قانونی مواد",
+            "untrue": "جھوٹا مواد",
+            "falseInformation": "گمراہ کن معلومات",
+            "other": "دوسری وجہ"
         }
     },
     "commentsPage": {
-        "title": "Comments",
-        "emptyLabel": "Comments",
-        "emptyMessage": "No comments yet. Be the first to comment.",
-        "attachmentAlt": "Comment attachment",
-        "pageInfo": "Page {current} of {total}",
-        "confirmDelete": "Are you sure you want to delete this comment?",
+        "title": "تبصرے",
+        "emptyLabel": "تبصرے",
+        "emptyMessage": "ابھی تک کوئی تبصرہ نہیں۔ پہلا تبصرہ کریں۔",
+        "attachmentAlt": "تبصرے کی منسلکہ",
+        "pageInfo": "صفحہ {current} از {total}",
+        "confirmDelete": "کیا آپ واقعی اس تبصرے کو حذف کرنا چاہتے ہیں؟",
         "errors": {
-            "loadFailed": "An error occurred while loading comments."
+            "loadFailed": "تبصرے لوڈ کرتے وقت ایک خرابی پیش آئی۔"
         },
         "reactions": {
-            "support": "Agree",
-            "neutral": "Neutral",
-            "oppose": "Disagree"
+            "support": "متفق",
+            "neutral": "غیر جانبدار",
+            "oppose": "اختلاف"
         },
-        "you": "You"
+        "you": "آپ"
     },
     "profilePage": {
-        "title": "My Profile",
-        "subtitle": "Manage your account information and update your password",
-        "noPlan": "No plan",
-        "lastLogin": "Last login",
-        "accountInfo": "Account information",
-        "systemInfo": "System information",
-        "currentPlan": "Current plan",
-        "planType": "Plan type",
-        "editAccount": "Edit account details",
-        "saving": "Saving...",
-        "saveChanges": "Save changes",
+        "title": "میرا پروفائل",
+        "subtitle": "اپنے اکاؤنٹ کی معلومات کا انتظام کریں اور اپنا پاس ورڈ اپ ڈیٹ کریں",
+        "noPlan": "کوئی منصوبہ نہیں",
+        "lastLogin": "آخری لاگ ان",
+        "accountInfo": "اکاؤنٹ کی معلومات",
+        "systemInfo": "سسٹم کی معلومات",
+        "currentPlan": "موجودہ منصوبہ",
+        "planType": "منصوبے کی قسم",
+        "editAccount": "اکاؤنٹ کی تفصیلات میں ترمیم کریں",
+        "saving": "محفوظ کیا جا رہا ہے...",
+        "saveChanges": "تبدیلیاں محفوظ کریں",
         "tabs": {
-            "userInfo": "User information",
-            "editData": "Edit data",
-            "password": "Update password",
-            "wallet": "Wallet"
+            "userInfo": "صارف کی معلومات",
+            "editData": "ڈیٹا میں ترمیم کریں",
+            "password": "پاس ورڈ اپ ڈیٹ کریں",
+            "wallet": "والٹ"
         },
         "fields": {
-            "name": "Name",
-            "fullName": "Full name",
-            "email": "Email",
-            "phone": "Phone",
-            "phoneNumber": "Phone number",
-            "country": "Country",
-            "position": "Position",
-            "positionJob": "Position / Job",
-            "birthDate": "Date of birth",
-            "role": "Role",
-            "status": "Status",
-            "points": "Points",
-            "price": "Price"
+            "name": "نام",
+            "fullName": "پورا نام",
+            "email": "ای میل",
+            "phone": "فون",
+            "phoneNumber": "فون نمبر",
+            "country": "ملک",
+            "position": "عہدہ",
+            "positionJob": "عہدہ / ملازمت",
+            "birthDate": "تاریخ پیدائش",
+            "role": "کردار",
+            "status": "حیثیت",
+            "points": "پوائنٹس",
+            "price": "قیمت"
         },
         "placeholders": {
-            "fullName": "Enter your full name",
-            "countrySearch": "Search for a country",
-            "position": "Software engineer"
+            "fullName": "اپنا پورا نام درج کریں",
+            "countrySearch": "ملک تلاش کریں",
+            "position": "سافٹ ویئر انجینئر"
         },
         "status": {
-            "active": "Active"
+            "active": "فعال"
         },
         "password": {
-            "title": "Update password",
-            "current": "Current password",
-            "new": "New password",
-            "confirm": "Confirm password",
-            "updating": "Updating...",
-            "update": "Update password"
+            "title": "پاس ورڈ اپ ڈیٹ کریں",
+            "current": "موجودہ پاس ورڈ",
+            "new": "نیا پاس ورڈ",
+            "confirm": "پاس ورڈ کی تصدیق کریں",
+            "updating": "اپ ڈیٹ ہو رہا ہے...",
+            "update": "پاس ورڈ اپ ڈیٹ کریں"
         },
         "messages": {
-            "fillAllFields": "Please fill in all fields.",
-            "passwordMismatch": "Passwords do not match.",
-            "passwordUpdated": "Password updated successfully.",
-            "passwordUpdateFailed": "An error occurred while updating the password.",
-            "chooseCountry": "Please choose a country from the list.",
-            "noChanges": "You have not made any changes.",
-            "profileUpdated": "Your profile has been updated successfully.",
-            "profileUpdateFailed": "An error occurred while updating your profile."
+            "fillAllFields": "براہ کرم تمام خانے پُر کریں۔",
+            "passwordMismatch": "پاس ورڈز میل نہیں کھاتے۔",
+            "passwordUpdated": "پاس ورڈ کامیابی سے اپ ڈیٹ ہو گیا۔",
+            "passwordUpdateFailed": "پاس ورڈ اپ ڈیٹ کرتے وقت ایک خرابی پیش آگئی۔",
+            "chooseCountry": "براہ کرم فہرست سے ملک منتخب کریں۔",
+            "noChanges": "آپ نے کوئی تبدیلی نہیں کی۔",
+            "profileUpdated": "آپ کی پروفائل کامیابی سے اپ ڈیٹ ہو گئی۔",
+            "profileUpdateFailed": "آپ کی پروفائل اپ ڈیٹ کرتے وقت ایک خرابی پیش آگئی۔"
         },
         "wallet": {
-            "title": "Wallet",
-            "availableBalance": "Available balance",
-            "deposit": "Add funds",
-            "recentTransactions": "Recent transactions",
-            "depositType": "Deposit",
-            "withdrawType": "Withdrawal",
-            "noTransactions": "No transactions yet",
-            "withdrawComingSoon": "The withdrawal window will open soon."
+            "title": "والٹ",
+            "availableBalance": "دستیاب بیلنس",
+            "deposit": "فنڈز شامل کریں",
+            "recentTransactions": "تازہ ترین لین دین",
+            "depositType": "جمع",
+            "withdrawType": "رقم نکالنا",
+            "noTransactions": "ابھی تک کوئی لین دین نہیں",
+            "withdrawComingSoon": "رقم نکالنے کی سہولت جلد دستیاب ہوگی۔"
         }
     },
     "eventUpload": {
-        "maxPerFile": "Maximum per file: 100 MB",
-        "dragFiles": "Drag files here or",
-        "clickToChoose": "click to choose",
-        "supportedFiles": "Images and videos (max 100 MB per file)",
-        "selectedFiles": "Selected files ({count})",
-        "uploading": "Uploading...",
-        "uploadFiles": "Upload files",
-        "success": "Files uploaded successfully!",
+        "maxPerFile": "فی فائل زیادہ سے زیادہ: 100 MB",
+        "dragFiles": "فائلیں یہاں ڈریگ کریں یا",
+        "clickToChoose": "منتخب کرنے کے لیے کلک کریں",
+        "supportedFiles": "تصاویر اور ویڈیوز (فی فائل زیادہ سے زیادہ 100 MB)",
+        "selectedFiles": "منتخب شدہ فائلیں ({count})",
+        "uploading": "اپ لوڈ ہو رہا ہے...",
+        "uploadFiles": "فائلیں اپلوڈ کریں",
+        "success": "فائلیں کامیابی کے ساتھ اپلوڈ ہو گئیں!",
         "errors": {
-            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
-            "unsupportedType": "File type \"{name}\" is not supported."
+            "fileTooLarge": "فائل \"{name}\" 100 MB سے بڑی ہے۔",
+            "unsupportedType": "فائل کی قسم \"{name}\" معاون نہیں ہے۔"
+        }
+    },
+    "discovery": {
+        "title": "تلاش کے نتائج",
+        "description": "Scemory پر ایونٹس، تصاویر اور ویڈیوز دریافت کریں۔",
+        "showing": "دکھائے جا رہے ہیں",
+        "of": "از",
+        "results": "نتائج",
+        "details": "تفصیلات دیکھیں",
+        "noResultsTitle": "کوئی نتیجہ نہیں ملا",
+        "noResultsDescription": "اپنی تلاش یا فلٹرز تبدیل کر کے دیکھیں۔",
+        "filters": {
+            "allCities": "تمام شہر",
+            "allCountries": "تمام ممالک"
+        },
+        "tabs": {
+            "all": "سب",
+            "event": "ایونٹس",
+            "image": "تصاویر",
+            "video": "ویڈیوز"
+        },
+        "resultLabels": {
+            "event": "ایونٹ",
+            "image": "تصویر",
+            "video": "ویڈیو"
+        },
+        "media": {
+            "price": "قیمت",
+            "addToCart": "کارٹ میں شامل کریں",
+            "added": "شامل ہو گیا",
+            "adding": "شامل کیا جا رہا ہے...",
+            "playVideo": "ویڈیو چلائیں",
+            "pauseVideo": "ویڈیو روکیں"
+        }
+    },
+    "timeline": {
+        "title": "آپ کی سرگرمیوں کی ٹائم لائن",
+        "subtitle": "اپنے ایونٹس، ردعمل، تبصرے اور محفوظ اشیا ایک جگہ دیکھیں۔",
+        "totalActivity": "کل سرگرمی",
+        "latestActivity": "تازہ ترین سرگرمی",
+        "noLatestActivity": "ابھی کوئی سرگرمی نہیں",
+        "loading": "سرگرمی لوڈ ہو رہی ہے...",
+        "loadError": "آپ کی سرگرمی لوڈ نہیں ہو سکی۔",
+        "retry": "دوبارہ کوشش کریں",
+        "viewAll": "سب دیکھیں",
+        "empty": "اس حصے میں کوئی سرگرمی نہیں۔",
+        "previous": "پچھلا",
+        "next": "اگلا",
+        "pageOf": "صفحہ {current} از {last}",
+        "unknownEvent": "نامعلوم ایونٹ",
+        "parentComment": "اس کے جواب میں: {comment}",
+        "reactionTo": "اس پر ردعمل: {comment}",
+        "onEvent": "{event} پر",
+        "tabs": {
+            "all": "تمام سرگرمی",
+            "events": "ایونٹس",
+            "likes": "پسندیدگیاں",
+            "comments": "تبصرے",
+            "replies": "جوابات",
+            "comment_images": "تبصروں کی تصاویر",
+            "comment_interactions": "تبصروں پر ردعمل",
+            "wishlists": "پسندیدہ"
+        },
+        "filters": {
+            "label": "مدت",
+            "all": "تمام وقت",
+            "today": "آج",
+            "this_week": "اس ہفتے",
+            "this_month": "اس مہینے",
+            "custom": "مخصوص مدت",
+            "from": "سے",
+            "to": "تک",
+            "apply": "لاگو کریں",
+            "invalidRange": "درست تاریخوں کی حد منتخب کریں۔"
+        },
+        "reactions": {
+            "support": "حمایت",
+            "neutral": "غیر جانب دار",
+            "exhibitions": "مخالفت"
+        },
+        "status": {
+            "pending": "زیر التوا",
+            "approved": "منظور شدہ",
+            "rejected": "مسترد شدہ",
+            "active": "فعال",
+            "inactive": "غیر فعال"
         }
     }
 }

@@ -96,13 +96,13 @@
         "collection_benefit_2": "Автоматическая скидка 10%",
         "collection_benefit_3": "✓ Экономьте время и деньги",
         "collection_benefit_4": "✓ Получите все воспоминания о событии мгновенно",
-        "upload_media_to_event": "????????? ????? ? ???????",
+        "upload_media_to_event": "Загрузить медиафайлы в событие",
         "media_alt": "Event media",
         "send_reply": "Send reply",
-        "comment_add_images": "???????? ??????????? ({count}/{max})",
-        "comment_image_limit": "???????? 2 ???????????, ?? 5 ?? ??????",
-        "selected_comment_image_alt": "????????? ??????????? {number}",
-        "remove_selected_comment_image": "??????? ????????? ??????????? {number}"
+        "comment_add_images": "Добавить изображения ({count}/{max})",
+        "comment_image_limit": "Не более 2 изображений по 5 МБ каждое",
+        "selected_comment_image_alt": "Выбранное изображение {number}",
+        "remove_selected_comment_image": "Удалить выбранное изображение {number}"
     },
     "common": {
         "search": "Искать",
@@ -111,21 +111,21 @@
         "details": "Подробнее",
         "notSpecified": "Не указано",
         "loadingEvents": "Загрузка событий...",
-        "loading": "????????...",
+        "loading": "Загрузка...",
         "close": "Закрыть",
-        "tryAgain": "?????????",
-        "back": "?????",
-        "remove": "???????",
+        "tryAgain": "Повторить",
+        "back": "Назад",
+        "remove": "Удалить",
         "clear": "Очистить",
-        "previous": "??????????",
-        "next": "?????????",
-        "noResults": "??? ???????????",
-        "unknownError": "??????????? ??????",
+        "previous": "Предыдущая",
+        "next": "Следующая",
+        "noResults": "Нет результатов",
+        "unknownError": "Неизвестная ошибка",
         "learnMore": "Узнать больше",
-        "cancel": "??????",
-        "sending": "????????...",
-        "show": "????????",
-        "hide": "??????"
+        "cancel": "Отмена",
+        "sending": "Отправка...",
+        "show": "Показать",
+        "hide": "Скрыть"
     },
     "events": {
         "add_historical_event": "Добавить историческое событие",
@@ -158,7 +158,58 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "Событие без названия"
+        "no_title": "Событие без названия",
+        "directory": {
+            "eyebrow": "Исследуйте Scemory",
+            "eventsTitle": "События",
+            "eventsDescription": "Откройте для себя текущие и предстоящие события со всего мира.",
+            "historicalTitle": "Исторические события",
+            "historicalDescription": "Исследуйте документированные события и сохраненные воспоминания о прошлом.",
+            "events": "событий",
+            "historicalEvents": "исторических событий",
+            "collection": "Подборка событий",
+            "filters": "Фильтры",
+            "refine": "Уточнить результаты",
+            "closeFilters": "Закрыть фильтры",
+            "searchLabel": "Поиск",
+            "searchPlaceholder": "Поиск событий...",
+            "eventType": "Тип события",
+            "types": {
+                "all": "Все события",
+                "real": "Реальные события",
+                "general": "Общие события"
+            },
+            "country": "Страна",
+            "allCountries": "Все страны",
+            "category": "Категория",
+            "allCategories": "Все категории",
+            "city": "Город",
+            "allCities": "Все города",
+            "subcategory": "Подкатегория",
+            "allSubcategories": "Все подкатегории",
+            "fromDate": "Дата начала",
+            "toDate": "Дата окончания",
+            "clearFilters": "Сбросить фильтры",
+            "createEvent": "Создать событие",
+            "createHistorical": "Добавить историческое событие",
+            "results": "Событий: {count}",
+            "showing": "Показано {from}–{to} из {total}",
+            "errorTitle": "Не удалось загрузить события",
+            "errorDescription": "При загрузке событий произошла ошибка. Повторите попытку.",
+            "emptyTitle": "События не найдены",
+            "historicalEmptyTitle": "Исторические события не найдены",
+            "emptyDescription": "Попробуйте изменить или сбросить фильтры.",
+            "eventBadge": "Событие",
+            "historicalBadge": "Историческое",
+            "unknownLocation": "Неизвестное место",
+            "uncategorized": "Без категории",
+            "viewEvent": "Посмотреть событие",
+            "pagination": "Навигация по страницам событий",
+            "previous": "Назад",
+            "next": "Далее"
+        },
+        "from_map": "С карты",
+        "undefined_city": "Не указано"
     },
     "pagination": {
         "previous": "Назад",
@@ -495,12 +546,14 @@
             "maxFourTags": "You can select up to 4 tags only",
             "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
             "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+            "mediaRequired": "Загрузите хотя бы одно изображение или видео."
         },
         "success": {
             "created": "Event created successfully!",
             "historicalCreated": "Historical event created successfully!"
-        }
+        },
+        "minimumRequirementsHint": "Чтобы создать событие, достаточно указать название, описание и загрузить хотя бы одно изображение или видео. Все остальные поля необязательны."
     },
     "commons": {
         "required": "обязательно",
@@ -592,7 +645,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -628,10 +681,10 @@
         "errors": {
             "loadPlan": "Failed to load plan. Please try again.",
             "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "?? ??????? ????????? ??????. ?????????? ?????."
+            "loadPlans": "Не удалось загрузить тарифы. Повторите попытку."
         },
         "customPlanNote": "Под ваши требования",
-        "basicAccessIncluded": "??????? ?????? ???????",
+        "basicAccessIncluded": "Базовый доступ включен",
         "usd": "USD"
     },
     "free": "Бесплатный",
@@ -745,7 +798,11 @@
                 "cityRequired": "Выберите город.",
                 "startDateRequired": "Выберите дату начала.",
                 "eventTypeRequired": "Выберите тип события.",
-                "cityCreateFailed": "Не удалось создать город. Повторите попытку."
+                "cityCreateFailed": "Не удалось создать город. Повторите попытку.",
+                "sending": "Отправка...",
+                "eventNameRequired": "Введите название события.",
+                "descriptionRequired": "Введите описание события.",
+                "success": "Запрос на специальное освещение успешно отправлен."
             }
         }
     },
@@ -794,8 +851,11 @@
             "accepted": "accepted",
             "rejected": "rejected",
             "checking": "checking",
-            "idle": "idle"
-        }
+            "idle": "idle",
+            "warning": "предупреждение о качестве"
+        },
+        "videoReady": "Видео готово к загрузке.",
+        "qualityWarning": "Проверки качества носят рекомендательный характер и не мешают созданию события."
     },
     "cart": {
         "title": "Shopping Cart",
@@ -828,7 +888,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -865,7 +925,7 @@
         "downloadSuccess": "{filename} downloaded successfully!",
         "downloadFailed": "Download failed. Please try again.",
         "empty": "No downloads found",
-        "emptyHint": "????????? ????? ???????? ?????"
+        "emptyHint": "Купленные файлы появятся здесь"
     },
     "experience": {
         "kicker": "ОПЫТ SCEMORY",
@@ -978,7 +1038,7 @@
             "reasonLabel": "Possible reason",
             "noteLabel": "Note",
             "noCharge": "No amount was charged to your account",
-            "retry": "?????????",
+            "retry": "Повторить",
             "contactSupport": "Contact support",
             "statusShort": "Payment failed",
             "noChargeShort": "No amount was charged",
@@ -1055,132 +1115,223 @@
             "mapLoadFailed": "При загрузке карты произошла ошибка."
         }
     },
-    "cancel": "??????",
-    "login": "?????",
-    "sending": "????????...",
-    "send_reply": "????????? ?????",
+    "cancel": "Отменить",
+    "login": "Войти",
+    "sending": "Отправка...",
+    "send_reply": "Отправить ответ",
     "report": {
-        "action": "Report",
-        "commentTitle": "Report this comment",
-        "modalTitle": "Report comment",
-        "reasonPrompt": "Choose the reason for reporting this comment:",
-        "submit": "Submit report",
-        "submitting": "Submitting...",
-        "successTitle": "Report submitted",
-        "successMessage": "Thank you. We will review this comment soon.",
+        "action": "Пожаловаться",
+        "commentTitle": "Пожаловаться на этот комментарий",
+        "modalTitle": "Пожаловаться на комментарий",
+        "reasonPrompt": "Выберите причину для жалобы на этот комментарий:",
+        "submit": "Отправить жалобу",
+        "submitting": "Отправка...",
+        "successTitle": "Жалоба отправлена",
+        "successMessage": "Спасибо. Мы скоро рассмотрим этот комментарий.",
         "errors": {
-            "selectReason": "Please choose a report reason.",
-            "submitFailed": "An error occurred while submitting the report. Please try again."
+            "selectReason": "Пожалуйста, выберите причину жалобы.",
+            "submitFailed": "Произошла ошибка при отправке жалобы. Пожалуйста, попробуйте снова."
         },
         "reasons": {
-            "spam": "Spam",
-            "offensive": "Offensive content",
-            "inappropriate": "Inappropriate",
-            "illegal": "Illegal content",
-            "untrue": "False content",
-            "falseInformation": "Misleading information",
-            "other": "Other reason"
+            "spam": "Спам",
+            "offensive": "Оскорбительное содержание",
+            "inappropriate": "Неуместно",
+            "illegal": "Незаконное содержание",
+            "untrue": "Ложная информация",
+            "falseInformation": "Вводящая в заблуждение информация",
+            "other": "Другая причина"
         }
     },
     "commentsPage": {
-        "title": "Comments",
-        "emptyLabel": "Comments",
-        "emptyMessage": "No comments yet. Be the first to comment.",
-        "attachmentAlt": "Comment attachment",
-        "pageInfo": "Page {current} of {total}",
-        "confirmDelete": "Are you sure you want to delete this comment?",
+        "title": "Комментарии",
+        "emptyLabel": "Комментарии",
+        "emptyMessage": "Комментариев пока нет. Будьте первым, кто оставит комментарий.",
+        "attachmentAlt": "Вложение к комментарию",
+        "pageInfo": "Страница {current} из {total}",
+        "confirmDelete": "Вы уверены, что хотите удалить этот комментарий?",
         "errors": {
-            "loadFailed": "An error occurred while loading comments."
+            "loadFailed": "Произошла ошибка при загрузке комментариев."
         },
         "reactions": {
-            "support": "Agree",
-            "neutral": "Neutral",
-            "oppose": "Disagree"
+            "support": "Согласен",
+            "neutral": "Нейтрально",
+            "oppose": "Не согласен"
         },
-        "you": "You"
+        "you": "Вы"
     },
     "profilePage": {
-        "title": "My Profile",
-        "subtitle": "Manage your account information and update your password",
-        "noPlan": "No plan",
-        "lastLogin": "Last login",
-        "accountInfo": "Account information",
-        "systemInfo": "System information",
-        "currentPlan": "Current plan",
-        "planType": "Plan type",
-        "editAccount": "Edit account details",
-        "saving": "Saving...",
-        "saveChanges": "Save changes",
+        "title": "Мой профиль",
+        "subtitle": "Управляйте информацией своей учетной записи и обновляйте пароль",
+        "noPlan": "Нет плана",
+        "lastLogin": "Последний вход",
+        "accountInfo": "Информация об учетной записи",
+        "systemInfo": "Системная информация",
+        "currentPlan": "Текущий план",
+        "planType": "Тип плана",
+        "editAccount": "Редактировать данные учетной записи",
+        "saving": "Сохранение...",
+        "saveChanges": "Сохранить изменения",
         "tabs": {
-            "userInfo": "User information",
-            "editData": "Edit data",
-            "password": "Update password",
-            "wallet": "Wallet"
+            "userInfo": "Информация о пользователе",
+            "editData": "Редактировать данные",
+            "password": "Обновить пароль",
+            "wallet": "Кошелек"
         },
         "fields": {
-            "name": "Name",
-            "fullName": "Full name",
-            "email": "Email",
-            "phone": "Phone",
-            "phoneNumber": "Phone number",
-            "country": "Country",
-            "position": "Position",
-            "positionJob": "Position / Job",
-            "birthDate": "Date of birth",
-            "role": "Role",
-            "status": "Status",
-            "points": "Points",
-            "price": "Price"
+            "name": "Имя",
+            "fullName": "Полное имя",
+            "email": "Электронная почта",
+            "phone": "Телефон",
+            "phoneNumber": "Номер телефона",
+            "country": "Страна",
+            "position": "Должность",
+            "positionJob": "Должность / работа",
+            "birthDate": "Дата рождения",
+            "role": "Роль",
+            "status": "Статус",
+            "points": "Очки",
+            "price": "Цена"
         },
         "placeholders": {
-            "fullName": "Enter your full name",
-            "countrySearch": "Search for a country",
-            "position": "Software engineer"
+            "fullName": "Введите ваше полное имя",
+            "countrySearch": "Поиск страны",
+            "position": "Программист"
         },
         "status": {
-            "active": "Active"
+            "active": "Активен"
         },
         "password": {
-            "title": "Update password",
-            "current": "Current password",
-            "new": "New password",
-            "confirm": "Confirm password",
-            "updating": "Updating...",
-            "update": "Update password"
+            "title": "Обновить пароль",
+            "current": "Текущий пароль",
+            "new": "Новый пароль",
+            "confirm": "Подтвердите пароль",
+            "updating": "Обновление...",
+            "update": "Обновить пароль"
         },
         "messages": {
-            "fillAllFields": "Please fill in all fields.",
-            "passwordMismatch": "Passwords do not match.",
-            "passwordUpdated": "Password updated successfully.",
-            "passwordUpdateFailed": "An error occurred while updating the password.",
-            "chooseCountry": "Please choose a country from the list.",
-            "noChanges": "You have not made any changes.",
-            "profileUpdated": "Your profile has been updated successfully.",
-            "profileUpdateFailed": "An error occurred while updating your profile."
+            "fillAllFields": "Пожалуйста, заполните все поля.",
+            "passwordMismatch": "Пароли не совпадают.",
+            "passwordUpdated": "Пароль успешно обновлен.",
+            "passwordUpdateFailed": "Произошла ошибка при обновлении пароля.",
+            "chooseCountry": "Пожалуйста, выберите страну из списка.",
+            "noChanges": "Вы не внесли никаких изменений.",
+            "profileUpdated": "Ваш профиль успешно обновлен.",
+            "profileUpdateFailed": "Произошла ошибка при обновлении вашего профиля."
         },
         "wallet": {
-            "title": "Wallet",
-            "availableBalance": "Available balance",
-            "deposit": "Add funds",
-            "recentTransactions": "Recent transactions",
-            "depositType": "Deposit",
-            "withdrawType": "Withdrawal",
-            "noTransactions": "No transactions yet",
-            "withdrawComingSoon": "The withdrawal window will open soon."
+            "title": "Кошелек",
+            "availableBalance": "Доступный баланс",
+            "deposit": "Пополнить средства",
+            "recentTransactions": "Последние транзакции",
+            "depositType": "Депозит",
+            "withdrawType": "Снятие",
+            "noTransactions": "Транзакций пока нет",
+            "withdrawComingSoon": "Функция вывода средств скоро станет доступна."
         }
     },
     "eventUpload": {
-        "maxPerFile": "Maximum per file: 100 MB",
-        "dragFiles": "Drag files here or",
-        "clickToChoose": "click to choose",
-        "supportedFiles": "Images and videos (max 100 MB per file)",
-        "selectedFiles": "Selected files ({count})",
-        "uploading": "Uploading...",
-        "uploadFiles": "Upload files",
-        "success": "Files uploaded successfully!",
+        "maxPerFile": "Максимум на файл: 100 МБ",
+        "dragFiles": "Перетащите файлы сюда или",
+        "clickToChoose": "нажмите, чтобы выбрать",
+        "supportedFiles": "Изображения и видео (макс. 100 МБ на файл)",
+        "selectedFiles": "Выбранные файлы ({count})",
+        "uploading": "Загрузка...",
+        "uploadFiles": "Загрузить файлы",
+        "success": "Файлы успешно загружены!",
         "errors": {
-            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
-            "unsupportedType": "File type \"{name}\" is not supported."
+            "fileTooLarge": "Файл \"{name}\" превышает 100 МБ.",
+            "unsupportedType": "Тип файла \"{name}\" не поддерживается."
         }
+    },
+    "discovery": {
+        "title": "Результаты поиска",
+        "description": "Находите события, изображения и видео в Scemory.",
+        "showing": "Показано",
+        "of": "из",
+        "results": "результатов",
+        "details": "Подробнее",
+        "noResultsTitle": "Ничего не найдено",
+        "noResultsDescription": "Попробуйте изменить поисковый запрос или фильтры.",
+        "filters": {
+            "allCities": "Все города",
+            "allCountries": "Все страны"
+        },
+        "tabs": {
+            "all": "Все",
+            "event": "События",
+            "image": "Изображения",
+            "video": "Видео"
+        },
+        "resultLabels": {
+            "event": "Событие",
+            "image": "Изображение",
+            "video": "Видео"
+        },
+        "media": {
+            "price": "Цена",
+            "addToCart": "Добавить в корзину",
+            "added": "Добавлено",
+            "adding": "Добавление...",
+            "playVideo": "Воспроизвести видео",
+            "pauseVideo": "Приостановить видео"
+        }
+    },
+    "timeline": {
+        "title": "История вашей активности",
+        "subtitle": "Просматривайте события, реакции, комментарии и сохраненные элементы в одном месте.",
+        "totalActivity": "Всего действий",
+        "latestActivity": "Последняя активность",
+        "noLatestActivity": "Активности пока нет",
+        "loading": "Загрузка активности...",
+        "loadError": "Не удалось загрузить вашу активность.",
+        "retry": "Повторить",
+        "viewAll": "Показать все",
+        "empty": "В этом разделе нет активности.",
+        "previous": "Назад",
+        "next": "Далее",
+        "pageOf": "Страница {current} из {last}",
+        "unknownEvent": "Неизвестное событие",
+        "parentComment": "В ответ на: {comment}",
+        "reactionTo": "Реакция на: {comment}",
+        "onEvent": "В событии {event}",
+        "tabs": {
+            "all": "Вся активность",
+            "events": "События",
+            "likes": "Отметки «Нравится»",
+            "comments": "Комментарии",
+            "replies": "Ответы",
+            "comment_images": "Изображения в комментариях",
+            "comment_interactions": "Реакции на комментарии",
+            "wishlists": "Избранное"
+        },
+        "filters": {
+            "label": "Период",
+            "all": "За все время",
+            "today": "Сегодня",
+            "this_week": "На этой неделе",
+            "this_month": "В этом месяце",
+            "custom": "Произвольный период",
+            "from": "С",
+            "to": "По",
+            "apply": "Применить",
+            "invalidRange": "Выберите допустимый диапазон дат."
+        },
+        "reactions": {
+            "support": "Поддержка",
+            "neutral": "Нейтрально",
+            "exhibitions": "Несогласие"
+        },
+        "status": {
+            "pending": "На рассмотрении",
+            "approved": "Одобрено",
+            "rejected": "Отклонено",
+            "active": "Активно",
+            "inactive": "Неактивно"
+        }
+    },
+    "eventss": {
+        "from_map": "С карты",
+        "no_title": "Событие без названия",
+        "undefined_city": "Не указано"
     }
 }

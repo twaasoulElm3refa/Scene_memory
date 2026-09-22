@@ -96,13 +96,13 @@
         "collection_benefit_2": "تطبيق خصم 10% تلقائيًا",
         "collection_benefit_3": "وصول سهل في التنزيلات",
         "collection_benefit_4": "نفس تجربة الدفع الآمنة",
-        "upload_media_to_event": "??? ????? ?????",
-        "media_alt": "????? ?????",
-        "send_reply": "????? ????",
-        "comment_add_images": "????? ??? ({count}/{max})",
-        "comment_image_limit": "?????? ??? ????? 5 ???????? ??? ????",
-        "selected_comment_image_alt": "?????? ??????? {number}",
-        "remove_selected_comment_image": "????? ?????? ??????? {number}"
+        "upload_media_to_event": "رفع وسائط إلى الفعالية",
+        "media_alt": "وسائط الفعالية",
+        "send_reply": "إرسال الرد",
+        "comment_add_images": "إضافة صور ({count}/{max})",
+        "comment_image_limit": "صورتان كحد أقصى، 5 ميجابايت لكل صورة",
+        "selected_comment_image_alt": "الصورة المحددة {number}",
+        "remove_selected_comment_image": "إزالة الصورة المحددة {number}"
     },
     "common": {
         "search": "بحث",
@@ -111,21 +111,21 @@
         "details": "التفاصيل",
         "notSpecified": "غير محدد",
         "loadingEvents": "جاري تحميل الفعاليات...",
-        "loading": "???? ???????...",
+        "loading": "جارٍ التحميل...",
         "close": "إغلاق",
-        "tryAgain": "???? ??? ????",
-        "back": "????",
-        "remove": "?????",
+        "tryAgain": "حاول مرة أخرى",
+        "back": "رجوع",
+        "remove": "إزالة",
         "clear": "مسح",
-        "previous": "??????",
-        "next": "??????",
-        "noResults": "?? ???? ?????",
-        "unknownError": "??? ??? ?????",
+        "previous": "السابق",
+        "next": "التالي",
+        "noResults": "لا توجد نتائج",
+        "unknownError": "خطأ غير معروف",
         "learnMore": "اعرف المزيد",
-        "cancel": "?????",
-        "sending": "???? ???????...",
-        "show": "?????",
-        "hide": "?????"
+        "cancel": "إلغاء",
+        "sending": "جاري الإرسال...",
+        "show": "إظهار",
+        "hide": "إخفاء"
     },
     "events": {
         "add_historical_event": "اضافه شخصيه تاريخية",
@@ -158,7 +158,58 @@
             "general": "General Events"
         },
         "emptyAvailable": "No events are currently available.",
-        "no_title": "فعالية بلا عنوان"
+        "no_title": "فعالية بلا عنوان",
+        "directory": {
+            "eyebrow": "استكشف Scemory",
+            "eventsTitle": "الفعاليات",
+            "eventsDescription": "اكتشف الفعاليات الحالية والقادمة من جميع أنحاء العالم.",
+            "historicalTitle": "الفعاليات التاريخية",
+            "historicalDescription": "استكشف الفعاليات الموثقة والذكريات المحفوظة من الماضي.",
+            "events": "فعالية",
+            "historicalEvents": "فعالية تاريخية",
+            "collection": "مجموعة الفعاليات",
+            "filters": "عوامل التصفية",
+            "refine": "تحسين النتائج",
+            "closeFilters": "إغلاق عوامل التصفية",
+            "searchLabel": "بحث",
+            "searchPlaceholder": "ابحث عن فعاليات...",
+            "eventType": "نوع الفعالية",
+            "types": {
+                "all": "كل الفعاليات",
+                "real": "الفعاليات الواقعية",
+                "general": "الفعاليات العامة"
+            },
+            "country": "الدولة",
+            "allCountries": "كل الدول",
+            "category": "التصنيف",
+            "allCategories": "كل التصنيفات",
+            "city": "المدينة",
+            "allCities": "كل المدن",
+            "subcategory": "التصنيف الفرعي",
+            "allSubcategories": "كل التصنيفات الفرعية",
+            "fromDate": "من تاريخ",
+            "toDate": "إلى تاريخ",
+            "clearFilters": "مسح عوامل التصفية",
+            "createEvent": "إنشاء فعالية",
+            "createHistorical": "إضافة فعالية تاريخية",
+            "results": "{count} فعالية",
+            "showing": "عرض {from}–{to} من {total}",
+            "errorTitle": "تعذر تحميل الفعاليات",
+            "errorDescription": "حدث خطأ أثناء تحميل الفعاليات. يرجى المحاولة مرة أخرى.",
+            "emptyTitle": "لم يتم العثور على فعاليات",
+            "historicalEmptyTitle": "لم يتم العثور على فعاليات تاريخية",
+            "emptyDescription": "جرّب تغيير عوامل التصفية أو مسحها.",
+            "eventBadge": "فعالية",
+            "historicalBadge": "تاريخية",
+            "unknownLocation": "موقع غير معروف",
+            "uncategorized": "غير مصنف",
+            "viewEvent": "عرض الفعالية",
+            "pagination": "صفحات الفعاليات",
+            "previous": "السابق",
+            "next": "التالي"
+        },
+        "from_map": "من الخريطة",
+        "undefined_city": "غير محدد"
     },
     "pagination": {
         "previous": "السابق",
@@ -540,10 +591,10 @@
             "next": "التالي",
             "page_info": "صفحة {current} من {total}"
         },
-        "confirmRemove": "?? ??? ????? ?? ????? ??? ?????? ?? ????? ????????",
+        "confirmRemove": "هل أنت متأكد من إزالة هذا العنصر من المفضلة؟",
         "errors": {
-            "deleteFailed": "??? ??? ????? ?????? ???? ??? ????.",
-            "connectionFailed": "????? ?? ??????? ???????? ???? ?? ???????? ????? ??? ????."
+            "deleteFailed": "حدث خطأ أثناء الحذف. يرجى المحاولة مرة أخرى.",
+            "connectionFailed": "تعذر الاتصال بالخادم. تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
         }
     },
     "terms": {
@@ -594,7 +645,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -630,15 +681,16 @@
         "errors": {
             "loadPlan": "Failed to load plan. Please try again.",
             "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "??? ????? ???????. ???? ??? ????."
+            "loadPlans": "تعذر تحميل الباقات. يرجى المحاولة مرة أخرى."
         },
         "customPlanNote": "مصممة حول متطلباتك",
-        "basicAccessIncluded": "????? ?????? ???????",
+        "basicAccessIncluded": "الوصول الأساسي مشمول",
         "moneyBack": "ضمان 30 يومًا",
         "perMonth": "شهريًا",
         "securePayments": "مدفوعات آمنة",
         "support247": "دعم على مدار الساعة",
-        "usd": "دولار أمريكي"
+        "usd": "دولار أمريكي",
+        "prioritySupport": "دعم ذو أولوية"
     },
     "free": "مجانا",
     "basic": "اساسي",
@@ -841,7 +893,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -855,13 +907,13 @@
             "checkout": "Checkout failed. Please try again.",
             "walletPayment": "Wallet payment failed",
             "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "??? ?? ????? ???????? ??? ?????.",
-            "itemNotIdentified": "?? ???? ????? ??? ??????.",
-            "addFailed": "??? ??? ????? ???????."
+            "collectionAddFailed": "تعذرت إضافة المجموعة إلى السلة.",
+            "itemNotIdentified": "تعذر تحديد هذا العنصر.",
+            "addFailed": "حدث خطأ أثناء الإضافة إلى السلة."
         },
         "messages": {
-            "collectionAddedDiscount": "??? ????? {count} ???? ??? ????? ???? 10%!",
-            "added": "??? ??????? ??? ????? ?????."
+            "collectionAddedDiscount": "تمت إضافة {count} صورة إلى السلة بخصم 10٪!",
+            "added": "تمت الإضافة إلى السلة بنجاح."
         }
     },
     "downloads": {
@@ -877,8 +929,8 @@
         "download": "Download",
         "downloadSuccess": "{filename} downloaded successfully!",
         "downloadFailed": "Download failed. Please try again.",
-        "empty": "?? ???? ???????",
-        "emptyHint": "????? ??????? ???? ??????? ???"
+        "empty": "لا توجد تنزيلات",
+        "emptyHint": "ستظهر الملفات التي تشتريها هنا"
     },
     "experience": {
         "kicker": "تجربة SCEMORY",
@@ -948,7 +1000,7 @@
     "searchResults": {
         "loadError": "Unable to load search results",
         "errors": {
-            "loadFailed": "??? ?? ????? ?????????. ?????? ???????? ??? ????."
+            "loadFailed": "تعذر تحميل الفعاليات. يرجى المحاولة مرة أخرى."
         }
     },
     "payment": {
@@ -991,7 +1043,7 @@
             "reasonLabel": "Possible reason",
             "noteLabel": "Note",
             "noCharge": "No amount was charged to your account",
-            "retry": "???? ??? ????",
+            "retry": "حاول مرة أخرى",
             "contactSupport": "Contact support",
             "statusShort": "Payment failed",
             "noChargeShort": "No amount was charged",
@@ -1028,7 +1080,7 @@
         "invalidAmount": "Enter a valid amount (more than $1)",
         "genericError": "Something went wrong. Please try again.",
         "errors": {
-            "invalidAmount": "???? ?????? ?????? (???? ?? 1 ?????)"
+            "invalidAmount": "أدخل مبلغًا صالحًا (أكثر من دولار واحد)"
         }
     },
     "gate": {
@@ -1068,132 +1120,218 @@
             "mapLoadFailed": "حدث خطأ أثناء تحميل الخريطة."
         }
     },
-    "cancel": "?????",
-    "login": "????? ??????",
-    "sending": "???? ???????...",
-    "send_reply": "????? ????",
+    "cancel": "إلغاء",
+    "login": "تسجيل الدخول",
+    "sending": "جاري الإرسال...",
+    "send_reply": "إرسال الرد",
     "report": {
-        "action": "?????",
-        "commentTitle": "??????? ?? ??? ???????",
-        "modalTitle": "??????? ?? ?????",
-        "reasonPrompt": "???? ??? ??????? ?? ??? ???????:",
-        "submit": "????? ??????",
-        "submitting": "???? ???????...",
-        "successTitle": "?? ????? ??????",
-        "successMessage": "????? ??? ?????? ??? ??????? ??????.",
+        "action": "إبلاغ",
+        "commentTitle": "الإبلاغ عن هذا التعليق",
+        "modalTitle": "الإبلاغ عن محتوى",
+        "reasonPrompt": "اختر سبب الإبلاغ عن هذا المحتوى:",
+        "submit": "إرسال البلاغ",
+        "submitting": "جاري الإرسال...",
+        "successTitle": "تم إرسال البلاغ",
+        "successMessage": "شكرًا لك، تم إرسال البلاغ بنجاح.",
         "errors": {
-            "selectReason": "???? ?????? ??? ??????.",
-            "submitFailed": "??? ??? ????? ????? ??????. ???? ??? ????."
+            "selectReason": "يرجى اختيار سبب البلاغ.",
+            "submitFailed": "حدث خطأ أثناء إرسال البلاغ. يرجى المحاولة مرة أخرى."
         },
         "reasons": {
-            "spam": "???? ????",
-            "offensive": "????? ????",
-            "inappropriate": "??? ????",
-            "illegal": "????? ??? ??????",
-            "untrue": "????? ????",
-            "falseInformation": "??????? ?????",
-            "other": "??? ???"
+            "spam": "محتوى مزعج",
+            "offensive": "محتوى مسيء",
+            "inappropriate": "محتوى غير مناسب",
+            "illegal": "محتوى غير قانوني",
+            "untrue": "معلومات غير صحيحة",
+            "falseInformation": "معلومات مضللة",
+            "other": "أخرى"
         }
     },
     "commentsPage": {
-        "title": "?????????",
-        "emptyLabel": "?????????",
-        "emptyMessage": "?? ???? ??????? ???. ?? ??? ?? ?????!",
-        "attachmentAlt": "???? ???????",
-        "pageInfo": "???? {current} ?? {total}",
-        "confirmDelete": "?? ??? ????? ?? ??? ????????",
+        "title": "التعليقات",
+        "emptyLabel": "لا توجد تعليقات",
+        "emptyMessage": "لا توجد تعليقات هنا بعد. كن أول من يعلق!",
+        "attachmentAlt": "مرفق التعليق",
+        "pageInfo": "صفحة {current} من {total}",
+        "confirmDelete": "هل أنت متأكد من حذف هذا التعليق؟",
         "errors": {
-            "loadFailed": "??? ??? ????? ??? ?????????."
+            "loadFailed": "حدث خطأ أثناء تحميل التعليقات."
         },
         "reactions": {
-            "support": "?????",
-            "neutral": "?????",
-            "oppose": "??? ?????"
+            "support": "داعم",
+            "neutral": "محايد",
+            "oppose": "معارض"
         },
-        "you": "???"
+        "you": "أنت"
     },
     "profilePage": {
-        "title": "???? ??????",
-        "subtitle": "????? ??????? ????? ?????? ???? ??????",
-        "noPlan": "?? ???? ????",
-        "lastLogin": "??? ????",
-        "accountInfo": "??????? ??????",
-        "systemInfo": "??????? ??????",
-        "currentPlan": "?????? ???????",
-        "planType": "??? ??????",
-        "editAccount": "????? ?????? ??????",
-        "saving": "???? ?????...",
-        "saveChanges": "??? ?????????",
+        "title": "الملف الشخصي",
+        "subtitle": "إدارة معلومات حسابك وبياناتك الشخصية",
+        "noPlan": "لا توجد باقة",
+        "lastLogin": "آخر تسجيل دخول",
+        "accountInfo": "معلومات الحساب",
+        "systemInfo": "معلومات النظام",
+        "currentPlan": "الباقة الحالية",
+        "planType": "نوع الباقة",
+        "editAccount": "تعديل الحساب",
+        "saving": "جارٍ الحفظ...",
+        "saveChanges": "حفظ التغييرات",
         "tabs": {
-            "userInfo": "??????? ????????",
-            "editData": "????? ????????",
-            "password": "????? ???? ??????",
-            "wallet": "???????"
+            "userInfo": "معلومات المستخدم",
+            "editData": "تعديل البيانات",
+            "password": "كلمة المرور",
+            "wallet": "المحفظة"
         },
         "fields": {
-            "name": "?????",
-            "fullName": "????? ??????",
-            "email": "?????? ??????????",
-            "phone": "??????",
-            "phoneNumber": "??? ??????",
-            "country": "??????",
-            "position": "??????",
-            "positionJob": "?????? / ???????",
-            "birthDate": "????? ???????",
-            "role": "?????",
-            "status": "??????",
-            "points": "??????",
-            "price": "?????"
+            "name": "الاسم",
+            "fullName": "الاسم الكامل",
+            "email": "البريد الإلكتروني",
+            "phone": "الهاتف",
+            "phoneNumber": "رقم الهاتف",
+            "country": "الدولة",
+            "position": "المنصب",
+            "positionJob": "المنصب / الوظيفة",
+            "birthDate": "تاريخ الميلاد",
+            "role": "الدور",
+            "status": "الحالة",
+            "points": "النقاط",
+            "price": "السعر"
         },
         "placeholders": {
-            "fullName": "???? ???? ??????",
-            "countrySearch": "???? ?? ??????",
-            "position": "????? ???????"
+            "fullName": "أدخل الاسم الكامل",
+            "countrySearch": "ابحث عن الدولة",
+            "position": "أدخل المنصب"
         },
         "status": {
-            "active": "???"
+            "active": "نشط"
         },
         "password": {
-            "title": "????? ???? ??????",
-            "current": "???? ?????? ???????",
-            "new": "???? ?????? ???????",
-            "confirm": "????? ???? ??????",
-            "updating": "???? ???????...",
-            "update": "????? ???? ??????"
+            "title": "تحديث كلمة المرور",
+            "current": "كلمة المرور الحالية",
+            "new": "كلمة المرور الجديدة",
+            "confirm": "تأكيد كلمة المرور",
+            "updating": "جارٍ تحديث كلمة المرور...",
+            "update": "تحديث كلمة المرور"
         },
         "messages": {
-            "fillAllFields": "?? ???? ???? ?? ??????.",
-            "passwordMismatch": "???? ?????? ??? ???????.",
-            "passwordUpdated": "?? ????? ???? ?????? ?????.",
-            "passwordUpdateFailed": "??? ??? ????? ????? ???? ??????.",
-            "chooseCountry": "?? ???? ???? ?????? ?? ???????.",
-            "noChanges": "?? ??? ?????? ?? ???????.",
-            "profileUpdated": "?? ????? ??????? ?????.",
-            "profileUpdateFailed": "??? ??? ????? ????? ????????."
+            "fillAllFields": "يرجى ملء جميع الحقول.",
+            "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+            "passwordUpdated": "تم تحديث كلمة المرور بنجاح.",
+            "passwordUpdateFailed": "فشل تحديث كلمة المرور.",
+            "chooseCountry": "يرجى اختيار دولة صحيحة.",
+            "noChanges": "لم يتم إجراء أي تغييرات.",
+            "profileUpdated": "تم تحديث الملف الشخصي بنجاح.",
+            "profileUpdateFailed": "حدث خطأ أثناء تحديث الملف الشخصي."
         },
         "wallet": {
-            "title": "???????",
-            "availableBalance": "?????? ??????",
-            "deposit": "??? ??????",
-            "recentTransactions": "??? ????????",
-            "depositType": "???",
-            "withdrawType": "???",
-            "noTransactions": "?? ???? ?????? ??? ????",
-            "withdrawComingSoon": "???? ??? ????? ??? ?????? ??????."
+            "title": "المحفظة",
+            "availableBalance": "الرصيد المتاح",
+            "deposit": "إيداع",
+            "recentTransactions": "آخر المعاملات",
+            "depositType": "إيداع",
+            "withdrawType": "سحب",
+            "noTransactions": "لا توجد معاملات حتى الآن",
+            "withdrawComingSoon": "خاصية السحب ستكون متاحة قريبًا."
         }
     },
     "eventUpload": {
-        "maxPerFile": "???? ?????? ??? ???: 100 ????????",
-        "dragFiles": "???? ??????? ??? ??",
-        "clickToChoose": "???? ????????",
-        "supportedFiles": "??? ????????? (100 ???????? ??? ???? ??? ???)",
-        "selectedFiles": "??????? ???????? ({count})",
-        "uploading": "???? ?????...",
-        "uploadFiles": "??? ???????",
-        "success": "?? ??? ??????? ?????!",
+        "maxPerFile": "الحد الأقصى لحجم الملف: 100 ميجابايت",
+        "dragFiles": "اسحب الملفات هنا",
+        "clickToChoose": "اضغط لاختيار الملفات",
+        "supportedFiles": "الأنواع المدعومة (100 ميجابايت كحد أقصى لكل ملف)",
+        "selectedFiles": "الملفات المحددة ({count})",
+        "uploading": "جارٍ الرفع...",
+        "uploadFiles": "رفع الملفات",
+        "success": "تم رفع الملفات بنجاح!",
         "errors": {
-            "fileTooLarge": "????? \"{name}\" ???? ?? 100 ????????.",
-            "unsupportedType": "??? ????? \"{name}\" ??? ?????."
+            "fileTooLarge": "الملف \"{name}\" أكبر من 100 ميجابايت.",
+            "unsupportedType": "نوع الملف \"{name}\" غير مدعوم."
+        }
+    },
+    "discovery": {
+        "title": "نتائج البحث",
+        "description": "اكتشف الفعاليات والصور ومقاطع الفيديو عبر Scemory.",
+        "showing": "عرض",
+        "of": "من",
+        "results": "نتيجة",
+        "details": "عرض التفاصيل",
+        "noResultsTitle": "لم يتم العثور على نتائج",
+        "noResultsDescription": "جرّب تغيير البحث أو عوامل التصفية.",
+        "filters": {
+            "allCities": "كل المدن",
+            "allCountries": "كل الدول"
+        },
+        "tabs": {
+            "all": "الكل",
+            "event": "الفعاليات",
+            "image": "الصور",
+            "video": "مقاطع الفيديو"
+        },
+        "resultLabels": {
+            "event": "فعالية",
+            "image": "صورة",
+            "video": "فيديو"
+        },
+        "media": {
+            "price": "السعر",
+            "addToCart": "إضافة إلى السلة",
+            "added": "تمت الإضافة",
+            "adding": "جارٍ الإضافة...",
+            "playVideo": "تشغيل الفيديو",
+            "pauseVideo": "إيقاف الفيديو مؤقتًا"
+        }
+    },
+    "timeline": {
+        "title": "سجل نشاطك",
+        "subtitle": "راجع فعالياتك وتفاعلاتك وتعليقاتك وعناصرك المحفوظة في مكان واحد.",
+        "totalActivity": "إجمالي النشاط",
+        "latestActivity": "أحدث نشاط",
+        "noLatestActivity": "لا يوجد نشاط بعد",
+        "loading": "جارٍ تحميل النشاط...",
+        "loadError": "تعذر تحميل نشاطك.",
+        "retry": "حاول مرة أخرى",
+        "viewAll": "عرض الكل",
+        "empty": "لا يوجد نشاط في هذا القسم.",
+        "previous": "السابق",
+        "next": "التالي",
+        "pageOf": "صفحة {current} من {last}",
+        "unknownEvent": "فعالية غير معروفة",
+        "parentComment": "ردًا على: {comment}",
+        "reactionTo": "تفاعل مع: {comment}",
+        "onEvent": "في {event}",
+        "tabs": {
+            "all": "كل النشاط",
+            "events": "الفعاليات",
+            "likes": "الإعجابات",
+            "comments": "التعليقات",
+            "replies": "الردود",
+            "comment_images": "صور التعليقات",
+            "comment_interactions": "تفاعلات التعليقات",
+            "wishlists": "المفضلة"
+        },
+        "filters": {
+            "label": "الفترة",
+            "all": "كل الوقت",
+            "today": "اليوم",
+            "this_week": "هذا الأسبوع",
+            "this_month": "هذا الشهر",
+            "custom": "نطاق مخصص",
+            "from": "من",
+            "to": "إلى",
+            "apply": "تطبيق",
+            "invalidRange": "اختر نطاقًا زمنيًا صحيحًا."
+        },
+        "reactions": {
+            "support": "داعم",
+            "neutral": "محايد",
+            "exhibitions": "معارض"
+        },
+        "status": {
+            "pending": "قيد الانتظار",
+            "approved": "مقبول",
+            "rejected": "مرفوض",
+            "active": "نشط",
+            "inactive": "غير نشط"
         }
     }
 }

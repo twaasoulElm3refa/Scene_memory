@@ -38,6 +38,7 @@ use App\Http\Controllers\api\home\EventUserCreateController;
 use App\Http\Controllers\api\home\GateController;
 use App\Http\Controllers\api\home\ImageTagsController;
 use App\Http\Controllers\api\home\IncomeController;
+use App\Http\Controllers\api\home\LeaderboardController;
 use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\home\PlanController;
@@ -62,6 +63,10 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnEvent;
 use App\Http\Middleware\VerifyN8nWebhookSecret;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/leaderboard/monthly-preview', [LeaderboardController::class, 'monthlyPreview'])
+    ->middleware('throttle:60,1')
+    ->name('leaderboard.monthly-preview');
 
 Route::prefix('v1')->group(function () {
 

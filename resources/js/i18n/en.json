@@ -160,7 +160,56 @@
             "real": "Real Events",
             "general": "General Events"
         },
-        "emptyAvailable": "No events are currently available."
+        "emptyAvailable": "No events are currently available.",
+        "directory": {
+            "eyebrow": "Explore Scemory",
+            "eventsTitle": "Events",
+            "eventsDescription": "Discover current and upcoming events from around the world.",
+            "historicalTitle": "Historical Events",
+            "historicalDescription": "Explore documented events and preserved memories from the past.",
+            "events": "events",
+            "historicalEvents": "historical events",
+            "collection": "Event collection",
+            "filters": "Filters",
+            "refine": "Refine results",
+            "closeFilters": "Close filters",
+            "searchLabel": "Search",
+            "searchPlaceholder": "Search events...",
+            "eventType": "Event type",
+            "types": {
+                "all": "All events",
+                "real": "Real events",
+                "general": "General events"
+            },
+            "country": "Country",
+            "allCountries": "All countries",
+            "category": "Category",
+            "allCategories": "All categories",
+            "city": "City",
+            "allCities": "All cities",
+            "subcategory": "Subcategory",
+            "allSubcategories": "All subcategories",
+            "fromDate": "From date",
+            "toDate": "To date",
+            "clearFilters": "Clear filters",
+            "createEvent": "Create event",
+            "createHistorical": "Add historical event",
+            "results": "{count} events",
+            "showing": "Showing {from}–{to} of {total}",
+            "errorTitle": "Unable to load events",
+            "errorDescription": "Something went wrong while loading events. Please try again.",
+            "emptyTitle": "No events found",
+            "historicalEmptyTitle": "No historical events found",
+            "emptyDescription": "Try changing or clearing your filters.",
+            "eventBadge": "Event",
+            "historicalBadge": "Historical",
+            "unknownLocation": "Unknown location",
+            "uncategorized": "Uncategorized",
+            "viewEvent": "View event",
+            "pagination": "Events pagination",
+            "previous": "Previous",
+            "next": "Next"
+        }
     },
     "pagination": {
         "previous": "Previous",
@@ -283,7 +332,7 @@
         "logoAlt": "Logo",
         "googlePlayAlt": "Get it on Google Play",
         "appStoreAlt": "Download on the App Store",
-        "copyright2025": "? 2025 Scene Memory. All rights reserved.",
+        "copyright2025": "© 2025 Scene Memory. All rights reserved.",
         "services": "Services",
         "copyrightLink": "Copyright",
         "termsOfService": "Terms of Service",
@@ -601,7 +650,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -844,7 +893,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -1197,6 +1246,92 @@
         "errors": {
             "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
             "unsupportedType": "File type \"{name}\" is not supported."
+        }
+    },
+    "discovery": {
+        "title": "Search results",
+        "description": "Discover events, images, and videos across Scemory.",
+        "showing": "Showing",
+        "of": "of",
+        "results": "results",
+        "details": "View details",
+        "noResultsTitle": "No results found",
+        "noResultsDescription": "Try changing your search or filters.",
+        "filters": {
+            "allCities": "All cities",
+            "allCountries": "All countries"
+        },
+        "tabs": {
+            "all": "All",
+            "event": "Events",
+            "image": "Images",
+            "video": "Videos"
+        },
+        "resultLabels": {
+            "event": "Event",
+            "image": "Image",
+            "video": "Video"
+        },
+        "media": {
+            "price": "Price",
+            "addToCart": "Add to cart",
+            "added": "Added",
+            "adding": "Adding...",
+            "playVideo": "Play video",
+            "pauseVideo": "Pause video"
+        }
+    },
+    "timeline": {
+        "title": "Your activity timeline",
+        "subtitle": "Review your events, reactions, comments, and saved items in one place.",
+        "totalActivity": "Total activity",
+        "latestActivity": "Latest activity",
+        "noLatestActivity": "No activity yet",
+        "loading": "Loading activity...",
+        "loadError": "We could not load your activity.",
+        "retry": "Try again",
+        "viewAll": "View all",
+        "empty": "No activity found for this section.",
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {current} of {last}",
+        "unknownEvent": "Unknown event",
+        "parentComment": "In reply to: {comment}",
+        "reactionTo": "Reaction to: {comment}",
+        "onEvent": "On {event}",
+        "tabs": {
+            "all": "All activity",
+            "events": "Events",
+            "likes": "Likes",
+            "comments": "Comments",
+            "replies": "Replies",
+            "comment_images": "Comment images",
+            "comment_interactions": "Comment reactions",
+            "wishlists": "Favorites"
+        },
+        "filters": {
+            "label": "Period",
+            "all": "All time",
+            "today": "Today",
+            "this_week": "This week",
+            "this_month": "This month",
+            "custom": "Custom range",
+            "from": "From",
+            "to": "To",
+            "apply": "Apply",
+            "invalidRange": "Choose a valid date range."
+        },
+        "reactions": {
+            "support": "Support",
+            "neutral": "Neutral",
+            "exhibitions": "Oppose"
+        },
+        "status": {
+            "pending": "Pending",
+            "approved": "Approved",
+            "rejected": "Rejected",
+            "active": "Active",
+            "inactive": "Inactive"
         }
     }
 }

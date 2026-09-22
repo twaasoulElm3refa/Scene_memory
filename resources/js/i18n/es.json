@@ -99,8 +99,8 @@
         "upload_media_to_event": "Subir medios al evento",
         "media_alt": "Event media",
         "send_reply": "Send reply",
-        "comment_add_images": "A?adir im?genes ({count}/{max})",
-        "comment_image_limit": "M?ximo 2 im?genes, 5 MB cada una",
+        "comment_add_images": "Añadir imágenes ({count}/{max})",
+        "comment_image_limit": "Máximo 2 imágenes, 5 MB cada una",
         "selected_comment_image_alt": "Imagen seleccionada {number}",
         "remove_selected_comment_image": "Eliminar imagen seleccionada {number}"
     },
@@ -114,7 +114,7 @@
         "loading": "Cargando...",
         "close": "Cerrar",
         "tryAgain": "Intentar de nuevo",
-        "back": "Atr?s",
+        "back": "Atrás",
         "remove": "Eliminar",
         "clear": "Borrar",
         "previous": "Anterior",
@@ -160,7 +160,56 @@
             "real": "Real Events",
             "general": "General Events"
         },
-        "emptyAvailable": "No events are currently available."
+        "emptyAvailable": "No events are currently available.",
+        "directory": {
+            "eyebrow": "Explora Scemory",
+            "eventsTitle": "Eventos",
+            "eventsDescription": "Descubre eventos actuales y próximos de todo el mundo.",
+            "historicalTitle": "Eventos históricos",
+            "historicalDescription": "Explora eventos documentados y recuerdos conservados del pasado.",
+            "events": "eventos",
+            "historicalEvents": "eventos históricos",
+            "collection": "Colección de eventos",
+            "filters": "Filtros",
+            "refine": "Refinar resultados",
+            "closeFilters": "Cerrar filtros",
+            "searchLabel": "Buscar",
+            "searchPlaceholder": "Buscar eventos...",
+            "eventType": "Tipo de evento",
+            "types": {
+                "all": "Todos los eventos",
+                "real": "Eventos reales",
+                "general": "Eventos generales"
+            },
+            "country": "País",
+            "allCountries": "Todos los países",
+            "category": "Categoría",
+            "allCategories": "Todas las categorías",
+            "city": "Ciudad",
+            "allCities": "Todas las ciudades",
+            "subcategory": "Subcategoría",
+            "allSubcategories": "Todas las subcategorías",
+            "fromDate": "Desde",
+            "toDate": "Hasta",
+            "clearFilters": "Borrar filtros",
+            "createEvent": "Crear evento",
+            "createHistorical": "Añadir evento histórico",
+            "results": "{count} eventos",
+            "showing": "Mostrando {from}–{to} de {total}",
+            "errorTitle": "No se pudieron cargar los eventos",
+            "errorDescription": "Se produjo un error al cargar los eventos. Inténtalo de nuevo.",
+            "emptyTitle": "No se encontraron eventos",
+            "historicalEmptyTitle": "No se encontraron eventos históricos",
+            "emptyDescription": "Prueba a cambiar o borrar los filtros.",
+            "eventBadge": "Evento",
+            "historicalBadge": "Histórico",
+            "unknownLocation": "Ubicación desconocida",
+            "uncategorized": "Sin categoría",
+            "viewEvent": "Ver evento",
+            "pagination": "Paginación de eventos",
+            "previous": "Anterior",
+            "next": "Siguiente"
+        }
     },
     "pagination": {
         "previous": "Anterior",
@@ -497,12 +546,14 @@
             "maxFourTags": "You can select up to 4 tags only",
             "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
             "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+            "mediaRequired": "Sube al menos una imagen o un vídeo."
         },
         "success": {
             "created": "Event created successfully!",
             "historicalCreated": "Historical event created successfully!"
-        }
+        },
+        "minimumRequirementsHint": "Para crear un evento, solo necesitas un título, una descripción y al menos una imagen o un vídeo. Los demás campos son opcionales."
     },
     "commons": {
         "required": "requerido",
@@ -599,7 +650,7 @@
         "loadingPlan": "Loading plan...",
         "premiumPlan": "Premium Plan",
         "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
         "whatsIncluded": "What's Included",
         "readyToStart": "Ready to get started?",
         "cancelNoQuestions": "Cancel anytime. No questions asked.",
@@ -635,10 +686,10 @@
         "errors": {
             "loadPlan": "Failed to load plan. Please try again.",
             "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "No se pudieron cargar los planes. Int?ntalo de nuevo."
+            "loadPlans": "No se pudieron cargar los planes. Inténtalo de nuevo."
         },
         "customPlanNote": "Diseñado según tus requisitos",
-        "basicAccessIncluded": "Acceso b?sico incluido",
+        "basicAccessIncluded": "Acceso básico incluido",
         "usd": "USD"
     },
     "free": "Gratis",
@@ -752,7 +803,11 @@
                 "cityRequired": "Selecciona una ciudad.",
                 "startDateRequired": "Selecciona una fecha de inicio.",
                 "eventTypeRequired": "Selecciona un tipo de evento.",
-                "cityCreateFailed": "No se pudo crear la ciudad. Inténtalo de nuevo."
+                "cityCreateFailed": "No se pudo crear la ciudad. Inténtalo de nuevo.",
+                "sending": "Enviando...",
+                "eventNameRequired": "Introduce el nombre del evento.",
+                "descriptionRequired": "Introduce la descripción del evento.",
+                "success": "Tu solicitud de cobertura especial se ha enviado correctamente."
             }
         }
     },
@@ -801,8 +856,11 @@
             "accepted": "accepted",
             "rejected": "rejected",
             "checking": "checking",
-            "idle": "idle"
-        }
+            "idle": "idle",
+            "warning": "advertencia de calidad"
+        },
+        "videoReady": "El vídeo está listo para subir.",
+        "qualityWarning": "Los controles de calidad son orientativos y no impiden crear el evento."
     },
     "cart": {
         "title": "Shopping Cart",
@@ -835,7 +893,7 @@
         "needMoreWallet": "You need ${amount} more in your wallet",
         "or": "OR",
         "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
+        "payWithPayPal": "Pay with PayPal — ${amount}",
         "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
         "continueShopping": "Continue Shopping",
         "itemRemoved": "Item removed",
@@ -872,7 +930,7 @@
         "downloadSuccess": "{filename} downloaded successfully!",
         "downloadFailed": "Download failed. Please try again.",
         "empty": "No downloads found",
-        "emptyHint": "Los archivos que compres aparecer?n aqu?"
+        "emptyHint": "Los archivos que compres aparecerán aquí"
     },
     "experience": {
         "kicker": "EXPERIENCIA SCEMORY",
@@ -1063,131 +1121,217 @@
         }
     },
     "cancel": "Cancelar",
-    "login": "Iniciar sesi?n",
+    "login": "Iniciar sesión",
     "sending": "Enviando...",
     "send_reply": "Enviar respuesta",
     "report": {
-        "action": "Report",
-        "commentTitle": "Report this comment",
-        "modalTitle": "Report comment",
-        "reasonPrompt": "Choose the reason for reporting this comment:",
-        "submit": "Submit report",
-        "submitting": "Submitting...",
-        "successTitle": "Report submitted",
-        "successMessage": "Thank you. We will review this comment soon.",
+        "action": "Reportar",
+        "commentTitle": "Reportar este comentario",
+        "modalTitle": "Reportar comentario",
+        "reasonPrompt": "Elija el motivo para reportar este comentario:",
+        "submit": "Enviar reporte",
+        "submitting": "Enviando...",
+        "successTitle": "Reporte enviado",
+        "successMessage": "Gracias. Revisaremos este comentario pronto.",
         "errors": {
-            "selectReason": "Please choose a report reason.",
-            "submitFailed": "An error occurred while submitting the report. Please try again."
+            "selectReason": "Por favor, elija un motivo para el reporte.",
+            "submitFailed": "Ocurrió un error al enviar el reporte. Por favor, inténtelo de nuevo."
         },
         "reasons": {
             "spam": "Spam",
-            "offensive": "Offensive content",
-            "inappropriate": "Inappropriate",
-            "illegal": "Illegal content",
-            "untrue": "False content",
-            "falseInformation": "Misleading information",
-            "other": "Other reason"
+            "offensive": "Contenido ofensivo",
+            "inappropriate": "Inapropiado",
+            "illegal": "Contenido ilegal",
+            "untrue": "Contenido falso",
+            "falseInformation": "Información engañosa",
+            "other": "Otra razón"
         }
     },
     "commentsPage": {
-        "title": "Comments",
-        "emptyLabel": "Comments",
-        "emptyMessage": "No comments yet. Be the first to comment.",
-        "attachmentAlt": "Comment attachment",
-        "pageInfo": "Page {current} of {total}",
-        "confirmDelete": "Are you sure you want to delete this comment?",
+        "title": "Comentarios",
+        "emptyLabel": "Comentarios",
+        "emptyMessage": "Aún no hay comentarios. Sé el primero en comentar.",
+        "attachmentAlt": "Adjuntar comentario",
+        "pageInfo": "Página {current} de {total}",
+        "confirmDelete": "¿Está seguro de que desea eliminar este comentario?",
         "errors": {
-            "loadFailed": "An error occurred while loading comments."
+            "loadFailed": "Ocurrió un error al cargar los comentarios."
         },
         "reactions": {
-            "support": "Agree",
+            "support": "De acuerdo",
             "neutral": "Neutral",
-            "oppose": "Disagree"
+            "oppose": "En desacuerdo"
         },
-        "you": "You"
+        "you": "Tú"
     },
     "profilePage": {
-        "title": "My Profile",
-        "subtitle": "Manage your account information and update your password",
-        "noPlan": "No plan",
-        "lastLogin": "Last login",
-        "accountInfo": "Account information",
-        "systemInfo": "System information",
-        "currentPlan": "Current plan",
-        "planType": "Plan type",
-        "editAccount": "Edit account details",
-        "saving": "Saving...",
-        "saveChanges": "Save changes",
+        "title": "Mi perfil",
+        "subtitle": "Administra la información de tu cuenta y actualiza tu contraseña",
+        "noPlan": "Sin plan",
+        "lastLogin": "Último inicio de sesión",
+        "accountInfo": "Información de la cuenta",
+        "systemInfo": "Información del sistema",
+        "currentPlan": "Plan actual",
+        "planType": "Tipo de plan",
+        "editAccount": "Editar detalles de la cuenta",
+        "saving": "Guardando...",
+        "saveChanges": "Guardar cambios",
         "tabs": {
-            "userInfo": "User information",
-            "editData": "Edit data",
-            "password": "Update password",
-            "wallet": "Wallet"
+            "userInfo": "Información del usuario",
+            "editData": "Editar datos",
+            "password": "Actualizar contraseña",
+            "wallet": "Billetera"
         },
         "fields": {
-            "name": "Name",
-            "fullName": "Full name",
-            "email": "Email",
-            "phone": "Phone",
-            "phoneNumber": "Phone number",
-            "country": "Country",
-            "position": "Position",
-            "positionJob": "Position / Job",
-            "birthDate": "Date of birth",
-            "role": "Role",
-            "status": "Status",
-            "points": "Points",
-            "price": "Price"
+            "name": "Nombre",
+            "fullName": "Nombre completo",
+            "email": "Correo electrónico",
+            "phone": "Teléfono",
+            "phoneNumber": "Número de teléfono",
+            "country": "País",
+            "position": "Cargo",
+            "positionJob": "Cargo / Empleo",
+            "birthDate": "Fecha de nacimiento",
+            "role": "Rol",
+            "status": "Estado",
+            "points": "Puntos",
+            "price": "Precio"
         },
         "placeholders": {
-            "fullName": "Enter your full name",
-            "countrySearch": "Search for a country",
-            "position": "Software engineer"
+            "fullName": "Ingresa tu nombre completo",
+            "countrySearch": "Buscar un país",
+            "position": "Ingeniero de software"
         },
         "status": {
-            "active": "Active"
+            "active": "Activo"
         },
         "password": {
-            "title": "Update password",
-            "current": "Current password",
-            "new": "New password",
-            "confirm": "Confirm password",
-            "updating": "Updating...",
-            "update": "Update password"
+            "title": "Actualizar contraseña",
+            "current": "Contraseña actual",
+            "new": "Nueva contraseña",
+            "confirm": "Confirmar contraseña",
+            "updating": "Actualizando...",
+            "update": "Actualizar contraseña"
         },
         "messages": {
-            "fillAllFields": "Please fill in all fields.",
-            "passwordMismatch": "Passwords do not match.",
-            "passwordUpdated": "Password updated successfully.",
-            "passwordUpdateFailed": "An error occurred while updating the password.",
-            "chooseCountry": "Please choose a country from the list.",
-            "noChanges": "You have not made any changes.",
-            "profileUpdated": "Your profile has been updated successfully.",
-            "profileUpdateFailed": "An error occurred while updating your profile."
+            "fillAllFields": "Por favor, complete todos los campos.",
+            "passwordMismatch": "Las contraseñas no coinciden.",
+            "passwordUpdated": "Contraseña actualizada con éxito.",
+            "passwordUpdateFailed": "Ocurrió un error al actualizar la contraseña.",
+            "chooseCountry": "Por favor, elija un país de la lista.",
+            "noChanges": "No ha realizado ningún cambio.",
+            "profileUpdated": "Su perfil ha sido actualizado con éxito.",
+            "profileUpdateFailed": "Ocurrió un error al actualizar su perfil."
         },
         "wallet": {
-            "title": "Wallet",
-            "availableBalance": "Available balance",
-            "deposit": "Add funds",
-            "recentTransactions": "Recent transactions",
-            "depositType": "Deposit",
-            "withdrawType": "Withdrawal",
-            "noTransactions": "No transactions yet",
-            "withdrawComingSoon": "The withdrawal window will open soon."
+            "title": "Billetera",
+            "availableBalance": "Saldo disponible",
+            "deposit": "Añadir fondos",
+            "recentTransactions": "Transacciones recientes",
+            "depositType": "Depósito",
+            "withdrawType": "Retiro",
+            "noTransactions": "Aún no hay transacciones",
+            "withdrawComingSoon": "La función de retiro estará disponible pronto."
         }
     },
     "eventUpload": {
-        "maxPerFile": "Maximum per file: 100 MB",
-        "dragFiles": "Drag files here or",
-        "clickToChoose": "click to choose",
-        "supportedFiles": "Images and videos (max 100 MB per file)",
-        "selectedFiles": "Selected files ({count})",
-        "uploading": "Uploading...",
-        "uploadFiles": "Upload files",
-        "success": "Files uploaded successfully!",
+        "maxPerFile": "Máximo por archivo: 100 MB",
+        "dragFiles": "Arrastre los archivos aquí o",
+        "clickToChoose": "haga clic para elegir",
+        "supportedFiles": "Imágenes y videos (máx. 100 MB por archivo)",
+        "selectedFiles": "Archivos seleccionados ({count})",
+        "uploading": "Subiendo...",
+        "uploadFiles": "Subir archivos",
+        "success": "¡Archivos subidos con éxito!",
         "errors": {
-            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
-            "unsupportedType": "File type \"{name}\" is not supported."
+            "fileTooLarge": "El archivo \"{name}\" es mayor de 100 MB.",
+            "unsupportedType": "El tipo de archivo \"{name}\" no es compatible."
+        }
+    },
+    "discovery": {
+        "title": "Resultados de búsqueda",
+        "description": "Descubre eventos, imágenes y vídeos en Scemory.",
+        "showing": "Mostrando",
+        "of": "de",
+        "results": "resultados",
+        "details": "Ver detalles",
+        "noResultsTitle": "No se encontraron resultados",
+        "noResultsDescription": "Prueba a cambiar la búsqueda o los filtros.",
+        "filters": {
+            "allCities": "Todas las ciudades",
+            "allCountries": "Todos los países"
+        },
+        "tabs": {
+            "all": "Todo",
+            "event": "Eventos",
+            "image": "Imágenes",
+            "video": "Vídeos"
+        },
+        "resultLabels": {
+            "event": "Evento",
+            "image": "Imagen",
+            "video": "Vídeo"
+        },
+        "media": {
+            "price": "Precio",
+            "addToCart": "Añadir al carrito",
+            "added": "Añadido",
+            "adding": "Añadiendo...",
+            "playVideo": "Reproducir vídeo",
+            "pauseVideo": "Pausar vídeo"
+        }
+    },
+    "timeline": {
+        "title": "Tu cronología de actividad",
+        "subtitle": "Consulta tus eventos, reacciones, comentarios y elementos guardados en un solo lugar.",
+        "totalActivity": "Actividad total",
+        "latestActivity": "Última actividad",
+        "noLatestActivity": "Aún no hay actividad",
+        "loading": "Cargando actividad...",
+        "loadError": "No pudimos cargar tu actividad.",
+        "retry": "Intentar de nuevo",
+        "viewAll": "Ver todo",
+        "empty": "No hay actividad en esta sección.",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "pageOf": "Página {current} de {last}",
+        "unknownEvent": "Evento desconocido",
+        "parentComment": "En respuesta a: {comment}",
+        "reactionTo": "Reacción a: {comment}",
+        "onEvent": "En {event}",
+        "tabs": {
+            "all": "Toda la actividad",
+            "events": "Eventos",
+            "likes": "Me gusta",
+            "comments": "Comentarios",
+            "replies": "Respuestas",
+            "comment_images": "Imágenes de comentarios",
+            "comment_interactions": "Reacciones a comentarios",
+            "wishlists": "Favoritos"
+        },
+        "filters": {
+            "label": "Periodo",
+            "all": "Todo el tiempo",
+            "today": "Hoy",
+            "this_week": "Esta semana",
+            "this_month": "Este mes",
+            "custom": "Intervalo personalizado",
+            "from": "Desde",
+            "to": "Hasta",
+            "apply": "Aplicar",
+            "invalidRange": "Elige un intervalo de fechas válido."
+        },
+        "reactions": {
+            "support": "A favor",
+            "neutral": "Neutral",
+            "exhibitions": "En contra"
+        },
+        "status": {
+            "pending": "Pendiente",
+            "approved": "Aprobado",
+            "rejected": "Rechazado",
+            "active": "Activo",
+            "inactive": "Inactivo"
         }
     }
 }
