@@ -22,6 +22,7 @@ class SpecialCoverageRequestController extends Controller
             'country_id' => $validated['country_id'],
             'city_id' => $validated['city_id'],
             'start_date' => $validated['start_date'],
+            'coverage_time' => $validated['coverage_time'] ?? null,
             'event_type' => $validated['event_type'],
             'status' => SpecialCoverageRequest::STATUS_PENDING,
         ]);

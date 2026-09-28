@@ -792,6 +792,7 @@
                 "addNewCity": "Yeni şehir ekle",
                 "createCity": "Şehir oluştur",
                 "startDate": "Başlangıç tarihi",
+                "coverageTime": "Haber saati",
                 "eventType": "Etkinlik türü",
                 "personalEvent": "Kişisel etkinlik",
                 "publicEvent": "Halka açık etkinlik",
@@ -1195,6 +1196,7 @@
             "role": "Rol",
             "status": "Durum",
             "points": "Puanlar",
+            "rank": "Sıralama",
             "price": "Fiyat"
         },
         "placeholders": {

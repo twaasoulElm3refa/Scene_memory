@@ -16,6 +16,7 @@ const requiredKeys = [
     "addNewCity",
     "createCity",
     "startDate",
+    "coverageTime",
     "eventType",
     "personalEvent",
     "publicEvent",
@@ -67,7 +68,7 @@ describe("special coverage form", () => {
         }
     });
 
-    it("submits persisted location, date, and event type IDs", () => {
+    it("submits persisted location, date, optional time, and event type IDs", () => {
         const source = readFileSync(
             resolve(process.cwd(), "resources/js/views/home/components/SpecialCoverageSection.vue"),
             "utf8"
@@ -78,6 +79,18 @@ describe("special coverage form", () => {
         expect(source).toContain("SpecialCoverageRequestService.createCity");
         expect(source).toContain("city_id: Number(cityId.value)");
         expect(source).toContain("start_date: startDate.value");
+        expect(source).toContain("coverage_time: coverageTime.value || null");
         expect(source).toContain("event_type: eventType.value");
+    });
+
+    it("supports editing and displaying an existing coverage time", () => {
+        const source = readFileSync(
+            resolve(process.cwd(), "resources/js/views/admin/special-coverage/SpecialCoverageRequestShow.vue"),
+            "utf8"
+        );
+
+        expect(source).toContain('v-model="coverageTime"');
+        expect(source).toContain("specialCoverageRequestsService.update");
+        expect(source).toContain("formatTime(item.coverage_time)");
     });
 });

@@ -41,6 +41,7 @@ class SpecialCoverageRequestApiTest extends TestCase
             ->assertJsonPath('data.country.id', $country->id)
             ->assertJsonPath('data.city.id', $city->id)
             ->assertJsonPath('data.start_date', '2026-10-12')
+            ->assertJsonPath('data.coverage_time', null)
             ->assertJsonPath('data.event_type', SpecialCoverageRequest::EVENT_TYPE_PUBLIC);
 
         $this->assertDatabaseHas('special_coverage_requests', [
@@ -53,6 +54,28 @@ class SpecialCoverageRequestApiTest extends TestCase
             'event_type' => SpecialCoverageRequest::EVENT_TYPE_PUBLIC,
             'status' => SpecialCoverageRequest::STATUS_PENDING,
         ]);
+    }
+
+    public function test_authenticated_user_can_submit_request_with_coverage_time(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+        [$country, $city] = $this->location();
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/v1/special-coverage-requests', [
+            'event_name' => 'Timed Coverage',
+            'event_description' => 'Coverage starts at an exact time.',
+            'country_id' => $country->id,
+            'city_id' => $city->id,
+            'start_date' => '2026-10-12',
+            'coverage_time' => '09:30',
+            'event_type' => SpecialCoverageRequest::EVENT_TYPE_PUBLIC,
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('data.coverage_time', '09:30');
+
+        $this->assertSame('09:30', SpecialCoverageRequest::query()->firstOrFail()->coverage_time);
     }
 
     public function test_guest_cannot_submit_request(): void
@@ -232,6 +255,32 @@ class SpecialCoverageRequestApiTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.id', $request->id)
             ->assertJsonPath('data.user.email', $request->user->email);
+    }
+
+    public function test_admin_can_edit_or_clear_coverage_time(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $request = SpecialCoverageRequest::query()->create([
+            'user_id' => User::factory()->create(['role' => 'user'])->id,
+            'event_name' => 'Coverage Needed',
+            'event_description' => 'Details.',
+        ]);
+        Sanctum::actingAs($admin);
+
+        $this->patchJson("/api/v1/admin/special-coverage-requests/{$request->id}", [
+            'coverage_time' => '18:45',
+        ])->assertOk()
+            ->assertJsonPath('data.id', $request->id)
+            ->assertJsonPath('data.coverage_time', '18:45');
+
+        $this->assertSame('18:45', $request->fresh()->coverage_time);
+
+        $this->patchJson("/api/v1/admin/special-coverage-requests/{$request->id}", [
+            'coverage_time' => null,
+        ])->assertOk()
+            ->assertJsonPath('data.coverage_time', null);
+
+        $this->assertNull($request->fresh()->coverage_time);
     }
 
     public function test_normal_user_cannot_access_admin_list(): void

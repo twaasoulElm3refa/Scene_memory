@@ -32,6 +32,7 @@ class StoreSpecialCoverageRequest extends FormRequest
                         ->whereNull('deleted_at')),
             ],
             'start_date' => ['required', 'date_format:Y-m-d'],
+            'coverage_time' => ['nullable', 'date_format:H:i'],
             'event_type' => ['required', Rule::in(SpecialCoverageRequest::EVENT_TYPES)],
         ];
     }

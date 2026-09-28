@@ -51,6 +51,46 @@
                             <dd class="font-semibold text-gray-900">{{ formatDateOnly(item.start_date) }}</dd>
                         </div>
                         <div>
+                            <dt class="text-gray-500">{{ $t("homeAudit.specialCoverage.modal.coverageTime") }}</dt>
+                            <dd v-if="!isEditingTime" class="mt-1 flex items-center gap-2 font-semibold text-gray-900">
+                                <span>{{ formatTime(item.coverage_time) }}</span>
+                                <button
+                                    type="button"
+                                    class="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                                    @click="beginEditingTime"
+                                >
+                                    Edit
+                                </button>
+                            </dd>
+                            <dd v-else class="mt-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <input
+                                        v-model="coverageTime"
+                                        type="time"
+                                        class="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                                        :disabled="timeSaving"
+                                    />
+                                    <button
+                                        type="button"
+                                        class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                                        :disabled="timeSaving"
+                                        @click="saveTime"
+                                    >
+                                        {{ timeSaving ? "Saving..." : "Save" }}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-60"
+                                        :disabled="timeSaving"
+                                        @click="cancelEditingTime"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                                <p v-if="timeError" class="mt-2 text-xs text-red-600">{{ timeError }}</p>
+                            </dd>
+                        </div>
+                        <div>
                             <dt class="text-gray-500">{{ $t("homeAudit.specialCoverage.modal.eventType") }}</dt>
                             <dd class="font-semibold text-gray-900">{{ eventTypeLabel(item.event_type) }}</dd>
                         </div>
@@ -178,6 +218,10 @@ const actionLoading = ref(false);
 const showRejectReason = ref(false);
 const rejectReason = ref("");
 const rejectReasonError = ref("");
+const isEditingTime = ref(false);
+const coverageTime = ref("");
+const timeSaving = ref(false);
+const timeError = ref("");
 
 const isPending = computed(() => item.value?.status === "pending");
 
@@ -188,10 +232,44 @@ async function fetchRequest() {
     try {
         const response = await specialCoverageRequestsService.getSingle(route.params.id);
         item.value = response.data.data;
+        coverageTime.value = timeInputValue(item.value.coverage_time);
     } catch (err) {
         error.value = err.response?.data?.message || "Failed to load request details.";
     } finally {
         loading.value = false;
+    }
+}
+
+function beginEditingTime() {
+    coverageTime.value = timeInputValue(item.value?.coverage_time);
+    timeError.value = "";
+    isEditingTime.value = true;
+}
+
+function cancelEditingTime() {
+    coverageTime.value = timeInputValue(item.value?.coverage_time);
+    timeError.value = "";
+    isEditingTime.value = false;
+}
+
+async function saveTime() {
+    timeSaving.value = true;
+    timeError.value = "";
+
+    try {
+        const response = await specialCoverageRequestsService.update(route.params.id, {
+            coverage_time: coverageTime.value || null,
+        });
+        item.value = response.data.data;
+        coverageTime.value = timeInputValue(item.value.coverage_time);
+        isEditingTime.value = false;
+        toastr.success("Special coverage request time updated successfully.");
+    } catch (err) {
+        timeError.value = err.response?.data?.errors?.coverage_time?.[0]
+            || err.response?.data?.message
+            || "Failed to update coverage time.";
+    } finally {
+        timeSaving.value = false;
     }
 }
 
@@ -272,6 +350,14 @@ function formatDateOnly(dateString) {
         month: "short",
         year: "numeric",
     });
+}
+
+function timeInputValue(value) {
+    return typeof value === "string" ? value.slice(0, 5) : "";
+}
+
+function formatTime(value) {
+    return timeInputValue(value) || "-";
 }
 
 function locationName(location) {

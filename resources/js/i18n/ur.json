@@ -792,6 +792,7 @@
                 "addNewCity": "نیا شہر شامل کریں",
                 "createCity": "شہر بنائیں",
                 "startDate": "آغاز کی تاریخ",
+                "coverageTime": "کوریج کا وقت",
                 "eventType": "ایونٹ کی قسم",
                 "personalEvent": "ذاتی ایونٹ",
                 "publicEvent": "عوامی ایونٹ",
@@ -1195,6 +1196,7 @@
             "role": "کردار",
             "status": "حیثیت",
             "points": "پوائنٹس",
+            "rank": "درجہ بندی",
             "price": "قیمت"
         },
         "placeholders": {

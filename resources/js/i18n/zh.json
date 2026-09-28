@@ -792,6 +792,7 @@
                 "addNewCity": "添加新城市",
                 "createCity": "创建城市",
                 "startDate": "开始日期",
+                "coverageTime": "报道时间",
                 "eventType": "活动类型",
                 "personalEvent": "个人活动",
                 "publicEvent": "公开活动",
@@ -1195,6 +1196,7 @@
             "role": "角色",
             "status": "状态",
             "points": "积分",
+            "rank": "排名",
             "price": "价格"
         },
         "placeholders": {

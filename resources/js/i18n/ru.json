@@ -787,6 +787,7 @@
                 "addNewCity": "Добавить новый город",
                 "createCity": "Создать город",
                 "startDate": "Дата начала",
+                "coverageTime": "Время освещения",
                 "eventType": "Тип события",
                 "personalEvent": "Личное событие",
                 "publicEvent": "Публичное событие",
@@ -1190,6 +1191,7 @@
             "role": "Роль",
             "status": "Статус",
             "points": "Очки",
+            "rank": "Место",
             "price": "Цена"
         },
         "placeholders": {

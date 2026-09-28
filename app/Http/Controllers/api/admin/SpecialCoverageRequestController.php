@@ -75,6 +75,33 @@ class SpecialCoverageRequestController extends Controller
         return $this->success($request, 'Special coverage request retrieved successfully.');
     }
 
+    public function update(Request $request, int $id)
+    {
+        $validated = $request->validate([
+            'coverage_time' => ['present', 'nullable', 'date_format:H:i'],
+        ]);
+
+        $specialCoverageRequest = SpecialCoverageRequest::query()->find($id);
+
+        if (! $specialCoverageRequest) {
+            return $this->notFound('Special coverage request not found.');
+        }
+
+        $specialCoverageRequest->update([
+            'coverage_time' => $validated['coverage_time'],
+        ]);
+
+        return $this->success(
+            $specialCoverageRequest->fresh()->load([
+                'user:id,name,email,phone,country',
+                'reviewer:id,name,email',
+                'country.translation',
+                'city.translation',
+            ]),
+            'Special coverage request time updated successfully.'
+        );
+    }
+
     public function approve(int $id)
     {
         try {

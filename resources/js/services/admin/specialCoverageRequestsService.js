@@ -11,6 +11,10 @@ export const specialCoverageRequestsService = {
         return api.get(`/admin/special-coverage-requests/${id}`);
     },
 
+    update(id, payload) {
+        return api.patch(`/admin/special-coverage-requests/${id}`, payload);
+    },
+
     approve(id) {
         return api.post(`/admin/special-coverage-requests/${id}/approve`);
     },

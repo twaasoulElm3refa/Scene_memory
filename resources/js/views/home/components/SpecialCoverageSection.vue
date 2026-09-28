@@ -281,6 +281,27 @@
                                     {{ errors.event_type }}
                                 </p>
                             </div>
+
+                            <div class="special-coverage-modal__field">
+                                <label for="special-coverage-time">
+                                    {{ $t("homeAudit.specialCoverage.modal.coverageTime") }}
+                                </label>
+                                <input
+                                    id="special-coverage-time"
+                                    v-model="coverageTime"
+                                    type="time"
+                                    :disabled="isSubmitting"
+                                    :aria-invalid="Boolean(errors.coverage_time)"
+                                    aria-describedby="special-coverage-time-error"
+                                />
+                                <p
+                                    v-if="errors.coverage_time"
+                                    id="special-coverage-time-error"
+                                    class="special-coverage-modal__error"
+                                >
+                                    {{ errors.coverage_time }}
+                                </p>
+                            </div>
                         </div>
 
                         <div class="special-coverage-modal__field">
@@ -368,6 +389,7 @@ const cityId = ref("");
 const citySearch = ref("");
 const startDate = ref("");
 const eventType = ref("");
+const coverageTime = ref("");
 const isLoadingCountries = ref(false);
 const isLoadingCities = ref(false);
 const isCreatingCity = ref(false);
@@ -468,6 +490,7 @@ const resetForm = () => {
     citySearch.value = "";
     startDate.value = "";
     eventType.value = "";
+    coverageTime.value = "";
     cities.value = [];
     isCountryDropdownOpen.value = false;
     isCityDropdownOpen.value = false;
@@ -581,6 +604,7 @@ const submitRequest = async () => {
             country_id: Number(countryId.value),
             city_id: Number(cityId.value),
             start_date: startDate.value,
+            coverage_time: coverageTime.value || null,
             event_type: eventType.value,
         });
 
@@ -603,6 +627,7 @@ const submitRequest = async () => {
             country_id: firstError(validationErrors.country_id),
             city_id: firstError(validationErrors.city_id),
             start_date: firstError(validationErrors.start_date),
+            coverage_time: firstError(validationErrors.coverage_time),
             event_type: firstError(validationErrors.event_type),
         };
     } finally {

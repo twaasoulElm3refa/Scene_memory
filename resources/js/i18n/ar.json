@@ -793,6 +793,7 @@
                 "addNewCity": "إضافة مدينة جديدة",
                 "createCity": "إنشاء مدينة",
                 "startDate": "تاريخ البدء",
+                "coverageTime": "وقت التغطية",
                 "eventType": "نوع الحدث",
                 "personalEvent": "حدث شخصي",
                 "publicEvent": "حدث عام",
@@ -1195,6 +1196,7 @@
             "role": "الدور",
             "status": "الحالة",
             "points": "النقاط",
+            "rank": "الترتيب",
             "price": "السعر"
         },
         "placeholders": {

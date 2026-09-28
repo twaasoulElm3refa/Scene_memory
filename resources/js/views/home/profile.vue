@@ -37,6 +37,8 @@
                         </p>
                     </div>
                 </div>
+
+                <MonthlyStatsCard class="mt-5" :stats="monthlyStats" />
             </div>
 
             <!-- Tabs -->
@@ -339,9 +341,11 @@ import { getProfile, updateProfileAPI } from "@/services/userService/userService
 import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
+import MonthlyStatsCard from "@/components/profile/MonthlyStatsCard.vue";
 
 export default {
     name: "UserProfile",
+    components: { MonthlyStatsCard },
     setup() {
         const router = useRouter();
         const route = useRoute();
@@ -360,6 +364,11 @@ export default {
             last_login_at: null,
             licenceType: null,
             wallet: null,
+        });
+        const monthlyStats = ref({
+            monthly_points: 0,
+            monthly_rank: null,
+            month: "",
         });
 
         // Edit Form Data
@@ -686,6 +695,10 @@ export default {
 
                 if (userData) {
                     profile.value = { ...userData };
+                    monthlyStats.value = {
+                        ...monthlyStats.value,
+                        ...(res?.monthly_statistics || {}),
+                    };
 
                     editData.value = {
                         name: userData.name || "",
@@ -782,6 +795,7 @@ export default {
 
         return {
             profile,
+            monthlyStats,
             editData,
             originalEditData,
             countries,

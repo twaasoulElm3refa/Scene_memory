@@ -110,6 +110,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('special-coverage-requests')->group(function () {
             Route::get('/', [AdminSpecialCoverageRequestController::class, 'index']);
             Route::get('/{id}', [AdminSpecialCoverageRequestController::class, 'show']);
+            Route::patch('/{id}', [AdminSpecialCoverageRequestController::class, 'update']);
             Route::post('/{id}/approve', [AdminSpecialCoverageRequestController::class, 'approve']);
             Route::post('/{id}/reject', [AdminSpecialCoverageRequestController::class, 'reject']);
         });

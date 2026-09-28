@@ -792,6 +792,7 @@
                 "addNewCity": "नया शहर जोड़ें",
                 "createCity": "शहर बनाएँ",
                 "startDate": "आरंभ तिथि",
+                "coverageTime": "कवरेज का समय",
                 "eventType": "इवेंट का प्रकार",
                 "personalEvent": "व्यक्तिगत इवेंट",
                 "publicEvent": "सार्वजनिक इवेंट",
@@ -1195,6 +1196,7 @@
             "role": "भूमिका",
             "status": "स्थिति",
             "points": "अंक",
+            "rank": "रैंक",
             "price": "मूल्य"
         },
         "placeholders": {

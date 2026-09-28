@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\UserMonthlyPoint;
+use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -14,12 +16,10 @@ class MonthlyLeaderboardService
         $period = now();
         $limit = max(1, min($limit, 10));
 
-        return UserMonthlyPoint::query()
+        return $this->currentMonthQuery($period)
             ->select(['id', 'user_id', 'month', 'year', 'points'])
             ->with('user:id,name,image')
             ->whereHas('user')
-            ->where('month', $period->month)
-            ->where('year', $period->year)
             ->orderByDesc('points')
             ->orderBy('user_id')
             ->limit($limit)
@@ -32,11 +32,10 @@ class MonthlyLeaderboardService
     public function currentMonth(int $perPage = 15, ?int $page = null): LengthAwarePaginator
     {
         $perPage = max(1, min($perPage, 100));
+        $period = now();
 
-        $leaderboard = UserMonthlyPoint::query()
+        $leaderboard = $this->currentMonthQuery($period)
             ->with('user')
-            ->where('month', now()->month)
-            ->where('year', now()->year)
             ->orderByDesc('points')
             ->orderBy('user_id')
             ->paginate($perPage, ['*'], 'page', $page);
@@ -48,5 +47,45 @@ class MonthlyLeaderboardService
         });
 
         return $leaderboard;
+    }
+
+    /** @return array{monthly_points: int, monthly_rank: ?int, month: string} */
+    public function currentUserStats(int $userId): array
+    {
+        $period = now();
+        $entry = $this->currentMonthQuery($period)
+            ->where('user_id', $userId)
+            ->first(['user_id', 'points']);
+
+        if (! $entry) {
+            return [
+                'monthly_points' => 0,
+                'monthly_rank' => null,
+                'month' => $period->format('Y-m'),
+            ];
+        }
+
+        $usersAhead = $this->currentMonthQuery($period)
+            ->where(function (Builder $query) use ($entry): void {
+                $query->where('points', '>', $entry->points)
+                    ->orWhere(function (Builder $query) use ($entry): void {
+                        $query->where('points', $entry->points)
+                            ->where('user_id', '<', $entry->user_id);
+                    });
+            })
+            ->count();
+
+        return [
+            'monthly_points' => (int) $entry->points,
+            'monthly_rank' => $usersAhead + 1,
+            'month' => $period->format('Y-m'),
+        ];
+    }
+
+    private function currentMonthQuery(CarbonInterface $period): Builder
+    {
+        return UserMonthlyPoint::query()
+            ->where('month', $period->month)
+            ->where('year', $period->year);
     }
 }

@@ -741,6 +741,7 @@
                 "addNewCity": "افزودن شهر جدید",
                 "createCity": "ایجاد شهر",
                 "startDate": "تاریخ شروع",
+                "coverageTime": "زمان پوشش",
                 "eventType": "نوع رویداد",
                 "personalEvent": "رویداد شخصی",
                 "publicEvent": "رویداد عمومی",
@@ -1137,6 +1138,7 @@
             "role": "Role",
             "status": "Status",
             "points": "Points",
+            "rank": "رتبه",
             "price": "Price"
         },
         "placeholders": {

@@ -234,6 +234,42 @@ class PointServiceTest extends TestCase
         $this->assertTrue($firstPage->first()->relationLoaded('user'));
     }
 
+    public function test_current_user_monthly_stats_reuse_live_leaderboard_ordering(): void
+    {
+        $users = User::factory()->count(3)->create(['role' => 'user']);
+
+        UserMonthlyPoint::create(['user_id' => $users[0]->id, 'month' => 9, 'year' => 2026, 'points' => 250]);
+        UserMonthlyPoint::create(['user_id' => $users[1]->id, 'month' => 9, 'year' => 2026, 'points' => 500]);
+        UserMonthlyPoint::create(['user_id' => $users[2]->id, 'month' => 9, 'year' => 2026, 'points' => 100]);
+
+        $service = app(MonthlyLeaderboardService::class);
+
+        $this->assertSame([
+            'monthly_points' => 250,
+            'monthly_rank' => 2,
+            'month' => '2026-09',
+        ], $service->currentUserStats($users[0]->id));
+
+        $users[0]->monthlyPoints()->update(['points' => 600]);
+
+        $this->assertSame([
+            'monthly_points' => 600,
+            'monthly_rank' => 1,
+            'month' => '2026-09',
+        ], $service->currentUserStats($users[0]->id));
+    }
+
+    public function test_user_without_current_month_points_is_unranked(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+
+        $this->assertSame([
+            'monthly_points' => 0,
+            'monthly_rank' => null,
+            'month' => '2026-09',
+        ], app(MonthlyLeaderboardService::class)->currentUserStats($user->id));
+    }
+
     public function test_archive_command_saves_previous_month_clears_it_and_preserves_lifetime_points(): void
     {
         Carbon::setTestNow('2026-10-01 00:00:00');

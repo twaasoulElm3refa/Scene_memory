@@ -793,6 +793,7 @@
                 "addNewCity": "Add new city",
                 "createCity": "Create city",
                 "startDate": "Start date",
+                "coverageTime": "Coverage time",
                 "eventType": "Event type",
                 "personalEvent": "Personal event",
                 "publicEvent": "Public event",
@@ -1195,6 +1196,7 @@
             "role": "Role",
             "status": "Status",
             "points": "Points",
+            "rank": "Rank",
             "price": "Price"
         },
         "placeholders": {

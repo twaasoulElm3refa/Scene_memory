@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,11 +12,15 @@ class SpecialCoverageRequest extends Model
     use HasFactory;
 
     public const STATUS_PENDING = 'pending';
+
     public const STATUS_APPROVED = 'approved';
+
     public const STATUS_REJECTED = 'rejected';
 
     public const EVENT_TYPE_PERSONAL = 'personal';
+
     public const EVENT_TYPE_PUBLIC = 'public';
+
     public const EVENT_TYPES = [
         self::EVENT_TYPE_PERSONAL,
         self::EVENT_TYPE_PUBLIC,
@@ -27,6 +32,13 @@ class SpecialCoverageRequest extends Model
         'start_date' => 'date:Y-m-d',
         'reviewed_at' => 'datetime',
     ];
+
+    protected function coverageTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => $value === null ? null : substr($value, 0, 5),
+        );
+    }
 
     public function user(): BelongsTo
     {
