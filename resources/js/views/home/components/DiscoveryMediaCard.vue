@@ -12,6 +12,7 @@
             <template v-if="isVideoResult">
                 <video
                     v-if="resolvedVideoUrl"
+                    :key="resolvedVideoUrl"
                     ref="videoRef"
                     class="discovery-media-card__video"
                     muted
@@ -45,7 +46,7 @@
                                 : 'discovery.media.playVideo'
                         )
                     "
-                    @click.stop="handleMediaClick"
+                    @click.stop="toggleVideo"
                 >
                     <PauseIcon
                         v-if="isPlaying"
@@ -133,12 +134,14 @@
                     {{ cartButtonLabel }}
                 </span>
             </button>
+
+            <slot name="event-action"></slot>
         </footer>
     </article>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 import {
     CheckIcon,
@@ -151,6 +154,7 @@ import { useI18n } from "vue-i18n";
 
 import { CartService } from "@/services/CartService/CartService";
 import { showSafeToast } from "@/services/ApiClient";
+import { discoveryVideoSources } from "@/services/EventService/eventSearchHelpers";
 
 
 /* =====================================================
@@ -201,6 +205,8 @@ const isPlaying = ref(false);
 const isAdding = ref(false);
 
 const isAdded = ref(false);
+
+const videoSourceIndex = ref(0);
 
 
 /* =====================================================
@@ -283,38 +289,30 @@ const getStorageUrl = (mediaOrPath) => {
 };
 
 
-const isVideo = (path) => {
-    const rawPath = getMediaRawPath(path);
+const videoSources = computed(() => {
+    if (!isVideoResult.value) return [];
 
-    if (!rawPath || typeof rawPath !== "string") {
-        return false;
-    }
-
-    return /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(rawPath);
-};
-
-
-const resolvedVideoPath = computed(() => {
-    if (!isVideoResult.value) return "";
-
-    return (
-        props.result?.full_url ||
-        props.result?.video_url ||
-        props.result?.media_url ||
-        props.result?.file_url ||
-        props.result?.url ||
-        ""
-    );
+    return discoveryVideoSources(props.result);
 });
 
 
 const resolvedVideoUrl = computed(() => {
-    if (!isVideo(resolvedVideoPath.value)) {
-        return "";
-    }
-
-    return getStorageUrl(resolvedVideoPath.value);
+    return videoSources.value[videoSourceIndex.value] || "";
 });
+
+
+watch(
+    () => [
+        props.result?.id,
+        props.result?.preview_url,
+        props.result?.video_url,
+        props.result?.media_url,
+    ],
+    () => {
+        videoSourceIndex.value = 0;
+        isPlaying.value = false;
+    }
+);
 
 
 /* =====================================================
@@ -345,11 +343,16 @@ const hasMediaSource = computed(() => {
 const handleVideoError = (event) => {
     const video = event?.target;
 
+    if (videoSources.value[videoSourceIndex.value + 1]) {
+        videoSourceIndex.value += 1;
+        isPlaying.value = false;
+        return;
+    }
+
     console.error(
         "Unable to load discovery video:",
         {
             id: props.result?.id,
-            path: resolvedVideoPath.value,
             url: resolvedVideoUrl.value,
             error: video?.error || null,
         }

@@ -12,6 +12,7 @@ import api from "@/services/ApiClient";
 import { EventService } from "../../resources/js/services/EventService/EventService";
 import {
     discoveryResultsToMapEvents,
+    discoveryVideoSources,
     eventFiltersToQuery,
     normalizeDiscoveryResult,
     normalizePaginatedResponse,
@@ -106,6 +107,8 @@ describe("discovery URL and response helpers", () => {
                         type: "video",
                         price: "17.50",
                         media_url: "events/video.mp4",
+                        preview_url: "events/video-preview.mp4",
+                        video_url: "events/video.mp4",
                         thumbnail_url: "events/poster.jpg",
                         city: { name: "Cairo" },
                     }],
@@ -135,6 +138,23 @@ describe("discovery URL and response helpers", () => {
             price: "17.50",
         });
         expect(result.media_url).toBe("/storage/events/video.mp4");
+        expect(result.preview_url).toBe("/storage/events/video-preview.mp4");
+        expect(result.video_url).toBe("/storage/events/video.mp4");
+    });
+
+    it("uses the watermarked video preview before the original and falls back when absent", () => {
+        expect(discoveryVideoSources({
+            preview_url: "events/watermarked.mp4",
+            video_url: "events/original.mp4",
+        })).toEqual([
+            "/storage/events/watermarked.mp4",
+            "/storage/events/original.mp4",
+        ]);
+
+        expect(discoveryVideoSources({
+            preview_url: "",
+            video_url: "events/original.mp4",
+        })).toEqual(["/storage/events/original.mp4"]);
     });
 
     it("deduplicates parent events before rendering map markers", () => {

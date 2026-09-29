@@ -182,6 +182,7 @@
                         :total-pages="totalPages" :total-results="totalResults" :result-from="resultFrom"
                         :result-to="resultTo" :per-page="perPage" :fallback-image="fallbackImage"
                         :format-date="formatDate" :lang="lang" :show-see-more="canSeeMoreSearchResults"
+                        enable-media-preview
                         @update:active-type="handleTypeChange" @update:current-page="handlePageChange"
                         @see-more="goToMoreSearchResults" />
                 </div>

@@ -262,7 +262,20 @@
                 :fallback-image="fallbackImage"
                 :preview-enabled="enableMediaPreview && Boolean(mediaPreviewSource(result))"
                 @preview="openMediaPreview"
-            />
+            >
+                <template #event-action>
+                    <a
+                        :href="eventUrl(result)"
+                        class="media-event-link"
+                    >
+                        <span class="result-details">
+                            {{ $t("discovery.details") }}
+
+                            <ArrowRightIcon aria-hidden="true" />
+                        </span>
+                    </a>
+                </template>
+            </DiscoveryMediaCard>
             </template>
         </div>
 
@@ -360,6 +373,7 @@
                     autoplay
                     playsinline
                     preload="metadata"
+                    @error="handlePreviewVideoError(currentPreviewMedia)"
                 ></video>
 
                 <img
@@ -387,6 +401,7 @@ import {
 } from "@heroicons/vue/24/outline";
 
 import DiscoveryMediaCard from "./DiscoveryMediaCard.vue";
+import { discoveryVideoSources } from "@/services/EventService/eventSearchHelpers";
 
 
 const props = defineProps({
@@ -511,17 +526,21 @@ const failedVideos = reactive(new Set());
 
 const isPreviewOpen = ref(false);
 const previewIndex = ref(0);
+const failedPreviewVideoSources = reactive(new Map());
 
 const mediaPreviewSource = (result) => {
     if (!result || !["image", "video"].includes(result.result_type)) {
         return "";
     }
 
-    return (
-        result.preview_url ||
-        result.thumbnail_url ||
-        ""
-    );
+    if (result.result_type === "video") {
+        const sources = discoveryVideoSources(result);
+        const sourceIndex = failedPreviewVideoSources.get(resultKey(result)) || 0;
+
+        return sources[sourceIndex] || "";
+    }
+
+    return result.media_url || result.image_url || result.thumbnail_url || "";
 };
 
 const mediaItems = computed(() => {
@@ -540,7 +559,7 @@ const currentPreviewMedia = computed(() => {
 const previewMediaKey = computed(() => {
     const media = currentPreviewMedia.value;
 
-    return `${media?.result_type || "media"}-${media?.id || mediaPreviewSource(media)}`;
+    return `${media?.result_type || "media"}-${media?.id || ""}-${mediaPreviewSource(media)}`;
 });
 
 const openMediaPreview = (result) => {
@@ -580,6 +599,22 @@ const showNextMedia = () => {
     }
 
     previewIndex.value = (previewIndex.value + 1) % total;
+};
+
+const handlePreviewVideoError = (result) => {
+    const sources = discoveryVideoSources(result);
+    const key = resultKey(result);
+    const sourceIndex = failedPreviewVideoSources.get(key) || 0;
+
+    if (sources[sourceIndex + 1]) {
+        failedPreviewVideoSources.set(key, sourceIndex + 1);
+        return;
+    }
+
+    console.error("Discovery preview video failed to load:", {
+        id: result?.id,
+        source: sources[sourceIndex] || "",
+    });
 };
 
 const handleMediaPreviewKeydown = (event) => {
@@ -660,13 +695,7 @@ const videoSource = (result) => {
         return "";
     }
 
-    return (
-        result.video_url ||
-        result.media_url ||
-        result.file_url ||
-        result.url ||
-        ""
-    );
+    return discoveryVideoSources(result)[0] || "";
 };
 
 
@@ -1410,6 +1439,26 @@ const handleFallbackImageError = (event) => {
     color: var(--scemory-primary);
 
     font-weight: 800;
+}
+
+
+.media-event-link {
+    display: flex;
+
+    width: 100%;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    padding-top: 14px;
+
+    border-top:
+        1px solid
+        var(--scemory-border-soft);
+
+    font-size: 12px;
+
+    text-decoration: none;
 }
 
 

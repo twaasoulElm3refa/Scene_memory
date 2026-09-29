@@ -157,7 +157,10 @@ class EventSearchFiltersTest extends TestCase
         $this->getJson('/api/v1/events/discovery/search?type=video&seed=10')
             ->assertOk()
             ->assertJsonPath('data.total', 1)
-            ->assertJsonPath('data.data.0.result_type', 'video');
+            ->assertJsonPath('data.data.0.result_type', 'video')
+            ->assertJsonPath('data.data.0.event_id', $eventId)
+            ->assertJsonPath('data.data.0.preview_url', 'videos/clip.mp4.jpg')
+            ->assertJsonPath('data.data.0.video_url', 'videos/clip.mp4');
     }
 
     public function test_discovery_media_matches_its_own_or_parent_event_tags(): void

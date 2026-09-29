@@ -756,6 +756,7 @@ class EventRepository implements EventRepositoryInterface
             'title' => $title,
             'description' => $description,
             'media_url' => $mediaUrl,
+            'preview_url' => $media?->preview_url,
             'thumbnail_url' => $thumbnailUrl,
             'video_url' => $resultType === 'video' ? $mediaUrl : null,
             'start_date' => $event->start_date,

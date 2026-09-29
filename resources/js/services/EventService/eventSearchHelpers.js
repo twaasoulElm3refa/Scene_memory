@@ -115,6 +115,21 @@ export const toMediaUrl = (pathValue) => {
     return `/storage/${pathValue}`;
 };
 
+export const discoveryVideoSources = (result = {}) => {
+    return [
+        toMediaUrl(result.preview_url),
+        toMediaUrl(
+            result.video_url ||
+            result.media_url ||
+            result.full_url ||
+            result.file_url ||
+            result.url
+        ),
+    ].filter((source, index, sources) => {
+        return Boolean(source) && sources.indexOf(source) === index;
+    });
+};
+
 export const normalizeDiscoveryResult = (result = {}) => {
     const resultType = ["event", "image", "video"].includes(result.result_type)
         ? result.result_type
@@ -127,6 +142,8 @@ export const normalizeDiscoveryResult = (result = {}) => {
         result.first_image?.full_url ||
         result.firstImage?.full_url
     );
+    const previewUrl = toMediaUrl(result.preview_url);
+    const videoUrl = toMediaUrl(result.video_url);
     const thumbnailUrl = toMediaUrl(
         result.thumbnail_url ||
         result.first_image?.preview_url ||
@@ -160,6 +177,8 @@ export const normalizeDiscoveryResult = (result = {}) => {
             description: result.translation?.description || description,
         },
         media_url: mediaUrl,
+        preview_url: previewUrl,
+        video_url: videoUrl,
         thumbnail_url: thumbnailUrl || mediaUrl,
         image_url: thumbnailUrl || mediaUrl,
         image_webp_url: null,
