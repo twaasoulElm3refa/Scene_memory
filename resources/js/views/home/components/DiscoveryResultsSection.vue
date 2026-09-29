@@ -527,6 +527,7 @@ const failedVideos = reactive(new Set());
 const isPreviewOpen = ref(false);
 const previewIndex = ref(0);
 const failedPreviewVideoSources = reactive(new Map());
+const failedPreviewImages = reactive(new Set());
 
 const mediaPreviewSource = (result) => {
     if (!result || !["image", "video"].includes(result.result_type)) {
@@ -538,6 +539,13 @@ const mediaPreviewSource = (result) => {
         const sourceIndex = failedPreviewVideoSources.get(resultKey(result)) || 0;
 
         return sources[sourceIndex] || "";
+    }
+
+    if (
+        result.preview_url &&
+        !failedPreviewImages.has(resultKey(result))
+    ) {
+        return result.preview_url;
     }
 
     return result.media_url || result.image_url || result.thumbnail_url || "";
@@ -642,8 +650,18 @@ const handleMediaPreviewKeydown = (event) => {
 
 const handlePreviewImageError = (event) => {
     const image = event?.target;
+    const result = currentPreviewMedia.value;
 
     if (!image) {
+        return;
+    }
+
+    if (
+        result?.result_type === "image" &&
+        result.preview_url &&
+        !failedPreviewImages.has(resultKey(result))
+    ) {
+        failedPreviewImages.add(resultKey(result));
         return;
     }
 
