@@ -1,0 +1,1 @@
+import{a8 as t,c as a,U as s,k as n,e as o,Z as r}from"./index-DLoqZaOM.js";const _=t({__name:"newsletter",setup(l){return(u,e)=>(a(),s(r,null,{default:n(()=>[...e[0]||(e[0]=[o("h3",null,"newsletters",-1)])]),_:1}))}});export{_ as default};

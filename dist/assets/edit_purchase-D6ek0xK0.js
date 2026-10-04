@@ -1,0 +1,1 @@
+import{c as a,U as s,k as r,e as t,Z as u}from"./index-DLoqZaOM.js";const c={__name:"edit_purchase",setup(l){return(n,e)=>(a(),s(u,null,{default:r(()=>[...e[0]||(e[0]=[t("div",null,[t("h1",null,"edit purchase")],-1)])]),_:1}))}};export{c as default};

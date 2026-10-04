@@ -210,6 +210,8 @@
 import { ref, onMounted, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import downloadService from "@/services/downloadService/downloadService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 const { t } = useI18n();
 const downloads     = ref([]);
@@ -234,6 +236,7 @@ const showToast = (message, type = "success") => {
 /* ── URL ── */
 const getUrl = (path) => {
   if (!path) return "";
+  if (isMobileRuntime()) return toMediaUrl(path) || "";
   if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) return path;
   return `/storage/${path}`;
 };

@@ -372,6 +372,8 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getCreatorEvent } from "@/services/CreatorService/CreatorService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 const route = useRoute();
 
@@ -394,6 +396,7 @@ const normalizeEvent = (payload) => {
 
 const storageUrl = (path) => {
     if (!path) return "";
+    if (isMobileRuntime()) return toMediaUrl(path) || "";
     const value = String(path);
     if (value.startsWith("http://") || value.startsWith("https://")) return value;
     if (value.startsWith("/storage/")) return value;

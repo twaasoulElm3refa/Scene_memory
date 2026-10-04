@@ -1,4 +1,6 @@
 import axios from "axios";
+import { backendOrigin, isMobileRuntime } from "./runtimeUrls";
+import { getAuthToken } from "./authTokenStorage";
 
 const LANG_KEY = "language";
 const SUPPORTED_LANGS = ["ar", "en", "ru", "fr", "zh"];
@@ -9,7 +11,9 @@ const getLang = () => {
 };
 
 const AdminApiClient = axios.create({
-    baseURL: "/api/v1",
+    baseURL: isMobileRuntime() && backendOrigin()
+        ? `${backendOrigin()}/api/v1`
+        : "/api/v1",
     headers: {
         Accept: "application/json",
         "Accept-Language": getLang(),
@@ -19,7 +23,7 @@ const AdminApiClient = axios.create({
 AdminApiClient.interceptors.request.use(
     (config) => {
         const token =
-            localStorage.getItem("admin_token") || localStorage.getItem("auth_token");
+            localStorage.getItem("admin_token") || getAuthToken();
 
         config.headers["Accept-Language"] = getLang();
 

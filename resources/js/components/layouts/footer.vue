@@ -31,7 +31,7 @@
           <!-- Logo -->
           <div class="mb-3">
             <img
-              src="/images/logo.png"
+              :src="toAssetUrl('/images/logo.png')"
               :alt="$t('footer.logoAlt')"
               class="rounded-circle logo-glow p-1 w-50"
             />
@@ -79,8 +79,10 @@
 </template>
 
 <script>
+import { toAssetUrl } from '@/services/runtimeUrls';
 export default {
   name: "Footer",
+  methods: { toAssetUrl },
 
   data() {
     return {

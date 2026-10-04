@@ -345,6 +345,8 @@ import { ref, reactive, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { CartService } from "@/services/CartService/CartService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 import { PaymentService } from "../../services/PaymentService/PaymentService";
 import { getOrCreateIdempotencyKey, clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
 
@@ -479,6 +481,10 @@ const getMediaRawPath = (mediaOrPath) => {
 
 const getStorageUrl = (mediaOrPath) => {
     const rawPath = getMediaRawPath(mediaOrPath);
+
+    if (isMobileRuntime() && rawPath) {
+        return toMediaUrl(rawPath);
+    }
 
     if (!rawPath || typeof rawPath !== 'string') {
         return placeholderImage;

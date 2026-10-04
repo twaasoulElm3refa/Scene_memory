@@ -364,6 +364,7 @@ import { useI18n } from "vue-i18n";
 import { showSafeToast } from "../../../services/ApiClient";
 import { LocationService } from "../../../services/LocationService/LocationService";
 import { SpecialCoverageRequestService } from "../../../services/SpecialCoverageRequestService";
+import { getAuthToken } from "../../../services/authTokenStorage";
 import {
     cityNameExists,
     filterCityOptions,
@@ -404,7 +405,7 @@ const cityDropdownRef = ref(null);
 
 let previousBodyOverflow = "";
 
-const isAuthenticated = () => Boolean(localStorage.getItem("auth_token"));
+const isAuthenticated = () => Boolean(getAuthToken());
 
 const locationName = getLocationName;
 

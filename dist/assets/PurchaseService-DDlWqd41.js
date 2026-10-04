@@ -1,0 +1,1 @@
+import{P as t}from"./index-DLoqZaOM.js";const a={getAll(e=1){return t.get(`/purchases?page=${e}`)},getByStatus(e,r=1){return t.get(`/purchases/status/${e}`,{params:{page:r}})},getByType(e,r=1){return t.get(`/purchases/type/${e}`,{params:{page:r}})},getSingle(e){return t.get(`/purchases/show/${e}`)},delete(e){return t.delete(`/purchases/delete/${e}`)}};export{a as P};

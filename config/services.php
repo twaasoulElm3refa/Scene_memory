@@ -24,6 +24,7 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
+        'mobile_app_link' => env('GOOGLE_MOBILE_APP_LINK', 'https://scemory.com/mobile/auth/callback'),
     ],
 
     'facebook' => [

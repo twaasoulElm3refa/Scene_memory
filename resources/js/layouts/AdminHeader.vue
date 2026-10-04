@@ -21,6 +21,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import AdminApiClient from "@/services/AdminApiClient";
+import { isMobileRuntime } from "@/services/runtimeUrls";
+import { clearAuthToken, getAuthToken } from "@/services/authTokenStorage";
 
 const router = useRouter();
 const theme = ref("dark");
@@ -43,16 +46,13 @@ const toggleTheme = () => {
 const fetchProfile = async () => {
   try {
     const token =
-      localStorage.getItem("admin_token") || localStorage.getItem("auth_token");
+      localStorage.getItem("admin_token") || getAuthToken();
 
-    const res = await fetch("/api/v1/users/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    });
-
-    const data = await res.json();
+    const data = isMobileRuntime()
+      ? (await AdminApiClient.get('/users/profile')).data
+      : await (await fetch("/api/v1/users/profile", {
+          headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+        })).json();
 
     if (data?.data?.user?.name) {
       userName.value = data.data.user.name;
@@ -73,8 +73,8 @@ onMounted(() => {
 
 /* ===== Logout ===== */
 
-const logout = () => {
-  localStorage.removeItem("auth_token");
+const logout = async () => {
+  await clearAuthToken();
   localStorage.removeItem("user_role");
   localStorage.removeItem("admin_token");
   localStorage.removeItem("admin_user");

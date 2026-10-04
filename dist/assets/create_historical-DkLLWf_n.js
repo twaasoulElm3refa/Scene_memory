@@ -1,0 +1,1 @@
+import{c as r,U as t}from"./index-DLoqZaOM.js";import o from"./create_event-DyuBJ5c3.js";import"./maplibre-gl-C-0v3V1U.js";import"./EventService-B2Vr0MJh.js";import"./eventSearchHelpers-wUSgD8GT.js";import"./CategoryService-B3XgD1D1.js";import"./TagService-DBxnlA3N.js";const f={__name:"create_historical",setup(e){return(a,c)=>(r(),t(o,{historical:""}))}};export{f as default};

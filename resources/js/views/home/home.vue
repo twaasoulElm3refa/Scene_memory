@@ -7,7 +7,7 @@
                 <!-- Background Video -->
                 <video class="absolute inset-0 z-0 h-full w-full object-cover" autoplay muted loop playsinline
                     preload="auto">
-                    <source src="/video/Final_Scemory.mp4" type="video/mp4" />
+                    <source :src="heroVideoUrl" type="video/mp4" />
                     {{ $t('homeAudit.home.videoUnsupported') }}
                 </video>
 
@@ -182,9 +182,8 @@
                         :total-pages="totalPages" :total-results="totalResults" :result-from="resultFrom"
                         :result-to="resultTo" :per-page="perPage" :fallback-image="fallbackImage"
                         :format-date="formatDate" :lang="lang" :show-see-more="canSeeMoreSearchResults"
-                        enable-media-preview
-                        @update:active-type="handleTypeChange" @update:current-page="handlePageChange"
-                        @see-more="goToMoreSearchResults" />
+                        enable-media-preview @update:active-type="handleTypeChange"
+                        @update:current-page="handlePageChange" @see-more="goToMoreSearchResults" />
                 </div>
             </section>
 
@@ -261,7 +260,7 @@ import {
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import debounce from "lodash/debounce";
-
+import { Capacitor } from "@capacitor/core";
 import { CategoryService } from "@/services/CategoryService/CategoryService";
 import { TagService } from "@/services/TagService/TagService";
 import { LocationService } from "@/services/LocationService/LocationService";
@@ -276,6 +275,7 @@ import {
 } from "@/services/EventService/eventSearchHelpers";
 import { PlanService } from "@/services/planService/planService";
 import { AuthService } from "@/services/AuthService/AuthService";
+import { getAuthToken } from "@/services/authTokenStorage";
 import Navbar from "@/components/layouts/Navbar.vue";
 
 const MapSection = defineAsyncComponent(() => import("./components/MapSection.vue"));
@@ -361,6 +361,20 @@ let toastTimer = null;
 let progressInterval = null;
 let hasMapErrorListener = false;
 const scheduledTasks = [];
+
+const useMobileAssets =
+    Capacitor.isNativePlatform() ||
+    import.meta.env.VITE_FORCE_MOBILE_API === "true";
+
+const assetBaseUrl = String(
+    import.meta.env.VITE_API_URL || ""
+).replace(/\/+$/, "");
+
+const heroVideoUrl =
+    useMobileAssets && assetBaseUrl
+        ? `${assetBaseUrl}/video/Final_Scemory.mp4`
+        : "/video/Final_Scemory.mp4";
+
 
 const visiblePages = computed(() => {
     const total = Number(totalPages.value) || 1;
@@ -960,7 +974,7 @@ const loadPlans = async () => {
 };
 
 const fetchProfile = async () => {
-    const token = localStorage.getItem("auth_token");
+    const token = getAuthToken();
 
     if (!token) return;
 

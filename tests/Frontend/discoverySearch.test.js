@@ -12,6 +12,7 @@ import api from "@/services/ApiClient";
 import { EventService } from "../../resources/js/services/EventService/EventService";
 import {
     discoveryResultsToMapEvents,
+    discoveryImageSources,
     discoveryVideoSources,
     eventFiltersToQuery,
     normalizeDiscoveryResult,
@@ -62,6 +63,31 @@ describe("discovery search requests", () => {
 });
 
 describe("discovery URL and response helpers", () => {
+    it("uses the backend image preview and falls through to the full image on mobile", () => {
+        vi.stubEnv("VITE_FORCE_MOBILE_API", "true");
+        vi.stubEnv("VITE_API_URL", "https://dev.scemory.com");
+        try {
+            const image = normalizeDiscoveryResult({
+                result_type: "image",
+                id: 42,
+                event_id: 7,
+                event_slug: "sample",
+                media_url: "events/full/example.jpg",
+                preview_url: "events/preview/example.jpg",
+                thumbnail_url: "events/preview/example.jpg",
+                first_image: { full_url: "events/full/other.jpg" },
+            });
+
+            expect(discoveryImageSources(image)).toEqual([
+                "https://dev.scemory.com/storage/events/preview/example.jpg",
+                "https://dev.scemory.com/storage/events/full/example.jpg",
+            ]);
+            expect(image.image_url).toBe("https://dev.scemory.com/storage/events/preview/example.jpg");
+        } finally {
+            vi.unstubAllEnvs();
+        }
+    });
+
     it("round-trips the complete search state through the query string", () => {
         const query = eventFiltersToQuery({
             type: "image",

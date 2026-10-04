@@ -406,11 +406,13 @@ import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { EventImageService } from "../../../services/EventImageService/EventImageService";
 import { normalizeErrorMessage, showSafeToast } from "../../../services/ApiClient";
 import { EventService } from "../../../services/admin/events/EventService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime, toAssetUrl as publicAssetUrl } from "@/services/runtimeUrls";
 
 const route = useRoute();
 const router = useRouter();
 
-const fallbackImage = "/images/logo.png";
+const fallbackImage = publicAssetUrl("/images/logo.png");
 
 const event = ref(null);
 const loading = ref(true);
@@ -742,9 +744,6 @@ async function uploadSelectedMedia() {
 
   try {
     await EventImageService.create(event.value.id, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
       onUploadProgress(progressEvent) {
         if (!progressEvent.total) return;
         uploadProgress.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -883,7 +882,7 @@ function toAssetUrl(path) {
     .replace(/^storage\//, "")
     .replace(/^\/?storage\//, "");
 
-  return `/storage/${cleaned}`;
+  return isMobileRuntime() ? toMediaUrl(cleaned) : `/storage/${cleaned}`;
 }
 
 function isMediaVideo(media) {

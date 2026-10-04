@@ -48,6 +48,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { adminLogin } from "../../../services/admin/auth/authServices";
+import { setAuthToken } from "../../../services/authTokenStorage";
 
 const router = useRouter();
 
@@ -79,7 +80,7 @@ const handleLogin = async () => {
 
         localStorage.setItem("admin_token", token);
         localStorage.setItem("admin_user", JSON.stringify(user));
-        localStorage.setItem("auth_token", token);
+        await setAuthToken(token);
         localStorage.setItem("user_role", user.role || "admin");
 
         successMessage.value = data?.message || "Login successful.";

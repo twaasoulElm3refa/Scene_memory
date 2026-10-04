@@ -1,0 +1,1 @@
+import{P as e}from"./index-DLoqZaOM.js";const s={getAll(){return e.get("/plans/all")},getSingle(r){return e.get(`/plans/single/${r}`)},subscribe(r){return e.post(`/subscribe/${r}`)},async getAllPlans(){try{return(await e.get("/plans/all")).data.data||[]}catch(r){throw console.error("❌ Error fetching plans:",r),r}}};export{s as P};

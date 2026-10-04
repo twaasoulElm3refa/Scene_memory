@@ -269,6 +269,8 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { countryService } from "@/services/admin/countries/countryService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 const router = useRouter();
 const theme = localStorage.getItem("theme") || "light";
@@ -295,6 +297,7 @@ const totalPages = computed(() => paginationData.value.last_page || 1);
 
 const getImageUrl = (path) => {
   if (!path) return null;
+  if (isMobileRuntime()) return toMediaUrl(path);
   const base = import.meta.env.VITE_APP_BASE_URL || "http://127.0.0.1:8000";
   return `${base}/storage/${path}`;
 };

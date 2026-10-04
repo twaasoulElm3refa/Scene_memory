@@ -238,6 +238,7 @@
 
 <script>
 import CountryService from '@/services/CountryService/CountryService';
+import { toMediaUrl } from '@/services/EventService/eventSearchHelpers';
 
 export default {
     name: 'CountryData',
@@ -391,7 +392,7 @@ export default {
             const url = firstImage.full_url || firstImage.url || '';
             if (!url) return '';
             if (/^https?:\/\//i.test(url)) return url;
-            return `/storage/${String(url).replace(/^\/+/, '')}`;
+            return toMediaUrl(url);
         },
 
         destroyMap() {

@@ -1,0 +1,1 @@
+import{P as t}from"./index-DLoqZaOM.js";const i={getMyWishlist(e=1){return t.get(`/Wishlist/me?page=${e}`)},addToWishlist(e){return t.post(`/Wishlist/${e}`)},deleteFromWishlist(e){return t.delete(`/Wishlist/${e}/delete`)}};export{i as W};

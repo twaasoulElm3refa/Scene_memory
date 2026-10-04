@@ -543,6 +543,10 @@ import { LocationService } from "../../services/LocationService/LocationService"
 import { CategoryService } from "../../services/CategoryService/CategoryService";
 import { EventService } from "../../services/EventService/EventService";
 import { TagService } from "../../services/TagService/TagService";
+import { useRouter } from "vue-router";
+import { isMobileRuntime } from "../../services/runtimeUrls";
+
+const router = useRouter();
 
 const props = defineProps({
     admin: {
@@ -1084,7 +1088,11 @@ async function createEvent() {
             : props.historical
                 ? "eventForm.success.historicalCreated"
                 : "eventForm.success.created"));
-        window.location.href = props.admin ? "/admin/events" : "/";
+        if (isMobileRuntime()) {
+            await router.push(props.admin ? "/admin/events" : "/");
+        } else {
+            window.location.href = props.admin ? "/admin/events" : "/";
+        }
     } catch (err) {
         console.error(err);
         const errorKey = props.historical

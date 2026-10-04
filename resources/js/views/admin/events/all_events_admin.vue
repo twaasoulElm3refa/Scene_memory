@@ -173,6 +173,8 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import eventService from "@/services/admin/events/eventsService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 export default {
   components: {
@@ -276,6 +278,7 @@ export default {
     const getEventImage = (event) => {
       if (event.first_image && event.first_image.url) {
         const imageUrl = event.first_image.url;
+        if (isMobileRuntime()) return toMediaUrl(imageUrl);
         if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
           return imageUrl;
         }

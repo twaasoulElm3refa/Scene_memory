@@ -140,6 +140,8 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { WishlistService } from '../../services/WishlistService/WishlistService'
+import { toMediaUrl } from '../../services/EventService/eventSearchHelpers'
+import { isMobileRuntime } from '../../services/runtimeUrls'
 
 const { t, locale } = useI18n()
 const wishlists = ref([])
@@ -177,7 +179,9 @@ const fetchWishlists = async (page = 1) => {
 
 const getImageUrl = (item) => {
     if (item.first_image?.preview_url) {
-        return `http://localhost:8000/storage/${item.first_image.preview_url}`
+        return isMobileRuntime()
+            ? toMediaUrl(item.first_image.preview_url)
+            : `http://localhost:8000/storage/${item.first_image.preview_url}`
     }
 
     return `https://picsum.photos/seed/event-${item.id}/800/600`

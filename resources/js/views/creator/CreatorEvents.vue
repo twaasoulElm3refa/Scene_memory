@@ -204,6 +204,8 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getCreatorEvents } from "@/services/CreatorService/CreatorService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 const route = useRoute();
 
@@ -288,6 +290,7 @@ const resolveImage = (event) => {
     if (!raw) return "";
 
     const image = String(raw);
+    if (isMobileRuntime()) return toMediaUrl(image) || "";
 
     if (image.startsWith("http://") || image.startsWith("https://")) {
         return image;

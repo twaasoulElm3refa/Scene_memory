@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import AdminLayout from '../../../layouts/AdminLayout.vue'
 import { FooterService } from '../../../services/FooterService/FooterService'
+import { toMediaUrl } from '@/services/EventService/eventSearchHelpers'
+import { isMobileRuntime } from '@/services/runtimeUrls'
 
 interface FooterData {
   id: number
@@ -127,7 +129,7 @@ function closeModal() {
               <div class="mt-1">
                 <img
                   v-if="footer.logo"
-                  :src="`/storage/${footer.logo}`"
+                  :src="isMobileRuntime() ? toMediaUrl(footer.logo) : `/storage/${footer.logo}`"
                   alt="Footer Logo"
                   class="h-16 w-auto object-contain rounded border bg-gray-50"
                 />

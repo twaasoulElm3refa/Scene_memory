@@ -93,8 +93,10 @@
                 v-if="result.result_type === 'event'"
                 class="discovery-card"
             >
-                <a
-                    :href="eventUrl(result)"
+                <component
+                    :is="isMobileRuntime() ? RouterLink : 'a'"
+                    :to="isMobileRuntime() ? eventUrl(result) : undefined"
+                    :href="isMobileRuntime() ? undefined : eventUrl(result)"
                     class="result-card-link"
                 >
                     <!-- Media -->
@@ -159,7 +161,7 @@
                                 :loading="index === 0 ? 'eager' : 'lazy'"
                                 :fetchpriority="index === 0 ? 'high' : 'auto'"
                                 decoding="async"
-                                @error="handleImageError"
+                                @error="handleImageError($event, result)"
                             />
 
                             <div
@@ -252,7 +254,7 @@
                             </span>
                         </div>
                     </div>
-                </a>
+                </component>
             </article>
 
             <DiscoveryMediaCard
@@ -264,8 +266,10 @@
                 @preview="openMediaPreview"
             >
                 <template #event-action>
-                    <a
-                        :href="eventUrl(result)"
+                    <component
+                        :is="isMobileRuntime() ? RouterLink : 'a'"
+                        :to="isMobileRuntime() ? eventUrl(result) : undefined"
+                        :href="isMobileRuntime() ? undefined : eventUrl(result)"
                         class="media-event-link"
                     >
                         <span class="result-details">
@@ -273,7 +277,7 @@
 
                             <ArrowRightIcon aria-hidden="true" />
                         </span>
-                    </a>
+                    </component>
                 </template>
             </DiscoveryMediaCard>
             </template>
@@ -392,6 +396,8 @@
 
 <script setup>
 import { computed, onUnmounted, reactive, ref, watch } from "vue";
+import { RouterLink } from "vue-router";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 import {
     ArrowRightIcon,
@@ -401,7 +407,7 @@ import {
 } from "@heroicons/vue/24/outline";
 
 import DiscoveryMediaCard from "./DiscoveryMediaCard.vue";
-import { discoveryVideoSources } from "@/services/EventService/eventSearchHelpers";
+import { discoveryImageSources, discoveryVideoSources } from "@/services/EventService/eventSearchHelpers";
 
 
 const props = defineProps({
@@ -728,13 +734,7 @@ const imageSource = (result) => {
         return props.fallbackImage || "";
     }
 
-    return (
-        result.thumbnail_url ||
-        result.media_url ||
-        result.image_url ||
-        props.fallbackImage ||
-        ""
-    );
+    return discoveryImageSources(result)[0] || props.fallbackImage || "";
 };
 
 
@@ -830,10 +830,18 @@ const prepareVideoFrame = (event) => {
 |--------------------------------------------------------------------------
 */
 
-const handleImageError = (event) => {
+const handleImageError = (event, result) => {
     const image = event?.target;
 
     if (!image) {
+        return;
+    }
+
+    const sources = discoveryImageSources(result);
+    const nextIndex = Number(image.dataset.sourceIndex || 0) + 1;
+    if (sources[nextIndex]) {
+        image.dataset.sourceIndex = String(nextIndex);
+        image.src = sources[nextIndex];
         return;
     }
 

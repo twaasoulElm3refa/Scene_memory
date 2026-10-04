@@ -293,6 +293,8 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { countryService } from "../../../services/admin/countries/countryService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime, toAssetUrl } from "@/services/runtimeUrls";
 
 const route = useRoute();
 const router = useRouter();
@@ -421,7 +423,8 @@ const fetchCountry = async (page = 1) => {
 };
 
 const getImageUrl = (imagePath) => {
-  if (!imagePath) return "/placeholder-flag.png";
+  if (!imagePath) return toAssetUrl("/placeholder-flag.png");
+  if (isMobileRuntime()) return toMediaUrl(imagePath);
   return imagePath.startsWith("http") ? imagePath : `/storage/${imagePath}`;
 };
 

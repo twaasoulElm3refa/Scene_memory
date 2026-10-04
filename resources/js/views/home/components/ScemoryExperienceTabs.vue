@@ -84,6 +84,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
+import { toAssetUrl } from '@/services/runtimeUrls';
 
 const lang = localStorage.getItem("language") || localStorage.getItem("lang") || "en";
 
@@ -96,7 +97,7 @@ const tabs = [
     descriptionKey: "experience.tabs.explore.description",
     ctaKey: "experience.tabs.explore.cta",
     to: "/all_events",
-    image: "/images/photo1.png",
+    image: toAssetUrl("/images/photo1.png"),
     imageAltKey: "experience.tabs.explore.imageAlt",
     featureKeys: [
       "experience.tabs.explore.features.browse",
@@ -118,7 +119,7 @@ const tabs = [
     descriptionKey: "experience.tabs.share.description",
     ctaKey: "experience.tabs.share.cta",
     to: "/add_event",
-    image: "/images/photo2.png",
+    image: toAssetUrl("/images/photo2.png"),
     imageAltKey: "experience.tabs.share.imageAlt",
     featureKeys: [
       "experience.tabs.share.features.add",
@@ -140,7 +141,7 @@ const tabs = [
     descriptionKey: "experience.tabs.license.description",
     ctaKey: "experience.tabs.license.cta",
     to: "/all_events",
-    image: "/images/photo3.png",
+    image: toAssetUrl("/images/photo3.png"),
     imageAltKey: "experience.tabs.license.imageAlt",
     featureKeys: [
       "experience.tabs.license.features.preview",

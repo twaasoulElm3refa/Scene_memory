@@ -1,4 +1,5 @@
 import api from "../ApiClient";
+import { isMobileRuntime } from "../runtimeUrls";
 
 export const TagService = {
     async getTags() {
@@ -15,7 +16,7 @@ export const TagService = {
     },
 
     async generateImageTags(formData) {
-        return api.post("/tools/image-tags", formData, {
+        return api.post("/tools/image-tags", formData, isMobileRuntime() ? {} : {
             headers: {
                 "Content-Type": "multipart/form-data",
             },

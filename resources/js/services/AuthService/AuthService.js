@@ -1,4 +1,5 @@
 import api from "../ApiClient";
+import { googleAuthOrigin } from "../runtimeUrls";
 
 export const AuthService = {
   login(payload) {
@@ -31,6 +32,13 @@ export const AuthService = {
 
   googleCallback(code) {
     return api.get("/users/google-callback", { params: { code } });
+  },
+
+  exchangeMobileGoogleCode(code, codeVerifier) {
+    return api.post(`${googleAuthOrigin()}/api/v1/users/google-mobile-exchange`, {
+      code,
+      code_verifier: codeVerifier,
+    });
   },
 
   getProfile() {

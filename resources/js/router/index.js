@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { getAuthToken } from "../services/authTokenStorage";
 
 const Home = () => import("../views/home/home.vue");
 const Register = () => import("../views/auth/register.vue");
@@ -561,7 +562,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const authToken = localStorage.getItem("auth_token");
+    const authToken = getAuthToken();
     const adminToken = localStorage.getItem("admin_token");
     const token = authToken || adminToken;
     const role = localStorage.getItem("user_role");

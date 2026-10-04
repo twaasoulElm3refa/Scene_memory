@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.scemory.app",
+      "sha256_cert_fingerprints": [
+        "1D:CB:17:51:29:24:F3:C7:4E:FA:52:33:68:5E:F8:0D:3D:8B:1F:21:AE:03:FF:1A:60:AC:1C:71:8E:85:0A:20"
+      ]
+    }
+  }
+]

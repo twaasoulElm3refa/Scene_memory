@@ -6,7 +6,7 @@
             <!-- Left branding side -->
             <div class="d-none d-lg-flex col-lg-5 align-items-center justify-content-center p-5 position-relative">
                 <div class="text-center">
-                    <img src="/images/logo.png" alt="NEXTLEVEL Logo" class="height-auto logo-glow" />
+                    <img :src="toAssetUrl('/images/logo.png')" alt="NEXTLEVEL Logo" class="height-auto logo-glow" />
                     <h1 class="display-5 fw-black mb-3">Scene Memory</h1>
                     <p class="lead fs-3 fw-medium opacity-90">Share your memories with the world</p>
                 </div>
@@ -77,7 +77,7 @@
 
                         <button @click.prevent="handleGoogleLogin"
                             class="btn btn-google btn-lg d-flex align-items-center justify-content-center gap-2 mt-3">
-                            <img src="/images/google_logo.png" alt="Google" style="width: 65px; height: 36px" />
+                            <img :src="toAssetUrl('/images/google_logo.png')" alt="Google" style="width: 65px; height: 36px" />
                             Continue with Google
                         </button>
                     </form>
@@ -144,7 +144,7 @@
 
                         <button @click.prevent="handleGoogleLogin"
                             class="btn btn-google btn-lg d-flex align-items-center justify-content-center gap-2 mt-1">
-                            <img src="/images/google_logo.png" alt="Google" style="width: 65px; height: 36px" />
+                            <img :src="toAssetUrl('/images/google_logo.png')" alt="Google" style="width: 65px; height: 36px" />
                             Continue with Google
                         </button>
                     </form>
@@ -247,6 +247,15 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { AuthService } from "../../services/AuthService/AuthService";
+import { toAssetUrl } from "../../services/runtimeUrls";
+import { googleAuthOrigin, isMobileRuntime } from "../../services/runtimeUrls";
+import { Capacitor } from "@capacitor/core";
+import { Browser } from "@capacitor/browser";
+import {
+    clearGoogleOAuthVerifier,
+    setAuthToken,
+    setGoogleOAuthVerifier,
+} from "../../services/authTokenStorage";
 
 const route = useRoute();
 const router = useRouter();
@@ -310,7 +319,7 @@ const countries = ref([
 ]);
 
 // ✅ الدالة الوحيدة اللي بتخزن وبتعمل redirect — كل حاجة بتمر منها
-const saveTokenAndRedirect = (token, role, user = null) => {
+const saveTokenAndRedirect = async (token, role, user = null) => {
     if (!token) {
         error.value = "No token received";
         return;
@@ -318,7 +327,7 @@ const saveTokenAndRedirect = (token, role, user = null) => {
 
     const normalizedRole = (role || "user").toString().toLowerCase().trim();
 
-    localStorage.setItem("auth_token", token);
+    await setAuthToken(token);
     localStorage.setItem("user_role", normalizedRole);
 
     if (user) {
@@ -411,13 +420,13 @@ onMounted(async () => {
         const url = new URL(window.location.href);
         url.search = "";
         window.history.replaceState({}, document.title, url.toString());
-        localStorage.setItem("auth_token", token);
+        await setAuthToken(token);
         try {
             const res = await AuthService.getProfile();
             const role = res.data.data?.role || res.data.data?.user?.role || "user";
-            saveTokenAndRedirect(token, role);
+            await saveTokenAndRedirect(token, role);
         } catch {
-            saveTokenAndRedirect(token, "user");
+            await saveTokenAndRedirect(token, "user");
         }
     }
 });
@@ -438,7 +447,7 @@ const handleLogin = async () => {
         if (res.data.status === "success") {
             const token = res.data.data?.token;
             const role = res.data.data?.user?.role;
-            saveTokenAndRedirect(token, role);
+            await saveTokenAndRedirect(token, role);
         } else if (res.data.status === "otp_required") {
             const email = loginForm.value.email;
             loginForm.value.password = "";
@@ -589,13 +598,41 @@ const handleReset = async () => {
     }
 };
 
-const handleGoogleLogin = () => {
+const handleGoogleLogin = async () => {
     const currentLang = String(getLang() || "en").toLowerCase();
     const destination = getSafePostAuthRedirect();
     localStorage.setItem("lang", currentLang);
     localStorage.setItem("language", currentLang);
     sessionStorage.setItem(POST_AUTH_REDIRECT_KEY, destination);
-    document.cookie = `oauth_lang=${encodeURIComponent(currentLang)}; path=/; max-age=600`;
+    if (isMobileRuntime() && googleAuthOrigin()) {
+        try {
+            const randomBytes = crypto.getRandomValues(new Uint8Array(32));
+            const verifier = Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join("");
+            const codeVerifier = btoa(verifier).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+            const challengeBytes = await crypto.subtle.digest(
+                "SHA-256",
+                new TextEncoder().encode(codeVerifier)
+            );
+            const challenge = btoa(
+                Array.from(new Uint8Array(challengeBytes), (byte) => String.fromCharCode(byte)).join("")
+            ).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+            await setGoogleOAuthVerifier(codeVerifier);
+            sessionStorage.setItem("mobile_google_oauth_pending", String(Date.now()));
+
+            const url = `${googleAuthOrigin()}/api/v1/users/google-login?mobile=1&lang=${encodeURIComponent(currentLang)}&code_challenge=${encodeURIComponent(challenge)}`;
+            if (Capacitor.isNativePlatform()) {
+                await Browser.open({ url });
+            } else {
+                window.location.href = url;
+            }
+        } catch {
+            sessionStorage.removeItem("mobile_google_oauth_pending");
+            await clearGoogleOAuthVerifier();
+            error.value = "Could not start Google sign in. Please try again.";
+        }
+        return;
+    }
     window.location.href = `/api/v1/users/google-login?lang=${encodeURIComponent(currentLang)}`;
 };
 </script>

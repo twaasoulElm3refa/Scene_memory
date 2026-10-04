@@ -410,11 +410,14 @@
 
 <script setup>
 import { computed, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { RequestService } from "../../../services/RequestService/RequestService";
+import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 
 const route = useRoute();
+const router = useRouter();
 
 const apiData = ref(null);
 const loading = ref(true);
@@ -504,8 +507,10 @@ const resolveImageUrl = (path) => {
         imagePath.startsWith("data:") ||
         imagePath.startsWith("blob:")
     ) {
-        return imagePath;
+        return isMobileRuntime() ? toMediaUrl(imagePath) : imagePath;
     }
+
+    if (isMobileRuntime()) return toMediaUrl(imagePath);
 
     if (imagePath.startsWith("/storage/")) {
         return imagePath;
@@ -677,8 +682,8 @@ const approveRequest = async () => {
             "Request approved successfully!"
         );
 
-        window.location.href =
-            "/admin/requests";
+        if (isMobileRuntime()) await router.push("/admin/requests");
+        else window.location.href = "/admin/requests";
     } catch (err) {
         alert(
             err.response?.data?.message ||
@@ -726,8 +731,8 @@ const declineRequest = async () => {
             "Request rejected successfully!"
         );
 
-        window.location.href =
-            "/admin/requests";
+        if (isMobileRuntime()) await router.push("/admin/requests");
+        else window.location.href = "/admin/requests";
     } catch (err) {
         alert(
             err.response?.data?.message ||

@@ -1,9 +1,12 @@
 import axios from "axios";
+import { Capacitor } from "@capacitor/core";
+import { getAuthToken } from "./authTokenStorage";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
 
 const LANG_KEY = "language";
 const LEGACY_LANG_KEY = "lang";
+
 const SUPPORTED_LANGS = [
     "ar",
     "de",
@@ -24,7 +27,7 @@ const SUPPORTED_LANGS = [
 |--------------------------------------------------------------------------
 | Toastr Z-Index
 |--------------------------------------------------------------------------
-| يجعل رسائل Toastr تظهر فوق الـNavbar والـModal وأي Overlay.
+| يجعل رسائل Toastr تظهر فوق الـ Navbar والـ Modal وأي Overlay.
 */
 
 const TOAST_STYLE_ID = "global-toastr-z-index";
@@ -33,6 +36,7 @@ if (!document.getElementById(TOAST_STYLE_ID)) {
     const toastrStyle = document.createElement("style");
 
     toastrStyle.id = TOAST_STYLE_ID;
+
     toastrStyle.textContent = `
         #toast-container {
             z-index: 2147483647 !important;
@@ -42,11 +46,20 @@ if (!document.getElementById(TOAST_STYLE_ID)) {
         #toast-container > .toast {
             z-index: 2147483647 !important;
             position: relative !important;
+            white-space: pre-line !important;
+            word-break: break-word !important;
+            max-width: 95vw !important;
         }
     `;
 
     document.head.appendChild(toastrStyle);
 }
+
+/*
+|--------------------------------------------------------------------------
+| Language
+|--------------------------------------------------------------------------
+*/
 
 const getLang = () => {
     const routeLang = String(
@@ -63,8 +76,16 @@ const getLang = () => {
         ""
     ).toLowerCase();
 
-    return SUPPORTED_LANGS.includes(lang) ? lang : "en";
+    return SUPPORTED_LANGS.includes(lang)
+        ? lang
+        : "en";
 };
+
+/*
+|--------------------------------------------------------------------------
+| Toastr Settings
+|--------------------------------------------------------------------------
+*/
 
 toastr.options = {
     closeButton: true,
@@ -80,6 +101,12 @@ toastr.options = {
     newestOnTop: true,
     preventDuplicates: true,
 };
+
+/*
+|--------------------------------------------------------------------------
+| Error Helpers
+|--------------------------------------------------------------------------
+*/
 
 export function normalizeErrorMessage(
     message,
@@ -122,14 +149,48 @@ export function showSafeToast(
     toastr[safeType](safeMessage);
 }
 
+/*
+|--------------------------------------------------------------------------
+| API Base URL
+|--------------------------------------------------------------------------
+|
+| Web:
+| /api/v1
+|
+| Mobile / Capacitor:
+| VITE_API_URL + /api/v1
+|
+*/
+
+const useMobileApi =
+    Capacitor.isNativePlatform() ||
+    import.meta.env.VITE_FORCE_MOBILE_API === "true";
+
+const apiBaseURL =
+    useMobileApi && import.meta.env.VITE_API_URL
+        ? `${import.meta.env.VITE_API_URL.replace(/\/$/, "")}/api/v1`
+        : "/api/v1";
+
+/*
+|--------------------------------------------------------------------------
+| Axios Instance
+|--------------------------------------------------------------------------
+*/
+
 const api = axios.create({
-    baseURL: "/api/v1",
+    baseURL: apiBaseURL,
 
     headers: {
         Accept: "application/json",
         "Accept-Language": getLang(),
     },
 });
+
+/*
+|--------------------------------------------------------------------------
+| Language Sync
+|--------------------------------------------------------------------------
+*/
 
 const syncAcceptLanguageHeader = () => {
     api.defaults.headers.common["Accept-Language"] =
@@ -149,7 +210,10 @@ window.addEventListener("lang-changed", (event) => {
 
 window.addEventListener("storage", (event) => {
     if (
-        (event.key === LANG_KEY || event.key === LEGACY_LANG_KEY) &&
+        (
+            event.key === LANG_KEY ||
+            event.key === LEGACY_LANG_KEY
+        ) &&
         event.newValue
     ) {
         api.defaults.headers.common["Accept-Language"] =
@@ -157,10 +221,15 @@ window.addEventListener("storage", (event) => {
     }
 });
 
+/*
+|--------------------------------------------------------------------------
+| Request Interceptor
+|--------------------------------------------------------------------------
+*/
+
 api.interceptors.request.use(
     (config) => {
-        const token =
-            localStorage.getItem("auth_token");
+        const token = getAuthToken();
 
         const lang = getLang();
 
@@ -178,138 +247,232 @@ api.interceptors.request.use(
         return config;
     },
 
-    (error) => Promise.reject(error)
+    (error) => {
+        console.error(
+            "API REQUEST INTERCEPTOR ERROR:",
+            error
+        );
+
+        return Promise.reject(error);
+    }
 );
+
+/*
+|--------------------------------------------------------------------------
+| Response Interceptor - DEBUG MODE
+|--------------------------------------------------------------------------
+|
+| يعرض الخطأ الحقيقي مؤقتًا أثناء اختبار تطبيق الموبايل.
+|
+| يعرض:
+| - HTTP Status
+| - Axios Error Code
+| - Method
+| - Full URL
+| - Server Message
+| - Axios Message
+|
+| ولا يعرض Authorization Token.
+|
+*/
 
 api.interceptors.response.use(
     (response) => response,
 
     (error) => {
-        const status =
-            error.response?.status;
-
         if (
             error.config?.suppressGlobalErrorToast
         ) {
             return Promise.reject(error);
         }
 
+        if (!import.meta.env.DEV) {
+            console.error("API request failed:", error);
+            if (error.response?.status !== 401) {
+                toastr.error(normalizeErrorMessage(error.response?.data?.message, "Request failed."));
+            }
+            return Promise.reject(error);
+        }
+
+        const method = String(
+            error.config?.method || "GET"
+        ).toUpperCase();
+
+        const baseURL =
+            error.config?.baseURL || "";
+
+        const requestURL =
+            error.config?.url || "";
+
+        let fullURL = requestURL;
+
+        if (
+            requestURL &&
+            !/^https?:\/\//i.test(requestURL)
+        ) {
+            fullURL =
+                `${baseURL.replace(/\/$/, "")}` +
+                `${requestURL.startsWith("/") ? "" : "/"}` +
+                `${requestURL}`;
+        }
+
+        const status =
+            error.response?.status || null;
+
+        const code =
+            error.code || "NO_CODE";
+
+        let serverMessage = "";
+
+        const responseData =
+            error.response?.data;
+
+        if (responseData) {
+            if (
+                typeof responseData === "string"
+            ) {
+                serverMessage =
+                    responseData;
+            } else if (
+                typeof responseData === "object"
+            ) {
+                serverMessage =
+                    responseData.message ||
+                    responseData.error ||
+                    "";
+
+                if (!serverMessage) {
+                    try {
+                        serverMessage =
+                            JSON.stringify(
+                                responseData
+                            );
+                    } catch {
+                        serverMessage =
+                            "Unable to stringify server response";
+                    }
+                }
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Debug Console
+        |--------------------------------------------------------------------------
+        */
+
+        console.error(
+            "================ API DEBUG ERROR ================"
+        );
+
+        console.error(
+            "Message:",
+            error.message
+        );
+
+        console.error(
+            "Code:",
+            code
+        );
+
+        console.error(
+            "Status:",
+            status
+        );
+
+        console.error(
+            "Method:",
+            method
+        );
+
+        console.error(
+            "URL:",
+            fullURL
+        );
+
+        console.error(
+            "Response Data:",
+            responseData
+        );
+
+        console.error(
+            "Response Headers:",
+            error.response?.headers
+        );
+
+        console.error(
+            "Axios Error:",
+            error
+        );
+
+        console.error(
+            "================================================="
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Network Error
+        |--------------------------------------------------------------------------
+        |
+        | مفيش Response من السيرفر أساسًا.
+        |
+        */
+
         if (!error.response) {
-            showSafeToast(
-                "error",
-                error.message,
-                "تعذر الاتصال بالخادم. تحقق من اتصال الشبكة وحاول مرة أخرى."
+            const debugMessage =
+                `NETWORK ERROR\n\n` +
+                `Code: ${code}\n` +
+                `Method: ${method}\n` +
+                `URL: ${fullURL || "UNKNOWN URL"}\n` +
+                `Message: ${error.message || "Unknown network error"}`;
+
+            toastr.error(
+                debugMessage,
+                "API Debug Error",
+                {
+                    timeOut: 0,
+                    extendedTimeOut: 0,
+                    closeButton: true,
+                    tapToDismiss: false,
+                }
             );
 
             return Promise.reject(error);
         }
 
-        switch (status) {
-            case 400:
-                showSafeToast(
-                    "warning",
-                    error.response?.data?.message,
-                    "الطلب غير صحيح. راجع البيانات المرسلة."
-                );
-                break;
+        /*
+        |--------------------------------------------------------------------------
+        | HTTP Error
+        |--------------------------------------------------------------------------
+        |
+        | السيرفر رد فعليًا بـ 4xx أو 5xx.
+        |
+        */
 
-            case 401:
-                showSafeToast(
-                    "error",
-                    error.response?.data?.message,
-                    "انتهت الجلسة. من فضلك سجل الدخول مرة أخرى."
-                );
+        const debugMessage =
+            `HTTP ${status}\n\n` +
+            `Code: ${code}\n` +
+            `Method: ${method}\n` +
+            `URL: ${fullURL || "UNKNOWN URL"}\n` +
+            `Server: ${
+                serverMessage ||
+                "No server message"
+            }\n` +
+            `Axios: ${
+                error.message ||
+                "No Axios message"
+            }`;
 
-                localStorage.removeItem("auth_token");
-
-                setTimeout(() => {
-                    window.location.href =
-                        `/${getLang()}/auth`;
-                }, 1500);
-                break;
-
-            case 403:
-                showSafeToast(
-                    "error",
-                    error.response?.data?.message,
-                    "ليس لديك صلاحية لتنفيذ هذا الإجراء."
-                );
-                break;
-
-            case 404:
-                showSafeToast(
-                    "error",
-                    error.response?.data?.message,
-                    "العنصر المطلوب غير موجود."
-                );
-                break;
-
-            case 422: {
-                const errors =
-                    error.response?.data?.errors;
-
-                if (errors) {
-                    Object.values(errors).forEach(
-                        (fieldErrors) => {
-                            const messages =
-                                Array.isArray(fieldErrors)
-                                    ? fieldErrors
-                                    : [fieldErrors];
-
-                            messages.forEach((msg) => {
-                                showSafeToast(
-                                    "error",
-                                    msg,
-                                    "من فضلك راجع الحقول المطلوبة."
-                                );
-                            });
-                        }
-                    );
-                } else {
-                    showSafeToast(
-                        "error",
-                        error.response?.data?.message,
-                        "من فضلك راجع الحقول المطلوبة."
-                    );
-                }
-
-                break;
+        toastr.error(
+            debugMessage,
+            "API Debug Error",
+            {
+                timeOut: 0,
+                extendedTimeOut: 0,
+                closeButton: true,
+                tapToDismiss: false,
             }
-
-            case 429:
-                showSafeToast(
-                    "warning",
-                    error.response?.data?.message,
-                    "تم إرسال طلبات كثيرة. حاول مرة أخرى بعد قليل."
-                );
-                break;
-
-            case 500:
-                showSafeToast(
-                    "error",
-                    error.response?.data?.message,
-                    "حدث خطأ في الخادم. راجع Console وLaravel log لمعرفة التفاصيل."
-                );
-                break;
-
-            case 502:
-            case 503:
-            case 504:
-                showSafeToast(
-                    "error",
-                    error.response?.data?.message,
-                    "الخدمة غير متاحة حاليًا. حاول مرة أخرى بعد قليل."
-                );
-                break;
-
-            default:
-                showSafeToast(
-                    "error",
-                    error.response?.data?.message ||
-                        error.message,
-                    "حدث خطأ غير معروف."
-                );
-        }
+        );
 
         return Promise.reject(error);
     }

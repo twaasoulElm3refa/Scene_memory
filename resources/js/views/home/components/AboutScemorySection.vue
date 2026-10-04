@@ -3,7 +3,7 @@
     <div class="relative mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
       <div class="about-media relative min-h-[420px] overflow-hidden rounded-[34px] border">
         <img
-          src="/images/about.png"
+          :src="toAssetUrl('/images/about.png')"
           :alt="$t('homeAudit.about.imageAlt')"
           class="absolute inset-0 h-full w-full object-cover object-center"
         />
@@ -46,6 +46,7 @@
 </template>
 
 <script setup>
+import { toAssetUrl } from '@/services/runtimeUrls';
 const features = [
   "homeAudit.about.features.upload",
   "homeAudit.about.features.explore",

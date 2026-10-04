@@ -154,7 +154,9 @@ import { useI18n } from "vue-i18n";
 
 import { CartService } from "@/services/CartService/CartService";
 import { showSafeToast } from "@/services/ApiClient";
-import { discoveryVideoSources } from "@/services/EventService/eventSearchHelpers";
+import { discoveryImageSources, discoveryVideoSources, toMediaUrl } from "@/services/EventService/eventSearchHelpers";
+import { isMobileRuntime } from "@/services/runtimeUrls";
+import { getAuthToken } from "@/services/authTokenStorage";
 
 
 /* =====================================================
@@ -207,6 +209,7 @@ const isAdding = ref(false);
 const isAdded = ref(false);
 
 const videoSourceIndex = ref(0);
+const imageSourceIndex = ref(0);
 
 
 /* =====================================================
@@ -247,6 +250,10 @@ const getStorageUrl = (mediaOrPath) => {
     }
 
     const path = rawPath.replace(/\\/g, "/").trim();
+
+    if (isMobileRuntime()) {
+        return toMediaUrl(path) || "";
+    }
 
     if (path.startsWith("http://") || path.startsWith("https://")) {
         try {
@@ -320,17 +327,12 @@ watch(
 ===================================================== */
 
 const thumbnailSource = computed(() => {
-    const imagePath =
-        props.result?.thumbnail_url ||
-        props.result?.image_url ||
-        props.result?.media_url ||
-        props.fallbackImage ||
-        "";
-
-    return imagePath
-        ? getStorageUrl(imagePath)
-        : "";
+    const imagePath = discoveryImageSources(props.result)[imageSourceIndex.value]
+        || props.fallbackImage || "";
+    return imagePath ? getStorageUrl(imagePath) : "";
 });
+
+watch(() => props.result, () => { imageSourceIndex.value = 0; });
 
 
 const hasMediaSource = computed(() => {
@@ -489,6 +491,11 @@ const handleImageError = (
         return;
     }
 
+    if (discoveryImageSources(props.result)[imageSourceIndex.value + 1]) {
+        imageSourceIndex.value += 1;
+        return;
+    }
+
     if (
         props.fallbackImage &&
         image.src !== props.fallbackImage
@@ -522,9 +529,7 @@ const addToCart = async () => {
     }
 
     if (
-        !localStorage.getItem(
-            "auth_token"
-        )
+        !getAuthToken()
     ) {
         showSafeToast(
             "error",

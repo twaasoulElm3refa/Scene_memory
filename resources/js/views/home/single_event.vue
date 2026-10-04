@@ -782,8 +782,11 @@ import { useI18n } from "vue-i18n";
 import { EventService } from "@/services/singleEventService/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService/CommentService";
 import { CartService } from "@/services/CartService/CartService";
+import api from "@/services/ApiClient";
+import { isMobileRuntime } from "@/services/runtimeUrls";
 import { ReplyService } from "../../services/ReplyService/ReplyService";
 import { AuthService } from "../../services/AuthService/AuthService";
+import { getAuthToken } from "@/services/authTokenStorage";
 import { LikeService } from "../../services/LikeService/LikeService";
 import { WishlistService } from "../../services/WishlistService/WishlistService";
 import { MediaRequestService } from "../../services/MediaRequestService/MediaRequestService";
@@ -955,7 +958,7 @@ const addToCart = async (mediaId) => {
         return;
     }
 
-    const token = localStorage.getItem("auth_token");
+    const token = getAuthToken();
 
     if (!token) {
         showCartAlert("error", t("event.comment_login_required"));
@@ -977,7 +980,7 @@ const addToCart = async (mediaId) => {
 
 // ─── Add Collection to Cart ────────────────────────────────────────────────────
 const addCollectionToCart = async () => {
-    const token = localStorage.getItem("auth_token");
+    const token = getAuthToken();
 
     if (!token) {
         collectionAlert.value = {
@@ -1001,20 +1004,21 @@ const addCollectionToCart = async () => {
     collectionAlert.value.show = false;
 
     try {
-        const response = await fetch(`/api/v1/collections/${event.value.id}/add-to-cart`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
-            },
-        });
-
-        const data = await response.json().catch(() => null);
-
-        if (!response.ok) {
-            throw new Error(data?.message || t("cart.errors.collectionAddFailed"));
+        let data;
+        if (isMobileRuntime()) {
+            data = (await api.post(`/collections/${event.value.id}/add-to-cart`)).data;
+        } else {
+            const response = await fetch(`/api/v1/collections/${event.value.id}/add-to-cart`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                },
+            });
+            data = await response.json().catch(() => null);
+            if (!response.ok) throw new Error(data?.message || t("cart.errors.collectionAddFailed"));
         }
 
         const totalImages = data?.total_images || eventImages.value.length;
@@ -1183,12 +1187,12 @@ const addReply = async (commentId) => {
 
 // ─── Auth / User ──────────────────────────────────────────────────────────────
 const checkAuth = () => {
-    isAuthenticated.value = !!localStorage.getItem("auth_token");
+    isAuthenticated.value = !!getAuthToken();
 };
 
 const fetchCurrentUser = async () => {
     try {
-        const token = localStorage.getItem("auth_token");
+        const token = getAuthToken();
         if (!token) return;
         const res = await AuthService.getProfile();
         currentUserId.value = res?.data?.data?.user?.id || res?.data?.id || null;
@@ -1215,7 +1219,7 @@ const toggleLike = async () => {
     if (likeLoading.value || isLiked.value) return;
     if (!event.value?.id) return;
 
-    const token = localStorage.getItem("auth_token");
+    const token = getAuthToken();
     if (!token) {
         likeError.value = t("event.comment_login_required");
         setTimeout(() => (likeError.value = ""), 4000);
@@ -1244,7 +1248,7 @@ const addToWishlist = async () => {
     if (wishlistLoading.value || isInWishlist.value) return;
     if (!event.value?.id) return;
 
-    const token = localStorage.getItem("auth_token");
+    const token = getAuthToken();
     if (!token) {
         wishlistError.value = t("event.comment_login_required");
         setTimeout(() => (wishlistError.value = ""), 4000);

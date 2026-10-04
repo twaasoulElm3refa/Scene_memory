@@ -101,8 +101,8 @@
             <img
               :src="
                 event.first_image
-                  ? `/storage/${event.first_image.url}`
-                  : '/images/default-event.jpg'
+                  ? (isMobileRuntime() ? toMediaUrl(event.first_image.url) : `/storage/${event.first_image.url}`)
+                  : (isMobileRuntime() ? EVENT_FALLBACK_IMAGE : '/images/default-event.jpg')
               "
               alt="صورة الرحلة"
               class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
@@ -175,6 +175,9 @@
 import UserLayout from "../../layouts/user/UserLayout.vue";
 import { ref, computed, onMounted } from "vue";
 import { UserDashboardService } from "../../services/UserDashboardService/UserDashboardService";
+import { isMobileRuntime } from "../../services/runtimeUrls";
+import { toMediaUrl } from "../../services/EventService/eventSearchHelpers";
+import { EVENT_FALLBACK_IMAGE } from "../../services/EventService/eventMedia";
 
 const events = ref([]);
 const eventsCount = ref(0);

@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { Capacitor } from "@capacitor/core";
+
 export default {
     name: "App",
 
@@ -118,22 +120,36 @@ export default {
         },
 
         setupAxios() {
+            const useMobileApi =
+                Capacitor.isNativePlatform() ||
+                import.meta.env.VITE_FORCE_MOBILE_API === "true";
+
+            const apiUrl =
+                import.meta.env.VITE_API_URL
+                    ? import.meta.env.VITE_API_URL.replace(/\/$/, "")
+                    : "";
+
             const csrfToken =
                 document.querySelector(
                     'meta[name="csrf-token"]'
                 );
 
-            if (csrfToken) {
+            if (
+                csrfToken &&
+                !useMobileApi
+            ) {
                 window.axios.defaults.headers.common[
                     "X-CSRF-TOKEN"
                 ] = csrfToken.content;
             }
 
             window.axios.defaults.baseURL =
-                "/api";
+                useMobileApi && apiUrl
+                    ? `${apiUrl}/api`
+                    : "/api";
 
             window.axios.defaults.withCredentials =
-                true;
+                !useMobileApi;
 
             const lang = (
                 this.$route.params.lang ||

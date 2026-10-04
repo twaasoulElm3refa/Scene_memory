@@ -242,7 +242,7 @@
 
                         <span class="brand-logo">
 
-                            <img src="/images/logo.png" alt="Scemory logo" />
+                            <img :src="logoUrl" alt="Scemory logo" />
 
                         </span>
 
@@ -363,8 +363,11 @@
 <script setup>
 
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
-
+import { Capacitor } from "@capacitor/core";
 import axios from "axios";
+import api from "@/services/ApiClient";
+import { isMobileRuntime } from "@/services/runtimeUrls";
+import { clearAuthToken, getAuthToken } from "@/services/authTokenStorage";
 
 import { useRouter, useRoute, RouterLink } from "vue-router";
 
@@ -433,6 +436,19 @@ const localizedPath = (path) => {
     return `/${routeLang.value}${cleanPath}`;
 
 };
+
+const useMobileAssets =
+    Capacitor.isNativePlatform() ||
+    import.meta.env.VITE_FORCE_MOBILE_API === "true";
+
+const assetBaseUrl = String(
+    import.meta.env.VITE_API_URL || ""
+).replace(/\/+$/, "");
+
+const logoUrl =
+    useMobileAssets && assetBaseUrl
+        ? `${assetBaseUrl}/images/logo.png`
+        : "/images/logo.png";
 
 const selectLanguage = async (lang) => {
 
@@ -506,7 +522,7 @@ const openSpecialCoverage = async () => {
 
     };
 
-    if (localStorage.getItem("auth_token")) {
+    if (getAuthToken()) {
 
         await router.push(destination);
 
@@ -558,9 +574,9 @@ const toggleDropdown = () => {
 
 };
 
-const logout = () => {
+const logout = async () => {
 
-    localStorage.removeItem("auth_token");
+    await clearAuthToken();
 
     localStorage.removeItem("admin_token");
 
@@ -586,15 +602,17 @@ const logout = () => {
 
 const fetchProfile = async () => {
 
-    const token = localStorage.getItem("auth_token");
+    const token = getAuthToken();
 
     if (!token) return;
 
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (!isMobileRuntime()) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
     try {
 
-        const res = await axios.get("/v1/users/profile");
+        const res = isMobileRuntime()
+            ? await api.get("/users/profile")
+            : await axios.get("/v1/users/profile");
 
         if (res.data.status === "success") {
 
@@ -614,7 +632,17 @@ const fetchProfile = async () => {
 
     } catch (err) {
 
-        localStorage.clear();
+        if (isMobileRuntime()) {
+            if (err.response?.status === 401) {
+                await clearAuthToken();
+                localStorage.removeItem("user_role");
+                localStorage.removeItem("user_data");
+            } else {
+                return;
+            }
+        } else {
+            localStorage.clear();
+        }
 
         isLoggedIn.value = false;
 

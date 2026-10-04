@@ -6,6 +6,8 @@ import CommentService from '../../services/CommentService/CommentService';
 import CommentAttachments from '../../components/comments/CommentAttachments.vue';
 import CommentReactionButtons from '../../components/comments/CommentReactionButtons.vue';
 import { useCommentReactions } from '../../composables/useCommentReactions';
+import { toMediaUrl } from '../../services/EventService/eventSearchHelpers';
+import { isMobileRuntime } from '../../services/runtimeUrls';
 
 const route = useRoute();
 const { t, locale } = useI18n();
@@ -28,6 +30,8 @@ const {
 
 const getCommentImageUrl = (image) => {
   const rawPath = image?.url || image?.path || '';
+
+  if (isMobileRuntime()) return toMediaUrl(rawPath) || '';
 
   if (!rawPath || typeof rawPath !== 'string') return '';
 

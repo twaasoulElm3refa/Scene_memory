@@ -1,6 +1,11 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import { Capacitor } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
+import { Browser } from "@capacitor/browser";
+import { mobileAppLinkOrigin } from "./services/runtimeUrls";
+import { clearGoogleOAuthVerifier, restoreAuthToken } from "./services/authTokenStorage";
 import { createI18n } from "vue-i18n";
 
 // messages Languages
@@ -130,7 +135,85 @@ document.documentElement.dir = RTL_LANGS.includes(initialLang) ? "rtl" : "ltr";
 localStorage.setItem("language", initialLang);
 localStorage.setItem("lang", initialLang);
 
-app.use(router);
-app.use(i18n);
+const MOBILE_GOOGLE_PENDING_KEY = "mobile_google_oauth_pending";
 
-app.mount("#app");
+const configureNativeAppLinks = async () => {
+    const handledUrls = new Set();
+    let oauthWasBackgrounded = false;
+
+    const handleAppUrl = async ({ url }) => {
+        try {
+            if (!url || handledUrls.has(url)) return;
+
+            const callback = new URL(url);
+            if (callback.origin !== mobileAppLinkOrigin() || callback.pathname !== "/mobile/auth/callback") return;
+
+            const lang = normalizeLang(callback.searchParams.get("lang"));
+            const code = callback.searchParams.get("code");
+            const error = callback.searchParams.get("error");
+
+            if ((!code || !/^[A-Za-z0-9]{64}$/.test(code)) && !error) return;
+
+            handledUrls.add(url);
+            sessionStorage.removeItem(MOBILE_GOOGLE_PENDING_KEY);
+
+            try {
+                await Browser.close();
+            } catch {
+            }
+
+            await router.replace({
+                name: "google-callback",
+                params: { lang },
+                query: code ? { code } : { error },
+            });
+        } catch (error) {
+            console.error("Invalid app link:", error);
+        }
+    };
+
+    await CapacitorApp.addListener("appUrlOpen", handleAppUrl);
+
+    const launch = await CapacitorApp.getLaunchUrl();
+    if (launch?.url) {
+        await handleAppUrl(launch);
+    }
+
+    await CapacitorApp.addListener("appStateChange", ({ isActive }) => {
+        const pendingSince = Number(sessionStorage.getItem(MOBILE_GOOGLE_PENDING_KEY) || 0);
+
+        if (!isActive && pendingSince) {
+            oauthWasBackgrounded = true;
+            return;
+        }
+
+        if (!isActive || !oauthWasBackgrounded || !pendingSince) return;
+
+        oauthWasBackgrounded = false;
+        window.setTimeout(async () => {
+            if (!sessionStorage.getItem(MOBILE_GOOGLE_PENDING_KEY)) return;
+
+            sessionStorage.removeItem(MOBILE_GOOGLE_PENDING_KEY);
+            await clearGoogleOAuthVerifier();
+            await router.replace({
+                name: "google-callback",
+                params: { lang: normalizeLang(localStorage.getItem("lang")) },
+                query: { error: "cancelled" },
+            });
+        }, 1200);
+    });
+};
+
+const bootstrap = async () => {
+    await restoreAuthToken();
+
+    app.use(router);
+    app.use(i18n);
+    app.mount("#app");
+
+    if (Capacitor.isNativePlatform()) {
+        await configureNativeAppLinks();
+    }
+};
+
+void bootstrap();

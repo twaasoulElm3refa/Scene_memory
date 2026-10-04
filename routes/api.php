@@ -89,6 +89,7 @@ Route::prefix('v1')->group(function () {
         // Social Auth
         Route::get('/google-login', [GoogleAuthController::class, 'googleLogin'])->middleware('guest');
         Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware('guest');
+        Route::post('/google-mobile-exchange', [GoogleAuthController::class, 'exchangeMobileCode'])->middleware('throttle:10,1');
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);

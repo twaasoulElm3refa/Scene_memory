@@ -1,6 +1,11 @@
 <template>
   <div class="scemory-page gate-page min-h-screen bg-gray-50 p-6">
 
+    <div v-if="mobileSignInRequired" class="max-w-lg mx-auto mb-10 text-center">
+      <p>{{ $t('event.comment_login_required') }}</p>
+      <router-link :to="`/${$route.params.lang || 'en'}/auth`">{{ $t('nav.login') }}</router-link>
+    </div>
+
     <!-- Search Bar -->
     <div class="relative max-w-lg mx-auto mb-10">
       <div class="relative">
@@ -79,7 +84,7 @@
           <div class="relative h-48 overflow-hidden">
             <img
               v-if="event.first_image"
-              :src="`/storage/${event.first_image.full_url}`"
+              :src="toMediaUrl(event.first_image.full_url)"
               :alt="event.translation?.title || event.title"
               class="w-full h-full object-cover"
             />
@@ -138,6 +143,9 @@
 
 <script>
 import GateService from '@/services/GateService/GateService';
+import { toMediaUrl } from '@/services/EventService/eventSearchHelpers';
+import { isMobileRuntime } from '@/services/runtimeUrls';
+import { clearAuthToken, getAuthToken } from '@/services/authTokenStorage';
 
 export default {
   name: 'GatePage',
@@ -151,6 +159,7 @@ export default {
       loadingEvents: false,
       requestController: null,
       requestKey: '',
+      mobileSignInRequired: false,
     };
   },
 
@@ -166,6 +175,7 @@ export default {
   },
 
   methods: {
+    toMediaUrl,
     makeRequestKey() {
       return `${this.$route.params.lang || 'en'}:all`;
     },
@@ -182,6 +192,13 @@ export default {
     },
 
     async fetchRandomEvents() {
+      if (isMobileRuntime() && !getAuthToken()) {
+        this.mobileSignInRequired = true;
+        this.randomEvents = [];
+        this.countries = [];
+        return;
+      }
+      this.mobileSignInRequired = false;
       this.cancelActiveRequest();
       const requestKey = this.makeRequestKey();
       const controller = new AbortController();
@@ -199,6 +216,11 @@ export default {
         this.randomEvents = data.data;
       } catch (e) {
         if (this.isCanceledRequest(e)) return;
+        if (isMobileRuntime() && e.response?.status === 401) {
+          this.mobileSignInRequired = true;
+          await clearAuthToken();
+          return;
+        }
         console.error('Error fetching random events:', e);
       } finally {
         if (this.requestKey === requestKey) {
@@ -209,10 +231,16 @@ export default {
     },
 
     async fetchCountries() {
+      if (isMobileRuntime() && !getAuthToken()) return;
       try {
         const { data } = await GateService.getAllCountries();
         this.countries = data.data;
       } catch (e) {
+        if (isMobileRuntime() && e.response?.status === 401) {
+          this.mobileSignInRequired = true;
+          await clearAuthToken();
+          return;
+        }
         console.error('Error fetching countries:', e);
       }
     },

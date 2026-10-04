@@ -130,6 +130,7 @@
 <script setup>
 import { computed, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { clearAuthToken } from "@/services/authTokenStorage";
 import {
     CalendarIcon,
     WalletIcon,
@@ -187,7 +188,7 @@ const withdrawalsActive = computed(() =>
 );
 
 const logout = async () => {
-    localStorage.removeItem("auth_token");
+    await clearAuthToken();
     localStorage.removeItem("user");
     localStorage.removeItem("user_data");
     localStorage.removeItem("user_role");
