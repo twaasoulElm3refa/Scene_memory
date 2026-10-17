@@ -186,6 +186,16 @@ class User extends Authenticatable
         return $this->hasMany(UserDailyPoint::class);
     }
 
+    public function weeklyPoints(): HasMany
+    {
+        return $this->hasMany(UserWeeklyPoint::class);
+    }
+
+    public function weeklyLeaderboards(): HasMany
+    {
+        return $this->hasMany(WeeklyLeaderboard::class);
+    }
+
     public function monthlyPoints(): HasMany
     {
         return $this->hasMany(UserMonthlyPoint::class);

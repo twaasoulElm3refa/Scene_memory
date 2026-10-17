@@ -68,6 +68,13 @@ Route::get('/leaderboard/monthly-preview', [LeaderboardController::class, 'month
     ->middleware('throttle:60,1')
     ->name('leaderboard.monthly-preview');
 
+Route::get('/leaderboard/weekly-preview', [LeaderboardController::class, 'weeklyPreview'])
+    ->middleware('throttle:60,1')->name('leaderboard.weekly-preview');
+Route::get('/leaderboard/weekly', [LeaderboardController::class, 'weekly'])
+    ->middleware('throttle:60,1')->name('leaderboard.weekly');
+Route::get('/leaderboard/weekly-history', [LeaderboardController::class, 'weeklyHistory'])
+    ->middleware('throttle:60,1')->name('leaderboard.weekly-history');
+
 Route::prefix('v1')->group(function () {
 
     Route::post('/moderation/events/{event}/translations', [N8nEventTranslationController::class, 'store'])

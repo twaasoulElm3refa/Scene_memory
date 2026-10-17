@@ -8,7 +8,7 @@ class ProfileService
 {
     public function __construct(
         protected ProfileRepositoryInterface $repository,
-        protected MonthlyLeaderboardService $monthlyLeaderboardService
+        protected WeeklyLeaderboardService $weeklyLeaderboardService
     ) {}
 
     public function activity(
@@ -17,7 +17,7 @@ class ProfileService
     ): array {
         return [
             ...$this->repository->getProfileActivity($userId, $filters),
-            'monthly_statistics' => $this->monthlyLeaderboardService->currentUserStats($userId),
+            'weekly_statistics' => $this->weeklyLeaderboardService->currentUserStats($userId),
         ];
     }
 }

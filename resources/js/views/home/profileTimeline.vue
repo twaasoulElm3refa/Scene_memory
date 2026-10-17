@@ -5,7 +5,7 @@
                 <span class="eyebrow">Scemory</span>
                 <h1>{{ t("timeline.title") }}</h1>
                 <p>{{ t("timeline.subtitle") }}</p>
-                <MonthlyStatsCard class="hero-monthly-stats" :stats="monthlyStats" variant="dark" />
+                <WeeklyStatsCard class="hero-weekly-stats" :stats="weeklyStats" variant="dark" @refresh="loadSection()" />
             </div>
 
             <div class="summary-grid">
@@ -165,7 +165,7 @@ import { computed, defineComponent, h, onBeforeUnmount, onMounted, ref } from "v
 import { RouterLink, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { profileTimeline } from "@/services/profileTimeline/profileTimeline";
-import MonthlyStatsCard from "@/components/profile/MonthlyStatsCard.vue";
+import WeeklyStatsCard from "@/components/profile/WeeklyStatsCard.vue";
 
 const { t, locale } = useI18n();
 const route = useRoute();
@@ -174,7 +174,7 @@ const sectionKeys = ["events", "likes", "comments", "replies", "comment_images",
 const emptySection = () => ({ data: [], total: 0, latest_activity_at: null, pagination: null, has_more: false });
 const sections = ref(Object.fromEntries(sectionKeys.map((key) => [key, emptySection()])));
 const summary = ref({ total: 0, latest_activity_at: null, counts: {} });
-const monthlyStats = ref({ monthly_points: 0, monthly_rank: null, month: "" });
+const weeklyStats = ref({ weekly_points: 0, weekly_rank: null, week_start: "", week_end: "" });
 const activeTab = ref("all");
 const period = ref("all");
 const customFrom = ref("");
@@ -333,9 +333,9 @@ const loadSection = async (section = activeTab.value, page = 1) => {
             signal: abortController.signal,
         });
         const payload = response.data.data;
-        monthlyStats.value = {
-            ...monthlyStats.value,
-            ...(payload.monthly_statistics || {}),
+        weeklyStats.value = {
+            ...weeklyStats.value,
+            ...(payload.weekly_statistics || {}),
         };
         if (section === "all") {
             sectionKeys.forEach((key) => {
@@ -404,7 +404,7 @@ onBeforeUnmount(() => abortController?.abort());
 .eyebrow { display: block; margin-bottom: 8px; color: #9fd6df; font-size: .75rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
 .activity-hero h1 { margin: 0 0 8px; font-size: clamp(2rem, 4vw, 3.25rem); font-weight: 800; }
 .activity-hero p { margin: 0; max-width: 600px; color: #d8e3ee; }
-.hero-monthly-stats { margin-top: 18px; }
+.hero-weekly-stats { margin-top: 18px; }
 .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(150px, 1fr)); gap: 12px; }
 .summary-card { display: flex; gap: 12px; align-items: center; min-width: 190px; padding: 16px; border: 1px solid rgba(255,255,255,.18); border-radius: 16px; background: rgba(255,255,255,.09); backdrop-filter: blur(8px); }
 .summary-card i { color: #9fd6df; font-size: 1.25rem; }

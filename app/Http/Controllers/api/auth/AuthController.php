@@ -11,8 +11,8 @@ use App\Http\Resources\userResource;
 use App\Models\Events;
 use App\Models\LicenceType;
 use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
-use App\Services\MonthlyLeaderboardService;
 use App\Services\RegistrationOtpService;
+use App\Services\WeeklyLeaderboardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ class AuthController extends Controller
     public function __construct(
         private readonly AuthRepositoryInterface $authRepository,
         private readonly RegistrationOtpService $registrationOtpService,
-        private readonly MonthlyLeaderboardService $monthlyLeaderboardService
+        private readonly WeeklyLeaderboardService $weeklyLeaderboardService
     ) {}
 
     public function register(registerRequest $request)
@@ -260,7 +260,7 @@ class AuthController extends Controller
 
         return $this->success([
             'user' => $cachedProfile,
-            'monthly_statistics' => $this->monthlyLeaderboardService->currentUserStats($user->id),
+            'weekly_statistics' => $this->weeklyLeaderboardService->currentUserStats($user->id),
         ], 'Profile fetched successfully.');
     }
 

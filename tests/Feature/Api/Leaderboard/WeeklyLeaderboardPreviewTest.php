@@ -3,12 +3,13 @@
 namespace Tests\Feature\Api\Leaderboard;
 
 use App\Models\User;
-use App\Models\UserMonthlyPoint;
+use App\Models\UserWeeklyPoint;
+use App\Services\WeeklyCompetitionPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
-class MonthlyLeaderboardPreviewTest extends TestCase
+class WeeklyLeaderboardPreviewTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,37 +20,37 @@ class MonthlyLeaderboardPreviewTest extends TestCase
         Carbon::setTestNow('2026-09-22 12:00:00');
     }
 
-    public function test_it_returns_only_the_current_month_top_ten_in_rank_order(): void
+    public function test_it_returns_only_the_current_week_top_ten_in_rank_order(): void
     {
         $users = User::factory()->count(12)->create(['role' => 'user']);
 
         foreach ($users as $index => $user) {
-            UserMonthlyPoint::create([
+            UserWeeklyPoint::create([
                 'user_id' => $user->id,
-                'month' => 9,
-                'year' => 2026,
+                'week_start' => '2026-09-19',
+                'week_end' => '2026-09-25',
                 'points' => ($index + 1) * 10,
             ]);
         }
 
         $previousMonthUser = User::factory()->create(['role' => 'user']);
-        UserMonthlyPoint::create([
+        UserWeeklyPoint::create([
             'user_id' => $previousMonthUser->id,
-            'month' => 8,
-            'year' => 2026,
+            'week_start' => '2026-09-05',
+            'week_end' => '2026-09-11',
             'points' => 9999,
         ]);
 
-        $response = $this->getJson('/api/leaderboard/monthly-preview');
+        $response = $this->getJson('/api/leaderboard/weekly-preview');
 
         $response
             ->assertOk()
-            ->assertJsonPath('month', 'September')
-            ->assertJsonPath('year', 2026)
+            ->assertJsonPath('week_start', '2026-09-19')
+            ->assertJsonPath('week_end', '2026-09-25')
             ->assertJsonCount(10, 'users')
             ->assertJsonStructure([
-                'month',
-                'year',
+                'week_start',
+                'week_end',
                 'users' => [[
                     'rank',
                     'id',
@@ -71,13 +72,12 @@ class MonthlyLeaderboardPreviewTest extends TestCase
         $this->assertNotContains($previousMonthUser->id, collect($response->json('users'))->pluck('id'));
     }
 
-    public function test_it_returns_an_empty_user_list_when_no_points_exist_for_the_current_month(): void
+    public function test_it_returns_an_empty_user_list_when_no_points_exist_for_the_current_week(): void
     {
-        $this->getJson('/api/leaderboard/monthly-preview')
+        $this->getJson('/api/leaderboard/weekly-preview')
             ->assertOk()
             ->assertExactJson([
-                'month' => 'September',
-                'year' => 2026,
+                ...app(WeeklyCompetitionPeriod::class)->metadata(),
                 'users' => [],
             ]);
     }

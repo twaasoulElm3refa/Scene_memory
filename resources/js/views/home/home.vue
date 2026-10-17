@@ -190,8 +190,8 @@
             <!-- SPECIAL COVERAGE -->
             <SpecialCoverageSection />
 
-            <!-- MONTHLY LEADERBOARD -->
-            <MonthlyLeaderboardPreview />
+            <!-- WEEKLY LEADERBOARD -->
+            <WeeklyLeaderboardPreview />
 
             <!-- SCEMORY EXPERIENCE -->
             <ScemoryExperienceTabs />
@@ -285,7 +285,7 @@ const DiscoveryResultsSection = defineAsyncComponent(() => import("./components/
 const PlansSection = defineAsyncComponent(() => import("./components/PlansSection.vue"));
 const TrendingEventsSection = defineAsyncComponent(() => import("./components/TrendingEventsSection.vue"));
 const SpecialCoverageSection = defineAsyncComponent(() => import("./components/SpecialCoverageSection.vue"));
-const MonthlyLeaderboardPreview = defineAsyncComponent(() => import("./components/MonthlyLeaderboardPreview.vue"));
+const WeeklyLeaderboardPreview = defineAsyncComponent(() => import("./components/WeeklyLeaderboardPreview.vue"));
 const ScemoryExperienceTabs = defineAsyncComponent(() => import("./components/ScemoryExperienceTabs.vue"));
 const NewsletterSection = defineAsyncComponent(() => import("./components/NewsletterSection.vue"));
 

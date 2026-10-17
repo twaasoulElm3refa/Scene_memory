@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
+/** @deprecated Read-only legacy monthly data. All active competitions use WeeklyLeaderboardService. */
 class MonthlyLeaderboardService
 {
     /** @return Collection<int, UserMonthlyPoint> */

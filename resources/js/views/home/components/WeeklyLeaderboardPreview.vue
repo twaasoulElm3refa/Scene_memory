@@ -1,26 +1,26 @@
 <template>
-    <section class="monthly-leaderboard" aria-labelledby="monthly-leaderboard-title">
-        <div class="monthly-leaderboard__container">
-            <div class="monthly-leaderboard__panel">
-                <div class="monthly-leaderboard__glow" aria-hidden="true"></div>
+    <section class="weekly-leaderboard" :class="{ 'weekly-leaderboard--full': full }" aria-labelledby="weekly-leaderboard-title">
+        <div class="weekly-leaderboard__container">
+            <div class="weekly-leaderboard__panel">
+                <div class="weekly-leaderboard__glow" aria-hidden="true"></div>
 
-                <header class="monthly-leaderboard__header">
+                <header class="weekly-leaderboard__header">
                     <div>
-                        <span class="monthly-leaderboard__eyebrow">
+                        <span class="weekly-leaderboard__eyebrow">
                             <span aria-hidden="true">🏆</span>
-                            Monthly leaderboard
+                            {{ t("weeklyCompetition.title") }}
                         </span>
-                        <h2 id="monthly-leaderboard-title">Monthly Memory Leaders</h2>
-                        <p>Top contributors this month</p>
+                        <h2 id="weekly-leaderboard-title">{{ t('weeklyCompetition.leaders') }}</h2>
+                        <p>{{ t('weeklyCompetition.subtitle') }}</p>
                     </div>
 
-                    <div class="monthly-leaderboard__period" aria-live="polite">
+                    <div class="weekly-leaderboard__period" aria-live="polite">
                         <strong>{{ periodLabel }}</strong>
                         <span>{{ resetLabel }}</span>
                     </div>
                 </header>
 
-                <div v-if="loading" class="monthly-leaderboard__grid" aria-label="Loading monthly leaderboard">
+                <div v-if="loading" class="weekly-leaderboard__grid" :aria-label="t('weeklyCompetition.loading')">
                     <div v-for="index in 6" :key="index" class="leader-card leader-card--skeleton">
                         <span class="skeleton skeleton--rank"></span>
                         <span class="skeleton skeleton--avatar"></span>
@@ -32,27 +32,27 @@
                     </div>
                 </div>
 
-                <div v-else-if="error" class="monthly-leaderboard__state" role="alert">
-                    <span class="monthly-leaderboard__state-icon" aria-hidden="true">↻</span>
-                    <strong>We couldn't load this month's leaders.</strong>
-                    <p>Please try again in a moment.</p>
-                    <button type="button" @click="loadLeaderboard">Try again</button>
+                <div v-else-if="error" class="weekly-leaderboard__state" role="alert">
+                    <span class="weekly-leaderboard__state-icon" aria-hidden="true">↻</span>
+                    <strong>{{ t('weeklyCompetition.error') }}</strong>
+                    <p>{{ t('weeklyCompetition.tryLater') }}</p>
+                    <button type="button" @click="loadLeaderboard(page)">{{ t('weeklyCompetition.retry') }}</button>
                 </div>
 
-                <div v-else-if="users.length === 0" class="monthly-leaderboard__state">
-                    <span class="monthly-leaderboard__state-icon" aria-hidden="true">✦</span>
-                    <strong>This month's leaderboard is ready for its first memory.</strong>
-                    <p>Contributors will appear here as soon as they earn points.</p>
+                <div v-else-if="users.length === 0" class="weekly-leaderboard__state">
+                    <span class="weekly-leaderboard__state-icon" aria-hidden="true">✦</span>
+                    <strong>{{ t('weeklyCompetition.empty') }}</strong>
+                    <p>{{ t('weeklyCompetition.emptyHint') }}</p>
                 </div>
 
-                <ol v-else class="monthly-leaderboard__grid">
+                <ol v-else class="weekly-leaderboard__grid">
                     <li
                         v-for="user in users"
                         :key="user.id"
                         class="leader-card"
                         :class="`leader-card--rank-${user.rank}`"
                     >
-                        <span class="leader-card__rank" :aria-label="`Rank ${user.rank}`">
+                        <span class="leader-card__rank" :aria-label="t('weeklyCompetition.rankValue', { rank: user.rank })">
                             <span v-if="user.rank <= 3" aria-hidden="true">{{ medalFor(user.rank) }}</span>
                             <span>#{{ user.rank }}</span>
                         </span>
@@ -61,7 +61,7 @@
                             v-if="user.avatar && !failedAvatars[user.id]"
                             class="leader-card__avatar"
                             :src="user.avatar"
-                            :alt="`${user.name}'s avatar`"
+                            :alt="user.name"
                             loading="lazy"
                             @error="markAvatarFailed(user.id)"
                         />
@@ -71,22 +71,27 @@
 
                         <span class="leader-card__identity">
                             <strong>{{ user.name }}</strong>
-                            <span class="leader-card__badge">{{ user.badge }}</span>
+                            <span class="leader-card__badge">{{ badgeLabel(user.badge) }}</span>
                         </span>
 
                         <span class="leader-card__points">
                             <strong>{{ formatPoints(user.points) }}</strong>
-                            <small>pts</small>
+                            <small>{{ t('weeklyCompetition.pts') }}</small>
                         </span>
                     </li>
                 </ol>
 
-                <footer class="monthly-leaderboard__footer">
-                    <a href="/leaderboard" class="monthly-leaderboard__link">
-                        <span class="monthly-leaderboard__link-desktop">View Full Leaderboard</span>
-                        <span class="monthly-leaderboard__link-mobile">View All</span>
+                <footer class="weekly-leaderboard__footer">
+                    <RouterLink v-if="!full" :to="`/${locale}/leaderboard`" class="weekly-leaderboard__link">
+                        <span class="weekly-leaderboard__link-desktop">{{ t('weeklyCompetition.viewFull') }}</span>
+                        <span class="weekly-leaderboard__link-mobile">{{ t('weeklyCompetition.viewAll') }}</span>
                         <span aria-hidden="true">→</span>
-                    </a>
+                    </RouterLink>
+                    <template v-else>
+                        <button type="button" :disabled="loading || page <= 1" @click="loadLeaderboard(page - 1)">{{ t('weeklyCompetition.previous') }}</button>
+                        <span>{{ page }} / {{ lastPage }}</span>
+                        <button type="button" :disabled="loading || page >= lastPage" @click="loadLeaderboard(page + 1)">{{ t('weeklyCompetition.next') }}</button>
+                    </template>
                 </footer>
             </div>
         </div>
@@ -94,46 +99,50 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { getMonthlyLeaderboardPreview } from "@/services/leaderboardService";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { RouterLink } from "vue-router";
+import { getWeeklyLeaderboardPreview, getWeeklyLeaderboard } from "@/services/leaderboardService";
 
+const props = defineProps({ full: { type: Boolean, default: false } });
+const { locale, t } = useI18n();
 const users = ref([]);
 const loading = ref(true);
 const error = ref(false);
-const month = ref("");
-const year = ref(null);
+const weekStart = ref("");
+const weekEnd = ref("");
+const timezone = ref("");
+const page = ref(1);
+const lastPage = ref(1);
 const failedAvatars = ref({});
+let rolloverTimer;
 
-const periodLabel = computed(() => {
-    if (month.value && year.value) {
-        return `${month.value} ${year.value}`;
-    }
+function formatDate(date) {
+    if (!date) return "—";
+    // These are business calendar dates, not browser-local instants.
+    return new Intl.DateTimeFormat(locale.value, { dateStyle: "medium", timeZone: "UTC" })
+        .format(new Date(`${date}T00:00:00Z`));
+}
+const periodLabel = computed(() => `${formatDate(weekStart.value)} – ${formatDate(weekEnd.value)}`);
+const resetLabel = computed(() => t("weeklyCompetition.resets", { timezone: timezone.value }));
 
-    return new Intl.DateTimeFormat(undefined, {
-        month: "long",
-        year: "numeric",
-    }).format(new Date());
-});
-
-const resetLabel = computed(() => {
-    const now = new Date();
-    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    const days = Math.max(1, Math.ceil((nextMonth.getTime() - now.getTime()) / 86400000));
-
-    return `Resets in ${days} ${days === 1 ? "day" : "days"}`;
-});
-
-async function loadLeaderboard() {
+async function loadLeaderboard(requestedPage = 1) {
     loading.value = true;
     error.value = false;
-
+    clearTimeout(rolloverTimer);
     try {
-        const response = await getMonthlyLeaderboardPreview();
+        const response = await (props.full ? getWeeklyLeaderboard(requestedPage) : getWeeklyLeaderboardPreview());
         const payload = response.data || {};
-
-        users.value = Array.isArray(payload.users) ? payload.users.slice(0, 10) : [];
-        month.value = payload.month || "";
-        year.value = Number(payload.year) || null;
+        users.value = Array.isArray(payload.users) ? (props.full ? payload.users : payload.users.slice(0, 10)) : [];
+        weekStart.value = payload.week_start || "";
+        weekEnd.value = payload.week_end || "";
+        timezone.value = payload.timezone || "";
+        page.value = payload.current_page || 1;
+        lastPage.value = payload.last_page || 1;
+        const delay = Date.parse(payload.ends_at) - Date.now();
+        if (Number.isFinite(delay)) {
+            rolloverTimer = setTimeout(() => loadLeaderboard(1), Math.max(1000, delay + 100));
+        }
     } catch {
         error.value = true;
         users.value = [];
@@ -141,47 +150,45 @@ async function loadLeaderboard() {
         loading.value = false;
     }
 }
-
-function formatPoints(points) {
-    return new Intl.NumberFormat().format(Number(points) || 0);
-}
-
+const formatPoints = (points) => new Intl.NumberFormat(locale.value).format(Number(points) || 0);
 function initialsFor(name) {
-    return String(name || "?")
-        .trim()
-        .split(/\s+/)
-        .slice(0, 2)
-        .map((part) => part.charAt(0).toUpperCase())
-        .join("") || "?";
+    return String(name || "?").trim().split(/\s+/).slice(0, 2).map((part) => part.charAt(0).toUpperCase()).join("") || "?";
 }
-
-function medalFor(rank) {
-    return { 1: "🥇", 2: "🥈", 3: "🥉" }[rank] || "";
+const medalFor = (rank) => ({ 1: "🥇", 2: "🥈", 3: "🥉" }[rank] || "");
+function badgeLabel(badge) {
+    const key = { "Memory Master": "master", "Story Keeper": "keeper", "Moment Curator": "curator", "Memory Contributor": "contributor" }[badge];
+    return key ? t(`weeklyCompetition.${key}`) : badge;
 }
-
 function markAvatarFailed(userId) {
     failedAvatars.value = { ...failedAvatars.value, [userId]: true };
 }
-
-onMounted(loadLeaderboard);
+const refresh = () => loadLeaderboard(page.value);
+onMounted(() => {
+    loadLeaderboard();
+    window.addEventListener("focus", refresh);
+});
+onUnmounted(() => {
+    clearTimeout(rolloverTimer);
+    window.removeEventListener("focus", refresh);
+});
 </script>
 
 <style scoped>
-.monthly-leaderboard {
+.weekly-leaderboard {
     position: relative;
     overflow: hidden;
     padding: 48px 0;
     background: linear-gradient(180deg, var(--scemory-surface) 0%, var(--scemory-surface-soft) 100%);
 }
 
-.monthly-leaderboard__container {
+.weekly-leaderboard__container {
     box-sizing: border-box;
     width: min(100%, 1320px);
     margin-inline: auto;
     padding-inline: 32px;
 }
 
-.monthly-leaderboard__panel {
+.weekly-leaderboard__panel {
     position: relative;
     isolation: isolate;
     overflow: hidden;
@@ -194,7 +201,7 @@ onMounted(loadLeaderboard);
     box-shadow: var(--scemory-shadow);
 }
 
-.monthly-leaderboard__glow {
+.weekly-leaderboard__glow {
     position: absolute;
     z-index: -1;
     inset-block-end: -140px;
@@ -205,7 +212,7 @@ onMounted(loadLeaderboard);
     background: rgba(22, 119, 255, 0.07);
 }
 
-.monthly-leaderboard__header {
+.weekly-leaderboard__header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -213,7 +220,7 @@ onMounted(loadLeaderboard);
     margin-block-end: 28px;
 }
 
-.monthly-leaderboard__eyebrow {
+.weekly-leaderboard__eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -228,7 +235,7 @@ onMounted(loadLeaderboard);
     text-transform: uppercase;
 }
 
-.monthly-leaderboard__header h2 {
+.weekly-leaderboard__header h2 {
     margin: 14px 0 0;
     color: var(--scemory-heading);
     font-size: clamp(1.75rem, 3.2vw, 2.75rem);
@@ -237,12 +244,12 @@ onMounted(loadLeaderboard);
     line-height: 1.08;
 }
 
-.monthly-leaderboard__header p {
+.weekly-leaderboard__header p {
     margin: 8px 0 0;
     color: var(--scemory-muted);
 }
 
-.monthly-leaderboard__period {
+.weekly-leaderboard__period {
     display: flex;
     flex: 0 0 auto;
     flex-direction: column;
@@ -255,17 +262,17 @@ onMounted(loadLeaderboard);
     box-shadow: 0 8px 24px rgba(17, 75, 125, 0.08);
 }
 
-.monthly-leaderboard__period strong {
+.weekly-leaderboard__period strong {
     color: var(--scemory-heading);
     font-size: 0.95rem;
 }
 
-.monthly-leaderboard__period span {
+.weekly-leaderboard__period span {
     color: var(--scemory-muted);
     font-size: 0.78rem;
 }
 
-.monthly-leaderboard__grid {
+.weekly-leaderboard__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
@@ -388,7 +395,7 @@ onMounted(loadLeaderboard);
     font-weight: 700;
 }
 
-.monthly-leaderboard__state {
+.weekly-leaderboard__state {
     display: flex;
     min-height: 210px;
     align-items: center;
@@ -402,22 +409,22 @@ onMounted(loadLeaderboard);
     text-align: center;
 }
 
-.monthly-leaderboard__state-icon {
+.weekly-leaderboard__state-icon {
     margin-block-end: 10px;
     color: var(--scemory-light-blue);
     font-size: 1.8rem;
 }
 
-.monthly-leaderboard__state strong {
+.weekly-leaderboard__state strong {
     color: var(--scemory-heading);
 }
 
-.monthly-leaderboard__state p {
+.weekly-leaderboard__state p {
     margin: 6px 0 0;
     font-size: 0.88rem;
 }
 
-.monthly-leaderboard__state button {
+.weekly-leaderboard__state button {
     margin-block-start: 14px;
     padding: 9px 16px;
     border: 0;
@@ -428,13 +435,13 @@ onMounted(loadLeaderboard);
     font-weight: 800;
 }
 
-.monthly-leaderboard__footer {
+.weekly-leaderboard__footer {
     display: flex;
     justify-content: center;
     margin-block-start: 26px;
 }
 
-.monthly-leaderboard__link {
+.weekly-leaderboard__link {
     display: inline-flex;
     min-height: 44px;
     align-items: center;
@@ -451,13 +458,13 @@ onMounted(loadLeaderboard);
     transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
-.monthly-leaderboard__link:hover {
+.weekly-leaderboard__link:hover {
     transform: translateY(-2px);
     color: #fff;
     box-shadow: 0 13px 30px rgba(13, 77, 151, 0.26);
 }
 
-.monthly-leaderboard__link-mobile {
+.weekly-leaderboard__link-mobile {
     display: none;
 }
 
@@ -484,36 +491,36 @@ onMounted(loadLeaderboard);
 }
 
 @media (max-width: 760px) {
-    .monthly-leaderboard { padding: 36px 0; }
-    .monthly-leaderboard__container { padding-inline: 18px; }
-    .monthly-leaderboard__panel { padding: 22px 16px; border-radius: 22px; }
+    .weekly-leaderboard { padding: 36px 0; }
+    .weekly-leaderboard__container { padding-inline: 18px; }
+    .weekly-leaderboard__panel { padding: 22px 16px; border-radius: 22px; }
 
-    .monthly-leaderboard__header {
+    .weekly-leaderboard__header {
         align-items: flex-start;
         flex-direction: column;
         gap: 16px;
         margin-block-end: 22px;
     }
 
-    .monthly-leaderboard__period {
+    .weekly-leaderboard__period {
         width: 100%;
         align-items: center;
         flex-direction: row;
         justify-content: space-between;
     }
 
-    .monthly-leaderboard__grid { grid-template-columns: minmax(0, 1fr); }
-    .monthly-leaderboard__grid > .leader-card:nth-child(n + 6) { display: none; }
+    .weekly-leaderboard__grid { grid-template-columns: minmax(0, 1fr); }
+    .weekly-leaderboard:not(.weekly-leaderboard--full) .weekly-leaderboard__grid > .leader-card:nth-child(n + 6) { display: none; }
     .leader-card { gap: 10px; padding: 12px; }
     .leader-card__rank { width: 34px; }
     .leader-card__avatar, .skeleton--avatar { width: 42px; height: 42px; }
-    .monthly-leaderboard__link-desktop { display: none; }
-    .monthly-leaderboard__link-mobile { display: inline; }
+    .weekly-leaderboard__link-desktop { display: none; }
+    .weekly-leaderboard__link-mobile { display: inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .leader-card,
-    .monthly-leaderboard__link,
+    .weekly-leaderboard__link,
     .skeleton {
         transition: none;
         animation: none;

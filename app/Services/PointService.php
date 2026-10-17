@@ -21,7 +21,7 @@ class PointService
 
     public const WISHLIST_CREATED = 'wishlist.created';
 
-    public function __construct(private readonly MonthlyPointService $monthlyPointService) {}
+    public function __construct(private readonly WeeklyPointService $weeklyPointService) {}
 
     /**
      * Award an active point rule once for the same user, action, and reference.
@@ -32,7 +32,7 @@ class PointService
             return false;
         }
 
-        return $this->monthlyPointService->addPoints(
+        return $this->weeklyPointService->addPoints(
             $user,
             $action,
             $reference->getMorphClass(),

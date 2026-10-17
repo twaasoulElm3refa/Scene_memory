@@ -44,6 +44,8 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
+            // Application timestamps are UTC; competition dates have their own timezone.
+            'timezone' => '+00:00',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),

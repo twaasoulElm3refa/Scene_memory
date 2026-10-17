@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <MonthlyStatsCard class="mt-5" :stats="monthlyStats" />
+                <WeeklyStatsCard class="mt-5" :stats="weeklyStats" @refresh="fetchProfile" />
             </div>
 
             <!-- Tabs -->
@@ -341,11 +341,11 @@ import { getProfile, updateProfileAPI } from "@/services/userService/userService
 import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
-import MonthlyStatsCard from "@/components/profile/MonthlyStatsCard.vue";
+import WeeklyStatsCard from "@/components/profile/WeeklyStatsCard.vue";
 
 export default {
     name: "UserProfile",
-    components: { MonthlyStatsCard },
+    components: { WeeklyStatsCard },
     setup() {
         const router = useRouter();
         const route = useRoute();
@@ -365,10 +365,10 @@ export default {
             licenceType: null,
             wallet: null,
         });
-        const monthlyStats = ref({
-            monthly_points: 0,
-            monthly_rank: null,
-            month: "",
+        const weeklyStats = ref({
+            weekly_points: 0,
+            weekly_rank: null,
+            week_start: "", week_end: "",
         });
 
         // Edit Form Data
@@ -695,9 +695,9 @@ export default {
 
                 if (userData) {
                     profile.value = { ...userData };
-                    monthlyStats.value = {
-                        ...monthlyStats.value,
-                        ...(res?.monthly_statistics || {}),
+                    weeklyStats.value = {
+                        ...weeklyStats.value,
+                        ...(res?.weekly_statistics || {}),
                     };
 
                     editData.value = {
@@ -795,7 +795,8 @@ export default {
 
         return {
             profile,
-            monthlyStats,
+            weeklyStats,
+            fetchProfile,
             editData,
             originalEditData,
             countries,

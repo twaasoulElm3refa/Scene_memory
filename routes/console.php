@@ -17,6 +17,7 @@ Schedule::command('queue:work --stop-when-empty --tries=3 --timeout=1200')
     ->withoutOverlapping()
     ->runInBackground();
 
-Schedule::command('leaderboard:archive-month')
-    ->monthlyOn(1, '00:00')
+Schedule::command('leaderboard:archive-weekly')
+    ->weeklyOn(6, config('competition.archive_time', '00:05'))
+    ->timezone(config('competition.timezone', 'Asia/Riyadh'))
     ->withoutOverlapping();

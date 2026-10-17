@@ -16,5 +16,5 @@ docker system prune -a
 docker system prune -a --volumes
 docker system df
 
-wsl -d Ubuntu
+wsl -d Ubuntu-24.04
 cd ~/projects/Scene_memory

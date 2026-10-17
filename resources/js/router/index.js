@@ -293,6 +293,15 @@ const routes = [
         meta: { hideNavbar: false, hideFooter: false },
     },
     {
+        path: "/:lang/leaderboard",
+        component: () => import("../views/home/WeeklyLeaderboard.vue"),
+        meta: { hideNavbar: false, hideFooter: false },
+    },
+    {
+        path: "/leaderboard",
+        redirect: "/en/leaderboard",
+    },
+    {
         path: "/:lang/profile",
         component: profile,
         meta: { hideNavbar: false, hideFooter: false },

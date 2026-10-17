@@ -5,20 +5,21 @@ namespace Tests\Feature\Points;
 use App\Models\CommentImage;
 use App\Models\Events;
 use App\Models\Likes;
-use App\Models\MonthlyLeaderboard;
 use App\Models\PointRule;
 use App\Models\User;
 use App\Models\UserDailyPoint;
-use App\Models\UserMonthlyPoint;
 use App\Models\UserPointHistory;
+use App\Models\UserWeeklyPoint;
+use App\Models\WeeklyLeaderboard;
 use App\Models\Wishlist;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Repositories\Contracts\Likes\LikeRepositoryInterface;
 use App\Repositories\Contracts\Wishlists\WishlistRepositoryInterface;
-use App\Services\MonthlyLeaderboardService;
-use App\Services\MonthlyPointService;
 use App\Services\PointService;
+use App\Services\WeeklyCompetitionPeriod;
+use App\Services\WeeklyLeaderboardService;
+use App\Services\WeeklyPointService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
@@ -38,7 +39,7 @@ class PointServiceTest extends TestCase
         Carbon::setTestNow('2026-09-15 12:00:00');
     }
 
-    public function test_it_awards_all_supported_timeline_actions_and_aggregates_monthly_points(): void
+    public function test_it_awards_all_supported_timeline_actions_and_aggregates_weekly_points(): void
     {
         $user = User::factory()->create(['role' => 'user']);
 
@@ -92,10 +93,10 @@ class PointServiceTest extends TestCase
 
         $this->assertSame(23, $user->fresh()->total_points);
         $this->assertSame(7, UserPointHistory::where('user_id', $user->id)->count());
-        $this->assertDatabaseHas('user_monthly_points', [
+        $this->assertDatabaseHas('user_weekly_points', [
             'user_id' => $user->id,
-            'month' => 9,
-            'year' => 2026,
+            'week_start' => '2026-09-12',
+            'week_end' => '2026-09-18',
             'points' => 23,
         ]);
         $this->assertSame(7, UserDailyPoint::where('user_id', $user->id)->count());
@@ -118,10 +119,10 @@ class PointServiceTest extends TestCase
         $this->assertFalse($service->award($user, PointService::EVENT_CREATED, $event));
 
         $this->assertSame(10, $user->fresh()->total_points);
-        $this->assertDatabaseHas('user_monthly_points', [
+        $this->assertDatabaseHas('user_weekly_points', [
             'user_id' => $user->id,
-            'month' => 9,
-            'year' => 2026,
+            'week_start' => '2026-09-12',
+            'week_end' => '2026-09-18',
             'points' => 10,
         ]);
         $this->assertDatabaseHas('user_daily_points', [
@@ -158,10 +159,10 @@ class PointServiceTest extends TestCase
         ])->assertOk();
 
         $this->assertSame(6, $user->fresh()->total_points);
-        $this->assertDatabaseHas('user_monthly_points', [
+        $this->assertDatabaseHas('user_weekly_points', [
             'user_id' => $user->id,
-            'month' => 9,
-            'year' => 2026,
+            'week_start' => '2026-09-12',
+            'week_end' => '2026-09-18',
             'points' => 6,
         ]);
         $this->assertSame(2, UserDailyPoint::where('user_id', $user->id)->count());
@@ -184,19 +185,19 @@ class PointServiceTest extends TestCase
 
         $this->assertSame(0, $user->fresh()->total_points);
         $this->assertDatabaseCount('user_daily_points', 0);
-        $this->assertDatabaseCount('user_monthly_points', 0);
+        $this->assertDatabaseCount('user_weekly_points', 0);
         $this->assertDatabaseCount('user_points_history', 0);
     }
 
-    public function test_monthly_service_accepts_reference_type_and_id_and_prevents_duplicates(): void
+    public function test_weekly_service_accepts_reference_type_and_id_and_prevents_duplicates(): void
     {
         $user = User::factory()->create(['role' => 'user']);
         $event = Events::create([
             'user_id' => $user->id,
-            'title' => 'Direct monthly award',
-            'slug' => 'direct-monthly-award',
+            'title' => 'Direct weekly award',
+            'slug' => 'direct-weekly-award',
         ]);
-        $service = app(MonthlyPointService::class);
+        $service = app(WeeklyPointService::class);
 
         $this->assertTrue($service->addPoints(
             $user,
@@ -212,20 +213,20 @@ class PointServiceTest extends TestCase
         ));
 
         $this->assertSame(3, $user->fresh()->total_points);
-        $this->assertSame(3, $user->monthlyPoints()->sole()->points);
+        $this->assertSame(3, $user->weeklyPoints()->sole()->points);
         $this->assertSame(1, $user->pointsHistory()->count());
     }
 
-    public function test_current_month_leaderboard_is_ranked_and_paginated(): void
+    public function test_current_week_leaderboard_is_ranked_and_paginated(): void
     {
         $users = User::factory()->count(3)->create(['role' => 'user']);
 
-        UserMonthlyPoint::create(['user_id' => $users[0]->id, 'month' => 9, 'year' => 2026, 'points' => 210]);
-        UserMonthlyPoint::create(['user_id' => $users[1]->id, 'month' => 9, 'year' => 2026, 'points' => 520]);
-        UserMonthlyPoint::create(['user_id' => $users[2]->id, 'month' => 9, 'year' => 2026, 'points' => 430]);
+        UserWeeklyPoint::create(['user_id' => $users[0]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 210]);
+        UserWeeklyPoint::create(['user_id' => $users[1]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 520]);
+        UserWeeklyPoint::create(['user_id' => $users[2]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 430]);
 
-        $firstPage = app(MonthlyLeaderboardService::class)->currentMonth(2, 1);
-        $secondPage = app(MonthlyLeaderboardService::class)->currentMonth(2, 2);
+        $firstPage = app(WeeklyLeaderboardService::class)->currentWeek(2, 1);
+        $secondPage = app(WeeklyLeaderboardService::class)->currentWeek(2, 2);
 
         $this->assertSame([520, 430], $firstPage->pluck('points')->all());
         $this->assertSame([1, 2], $firstPage->pluck('rank')->all());
@@ -234,87 +235,86 @@ class PointServiceTest extends TestCase
         $this->assertTrue($firstPage->first()->relationLoaded('user'));
     }
 
-    public function test_current_user_monthly_stats_reuse_live_leaderboard_ordering(): void
+    public function test_current_user_weekly_stats_reuse_live_leaderboard_ordering(): void
     {
         $users = User::factory()->count(3)->create(['role' => 'user']);
 
-        UserMonthlyPoint::create(['user_id' => $users[0]->id, 'month' => 9, 'year' => 2026, 'points' => 250]);
-        UserMonthlyPoint::create(['user_id' => $users[1]->id, 'month' => 9, 'year' => 2026, 'points' => 500]);
-        UserMonthlyPoint::create(['user_id' => $users[2]->id, 'month' => 9, 'year' => 2026, 'points' => 100]);
+        UserWeeklyPoint::create(['user_id' => $users[0]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 250]);
+        UserWeeklyPoint::create(['user_id' => $users[1]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 500]);
+        UserWeeklyPoint::create(['user_id' => $users[2]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 100]);
 
-        $service = app(MonthlyLeaderboardService::class);
+        $service = app(WeeklyLeaderboardService::class);
 
         $this->assertSame([
-            'monthly_points' => 250,
-            'monthly_rank' => 2,
-            'month' => '2026-09',
+            'weekly_points' => 250,
+            'weekly_rank' => 2,
+            ...app(WeeklyCompetitionPeriod::class)->metadata(),
         ], $service->currentUserStats($users[0]->id));
 
-        $users[0]->monthlyPoints()->update(['points' => 600]);
+        $users[0]->weeklyPoints()->update(['points' => 600]);
 
         $this->assertSame([
-            'monthly_points' => 600,
-            'monthly_rank' => 1,
-            'month' => '2026-09',
+            'weekly_points' => 600,
+            'weekly_rank' => 1,
+            ...app(WeeklyCompetitionPeriod::class)->metadata(),
         ], $service->currentUserStats($users[0]->id));
     }
 
-    public function test_user_without_current_month_points_is_unranked(): void
+    public function test_user_without_current_week_points_is_unranked(): void
     {
         $user = User::factory()->create(['role' => 'user']);
 
         $this->assertSame([
-            'monthly_points' => 0,
-            'monthly_rank' => null,
-            'month' => '2026-09',
-        ], app(MonthlyLeaderboardService::class)->currentUserStats($user->id));
+            'weekly_points' => 0,
+            'weekly_rank' => null,
+            ...app(WeeklyCompetitionPeriod::class)->metadata(),
+        ], app(WeeklyLeaderboardService::class)->currentUserStats($user->id));
     }
 
-    public function test_archive_command_saves_previous_month_clears_it_and_preserves_lifetime_points(): void
+    public function test_archive_command_preserves_completed_aggregates_and_lifetime_points(): void
     {
         Carbon::setTestNow('2026-10-01 00:00:00');
         $users = User::factory()->count(2)->create(['role' => 'user']);
         $users[0]->update(['total_points' => 520]);
         $users[1]->update(['total_points' => 430]);
 
-        UserMonthlyPoint::create(['user_id' => $users[0]->id, 'month' => 9, 'year' => 2026, 'points' => 520]);
-        UserMonthlyPoint::create(['user_id' => $users[1]->id, 'month' => 9, 'year' => 2026, 'points' => 430]);
+        UserWeeklyPoint::create(['user_id' => $users[0]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 520]);
+        UserWeeklyPoint::create(['user_id' => $users[1]->id, 'week_start' => '2026-09-12', 'week_end' => '2026-09-18', 'points' => 430]);
 
-        $this->artisan('leaderboard:archive-month')
-            ->expectsOutput('Archived 2 leaderboard entries for September 2026.')
+        $this->artisan('leaderboard:archive-weekly')
             ->assertSuccessful();
 
-        $this->assertDatabaseHas('monthly_leaderboards', [
+        $this->assertDatabaseHas('weekly_leaderboards', [
             'user_id' => $users[0]->id,
-            'month' => 9,
-            'year' => 2026,
+            'week_start' => '2026-09-12',
+            'week_end' => '2026-09-18',
             'points' => 520,
             'rank' => 1,
         ]);
-        $this->assertDatabaseHas('monthly_leaderboards', [
+        $this->assertDatabaseHas('weekly_leaderboards', [
             'user_id' => $users[1]->id,
             'points' => 430,
             'rank' => 2,
         ]);
-        $this->assertDatabaseCount('user_monthly_points', 0);
+        $this->assertDatabaseCount('user_weekly_points', 2);
         $this->assertSame(520, $users[0]->fresh()->total_points);
         $this->assertSame(430, $users[1]->fresh()->total_points);
 
-        $this->artisan('leaderboard:archive-month')->assertSuccessful();
-        $this->assertSame(2, MonthlyLeaderboard::count());
+        $this->artisan('leaderboard:archive-weekly')->assertSuccessful();
+        $this->assertSame(2, WeeklyLeaderboard::count());
     }
 
-    public function test_new_month_starts_from_zero_until_points_are_earned(): void
+    public function test_new_week_starts_from_zero_until_points_are_earned(): void
     {
         $user = User::factory()->create(['role' => 'user', 'total_points' => 10]);
-        UserMonthlyPoint::create([
+        UserWeeklyPoint::create([
             'user_id' => $user->id,
-            'month' => 8,
-            'year' => 2026,
+            'week_start' => '2026-09-05',
+            'week_end' => '2026-09-11',
             'points' => 10,
         ]);
 
-        $leaderboard = app(MonthlyLeaderboardService::class)->currentMonth();
+        $leaderboard = app(WeeklyLeaderboardService::class)->currentWeek();
 
         $this->assertTrue($leaderboard->isEmpty());
         $this->assertSame(10, $user->fresh()->total_points);
