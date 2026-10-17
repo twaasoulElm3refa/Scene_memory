@@ -9,7 +9,7 @@ class PaymentFinancialValidator
 {
     public function __construct(private readonly PayPalCaptureData $captureData) {}
 
-    public function assertCompletedCapture(Payment $payment, array $resource): array
+    public function assertCompletedCapture(Payment $payment, array $resource, bool $reversedGiftEvidence = false): array
     {
         $order = $payment->order;
         if (! $order || $order->user_id !== $payment->user_id || ! $order->user()->exists()) {
@@ -20,7 +20,8 @@ class PaymentFinancialValidator
         }
 
         $status = strtoupper((string) $this->captureData->extractCaptureStatus($resource));
-        if ($status !== 'COMPLETED') {
+        $allowed = $reversedGiftEvidence && $payment->operation === 'virtual_gift' ? ['COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'] : ['COMPLETED'];
+        if (! in_array($status, $allowed, true)) {
             throw new RuntimeException('PayPal capture is not completed.');
         }
 

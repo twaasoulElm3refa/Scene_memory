@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jobs\SendPaymentReceipt;
 use App\Models\CartItems;
 use App\Models\Entitlement;
+use App\Models\GiftTransaction;
 use App\Models\Payment;
 use App\Models\Purchases;
 use App\Models\Wallet;
@@ -15,6 +16,11 @@ use RuntimeException;
 
 class PaymentFinalizer
 {
+    public function finalizeVirtualGift(Payment $payment, ?array $resource = null): GiftTransaction
+    {
+        return app(VirtualGiftService::class)->finalize($payment, $resource);
+    }
+
     public function __construct(
         private readonly PaymentFinancialValidator $validator,
         private readonly WalletLedgerService $ledger,

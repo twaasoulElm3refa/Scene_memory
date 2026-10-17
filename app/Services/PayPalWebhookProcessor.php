@@ -23,6 +23,8 @@ class PayPalWebhookProcessor
         'PAYMENT.CAPTURE.DECLINED',
         'PAYMENT.CAPTURE.REFUNDED',
         'PAYMENT.CAPTURE.REVERSED',
+        'CUSTOMER.DISPUTE.CREATED',
+        'CUSTOMER.DISPUTE.RESOLVED',
     ];
 
     public function __construct(
@@ -38,11 +40,13 @@ class PayPalWebhookProcessor
             $payload = json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             Log::warning('webhook_failed', ['reason' => 'invalid_json', 'webhook_type' => $webhookType]);
+
             return response()->json(['status' => 'invalid'], 400);
         }
         if (! is_array($payload) || ! is_string($payload['id'] ?? null) || trim($payload['id']) === ''
             || ! is_string($payload['event_type'] ?? null) || trim($payload['event_type']) === '') {
             Log::warning('webhook_failed', ['reason' => 'missing_event_identity', 'webhook_type' => $webhookType]);
+
             return response()->json(['status' => 'invalid'], 400);
         }
 
@@ -69,6 +73,7 @@ class PayPalWebhookProcessor
         if (! is_string($webhookId) || $webhookId === '') {
             Log::error('payment_validation_failed', ['event_id' => $eventId, 'reason' => 'webhook_id_not_configured']);
             Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'webhook_id_not_configured']);
+
             return response()->json(['status' => 'error'], 503);
         }
 
@@ -76,11 +81,13 @@ class PayPalWebhookProcessor
             Log::info('webhook_signature_started', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
             if (! $this->verificationBypassed() && ! $this->verifier->verify($request, $rawBody, $webhookId, $webhookType)) {
                 Log::warning('webhook_signature_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
+
                 return response()->json(['status' => 'invalid'], 400);
             }
         } catch (Throwable $exception) {
             $this->logException($exception, $eventId, $eventType);
             Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'signature_exception']);
+
             return response()->json(['status' => 'error'], 500);
         }
         Log::info('webhook_signature_success', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
@@ -119,6 +126,7 @@ class PayPalWebhookProcessor
             if (in_array($event->status, ['processed', 'ignored'], true)
                 || ($event->status === 'processing' && $event->updated_at?->gt(now()->subMinutes(5)))) {
                 Log::info('webhook_duplicate', ['event_id' => $eventId, 'webhook_type' => $webhookType, 'status' => $event->status]);
+
                 return response()->json(['status' => 'duplicate']);
             }
         }
@@ -157,6 +165,7 @@ class PayPalWebhookProcessor
             Log::warning('payment_validation_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'exception' => $exception::class]);
             $this->logException($exception, $eventId, $eventType);
             Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'handler_exception']);
+
             return response()->json(['status' => 'error'], 500);
         }
     }

@@ -11,6 +11,32 @@ use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class PayPalGateway
 {
+    public function showCaptureDetails(string $captureId): array
+    {
+        return $this->client()->showCapturedPaymentDetails($captureId);
+    }
+
+    public function showRefundDetails(string $refundId): array
+    {
+        return $this->client()->showRefundDetails($refundId);
+    }
+
+    public function refundCapture(string $captureId, string $amount, string $currency, string $requestId): array
+    {
+        // The installed SDK refund helper requires a float. Reuse this gateway's
+        // token/configuration and send an exact decimal string to the same API.
+        $token = $this->accessToken();
+        if (empty($token['access_token'])) {
+            throw new \RuntimeException('PayPal authentication failed.');
+        }
+
+        return Http::acceptJson()->withToken($token['access_token'])
+            ->withHeaders(['PayPal-Request-Id' => $requestId])->timeout($this->timeout())
+            ->post($this->baseUrl().'/v2/payments/captures/'.rawurlencode($captureId).'/refund', [
+                'amount' => ['value' => $amount, 'currency_code' => $currency],
+            ])->throw()->json();
+    }
+
     public function createOrder(array $data, string $requestId): array
     {
         $client = $this->client();
@@ -190,7 +216,7 @@ class PayPalGateway
             ];
         }
 
-       try {
+        try {
             $rawEvent = $data['webhook_event_raw'] ?? '';
 
             if (! is_string($rawEvent) || trim($rawEvent) === '') {
@@ -224,9 +250,9 @@ class PayPalGateway
 
             // إدخال webhook_event بالجسم الأصلي كما وصل من PayPal.
             $verificationBody = substr($encodedHeaders, 0, -1)
-                . ',"webhook_event":'
-                . $rawEvent
-                . '}';
+                .',"webhook_event":'
+                .$rawEvent
+                .'}';
 
             $response = Http::acceptJson()
                 ->withToken($tokenResult['access_token'])

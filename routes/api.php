@@ -64,6 +64,8 @@ use App\Http\Middleware\OwnEvent;
 use App\Http\Middleware\VerifyN8nWebhookSecret;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__.'/gifts.php';
+
 Route::get('/leaderboard/monthly-preview', [LeaderboardController::class, 'monthlyPreview'])
     ->middleware('throttle:60,1')
     ->name('leaderboard.monthly-preview');

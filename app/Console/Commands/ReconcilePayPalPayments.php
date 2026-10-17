@@ -24,7 +24,16 @@ class ReconcilePayPalPayments extends Command
 
         Payment::query()
             ->where('method', 'paypal')
-            ->whereIn('status', ['pending', 'approved'])
+            ->where(function ($query) {
+                $query->whereIn('status', ['pending', 'approved'])
+                    ->orWhere(function ($query) {
+                        $query->where('operation', 'virtual_gift')->whereIn('status', ['completed', 'partially_refunded'])
+                            ->whereExists(function ($query) {
+                                $query->selectRaw('1')->from('gift_transactions')->whereColumn('gift_transactions.payment_id', 'payments.id')
+                                    ->where(fn ($q) => $q->whereNull('last_reconciled_at')->orWhere('last_reconciled_at', '<=', now()->subDay()));
+                            });
+                    });
+            })
             ->whereNotNull('paypal_order_id')
             ->where('created_at', '<=', now()->subMinutes($age))
             ->orderBy('id')

@@ -152,6 +152,7 @@
                                                 <p class="font-semibold text-xs text-gray-500">{{ $t('event.organizer')
                                                 }}</p>
                                                 <p class="font-medium">{{ event.user.name }}</p>
+                                                <GiftSupportButton :event-id="event.id" :recipient="event.user" :authenticated="isAuthenticated" :current-user-id="currentUserId" />
                                             </div>
                                         </div>
                                     </div>
@@ -401,6 +402,7 @@
                                         </div>
 
                                         <div class="flex items-center gap-2">
+                                            <GiftSupportButton :event-id="event.id" :comment-id="comment.id" :recipient="comment.user" :authenticated="isAuthenticated" :current-user-id="currentUserId" />
                                             <!-- Reply Button -->
                                             <button v-if="isAuthenticated" @click="toggleReplyForm(comment?.id)"
                                                 class="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-2 py-1 rounded-lg hover:bg-indigo-50">
@@ -776,6 +778,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import GiftSupportButton from "@/components/gifts/GiftSupportButton.vue";
 import { PhotoIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";

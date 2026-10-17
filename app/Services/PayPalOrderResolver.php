@@ -25,14 +25,15 @@ class PayPalOrderResolver
         }
 
         $customId = $this->captureData->extractCustomId($resource);
-        if (is_string($customId) && preg_match('/^(?:purchase|wallet_topup):(\d+)$/', $customId, $matches)) {
+        if (is_string($customId) && preg_match('/^(?:purchase|wallet_topup|virtual_gift):(\d+)$/', $customId, $matches)) {
             if ($payment = (clone $query)->find((int) $matches[1])) {
                 return $payment;
             }
         }
 
         $captureId = $this->captureData->extractCaptureId($resource)
-            ?? data_get($resource, 'supplementary_data.related_ids.capture_id');
+            ?? data_get($resource, 'supplementary_data.related_ids.capture_id')
+            ?? data_get($resource, 'disputed_transactions.0.seller_transaction_id');
 
         return $captureId ? (clone $query)->where('capture_id', $captureId)->first() : null;
     }

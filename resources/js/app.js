@@ -26,6 +26,7 @@ import eventDirectoryMessages from "./i18n/eventDirectory";
 import discoverySearchMessages from "./i18n/discoverySearch";
 import profileTimelineMessages from "./i18n/profileTimeline";
 import weeklyCompetitionMessages from "./i18n/weeklyCompetition";
+import virtualGiftMessages from "./i18n/virtualGifts";
 
 // styles
 import "../css/app.css";
@@ -76,6 +77,8 @@ Object.entries(profileTimelineMessages).forEach(([lang, timeline]) => {
 Object.entries(weeklyCompetitionMessages).forEach(([lang, competition]) => {
     messages[lang].weeklyCompetition = competition;
 });
+
+Object.entries(virtualGiftMessages).forEach(([lang, gifts]) => { messages[lang].gifts = gifts; });
 
 const DEFAULT_LANG = "en";
 const RTL_LANGS = ["ar", "fa", "ur"];

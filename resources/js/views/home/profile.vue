@@ -6,6 +6,10 @@
             <p class="text-gray-600">{{ $t('profilePage.subtitle') }}</p>
         </div>
 
+        <div class="mb-4 text-center">
+            <RouterLink :to="`/${route.params.lang || 'en'}/gifts`" class="text-emerald-700">{{ $t('gifts.history') }}</RouterLink>
+        </div>
+
         <!-- Card -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
             <!-- Profile Header -->
@@ -794,6 +798,7 @@ export default {
         });
 
         return {
+            route,
             profile,
             weeklyStats,
             fetchProfile,

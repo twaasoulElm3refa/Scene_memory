@@ -331,6 +331,17 @@ const routes = [
         meta: { hideNavbar: true, hideFooter: true },
     },
 
+    {
+        path: "/:lang/gifts",
+        component: () => import("../views/home/VirtualGifts.vue"),
+        meta: { hideNavbar: false, hideFooter: false, requiresAuth: true },
+    },
+    {
+        path: "/admin/gifts",
+        component: () => import("../views/admin/gifts/VirtualGiftsAdmin.vue"),
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+
     // Admin dashboard
     {
         path: "/admin",
