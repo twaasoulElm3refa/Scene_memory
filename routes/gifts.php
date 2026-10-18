@@ -29,6 +29,7 @@ Route::prefix('v1/admin/gifts')->middleware(['auth:sanctum', AdminMiddleware::cl
     Route::post('/catalog', [AdminGifts::class, 'save']);
     Route::post('/catalog/{id}', [AdminGifts::class, 'save']);
     Route::delete('/catalog/{id}', [AdminGifts::class, 'deactivate']);
+    Route::post('/catalog/{id}/activate', [AdminGifts::class, 'activate']);
     Route::get('/transactions', [AdminGifts::class, 'transactions']);
     Route::get('/transactions/{reference}/audit', [AdminGifts::class, 'audit']);
     Route::post('/transactions/{reference}/actions', [AdminGifts::class, 'action']);

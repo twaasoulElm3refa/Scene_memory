@@ -34,7 +34,7 @@ class GiftController extends Controller
             return $this->success([]);
         }
 
-        return $this->success(VirtualGift::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get());
+        return $this->success(VirtualGift::where('is_active', true)->orderBy('sort_order')->orderBy('id')->get())->header('Cache-Control', 'no-store');
     }
 
     public function wallet(SendVirtualGiftRequest $request)

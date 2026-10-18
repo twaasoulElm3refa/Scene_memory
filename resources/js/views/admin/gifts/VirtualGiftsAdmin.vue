@@ -8,25 +8,22 @@
             <template v-if="tab === 'catalog'">
                 <form class="gift-panel" @submit.prevent="save">
                     <h2>{{ form.id ? t('gifts.edit') : t('gifts.create') }}</h2>
-                    <label>{{ t('gifts.name') }} <input v-model="form.name" required maxlength="120" /></label>
-                    <label>{{ t('gifts.catalogCode') }} <input v-model="form.slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxlength="100" /></label>
-                    <label>{{ t('gifts.description') }} <textarea v-model="form.description" maxlength="2000" /></label>
-                    <label>{{ t('gifts.price') }} <input v-model="form.price" required inputmode="decimal" pattern="[0-9]+(\.[0-9]{1,2})?" /></label>
-                    <label>{{ t('gifts.currency') }} <select v-model="form.currency"><option v-for="currency in currencies" :key="currency">{{ currency }}</option></select></label>
-                    <label>{{ t('gifts.order') }} <input v-model.number="form.sort_order" type="number" min="0" step="1" required /></label>
-                    <label><input v-model="form.is_active" type="checkbox" /> {{ t('gifts.active') }}</label>
-                    <label>{{ t('gifts.image') }} <input ref="imageInput" type="file" accept="image/jpeg,image/png,image/webp" @change="image = $event.target.files[0] || null" /></label>
-                    <label>{{ t('gifts.language') }} <select v-model="editLocale"><option v-for="language in languages" :key="language">{{ language }}</option></select></label>
-                    <label>{{ t('gifts.translatedName') }} <input :value="form.translations[editLocale]?.name || ''" maxlength="120" @input="translation('name', $event.target.value)" /></label>
-                    <label>{{ t('gifts.translatedDescription') }} <textarea :value="form.translations[editLocale]?.description || ''" maxlength="2000" @input="translation('description', $event.target.value)" /></label>
-                    <div><button :disabled="busy">{{ t('gifts.save') }}</button> <button type="button" @click="reset">{{ t('gifts.create') }}</button></div>
+                    <div class="gift-form-fields">
+                        <label>{{ t('gifts.name') }} <input v-model.trim="form.name" required maxlength="120" /></label>
+                        <label>{{ t('gifts.price') }} (USD) <input v-model="form.price" required type="number" min="0.01" max="999999.99" step="0.01" inputmode="decimal" /></label>
+                        <label class="gift-image-field">{{ t('gifts.image') }} <input ref="imageInput" type="file" accept="image/jpeg,image/png,image/webp" :required="!form.id" @change="chooseImage" /></label>
+                        <img v-if="imagePreview || form.image_url" class="gift-preview" :src="imagePreview || toAssetUrl(form.image_url)" alt="" />
+                    </div>
+                    <div class="gift-actions"><button class="gift-primary" :disabled="busy">{{ form.id ? (locale === 'en' ? 'Save Changes' : t('gifts.save')) : t('gifts.create') }}</button><button v-if="form.id" type="button" :disabled="busy" @click="reset">{{ t('gifts.cancel') }}</button></div>
                 </form>
-                <article v-for="gift in catalog" :key="gift.id" class="gift-panel gift-row">
-                    <img v-if="gift.image_url" :src="toAssetUrl(gift.image_url)" alt="" />
-                    <strong>{{ gift.name }} · {{ money(gift.price_minor, gift.currency) }}</strong>
-                    <span>{{ gift.is_active ? t('gifts.active') : t('gifts.inactive') }}</span>
-                    <button @click="edit(gift)">{{ t('gifts.edit') }}</button><button :disabled="busy || !gift.is_active" @click="deactivate(gift)">{{ t('gifts.deactivate') }}</button>
-                </article>
+                <p v-if="notice" role="status">{{ notice }}</p>
+                <div class="gift-admin-grid">
+                    <article v-for="gift in catalog" :key="gift.id" class="gift-panel gift-card">
+                        <img v-if="gift.image_url" :src="toAssetUrl(gift.image_url)" alt="" />
+                        <div><strong>{{ gift.name }}</strong><p>{{ money(gift.price_minor, gift.currency) }}</p><span class="gift-status" :class="{ inactive: !gift.is_active }">{{ gift.is_active ? t('gifts.active') : t('gifts.inactive') }}</span></div>
+                        <div class="gift-actions"><button :disabled="busy" @click="edit(gift)">{{ t('gifts.edit') }}</button><button :disabled="busy" @click="toggle(gift)">{{ gift.is_active ? t('gifts.deactivate') : (locale === 'en' ? 'Activate' : t('gifts.active')) }}</button></div>
+                    </article>
+                </div>
             </template>
             <template v-if="tab === 'transactions'">
                 <form class="gift-filters" @submit.prevent="transactionPage = 1; loadTransactions()">
@@ -84,29 +81,31 @@
     </AdminLayout>
 </template>
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import { giftAdminRequest, giftMoney } from '@/services/virtualGiftService';
 import { toAssetUrl } from '@/services/runtimeUrls';
 const { t, locale } = useI18n();
-const panels = ['catalog','transactions','report','withdrawals'], currencies = ['USD','EUR','GBP','EGP','SAR','AED'], languages = ['ar','de','en','es','fa','fr','hi','it','ja','ru','tr','ur','zh'];
+const panels = ['catalog','transactions','report','withdrawals'];
 const statuses = ['pending','paid','failed','cancelled','partially_refunded','refunded','reversed'];
 const buckets = ['pending','available','reserved','settled','reversed','recovery'];
 const financialLabels = [['gross_payments_minor','gross'],['gross_minor','total'],['commission_minor','commission'],['recipient_minor','recipientEarnings'],['processing_fee_minor','processingFees'],['platform_net_minor','platformNet'],['wallet_volume_minor','walletVolume'],['paypal_volume_minor','paypalVolume'],['refunded_minor','refunds']];
-const blank = () => ({ name: '', slug: '', description: '', price: '', currency: 'USD', sort_order: 0, is_active: true, translations: {} });
-const form = ref(blank()), image = ref(null), imageInput = ref(null), editLocale = ref('ar'), tab = ref('catalog'), catalog = ref([]), transactions = ref({}), report = ref(null), withdrawals = ref({});
-const error = ref(''), busy = ref(false), status = ref(''), method = ref(''), recipientFilter = ref(''), reviewOnly = ref(false), transactionPage = ref(1), recipientPage = ref(1), withdrawalPage = ref(1), audit = ref(null), refundTarget = ref(null), reviewTarget = ref(null), reviewAction = ref('clear_review'), proof = ref(''), recoveryPrice = ref(''), payoutProof = ref('');
+const blank = () => ({ name: '', price: '' });
+const form = ref(blank()), image = ref(null), imagePreview = ref(''), imageInput = ref(null), tab = ref('catalog'), catalog = ref([]), transactions = ref({}), report = ref(null), withdrawals = ref({});
+const error = ref(''), notice = ref(''), busy = ref(false), status = ref(''), method = ref(''), recipientFilter = ref(''), reviewOnly = ref(false), transactionPage = ref(1), recipientPage = ref(1), withdrawalPage = ref(1), audit = ref(null), refundTarget = ref(null), reviewTarget = ref(null), reviewAction = ref('clear_review'), proof = ref(''), recoveryPrice = ref(''), payoutProof = ref('');
 const toMinor = (value) => { const match = /^(\d+)(?:\.(\d{1,2}))?$/.exec(String(value)); if (!match) throw new Error(); const amount = Number(match[1]) * 100 + Number((match[2] || '').padEnd(2, '0')); if (!Number.isSafeInteger(amount) || amount < 1 || amount > 99999999) throw new Error(); return amount; };
 const recoveryAmount = computed(() => { try { return toMinor(recoveryPrice.value); } catch { return 0; } });
 const money = (minor, currency, precision = 2) => giftMoney(minor, currency, locale.value, precision ?? 2);
 const eventLabel = (type) => t(`gifts.${({ created: 'create', delivered: 'sentSuccess', processing_fee: 'processingFees', released: 'available', refunded: 'refunded', reversed: 'reversed', reversal_already_covered: 'refunded', refund_requested: 'refund', withdrawal_reserved: 'reserved', withdrawal_approved: 'approved', withdrawal_paid: 'settled', withdrawal_rejected: 'rejected', withdrawal_cancelled: 'cancelled', dispute: 'review', review_cleared: 'clearReview', recovered: 'recovery', failed: 'failed', cancelled: 'cancelled' })[type] || 'audit'}`);
-const run = async (fn) => { busy.value = true; error.value = ''; try { await fn(); } catch { error.value = t('gifts.adminError'); } finally { busy.value = false; } };
-function reset() { form.value = blank(); image.value = null; if (imageInput.value) imageInput.value.value = ''; }
-function edit(gift) { form.value = { ...gift, price: `${Math.floor(gift.price_minor / 100)}.${String(gift.price_minor % 100).padStart(2,'0')}`, translations: JSON.parse(JSON.stringify({ ...(gift.translations || {}) })) }; image.value = null; if (imageInput.value) imageInput.value.value = ''; window.scrollTo({ top: 0, behavior: 'auto' }); }
-function translation(key, value) { form.value.translations[editLocale.value] = { ...form.value.translations[editLocale.value], [key]: value }; }
-async function save() { await run(async () => { const data = new FormData(); for (const key of ['slug','name','description','currency','sort_order']) data.append(key, form.value[key] ?? ''); data.append('is_active', form.value.is_active ? '1' : '0'); data.append('price_minor', String(toMinor(form.value.price))); data.append('translations', JSON.stringify(form.value.translations)); if (image.value) data.append('image', image.value); await giftAdminRequest('post', form.value.id ? `/catalog/${form.value.id}` : '/catalog', data); reset(); catalog.value = await giftAdminRequest('get', '/catalog'); }); }
-async function deactivate(gift) { await run(async () => { await giftAdminRequest('delete', `/catalog/${gift.id}`); catalog.value = await giftAdminRequest('get', '/catalog'); }); }
+const failureMessage = (failure) => Object.values(failure?.response?.data?.errors || {}).flat().join(' ') || failure?.response?.data?.message || failure?.message || t('gifts.adminError');
+const run = async (fn) => { if (busy.value) return; busy.value = true; error.value = ''; try { await fn(); } catch (failure) { error.value = failureMessage(failure); } finally { busy.value = false; } };
+function clearPreview() { if (imagePreview.value) URL.revokeObjectURL(imagePreview.value); imagePreview.value = ''; }
+function chooseImage(event) { clearPreview(); image.value = event.target.files[0] || null; if (image.value) imagePreview.value = URL.createObjectURL(image.value); }
+function reset() { form.value = blank(); image.value = null; clearPreview(); if (imageInput.value) imageInput.value.value = ''; }
+function edit(gift) { reset(); form.value = { id: gift.id, name: gift.name, price: (gift.price_minor / 100).toFixed(2), image_url: gift.image_url }; window.scrollTo({ top: 0, behavior: 'auto' }); }
+async function save() { await run(async () => { notice.value = ''; const data = new FormData(); data.append('name', form.value.name); data.append('price', form.value.price); if (image.value) data.append('image', image.value); const editing = Boolean(form.value.id); const saved = await giftAdminRequest('post', editing ? `/catalog/${form.value.id}` : '/catalog', data); catalog.value = editing ? catalog.value.map((gift) => gift.id === saved.id ? saved : gift) : [...catalog.value, saved]; reset(); notice.value = editing ? (locale.value === 'en' ? 'Gift updated.' : t('gifts.save')) : (locale.value === 'en' ? 'Gift created.' : t('gifts.create')); catalog.value = await giftAdminRequest('get', '/catalog'); }); }
+async function toggle(gift) { await run(async () => { await giftAdminRequest(gift.is_active ? 'delete' : 'post', `/catalog/${gift.id}${gift.is_active ? '' : '/activate'}`); catalog.value = await giftAdminRequest('get', '/catalog'); }); }
 async function loadTransactions() { await run(async () => { transactions.value = await giftAdminRequest('get', '/transactions', null, { page: transactionPage.value, ...(status.value ? {status: status.value} : {}), ...(method.value ? {payment_method: method.value} : {}), ...(recipientFilter.value ? {recipient_user_id: recipientFilter.value} : {}), ...(reviewOnly.value ? {review_required: 1} : {}) }); }); }
 async function loadReport() { await run(async () => { report.value = await giftAdminRequest('get', '/report', null, {page: recipientPage.value}); }); }
 async function loadWithdrawals() { await run(async () => { withdrawals.value = await giftAdminRequest('get', '/withdrawals', null, {page: withdrawalPage.value}); }); }
@@ -115,7 +114,20 @@ async function loadAudit(gift) { await run(async () => { audit.value = await gif
 async function payout(withdrawal, newStatus, reference) { await run(async () => { await giftAdminRequest('post', `/withdrawals/${withdrawal.reference}`, {status: newStatus, ...(reference ? {payout_reference: reference} : {})}); withdrawals.value = await giftAdminRequest('get', '/withdrawals', null, {page: withdrawalPage.value}); }); }
 async function load() { if (tab.value === 'catalog') await run(async () => { catalog.value = await giftAdminRequest('get', '/catalog'); }); else if (tab.value === 'transactions') await loadTransactions(); else if (tab.value === 'report') await loadReport(); else await loadWithdrawals(); }
 onMounted(load);
+onUnmounted(clearPreview);
 </script>
 <style scoped>
 .gifts-admin { color: #172036; padding: 24px; max-width: 1200px; margin: auto; } h1 { font-size: 1.8rem; } h2 { font-size: 1.2rem; } nav, .gift-actions, .gift-filters, .gift-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-block: 16px; } .gift-panel { padding: 20px; border: 1px solid #d9e8e3; border-radius: 16px; background: white; margin-block: 16px; } form.gift-panel { display: grid; gap: 12px; max-width: 650px; } label { display: grid; gap: 4px; } input:not([type=checkbox]), select, textarea { padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; max-width: 100%; } button { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ecfdf5; color: #047857; } button:disabled { opacity: .5; } button[aria-pressed=true] { background: #047857; color: white; } .gift-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; } .gift-row img { width: 56px; height: 56px; object-fit: contain; } [role=alert] { color: #b91c1c; } @media(max-width: 600px) { .gifts-admin { padding: 12px; } }
+.gifts-admin form.gift-panel { max-width: none; gap: 16px; }
+.gift-form-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: end; }
+.gift-image-field { grid-column: 1 / 2; }
+.gift-preview { width: 88px; height: 88px; object-fit: contain; border: 1px solid #d9e8e3; border-radius: 12px; }
+.gift-primary { background: #047857; color: white; border-color: #047857; }
+.gift-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.gift-card { display: grid; justify-items: start; gap: 12px; margin: 0; }
+.gift-card > img { width: 100%; height: 112px; object-fit: contain; }
+.gift-card p { margin: 4px 0; }
+.gift-status { display: inline-block; padding: 3px 10px; border-radius: 99px; color: #047857; background: #ecfdf5; }
+.gift-status.inactive { color: #64748b; background: #f1f5f9; }
+@media(max-width: 600px) { .gift-form-fields { grid-template-columns: 1fr; } }
 </style>

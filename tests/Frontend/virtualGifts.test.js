@@ -77,20 +77,45 @@ describe('virtual gifts', () => {
         expect(document.querySelector('.gift-confirm').disabled).toBe(true);
     });
 
-    it('uses the existing admin client to submit editable prices and translations', async () => {
+    it('submits only the three gift fields and refreshes the catalog', async () => {
         giftAdminRequest.mockResolvedValue(catalog);
         await mount(Admin);
         const form = document.querySelector('form');
         const inputs = form.querySelectorAll('input');
-        for (const [index, value] of [[0, 'Edited Coffee'], [1, 'edited-coffee'], [2, '3.25']]) { inputs[index].value = value; inputs[index].dispatchEvent(new Event('input', { bubbles: true })); }
+        expect(inputs).toHaveLength(3);
+        for (const [index, value] of [[0, 'Edited Coffee'], [1, '3.25']]) { inputs[index].value = value; inputs[index].dispatchEvent(new Event('input', { bubbles: true })); }
         await settle(); form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); await settle();
         const call = giftAdminRequest.mock.calls.find(([method]) => method === 'post');
-        expect(call[2].get('price_minor')).toBe('325'); expect(call[2].get('name')).toBe('Edited Coffee'); expect(call[2].get('translations')).toBe('{}');
+        expect([...call[2].keys()]).toEqual(['name', 'price']);
+        expect(call[2].get('price')).toBe('3.25'); expect(call[2].get('name')).toBe('Edited Coffee');
+        expect(giftAdminRequest).toHaveBeenCalledWith('get', '/catalog');
+    });
+
+    it('shows validation details instead of a fake success', async () => {
+        giftAdminRequest.mockResolvedValueOnce(catalog).mockRejectedValueOnce({ response: { data: { errors: { price: ['Enter a valid price.'] } } } });
+        await mount(Admin);
+        const form = document.querySelector('form');
+        form.querySelector('input').value = 'Rose';
+        form.querySelector('input').dispatchEvent(new Event('input', { bubbles: true }));
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); await settle();
+        expect(document.querySelector('[role=alert]').textContent).toContain('Enter a valid price.');
+        expect(document.querySelector('main [role=status]')).toBeNull();
+    });
+
+    it('distinguishes a catalog error from an empty catalog and allows retry', async () => {
+        giftRequest.mockRejectedValueOnce({ response: { data: { message: 'Catalog unavailable' } } });
+        await mount(Modal, { eventId: 7, recipient });
+        expect(document.querySelector('dialog').textContent).toContain('Catalog unavailable');
+        expect(document.querySelector('dialog').textContent).not.toContain(messages.en.empty);
+        document.querySelector('dialog button:not([aria-label])').click(); await settle();
+        expect(document.querySelectorAll('.gift-catalog button')).toHaveLength(1);
     });
 
     it('preserves reduced-motion and responsive gift layouts', () => {
         const source = readFileSync('resources/js/components/gifts/VirtualGiftModal.vue', 'utf8');
         expect(source).toContain('prefers-reduced-motion: reduce'); expect(source).toContain('@media(max-width: 450px)'); expect(source).toContain('animation: none');
+        expect(source).toContain('position: fixed; inset: 0; margin: auto;');
+        expect(source).toContain('<Teleport to="body">');
         const event = readFileSync('resources/js/views/home/single_event.vue', 'utf8');
         expect(event).toContain(':recipient="event.user"'); expect(event).toContain(':recipient="comment.user"');
     });

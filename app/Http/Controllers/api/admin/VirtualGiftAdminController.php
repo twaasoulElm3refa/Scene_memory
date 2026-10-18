@@ -16,6 +16,8 @@ use App\Services\VirtualGiftService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class VirtualGiftAdminController extends Controller
@@ -24,32 +26,59 @@ class VirtualGiftAdminController extends Controller
 
     public function index()
     {
-        return $this->success(VirtualGift::orderBy('sort_order')->orderBy('id')->get());
+        return $this->success(VirtualGift::orderBy('sort_order')->orderBy('id')->get())->header('Cache-Control', 'no-store');
     }
 
     public function save(Request $request, ?int $id = null)
     {
         $gift = $id ? VirtualGift::findOrFail($id) : new VirtualGift;
-        if (is_string($request->input('translations'))) {
-            $decoded = json_decode($request->input('translations'), true);
-            $request->merge(['translations' => $decoded ?? $request->input('translations')]);
-        }
         $data = $request->validate([
-            'slug' => ['required', 'string', 'max:100', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('virtual_gifts')->ignore($gift->id)],
-            'name' => 'required|string|max:120', 'description' => 'nullable|string|max:2000',
-            'price_minor' => 'required|integer|min:1|max:99999999', 'currency' => ['required', Rule::in(config('virtual_gifts.currencies'))],
-            'is_active' => 'required|boolean', 'sort_order' => 'required|integer|min:0|max:100000',
-            'translations' => 'nullable|array:ar,de,en,es,fa,fr,hi,it,ja,ru,tr,ur,zh',
-            'translations.*' => 'array:name,description', 'translations.*.name' => 'nullable|string|max:120', 'translations.*.description' => 'nullable|string|max:2000',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048|dimensions:max_width=4096,max_height=4096',
+            'name' => 'required|string|max:120',
+            'price' => ['required_without:price_minor', 'regex:/^(?:0|[1-9][0-9]{0,5})(?:\.[0-9]{1,2})?$/'],
+            'price_minor' => 'required_without:price|integer|min:1|max:99999999',
+            'image' => [$id ? 'nullable' : 'required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048', 'dimensions:max_width=4096,max_height=4096'],
         ]);
-        unset($data['image']);
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('virtual-gifts', 'public');
+        $minor = isset($data['price'])
+            ? (int) explode('.', $data['price'])[0] * 100 + (int) str_pad(explode('.', $data['price'])[1] ?? '0', 2, '0')
+            : (int) $data['price_minor'];
+        if ($minor < 1 || $minor > 99999999) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['price' => 'Enter a USD price between 0.01 and 999999.99.']);
         }
-        $gift->fill($data)->save();
+
+        $newImage = null;
+        try {
+            if ($request->hasFile('image')) {
+                $newImage = $request->file('image')->store('virtual-gifts', 'public');
+                if (! $newImage) throw new \RuntimeException('Gift image could not be stored.');
+            }
+            $gift->name = $data['name'];
+            $gift->price_minor = $minor;
+            if (! $id) {
+                $gift->slug = Str::limit(Str::slug($data['name']) ?: 'gift', 72, '').'-'.Str::lower(Str::random(12));
+                $gift->currency = 'USD';
+                $gift->is_active = true;
+                $gift->sort_order = (int) VirtualGift::max('sort_order') + 1;
+            }
+            if ($newImage) {
+                $gift->image_path = $newImage;
+            }
+            $gift->save();
+        } catch (\Throwable $exception) {
+            if ($newImage) Storage::disk('public')->delete($newImage);
+            Log::error('gift_catalog_save_failed', ['exception' => $exception::class]);
+
+            return $this->error('Gift could not be saved. Please try again or contact support.', 500);
+        }
 
         return $this->success($gift->fresh());
+    }
+
+    public function activate(int $id)
+    {
+        $gift = VirtualGift::findOrFail($id);
+        $gift->update(['is_active' => true]);
+
+        return $this->success($gift);
     }
 
     public function deactivate(int $id)

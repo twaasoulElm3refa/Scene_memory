@@ -276,16 +276,30 @@ class VirtualGiftsTest extends TestCase
     public function test_admin_catalog_authorization_upload_validation_and_deactivation(): void
     {
         $this->getJson('/api/v1/admin/gifts/catalog')->assertUnauthorized();
+        $historical = $this->paid();
         Sanctum::actingAs(User::factory()->create(['role' => 'admin']));
         Storage::fake('public');
-        $data = ['slug' => 'new-gift', 'name' => 'New Gift', 'price_minor' => 250, 'currency' => 'USD', 'sort_order' => 4, 'is_active' => true, 'translations' => ['ar' => ['name' => 'هدية']]];
-        $this->postJson('/api/v1/admin/gifts/catalog', $data + ['image' => UploadedFile::fake()->image('gift.png')])->assertOk();
-        $newGift = VirtualGift::where('slug', 'new-gift')->sole();
+        $data = ['name' => 'New Gift', 'price' => '2.50'];
+        $response = $this->postJson('/api/v1/admin/gifts/catalog', $data + ['image' => UploadedFile::fake()->image('gift.png')])->assertOk()->assertJsonPath('data.price_minor', 250)->assertJsonPath('data.currency', 'USD')->assertJsonPath('data.is_active', true);
+        $newGift = VirtualGift::findOrFail($response->json('data.id'));
+        $this->assertMatchesRegularExpression('/^new-gift-[a-z0-9]{12}$/', $newGift->slug);
         Storage::disk('public')->assertExists($newGift->image_path);
-        $this->postJson('/api/v1/admin/gifts/catalog', array_merge($data, ['slug' => 'invalid-gift', 'price_minor' => -1]))->assertUnprocessable();
-        $this->postJson('/api/v1/admin/gifts/catalog', array_merge($data, ['slug' => 'unsafe-gift', 'image' => UploadedFile::fake()->create('unsafe.svg', 1, 'image/svg+xml')]))->assertUnprocessable();
+        $this->assertSame(Storage::disk('public')->url($newGift->image_path), $newGift->image_url);
+        $this->getJson('/api/virtual-gifts')->assertOk()->assertJsonFragment(['id' => $newGift->id]);
+        $this->postJson('/api/v1/admin/gifts/catalog', $data)->assertUnprocessable()->assertJsonValidationErrors('image');
+        $this->postJson('/api/v1/admin/gifts/catalog', ['name' => 'Invalid', 'price' => '-1', 'image' => UploadedFile::fake()->image('gift.png')])->assertUnprocessable();
+        $this->postJson('/api/v1/admin/gifts/catalog', $data + ['image' => UploadedFile::fake()->create('unsafe.svg', 1, 'image/svg+xml')])->assertUnprocessable();
+        $this->postJson('/api/v1/admin/gifts/catalog/'.$newGift->id, ['name' => 'Updated Gift', 'price' => '3.25'])->assertOk();
+        $this->assertSame(325, $newGift->fresh()->price_minor);
+        $this->assertSame('Updated Gift', $newGift->fresh()->name);
+        $this->postJson('/api/v1/admin/gifts/catalog/'.$this->gift->id, ['name' => 'Edited Coffee', 'price' => '4.00'])->assertOk();
+        $this->assertSame('Coffee', $historical->fresh()->gift_snapshot['name']);
+        $this->assertSame(100, $historical->fresh()->unit_price_minor);
         $this->deleteJson('/api/v1/admin/gifts/catalog/'.$newGift->id)->assertOk();
         $this->assertFalse($newGift->fresh()->is_active);
+        $this->getJson('/api/virtual-gifts')->assertOk()->assertJsonMissing(['id' => $newGift->id]);
+        $this->postJson('/api/v1/admin/gifts/catalog/'.$newGift->id.'/activate')->assertOk();
+        $this->getJson('/api/virtual-gifts')->assertOk()->assertJsonFragment(['id' => $newGift->id]);
     }
 
     public function test_histories_and_status_do_not_expose_other_users_private_financial_data(): void
