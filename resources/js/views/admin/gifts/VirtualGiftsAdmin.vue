@@ -67,16 +67,6 @@
                 <section class="gift-panel"><h2>{{ t('gifts.supportedEvents') }}</h2><p v-for="row in report.supported_events" :key="row.event_id + row.currency">#{{ row.event_id }} · {{ money(row.gross_minor, row.currency) }}</p></section>
                 <section class="gift-panel"><h2>{{ t('gifts.recipients') }}</h2><article v-for="row in report.recipients.data" :key="row.recipient_user_id + row.currency"><strong>#{{ row.recipient_user_id }} · {{ money(row.entitlement_minor, row.currency) }}</strong><p v-for="bucket in ['pending','available','reserved','settled','recovery']" :key="bucket">{{ t(`gifts.${bucket}`) }}: {{ money(row[`${bucket}_minor`], row.currency) }}</p></article><button :disabled="recipientPage <= 1" @click="recipientPage--; loadReport()">{{ t('gifts.previous') }}</button><button :disabled="recipientPage >= report.recipients.last_page" @click="recipientPage++; loadReport()">{{ t('gifts.next') }}</button></section>
             </template>
-            <template v-if="tab === 'withdrawals'">
-                <article v-for="withdrawal in withdrawals.data || []" :key="withdrawal.reference" class="gift-panel">
-                    <p>#{{ withdrawal.user_id }} · {{ money(withdrawal.amount_minor, withdrawal.currency) }} · {{ t(`gifts.${withdrawal.status}`) }}</p>
-                    <p>{{ withdrawal.payment_details?.method }} · {{ withdrawal.payment_details?.destination }}</p>
-                    <button v-if="withdrawal.status === 'pending'" :disabled="busy" @click="payout(withdrawal, 'approved')">{{ t('gifts.approve') }}</button>
-                    <button v-if="['pending','approved'].includes(withdrawal.status)" :disabled="busy" @click="payout(withdrawal, 'rejected')">{{ t('gifts.reject') }}</button>
-                    <form v-if="withdrawal.status === 'approved'" @submit.prevent="payout(withdrawal, 'paid', payoutProof)"><label>{{ t('gifts.proof') }} <input v-model="payoutProof" required maxlength="160" /></label><button :disabled="busy">{{ t('gifts.recordPayout') }}</button></form>
-                </article>
-                <button :disabled="withdrawalPage <= 1" @click="withdrawalPage--; loadWithdrawals()">{{ t('gifts.previous') }}</button><button :disabled="withdrawalPage >= withdrawals.last_page" @click="withdrawalPage++; loadWithdrawals()">{{ t('gifts.next') }}</button>
-            </template>
         </main>
     </AdminLayout>
 </template>
@@ -87,13 +77,13 @@ import AdminLayout from '@/layouts/AdminLayout.vue';
 import { giftAdminRequest, giftMoney } from '@/services/virtualGiftService';
 import { toAssetUrl } from '@/services/runtimeUrls';
 const { t, locale } = useI18n();
-const panels = ['catalog','transactions','report','withdrawals'];
+const panels = ['catalog','transactions','report'];
 const statuses = ['pending','paid','failed','cancelled','partially_refunded','refunded','reversed'];
 const buckets = ['pending','available','reserved','settled','reversed','recovery'];
 const financialLabels = [['gross_payments_minor','gross'],['gross_minor','total'],['commission_minor','commission'],['recipient_minor','recipientEarnings'],['processing_fee_minor','processingFees'],['platform_net_minor','platformNet'],['wallet_volume_minor','walletVolume'],['paypal_volume_minor','paypalVolume'],['refunded_minor','refunds']];
 const blank = () => ({ name: '', price: '' });
-const form = ref(blank()), image = ref(null), imagePreview = ref(''), imageInput = ref(null), tab = ref('catalog'), catalog = ref([]), transactions = ref({}), report = ref(null), withdrawals = ref({});
-const error = ref(''), notice = ref(''), busy = ref(false), status = ref(''), method = ref(''), recipientFilter = ref(''), reviewOnly = ref(false), transactionPage = ref(1), recipientPage = ref(1), withdrawalPage = ref(1), audit = ref(null), refundTarget = ref(null), reviewTarget = ref(null), reviewAction = ref('clear_review'), proof = ref(''), recoveryPrice = ref(''), payoutProof = ref('');
+const form = ref(blank()), image = ref(null), imagePreview = ref(''), imageInput = ref(null), tab = ref('catalog'), catalog = ref([]), transactions = ref({}), report = ref(null);
+const error = ref(''), notice = ref(''), busy = ref(false), status = ref(''), method = ref(''), recipientFilter = ref(''), reviewOnly = ref(false), transactionPage = ref(1), recipientPage = ref(1), audit = ref(null), refundTarget = ref(null), reviewTarget = ref(null), reviewAction = ref('clear_review'), proof = ref(''), recoveryPrice = ref('');
 const toMinor = (value) => { const match = /^(\d+)(?:\.(\d{1,2}))?$/.exec(String(value)); if (!match) throw new Error(); const amount = Number(match[1]) * 100 + Number((match[2] || '').padEnd(2, '0')); if (!Number.isSafeInteger(amount) || amount < 1 || amount > 99999999) throw new Error(); return amount; };
 const recoveryAmount = computed(() => { try { return toMinor(recoveryPrice.value); } catch { return 0; } });
 const money = (minor, currency, precision = 2) => giftMoney(minor, currency, locale.value, precision ?? 2);
@@ -108,11 +98,9 @@ async function save() { await run(async () => { notice.value = ''; const data = 
 async function toggle(gift) { await run(async () => { await giftAdminRequest(gift.is_active ? 'delete' : 'post', `/catalog/${gift.id}${gift.is_active ? '' : '/activate'}`); catalog.value = await giftAdminRequest('get', '/catalog'); }); }
 async function loadTransactions() { await run(async () => { transactions.value = await giftAdminRequest('get', '/transactions', null, { page: transactionPage.value, ...(status.value ? {status: status.value} : {}), ...(method.value ? {payment_method: method.value} : {}), ...(recipientFilter.value ? {recipient_user_id: recipientFilter.value} : {}), ...(reviewOnly.value ? {review_required: 1} : {}) }); }); }
 async function loadReport() { await run(async () => { report.value = await giftAdminRequest('get', '/report', null, {page: recipientPage.value}); }); }
-async function loadWithdrawals() { await run(async () => { withdrawals.value = await giftAdminRequest('get', '/withdrawals', null, {page: withdrawalPage.value}); }); }
 async function action(gift, operation, extra = {}) { await run(async () => { await giftAdminRequest('post', `/transactions/${gift.reference}/actions`, {action: operation, ...extra}); transactions.value = await giftAdminRequest('get', '/transactions', null, {page: transactionPage.value}); }); }
 async function loadAudit(gift) { await run(async () => { audit.value = await giftAdminRequest('get', `/transactions/${gift.reference}/audit`); }); }
-async function payout(withdrawal, newStatus, reference) { await run(async () => { await giftAdminRequest('post', `/withdrawals/${withdrawal.reference}`, {status: newStatus, ...(reference ? {payout_reference: reference} : {})}); withdrawals.value = await giftAdminRequest('get', '/withdrawals', null, {page: withdrawalPage.value}); }); }
-async function load() { if (tab.value === 'catalog') await run(async () => { catalog.value = await giftAdminRequest('get', '/catalog'); }); else if (tab.value === 'transactions') await loadTransactions(); else if (tab.value === 'report') await loadReport(); else await loadWithdrawals(); }
+async function load() { if (tab.value === 'catalog') await run(async () => { catalog.value = await giftAdminRequest('get', '/catalog'); }); else if (tab.value === 'transactions') await loadTransactions(); else if (tab.value === 'report') await loadReport(); }
 onMounted(load);
 onUnmounted(clearPreview);
 </script>

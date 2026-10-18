@@ -2,7 +2,8 @@
 
 return [
     'enabled' => env('VIRTUAL_GIFTS_ENABLED', true),
-    'holding_days' => (int) env('GIFT_HOLDING_DAYS', 7),
+    // Existing release_at values are retained; this applies to newly verified gifts.
+    'holding_hours' => max(24, (int) env('GIFT_HOLDING_HOURS', 24)),
     // MinorMoney and the current wallet use two decimal places. No FX is performed.
     'currencies' => ['USD', 'EUR', 'GBP', 'EGP', 'SAR', 'AED'],
     'paypal_currencies' => ['AUD', 'BRL', 'CAD', 'CNY', 'CZK', 'DKK', 'EUR', 'HKD', 'ILS', 'MYR', 'MXN', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'THB', 'USD'],

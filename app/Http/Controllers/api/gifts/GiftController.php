@@ -83,10 +83,10 @@ class GiftController extends Controller
     {
         $request->validate(['page' => 'sometimes|integer|min:1', 'per_page' => 'sometimes|integer|min:1|max:100']);
         $column = $request->routeIs('gifts.received') ? 'recipient_user_id' : 'sender_user_id';
-        $page = GiftTransaction::where($column, $request->user()->id)->with(['sender:id,name,image', 'recipient:id,name,image'])->latest('id')->paginate((int) $request->input('per_page', 20));
+        $page = GiftTransaction::where($column, $request->user()->id)->with(['sender:id,name,image', 'recipient:id,name,image', 'event:id,title,slug'])->latest('id')->paginate((int) $request->input('per_page', 20));
         $page->through(fn ($gift) => $this->serialize($gift));
 
-        return $this->success($page);
+        return $this->success($page)->header('Cache-Control', 'no-store');
     }
 
     public function eventSummary(int $event)
@@ -108,27 +108,33 @@ class GiftController extends Controller
     {
         $balances = GiftEarningEntry::where('recipient_user_id', $request->user()->id)->selectRaw('currency, SUM(pending_minor) pending_minor, SUM(available_minor) available_minor, SUM(reserved_minor) reserved_minor, SUM(settled_minor) settled_minor, SUM(reversed_minor) reversed_minor, SUM(recovery_minor) recovery_minor')->groupBy('currency')->get();
         $eligible = GiftEarningEntry::where('recipient_user_id', $request->user()->id)
-            ->whereHas('transaction', fn ($query) => $query->where('disputed', false)->where('review_required', false))
+            ->whereHas('transaction', fn ($query) => $query->whereIn('payment_status', ['paid', 'partially_refunded'])->where('delivery_status', 'delivered')->where('paid_at', '<=', now('UTC')->subHours(24))->where('disputed', false)->where('review_required', false))
             ->selectRaw('currency, SUM(available_minor) available_minor')->groupBy('currency')->pluck('available_minor', 'currency');
         $balances->each(function ($balance) use ($eligible, $request) {
             $balance->withdrawable_minor = $balance->recovery_minor > 0 || ! $request->user()->is_active ? 0 : (int) ($eligible[$balance->currency] ?? 0);
         });
+        $received = GiftTransaction::where('recipient_user_id', $request->user()->id)->whereNotNull('paid_at')->selectRaw('currency, SUM(gross_amount_minor-refunded_gross_minor) amount_minor')->groupBy('currency')->pluck('amount_minor', 'currency');
+        $withdrawn = GiftWithdrawal::where('user_id', $request->user()->id)->where('status', 'paid')->selectRaw('currency, SUM(amount_minor) amount_minor')->groupBy('currency')->pluck('amount_minor', 'currency');
+        $balances->each(function ($balance) use ($received, $withdrawn) {
+            $balance->total_received_minor = (int) ($received[$balance->currency] ?? 0);
+            $balance->total_withdrawn_minor = (int) ($withdrawn[$balance->currency] ?? 0);
+        });
         $wallet = Wallet::where('user_id', $request->user()->id)->first();
         $legacyBalance = $wallet ? app(MinorMoney::class)->fromDecimal((string) ($wallet->amount ?? '0')) : null;
 
-        return $this->success(['balances' => $balances, 'wallet' => $wallet ? ['balance_minor' => $wallet->balance_minor ?? $legacyBalance, 'currency' => $wallet->currency, 'is_consistent' => $wallet->balance_minor === null || $wallet->balance_minor === $legacyBalance] : null, 'holding_days' => config('virtual_gifts.holding_days')]);
+        return $this->success(['balances' => $balances, 'wallet' => $wallet ? ['balance_minor' => $wallet->balance_minor ?? $legacyBalance, 'currency' => $wallet->currency, 'is_consistent' => $wallet->balance_minor === null || $wallet->balance_minor === $legacyBalance] : null, 'holding_hours' => config('virtual_gifts.holding_hours')])->header('Cache-Control', 'no-store');
     }
 
     public function withdrawals(Request $request)
     {
         $page = GiftWithdrawal::where('user_id', $request->user()->id)->latest('id')->paginate(20);
 
-        return $this->success($page);
+        return $this->success($page)->header('Cache-Control', 'no-store');
     }
 
     public function withdraw(Request $request, GiftEarningsService $earnings)
     {
-        $data = $request->validate(['amount_minor' => 'required|integer|min:1|max:99999999', 'currency' => ['required', Rule::in(config('virtual_gifts.currencies'))], 'payment_details' => 'required|array:method,destination', 'payment_details.method' => 'required|string|max:100', 'payment_details.destination' => 'required|string|max:200', 'idempotency_key' => 'required|string|min:16|max:100']);
+        $data = $request->validate(['amount_minor' => 'required|integer|min:1|max:99999999', 'currency' => ['required', Rule::in(config('virtual_gifts.currencies'))], 'payment_details' => 'required|array:method,destination', 'payment_details.method' => ['required', 'string', 'min:2', 'max:100', 'regex:/[\pL\pN]/u'], 'payment_details.destination' => ['required', 'string', 'min:3', 'max:200', 'regex:/[\pL\pN]/u'], 'idempotency_key' => 'required|string|min:16|max:100']);
         $data['amount_minor'] = (int) $data['amount_minor'];
 
         return $this->attempt(fn () => $earnings->withdraw($request->user()->id, $data));
@@ -167,9 +173,9 @@ class GiftController extends Controller
 
     public function serialize(GiftTransaction $gift): array
     {
-        $gift->loadMissing(['sender:id,name,image', 'recipient:id,name,image']);
+        $gift->loadMissing(['sender:id,name,image', 'recipient:id,name,image', 'event:id,title,slug']);
 
-        return $gift->only(['reference', 'event_id', 'comment_id', 'target_type', 'gift_snapshot', 'quantity', 'unit_price_minor', 'gross_amount_minor', 'platform_commission_minor', 'recipient_earning_minor', 'currency', 'payment_method', 'payment_status', 'delivery_status', 'settlement_status', 'paid_at', 'delivered_at', 'release_at', 'refunded_gross_minor', 'created_at']) + ['sender' => $gift->sender?->only(['id', 'name']), 'recipient' => $gift->recipient?->only(['id', 'name']), 'can_capture' => $gift->sender_user_id === request()->user()?->id && $gift->payment_method === 'paypal'];
+        return $gift->only(['reference', 'event_id', 'comment_id', 'target_type', 'gift_snapshot', 'quantity', 'unit_price_minor', 'gross_amount_minor', 'platform_commission_minor', 'recipient_earning_minor', 'currency', 'payment_method', 'payment_status', 'delivery_status', 'settlement_status', 'paid_at', 'delivered_at', 'release_at', 'refunded_gross_minor', 'disputed', 'review_required', 'created_at']) + ['event_title' => $gift->event?->title, 'event_slug' => $gift->event?->slug, 'sender' => $gift->sender?->only(['id', 'name']), 'recipient' => $gift->recipient?->only(['id', 'name']), 'can_capture' => $gift->sender_user_id === request()->user()?->id && $gift->payment_method === 'paypal'];
     }
 
     private function attempt(callable $work)

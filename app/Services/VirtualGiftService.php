@@ -23,7 +23,7 @@ class VirtualGiftService
 
     public function create(int $senderId, array $input, string $method): GiftTransaction
     {
-        if (! in_array($method, ['wallet', 'paypal'], true) || config('virtual_gifts.holding_days') < 0) {
+        if (! in_array($method, ['wallet', 'paypal'], true) || config('virtual_gifts.holding_hours') < 24) {
             throw new CommerceException('Gift payment configuration is unavailable.', 503);
         }
 
@@ -145,11 +145,11 @@ class VirtualGiftService
                 $gift->review_required = true;
             }
             $at = now('UTC');
-            $holdingDays = (int) config('virtual_gifts.holding_days', 7);
-            if ($holdingDays < 0) {
-                throw new RuntimeException('Gift holding policy must be nonnegative.');
+            $holdingHours = (int) config('virtual_gifts.holding_hours', 24);
+            if ($holdingHours < 24) {
+                throw new RuntimeException('Gift holding policy must be at least 24 hours.');
             }
-            $releaseAt = $at->copy()->addDays($holdingDays);
+            $releaseAt = $at->copy()->addHours($holdingHours);
             $gift->forceFill(['payment_status' => 'paid', 'delivery_status' => 'delivered', 'settlement_status' => 'pending', 'paid_at' => $at, 'delivered_at' => $at, 'release_at' => $releaseAt])->save();
             $payment->forceFill(['status' => 'completed', 'paid_at' => $at, 'fulfilled_at' => $at, 'gateway_response' => $resource])->save();
             $order->update(['status' => 'completed', 'transaction_id' => $payment->capture_id, 'paid_at' => $at, 'fulfilled_at' => $at]);

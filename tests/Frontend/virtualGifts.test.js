@@ -6,6 +6,9 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import { readFileSync } from 'node:fs';
 import Modal from '../../resources/js/components/gifts/VirtualGiftModal.vue';
 import Admin from '../../resources/js/views/admin/gifts/VirtualGiftsAdmin.vue';
+import ProfileGifts from '../../resources/js/components/profile/ProfileGiftsEarnings.vue';
+import WithdrawalAdmin from '../../resources/js/views/admin/gifts/GiftWithdrawalsAdmin.vue';
+import ReturnPage from '../../resources/js/views/home/VirtualGifts.vue';
 import messages from '../../resources/js/i18n/virtualGifts';
 import { giftRequest, giftAdminRequest } from '../../resources/js/services/virtualGiftService';
 
@@ -19,7 +22,11 @@ let app;
 const settle = async () => { for (let index = 0; index < 15; index++) await Promise.resolve(); await nextTick(); };
 async function mount(component, props, locale = 'en') {
     const target = document.createElement('div'); document.body.append(target);
-    const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/:lang/gifts', component: { template: '<div />' } }] }); await router.push(`/${locale}/gifts`);
+    const router = createRouter({ history: createMemoryHistory(), routes: [
+        { path: '/:lang/gifts', component: { template: '<div />' } },
+        { path: '/:lang/profile', component: { template: '<div />' } },
+        { path: '/:lang/single_event/:slug', component: { template: '<div />' } },
+    ] }); await router.push(`/${locale}/gifts`);
     app = createApp(component, props); app.use(createI18n({ legacy: false, locale, messages: { [locale]: { gifts: messages[locale] } } })); app.use(router); app.mount(target); await settle(); return target;
 }
 const catalog = [{ id: 1, name: 'Coffee', slug: 'coffee', price_minor: 100, currency: 'USD', translations: { ar: { name: 'قهوة' } } }];
@@ -36,10 +43,42 @@ describe('virtual gifts', () => {
     it.each(Object.keys(messages))('has complete nonempty gift translations for %s', (locale) => {
         expect(Object.keys(messages[locale]).sort()).toEqual(Object.keys(messages.en).sort());
         expect(Object.values(messages[locale]).every((value) => typeof value === 'string' && value.length > 0)).toBe(true);
-        for (const path of ['resources/js/components/gifts/VirtualGiftModal.vue','resources/js/views/home/VirtualGifts.vue','resources/js/views/admin/gifts/VirtualGiftsAdmin.vue']) {
+        for (const path of ['resources/js/components/gifts/VirtualGiftModal.vue','resources/js/views/home/VirtualGifts.vue','resources/js/views/admin/gifts/VirtualGiftsAdmin.vue','resources/js/components/profile/ProfileGiftsEarnings.vue','resources/js/views/admin/gifts/GiftWithdrawalsAdmin.vue']) {
             const source = readFileSync(path, 'utf8');
             for (const match of source.matchAll(/gifts\.([A-Za-z_-]+)['"]/g)) expect(messages[locale][match[1]], match[1]).toBeTruthy();
         }
+    });
+
+    it('shows sent gifts in profile and keeps the withdrawal form in its earnings tab', async () => {
+        giftRequest.mockImplementation(async (_, path) => path === '/gifts/sent'
+            ? { data: [{ reference: 'sent-1', gift_snapshot: catalog[0], quantity: 1, recipient, event_title: 'Gift event', event_slug: 'gift-event', gross_amount_minor: 100, currency: 'USD', payment_method: 'wallet', payment_status: 'paid', delivery_status: 'delivered', created_at: '2026-10-18T10:00:00Z' }], current_page: 1, last_page: 1 }
+            : path === '/gifts/earnings' ? { balances: [{ currency: 'USD', pending_minor: 85, withdrawable_minor: 0, total_received_minor: 100, total_withdrawn_minor: 0 }] }
+                : { data: [], current_page: 1, last_page: 1 });
+        await mount(ProfileGifts);
+        expect(document.querySelectorAll('[role=tab]')).toHaveLength(2);
+        expect(document.querySelector('.gift-card').textContent).toContain('Gift event');
+        expect(document.querySelector('.gift-withdraw-form')).toBeNull();
+        document.querySelectorAll('[role=tab]')[1].click(); await settle();
+        expect(document.querySelector('.gift-withdraw-form')).not.toBeNull();
+        expect(document.querySelector('.gift-withdraw-form button').disabled).toBe(true);
+        expect(document.querySelector('.gift-balance').textContent).toContain('USD 0.85');
+    });
+
+    it('keeps the PayPal return page free of the withdrawal form', async () => {
+        await mount(ReturnPage);
+        expect(document.querySelector('.gift-withdraw-form')).toBeNull();
+        expect(document.querySelector('main').textContent).toContain(messages.en.paymentStatus);
+    });
+
+    it('lists masked admin withdrawals and reveals details only on request', async () => {
+        giftAdminRequest.mockImplementation(async (_, path) => path === '/withdrawals'
+            ? { data: [{ id: 5, reference: 'withdraw-1', user: { name: 'Recipient Name' }, user_id: 2, amount_minor: 85, currency: 'USD', payment_method: 'manual', destination_masked: '••••', status: 'pending', created_at: '2026-10-18T10:00:00Z' }], current_page: 1, last_page: 1 }
+            : { withdrawal: { id: 5, reference: 'withdraw-1', user: { name: 'Recipient Name' }, currency: 'USD', status: 'pending', payment_details: { method: 'manual', destination: 'Private account' } }, allocations: [], balance: { available_minor: 0, reserved_minor: 85 } });
+        await mount(WithdrawalAdmin);
+        expect(document.querySelector('.request-grid').textContent).toContain('••••');
+        expect(document.querySelector('main').textContent).not.toContain('Private account');
+        document.querySelector('.request-grid button').click(); await settle();
+        expect(document.querySelector('.detail').textContent).toContain('Private account');
     });
 
     it('shows the actual recipient, gift image selection, server price, and Arabic RTL', async () => {

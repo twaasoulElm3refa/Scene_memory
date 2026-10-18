@@ -48,14 +48,14 @@ class GiftEarningsService
         $count = 0;
         GiftEarningEntry::where('pending_minor', '>', 0)->where('release_at', '<=', now('UTC'))
             ->whereHas('recipient', fn ($query) => $query->where('is_active', true))
-            ->whereHas('transaction', fn ($query) => $query->whereIn('payment_status', ['paid', 'partially_refunded'])->where('disputed', false)->where('review_required', false))
+            ->whereHas('transaction', fn ($query) => $query->whereIn('payment_status', ['paid', 'partially_refunded'])->where('delivery_status', 'delivered')->whereNotNull('paid_at')->where('disputed', false)->where('review_required', false))
             ->orderBy('id')->limit($limit)->pluck('id')->each(function ($id) use (&$count): void {
                 $released = DB::transaction(function () use ($id): bool {
                     $candidate = GiftEarningEntry::findOrFail($id);
                     $user = User::whereKey($candidate->recipient_user_id)->lockForUpdate()->first();
                     $earning = GiftEarningEntry::lockForUpdate()->findOrFail($id);
                     $gift = $earning->transaction()->lockForUpdate()->firstOrFail();
-                    if (! $user?->is_active || ! $earning->pending_minor || $earning->release_at->isFuture() || $gift->disputed || $gift->review_required || ! in_array($gift->payment_status, ['paid', 'partially_refunded'], true)) {
+                    if (! $user?->is_active || ! $earning->pending_minor || $earning->release_at->isFuture() || ! $gift->paid_at || $gift->paid_at->copy()->addHours(24)->isFuture() || $gift->delivery_status !== 'delivered' || $gift->disputed || $gift->review_required || ! in_array($gift->payment_status, ['paid', 'partially_refunded'], true)) {
                         return false;
                     }
                     $this->move($earning, 'release:'.$gift->reference, 'released', ['pending' => -$earning->pending_minor, 'available' => $earning->pending_minor]);
@@ -88,8 +88,8 @@ class GiftEarningsService
             $earning = GiftEarningEntry::where('gift_transaction_id', $gift->id)->lockForUpdate()->firstOrFail();
             // Cancel outstanding payout reservations before making compensating entries.
             $withdrawalIds = DB::table('gift_withdrawal_allocations')->where('earning_entry_id', $earning->id)->pluck('withdrawal_id');
-            foreach (GiftWithdrawal::whereIn('id', $withdrawalIds)->whereIn('status', ['pending', 'approved'])->lockForUpdate()->get() as $withdrawal) {
-                $this->changeWithdrawal($withdrawal, 'rejected', null, null);
+            foreach (GiftWithdrawal::whereIn('id', $withdrawalIds)->whereIn('status', ['pending', 'approved', 'processing', 'failed'])->lockForUpdate()->get() as $withdrawal) {
+                $this->changeWithdrawal($withdrawal, 'rejected', null, null, 'Gift payment reversed.');
             }
             $earning->refresh();
             $cumulative = $gift->refunded_gross_minor + $refundGross;
@@ -135,11 +135,11 @@ class GiftEarningsService
             if ($entries->sum('recovery_minor') > 0) {
                 throw new CommerceException('Outstanding recovery requires administrator review.');
             }
-            $eligible = $entries->filter(fn ($entry) => $entry->available_minor > 0 && ! $entry->transaction->disputed && ! $entry->transaction->review_required);
+            $eligible = $entries->filter(fn ($entry) => $entry->available_minor > 0 && $entry->transaction->paid_at && $entry->transaction->paid_at->copy()->addHours(24)->isPast() && $entry->transaction->delivery_status === 'delivered' && in_array($entry->transaction->payment_status, ['paid', 'partially_refunded'], true) && ! $entry->transaction->disputed && ! $entry->transaction->review_required);
             if ($eligible->sum('available_minor') < $input['amount_minor']) {
                 throw new CommerceException('Insufficient available earnings.');
             }
-            $withdrawal = GiftWithdrawal::create(['reference' => (string) Str::uuid(), 'user_id' => $userId, 'idempotency_key' => $key, 'amount_minor' => $input['amount_minor'], 'currency' => $input['currency'], 'payment_details' => $input['payment_details']]);
+            $withdrawal = GiftWithdrawal::create(['reference' => (string) Str::uuid(), 'user_id' => $userId, 'idempotency_key' => $key, 'amount_minor' => $input['amount_minor'], 'currency' => $input['currency'], 'payment_details' => $input['payment_details'], 'available_balance_at_request_minor' => $eligible->sum('available_minor')]);
             $remaining = $input['amount_minor'];
             foreach ($eligible as $entry) {
                 $take = min($remaining, $entry->available_minor);
@@ -156,9 +156,9 @@ class GiftEarningsService
         }, 5);
     }
 
-    public function changeWithdrawal(GiftWithdrawal $original, string $status, ?int $actor, ?string $payoutReference): GiftWithdrawal
+    public function changeWithdrawal(GiftWithdrawal $original, string $status, ?int $actor, ?string $payoutReference, ?string $reason = null): GiftWithdrawal
     {
-        return DB::transaction(function () use ($original, $status, $actor, $payoutReference) {
+        return DB::transaction(function () use ($original, $status, $actor, $payoutReference, $reason) {
             User::whereKey($original->user_id)->lockForUpdate()->firstOrFail();
             $withdrawal = GiftWithdrawal::lockForUpdate()->findOrFail($original->id);
             if ($withdrawal->status === $status) {
@@ -168,31 +168,43 @@ class GiftEarningsService
 
                 return $withdrawal;
             }
-            if ($status === 'cancelled' && $withdrawal->status !== 'pending') {
-                throw new CommerceException('Only pending withdrawals can be cancelled.', 409);
-            }
-            if (! in_array($withdrawal->status, ['pending', 'approved'], true) || ! in_array($status, ['approved', 'paid', 'rejected', 'cancelled'], true) || ($status === 'paid' && $withdrawal->status !== 'approved')) {
+            $allowed = [
+                'pending' => ['approved', 'rejected', 'cancelled'],
+                'approved' => ['processing', 'paid', 'rejected'],
+                'processing' => ['paid', 'failed'],
+                'failed' => ['paid', 'rejected'],
+            ];
+            if (! in_array($status, $allowed[$withdrawal->status] ?? [], true) && ! ($actor === null && $status === 'rejected' && $withdrawal->status === 'processing')) {
                 throw new CommerceException('Invalid withdrawal transition.', 409);
+            }
+            if ($actor !== null && in_array($status, ['rejected', 'failed'], true) && ! trim((string) $reason)) {
+                throw new CommerceException('A reason is required for this withdrawal decision.');
+            }
+            if ($status === 'paid' && ! $payoutReference) {
+                throw new CommerceException('An external payout reference is required.');
             }
             $allocations = DB::table('gift_withdrawal_allocations')->where('withdrawal_id', $withdrawal->id)->get();
             foreach ($allocations as $allocation) {
                 $entry = GiftEarningEntry::lockForUpdate()->findOrFail($allocation->earning_entry_id);
                 $gift = $entry->transaction()->lockForUpdate()->firstOrFail();
-                if (in_array($status, ['approved', 'paid'], true) && ($gift->disputed || $gift->review_required || $entry->recovery_minor > 0)) {
+                if (in_array($status, ['approved', 'processing', 'paid'], true) && ($gift->disputed || $gift->review_required || $entry->recovery_minor > 0 || ! $gift->paid_at || $gift->delivery_status !== 'delivered' || ! in_array($gift->payment_status, ['paid', 'partially_refunded'], true))) {
                     throw new CommerceException('Gift earnings require review.');
                 }
                 if ($status === 'paid') {
-                    if (! $payoutReference) {
-                        throw new CommerceException('An external payout reference is required.');
-                    }
                     $this->move($entry, 'paid:'.$withdrawal->reference.':'.$entry->id, 'settled', ['reserved' => -(int) $allocation->amount_minor, 'settled' => (int) $allocation->amount_minor]);
                     $gift->update(['settled_at' => now('UTC')]);
                 } elseif (in_array($status, ['rejected', 'cancelled'], true)) {
                     $this->move($entry, 'unreserve:'.$withdrawal->reference.':'.$entry->id, 'unreserved', ['reserved' => -(int) $allocation->amount_minor, 'available' => (int) $allocation->amount_minor]);
                 }
-                app(VirtualGiftService::class)->audit($gift, 'withdrawal_'.$status, 'withdrawal-'.$status.':'.$withdrawal->reference.':'.$entry->id, ['withdrawal' => $withdrawal->reference, 'payout_reference' => $payoutReference], $actor);
+                app(VirtualGiftService::class)->audit($gift, 'withdrawal_'.$status, 'withdrawal-'.$status.':'.$withdrawal->reference.':'.$entry->id, ['withdrawal' => $withdrawal->reference, 'payout_reference' => $payoutReference, 'reason' => $reason], $actor);
             }
-            $withdrawal->update(['status' => $status, 'approved_by' => $actor, 'payout_reference' => $status === 'paid' ? $payoutReference : null, 'paid_at' => $status === 'paid' ? now('UTC') : null]);
+            $changes = ['status' => $status];
+            if ($status === 'approved') $changes += ['approved_by' => $actor, 'approved_at' => now('UTC')];
+            if ($status === 'processing') $changes['processing_at'] = now('UTC');
+            if ($status === 'rejected') $changes += ['rejection_reason' => $reason, 'rejected_at' => now('UTC')];
+            if ($status === 'failed') $changes += ['failure_reason' => $reason, 'failed_at' => now('UTC')];
+            if ($status === 'paid') $changes += ['payout_reference' => $payoutReference, 'paid_at' => now('UTC')];
+            $withdrawal->update($changes);
 
             return $withdrawal->fresh();
         }, 5);

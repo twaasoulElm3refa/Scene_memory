@@ -186,16 +186,43 @@ class VirtualGiftAdminController extends Controller
         ]);
     }
 
-    public function withdrawals()
+    public function withdrawals(Request $request)
     {
-        return $this->success(GiftWithdrawal::latest('id')->paginate(30));
+        $data = $request->validate(['status' => 'sometimes|in:pending,approved,processing,failed,rejected,cancelled,paid', 'page' => 'sometimes|integer|min:1']);
+        $query = GiftWithdrawal::with('user:id,name')->latest('id');
+        if (isset($data['status'])) $query->where('status', $data['status']);
+        $page = $query->paginate(30);
+        $page->through(function ($withdrawal) {
+            $withdrawal->payment_method = $withdrawal->payment_details['method'] ?? null;
+            $withdrawal->destination_masked = '••••';
+            $withdrawal->setHidden(['payment_details']);
+
+            return $withdrawal;
+        });
+
+        return $this->success($page)->header('Cache-Control', 'no-store');
+    }
+
+    public function withdrawalDetail(string $reference)
+    {
+        $withdrawal = GiftWithdrawal::with('user:id,name,email')->where('reference', $reference)->firstOrFail();
+        $allocations = DB::table('gift_withdrawal_allocations as allocation')
+            ->join('gift_earning_entries as earning', 'earning.id', '=', 'allocation.earning_entry_id')
+            ->join('gift_transactions as gift', 'gift.id', '=', 'earning.gift_transaction_id')
+            ->where('allocation.withdrawal_id', $withdrawal->id)
+            ->select('allocation.amount_minor', 'earning.id as earning_entry_id', 'earning.available_minor', 'earning.reserved_minor', 'earning.recovery_minor', 'gift.reference as gift_reference', 'gift.payment_status', 'gift.delivery_status', 'gift.disputed', 'gift.review_required')
+            ->get();
+        $balance = GiftEarningEntry::where('recipient_user_id', $withdrawal->user_id)->where('currency', $withdrawal->currency)
+            ->selectRaw('SUM(pending_minor) pending_minor, SUM(available_minor) available_minor, SUM(reserved_minor) reserved_minor, SUM(recovery_minor) recovery_minor')->first();
+
+        return $this->success(['withdrawal' => $withdrawal, 'allocations' => $allocations, 'balance' => $balance])->header('Cache-Control', 'no-store');
     }
 
     public function withdrawal(Request $request, string $reference, GiftEarningsService $earnings)
     {
-        $data = $request->validate(['status' => 'required|in:approved,rejected,paid', 'payout_reference' => 'required_if:status,paid|string|max:160']);
+        $data = $request->validate(['status' => 'required|in:approved,rejected,processing,failed,paid', 'payout_reference' => 'required_if:status,paid|string|max:160', 'reason' => 'required_if:status,rejected,failed|nullable|string|min:3|max:2000']);
         try {
-            return $this->success($earnings->changeWithdrawal(GiftWithdrawal::where('reference', $reference)->firstOrFail(), $data['status'], $request->user()->id, $data['payout_reference'] ?? null));
+            return $this->success($earnings->changeWithdrawal(GiftWithdrawal::where('reference', $reference)->firstOrFail(), $data['status'], $request->user()->id, $data['payout_reference'] ?? null, $data['reason'] ?? null));
         } catch (CommerceException $exception) {
             return $this->error($exception->getMessage(), $exception->status);
         }

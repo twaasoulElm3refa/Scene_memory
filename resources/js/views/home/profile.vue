@@ -6,10 +6,6 @@
             <p class="text-gray-600">{{ $t('profilePage.subtitle') }}</p>
         </div>
 
-        <div class="mb-4 text-center">
-            <RouterLink :to="`/${route.params.lang || 'en'}/gifts`" class="text-emerald-700">{{ $t('gifts.history') }}</RouterLink>
-        </div>
-
         <!-- Card -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
             <!-- Profile Header -->
@@ -334,6 +330,7 @@
                         </div>
                     </div>
                 </div>
+                <ProfileGiftsEarnings v-if="currentTab === 5" />
             </div>
         </div>
     </div>
@@ -346,10 +343,11 @@ import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import WeeklyStatsCard from "@/components/profile/WeeklyStatsCard.vue";
+import ProfileGiftsEarnings from "@/components/profile/ProfileGiftsEarnings.vue";
 
 export default {
     name: "UserProfile",
-    components: { WeeklyStatsCard },
+    components: { WeeklyStatsCard, ProfileGiftsEarnings },
     setup() {
         const router = useRouter();
         const route = useRoute();
@@ -625,10 +623,12 @@ export default {
             { id: 1, label: t("profilePage.tabs.userInfo") },
             { id: 2, label: t("profilePage.tabs.editData") },
             { id: 3, label: t("profilePage.tabs.password") },
-            { id: 4, label: t("profilePage.tabs.wallet") }
+            { id: 4, label: t("profilePage.tabs.wallet") },
+            { id: 5, label: t("gifts.history") }
         ]);
 
-        const currentTab = ref(1);
+        const currentTab = ref(route.query.tab === 'gifts' ? 5 : 1);
+        watch(() => route.query.tab, (value) => { if (value === 'gifts') currentTab.value = 5; });
         const isUpdatingProfile = ref(false);
         const statusMessage = ref("");
         const statusMessageType = ref("success");

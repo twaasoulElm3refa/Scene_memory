@@ -29,4 +29,9 @@ class GiftTransaction extends Model
     {
         return $this->hasOne(GiftEarningEntry::class);
     }
+
+    public function event()
+    {
+        return $this->belongsTo(Events::class, 'event_id');
+    }
 }

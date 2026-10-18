@@ -23,6 +23,9 @@
         <RouterLink to="/admin/gifts" class="sidebar-btn group text-decoration-none" :class="{ active: route.path === '/admin/gifts' }">
             <span class="flex items-center gap-3">✦ {{ $t('gifts.adminTitle') }}</span>
         </RouterLink>
+        <RouterLink to="/admin/gifts/withdrawals" class="sidebar-btn group text-decoration-none" :class="{ active: route.path === '/admin/gifts/withdrawals' }">
+            <span class="flex items-center gap-3">{{ $t('gifts.giftWithdrawalRequests') }}</span>
+        </RouterLink>
 
         <!-- Reports -->
         <RouterLink to="/admin/reports" class="sidebar-btn group text-decoration-none"

@@ -337,6 +337,11 @@ const routes = [
         meta: { hideNavbar: false, hideFooter: false, requiresAuth: true },
     },
     {
+        path: "/admin/gifts/withdrawals",
+        component: () => import("../views/admin/gifts/GiftWithdrawalsAdmin.vue"),
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
         path: "/admin/gifts",
         component: () => import("../views/admin/gifts/VirtualGiftsAdmin.vue"),
         meta: { hideNavbar: true, hideFooter: true },

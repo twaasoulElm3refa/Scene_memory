@@ -35,5 +35,6 @@ Route::prefix('v1/admin/gifts')->middleware(['auth:sanctum', AdminMiddleware::cl
     Route::post('/transactions/{reference}/actions', [AdminGifts::class, 'action']);
     Route::get('/report', [AdminGifts::class, 'report']);
     Route::get('/withdrawals', [AdminGifts::class, 'withdrawals']);
+    Route::get('/withdrawals/{reference}', [AdminGifts::class, 'withdrawalDetail']);
     Route::post('/withdrawals/{reference}', [AdminGifts::class, 'withdrawal']);
 });

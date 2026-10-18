@@ -223,9 +223,13 @@ class VirtualGiftsTest extends TestCase
     public function test_holding_period_release_and_withdrawal_are_distinct_and_idempotent(): void
     {
         $gift = $this->paid();
+        $this->assertSame($gift->paid_at->copy()->addHours(24)->toDateTimeString(), $gift->release_at->toDateTimeString());
         $this->artisan('gifts:release-earnings')->assertSuccessful();
         $this->assertSame(85, GiftEarningEntry::sole()->pending_minor);
-        $this->travel(7)->days();
+        $this->travel(23)->hours();
+        $this->artisan('gifts:release-earnings')->assertSuccessful();
+        $this->assertSame(85, GiftEarningEntry::sole()->pending_minor);
+        $this->travel(1)->hours();
         $this->artisan('gifts:release-earnings')->assertSuccessful();
         $this->artisan('gifts:release-earnings')->assertSuccessful();
         $this->assertSame(85, GiftEarningEntry::sole()->available_minor);
@@ -242,6 +246,81 @@ class VirtualGiftsTest extends TestCase
         $earnings->changeWithdrawal($withdrawal, 'paid', $this->sender->id, 'EXTERNAL-TEST-PAYOUT');
         $earnings->changeWithdrawal($withdrawal, 'paid', $this->sender->id, 'EXTERNAL-TEST-PAYOUT');
         $this->assertSame(85, GiftEarningEntry::sole()->settled_minor);
+    }
+
+    public function test_existing_pending_release_timestamp_is_preserved(): void
+    {
+        $gift = $this->paid();
+        $legacyRelease = $gift->paid_at->copy()->addDays(7);
+        GiftEarningEntry::sole()->update(['release_at' => $legacyRelease]);
+        $gift->update(['release_at' => $legacyRelease]);
+
+        $this->travel(25)->hours();
+        $this->artisan('gifts:release-earnings')->assertSuccessful();
+        $this->assertSame(85, GiftEarningEntry::sole()->pending_minor);
+        $this->travel(6)->days();
+        $this->artisan('gifts:release-earnings')->assertSuccessful();
+        $this->assertSame(85, GiftEarningEntry::sole()->available_minor);
+    }
+
+    public function test_admin_withdrawal_review_keeps_reservation_until_confirmed_payout(): void
+    {
+        $gift = $this->paid();
+        $this->getJson('/api/gifts/sent')->assertJsonPath('data.data.0.event_title', 'Gift event');
+        $this->getJson('/api/gifts/earnings')->assertJsonCount(0, 'data.balances');
+        Sanctum::actingAs($this->recipient);
+        $this->getJson('/api/gifts/earnings')->assertJsonPath('data.balances.0.total_received_minor', 100)->assertJsonPath('data.balances.0.withdrawable_minor', 0);
+        $this->travel(25)->hours();
+        app(GiftEarningsService::class)->release();
+        Sanctum::actingAs($this->recipient);
+        $this->getJson('/api/gifts/sent')->assertJsonCount(0, 'data.data');
+        $this->getJson('/api/gifts/earnings')->assertJsonPath('data.balances.0.withdrawable_minor', 85);
+        $this->postJson('/api/gifts/withdrawals', ['amount_minor' => 85, 'currency' => 'USD', 'idempotency_key' => 'review-flow-withdrawal-123', 'payment_details' => ['method' => 'manual', 'destination' => 'Private destination']])->assertOk();
+        $withdrawal = GiftWithdrawal::sole();
+        $this->assertSame(85, $withdrawal->available_balance_at_request_minor);
+        $this->assertSame(85, GiftEarningEntry::sole()->reserved_minor);
+        $this->getJson('/api/v1/admin/gifts/withdrawals')->assertUnauthorized();
+
+        Sanctum::actingAs(User::factory()->create(['role' => 'admin']));
+        $this->getJson('/api/v1/admin/gifts/withdrawals')->assertOk()->assertJsonMissingPath('data.data.0.payment_details')->assertJsonPath('data.data.0.destination_masked', '••••');
+        $url = '/api/v1/admin/gifts/withdrawals/'.$withdrawal->reference;
+        $this->getJson($url)->assertOk()->assertJsonPath('data.withdrawal.payment_details.destination', 'Private destination');
+        $this->postJson($url, ['status' => 'approved'])->assertOk();
+        $this->postJson($url, ['status' => 'processing'])->assertOk();
+        $this->assertSame(85, GiftEarningEntry::sole()->reserved_minor);
+        $this->postJson($url, ['status' => 'failed'])->assertUnprocessable();
+        $this->postJson($url, ['status' => 'failed', 'reason' => 'Transfer returned'])->assertOk();
+        $this->assertSame(85, GiftEarningEntry::sole()->reserved_minor);
+        $this->postJson($url, ['status' => 'paid'])->assertUnprocessable();
+        $this->postJson($url, ['status' => 'paid', 'payout_reference' => 'BANK-123'])->assertOk();
+        $this->postJson($url, ['status' => 'paid', 'payout_reference' => 'BANK-123'])->assertOk();
+        $this->assertSame(85, GiftEarningEntry::sole()->settled_minor);
+        $this->assertSame(0, GiftEarningEntry::sole()->reserved_minor);
+        Sanctum::actingAs($this->recipient);
+        $this->getJson('/api/gifts/earnings')->assertJsonPath('data.balances.0.total_withdrawn_minor', 85);
+    }
+
+    public function test_withdrawal_rejects_early_or_double_reservation_and_rejection_releases_once(): void
+    {
+        $this->paid();
+        Sanctum::actingAs($this->recipient);
+        $input = ['amount_minor' => 85, 'currency' => 'USD', 'idempotency_key' => 'request-once-after-hold', 'payment_details' => ['method' => 'manual', 'destination' => 'Private destination']];
+        $this->postJson('/api/gifts/withdrawals', $input)->assertUnprocessable();
+        $this->travel(25)->hours();
+        app(GiftEarningsService::class)->release();
+        $this->postJson('/api/gifts/withdrawals', $input)->assertOk();
+        $this->postJson('/api/gifts/withdrawals', $input)->assertOk();
+        $this->postJson('/api/gifts/withdrawals', array_replace($input, ['idempotency_key' => 'second-reservation-key']))->assertUnprocessable();
+        $withdrawal = GiftWithdrawal::sole();
+        $this->assertSame(85, GiftEarningEntry::sole()->reserved_minor);
+
+        Sanctum::actingAs(User::factory()->create(['role' => 'admin']));
+        $url = '/api/v1/admin/gifts/withdrawals/'.$withdrawal->reference;
+        $this->postJson($url, ['status' => 'rejected'])->assertUnprocessable();
+        $this->postJson($url, ['status' => 'rejected', 'reason' => 'Invalid destination'])->assertOk();
+        $this->postJson($url, ['status' => 'rejected', 'reason' => 'Invalid destination'])->assertOk();
+        $this->assertSame(85, GiftEarningEntry::sole()->available_minor);
+        $this->assertSame(0, GiftEarningEntry::sole()->reserved_minor);
     }
 
     public function test_refund_before_release_reverses_entitlement_and_wallet_with_compensating_entries(): void
