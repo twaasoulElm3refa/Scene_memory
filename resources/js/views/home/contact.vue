@@ -108,6 +108,9 @@
                       class="form-control form-select"
                       required
                     >
+                      <option value="copyright">{{ $t('policies.ui.copyrightReport') }}</option>
+                      <option value="privacy">{{ $t('policies.ui.privacyRequest') }}</option>
+                      <option value="legal">{{ $t('policies.ui.legalInquiry') }}</option>
                       <option value="general">
                         {{
                           $t("contacts.form.generalInquiry") ||
@@ -452,7 +455,7 @@ export default {
       form: {
         fullName: "",
         email: "",
-        subject: "general",
+        subject: ['copyright', 'privacy', 'legal'].includes(this.$route.query.topic) ? this.$route.query.topic : 'general',
         message: "",
       },
 
@@ -534,7 +537,6 @@ export default {
         console.error("Error submitting contact form:", error);
 
         this.errorMessage =
-          error?.response?.data?.message ||
           this.$t("contacts.form.errorMessage") ||
           "Something went wrong while sending your message. Please try again.";
       } finally {

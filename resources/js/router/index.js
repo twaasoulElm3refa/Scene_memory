@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getAuthToken } from "../services/authTokenStorage";
 
+import { policies } from '../policies';
+
+const PolicyPage = () => import('../views/home/PolicyPage.vue');
 const Home = () => import("../views/home/home.vue");
 const Register = () => import("../views/auth/register.vue");
 const profile = () => import("../views/home/profile.vue");
@@ -98,6 +101,11 @@ const getCurrentLang = () => localStorage.getItem("lang") || "en";
 const all_tags = () => import("../views/admin/tags/all_tags.vue");
 
 const routes = [
+    { path: '/:lang/policies', name: 'policies', component: PolicyPage, meta: { legalPolicy: true } },
+    ...policies.filter(policy => !['terms', 'privacy', 'dataProtection'].includes(policy.id)).map(policy => ({
+        path: '/:lang' + policy.path, name: 'policy-' + policy.id,
+        component: PolicyPage, props: { policy: policy.id }, meta: { legalPolicy: true },
+    })),
     {
         path: "/",
         redirect: () => {
@@ -280,17 +288,17 @@ const routes = [
     {
         path: "/:lang/terms",
         component: terms,
-        meta: { hideNavbar: false, hideFooter: false },
+        meta: { hideNavbar: false, hideFooter: false, legalPolicy: true },
     },
     {
         path: "/:lang/privacy-policy",
         component: privacy,
-        meta: { hideNavbar: false, hideFooter: false },
+        meta: { hideNavbar: false, hideFooter: false, legalPolicy: true },
     },
     {
         path: "/:lang/data-protection",
         component: dataProtction,
-        meta: { hideNavbar: false, hideFooter: false },
+        meta: { hideNavbar: false, hideFooter: false, legalPolicy: true },
     },
     {
         path: "/:lang/leaderboard",
@@ -584,6 +592,10 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) return savedPosition;
+        if (to.meta.legalPolicy) return to.hash ? { el: to.hash } : { top: 0, behavior: 'instant' };
+    },
 });
 
 router.beforeEach((to, from, next) => {

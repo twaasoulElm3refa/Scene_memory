@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 @php
-    $supported = ['ar', 'en', 'fr', 'de', 'ru', 'es', 'it', 'hi', 'ja', 'fa', 'zh', 'ur'];
+    $supported = array_map(
+        fn ($file) => pathinfo($file, PATHINFO_FILENAME),
+        glob(resource_path('js/i18n/*.json')) ?: []
+    );
 
     $segmentLang = request()->segment(1);
     $locale = in_array($segmentLang, $supported) ? $segmentLang : 'en';

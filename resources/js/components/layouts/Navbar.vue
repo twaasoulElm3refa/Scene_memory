@@ -15,17 +15,17 @@
 
                     </RouterLink>
 
-                    <RouterLink :to="localizedPath('/plans')" class="nav-link premium-nav-link"
+                    <RouterLink :to="localizedPath(navigationGroups.plans.path)" class="nav-link premium-nav-link"
                         :class="{ active: isActive('plans') }">
 
-                        {{ $t('nav.plans') }}
+                        {{ $t(navigationGroups.plans.labelKey) }}
 
                     </RouterLink>
 
                     <button type="button" class="nav-link premium-nav-link nav-dropdown-trigger"
                         @click="openSpecialCoverage">
 
-                        {{ $t('nav.specialCoverage') }}
+                        {{ $t(navigationGroups.specialCoverage.labelKey) }}
 
                     </button>
 
@@ -46,23 +46,7 @@
 
                             <div v-if="eventsOpen" class="dropdown-menu show navbar-dropdown">
 
-                                <RouterLink class="dropdown-item" :to="localizedPath('/all_events')">
-
-                                    {{ $t('nav.allEvents') }}
-
-                                </RouterLink>
-
-                                <RouterLink v-if="isLoggedIn" class="dropdown-item" :to="localizedPath('/add_event')">
-
-                                    {{ $t('nav.addEvent') }}
-
-                                </RouterLink>
-
-                                <RouterLink v-if="isLoggedIn" class="dropdown-item" :to="localizedPath('/historical')">
-
-                                    {{ $t('nav.historical') }}
-
-                                </RouterLink>
+                                <RouterLink v-for="link in eventLinks" :key="link.path" class="dropdown-item" :to="localizedPath(link.path)">{{ $t(link.labelKey) }}</RouterLink>
 
                             </div>
 
@@ -87,29 +71,7 @@
 
                             <div v-if="moreOpen" class="dropdown-menu show navbar-dropdown">
 
-                                <RouterLink class="dropdown-item" :to="localizedPath('/WishList')">
-
-                                    {{ $t('nav.favourites') }}
-
-                                </RouterLink>
-
-                                <RouterLink class="dropdown-item" :to="localizedPath('/contact')">
-
-                                    {{ $t('nav.contact') }}
-
-                                </RouterLink>
-
-                                <!-- <RouterLink class="dropdown-item" :to="localizedPath('/terms')">
-
-                                    {{ $t('nav.terms') }}
-
-                                </RouterLink>
-
-                                <RouterLink class="dropdown-item" :to="localizedPath('/who')">
-
-                                    {{ $t('nav.about') }}
-
-                                </RouterLink> -->
+                                <RouterLink v-for="link in moreLinks" :key="link.path" class="dropdown-item" :to="localizedPath(link.path)">{{ $t(link.labelKey) }}</RouterLink>
 
                             </div>
 
@@ -176,28 +138,7 @@
 
                                 <div v-if="dropdownOpen" class="dropdown-menu show navbar-dropdown user-dropdown">
 
-                                    <RouterLink class="dropdown-item" :to="localizedPath('/profile')">
-
-                                        {{ $t("nav.profile") }}
-
-                                    </RouterLink>
-
-                                    <RouterLink class="dropdown-item" :to="localizedPath('/profile/timeline')">
-                                        {{ $t("nav.timeline") }}
-                                    </RouterLink>
-
-                                    <RouterLink class="dropdown-item" :to="localizedPath('/downloads')">
-
-                                        {{ $t("nav.downloads") }}
-
-                                    </RouterLink>
-
-                                    <RouterLink v-if="eventCount > 0" class="dropdown-item"
-                                        :to="localizedPath('/creator/events')">
-
-                                        {{ $t("nav.dashboard") }}
-
-                                    </RouterLink>
+                                    <RouterLink v-for="link in accountLinks" :key="link.path" class="dropdown-item" :to="localizedPath(link.path)">{{ $t(link.labelKey) }}</RouterLink>
 
                                     <hr class="dropdown-divider" />
 
@@ -215,9 +156,9 @@
 
                         <template v-else>
 
-                            <RouterLink :to="localizedPath('/auth')" class="control-btn login-btn text-decoration-none">
+                            <RouterLink :to="localizedPath(navigationGroups.login.path)" class="control-btn login-btn text-decoration-none">
 
-                                {{ $t("nav.login") }}
+                                {{ $t(navigationGroups.login.labelKey) }}
 
                             </RouterLink>
 
@@ -280,17 +221,17 @@
 
                         </RouterLink>
 
-                        <RouterLink :to="localizedPath('/plans')" class="mobile-nav-link"
+                        <RouterLink :to="localizedPath(navigationGroups.plans.path)" class="mobile-nav-link"
                             :class="{ active: isActive('plans') }">
 
-                            {{ $t('nav.plans') }}
+                            {{ $t(navigationGroups.plans.labelKey) }}
 
                         </RouterLink>
 
                         <button type="button" class="mobile-nav-link mobile-special-coverage-button"
                             @click="openSpecialCoverage">
 
-                            {{ $t('nav.specialCoverage') }}
+                            {{ $t(navigationGroups.specialCoverage.labelKey) }}
 
                         </button>
 
@@ -300,23 +241,7 @@
 
                         <p class="mobile-section-title">{{ $t('nav.events') }}</p>
 
-                        <RouterLink class="mobile-nav-link" :to="localizedPath('/all_events')">
-
-                            {{ $t('nav.allEvents') }}
-
-                        </RouterLink>
-
-                        <RouterLink v-if="isLoggedIn" class="mobile-nav-link" :to="localizedPath('/add_event')">
-
-                            {{ $t('nav.addEvent') }}
-
-                        </RouterLink>
-
-                        <RouterLink v-if="isLoggedIn" class="mobile-nav-link" :to="localizedPath('/historical')">
-
-                            {{ $t('nav.historical') }}
-
-                        </RouterLink>
+                        <RouterLink v-for="link in eventLinks" :key="link.path" class="mobile-nav-link" :to="localizedPath(link.path)">{{ $t(link.labelKey) }}</RouterLink>
 
                     </div>
 
@@ -324,29 +249,7 @@
 
                         <p class="mobile-section-title">{{ $t('nav.more') }}</p>
 
-                        <RouterLink :to="localizedPath('/WishList')" class="mobile-nav-link">
-
-                            {{ $t('nav.favourites') }}
-
-                        </RouterLink>
-
-                        <RouterLink :to="localizedPath('/contact')" class="mobile-nav-link">
-
-                            {{ $t('nav.contact') }}
-
-                        </RouterLink>
-
-                        <RouterLink :to="localizedPath('/terms')" class="mobile-nav-link">
-
-                            {{ $t('nav.terms') }}
-
-                        </RouterLink>
-
-                        <RouterLink :to="localizedPath('/who')" class="mobile-nav-link">
-
-                            {{ $t('nav.about') }}
-
-                        </RouterLink>
+                        <RouterLink v-for="link in mobileMoreLinks" :key="link.path" class="mobile-nav-link" :to="localizedPath(link.path)">{{ $t(link.labelKey) }}</RouterLink>
 
                     </div>
 
@@ -362,7 +265,7 @@
 
 <script setup>
 
-import { ref, onMounted, onUnmounted, computed, watch } from "vue";
+import { ref, toRef, onMounted, onUnmounted, computed, watch } from "vue";
 import { Capacitor } from "@capacitor/core";
 import axios from "axios";
 import api from "@/services/ApiClient";
@@ -373,15 +276,17 @@ import { useRouter, useRoute, RouterLink } from "vue-router";
 
 import { useI18n } from "vue-i18n";
 
+import { navigationGroups, navigationSession, visibleNavigation, specialCoverageDestination } from '../../navigation';
+
 const router = useRouter();
 
 const route = useRoute();
 
-const { locale } = useI18n();
+const { locale, availableLocales } = useI18n();
 
 /*** STATE ***/
 
-const isLoggedIn = ref(false);
+const isLoggedIn = toRef(navigationSession, 'isLoggedIn');
 
 const userName = ref("UserName");
 
@@ -389,7 +294,7 @@ const count = ref(0);
 
 const userImage = ref(null);
 
-const eventCount = ref(0);
+const eventCount = toRef(navigationSession, 'eventCount');
 
 const dropdownOpen = ref(false);
 
@@ -403,7 +308,7 @@ const eventsOpen = ref(false);
 
 /*** Languages ***/
 
-const languages = ["AR", "EN", "FR", "DE", "RU", "ES", "IT", "HI", "JA", "FA", "ZH", "UR", "TR"];
+const languages = availableLocales.map(lang => lang.toUpperCase());
 
 /*** ROUTE LANG ***/
 
@@ -474,72 +379,15 @@ const selectLanguage = async (lang) => {
 
 /*** NAV ***/
 
-const allLinks = [
-
-    { labelKey: "nav.home", path: "/home", active: "home" },
-
-    { labelKey: "nav.scemoryGate", path: "/scemory-gate", active: "scemory-gate" },
-
-];
-
-const links = computed(() => {
-
-    if (!isLoggedIn.value) {
-
-        return allLinks.filter(
-
-            (l) =>
-
-                l.active !== "add_event" &&
-
-                l.active !== "Wishlist" &&
-
-                l.active !== "historical"
-
-        );
-
-    }
-
-    return allLinks;
-
-});
-
+const links = computed(() => visibleNavigation(navigationGroups.primary, navigationSession));
+const eventLinks = computed(() => visibleNavigation(navigationGroups.events, navigationSession));
+const accountLinks = computed(() => visibleNavigation(navigationGroups.account, navigationSession));
+const moreLinks = navigationGroups.more;
+const mobileMoreLinks = [...navigationGroups.more, ...navigationGroups.mobileMore];
 const openSpecialCoverage = async () => {
-
     mobileMenu.value = false;
-
-    const destination = {
-
-        path: localizedPath("/home"),
-
-        query: {
-
-            ...(route.path === localizedPath("/home") ? route.query : {}),
-
-            openSpecialCoverage: "1",
-
-        },
-
-    };
-
-    if (getAuthToken()) {
-
-        await router.push(destination);
-
-        return;
-
-    }
-
-    await router.push({
-
-        name: "auth",
-
-        params: { lang: routeLang.value },
-
-        query: { redirect: router.resolve(destination).fullPath },
-
-    });
-
+    await router.push(specialCoverageDestination(routeLang.value, Boolean(getAuthToken()),
+        route.path === localizedPath('/home') ? route.query : {}));
 };
 
 /*** USER ***/
@@ -604,7 +452,11 @@ const fetchProfile = async () => {
 
     const token = getAuthToken();
 
-    if (!token) return;
+    if (!token) {
+        isLoggedIn.value = false;
+        eventCount.value = 0;
+        return;
+    }
 
     if (!isMobileRuntime()) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
@@ -678,7 +530,7 @@ onUnmounted(() => {
 
 const goToCart = () => {
 
-    router.push(localizedPath("/cart"));
+    router.push(localizedPath(navigationGroups.cart.path));
 
 };
 

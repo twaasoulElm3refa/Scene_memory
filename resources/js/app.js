@@ -27,6 +27,7 @@ import discoverySearchMessages from "./i18n/discoverySearch";
 import profileTimelineMessages from "./i18n/profileTimeline";
 import weeklyCompetitionMessages from "./i18n/weeklyCompetition";
 import virtualGiftMessages from "./i18n/virtualGifts";
+import policyMessages from "./i18n/policies";
 
 // styles
 import "../css/app.css";
@@ -79,6 +80,7 @@ Object.entries(weeklyCompetitionMessages).forEach(([lang, competition]) => {
 });
 
 Object.entries(virtualGiftMessages).forEach(([lang, gifts]) => { messages[lang].gifts = gifts; });
+Object.entries(policyMessages).forEach(([lang, policies]) => { messages[lang].policies = policies; });
 
 const DEFAULT_LANG = "en";
 const RTL_LANGS = ["ar", "fa", "ur"];

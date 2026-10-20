@@ -91,7 +91,7 @@ export default {
             }
 
             const isArabic =
-                lang === "ar";
+                ["ar", "fa", "ur"].includes(lang);
 
             document.documentElement.lang =
                 lang;

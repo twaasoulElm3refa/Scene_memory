@@ -79,6 +79,10 @@ Route::get('/leaderboard/weekly-history', [LeaderboardController::class, 'weekly
 
 Route::prefix('v1')->group(function () {
 
+    // Visitors can contact support and report rights/privacy issues. Inbox access stays private.
+    Route::post('/contacts/create', [ContactController::class, 'create'])->middleware('throttle:5,1');
+    Route::get('/footer/links', [FooterController::class, 'publicLinks'])->middleware('throttle:60,1');
+
     Route::post('/moderation/events/{event}/translations', [N8nEventTranslationController::class, 'store'])
         ->middleware(VerifyN8nWebhookSecret::class)
         ->name('moderation.events.translations.store');
@@ -269,7 +273,6 @@ Route::prefix('v1')->group(function () {
         // CONTACTS
         Route::get('/contacts', [ContactController::class, 'all']);
         Route::get('/contacts/{id}', [ContactController::class, 'single']);
-        Route::post('/contacts/create', [ContactController::class, 'create']);
         Route::post('/contacts/respond/{id}', [ContactController::class, 'respond']);
         Route::delete('/contacts/delete/{id}', [ContactController::class, 'delete']);
         // 84
