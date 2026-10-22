@@ -4,18 +4,22 @@ namespace Tests\Feature\Api\Payments;
 
 use App\Exceptions\CommerceException;
 use App\Http\Controllers\api\admin\VirtualGiftAdminController;
+use App\Models\Entitlement;
 use App\Models\Events;
+use App\Models\EventsImges;
 use App\Models\GiftEarningEntry;
 use App\Models\GiftTransaction;
 use App\Models\GiftWithdrawal;
 use App\Models\User;
 use App\Models\VirtualGift;
 use App\Models\Wallet;
+use App\Services\CheckoutCartSnapshot;
 use App\Services\GiftEarningsService;
 use App\Services\MinorMoney;
 use App\Services\PaymentFinalizer;
 use App\Services\PayPalGateway;
 use App\Services\VirtualGiftService;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Mockery;
@@ -73,6 +77,42 @@ class VirtualGiftConcurrencyTest extends TestCase
         Wallet::create(['user_id' => $sender->id, 'currency' => 'USD', 'balance_minor' => $balance, 'amount' => app(MinorMoney::class)->toDecimal($balance)]);
 
         return [$sender, $recipient, ['gift_id' => $gift->id, 'event_id' => $event->id, 'quantity' => 1]];
+    }
+
+    public function test_concurrent_media_finalization_grants_and_debits_once(): void
+    {
+        Bus::fake();
+        [$buyer, $seller, $input] = $this->fixture(1000);
+        $media = EventsImges::create(['event_id' => $input['event_id'], 'type' => 'image', 'price' => '1.00', 'is_active' => 1]);
+        $snapshot = app(CheckoutCartSnapshot::class)->create(['user_id' => $buyer->id, 'type' => 'single_media', 'media_id' => $media->id, 'idempotency_key' => 'media-concurrency-'.uniqid()], 'wallet');
+        $this->workers(6, fn () => app(PaymentFinalizer::class)->finalizeWalletPurchase($snapshot['payment']));
+        $this->assertSame(900, $buyer->wallet->fresh()->balance_minor);
+        $this->assertSame(1, Entitlement::where('user_id', $buyer->id)->where('media_id', $media->id)->count());
+        $this->assertSame(1, $buyer->wallet->walletTransactions()->count());
+        $this->assertSame('completed', $snapshot['payment']->fresh()->status);
+    }
+
+    public function test_competing_media_orders_cannot_overspend_a_wallet(): void
+    {
+        Bus::fake();
+        [$buyer, $seller, $input] = $this->fixture(100);
+        $payments = [];
+        for ($i = 0; $i < 6; $i++) {
+            $media = EventsImges::create(['event_id' => $input['event_id'], 'type' => 'image', 'price' => '1.00', 'is_active' => 1]);
+            $payments[] = app(CheckoutCartSnapshot::class)->create(['user_id' => $buyer->id, 'type' => 'single_media', 'media_id' => $media->id, 'idempotency_key' => 'media-competing-'.uniqid()], 'wallet')['payment'];
+        }
+        $this->workers(6, function ($index) use ($payments) {
+            try {
+                app(PaymentFinalizer::class)->finalizeWalletPurchase($payments[$index]);
+            } catch (CommerceException $exception) {
+                if ($exception->getMessage() !== 'Insufficient wallet balance.') {
+                    throw $exception;
+                }
+            }
+        });
+        $this->assertSame(0, $buyer->wallet->fresh()->balance_minor);
+        $this->assertSame(1, Entitlement::where('user_id', $buyer->id)->count());
+        $this->assertSame(1, $buyer->wallet->walletTransactions()->count());
     }
 
     public function test_duplicate_wallet_purchases_deliver_and_debit_exactly_once(): void

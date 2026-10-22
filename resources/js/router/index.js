@@ -327,6 +327,12 @@ const routes = [
 
     // Auth Routes
     {
+        path: "/:lang/auth/facebook-callback",
+        name: "facebook-callback",
+        component: () => import("../views/auth/FacebookCallback.vue"),
+        meta: { hideNavbar: true, hideFooter: true },
+    },
+    {
         path: "/:lang/auth",
         name: "auth",
         component: Register,

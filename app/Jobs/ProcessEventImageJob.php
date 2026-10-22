@@ -35,11 +35,14 @@ class ProcessEventImageJob implements ShouldQueue
 
     public array $metadata = [];
 
+    public string $sourceDisk = 'public';
+
     public function __construct(
         int $eventId,
         string $tempPath,
         float|int|string|null $manualPrice = 0,
-        array $metadata = []
+        array $metadata = [],
+        string $sourceDisk = 'public'
     ) {
         $this->eventId = $eventId;
         $this->tempPath = $tempPath;
@@ -47,6 +50,7 @@ class ProcessEventImageJob implements ShouldQueue
             ? (float) $manualPrice
             : 0;
         $this->metadata = $metadata;
+        $this->sourceDisk = $sourceDisk;
     }
 
     public function handle(
@@ -69,7 +73,7 @@ class ProcessEventImageJob implements ShouldQueue
             return;
         }
 
-        if (! Storage::disk('public')->exists($this->tempPath)) {
+        if (! Storage::disk($this->sourceDisk)->exists($this->tempPath)) {
             \Log::error('ProcessEventImageJob: temp file not found', [
                 'event_id' => $this->eventId,
                 'temp_path' => $this->tempPath,
@@ -78,7 +82,7 @@ class ProcessEventImageJob implements ShouldQueue
             return;
         }
 
-        $absolutePath = Storage::disk('public')->path($this->tempPath);
+        $absolutePath = Storage::disk($this->sourceDisk)->path($this->tempPath);
 
         if (! is_file($absolutePath)) {
             \Log::error('ProcessEventImageJob: temp path is not a file', [
@@ -111,12 +115,14 @@ class ProcessEventImageJob implements ShouldQueue
             $plan = $analysis['plan'];
             $price = $this->manualPrice;
 
-            $filename = uniqid('', true).'.jpg';
-            $fullPath = 'events/full/'.$filename;
-            $previewPath = 'events/preview/'.$filename;
-            Storage::disk('public')->put($fullPath, (string) $image->toJpeg(90));
-            Storage::disk('public')->put($previewPath, (string) $preview);
-            $eventImage = EventsImges::create([
+            $filename = hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath);
+            $extension = $uploadedFile->guessExtension() ?: 'jpg';
+            $fullPath = 'events/full/'.$filename.'.'.$extension;
+            $previewPath = 'events/preview/'.$filename.'.jpg';
+            Storage::disk('media')->put($fullPath, fopen($absolutePath, 'rb'));
+            Storage::disk('media')->put($previewPath, (string) $preview);
+            $eventImage = EventsImges::updateOrCreate(['event_id' => $this->eventId, 'full_url' => $fullPath], [
+                'original_disk' => 'media', 'preview_disk' => 'media',
                 'event_id' => $this->eventId,
                 'type' => 'image',
                 'preview_url' => $previewPath,
@@ -171,6 +177,7 @@ class ProcessEventImageJob implements ShouldQueue
             }
 
             $cache->invalidateEvent($this->eventId, [(int) $eventImage->id]);
+            Storage::disk($this->sourceDisk)->delete($this->tempPath);
 
         } catch (\Throwable $e) {
             \Log::error('ProcessEventImageJob: failed', [
@@ -183,15 +190,13 @@ class ProcessEventImageJob implements ShouldQueue
             ]);
 
             throw $e;
-        } finally {
-            Storage::disk('public')->delete($this->tempPath);
         }
     }
 
     public function failed(\Throwable $exception): void
     {
         if (trim($this->tempPath) !== '') {
-            Storage::disk('public')->delete($this->tempPath);
+            Storage::disk($this->sourceDisk)->delete($this->tempPath);
         }
 
         \Log::error('ProcessEventImageJob: permanently failed', [
@@ -204,9 +209,9 @@ class ProcessEventImageJob implements ShouldQueue
     private function makeImageManager(): ImageManager
     {
         if (extension_loaded('imagick')) {
-            return new ImageManager(new ImagickDriver);
+            return new ImageManager(new ImagickDriver, decodeAnimation: false, strip: true);
         }
 
-        return new ImageManager(new GdDriver);
+        return new ImageManager(new GdDriver, decodeAnimation: false, strip: true);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SafeMedia;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BrandRequest extends FormRequest
@@ -17,13 +19,13 @@ class BrandRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048', new SafeMedia],
         ];
     }
 

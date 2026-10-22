@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\Footers\FooterRepositoryInterface;
+use App\Rules\SafeMedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -36,6 +37,7 @@ class FooterController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate(['logo' => ['sometimes', 'nullable', 'image', 'max:5120', new SafeMedia]]);
         $footer = $this->footerRepository->findOrFail(1);
         $data = $request->except(['_token']);
         if ($request->hasFile('logo')) {

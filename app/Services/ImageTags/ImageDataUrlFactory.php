@@ -2,6 +2,7 @@
 
 namespace App\Services\ImageTags;
 
+use App\Services\MediaAccessService;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Http\UploadedFile;
@@ -37,7 +38,15 @@ class ImageDataUrlFactory
         $imageDataUrls = [];
 
         foreach (array_slice($storedPaths, 0, $this->imagesLimit()) as $path) {
-            $path = ltrim(trim((string) $path), '/');
+            $diskName = is_array($path) ? ($path['disk'] ?? 'public') : 'public';
+            if (! in_array($diskName, ['public', 'media'], true)) {
+                continue;
+            }
+            $disk = $this->filesystem->disk($diskName);
+            $path = app(MediaAccessService::class)->relativePath(is_array($path) ? ($path['path'] ?? '') : $path);
+            if (! $path) {
+                continue;
+            }
 
             if ($path === '' || ! $disk->exists($path)) {
                 continue;

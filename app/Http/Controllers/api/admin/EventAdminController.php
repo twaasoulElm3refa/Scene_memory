@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Events;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Rules\SafeMedia;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -17,9 +18,7 @@ class EventAdminController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private readonly EventRepositoryInterface $eventRepository)
-    {
-    }
+    public function __construct(private readonly EventRepositoryInterface $eventRepository) {}
 
     public function update(Request $request, string $id): JsonResponse
     {
@@ -36,7 +35,7 @@ class EventAdminController extends Controller
                 'start_date' => ['required'],
                 'end_date' => ['required', 'after_or_equal:start_date'],
                 'time' => ['nullable', 'string'],
-                'image' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif', 'max:10240'],
+                'image' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif', 'max:10240', new SafeMedia],
                 'city_id' => ['nullable', 'exists:cities,id'],
                 'sub_categorey_id' => ['nullable', 'exists:sub_categoreys,id'],
                 'is_trending' => ['nullable', 'boolean'],
@@ -45,7 +44,7 @@ class EventAdminController extends Controller
             $event = $this->findEventByRouteKey($id);
             $oldSlug = $event->slug;
 
-            $data['slug'] = Str::slug($data['title']) . '-' . Str::random(5) . '-' . time();
+            $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('events', 'public');
@@ -135,13 +134,13 @@ class EventAdminController extends Controller
         if ($slug) {
             foreach ($locales as $locale) {
                 $this->forgetEventsCache("events_single_{$slug}_{$locale}");
-                $this->forgetEventsCache('event_' . strtolower(trim($slug)) . "_{$locale}");
+                $this->forgetEventsCache('event_'.strtolower(trim($slug))."_{$locale}");
             }
         }
 
         $this->forgetEventsCache('events_count');
         $this->forgetEventsCache('memories');
-        $this->forgetEventsCache('daily_events_' . app()->getLocale());
+        $this->forgetEventsCache('daily_events_'.app()->getLocale());
     }
 
     private function forgetEventsCache(string $key): void

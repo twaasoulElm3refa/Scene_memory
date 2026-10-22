@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\CommerceException;
 use App\Jobs\SendPaymentReceipt;
 use App\Models\CartItems;
 use App\Models\Entitlement;
@@ -9,6 +10,7 @@ use App\Models\GiftTransaction;
 use App\Models\Payment;
 use App\Models\Purchases;
 use App\Models\Wallet;
+use App\Support\SecurityMessage;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -237,6 +239,12 @@ class PaymentFinalizer
         }
         if (! $wallet) {
             throw new RuntimeException('Wallet not found.');
+        }
+        if (strtoupper((string) $wallet->currency) !== strtoupper($currency)) {
+            throw new CommerceException(SecurityMessage::get('currencyMismatch'), 422);
+        }
+        if ($wallet->balance_minor !== null && $wallet->balance_minor !== $this->money->fromDecimal($wallet->amount)) {
+            throw new CommerceException(SecurityMessage::get('invalidWithdrawal'), 422);
         }
 
         return $wallet;

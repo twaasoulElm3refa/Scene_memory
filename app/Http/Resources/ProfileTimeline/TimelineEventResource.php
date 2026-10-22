@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\ProfileTimeline;
 
+use App\Services\MediaAccessService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +25,7 @@ class TimelineEventResource extends JsonResource
             'slug' => $this->slug,
             'image' => $image ? [
                 'id' => $image->id,
-                'url' => $this->storageUrl($image->preview_url ?: $image->full_url),
+                'url' => app(MediaAccessService::class)->previewUrl($image, true),
                 'type' => $image->type,
             ] : ($this->image ? [
                 'id' => null,

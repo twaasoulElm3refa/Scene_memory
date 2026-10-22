@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReplyRequest;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Support\SecurityMessage;
 use Illuminate\Support\Facades\Cache;
 
 class CommentReplyController extends Controller
@@ -16,13 +17,13 @@ class CommentReplyController extends Controller
     public function __construct(
         private readonly CommentRepositoryInterface $commentRepository,
         private readonly EventRepositoryInterface $eventRepository
-    ) {
-    }
+    ) {}
 
     public function create(ReplyRequest $request)
     {
         $comment = $this->commentRepository->findOrFail((int) request('id'));
         $event = $this->eventRepository->findByIdOrFail((int) $comment->event_id);
+        abort_unless($event->is_active, 404, SecurityMessage::get('notFound'));
 
         $data = $request->validated();
         $data['user_id'] = auth()->id();

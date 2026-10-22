@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Laravel\Sanctum\Sanctum;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Support\MediaFixture;
 use Tests\TestCase;
 
 class EventCreationRequirementsTest extends TestCase
@@ -119,7 +120,7 @@ class EventCreationRequirementsTest extends TestCase
                 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
             )
         );
-        $video = UploadedFile::fake()->create('event.mp4', 100, 'video/mp4');
+        $video = MediaFixture::video();
 
         return match ($kind) {
             'image' => [$image],

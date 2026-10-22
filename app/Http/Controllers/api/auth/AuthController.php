@@ -13,14 +13,19 @@ use App\Models\LicenceType;
 use App\Repositories\Contracts\Auth\AuthRepositoryInterface;
 use App\Services\RegistrationOtpService;
 use App\Services\WeeklyLeaderboardService;
+use App\Support\SecurityMessage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\PersonalAccessToken;
 use Throwable;
 
 class AuthController extends Controller
@@ -108,10 +113,14 @@ class AuthController extends Controller
     public function login(loginRequest $request)
     {
         $request->validated();
+        // Legacy Google accounts were assigned this shared credential. Require reset without changing stored balances or credentials.
+        if ($request->password === 'password') {
+            return $this->unauthorized(SecurityMessage::get('denied'));
+        }
 
         $user = $this->authRepository->findUserByEmail($request->email);
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (! $user || ! $user->password || ! Hash::check($request->password, $user->password)) {
             return $this->unauthorized('Invalid credentials.');
         }
 
@@ -278,7 +287,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $otp = rand(100000, 999999);
+        $otp = random_int(100000, 999999);
 
         $this->authRepository->upsertPasswordResetToken($user->email, Hash::make($otp));
 
@@ -296,21 +305,29 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'otp' => 'required',
-            'password' => 'required|confirmed|min:8',
+            'otp' => 'required|digits:6',
+            'password' => ['required', 'confirmed', Password::min(8)->numbers()],
         ]);
 
-        $record = $this->authRepository->getPasswordResetToken($request->email);
-
-        if (! $record || ! Hash::check($request->otp, $record->token)) {
-            return response()->json([
-                'message' => 'الكود غير صحيح',
-            ], 400);
+        $attemptKey = 'password-reset:'.hash('sha256', strtolower($request->email));
+        if (RateLimiter::tooManyAttempts($attemptKey, 5)) {
+            return response()->json(['message' => SecurityMessage::get('rateLimit')], 429);
         }
+        RateLimiter::hit($attemptKey, 900);
+        $reset = DB::transaction(function () use ($request) {
+            $record = DB::table('password_reset_tokens')->where('email', $request->email)->lockForUpdate()->first();
+            if (! $record || ! $record->created_at || Carbon::parse($record->created_at)->lt(now()->subMinutes((int) config('auth.passwords.users.expire', 60))) || ! Hash::check($request->otp, $record->token)) {
+                return false;
+            }
+            $this->authRepository->updateUserPasswordByEmail($request->email, Hash::make($request->password));
+            $this->authRepository->deletePasswordResetToken($request->email);
+            $this->authRepository->findUserByEmail($request->email)?->tokens()->delete();
 
-        $this->authRepository->updateUserPasswordByEmail($request->email, Hash::make($request->password));
-
-        $this->authRepository->deletePasswordResetToken($request->email);
+            return true;
+        }, 5);
+        if (! $reset) {
+            return response()->json(['message' => SecurityMessage::get('invalidCode')], 400);
+        }
 
         return response()->json([
             'message' => 'تم تغيير كلمة المرور بنجاح',
@@ -357,6 +374,9 @@ class AuthController extends Controller
 
         $user->password = Hash::make($validated['new_password']);
         $user->save();
+        $currentToken = $user->currentAccessToken();
+        $currentId = $currentToken instanceof PersonalAccessToken ? $currentToken->getKey() : null;
+        $user->tokens()->when($currentId, fn ($query) => $query->whereKeyNot($currentId))->delete();
 
         return response()->json([
             'status' => 'success',
@@ -367,6 +387,21 @@ class AuthController extends Controller
     public function wallet()
     {
         return $this->success(auth()->user()->wallet, 'Wallet fetched successfully.');
+    }
+
+    public function logout(Request $request)
+    {
+        $token = $request->user()->currentAccessToken();
+        if ($token instanceof PersonalAccessToken) {
+            $token->delete();
+        }
+        if ($request->hasSession()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        return response()->noContent();
     }
 
     private function defaultLicenceTypeId(): ?int

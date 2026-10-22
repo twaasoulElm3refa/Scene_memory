@@ -75,11 +75,6 @@
 
                         <p v-if="error" class="text-center text-danger mb-0">{{ error }}</p>
 
-                        <button @click.prevent="handleGoogleLogin"
-                            class="btn btn-google btn-lg d-flex align-items-center justify-content-center gap-2 mt-3">
-                            <img :src="toAssetUrl('/images/google_logo.png')" alt="Google" style="width: 65px; height: 36px" />
-                            Continue with Google
-                        </button>
                     </form>
 
                     <!-- Register Form -->
@@ -142,11 +137,6 @@
 
                         <p v-if="error" class="text-center text-danger mb-0">{{ error }}</p>
 
-                        <button @click.prevent="handleGoogleLogin"
-                            class="btn btn-google btn-lg d-flex align-items-center justify-content-center gap-2 mt-1">
-                            <img :src="toAssetUrl('/images/google_logo.png')" alt="Google" style="width: 65px; height: 36px" />
-                            Continue with Google
-                        </button>
                     </form>
 
                     <!-- Email OTP Form -->
@@ -225,6 +215,13 @@
                         </button>
                     </form>
 
+                    <GoogleAuthButton v-if="!otpStage && ['login', 'register'].includes(tab)"
+                        :loading="googleLoading" :disabled="loading" @continue="handleGoogleLogin" />
+                    <p v-if="googleError" role="alert" class="text-center text-danger mt-3 mb-0">{{ googleError }}</p>
+                    <FacebookAuthButton v-if="!otpStage && ['login', 'register'].includes(tab)"
+                        :loading="facebookLoading" :disabled="loading || googleLoading" @continue="handleFacebookLogin" />
+                    <p v-if="facebookError" role="alert" class="text-center text-danger mt-3 mb-0">{{ facebookError }}</p>
+
                     <!-- Switch between Login & Register -->
                     <div class="text-center mt-4 text-white fs-6">
                         <span v-if="tab === 'register'">
@@ -245,20 +242,23 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import { useI18n } from "vue-i18n";
+import GoogleAuthButton from "../../components/auth/GoogleAuthButton.vue";
+import FacebookAuthButton from "../../components/auth/FacebookAuthButton.vue";
+import { facebookErrorKey, safeFacebookRedirect, startFacebookAuth } from "../../services/facebookAuth";
+import { googleErrorKey, safePostAuthRedirect, startGoogleAuth } from "../../services/googleAuth";
 import { useRouter, useRoute } from "vue-router";
 import { AuthService } from "../../services/AuthService/AuthService";
 import { toAssetUrl } from "../../services/runtimeUrls";
-import { googleAuthOrigin, isMobileRuntime } from "../../services/runtimeUrls";
-import { Capacitor } from "@capacitor/core";
-import { Browser } from "@capacitor/browser";
-import {
-    clearGoogleOAuthVerifier,
-    setAuthToken,
-    setGoogleOAuthVerifier,
-} from "../../services/authTokenStorage";
+import { setAuthToken } from "../../services/authTokenStorage";
 
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
+const googleLoading = ref(false);
+const googleError = ref("");
+const facebookLoading = ref(false);
+const facebookError = ref("");
 
 const tab = ref("login");
 const showPassword = ref(false);
@@ -304,11 +304,7 @@ const getSafePostAuthRedirect = () => {
         ? route.query.redirect
         : "";
 
-    if (requestedRedirect.startsWith(`/${lang}/`) && !requestedRedirect.startsWith("//")) {
-        return requestedRedirect;
-    }
-
-    return `/${lang}/home`;
+    return safePostAuthRedirect(requestedRedirect, lang);
 };
 
 const countries = ref([
@@ -406,32 +402,10 @@ const backFromOtp = () => {
     error.value = "";
 };
 
-onMounted(async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const errorMsg = urlParams.get("error");
-
-    if (errorMsg) {
-        error.value = decodeURIComponent(errorMsg);
-        return;
-    }
-
-    if (token) {
-        const url = new URL(window.location.href);
-        url.search = "";
-        window.history.replaceState({}, document.title, url.toString());
-        await setAuthToken(token);
-        try {
-            const res = await AuthService.getProfile();
-            const role = res.data.data?.role || res.data.data?.user?.role || "user";
-            await saveTokenAndRedirect(token, role);
-        } catch {
-            await saveTokenAndRedirect(token, "user");
-        }
-    }
-});
-
+const resetGoogleLoading = () => { googleLoading.value = false; };
+onMounted(() => window.addEventListener('pageshow', resetGoogleLoading));
 onUnmounted(() => {
+    window.removeEventListener('pageshow', resetGoogleLoading);
     if (resendTimer) {
         clearInterval(resendTimer);
     }
@@ -599,41 +573,37 @@ const handleReset = async () => {
 };
 
 const handleGoogleLogin = async () => {
+    if (googleLoading.value || loading.value) return;
+    googleLoading.value = true;
+    googleError.value = "";
     const currentLang = String(getLang() || "en").toLowerCase();
     const destination = getSafePostAuthRedirect();
     localStorage.setItem("lang", currentLang);
     localStorage.setItem("language", currentLang);
     sessionStorage.setItem(POST_AUTH_REDIRECT_KEY, destination);
-    if (isMobileRuntime() && googleAuthOrigin()) {
-        try {
-            const randomBytes = crypto.getRandomValues(new Uint8Array(32));
-            const verifier = Array.from(randomBytes, (byte) => String.fromCharCode(byte)).join("");
-            const codeVerifier = btoa(verifier).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-            const challengeBytes = await crypto.subtle.digest(
-                "SHA-256",
-                new TextEncoder().encode(codeVerifier)
-            );
-            const challenge = btoa(
-                Array.from(new Uint8Array(challengeBytes), (byte) => String.fromCharCode(byte)).join("")
-            ).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-
-            await setGoogleOAuthVerifier(codeVerifier);
-            sessionStorage.setItem("mobile_google_oauth_pending", String(Date.now()));
-
-            const url = `${googleAuthOrigin()}/api/v1/users/google-login?mobile=1&lang=${encodeURIComponent(currentLang)}&code_challenge=${encodeURIComponent(challenge)}`;
-            if (Capacitor.isNativePlatform()) {
-                await Browser.open({ url });
-            } else {
-                window.location.href = url;
-            }
-        } catch {
-            sessionStorage.removeItem("mobile_google_oauth_pending");
-            await clearGoogleOAuthVerifier();
-            error.value = "Could not start Google sign in. Please try again.";
-        }
-        return;
+    try {
+        await startGoogleAuth(currentLang);
+    } catch (err) {
+        googleError.value = t(googleErrorKey(err.response?.data?.error_code || 'unavailable'));
+        googleLoading.value = false;
     }
-    window.location.href = `/api/v1/users/google-login?lang=${encodeURIComponent(currentLang)}`;
+};
+const resetFacebookLoading = () => { facebookLoading.value = false; };
+onMounted(() => window.addEventListener('pageshow', resetFacebookLoading));
+onUnmounted(() => window.removeEventListener('pageshow', resetFacebookLoading));
+
+const handleFacebookLogin = async () => {
+    if (facebookLoading.value || loading.value || googleLoading.value) return;
+    facebookLoading.value = true;
+    facebookError.value = '';
+    const lang = String(getLang() || 'en').toLowerCase();
+    sessionStorage.setItem(POST_AUTH_REDIRECT_KEY, safeFacebookRedirect(route.query.redirect, lang));
+    try {
+        await startFacebookAuth(lang);
+    } catch (err) {
+        facebookError.value = t(facebookErrorKey(err.response?.data?.error_code || err.message || 'unavailable'));
+        facebookLoading.value = false;
+    }
 };
 </script>
 

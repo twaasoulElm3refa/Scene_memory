@@ -73,7 +73,7 @@ class GenerateEventAiTagsJob implements ShouldQueue
         $imageMediaByIndex = [];
 
         foreach ($media->filter(fn (EventsImges $item) => $this->isStoredImage($item))->take($visualInputLimit) as $image) {
-            $imagePaths[] = (string) $image->full_url;
+            $imagePaths[] = ($image->original_disk ?: 'public') === 'media' ? ['disk' => 'media', 'path' => $image->full_url] : (string) $image->full_url;
             $imageMediaByIndex[count($imagePaths)] = $image;
         }
 
@@ -98,7 +98,7 @@ class GenerateEventAiTagsJob implements ShouldQueue
 
             if ($frames !== []) {
                 $analysisBatches[] = [
-                    'paths' => $frames,
+                    'paths' => array_map(fn ($path) => ['disk' => 'media', 'path' => $path], $frames),
                     'media_by_index' => $videoMediaByIndex,
                 ];
             }
@@ -229,7 +229,7 @@ class GenerateEventAiTagsJob implements ShouldQueue
             return false;
         }
 
-        $disk = Storage::disk('public');
+        $disk = Storage::disk($image->original_disk ?: 'public');
 
         if (! $disk->exists($path)) {
             Log::warning('event_ai_tags_image_missing', [
@@ -255,7 +255,7 @@ class GenerateEventAiTagsJob implements ShouldQueue
             return false;
         }
 
-        $disk = Storage::disk('public');
+        $disk = Storage::disk($media->original_disk ?: 'public');
 
         if (! $disk->exists($path)) {
             Log::warning('event_ai_tags_video_missing', [

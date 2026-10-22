@@ -4,6 +4,7 @@ namespace App\Services\EventModeration;
 
 use App\Models\EventRequestCreate;
 use App\Models\EventsImges;
+use App\Services\MediaAccessService;
 use Illuminate\Support\Facades\Storage;
 
 class EventModerationPayloadBuilder
@@ -81,8 +82,8 @@ class EventModerationPayloadBuilder
                 ->map(fn (EventsImges $media): array => [
                     'id' => (int) $media->id,
                     'type' => $media->type,
-                    'preview_url' => $this->publicMediaUrl($media->preview_url),
-                    'full_url' => $this->publicMediaUrl($media->full_url),
+                    'preview_url' => app(MediaAccessService::class)->previewUrl($media, true),
+                    'full_url' => app(MediaAccessService::class)->reviewOriginalUrl($media),
                     'width' => $media->width,
                     'height' => $media->height,
                     'size' => $media->size,

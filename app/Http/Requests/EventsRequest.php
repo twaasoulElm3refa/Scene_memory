@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SafeMedia;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -27,7 +28,7 @@ class EventsRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:10000'],
             'city_id' => 'nullable|exists:cities,id',
             'sub_categorey_id' => 'nullable|exists:sub_categoreys,id',
             // The database has a safe default; choosing a type is optional.
@@ -147,6 +148,7 @@ class EventsRequest extends FormRequest
             'file',
             'mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg,mov',
             'max:20460',
+            new SafeMedia,
         ];
     }
 

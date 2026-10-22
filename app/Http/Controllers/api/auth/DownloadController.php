@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\api\auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Entitlement;
 use App\Models\EventsImges;
+use App\Services\MediaAccessService;
+use App\Support\SecurityMessage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class DownloadController extends Controller
@@ -23,7 +23,7 @@ class DownloadController extends Controller
             ->groupBy('media_id');
 
         $media = EventsImges::query()
-            ->select(['events_images.id', 'events_images.preview_url', 'events_images.type', 'events_images.width', 'events_images.height'])
+            ->select('events_images.*')
             ->joinSub($latestEntitlements, 'user_entitlements', function ($join) {
                 $join->on('user_entitlements.media_id', '=', 'events_images.id');
             })
@@ -32,7 +32,7 @@ class DownloadController extends Controller
             ->get()
             ->map(fn (EventsImges $item) => [
                 'id' => $item->id,
-                'preview_url' => $item->preview_url,
+                'preview_url' => app(MediaAccessService::class)->previewUrl($item, true),
                 'type' => $item->type,
                 'width' => $item->width,
                 'height' => $item->height,
@@ -44,40 +44,11 @@ class DownloadController extends Controller
 
     public function download(Request $request, EventsImges $media): BinaryFileResponse|JsonResponse
     {
-        $owned = Entitlement::query()
-            ->where('user_id', $request->user()->id)
-            ->where('media_id', $media->id)
-            ->exists();
-        if (! $owned) {
-            return response()->json(['message' => 'Download is not authorized.'], 403);
-        }
-
-        $path = $this->safeRelativePath($media->full_url);
-        if ($path === null) {
-            return response()->json(['message' => 'Media file is unavailable.'], 404);
-        }
-
-        if (Storage::disk('public')->exists($path)) {
-            $file = Storage::disk('public')->path($path);
-        } elseif (is_file(public_path($path))) {
-            $file = public_path($path);
-        } else {
-            return response()->json(['message' => 'Media file is unavailable.'], 404);
-        }
-
+        $access = app(MediaAccessService::class);
+        abort_unless($access->canDownload($media, $request->user()), 403, SecurityMessage::get('denied'));
+        $file = $access->file($media);
         Log::info('download_authorized', ['user_id' => $request->user()->id, 'media_id' => $media->id]);
-        return response()->download($file, basename($file), ['Cache-Control' => 'private, no-store']);
-    }
 
-    private function safeRelativePath(?string $value): ?string
-    {
-        if (! $value || parse_url($value, PHP_URL_SCHEME) !== null) {
-            return null;
-        }
-        $path = str_replace('\\', '/', trim($value));
-        $path = preg_replace('#^(?:/)?(?:storage|public)/#', '', $path);
-        $path = ltrim((string) $path, '/');
-
-        return $path !== '' && ! str_contains($path, '..') ? $path : null;
+        return response()->download($file, basename($file), ['Cache-Control' => 'private, no-store', 'X-Content-Type-Options' => 'nosniff']);
     }
 }

@@ -2,17 +2,35 @@
 
 namespace App\Models;
 
+use App\Services\MediaAccessService;
 use Illuminate\Database\Eloquent\Model;
 
 class EventsImges extends Model
 {
     protected $table = 'events_images';
 
-    protected $guarded =[];
+    protected $guarded = [];
+
+    public function toArray(): array
+    {
+        $data = parent::toArray();
+        $access = app(MediaAccessService::class);
+        $viewer = request()->user('sanctum');
+        $preview = $access->previewUrl($this, ! $access->isPublished($this) && $access->ownerOrAdmin($this, $viewer));
+        // Preserve the API's existing display keys, never its internal original path.
+        foreach (['full_url', 'preview_url', 'url', 'video'] as $key) {
+            if (array_key_exists($key, $data) || in_array($key, ['full_url', 'preview_url'], true)) {
+                $data[$key] = $preview;
+            }
+        }
+        unset($data['original_disk'], $data['preview_disk'], $data['events']);
+
+        return $data;
+    }
 
     public function events()
     {
-        return $this->belongsTo(Events::class,'event_id');
+        return $this->belongsTo(Events::class, 'event_id');
     }
 
     public function MediaRequest()
@@ -22,7 +40,7 @@ class EventsImges extends Model
 
     public function cart()
     {
-        return $this->belongsTo(Cart::class,'image_id');
+        return $this->belongsTo(Cart::class, 'image_id');
     }
 
     public function tags()

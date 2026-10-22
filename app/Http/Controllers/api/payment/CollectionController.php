@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\api\payment;
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\concerns\ApiResponse;
-use App\Models\Events;
+use App\Http\Controllers\Controller;
 use App\Models\CartItems;
-use App\Repositories\Contracts\Carts\CartRepositoryInterface;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Models\Entitlement;
+use App\Models\Events;
+use App\Repositories\Contracts\Carts\CartRepositoryInterface;
+use App\Services\MediaAccessService;
 use App\Services\MinorMoney;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller
 {
@@ -29,7 +31,7 @@ class CollectionController extends Controller
     public function addCollectionToCart(Request $request, $eventId): JsonResponse
     {
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             return response()->json(['success' => false, 'message' => 'Unauthenticated'], 401);
         }
 
@@ -42,7 +44,7 @@ class CollectionController extends Controller
             if ($images->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Event has no images'
+                    'message' => 'Event has no images',
                 ], 422);
             }
 
@@ -60,11 +62,11 @@ class CollectionController extends Controller
             $cart = $this->cartRepository->findByUserId($user->id)
                 ?? $this->cartRepository->create(['user_id' => $user->id]);
 
-            $collectionImages = $images->map(function($img) {
+            $collectionImages = $images->map(function ($img) {
                 return [
                     'id' => $img->id,
-                    'url' => $img->full_url,
-                    'preview_url' => $img->full_url,
+                    'url' => app(MediaAccessService::class)->previewUrl($img),
+                    'preview_url' => app(MediaAccessService::class)->previewUrl($img),
                     'price' => $img->price,
                 ];
             })->values()->all();
@@ -116,9 +118,9 @@ class CollectionController extends Controller
     public function getCollectionDetails($eventId): JsonResponse
     {
         try {
-            $event = Events::with('images')->findOrFail($eventId);
+            $event = Events::with('images')->where('is_active', 1)->findOrFail($eventId);
 
-            $images = $event->images()->get();
+            $images = $event->images()->where('is_active', 1)->get();
             $totalPrice = $images->sum('price');
             $discountAmount = $totalPrice * 0.10;
             $finalPrice = $totalPrice - $discountAmount;
@@ -131,10 +133,10 @@ class CollectionController extends Controller
                 'discount_percentage' => 10,
                 'discount_amount' => $discountAmount,
                 'total_after_discount' => $finalPrice,
-                'images_preview' => $images->map(function($img) {
+                'images_preview' => $images->map(function ($img) {
                     return [
                         'id' => $img->id,
-                        'url' => $img->full_url,
+                        'url' => app(MediaAccessService::class)->previewUrl($img),
                         'price' => $img->price,
                     ];
                 })->take(5),
@@ -150,7 +152,7 @@ class CollectionController extends Controller
 
     private function clearCartCache($userId)
     {
-        \Illuminate\Support\Facades\Cache::tags(['cart', "user_{$userId}"])->flush();
-        \Illuminate\Support\Facades\Cache::tags('user_profile')->flush();
+        Cache::tags(['cart', "user_{$userId}"])->flush();
+        Cache::tags('user_profile')->flush();
     }
 }

@@ -4,315 +4,161 @@ namespace Tests\Feature\Api;
 
 use App\Mail\WelcomeMail;
 use App\Models\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
-use Mockery;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Laravel\Socialite\Two\GoogleProvider;
 use Tests\TestCase;
 
 class GoogleMobileExchangeTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const CODE_VERIFIER = 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv';
+    private const VERIFIER = 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Mail::fake();
+        config()->set('app.frontend_url', 'https://scemory.com');
+        config()->set('services.google.client_id', 'fixture-client');
+        config()->set('services.google.client_secret', 'fixture-secret');
+        config()->set('services.google.redirect', 'https://scemory.com/api/v1/users/google-callback');
+    }
+
+    private function start(string $lang = 'en'): string
+    {
+        $challenge = rtrim(strtr(base64_encode(hash('sha256', self::VERIFIER, true)), '+/', '-_'), '=');
+        $response = $this->get('/api/v1/users/google-login?'.http_build_query([
+            'mobile' => 1, 'lang' => $lang, 'code_challenge' => $challenge, 'return_url' => 'https://attacker.test',
+        ]));
+        $response->assertRedirectContains('https://accounts.google.com/o/oauth2/auth?');
+        parse_str(parse_url($response->headers->get('Location'), PHP_URL_QUERY), $query);
+        $this->assertSame('fixture-client', $query['client_id']);
+        $this->assertSame(config('services.google.redirect'), $query['redirect_uri']);
+        $this->assertStringStartsWith('scemory-mobile-v1.', $query['state']);
+        $this->assertStringNotContainsString('attacker.test', $response->headers->get('Location'));
+        Socialite::forgetDrivers();
+
+        return $query['state'];
+    }
+
+    private function provider(bool $fail = false): void
+    {
+        $responses = new MockHandler([
+            new Response($fail ? 400 : 200, [], json_encode(['access_token' => 'server-only-token'])),
+            new Response(200, [], json_encode(['sub' => 'mobile-google-sub', 'email' => 'mobile@example.test', 'email_verified' => true, 'name' => 'Mobile User'])),
+        ]);
+        Socialite::extend('google', fn ($app) => (new GoogleProvider($app['request'], 'fixture-client', 'fixture-secret', config('services.google.redirect')))
+            ->setHttpClient(new Client(['handler' => HandlerStack::create($responses)])));
+    }
+
+    private function delivery(string $lang = 'en'): string
+    {
+        $state = $this->start($lang);
+        $this->provider();
+        $response = $this->get('/api/v1/users/google-callback?'.http_build_query(['code' => 'fixture', 'state' => $state]));
+        $response->assertRedirectContains('https://scemory.com/mobile/auth/callback?');
+        parse_str(parse_url($response->headers->get('Location'), PHP_URL_QUERY), $query);
+        $this->assertSame($lang, $query['lang']);
+        $this->assertArrayNotHasKey('token', $query);
+        $this->assertArrayNotHasKey('email', $query);
+        $this->assertMatchesRegularExpression('/^[A-Za-z0-9]{64}$/', $query['code']);
+
+        return $query['code'];
+    }
+
+    private function exchange(string $code, array $profile = [], string $verifier = self::VERIFIER)
+    {
+        return $this->postJson('/api/v1/users/google-mobile-exchange', ['code' => $code, 'code_verifier' => $verifier] + $profile);
+    }
 
     public function test_existing_mobile_user_returns_to_verified_app_link_and_exchanges_code_once(): void
     {
-        $user = User::factory()->create([
-            'email' => 'existing@example.test',
-            'role' => 'user',
-            'is_active' => true,
-        ]);
-        $provider = $this->mobileProvider('existing@example.test', 'Existing User');
-
-        Socialite::shouldReceive('driver')->with('google')->twice()->andReturn($provider);
-
-        $login = $this->get($this->mobileLoginUrl('ar').'&return_url=https://attacker.test');
-        $login->assertRedirectContains('https://accounts.google.test/o/oauth2');
-        $state = $this->parseRedirectQuery($login->headers->get('Location'))['state'] ?? null;
-        $this->assertNotEmpty($state);
-        $this->assertStringNotContainsString('attacker.test', $login->headers->get('Location'));
-
-        $callback = $this->get('/api/v1/users/google-callback?'.http_build_query([
-            'code' => 'google-code',
-            'state' => $state,
-        ]));
-
-        $callback->assertRedirectContains('https://scemory.com/mobile/auth/callback?');
-        $appLink = $this->parseRedirectQuery($callback->headers->get('Location'));
-
-        $this->assertSame('ar', $appLink['lang']);
-        $this->assertMatchesRegularExpression('/^[A-Za-z0-9]{64}$/', $appLink['code']);
-        $this->assertArrayNotHasKey('token', $appLink);
-        $this->assertArrayNotHasKey('email', $appLink);
+        $user = User::factory()->create(['google_id' => 'mobile-google-sub', 'email' => 'mobile@example.test', 'is_active' => true]);
+        $code = $this->delivery('ar');
         $this->assertDatabaseCount('personal_access_tokens', 0);
-
-        $exchange = $this->postJson('/api/v1/users/google-mobile-exchange', [
-            'code' => $appLink['code'],
-            'code_verifier' => self::CODE_VERIFIER,
-        ]);
-
-        $exchange->assertOk()
-            ->assertJsonPath('status', 'success')
-            ->assertJsonPath('role', 'user')
-            ->assertJsonPath('user.email', 'existing@example.test');
-        $this->assertNotEmpty($exchange->json('token'));
+        $this->exchange($code)->assertOk()->assertJsonPath('user.id', $user->id);
+        $this->exchange($code)->assertStatus(422);
+        $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseCount('personal_access_tokens', 1);
-
-        $this->postJson('/api/v1/users/google-mobile-exchange', [
-            'code' => $appLink['code'],
-            'code_verifier' => self::CODE_VERIFIER,
-        ])
-            ->assertStatus(422);
-        $this->assertDatabaseCount('personal_access_tokens', 1);
-        $this->assertSame($user->id, User::where('email', 'existing@example.test')->value('id'));
     }
 
-    public function test_mobile_callback_creates_a_new_user_without_putting_identity_in_app_link(): void
+    public function test_new_mobile_account_requires_profile_then_registers_without_password(): void
     {
-        Mail::fake();
-        DB::table('licence_types')->insert([
-            'id' => 1,
-            'name' => 'Free',
-            'price' => 0,
-            'is_active' => true,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        $provider = $this->mobileProvider('new@example.test', 'New User');
-
-        Socialite::shouldReceive('driver')->with('google')->twice()->andReturn($provider);
-
-        $login = $this->get($this->mobileLoginUrl('en'));
-        $login->assertRedirect();
-        $state = $this->parseRedirectQuery($login->headers->get('Location'))['state'] ?? null;
-
-        $callback = $this->get('/api/v1/users/google-callback?'.http_build_query([
-            'code' => 'google-code',
-            'state' => $state,
-        ]));
-        $appLink = $this->parseRedirectQuery($callback->headers->get('Location'));
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'new@example.test',
-            'name' => 'New User',
-            'is_active' => true,
-        ]);
-        $this->assertArrayNotHasKey('token', $appLink);
-        $this->assertArrayNotHasKey('email', $appLink);
+        $code = $this->delivery();
+        $this->exchange($code)->assertStatus(202)->assertJsonPath('status', 'profile_required');
+        $this->assertDatabaseCount('users', 0);
+        $this->exchange($code, ['country' => 'Egypt', 'date_of_birth' => '2000-01-01'])->assertOk()->assertJsonPath('role', 'user');
+        $this->assertDatabaseHas('users', ['google_id' => 'mobile-google-sub', 'email' => 'mobile@example.test', 'password' => null]);
         Mail::assertQueued(WelcomeMail::class);
-
-        $this->postJson('/api/v1/users/google-mobile-exchange', [
-            'code' => $appLink['code'],
-            'code_verifier' => self::CODE_VERIFIER,
-        ])
-            ->assertOk()
-            ->assertJsonPath('user.email', 'new@example.test');
     }
 
     public function test_mobile_google_cancellation_returns_a_safe_error_to_the_app(): void
     {
-        $provider = $this->mobileProvider();
-
-        Socialite::shouldReceive('driver')->with('google')->once()->andReturn($provider);
-
-        $login = $this->get($this->mobileLoginUrl('fr'));
-        $login->assertRedirect();
-        $state = $this->parseRedirectQuery($login->headers->get('Location'))['state'] ?? null;
-
-        $callback = $this->get('/api/v1/users/google-callback?'.http_build_query([
-            'error' => 'access_denied',
-            'state' => $state,
-        ]));
-
-        $callback->assertRedirect('https://scemory.com/mobile/auth/callback?lang=fr&error=cancelled');
+        $state = $this->start('fr');
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $state, 'error' => 'access_denied']))
+            ->assertRedirect('https://scemory.com/mobile/auth/callback?lang=fr&error=cancelled');
     }
 
     public function test_expired_and_replayed_mobile_oauth_states_are_rejected(): void
     {
-        $user = User::factory()->create([
-            'email' => 'state@example.test',
-            'is_active' => true,
-        ]);
-        $provider = $this->mobileProvider($user->email, $user->name);
-
-        Socialite::shouldReceive('driver')->with('google')->once()->andReturn($provider);
-        $login = $this->get($this->mobileLoginUrl('de'));
-        $login->assertRedirect();
-        $state = $this->parseRedirectQuery($login->headers->get('Location'))['state'] ?? null;
-
+        $state = $this->start('de');
         $this->travel(11)->minutes();
-
-        $this->get('/api/v1/users/google-callback?'.http_build_query([
-            'code' => 'google-code',
-            'state' => $state,
-        ]))->assertRedirect('https://scemory.com/mobile/auth/callback?lang=de&error=expired_state');
-
+        $url = '/api/v1/users/google-callback?'.http_build_query(['state' => $state, 'code' => 'fixture']);
+        $this->get($url)->assertRedirect('https://scemory.com/mobile/auth/callback?lang=de&error=expired_state');
         $this->travelBack();
-
-        $provider = $this->mobileProvider($user->email, $user->name);
-        Socialite::shouldReceive('driver')->with('google')->twice()->andReturn($provider);
-        $login = $this->get($this->mobileLoginUrl('de'));
-        $login->assertRedirect();
-        $state = $this->parseRedirectQuery($login->headers->get('Location'))['state'] ?? null;
-
-        $callbackUrl = '/api/v1/users/google-callback?'.http_build_query([
-            'code' => 'google-code',
-            'state' => $state,
-        ]);
-        $this->get($callbackUrl)->assertRedirectContains('code=');
-        $this->get($callbackUrl)
-            ->assertRedirect('https://scemory.com/mobile/auth/callback?lang=de&error=invalid_state');
+        $state = $this->start('de');
+        $this->provider();
+        $url = '/api/v1/users/google-callback?'.http_build_query(['state' => $state, 'code' => 'fixture']);
+        $this->get($url)->assertRedirectContains('code=');
+        $this->get($url)->assertRedirect('https://scemory.com/mobile/auth/callback?lang=de&error=invalid_state');
     }
 
     public function test_expired_or_unknown_delivery_code_is_rejected_without_issuing_a_token(): void
     {
-        $code = str_repeat('a', 64);
-        Cache::put('google-mobile-delivery:'.hash('sha256', $code), [
-            'user_id' => User::factory()->create(['is_active' => true])->id,
-            'code_challenge' => $this->codeChallenge(),
-        ], now()->subSecond());
-
-        $this->postJson('/api/v1/users/google-mobile-exchange', [
-            'code' => $code,
-            'code_verifier' => self::CODE_VERIFIER,
-        ])
-            ->assertStatus(422);
+        $code = $this->delivery();
+        $this->travel(6)->minutes();
+        $this->exchange($code)->assertStatus(422);
+        $this->exchange(str_repeat('a', 64))->assertStatus(422);
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
 
-    public function test_delivery_code_is_bound_to_the_app_pkce_verifier(): void
+    public function test_delivery_code_is_bound_to_the_app_pkce_verifier_and_cannot_use_web_exchange(): void
     {
-        $code = str_repeat('b', 64);
-        Cache::put('google-mobile-delivery:'.hash('sha256', $code), [
-            'user_id' => User::factory()->create(['is_active' => true])->id,
-            'code_challenge' => $this->codeChallenge(),
-        ], now()->addMinutes(2));
+        User::factory()->create(['google_id' => 'mobile-google-sub', 'is_active' => true]);
+        $code = $this->delivery();
+        $this->exchange($code, [], str_repeat('x', 43))->assertStatus(422)->assertJsonPath('error_code', 'invalid_state');
+        $this->postJson('/api/v1/users/google-exchange', ['code' => $code])->assertStatus(422);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+        $this->exchange($code)->assertOk();
+    }
 
-        $this->postJson('/api/v1/users/google-mobile-exchange', [
-            'code' => $code,
-            'code_verifier' => str_repeat('x', 43),
-        ])->assertStatus(422)
-            ->assertJsonPath('message', 'This sign in link does not belong to this app session.');
-
+    public function test_mobile_provider_callback_failure_returns_no_sensitive_details(): void
+    {
+        $state = $this->start();
+        $this->provider(fail: true);
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $state, 'code' => 'invalid']))
+            ->assertRedirect('https://scemory.com/mobile/auth/callback?lang=en&error=callback_failed');
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
 
-    public function test_mobile_provider_callback_failure_returns_to_the_app_without_details(): void
+    public function test_malformed_mobile_state_and_missing_challenge_cannot_downgrade_to_web(): void
     {
-        $provider = $this->mobileProvider(shouldFail: true);
-        Socialite::shouldReceive('driver')->with('google')->twice()->andReturn($provider);
-
-        $login = $this->get($this->mobileLoginUrl('en'));
-        $state = $this->parseRedirectQuery($login->headers->get('Location'))['state'] ?? null;
-
-        $this->get('/api/v1/users/google-callback?'.http_build_query([
-            'code' => 'bad-google-code',
-            'state' => $state,
-        ]))->assertRedirect('https://scemory.com/mobile/auth/callback?lang=en&error=callback_failed');
-
-        $this->assertDatabaseCount('personal_access_tokens', 0);
+        $this->getJson('/api/v1/users/google-login?mobile=1')->assertUnprocessable();
+        $this->get('/api/v1/users/google-callback?state=scemory-mobile-v1.invalid&code=fixture')
+            ->assertRedirect('https://scemory.com/mobile/auth/callback?lang=en&error=invalid_state');
+        $this->assertDatabaseCount('users', 0);
     }
 
-    public function test_web_google_callback_keeps_the_existing_frontend_redirect_flow(): void
+    public function test_missing_configuration_returns_a_localizable_error_to_the_app(): void
     {
-        config()->set('app.frontend_url', 'https://scemory.com');
-        $user = User::factory()->create([
-            'email' => 'web@example.test',
-            'role' => 'user',
-            'is_active' => true,
-        ]);
-        $provider = Mockery::mock();
-        $provider->shouldReceive('stateless')->once()->andReturnSelf();
-        $provider->shouldReceive('user')->once()->andReturn($this->googleUser('web@example.test', $user->name));
-        Socialite::shouldReceive('driver')->with('google')->once()->andReturn($provider);
-
-        $response = $this->withCookie('oauth_lang', 'en')
-            ->get('/api/v1/users/google-callback?code=google-code');
-
-        $response->assertRedirectContains('https://scemory.com/en/auth/google-callback?token=');
-        $this->assertStringNotContainsString('/mobile/auth/callback', $response->headers->get('Location'));
-        $this->assertDatabaseCount('personal_access_tokens', 1);
-    }
-
-    public function test_real_google_provider_includes_the_mobile_state_in_its_authorization_url(): void
-    {
-        config()->set('services.google.client_id', 'test-google-client');
-        config()->set('services.google.client_secret', 'test-google-secret');
-        config()->set('services.google.redirect', 'https://scemory.com/api/v1/users/google-callback');
-
-        $response = $this->get($this->mobileLoginUrl('en'));
-
-        $response->assertRedirectContains('https://accounts.google.com/o/oauth2/auth?');
-        $query = $this->parseRedirectQuery($response->headers->get('Location'));
-
-        $this->assertSame('test-google-client', $query['client_id']);
-        $this->assertSame('https://scemory.com/api/v1/users/google-callback', $query['redirect_uri']);
-        $this->assertStringStartsWith('scemory-mobile-v1.', $query['state']);
-    }
-
-    private function mobileProvider(
-        string $email = 'mobile@example.test',
-        string $name = 'Mobile User',
-        bool $shouldFail = false
-    ): Mockery\MockInterface {
-        $state = null;
-        $provider = Mockery::mock();
-
-        $provider->shouldReceive('stateless')->atLeast()->once()->andReturnSelf();
-        $provider->shouldReceive('with')->once()->with(Mockery::on(
-            function (array $parameters) use (&$state): bool {
-                $state = $parameters['state'] ?? null;
-
-                return is_string($state) && str_starts_with($state, 'scemory-mobile-v1.');
-            }
-        ))->andReturnSelf();
-        $provider->shouldReceive('redirect')->once()->andReturnUsing(
-            function () use (&$state): RedirectResponse {
-                return new RedirectResponse(
-                    'https://accounts.google.test/o/oauth2?'.http_build_query(['state' => $state])
-                );
-            }
-        );
-        if ($shouldFail) {
-            $provider->shouldReceive('user')->once()->andThrow(new \RuntimeException('Provider rejected callback.'));
-        } else {
-            $provider->shouldReceive('user')->zeroOrMoreTimes()->andReturn($this->googleUser($email, $name));
-        }
-
-        return $provider;
-    }
-
-    private function googleUser(string $email, string $name): Mockery\MockInterface
-    {
-        $googleUser = Mockery::mock();
-        $googleUser->shouldReceive('getEmail')->andReturn($email);
-        $googleUser->shouldReceive('getName')->andReturn($name);
-
-        return $googleUser;
-    }
-
-    private function parseRedirectQuery(string $url): array
-    {
-        parse_str((string) parse_url($url, PHP_URL_QUERY), $query);
-
-        return $query;
-    }
-
-    private function mobileLoginUrl(string $lang): string
-    {
-        return '/api/v1/users/google-login?'.http_build_query([
-            'mobile' => 1,
-            'lang' => $lang,
-            'code_challenge' => $this->codeChallenge(),
-        ]);
-    }
-
-    private function codeChallenge(): string
-    {
-        return rtrim(strtr(base64_encode(hash('sha256', self::CODE_VERIFIER, true)), '+/', '-_'), '=');
+        config()->set('services.google.client_id', null);
+        $this->get('/api/v1/users/google-login?mobile=1&lang=ar')
+            ->assertRedirect('https://scemory.com/mobile/auth/callback?lang=ar&error=unavailable');
     }
 }

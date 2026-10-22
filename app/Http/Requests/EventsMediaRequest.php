@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SafeMedia;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EventsMediaRequest extends FormRequest
@@ -17,13 +19,13 @@ class EventsMediaRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'url' => 'required|array|min:1',
-            'url.*' => 'required|mimes:jpeg,jpg,png,webp,gif,mp4|max:5120',
+            'url' => 'required|array|min:1|max:8',
+            'url.*' => ['required', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4', 'max:5120', new SafeMedia],
         ];
     }
 }

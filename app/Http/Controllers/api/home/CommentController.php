@@ -9,6 +9,7 @@ use App\Jobs\TranslateCommentJob;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Services\PointService;
+use App\Support\SecurityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,8 @@ class CommentController extends Controller
 
     public function create(CommentRequest $request)
     {
+        $event = $this->eventRepository->findById((int) $request->route('id'));
+        abort_unless($event && $event->is_active, 404, SecurityMessage::get('notFound'));
         $data = $request->validated();
         $storedPaths = [];
         $transactionStarted = false;
@@ -145,8 +148,9 @@ class CommentController extends Controller
 
     public function allPaginated(Request $request)
     {
+        $event = $this->eventRepository->findBySlug((string) request('slug'));
+        abort_unless($event && $event->is_active, 404, SecurityMessage::get('notFound'));
         try {
-            $event = $this->eventRepository->findBySlugOrFail((string) request('slug'));
             $page = request('page', 1);
             $cacheKey = "comments_page_{$page}_event_{$event->id}_".app()->getLocale();
 

@@ -159,8 +159,8 @@ class EventSearchFiltersTest extends TestCase
             ->assertJsonPath('data.total', 1)
             ->assertJsonPath('data.data.0.result_type', 'video')
             ->assertJsonPath('data.data.0.event_id', $eventId)
-            ->assertJsonPath('data.data.0.preview_url', 'videos/clip.mp4.jpg')
-            ->assertJsonPath('data.data.0.video_url', 'videos/clip.mp4');
+            ->assertJsonPath('data.data.0.preview_url', fn ($url) => str_contains($url, '/api/v1/media/'))
+            ->assertJsonPath('data.data.0.video_url', fn ($url) => str_contains($url, '/api/v1/media/'));
     }
 
     public function test_discovery_media_matches_its_own_or_parent_event_tags(): void

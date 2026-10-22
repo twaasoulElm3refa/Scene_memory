@@ -146,12 +146,7 @@ class GenerateImageTagsService
             'successful' => $response->successful(),
             'finish_reason' => data_get($responseBody, 'choices.0.finish_reason'),
             'content_type' => get_debug_type($content),
-            'content' => is_string($content)
-                ? mb_substr($content, 0, 2000)
-                : $content,
-            'body' => mb_substr($response->body(), 0, 2000),
             'model' => data_get($responseBody, 'model', $this->config->get('services.openrouter.model')),
-            'error' => data_get($responseBody, 'error'),
             'has_provider_error' => data_get($responseBody, 'error') !== null,
             'has_tool_calls' => ! empty(data_get($responseBody, 'choices.0.message.tool_calls')),
             'has_reasoning' => data_get($responseBody, 'choices.0.message.reasoning') !== null

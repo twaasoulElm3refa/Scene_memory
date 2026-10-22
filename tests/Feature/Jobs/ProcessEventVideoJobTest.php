@@ -15,7 +15,7 @@ class ProcessEventVideoJobTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_watermark_failure_does_not_create_media_and_retry_uses_moved_source(): void
+    public function test_watermark_failure_does_not_create_media_and_retry_uses_private_copy(): void
     {
         Storage::fake('public');
 
@@ -41,7 +41,7 @@ class ProcessEventVideoJobTest extends TestCase
                 }
 
                 $previewPath = 'videos/preview_wm_upload.mp4';
-                Storage::disk('public')->put($previewPath, 'watermarked-video');
+                Storage::disk('media')->put($previewPath, 'watermarked-video');
 
                 return $previewPath;
             }
@@ -58,8 +58,10 @@ class ProcessEventVideoJobTest extends TestCase
             'event_id' => $event->id,
             'type' => 'video',
         ]);
-        Storage::disk('public')->assertMissing($tempPath);
-        Storage::disk('public')->assertExists('videos/upload.mp4');
+        $finalPath = 'videos/'.hash('sha256', $event->id.'|public|'.$tempPath).'.mp4';
+        Storage::disk('public')->assertExists($tempPath);
+        Storage::disk('public')->assertMissing($finalPath);
+        Storage::disk('media')->assertExists($finalPath);
 
         $job->handle(app(EventTagCacheService::class));
 
@@ -67,7 +69,9 @@ class ProcessEventVideoJobTest extends TestCase
             'event_id' => $event->id,
             'type' => 'video',
             'preview_url' => 'videos/preview_wm_upload.mp4',
-            'full_url' => 'videos/upload.mp4',
+            'full_url' => $finalPath,
+            'original_disk' => 'media',
+            'preview_disk' => 'media',
         ]);
 
         $job->handle(app(EventTagCacheService::class));

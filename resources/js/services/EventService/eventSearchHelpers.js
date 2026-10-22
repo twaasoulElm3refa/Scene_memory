@@ -334,6 +334,8 @@ export const toMediaUrl = (pathValue) => {
         return `/storage/${path}`;
     }
 
+    if (path.startsWith("/api/")) return `${new URL(baseUrl).origin}${path}`;
+
     const cleanPath = path
         .replace(/\\/g, "/")
         .trim();

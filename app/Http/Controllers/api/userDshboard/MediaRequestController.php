@@ -5,14 +5,12 @@ namespace App\Http\Controllers\api\userDshboard;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadMediaRequest;
-use App\Jobs\GenerateEventAiTagsJob;
-use App\Jobs\ProcessEventVideoJob;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Services\EventMediaIngest;
 use App\Services\ImageAnalysisService;
+use App\Support\EventAccess;
 use Illuminate\Support\Facades\Cache;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
 
 class MediaRequestController extends Controller
 {
@@ -27,7 +25,8 @@ class MediaRequestController extends Controller
 
     public function all()
     {
-        $cacheKey = 'mediaRequest_'.request()->input('page', 1);
+        EventAccess::authorize($this->eventRepository->findById((int) request('id')), request()->user());
+        $cacheKey = 'mediaRequest_'.request('id').'_'.request()->input('page', 1);
         $mediaRequest = Cache::remember($cacheKey, $this->cacheTime, function () {
             return $this->eventImageRepository->findActiveByEventIdPaginated((int) request('id'), 10);
         });
@@ -38,70 +37,8 @@ class MediaRequestController extends Controller
     public function upload(UploadMediaRequest $request, ImageAnalysisService $imageAnalysisService)
     {
         $event = $this->eventRepository->findByIdOrFail((int) $request->id);
-        $createdMedia = [];
-
-        $manager = new ImageManager(
-            new Driver
-        );
-
-        if ($request->hasFile('url')) {
-            foreach ($request->file('url') as $file) {
-                $mime = $file->getMimeType();
-
-                if (str_starts_with($mime, 'image/')) {
-                    $analysis = $imageAnalysisService->process($file, $manager);
-
-                    $image = $analysis['image'];
-                    $preview = $analysis['preview_encoded'];
-                    $width = $analysis['width'];
-                    $height = $analysis['height'];
-                    $price = $analysis['price'];
-                    $plan = $analysis['plan'];
-
-                    $filename = uniqid().'.jpg';
-                    $fullPath = 'events/full/'.$filename;
-                    $previewPath = 'events/preview/'.$filename;
-
-                    // Save both full and preview images
-                    \Storage::disk('public')->put(
-                        $fullPath,
-                        $image->toJpeg(90)
-                    );
-
-                    \Storage::disk('public')->put(
-                        $previewPath,
-                        (string) $preview
-                    );
-
-                    $media = $this->eventImageRepository->create([
-                        'event_id' => $event->id,
-                        'preview_url' => $previewPath,
-                        'full_url' => $fullPath,
-                        'width' => $width,
-                        'height' => $height,
-                        'size' => $width * $height,
-                        'price' => $price,
-                        'licence_type' => $plan,
-                        'is_active' => 1,
-                    ]);
-
-                    $createdMedia[] = $media;
-                } elseif (str_starts_with($mime, 'video/')) {
-                    $path = $file->store('events/videos', 'public');
-                    ProcessEventVideoJob::dispatch($event->id, $path, true);
-                }
-            }
-
-            if ($createdMedia !== []) {
-                GenerateEventAiTagsJob::dispatch((int) $event->id);
-            }
-
-            try {
-                Cache::tags(['events'])->flush();
-            } catch (\Throwable) {
-                // Non-tagged cache stores are used in tests/local setups.
-            }
-        }
+        EventAccess::authorize($event, $request->user());
+        $createdMedia = app(EventMediaIngest::class)->upload($event, $request->file('url', []), true);
 
         return $this->success([
             'media' => $createdMedia,

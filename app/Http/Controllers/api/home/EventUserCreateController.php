@@ -89,7 +89,7 @@ class EventUserCreateController extends Controller
 
                             continue;
                         }
-                        $mime = (string) $file->getMimeType();
+                        $mime = (string) (new \finfo(FILEINFO_MIME_TYPE))->file($file->getRealPath());
                         $supportedImageMimes = [
                             'image/jpeg',
                             'image/jpg',
@@ -105,7 +105,7 @@ class EventUserCreateController extends Controller
                             'image/x-tiff',
                         ];
                         if (in_array($mime, $supportedImageMimes, true)) {
-                            $tempPath = $file->store('images_temp', 'public');
+                            $tempPath = $file->store('images_temp', 'media');
                             if (! $tempPath || trim($tempPath) === '') {
                                 \Log::error('Image temp store failed', [
                                     'event_id' => $event->id,
@@ -133,12 +133,13 @@ class EventUserCreateController extends Controller
                                 $event->id,
                                 $tempPath,
                                 $manualPrice,
-                                $photoMetadata
+                                $photoMetadata,
+                                'media'
                             );
-                        } elseif (str_starts_with($mime, 'video/')) {
+                        } elseif (str_starts_with($mime, 'video/') || in_array($mime, ['application/mp4', 'application/ogg'], true)) {
                             try {
-                                $path = $file->store('videos_temp', 'public');
-                                $videoJobs[] = new ProcessEventVideoJob($event->id, $path);
+                                $path = $file->store('videos_temp', 'media');
+                                $videoJobs[] = new ProcessEventVideoJob($event->id, $path, false, 'media');
                             } catch (\Throwable $e) {
                                 \Log::error('Video processing dispatch failed', [
                                     'name' => $file->getClientOriginalName(),

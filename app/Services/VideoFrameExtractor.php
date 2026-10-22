@@ -14,19 +14,20 @@ class VideoFrameExtractor
     /**
      * Extract a small set of representative JPEG frames for vision analysis.
      *
-     * @return array<int, string> Paths on the public disk.
+     * @return array<int, string> Paths on the private media disk.
      */
     public function extract(EventsImges $video, int $limit): array
     {
         $limit = max(0, min($limit, (int) config('ai_tags.video_frames_limit', 5)));
         $videoPath = ltrim((string) $video->full_url, '/');
-        $disk = Storage::disk('public');
+        $disk = Storage::disk('media');
 
-        if ($limit === 0 || $videoPath === '' || ! $disk->exists($videoPath)) {
+        $source = Storage::disk($video->original_disk ?: 'public');
+        if ($limit === 0 || $videoPath === '' || ! $source->exists($videoPath)) {
             return [];
         }
 
-        $absoluteVideoPath = $disk->path($videoPath);
+        $absoluteVideoPath = app(MediaAccessService::class)->file($video);
         $directory = 'ai-video-frames/event-'.$video->event_id.'/media-'.$video->id.'-'.Str::uuid();
         $disk->makeDirectory($directory);
 
@@ -42,6 +43,7 @@ class VideoFrameExtractor
                     '-hide_banner',
                     '-loglevel',
                     'error',
+                    '-nostdin', '-threads', '2', '-protocol_whitelist', 'file,pipe',
                     '-y',
                     '-ss',
                     number_format($timestamp, 3, '.', ''),
@@ -93,7 +95,7 @@ class VideoFrameExtractor
      */
     public function cleanup(array $framePaths): void
     {
-        $disk = Storage::disk('public');
+        $disk = Storage::disk('media');
         $directories = [];
 
         foreach ($framePaths as $path) {
@@ -118,6 +120,7 @@ class VideoFrameExtractor
             (string) config('services.ffmpeg.ffprobe_binary', 'ffprobe'),
             '-v',
             'error',
+            '-protocol_whitelist', 'file,pipe',
             '-show_entries',
             'format=duration',
             '-of',

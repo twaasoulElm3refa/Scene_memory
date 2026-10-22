@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\api\home;
 
 use App\Http\Controllers\Controller;
+use App\Rules\SafeMedia;
 use App\Services\PhotoQualityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MediaValidationController extends Controller
 {
-    public function __construct(private readonly PhotoQualityService $photoQualityService)
-    {
-    }
+    public function __construct(private readonly PhotoQualityService $photoQualityService) {}
 
     public function validatePhoto(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'photography_type' => ['required', 'in:normal,professional'],
-            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460'],
+            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:20460', new SafeMedia],
         ]);
 
         if ($validator->fails()) {

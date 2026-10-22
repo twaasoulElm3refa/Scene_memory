@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Support\SecurityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -37,6 +38,7 @@ class CommentInteractionController extends Controller
     {
         $comment = $this->commentRepository->findOrFail((int) request('id'));
         $event = $this->eventRepository->findByIdOrFail((int) $comment->event_id);
+        abort_unless($event->is_active, 404, SecurityMessage::get('notFound'));
         $userId = (int) $request->user()->id;
 
         $interaction = $this->commentRepository->updateOrCreateInteraction(

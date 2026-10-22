@@ -11,6 +11,7 @@ use App\Repositories\Contracts\Cities\CityRepositoryInterface;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Support\SecurityMessage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -311,7 +312,7 @@ class EventController extends Controller
             }
 
             return $DBCITY->events()
-                ->with('city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url')
+                ->with('city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url,preview_url,is_active,price,original_disk,preview_disk')
                 ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id', 'langitude', 'lattitude')
                 ->where('is_active', 1)
                 ->latest()
@@ -391,6 +392,7 @@ class EventController extends Controller
             return $this->error('Invalid slug', 400);
         }
 
+        abort_unless(Events::where('slug', $slug)->where('is_active', 1)->exists(), 404, SecurityMessage::get('notFound'));
         $cacheKey = $this->eventCacheKey($slug);
 
         $event = Cache::tags(['events'])->remember($cacheKey, now()->addHours(6), function () use ($slug) {
@@ -762,7 +764,7 @@ class EventController extends Controller
                 'city.translation',
                 'sub_categorey.translation',
                 'translation',
-                'firstImage:id,event_id,full_url'
+                'firstImage:id,event_id,full_url,preview_url,is_active,price,original_disk,preview_disk'
             )
             ->select(
                 'id',

@@ -196,8 +196,8 @@ class GenerateEventAiTagsJobTest extends TestCase
         $frameBytes = base64_decode(
             'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
         );
-        Storage::disk('public')->put('ai-video-frames/frame-1.png', $frameBytes);
-        Storage::disk('public')->put('ai-video-frames/frame-2.png', $frameBytes);
+        Storage::disk('media')->put('ai-video-frames/frame-1.png', $frameBytes);
+        Storage::disk('media')->put('ai-video-frames/frame-2.png', $frameBytes);
 
         $extractor = Mockery::mock(VideoFrameExtractor::class);
         $extractor->shouldReceive('extract')

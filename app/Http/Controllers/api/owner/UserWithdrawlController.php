@@ -5,12 +5,12 @@ namespace App\Http\Controllers\api\owner;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Withdraw;
+use App\Services\WithdrawalReservationService;
+use App\Support\SecurityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class UserWithdrawlController extends Controller
 {
@@ -18,7 +18,7 @@ class UserWithdrawlController extends Controller
 
     private function withdrawalsVersionKey(int $userId): string
     {
-        return 'user_withdrawals_version_' . $userId;
+        return 'user_withdrawals_version_'.$userId;
     }
 
     private function withdrawalsVersion(int $userId): int
@@ -30,7 +30,7 @@ class UserWithdrawlController extends Controller
     {
         $version = $this->withdrawalsVersion($userId);
 
-        return 'user_withdrawals_' . $userId . '_v' . $version . '_' . md5(json_encode($params));
+        return 'user_withdrawals_'.$userId.'_v'.$version.'_'.md5(json_encode($params));
     }
 
     private function flushWithdrawalsCache(int $userId): void
@@ -58,6 +58,7 @@ class UserWithdrawlController extends Controller
 
             if (json_last_error() !== JSON_ERROR_NONE || ! is_array($decoded)) {
                 $isInvalid = true;
+
                 return null;
             }
 
@@ -69,9 +70,9 @@ class UserWithdrawlController extends Controller
         return null;
     }
 
-    private function findUserWithdrawal(int $userId, int $withdrawalId): ?withdraw
+    private function findUserWithdrawal(int $userId, int $withdrawalId): ?Withdraw
     {
-        return withdraw::query()
+        return Withdraw::query()
             ->where('user_id', $userId)
             ->where('id', $withdrawalId)
             ->with(['approvedBy:id,name'])
@@ -100,7 +101,7 @@ class UserWithdrawlController extends Controller
         $cacheKey = $this->withdrawalsCacheKey($user->id, $cacheParams);
 
         $withdrawals = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($user, $status, $perPage, $usePagination) {
-            $query = withdraw::query()
+            $query = Withdraw::query()
                 ->where('user_id', $user->id)
                 ->with(['approvedBy:id,name'])
                 ->latest();
@@ -140,248 +141,51 @@ class UserWithdrawlController extends Controller
         return $this->success($withdrawal, 'Withdrawal fetched successfully');
     }
 
-    public function requestWithdrawals(Request $request, $id)
+    private function withdrawalInput(Request $request, bool $creating): array
     {
-        $user = $request->user();
-
-        if (! $user) {
-            return $this->unauthorized('Unauthenticated.');
-        }
-
-        $wallet = $user->wallet;
-
-        if (! $wallet) {
-            return $this->error('Wallet not found.', 404);
-        }
-
-        if ((int) $id !== (int) $wallet->id) {
-            return $this->forbidden('You are not authorized to request withdrawal from this wallet.');
-        }
-
-        $validator = Validator::make($request->all(), [
-            'amount' => ['required', 'numeric', 'gt:0'],
-            'fee' => ['nullable', 'numeric', 'min:0'],
-            'currency' => ['nullable', 'string', 'max:10'],
-            'method' => ['nullable', 'string', 'max:100'],
-            'payment_details' => ['nullable'],
-            'reference' => ['nullable', 'string', 'max:191'],
-            'transaction_id' => ['nullable', 'string', 'max:191'],
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator->errors());
-        }
-
-        $amount = (float) $request->input('amount');
-        $fee = (float) $request->input('fee', 0);
-
-        if ($fee > $amount) {
-            return $this->validationError([
-                'fee' => ['Fee cannot be greater than amount.'],
-            ]);
-        }
-
-        $walletAmount = (float) ($wallet->amount ?? 0);
-
-        if ($amount > $walletAmount) {
-            return $this->error('Insufficient wallet balance.', 422);
-        }
-
-        $invalidPaymentDetails = false;
-        $paymentDetails = $this->normalizePaymentDetails($request->input('payment_details'), $invalidPaymentDetails);
-
-        if ($invalidPaymentDetails) {
-            return $this->validationError([
-                'payment_details' => ['Payment details must be a valid JSON object or array.'],
-            ]);
-        }
-
-        try {
-            $withdrawal = DB::transaction(function () use ($user, $wallet, $request, $amount, $fee, $paymentDetails) {
-                $wallet->decrement('amount', $amount);
-                $wallet->increment('pending', $amount);
-                return withdraw::query()->create([
-                    'user_id' => $user->id,
-                    'amount' => $amount,
-                    'fee' => $fee,
-                    'net_amount' => $amount - $fee,
-                    'currency' => $request->input('currency', $user->wallet?->currency ?? 'EGP'),
-                    'status' => 'pending',
-                    'method' => $request->input('method'),
-                    'payment_details' => $paymentDetails,
-                    'reference' => $request->input('reference'),
-                    'transaction_id' => $request->input('transaction_id'),
-                ])->fresh(['approvedBy:id,name']);
-            });
-            $this->flushWithdrawalsCache($user->id);
-
-            return $this->success($withdrawal, 'Withdrawal request created successfully');
-        } catch (\Throwable $exception) {
-            Log::error('Create withdrawal request failed', [
-                'user_id' => $user->id,
-                'error' => $exception->getMessage(),
-            ]);
-
-            return $this->error('Failed to create withdrawal request.');
-        }
-    }
-
-    public function updateWithdrawals(Request $request, $id)
-    {
-        $user = $request->user();
-
-        if (! $user) {
-            return $this->unauthorized('Unauthenticated.');
-        }
-
-        $withdrawal = $this->findUserWithdrawal($user->id, (int) $id);
-
-        if (! $withdrawal) {
-            return $this->notFound('Withdrawal not found');
-        }
-
-        if (! in_array($withdrawal->status, ['pending'], true)) {
-            return $this->error('Only pending withdrawals can be updated.', 422);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'amount' => ['sometimes', 'numeric', 'gt:0'],
-            'fee' => ['sometimes', 'numeric', 'min:0'],
-            'currency' => ['sometimes', 'string', 'max:10'],
+        $data = $request->validate([
+            'amount' => [$creating ? 'required' : 'sometimes', 'numeric', 'gt:0', 'max:99999999.99'],
+            'fee' => ['sometimes', 'nullable', 'numeric', 'min:0', 'max:99999999.99'],
+            'currency' => ['sometimes', 'string', 'size:3'],
             'method' => ['sometimes', 'nullable', 'string', 'max:100'],
             'payment_details' => ['sometimes', 'nullable'],
             'reference' => ['sometimes', 'nullable', 'string', 'max:191'],
             'transaction_id' => ['sometimes', 'nullable', 'string', 'max:191'],
-            'status' => ['sometimes', Rule::in(['pending'])],
         ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator->errors());
-        }
-
-        $fillableFields = [
-            'amount',
-            'fee',
-            'currency',
-            'method',
-            'payment_details',
-            'reference',
-            'transaction_id',
-        ];
-
-        $payload = [];
-
-        foreach ($fillableFields as $field) {
-            if ($request->exists($field)) {
-                $payload[$field] = $request->input($field);
+        if (array_key_exists('payment_details', $data)) {
+            $invalid = false;
+            $data['payment_details'] = $this->normalizePaymentDetails($data['payment_details'], $invalid);
+            if ($invalid || strlen(json_encode($data['payment_details'])) > 8000) {
+                throw ValidationException::withMessages(['payment_details' => SecurityMessage::get('invalidWithdrawal')]);
             }
         }
 
-        if (empty($payload)) {
-            return $this->validationError([
-                'data' => ['No valid fields were provided for update.'],
-            ]);
-        }
+        return $data;
+    }
 
-        $amount = array_key_exists('amount', $payload)
-            ? (float) $payload['amount']
-            : (float) $withdrawal->amount;
+    public function requestWithdrawals(Request $request, $id)
+    {
+        $withdrawal = app(WithdrawalReservationService::class)->create($request->user(), (int) $id, $this->withdrawalInput($request, true));
+        $this->flushWithdrawalsCache($request->user()->id);
 
-        $fee = array_key_exists('fee', $payload)
-            ? (float) $payload['fee']
-            : (float) $withdrawal->fee;
+        return $this->success($withdrawal, 'Withdrawal request created successfully');
+    }
 
-        if ($fee > $amount) {
-            return $this->validationError([
-                'fee' => ['Fee cannot be greater than amount.'],
-            ]);
-        }
+    public function updateWithdrawals(Request $request, $id)
+    {
+        $withdrawal = app(WithdrawalReservationService::class)->update($request->user(), (int) $id, $this->withdrawalInput($request, false));
+        $this->flushWithdrawalsCache($request->user()->id);
 
-        $walletAmount = (float) ($user->wallet?->amount ?? 0);
-
-        if ($amount > $walletAmount) {
-            return $this->error('Insufficient wallet balance.', 422);
-        }
-
-        if (array_key_exists('payment_details', $payload)) {
-            $invalidPaymentDetails = false;
-            $payload['payment_details'] = $this->normalizePaymentDetails(
-                $payload['payment_details'],
-                $invalidPaymentDetails
-            );
-
-            if ($invalidPaymentDetails) {
-                return $this->validationError([
-                    'payment_details' => ['Payment details must be a valid JSON object or array.'],
-                ]);
-            }
-        }
-
-        $payload['net_amount'] = $amount - $fee;
-
-        try {
-            $withdrawal->update($payload);
-
-            $this->flushWithdrawalsCache($user->id);
-
-            return $this->success(
-                $withdrawal->fresh(['approvedBy:id,name']),
-                'Withdrawal updated successfully'
-            );
-        } catch (\Throwable $exception) {
-            Log::error('Update withdrawal request failed', [
-                'user_id' => $user->id,
-                'withdrawal_id' => $withdrawal->id,
-                'error' => $exception->getMessage(),
-            ]);
-
-            return $this->error('Failed to update withdrawal request.');
-        }
+        return $this->success($withdrawal, 'Withdrawal updated successfully');
     }
 
     public function deleteWithdrawals(Request $request)
     {
-        $user = $request->user();
+        $request->validate(['id' => 'required|integer|min:1']);
+        $withdrawal = app(WithdrawalReservationService::class)->transition($request->user(), (int) $request->id, 'rejected');
+        $this->flushWithdrawalsCache($request->user()->id);
 
-        if (! $user) {
-            return $this->unauthorized('Unauthenticated.');
-        }
-
-        $validator = Validator::make($request->all(), [
-            'id' => ['required', 'integer', 'min:1'],
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator->errors());
-        }
-
-        $withdrawal = $this->findUserWithdrawal($user->id, (int) $request->input('id'));
-
-        if (! $withdrawal) {
-            return $this->notFound('Withdrawal not found');
-        }
-
-        if (in_array($withdrawal->status, ['processing', 'completed'], true)) {
-            return $this->error('This withdrawal cannot be deleted after processing.', 422);
-        }
-
-        try {
-            $withdrawal->delete();
-
-            $this->flushWithdrawalsCache($user->id);
-
-            return $this->success([
-                'id' => $withdrawal->id,
-                'deleted' => true,
-            ], 'Withdrawal deleted successfully');
-        } catch (\Throwable $exception) {
-            Log::error('Delete withdrawal request failed', [
-                'user_id' => $user->id,
-                'withdrawal_id' => $withdrawal->id,
-                'error' => $exception->getMessage(),
-            ]);
-
-            return $this->error('Failed to delete withdrawal request.');
-        }
+        // Retain the financial record; cancellation releases only this reservation.
+        return $this->success(['id' => $withdrawal->id, 'deleted' => true]);
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\Process\Process;
 
 class ProcessEventVideoJob implements ShouldQueue
 {
@@ -25,15 +26,21 @@ class ProcessEventVideoJob implements ShouldQueue
 
     public $eventId;
 
+    public string $sourceDisk = 'public';
+
+    public ?float $manualPrice = null;
+
     public $filePath;
 
     public string $debugId;
 
     public bool $dispatchAiAfterProcessing;
 
-    public function __construct($eventId, $filePath, bool $dispatchAiAfterProcessing = false)
+    public function __construct($eventId, $filePath, bool $dispatchAiAfterProcessing = false, string $sourceDisk = 'public', ?float $manualPrice = null)
     {
         $this->eventId = $eventId;
+        $this->sourceDisk = $sourceDisk;
+        $this->manualPrice = $manualPrice;
         $this->filePath = $filePath;
         $this->debugId = (string) Str::uuid();
         $this->dispatchAiAfterProcessing = $dispatchAiAfterProcessing;
@@ -44,14 +51,14 @@ class ProcessEventVideoJob implements ShouldQueue
         $event = Events::find($this->eventId);
 
         if (! $event) {
-            Storage::disk('public')->delete($this->filePath);
+            Storage::disk($this->sourceDisk)->delete($this->filePath);
 
             return;
         }
 
-        $disk = Storage::disk('public');
-        $tempAbsPath = $disk->path($this->filePath);
-        $finalFilename = 'videos/'.basename($this->filePath);
+        $disk = Storage::disk('media');
+        $tempAbsPath = Storage::disk($this->sourceDisk)->path($this->filePath);
+        $finalFilename = 'videos/'.hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->filePath).'.'.pathinfo($this->filePath, PATHINFO_EXTENSION);
         $finalAbsPath = $disk->path($finalFilename);
 
         $existingMedia = EventsImges::query()
@@ -79,12 +86,8 @@ class ProcessEventVideoJob implements ShouldQueue
                 mkdir(dirname($finalAbsPath), 0775, true);
             }
 
-            if ($this->filePath !== $finalFilename && file_exists($tempAbsPath)) {
-                $renameResult = @rename($tempAbsPath, $finalAbsPath);
-
-                if (! $renameResult) {
-                    $disk->move($this->filePath, $finalFilename);
-                }
+            if (! file_exists($finalAbsPath) && file_exists($tempAbsPath)) {
+                $disk->put($finalFilename, fopen($tempAbsPath, 'rb'));
             }
 
             if (! file_exists($finalAbsPath)) {
@@ -103,11 +106,13 @@ class ProcessEventVideoJob implements ShouldQueue
                 'full_url' => $finalFilename,
             ], [
                 'preview_url' => $previewWatermarkedPath,
-                'price' => 15,
+                'price' => $this->manualPrice ?? 15,
+                'original_disk' => 'media', 'preview_disk' => 'media',
                 'is_active' => 1,
             ]);
 
             $cache->invalidateEvent((int) $event->id, [(int) $media->id]);
+            Storage::disk($this->sourceDisk)->delete($this->filePath);
 
             if ($this->dispatchAiAfterProcessing) {
                 GenerateEventAiTagsJob::dispatch((int) $event->id);
@@ -127,7 +132,7 @@ class ProcessEventVideoJob implements ShouldQueue
 
     protected function makeWatermarkedPreviewVideo(string $videoPath, string $debugId): ?string
     {
-        $disk = Storage::disk('public');
+        $disk = Storage::disk('media');
         $inputPath = $disk->path($videoPath);
 
         Log::info('makeWatermarkedPreviewVideo: START', [
@@ -219,7 +224,7 @@ class ProcessEventVideoJob implements ShouldQueue
         ]);
 
         $cmd = sprintf(
-            '%s -y -i %s -i %s -filter_complex %s -map %s -map 0:a? -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart -shortest %s 2>&1',
+            '%s -nostdin -threads 2 -filter_complex_threads 2 -protocol_whitelist file,pipe -y -i %s -i %s -filter_complex %s -map %s -map 0:a? -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart -shortest %s 2>&1',
             escapeshellcmd($ffmpegBin),
             escapeshellarg($inputPath),
             escapeshellarg($watermarkPath),
@@ -235,7 +240,11 @@ class ProcessEventVideoJob implements ShouldQueue
 
         $output = [];
         $returnCode = null;
-        @exec($cmd, $output, $returnCode);
+        $process = Process::fromShellCommandline($cmd);
+        $process->setTimeout((int) config('media_security.video_process_timeout', 300));
+        $process->run();
+        $returnCode = $process->getExitCode();
+        $output = [mb_substr($process->getOutput().$process->getErrorOutput(), 0, 2000)];
 
         Log::info('makeWatermarkedPreviewVideo: ffmpeg finished', [
             'debug_id' => $debugId,
@@ -259,45 +268,11 @@ class ProcessEventVideoJob implements ShouldQueue
             return null;
         }
 
-        $debugFrameRelative = 'videos/debug_frame_'.$baseName.'_'.time().'.jpg';
-        $debugFramePath = $disk->path($debugFrameRelative);
-
-        $frameCmd = sprintf(
-            '%s -y -i %s -map 0:v:0 -ss 00:00:01 -frames:v 1 -update 1 %s 2>&1',
-            escapeshellcmd($ffmpegBin),
-            escapeshellarg($outputPath),
-            escapeshellarg($debugFramePath)
-        );
-
-        Log::info('makeWatermarkedPreviewVideo: extracting debug frame', [
-            'debug_id' => $debugId,
-            'frame_cmd' => $frameCmd,
-        ]);
-
-        $frameOutput = [];
-        $frameReturn = null;
-        @exec($frameCmd, $frameOutput, $frameReturn);
-
-        Log::info('makeWatermarkedPreviewVideo: debug frame generated', [
-            'debug_id' => $debugId,
-            'frame_return_code' => $frameReturn,
-            'frame_exists' => file_exists($debugFramePath),
-            'frame_size' => file_exists($debugFramePath) ? filesize($debugFramePath) : null,
-            'frame_path' => $debugFrameRelative,
-            'frame_output' => implode("\n", $frameOutput),
-        ]);
-
-        Log::info('makeWatermarkedPreviewVideo: END SUCCESS', [
-            'debug_id' => $debugId,
-            'preview_relative' => $outputRelative,
-            'preview_absolute' => $outputPath,
-        ]);
-
         return $outputRelative;
     }
 
     public function failed(\Throwable $exception): void
     {
-        Storage::disk('public')->delete($this->filePath);
+        Storage::disk($this->sourceDisk)->delete($this->filePath);
     }
 }

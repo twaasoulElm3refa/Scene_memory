@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SafeMedia;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CommentRequest extends FormRequest
@@ -17,14 +19,14 @@ class CommentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'comment' => ['required', 'string'],
+            'comment' => ['required', 'string', 'max:10000'],
             'images' => ['sometimes', 'array', 'max:2'],
-            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', new SafeMedia],
         ];
     }
 

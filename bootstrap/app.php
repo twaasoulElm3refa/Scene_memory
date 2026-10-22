@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\BlockBadBots;
+use App\Http\Middleware\EnsureActiveAccount;
+use App\Http\Middleware\SecurityResponseHeaders;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,8 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(SecurityResponseHeaders::class);
         $middleware->api(SetLocale::class);
         $middleware->api(BlockBadBots::class);
+        $middleware->api(EnsureActiveAccount::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -292,8 +292,8 @@ class EventAiTagsDispatchTest extends TestCase
             $this->assertNotNull($storedImage);
             $this->assertSame('Manual photo description', $storedImage->description);
             $this->assertSame(25.5, (float) $storedImage->price);
-            $this->assertTrue(Storage::disk('public')->exists($storedImage->full_url));
-            $this->assertTrue(Storage::disk('public')->exists($storedImage->preview_url));
+            $this->assertTrue(Storage::disk('media')->exists($storedImage->full_url));
+            $this->assertTrue(Storage::disk('media')->exists($storedImage->preview_url));
             $this->assertDatabaseHas('images_tags', [
                 'events_imges_id' => $storedImage->id,
                 'tags_id' => $existingPhotoTag->id,

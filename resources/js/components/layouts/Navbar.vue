@@ -423,6 +423,11 @@ const toggleDropdown = () => {
 };
 
 const logout = async () => {
+    try {
+        await api.post('/users/logout', {}, { suppressGlobalErrorToast: true });
+    } catch {
+        // Offline sign-out still clears local credentials; server revocation requires connectivity.
+    }
 
     await clearAuthToken();
 

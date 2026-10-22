@@ -62,6 +62,9 @@ class DownloadEntitlementsTest extends TestCase
                 ],
             ]);
 
+        $this->assertStringContainsString('/api/v1/media/'.$oldThenNewest->id.'/preview?', $response->json('data.0.preview_url'));
+        $this->assertStringContainsString('signature=', $response->json('data.0.preview_url'));
+
         $ids = collect($response->json('data'))->pluck('id')->all();
         $this->assertSame([$oldThenNewest->id, $middle->id], $ids);
         $this->assertCount(2, $ids);
@@ -69,7 +72,7 @@ class DownloadEntitlementsTest extends TestCase
         $this->assertNotContains($otherUsersMedia->id, $ids);
         $this->assertSame([
             'id' => $oldThenNewest->id,
-            'preview_url' => 'newest.jpg',
+            'preview_url' => $response->json('data.0.preview_url'),
             'type' => 'image',
             'width' => '1200',
             'height' => '800',
@@ -103,6 +106,7 @@ class DownloadEntitlementsTest extends TestCase
 
         if (DB::connection()->getDriverName() === 'mysql') {
             DB::statement('ALTER TABLE entitlements DROP INDEX entitlements_user_media_unique');
+
             return;
         }
 

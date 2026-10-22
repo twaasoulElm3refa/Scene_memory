@@ -2,22 +2,27 @@
 
 namespace App\Services;
 
+use App\Rules\SafeMedia;
+use App\Support\SecurityMessage;
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\ImageManager;
 use Intervention\Image\EncodedImage;
+use Intervention\Image\ImageManager;
 
 class ImageAnalysisService
 {
     public function process(UploadedFile $file, ImageManager $manager): array
     {
-        if (!$file->isValid()) {
+        (new SafeMedia)->validate('image', $file, function () {
+            throw new \RuntimeException(SecurityMessage::get('invalidMedia'));
+        });
+        if (! $file->isValid()) {
             throw new \RuntimeException('Uploaded file is not valid.');
         }
 
         try {
             $path = $file->getRealPath();
 
-            if (!$path || !is_file($path)) {
+            if (! $path || ! is_file($path)) {
                 throw new \RuntimeException('Image file path not found');
             }
 
@@ -42,7 +47,7 @@ class ImageAnalysisService
             ]);
 
             throw new \RuntimeException(
-                'Unsupported or corrupted image: ' . (
+                'Unsupported or corrupted image: '.(
                     method_exists($file, 'getClientOriginalName')
                         ? $file->getClientOriginalName()
                         : $file->getFilename()
@@ -62,15 +67,15 @@ class ImageAnalysisService
         $previewEncoded = $this->makePreview(clone $image, $manager);
 
         return [
-            'image'            => $image,
-            'preview_encoded'  => $previewEncoded,
-            'width'            => $width,
-            'height'           => $height,
-            'resolution'       => $resolution,
+            'image' => $image,
+            'preview_encoded' => $previewEncoded,
+            'width' => $width,
+            'height' => $height,
+            'resolution' => $resolution,
             'resolution_score' => $resolutionScore,
-            'quality_score'    => $qualityScore,
-            'price'            => $price,
-            'plan'             => $plan,
+            'quality_score' => $qualityScore,
+            'price' => $price,
+            'plan' => $plan,
         ];
     }
 
@@ -121,7 +126,7 @@ class ImageAnalysisService
     {
         $realPath = $file->getRealPath();
 
-        if (!$realPath || !file_exists($realPath)) {
+        if (! $realPath || ! file_exists($realPath)) {
             return 50;
         }
 
@@ -132,7 +137,7 @@ class ImageAnalysisService
 
         $img = @imagecreatefromstring($content);
 
-        if (!$img) {
+        if (! $img) {
             return 50;
         }
 
@@ -309,8 +314,8 @@ class ImageAnalysisService
         $watermark = $manager->read(public_path('images/watermark.png'));
 
         $watermark->scale(
-            width: $image->width() * 0.75,
-            height: $image->height() * 0.55
+            width: max(1, (int) round($image->width() * 0.75)),
+            height: max(1, (int) round($image->height() * 0.55))
         );
 
         $image->place($watermark, 'center', 0, 0, 50);

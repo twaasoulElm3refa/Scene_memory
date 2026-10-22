@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Services;
+
+use App\Exceptions\GoogleAuthException;
+use App\Mail\WelcomeMail;
+use App\Models\LicenceType;
+use App\Models\User;
+use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Laravel\Socialite\Two\User as GoogleUser;
+use Throwable;
+
+class GoogleAccountService
+{
+    public function verifiedIdentity(GoogleUser $google): array
+    {
+        // Socialite obtains this from Google's authenticated HTTPS userinfo endpoint,
+        // using the access token exchanged server-side for the authorization code.
+        $raw = $google->getRaw();
+        $sub = $raw['sub'] ?? null;
+        $email = $google->getEmail();
+        if (! is_string($sub) || $sub === '' || strlen($sub) > 255
+            || $google->getId() !== $sub
+            || ($raw['email_verified'] ?? false) !== true
+            || ! is_string($email) || strlen($email) > 255 || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new GoogleAuthException('identity_invalid');
+        }
+
+        $avatar = $google->getAvatar();
+
+        return [
+            'sub' => $sub,
+            'email' => Str::lower($email),
+            'name' => Str::limit(trim((string) $google->getName()), 200, '') ?: 'Scemory',
+            'avatar' => is_string($avatar) && strlen($avatar) <= 2048
+                && filter_var($avatar, FILTER_VALIDATE_URL)
+                && parse_url($avatar, PHP_URL_SCHEME) === 'https'
+                && ! parse_url($avatar, PHP_URL_USER) ? $avatar : null,
+        ];
+    }
+
+    public function existingAccount(array $identity): ?User
+    {
+        $user = User::where('google_id', $identity['sub'])->first();
+        if ($user) {
+            if (! $user->is_active || $user->deleted_at !== null) {
+                throw new GoogleAuthException('disabled', 403);
+            }
+
+            return $user;
+        }
+
+        // Email is never sufficient evidence to take ownership of an existing account.
+        if (User::whereRaw('LOWER(email) = ?', [$identity['email']])->exists()) {
+            throw new GoogleAuthException('linking_required', 409);
+        }
+
+        return null;
+    }
+
+    public function complete(array $identity, array $profile): User
+    {
+        $user = Cache::lock('google-account:'.hash('sha256', $identity['sub']), 10)->block(3,
+            fn () => Cache::lock('google-email:'.hash('sha256', $identity['email']), 10)->block(3,
+                function () use ($identity, $profile) {
+                    if ($user = $this->existingAccount($identity)) {
+                        return $user;
+                    }
+                    try {
+                        return DB::transaction(function () use ($identity, $profile) {
+                            $name = $identity['name'];
+                            if (User::where('name', $name)->exists()) {
+                                $name .= ' '.Str::random(12);
+                            }
+
+                            return User::create([
+                                'google_id' => $identity['sub'],
+                                'google_avatar_url' => $identity['avatar'],
+                                'name' => $name,
+                                'email' => $identity['email'],
+                                'password' => null,
+                                'role' => 'user',
+                                'is_active' => true,
+                                'email_verified_at' => now(),
+                                'licence_type_id' => LicenceType::whereKey(1)->exists() ? 1 : null,
+                                'country' => $profile['country'],
+                                'date_of_birth' => $profile['date_of_birth'],
+                            ]);
+                        });
+                    } catch (UniqueConstraintViolationException) {
+                        // A simultaneous password registration may have claimed the email.
+                        return $this->existingAccount($identity) ?? throw new GoogleAuthException('callback_failed');
+                    }
+                }
+            )
+        );
+
+        $user->forceFill(['last_login_at' => now()])->save();
+        if ($user->wasRecentlyCreated) {
+            try {
+                Mail::to($user->email)->queue(new WelcomeMail($user));
+            } catch (Throwable $e) {
+                Log::warning('Google welcome email could not be queued.', ['exception' => $e::class]);
+            }
+        }
+
+        return $user;
+    }
+}

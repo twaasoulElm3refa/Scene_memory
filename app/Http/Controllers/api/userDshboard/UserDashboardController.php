@@ -5,9 +5,11 @@ namespace App\Http\Controllers\api\userDshboard;
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventsMediaRequest;
-use App\Jobs\GenerateEventAiTagsJob;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Rules\SafeMedia;
+use App\Services\EventMediaIngest;
+use App\Support\EventAccess;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -47,37 +49,19 @@ class UserDashboardController extends Controller
         $validated = $request->validated();
 
         $event = $this->eventRepository->findBySlugOrFail((string) $slug);
+        EventAccess::authorize($event, $request->user());
 
-        $createdMedia = [];
-
-        if ($request->hasFile('url')) {
-            foreach ($request->file('url') as $file) {
-                $path = $file->store('EventMedia', 'public');
-                $type = str_starts_with((string) $file->getMimeType(), 'video/') ? 'video' : 'image';
-                $media = $this->eventImageRepository->create([
-                    'event_id' => $event->id,
-                    'preview_url' => $path,
-                    'full_url' => $path,
-                    'type' => $type,
-                    'is_active' => 1,
-                ]);
-                $createdMedia[] = $media;
-            }
-        }
-
+        $createdMedia = app(EventMediaIngest::class)->upload($event, $request->file('url', []));
         $this->clearCache($event->user_id, $event->slug);
-
-        if ($createdMedia !== []) {
-            GenerateEventAiTagsJob::dispatch((int) $event->id);
-        }
 
         return $this->success($createdMedia, 'تم إضافة الوسائط بنجاح');
     }
 
     public function delete()
     {
+        $event = $this->eventRepository->findById((int) request()->route('id'));
+        EventAccess::authorize($event, request()->user());
         try {
-            $event = $this->eventRepository->findByIdOrFail((int) request('id'));
             $this->clearCache($event->user_id, $event->slug);
             $this->clearEventsCache();
             $event->delete();
@@ -90,9 +74,19 @@ class UserDashboardController extends Controller
 
     public function update(Request $request): JsonResponse
     {
-        $data = $request->all();
+        $event = $this->eventRepository->findBySlug((string) $request->route('slug'));
+        EventAccess::authorize($event, $request->user());
+        $data = $request->validate([
+            'title' => 'required|string|max:255', 'description' => 'sometimes|string|max:10000',
+            'city_id' => 'sometimes|nullable|exists:cities,id',
+            'sub_categorey_id' => 'sometimes|nullable|exists:sub_categoreys,id',
+            'start_date' => 'sometimes|nullable|date', 'end_date' => 'sometimes|nullable|date',
+            'time' => 'sometimes|nullable|string|max:30',
+            'lattitude' => 'sometimes|nullable|numeric|between:-90,90',
+            'langitude' => 'sometimes|nullable|numeric|between:-180,180',
+            'image' => ['sometimes', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', new SafeMedia],
+        ]);
         try {
-            $event = $this->eventRepository->findBySlug((string) request('slug'));
             $oldSlug = $event->slug;
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 

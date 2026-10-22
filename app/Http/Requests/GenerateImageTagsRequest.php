@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SafeMedia;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GenerateImageTagsRequest extends FormRequest
@@ -67,6 +68,7 @@ class GenerateImageTagsRequest extends FormRequest
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:5120',
+                new SafeMedia,
             ],
 
             'language' => [

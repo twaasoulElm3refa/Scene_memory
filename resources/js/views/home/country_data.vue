@@ -627,41 +627,9 @@ export default {
         },
 
         async loadMapLibre() {
-            if (window.maplibregl) {
-                return window.maplibregl;
+            if (!this.maplibrePromise) {
+                this.maplibrePromise = import('@/services/mapLibre').then(module => module.default);
             }
-
-            if (this.maplibrePromise) {
-                return this.maplibrePromise;
-            }
-
-            this.maplibrePromise = new Promise((resolve, reject) => {
-                if (!document.getElementById('maplibre-css')) {
-                    const link = document.createElement('link');
-                    link.id = 'maplibre-css';
-                    link.rel = 'stylesheet';
-                    link.href = 'https://unpkg.com/maplibre-gl@5.23.0/dist/maplibre-gl.css';
-                    document.head.appendChild(link);
-                }
-
-                const existingScript = document.getElementById('maplibre-js');
-                if (existingScript) {
-                    existingScript.addEventListener('load', () => resolve(window.maplibregl));
-                    existingScript.addEventListener('error', () =>
-                        reject(new Error(this.$t('country.errors.mapLibraryFailed')))
-                    );
-                    return;
-                }
-
-                const script = document.createElement('script');
-                script.id = 'maplibre-js';
-                script.src = 'https://unpkg.com/maplibre-gl@5.23.0/dist/maplibre-gl.js';
-                script.async = true;
-                script.onload = () => resolve(window.maplibregl);
-                script.onerror = () => reject(new Error(this.$t('country.errors.mapLibraryFailed')));
-                document.body.appendChild(script);
-            });
-
             return this.maplibrePromise;
         },
 

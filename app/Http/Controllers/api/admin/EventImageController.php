@@ -4,12 +4,14 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Jobs\GenerateEventAiTagsJob;
 use App\Repositories\Contracts\EventImages\EventImageRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Rules\SafeMedia;
+use App\Services\EventMediaIngest;
+use App\Support\EventAccess;
+use App\Support\SecurityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class EventImageController extends Controller
@@ -41,53 +43,22 @@ class EventImageController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'url' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4,webm,mov', 'max:51200'],
-            'video' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:51200'],
+            'url' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4,webm,mov', 'max:51200', new SafeMedia],
+            'video' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:51200', new SafeMedia],
         ]);
+        $file = $request->file('url') ?: $request->file('video');
+        abort_unless($file, 422, SecurityMessage::get('invalidMedia'));
+        $event = $this->eventRepository->findByIdOrFail((int) $request->route('id'));
+        $created = app(EventMediaIngest::class)->upload($event, [$file]);
+        $this->clearCache($event->id, $event->slug);
 
-        try {
-            $file = $request->file('url') ?: $request->file('video');
-
-            if (! $file) {
-                return $this->error('No media file was uploaded', 422);
-            }
-
-            $event = $this->eventRepository->findByIdOrFail((int) request('id'));
-            $type = str_starts_with((string) $file->getMimeType(), 'video/') ? 'video' : 'image';
-            $path = $file->store($type === 'video' ? 'eventVideos' : 'eventImages', 'public');
-
-            $data = [
-                'event_id' => $event->id,
-                'preview_url' => $path,
-                'full_url' => $path,
-                'type' => $type,
-                'is_active' => 1,
-                'size' => (string) $file->getSize(),
-            ];
-
-            if (Schema::hasColumn('events_imges', 'url')) {
-                $data['url'] = $path;
-            }
-
-            if ($type === 'video' && Schema::hasColumn('events_imges', 'video')) {
-                $data['video'] = $path;
-            }
-
-            $eventImage = $this->eventImageRepository->create($data);
-            $this->clearCache($event->id, $event->slug);
-            GenerateEventAiTagsJob::dispatch((int) $event->id);
-
-            return $this->success(
-                $this->normalizeMedia($eventImage),
-                'Event media added successfully'
-            );
-        } catch (\Exception $e) {
-            return $this->error($e->getMessage());
-        }
+        return $this->success($created[0] ?? []);
     }
 
     public function delete()
     {
+        $target = $this->eventImageRepository->findOrFail((int) request('id'));
+        EventAccess::authorize($target->events, request()->user());
         try {
             $eventImage = $this->eventImageRepository->findOrFail((int) request('id'));
             $event = $this->eventRepository->findByIdOrFail((int) $eventImage->event_id);

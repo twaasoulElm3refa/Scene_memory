@@ -1,13 +1,12 @@
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
+import maplibregl from "../mapLibre";
 import api from "../ApiClient";
+import { escapeHtml, safeMediaUrl } from '../safeContent';
 
 if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
     maplibregl.setRTLTextPlugin(
         'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js',
-        null,
         true
-    );
+    ).catch(() => {});
 }
 
 // ─────────────────────────────────────────────
@@ -574,7 +573,7 @@ export default class MapService {
         color: #111;
         line-height: 1.4;
       ">
-        ${displayTitle}
+        ${escapeHtml(displayTitle)}
       </p>
   `;
 
@@ -588,7 +587,7 @@ export default class MapService {
 
         if (event.image_url) {
             html += `
-      <img src="${event.image_url}" loading="lazy"
+      <img src="${escapeHtml(safeMediaUrl(event.image_url))}" loading="lazy"
         style="
           width:100%;
           max-height:140px;

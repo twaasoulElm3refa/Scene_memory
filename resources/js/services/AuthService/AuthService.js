@@ -26,19 +26,21 @@ export const AuthService = {
     return api.post("/users/reset-password", payload);
   },
 
-  googleLogin() {
-    return api.get("/users/google-login");
+  googleLogin(params = {}) {
+    return api.get("/users/google-login", { params, suppressGlobalErrorToast: true });
   },
 
-  googleCallback(code) {
-    return api.get("/users/google-callback", { params: { code } });
+  async exchangeGoogleCode(code, profile = {}) {
+    await api.get("/sanctum/csrf-cookie", { baseURL: "/", suppressGlobalErrorToast: true });
+    return api.post("/users/google-exchange", { code, ...profile }, { suppressGlobalErrorToast: true });
   },
 
-  exchangeMobileGoogleCode(code, codeVerifier) {
+  exchangeMobileGoogleCode(code, codeVerifier, profile = {}) {
     return api.post(`${googleAuthOrigin()}/api/v1/users/google-mobile-exchange`, {
       code,
       code_verifier: codeVerifier,
-    });
+      ...profile,
+    }, { suppressGlobalErrorToast: true });
   },
 
   getProfile() {

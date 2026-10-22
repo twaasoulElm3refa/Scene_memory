@@ -25,6 +25,7 @@ use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Controllers\api\admin\WithdrawlController;
 use App\Http\Controllers\api\auth\AuthController;
 use App\Http\Controllers\api\auth\DownloadController;
+use App\Http\Controllers\api\auth\FacebookAuthController;
 use App\Http\Controllers\api\auth\GoogleAuthController;
 use App\Http\Controllers\api\home\CartController;
 use App\Http\Controllers\api\home\CategoryController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\api\home\ImageTagsController;
 use App\Http\Controllers\api\home\IncomeController;
 use App\Http\Controllers\api\home\LeaderboardController;
 use App\Http\Controllers\api\home\LikesController;
+use App\Http\Controllers\api\home\MediaDeliveryController;
 use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\home\PlanController;
 use App\Http\Controllers\api\home\ProfileController;
@@ -100,11 +102,16 @@ Route::prefix('v1')->group(function () {
             ->middleware(['throttle:5,1', 'guest']);
 
         // Social Auth
-        Route::get('/google-login', [GoogleAuthController::class, 'googleLogin'])->middleware('guest');
-        Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware('guest');
+        Route::get('/facebook-login', [FacebookAuthController::class, 'login'])->middleware(['web', 'guest', 'throttle:10,1']);
+        Route::get('/facebook-callback', [FacebookAuthController::class, 'callback'])->middleware(['web', 'guest', 'throttle:20,1']);
+        Route::post('/facebook-exchange', [FacebookAuthController::class, 'exchange'])->middleware(['web', 'throttle:10,1']);
+        Route::get('/google-login', [GoogleAuthController::class, 'googleLogin'])->middleware(['web', 'guest', 'throttle:10,1']);
+        Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware(['web', 'guest', 'throttle:20,1']);
+        Route::post('/google-exchange', [GoogleAuthController::class, 'exchangeWebCode'])->middleware(['web', 'throttle:10,1']);
         Route::post('/google-mobile-exchange', [GoogleAuthController::class, 'exchangeMobileCode'])->middleware('throttle:10,1');
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
+            Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/profile', [AuthController::class, 'profile']);
             Route::get('/timeline', [ProfileController::class, 'activity']);
             Route::get('/wallet', [AuthController::class, 'wallet']);
@@ -115,7 +122,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('admin')->group(function () {
-        Route::post('/login', [AdminAuthController::class, 'login']);
+        Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:6,1');
     });
 
     Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
@@ -132,6 +139,10 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
         ->middleware(['auth:sanctum', 'throttle:60,1']);
+    Route::get('/media/{media}/preview', [MediaDeliveryController::class, 'preview'])
+        ->name('media.preview')->middleware('throttle:120,1');
+    Route::get('/media/{media}/review-original', [MediaDeliveryController::class, 'reviewOriginal'])
+        ->name('media.review-original')->middleware(['signed', 'throttle:60,1']);
 
     Route::prefix('special-coverage-requests')->middleware('auth:sanctum')->group(function () {
         Route::post('/', [SpecialCoverageRequestController::class, 'store'])->middleware('throttle:30,1');
@@ -300,7 +311,7 @@ Route::prefix('v1')->group(function () {
     // User Dashboard
     Route::prefix('user-dshboard')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/my-events', [UserDashboardController::class, 'myEvents']);
-        Route::post('/{slug}', [UserDashboardController::class, 'addMedia']);
+        Route::post('/{slug}', [UserDashboardController::class, 'addMedia'])->middleware('throttle:20,1');
         Route::delete('/{id}/delete', [EventImageController::class, 'delete']);
         // 95
 
@@ -312,7 +323,7 @@ Route::prefix('v1')->group(function () {
     });
 
     // Upload Media
-    Route::prefix('media-request')->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('media-request')->middleware(['auth:sanctum', 'throttle:20,1'])->group(function () {
         Route::get('/{id}', [MediaRequestController::class, 'all']);
         // Route::post('/approve/{id}', [MediaRequestController::class, 'approve'])->middleware(AdminMiddleware::class);
         // Route::post('/reject/{id}', [MediaRequestController::class, 'reject'])->middleware(AdminMiddleware::class);
@@ -434,8 +445,8 @@ Route::prefix('v1')->group(function () {
 
     // Payment
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/pay', [PaymentController::class, 'pay']);
-        Route::post('/pay/wallet', [PaymentController::class, 'payWallet']);
+        Route::post('/pay', [PaymentController::class, 'pay'])->middleware('throttle:20,1');
+        Route::post('/pay/wallet', [PaymentController::class, 'payWallet'])->middleware('throttle:60,1');
         // 145
     });
 
@@ -447,7 +458,7 @@ Route::prefix('v1')->group(function () {
     // 149
 
     Route::prefix('deposit')->middleware('auth:sanctum')->group(function () {
-        Route::post('/pay', [DepositController::class, 'create']);
+        Route::post('/pay', [DepositController::class, 'create'])->middleware('throttle:10,1');
         // 150
     });
 

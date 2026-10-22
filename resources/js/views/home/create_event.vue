@@ -535,8 +535,7 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
+import maplibregl from "@/services/mapLibre";
 import PhotoUploadWizard from "../../components/media/PhotoUploadWizard.vue";
 import { useFormWizard } from "../../composables/useFormWizard";
 import { LocationService } from "../../services/LocationService/LocationService";

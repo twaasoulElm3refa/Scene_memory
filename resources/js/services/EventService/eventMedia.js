@@ -82,7 +82,7 @@ export function getStorageUrl(mediaOrPath) {
     if (path.startsWith("//")) return `${window.location.protocol}${path}`;
 
     const backendOrigin = getBackendOrigin();
-    if (path.startsWith("/storage/") || path.startsWith("/uploads/")) {
+    if (path.startsWith("/api/") || path.startsWith("/storage/") || path.startsWith("/uploads/")) {
         return `${backendOrigin}${path}`;
     }
     if (path.startsWith("storage/") || path.startsWith("uploads/")) {
