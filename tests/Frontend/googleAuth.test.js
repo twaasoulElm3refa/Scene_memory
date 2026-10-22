@@ -116,7 +116,7 @@ describe('Google authentication UI', () => {
         sessionStorage.setItem('post_auth_redirect', '/en/events?country=EG');
         const login = vi.fn(); window.addEventListener('login', login);
         const { router } = await mount(Callback, {}, 'en', `/en/auth/google-callback?code=${code}&role=admin&token=hostile`);
-        expect(AuthService.exchangeGoogleCode).toHaveBeenCalledWith(code, { country: '', date_of_birth: '' });
+        expect(AuthService.exchangeGoogleCode).toHaveBeenCalledWith(code);
         expect(setAuthToken).toHaveBeenCalledWith('post-body-token');
         expect(localStorage.getItem('user_role')).toBe('user');
         expect(JSON.parse(localStorage.getItem('user_data')).id).toBe(7);
@@ -146,15 +146,13 @@ describe('Google authentication UI', () => {
         expect(googleErrorKey('<script>details</script>')).toBe('googleAuth.callback_failed');
     });
 
-    it('retains a native verifier until profile completion and submits required details without a password', async () => {
+    it('exchanges a native code and signs in without a profile-completion step', async () => {
         isMobileRuntime.mockReturnValue(true);
-        AuthService.exchangeMobileGoogleCode.mockResolvedValueOnce({ data: { status: 'profile_required' } }).mockResolvedValueOnce(success());
+        AuthService.exchangeMobileGoogleCode.mockResolvedValueOnce(success());
         const { target } = await mount(Callback, {}, 'ur', `/ur/auth/google-callback?code=${code}`);
-        expect(clearGoogleOAuthVerifier).not.toHaveBeenCalled();
-        const country = target.querySelector('#google-country'); country.value = 'Egypt'; country.dispatchEvent(new Event('input'));
-        const birthday = target.querySelector('#google-birthday'); birthday.value = '2000-01-01'; birthday.dispatchEvent(new Event('input'));
-        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); await settle();
-        expect(AuthService.exchangeMobileGoogleCode).toHaveBeenLastCalledWith(code, 'v'.repeat(43), { country: 'Egypt', date_of_birth: '2000-01-01' });
+        expect(target.querySelector('form')).toBeNull();
+        expect(target.querySelector('input')).toBeNull();
+        expect(AuthService.exchangeMobileGoogleCode).toHaveBeenCalledWith(code, 'v'.repeat(43));
         expect(clearGoogleOAuthVerifier).toHaveBeenCalledTimes(1);
         expect(setAuthToken).toHaveBeenCalledWith('post-body-token');
     });

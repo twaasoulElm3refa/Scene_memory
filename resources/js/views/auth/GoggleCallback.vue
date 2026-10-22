@@ -5,16 +5,6 @@
                 <span class="spinner-border text-primary mb-3" aria-hidden="true"></span>
                 <p>{{ t('googleAuth.signingIn') }}</p>
             </div>
-            <form v-else-if="profileRequired" @submit.prevent="exchange">
-                <h1 class="h4 mb-3">{{ t('googleAuth.completeProfile') }}</h1>
-                <p>{{ t('googleAuth.profileRequired') }}</p>
-                <label for="google-country" class="form-label">{{ t('googleAuth.country') }}</label>
-                <input id="google-country" v-model="profile.country" class="form-control mb-3" autocomplete="country-name" maxlength="255" required />
-                <label for="google-birthday" class="form-label">{{ t('googleAuth.dateOfBirth') }}</label>
-                <input id="google-birthday" v-model="profile.date_of_birth" type="date" class="form-control mb-3" autocomplete="bday" :max="today" required />
-                <p v-if="error" role="alert" class="text-danger">{{ error }}</p>
-                <button type="submit" class="btn btn-primary w-100">{{ t('googleAuth.finishSignup') }}</button>
-            </form>
             <form v-else-if="linkingRequired" @submit.prevent="confirmLink">
                 <h1 class="h4 mb-3">{{ t('googleAuth.linkAccountTitle') }}</h1>
                 <p class="text-muted mb-3">{{ t('googleAuth.linkAccountDesc') }}</p>
@@ -47,15 +37,11 @@ const router = useRouter();
 const loading = ref(true);
 const error = ref('');
 const retryable = ref(false);
-const profileRequired = ref(false);
 const linkingRequired = ref(false);
 const linkPassword = ref('');
-const profile = ref({ country: '', date_of_birth: '' });
 const code = ref('');
 const currentLang = computed(() => String(route.params.lang || 'en').toLowerCase());
 const rtl = computed(() => ['ar', 'fa', 'ur'].includes(currentLang.value));
-const now = new Date();
-const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
 const exchange = async () => {
     loading.value = true;
@@ -65,12 +51,8 @@ const exchange = async () => {
         const verifier = isMobileRuntime() ? await getGoogleOAuthVerifier() : '';
         if (isMobileRuntime() && !verifier) throw new Error('invalid_state');
         const response = isMobileRuntime()
-            ? await AuthService.exchangeMobileGoogleCode(code.value, verifier, profile.value)
-            : await AuthService.exchangeGoogleCode(code.value, profile.value);
-        if (response.data.status === 'profile_required') {
-            profileRequired.value = true;
-            return;
-        }
+            ? await AuthService.exchangeMobileGoogleCode(code.value, verifier)
+            : await AuthService.exchangeGoogleCode(code.value);
         const { token, role, user, is_profile_complete: complete } = response.data;
         if (!token || !user) throw new Error('callback_failed');
         await setAuthToken(token);
@@ -90,10 +72,8 @@ const exchange = async () => {
         const status = err.response?.status;
         const errorCode = err.response?.data?.error_code;
         retryable.value = !err.response || status >= 500 || status === 429 || errorCode === 'busy';
-        error.value = t(profileRequired.value && status === 422 && !errorCode
-            ? 'googleAuth.profileInvalid' : googleErrorKey(errorCode || err.message));
+        error.value = t(googleErrorKey(errorCode || err.message));
         if (!retryable.value && errorCode) {
-            profileRequired.value = false;
             await clearGoogleOAuthVerifier();
         }
     } finally {

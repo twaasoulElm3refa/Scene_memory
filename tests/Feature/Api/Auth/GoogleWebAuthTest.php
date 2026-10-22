@@ -81,20 +81,24 @@ class GoogleWebAuthTest extends TestCase
         $this->assertStringContainsString('openid', $query['scope']);
     }
 
-    public function test_new_user_must_complete_required_fields_before_passwordless_registration(): void
+    public function test_new_user_signs_in_immediately_without_profile_or_password(): void
     {
         $code = $this->completeCallback();
         $this->assertDatabaseCount('users', 0);
-        $this->postJson('/api/v1/users/google-exchange', ['code' => $code])->assertStatus(202)->assertJsonPath('status', 'profile_required');
-        $this->assertDatabaseCount('personal_access_tokens', 0);
-        $this->postJson('/api/v1/users/google-exchange', ['code' => $code, 'country' => 'Egypt', 'date_of_birth' => '2000-01-02', 'role' => 'admin'])
+        $this->postJson('/api/v1/users/google-exchange', [
+            'code' => $code,
+            'country' => 'fabricated',
+            'date_of_birth' => '2999-01-01',
+            'role' => 'admin',
+        ])
             ->assertOk()->assertJsonPath('role', 'user')->assertJsonPath('user.email', 'google@example.test');
         $user = User::sole();
         $this->assertNull($user->password);
         $this->assertSame('google-sub-123', $user->google_id);
         $this->assertSame('https://lh3.googleusercontent.com/fixture', $user->google_avatar_url);
         $this->assertNotNull($user->email_verified_at);
-        $this->assertSame('Egypt', $user->country);
+        $this->assertNull($user->country);
+        $this->assertNull($user->date_of_birth);
         $this->assertDatabaseCount('personal_access_tokens', 1);
     }
 
@@ -248,7 +252,7 @@ class GoogleWebAuthTest extends TestCase
     public function test_repeated_google_registration_uses_the_same_account(): void
     {
         $code = $this->completeCallback();
-        $first = $this->postJson('/api/v1/users/google-exchange', ['code' => $code, 'country' => 'Egypt', 'date_of_birth' => '2000-01-01'])->assertOk();
+        $first = $this->postJson('/api/v1/users/google-exchange', ['code' => $code])->assertOk();
         Socialite::forgetDrivers();
         $code = $this->completeCallback(['name' => 'Changed Google Name']);
         $second = $this->postJson('/api/v1/users/google-exchange', ['code' => $code])->assertOk();
@@ -284,12 +288,11 @@ class GoogleWebAuthTest extends TestCase
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
 
-    public function test_profile_validation_and_concurrent_email_claim_do_not_create_duplicates(): void
+    public function test_concurrent_email_claim_does_not_link_or_create_duplicates(): void
     {
         $code = $this->completeCallback();
-        $this->postJson('/api/v1/users/google-exchange', ['code' => $code, 'country' => 'Egypt', 'date_of_birth' => '2999-01-01'])->assertUnprocessable();
         User::factory()->create(['email' => 'google@example.test']);
-        $this->postJson('/api/v1/users/google-exchange', ['code' => $code, 'country' => 'Egypt', 'date_of_birth' => '2000-01-01'])
+        $this->postJson('/api/v1/users/google-exchange', ['code' => $code])
             ->assertStatus(409)->assertJsonPath('error_code', 'linking_required');
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseCount('personal_access_tokens', 0);
@@ -299,7 +302,7 @@ class GoogleWebAuthTest extends TestCase
     {
         User::factory()->create(['name' => 'Google User', 'email' => 'other@example.test']);
         $code = $this->completeCallback();
-        $this->postJson('/api/v1/users/google-exchange', ['code' => $code, 'country' => 'Egypt', 'date_of_birth' => '2000-01-01'])->assertOk();
+        $this->postJson('/api/v1/users/google-exchange', ['code' => $code])->assertOk();
         $this->assertDatabaseCount('users', 2);
     }
 
@@ -333,6 +336,27 @@ class GoogleWebAuthTest extends TestCase
             ->assertRedirect('https://scemory.com/en/auth/google-callback?error=linking_required');
 
         $this->assertNull($user->fresh()->google_id);
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    public function test_legacy_account_with_authoritative_google_subject_mapping_signs_in_directly(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'historical@example.test',
+            'google_id' => 'google-sub-123',
+            'password' => Hash::make('password'),
+            'role' => 'creator',
+        ]);
+        $user->createToken('google-auth-token');
+
+        $code = $this->completeCallback(['email' => 'changed@example.test']);
+        $response = $this->postJson('/api/v1/users/google-exchange', ['code' => $code])
+            ->assertOk()
+            ->assertJsonPath('user.id', $user->id)
+            ->assertJsonPath('role', 'creator');
+
+        $this->assertNotEmpty($response->json('token'));
+        $this->assertSame('historical@example.test', $user->fresh()->email);
         $this->assertDatabaseCount('users', 1);
     }
 
@@ -392,6 +416,13 @@ class GoogleWebAuthTest extends TestCase
 
         $this->assertNotEmpty($linkResponse->json('token'));
         $this->assertSame('google-sub-123', $user->fresh()->google_id);
+
+        Socialite::forgetDrivers();
+        $code = $this->completeCallback();
+        $this->postJson('/api/v1/users/google-exchange', ['code' => $code])
+            ->assertOk()
+            ->assertJsonPath('user.id', $user->id);
+        $this->assertDatabaseCount('users', 1);
     }
 
     public function test_authenticated_user_can_link_and_unlink_google_account(): void

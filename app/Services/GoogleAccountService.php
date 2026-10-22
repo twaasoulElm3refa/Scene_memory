@@ -109,16 +109,16 @@ class GoogleAccountService
         return $user;
     }
 
-    public function complete(array $identity, array $profile): User
+    public function complete(array $identity): User
     {
         $user = Cache::lock('google-account:'.hash('sha256', $identity['sub']), 10)->block(3,
             fn () => Cache::lock('google-email:'.hash('sha256', $identity['email']), 10)->block(3,
-                function () use ($identity, $profile) {
+                function () use ($identity) {
                     if ($user = $this->existingAccount($identity)) {
                         return $user;
                     }
                     try {
-                        return DB::transaction(function () use ($identity, $profile) {
+                        return DB::transaction(function () use ($identity) {
                             $name = $identity['name'];
                             if (User::where('name', $name)->exists()) {
                                 $name .= ' '.Str::random(12);
@@ -134,8 +134,6 @@ class GoogleAccountService
                                 'is_active' => true,
                                 'email_verified_at' => now(),
                                 'licence_type_id' => LicenceType::whereKey(1)->exists() ? 1 : null,
-                                'country' => $profile['country'],
-                                'date_of_birth' => $profile['date_of_birth'],
                             ]);
                         });
                     } catch (UniqueConstraintViolationException) {

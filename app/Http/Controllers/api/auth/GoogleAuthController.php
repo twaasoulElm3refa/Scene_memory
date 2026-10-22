@@ -263,15 +263,7 @@ class GoogleAuthController extends Controller
                     throw new GoogleAuthException('invalid_state', 422);
                 }
 
-                $user = $this->accounts->existingAccount($delivery['identity']);
-                if (! $user && (! $request->filled('country') || ! $request->filled('date_of_birth'))) {
-                    return response()->json(['status' => 'profile_required'], 202)->header('Cache-Control', 'no-store, private');
-                }
-                $profile = $user ? [] : $request->validate([
-                    'country' => ['required', 'string', 'max:255'],
-                    'date_of_birth' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
-                ]);
-                $user = $this->accounts->complete($delivery['identity'], $profile);
+                $user = $this->accounts->complete($delivery['identity']);
                 Cache::forget($key);
 
                 return response()->json([

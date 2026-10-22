@@ -10,9 +10,9 @@ beforeEach(() => { vi.resetAllMocks(); });
 describe('Google authentication API transport', () => {
     it('loads the Laravel CSRF cookie before exchanging the web delivery code in a POST body', async () => {
         api.get.mockResolvedValue({}); api.post.mockResolvedValue({ data: { token: 'body-only' } });
-        await AuthService.exchangeGoogleCode('delivery-code', { country: 'Egypt', date_of_birth: '2000-01-01' });
+        await AuthService.exchangeGoogleCode('delivery-code');
         expect(api.get).toHaveBeenCalledWith('/sanctum/csrf-cookie', { baseURL: '/', suppressGlobalErrorToast: true });
-        expect(api.post).toHaveBeenCalledWith('/users/google-exchange', { code: 'delivery-code', country: 'Egypt', date_of_birth: '2000-01-01' }, { suppressGlobalErrorToast: true });
+        expect(api.post).toHaveBeenCalledWith('/users/google-exchange', { code: 'delivery-code' }, { suppressGlobalErrorToast: true });
         expect(api.get.mock.invocationCallOrder[0]).toBeLessThan(api.post.mock.invocationCallOrder[0]);
     });
     it('does not exchange credentials if CSRF initialization fails', async () => {

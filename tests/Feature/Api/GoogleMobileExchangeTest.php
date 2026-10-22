@@ -88,13 +88,18 @@ class GoogleMobileExchangeTest extends TestCase
         $this->assertDatabaseCount('personal_access_tokens', 1);
     }
 
-    public function test_new_mobile_account_requires_profile_then_registers_without_password(): void
+    public function test_new_mobile_account_signs_in_immediately_without_profile_or_password(): void
     {
         $code = $this->delivery();
-        $this->exchange($code)->assertStatus(202)->assertJsonPath('status', 'profile_required');
-        $this->assertDatabaseCount('users', 0);
-        $this->exchange($code, ['country' => 'Egypt', 'date_of_birth' => '2000-01-01'])->assertOk()->assertJsonPath('role', 'user');
-        $this->assertDatabaseHas('users', ['google_id' => 'mobile-google-sub', 'email' => 'mobile@example.test', 'password' => null]);
+        $this->exchange($code, ['country' => 'fabricated', 'date_of_birth' => '2999-01-01'])
+            ->assertOk()->assertJsonPath('role', 'user');
+        $this->assertDatabaseHas('users', [
+            'google_id' => 'mobile-google-sub',
+            'email' => 'mobile@example.test',
+            'password' => null,
+            'country' => null,
+            'date_of_birth' => null,
+        ]);
         Mail::assertQueued(WelcomeMail::class);
     }
 

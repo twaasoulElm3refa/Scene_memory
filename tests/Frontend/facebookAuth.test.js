@@ -185,5 +185,8 @@ describe('Facebook boundaries and localization', () => {
     it('uses responsive width and visible keyboard focus', () => {
         const css = readFileSync('resources/js/components/auth/FacebookAuthButton.vue', 'utf8');
         expect(css).toContain('width: 100%'); expect(css).toContain('min-width: 0'); expect(css).toContain(':focus-visible');
+        expect(css).toContain('color: #FFFFFF !important;');
+        expect(css).toContain('color: #FFFFFF; fill: #FFFFFF;');
+        expect(css).toContain(':active:not(:disabled)');
     });
 });

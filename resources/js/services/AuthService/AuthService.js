@@ -30,16 +30,15 @@ export const AuthService = {
     return api.get("/users/google-login", { params, suppressGlobalErrorToast: true });
   },
 
-  async exchangeGoogleCode(code, profile = {}) {
+  async exchangeGoogleCode(code) {
     await api.get("/sanctum/csrf-cookie", { baseURL: "/", suppressGlobalErrorToast: true });
-    return api.post("/users/google-exchange", { code, ...profile }, { suppressGlobalErrorToast: true });
+    return api.post("/users/google-exchange", { code }, { suppressGlobalErrorToast: true });
   },
 
-  exchangeMobileGoogleCode(code, codeVerifier, profile = {}) {
+  exchangeMobileGoogleCode(code, codeVerifier) {
     return api.post(`${googleAuthOrigin()}/api/v1/users/google-mobile-exchange`, {
       code,
       code_verifier: codeVerifier,
-      ...profile,
     }, { suppressGlobalErrorToast: true });
   },
 

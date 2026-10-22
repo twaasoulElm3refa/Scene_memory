@@ -19,9 +19,11 @@ const { t, locale } = useI18n();
 
 <style scoped>
 .facebook-auth { width: 100%; min-width: 0; }
-.facebook-button { display: flex; align-items: center; justify-content: center; gap: .75rem; width: 100%; min-height: 48px; padding: 12px 16px; border: 1px solid #0866ff; border-radius: 8px; background: #0866ff; color: #FFFFFF; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.facebook-button { display: flex; align-items: center; justify-content: center; gap: .75rem; width: 100%; min-height: 48px; padding: 12px 16px; border: 1px solid #0866ff; border-radius: 8px; background: #0866ff; color: #FFFFFF !important; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.facebook-button svg { color: #FFFFFF; fill: #FFFFFF; }
 .facebook-button svg, .facebook-button .spinner-border { flex-shrink: 0; }
-.facebook-button:hover:not(:disabled) { background: #0757d8; color: #FFFFFF; }
+.facebook-button:hover:not(:disabled) { background: #0757d8; }
+.facebook-button:hover:not(:disabled), .facebook-button:focus, .facebook-button:active:not(:disabled) { color: #FFFFFF !important; }
 .facebook-button:focus-visible { outline: 3px solid #0866ff; outline-offset: 3px; }
 .facebook-button:disabled { opacity: .6; cursor: wait; }
 </style>
