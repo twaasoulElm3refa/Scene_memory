@@ -25,12 +25,14 @@ class EventMediaIngest
                 $preview = 'events/preview/'.$name.'.jpg';
                 Storage::disk('media')->put($full, fopen($file->getRealPath(), 'rb'));
                 Storage::disk('media')->put($preview, (string) ($analysisPrice ? $analysis['preview_encoded'] : $analysis['image']->toJpeg(85)));
-                $created[] = EventsImges::create([
+                $mediaRecord = EventsImges::create([
                     'event_id' => $event->id, 'type' => 'image', 'full_url' => $full, 'preview_url' => $preview,
                     'original_disk' => 'media', 'preview_disk' => 'media', 'is_active' => 1,
                     'width' => $analysis['width'], 'height' => $analysis['height'],
                     'price' => $analysisPrice ? $analysis['price'] : 0, 'licence_type' => $analysis['plan'],
                 ]);
+                app(MediaTierService::class)->assignTierToMedia($mediaRecord);
+                $created[] = $mediaRecord;
             } else {
                 $path = $file->store('videos_temp', 'media');
                 ProcessEventVideoJob::dispatch($event->id, $path, true, 'media', $analysisPrice ? null : 0);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\auth;
 
 use App\Exceptions\GoogleAuthException;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\GoogleAccountService;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\Request;
@@ -92,7 +93,30 @@ class GoogleAuthController extends Controller
             $provider = Socialite::driver('google');
             $google = $mobile !== null ? $provider->stateless()->user() : $provider->enablePKCE()->user();
             $identity = $this->accounts->verifiedIdentity($google);
-            $this->accounts->existingAccount($identity);
+
+            $linkUserId = $request->session()->pull('google_link_user_id');
+            if ($linkUserId) {
+                $linkUser = User::find($linkUserId);
+                if (! $linkUser || ! $linkUser->is_active || $linkUser->deleted_at !== null) {
+                    throw new GoogleAuthException('disabled', 403);
+                }
+                $this->accounts->linkAccount($linkUser, $identity);
+                $frontendUrl = rtrim((string) config('app.frontend_url'), '/');
+
+                return redirect()->away("{$frontendUrl}/{$lang}/profile?google_linked=1");
+            }
+
+            try {
+                $this->accounts->existingAccount($identity);
+            } catch (GoogleAuthException $e) {
+                if ($e->errorCode === 'linking_required') {
+                    $request->session()->put('pending_google_link', [
+                        'identity' => $identity,
+                        'expires_at' => now()->addMinutes(10)->timestamp,
+                    ]);
+                }
+                throw $e;
+            }
 
             $code = Str::random(64);
             $delivery = ['identity' => $identity];
@@ -124,6 +148,97 @@ class GoogleAuthController extends Controller
     public function exchangeMobileCode(Request $request)
     {
         return $this->exchange($request, true);
+    }
+
+    public function confirmLinkWithPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string'],
+        ]);
+
+        $pending = $request->session()->get('pending_google_link');
+        if (! is_array($pending) || ($pending['expires_at'] ?? 0) <= now()->timestamp || ! isset($pending['identity'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'The linking request has expired. Please sign in with Google again.',
+            ], 422);
+        }
+
+        $identity = $pending['identity'];
+        $user = User::whereRaw('LOWER(email) = ?', [$identity['email']])->first();
+        if (! $user) {
+            return response()->json(['status' => 'error', 'message' => 'Account not found.'], 404);
+        }
+
+        if (! $user->is_active || $user->deleted_at !== null) {
+            return response()->json(['status' => 'error', 'message' => 'This account is disabled.'], 403);
+        }
+
+        if (! $this->accounts->passwordProvesOwnership($user, (string) $request->input('password'))) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['password' => ['The provided password does not match the existing account.']],
+            ], 422);
+        }
+
+        $this->accounts->linkAccount($user, $identity);
+        $request->session()->forget('pending_google_link');
+
+        $user->forceFill(['last_login_at' => now()])->save();
+        $token = $user->createToken('google-auth-token')->plainTextToken;
+
+        return response()->json([
+            'status' => 'success',
+            'token' => $token,
+            'role' => $user->role,
+            'is_profile_complete' => ! empty($user->phone) && ! empty($user->country)
+                && ! empty($user->position) && ! empty($user->date_of_birth),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'google_avatar_url' => $user->google_avatar_url,
+            ],
+        ])->header('Cache-Control', 'no-store, private');
+    }
+
+    public function linkStart(Request $request)
+    {
+        $user = $request->user();
+        if (! $user || ! $user->is_active) {
+            return response()->json(['status' => 'error', 'message' => 'Unauthorized.'], 401);
+        }
+        $lang = $this->resolveLang($request);
+        if (! $this->configured()) {
+            return response()->json(['status' => 'error', 'message' => 'Google service unavailable.'], 503);
+        }
+
+        $request->session()->regenerate();
+        $request->session()->put('google_link_user_id', $user->id);
+        $request->session()->put('google_oauth', ['lang' => $lang, 'expires_at' => now()->addMinutes(10)->timestamp]);
+
+        $url = Socialite::driver('google')->enablePKCE()->redirect()->getTargetUrl();
+
+        return response()->json(['status' => 'success', 'url' => $url]);
+    }
+
+    public function unlink(Request $request)
+    {
+        $user = $request->user();
+        if (! $user->google_id) {
+            return response()->json(['status' => 'error', 'message' => 'Google account is not linked.'], 422);
+        }
+        if (! $user->facebook_id && ! $this->accounts->hasUsablePasswordCredential($user)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Please set a password before unlinking Google.',
+            ], 422);
+        }
+
+        $user->forceFill(['google_id' => null, 'google_avatar_url' => null])->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Google account unlinked successfully.']);
     }
 
     private function exchange(Request $request, bool $mobile)

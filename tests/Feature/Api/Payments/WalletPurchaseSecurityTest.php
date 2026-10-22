@@ -14,8 +14,8 @@ use App\Models\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\TestCase;
 
 class WalletPurchaseSecurityTest extends TestCase
 {
@@ -68,6 +68,29 @@ class WalletPurchaseSecurityTest extends TestCase
             'multiple' => ['multiple_media', 3000],
             'cart collection plus child is deduplicated' => ['cart', 5400],
         ];
+    }
+
+    public function test_direct_media_sale_retains_fifteen_percent_and_credits_creator_eighty_five_percent(): void
+    {
+        [$buyer, $event, $images] = $this->catalog();
+        $seller = $event->user;
+        Wallet::create(['user_id' => $buyer->id, 'amount' => '20.00', 'balance_minor' => 2000, 'currency' => 'USD']);
+        Wallet::create(['user_id' => $seller->id, 'amount' => '0.00', 'balance_minor' => 0, 'currency' => 'USD']);
+        Sanctum::actingAs($buyer);
+
+        $this->postJson('/api/v1/pay/wallet', [
+            'type' => 'single_media',
+            'media_id' => $images[0]->id,
+            'idempotency_key' => 'direct-sale-commission',
+        ])->assertOk();
+
+        $transaction = $seller->wallet->fresh()->walletTransactions()->where('source', 'media_sale')->sole();
+        $this->assertSame(850, $seller->wallet->fresh()->balance_minor);
+        $this->assertSame(850, $transaction->amount_minor);
+        $this->assertSame(1000, $transaction->metadata['gross_amount_minor']);
+        $this->assertSame(150, $transaction->metadata['platform_commission_minor']);
+        $this->assertSame(850, $transaction->metadata['creator_payout_minor']);
+        $this->assertSame(15, $transaction->metadata['commission_rate_percent']);
     }
 
     public function test_insufficient_balance_rolls_back_order_payment_ledger_and_entitlement(): void
@@ -141,6 +164,7 @@ class WalletPurchaseSecurityTest extends TestCase
         $images = collect([1000, 2000, 3000])->map(fn ($minor) => EventsImges::create([
             'event_id' => $event->id, 'is_active' => '1', 'price' => number_format($minor / 100, 2, '.', ''), 'type' => 'image',
         ]));
+
         return [$buyer, $event, $images];
     }
 
@@ -155,6 +179,7 @@ class WalletPurchaseSecurityTest extends TestCase
             'cart_id' => $cart->id, 'event_id' => $event->id, 'image_id' => $images[0]->id,
             'type' => 'single', 'price' => '10.00',
         ]);
+
         return [];
     }
 
@@ -162,6 +187,7 @@ class WalletPurchaseSecurityTest extends TestCase
     {
         static $sequence = 0;
         $sequence++;
+
         return Purchases::create([
             'user_id' => $user->id, 'payment_method' => 'paypal', 'status' => 'pending', 'currency' => 'USD',
             'amount' => '1.00', 'amount_minor' => 100, 'idempotency_key' => 'status-'.$sequence,

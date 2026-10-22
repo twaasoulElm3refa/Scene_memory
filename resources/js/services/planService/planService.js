@@ -13,6 +13,51 @@ export const PlanService = {
         return api.post(`/subscribe/${planId}`);
     },
 
+    subscribeWallet(planId) {
+        return api.post(`/plans/subscribe/${planId}/wallet`);
+    },
+
+    subscribePayPal(planId) {
+        return api.post(`/plans/subscribe/${planId}/paypal`);
+    },
+
+    getUserCredits() {
+        return api.get("/media-credits/balance", { suppressGlobalErrorToast: true });
+    },
+
+    getCreditHistory(params = {}) {
+        return api.get("/media-credits/history", { params });
+    },
+
+    checkMediaEligibility(mediaId) {
+        return api.get(`/media-credits/check/${mediaId}`);
+    },
+
+    redeemMedia(mediaId) {
+        return api.post(`/media-credits/redeem/${mediaId}`);
+    },
+
+    // Admin endpoints
+    getAdminTiers() {
+        return api.get("/admin/media-tiers");
+    },
+
+    saveAdminTier(data) {
+        return api.post("/admin/media-tiers", data);
+    },
+
+    deleteAdminTier(id) {
+        return api.delete(`/admin/media-tiers/${id}`);
+    },
+
+    validatePricing(params) {
+        return api.get("/admin/plans/validate", { params });
+    },
+
+    getCreditReports() {
+        return api.get("/admin/plan-credit-reports");
+    },
+
     /**
      * جلب كل الـ Plans
      */

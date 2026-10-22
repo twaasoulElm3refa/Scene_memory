@@ -38,7 +38,8 @@
         "login": "Accedi",
         "cart": "Carrello",
         "scemoryHome": "Home Scemory",
-        "toggleMenu": "Apri/chiudi menu"
+        "toggleMenu": "Apri/chiudi menu",
+        "mediaCredits": "Crediti Multimediali"
     },
     "login_to_comment": "Effettua il login per lasciare un commento",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "Crea account",
         "profileInvalid": "Inserisci un paese e una data di nascita valida che non sia futura.",
         "retry": "Riprova",
-        "backToLogin": "Torna all’accesso"
+        "backToLogin": "Torna all’accesso",
+        "linkAccountTitle": "Collega il tuo account Google",
+        "linkAccountDesc": "Esiste già un account con questa email. Inserisci la password per collegare in modo sicuro il tuo account Google.",
+        "accountPassword": "Password dell'account",
+        "confirmLink": "Conferma e collega account",
+        "invalidCredentials": "Password non valida. Verifica le tue credenziali e riprova.",
+        "linkSuccess": "Account Google collegato con successo.",
+        "unlinkSuccess": "Account Google scollegato con successo."
     },
     "facebookAuth": {
         "continue": "Continua con Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "Reinvia tra {seconds} s",
         "resend": "Reinvia codice",
         "profileInvalid": "Inserisci un’e-mail valida, un paese e una data di nascita non futura."
+    },
+    "mediaCredits": {
+        "myCredits": "I Miei Crediti Multimediali",
+        "photosAvailable": "Foto Disponibili",
+        "videosAvailable": "Video Disponibili",
+        "photos": "Foto",
+        "videos": "Video",
+        "photoQuotaDesc": "Quota permanente di riscatto foto",
+        "videoQuotaDesc": "Quota permanente di riscatto video",
+        "activeTier": "Livello di Accesso Attivo",
+        "breakdownByTier": "Ripartizione per Livello",
+        "viewDashboard": "Dashboard Crediti",
+        "getMoreCredits": "Ottieni Altri Crediti",
+        "browseMarketplace": "Sfoglia Marketplace",
+        "noTier": "Nessun Piano Attivo",
+        "getWithPlan": "Ottieni con il Piano",
+        "redeemed": "Riscattato",
+        "redeemSuccess": "Elemento multimediale riscattato con successo!",
+        "redeemFailed": "Impossibile riscattare con il piano.",
+        "activeGrants": "Quote Attive Assegnate",
+        "redemptionHistory": "Cronologia Riscatti",
+        "noGrants": "Nessuna quota attiva. Abbonati a un piano per ottenere crediti foto e video.",
+        "noRedemptions": "Nessun riscatto effettuato finora.",
+        "tier": "Livello",
+        "plan": "Piano",
+        "tierRank": "Rango Livello",
+        "grantedOn": "Assegnato il",
+        "payoutCap": "Tetto Pagamento Creatore",
+        "payWithWallet": "Paga con Portafoglio",
+        "payWithPaypal": "Paga con PayPal",
+        "insufficientCredits": "Crediti insufficienti o livello non idoneo.",
+        "includedQuotas": "Quote Multimediali Incluse",
+        "permanentQuotas": "Quote multimediali permanenti senza scadenza"
     }
 }

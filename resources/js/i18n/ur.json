@@ -38,7 +38,8 @@
         "login": "لاگ ان",
         "cart": "کارٹ",
         "scemoryHome": "Scemory ہوم",
-        "toggleMenu": "مینو ٹوگل کریں"
+        "toggleMenu": "مینو ٹوگل کریں",
+        "mediaCredits": "میڈیا کریڈٹس"
     },
     "login_to_comment": "لوگ ان کریں تا جواب دیں",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "اکاؤنٹ بنائیں",
         "profileInvalid": "ملک اور درست تاریخ پیدائش درج کریں جو مستقبل کی نہ ہو۔",
         "retry": "دوبارہ کوشش کریں",
-        "backToLogin": "سائن ان پر واپس جائیں"
+        "backToLogin": "سائن ان پر واپس جائیں",
+        "linkAccountTitle": "اپنا Google اکاؤنٹ منسلک کریں",
+        "linkAccountDesc": "اس ای میل سے ایک اکاؤنٹ پہلے ہی موجود ہے۔ اپنا Google اکاؤنٹ محفوظ طریقے سے منسلک کرنے کے لیے اپنا پاس ورڈ درج کریں۔",
+        "accountPassword": "اکاؤنٹ کا پاس ورڈ",
+        "confirmLink": "تصدیق کریں اور اکاؤنٹ منسلک کریں",
+        "invalidCredentials": "غلط پاس ورڈ۔ براہ کرم اپنی معلومات چیک کریں اور دوبارہ کوشش کریں۔",
+        "linkSuccess": "Google اکاؤنٹ کامیابی سے منسلک ہو گیا۔",
+        "unlinkSuccess": "Google اکاؤنٹ کامیابی سے غیر منسلک کر دیا گیا۔"
     },
     "facebookAuth": {
         "continue": "Facebook کے ساتھ جاری رکھیں",
@@ -1410,5 +1418,38 @@
         "resendIn": "{seconds} سیکنڈ میں دوبارہ بھیجیں",
         "resend": "کوڈ دوبارہ بھیجیں",
         "profileInvalid": "درست ای میل، ملک اور تاریخ پیدائش درج کریں جو مستقبل کی نہ ہو۔"
+    },
+    "mediaCredits": {
+        "myCredits": "میرے میڈیا کریڈٹس",
+        "photosAvailable": "دستیاب تصاویر",
+        "videosAvailable": "دستیاب ویڈیوز",
+        "photos": "تصاویر",
+        "videos": "ویڈیوز",
+        "photoQuotaDesc": "مستقل تصویر ریڈیمپشن کوٹہ",
+        "videoQuotaDesc": "مستقل ویڈیو ریڈیمپشن کوٹہ",
+        "activeTier": "فعال رسائی کا درجہ",
+        "breakdownByTier": "درجہ وار تفصیل",
+        "viewDashboard": "کریڈٹ ڈیش بورڈ",
+        "getMoreCredits": "مزید کریڈٹس حاصل کریں",
+        "browseMarketplace": "مارکیٹ دیکھیں",
+        "noTier": "کوئی فعال پلان نہیں",
+        "getWithPlan": "پلان کے ساتھ حاصل کریں",
+        "redeemed": "حاصل شدہ",
+        "redeemSuccess": "پلان کے ساتھ میڈیا کامیابی سے حاصل کر لیا گیا!",
+        "redeemFailed": "پلان کے ساتھ میڈیا حاصل کرنے میں ناکامی۔",
+        "activeGrants": "فعال کوٹہ گرانٹس",
+        "redemptionHistory": "ریڈیمپشن کی تاریخ",
+        "noGrants": "کوئی فعال میڈیا کوٹہ نہیں ہے۔ کریڈٹس حاصل کرنے کے لیے پلان سبسکرائب کریں۔",
+        "noRedemptions": "ابھی تک کوئی میڈیا حاصل نہیں کیا گیا۔",
+        "tier": "درجہ",
+        "plan": "پلان",
+        "tierRank": "درجہ رینک",
+        "grantedOn": "حصول کی تاریخ",
+        "payoutCap": "تخلیق کار ادائیگی کی حد",
+        "payWithWallet": "والٹ سے ادائیگی کریں",
+        "payWithPaypal": "پے پال سے ادائیگی کریں",
+        "insufficientCredits": "ناکافی کریڈٹس یا اس میڈیا کے لیے درجہ ناکافی ہے۔",
+        "includedQuotas": "شامل میڈیا کوٹہ",
+        "permanentQuotas": "مستقل غیر منسوخ شدہ میڈیا کوٹہ"
     }
 }

@@ -38,7 +38,8 @@
         "login": "تسجيل الدخول",
         "cart": "السلة",
         "scemoryHome": "صفحة Scemory الرئيسية",
-        "toggleMenu": "تبديل القائمة"
+        "toggleMenu": "تبديل القائمة",
+        "mediaCredits": "أرصدتي للوسائط"
     },
     "languages": {
         "AR": "العربية",
@@ -1373,7 +1374,14 @@
         "finishSignup": "إنشاء حساب",
         "profileInvalid": "أدخل دولة وتاريخ ميلاد صالحًا لا يقع في المستقبل.",
         "retry": "إعادة المحاولة",
-        "backToLogin": "العودة لتسجيل الدخول"
+        "backToLogin": "العودة لتسجيل الدخول",
+        "linkAccountTitle": "ربط حساب Google الخاص بك",
+        "linkAccountDesc": "يوجد حساب مسجل بهذا البريد الإلكتروني بالفعل. أدخل كلمة المرور لربط حساب Google بأمان.",
+        "accountPassword": "كلمة مرور الحساب",
+        "confirmLink": "تأكيد وربط الحساب",
+        "invalidCredentials": "كلمة المرور غير صحيحة. يرجى التحقق من بياناتك والمحاولة مجددًا.",
+        "linkSuccess": "تم ربط حساب Google بنجاح.",
+        "unlinkSuccess": "تم إلغاء ربط حساب Google بنجاح."
     },
     "facebookAuth": {
         "continue": "المتابعة باستخدام Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "إعادة الإرسال بعد {seconds} ثانية",
         "resend": "إعادة إرسال الرمز",
         "profileInvalid": "أدخل بريدًا إلكترونيًا ودولة وتاريخ ميلاد صالحًا لا يقع في المستقبل."
+    },
+    "mediaCredits": {
+        "myCredits": "أرصدتي للوسائط",
+        "photosAvailable": "الصور المتاحة",
+        "videosAvailable": "الفيديوهات المتاحة",
+        "photos": "صور",
+        "videos": "فيديوهات",
+        "photoQuotaDesc": "حصة استرداد دائمة للصور بدون تاريخ انتهاء",
+        "videoQuotaDesc": "حصة استرداد دائمة للفيديوهات بدون تاريخ انتهاء",
+        "activeTier": "فئة الوصول الحالية",
+        "breakdownByTier": "التوزيع حسب الفئة",
+        "viewDashboard": "لوحة الأرصدة",
+        "getMoreCredits": "شراء المزيد من الأرصدة",
+        "browseMarketplace": "تصفح المتجر",
+        "noTier": "لا توجد باقة نشطة",
+        "getWithPlan": "احصل عليها من باقتك",
+        "redeemed": "تم الاسترداد",
+        "redeemSuccess": "تم استرداد الوسائط بنجاح من رصيد باقتك!",
+        "redeemFailed": "فشل استرداد الوسائط من الباقة.",
+        "activeGrants": "حصص الباقات النشطة",
+        "redemptionHistory": "سجل الاستردادات",
+        "noGrants": "لا توجد حصص وسائط نشطة. اشترك في باقة للحصول على أرصدة صور وفيديوهات.",
+        "noRedemptions": "لا توجد استردادات بعد. تصفح المتجر لاستخدام أرصدتك.",
+        "tier": "الفئة",
+        "plan": "الباقة",
+        "tierRank": "رتبة الفئة",
+        "grantedOn": "تاريخ الشراء",
+        "payoutCap": "سقف مستحقات المنشئ",
+        "payWithWallet": "الدفع من المحفظة",
+        "payWithPaypal": "الدفع بواسطة باي بال",
+        "insufficientCredits": "الرصيد غير كافٍ أو فئة الباقة غير مؤهلة لهذه الوسائط.",
+        "includedQuotas": "حصص الوسائط المشمولة",
+        "permanentQuotas": "حصص وسائط دائمة بدون انتهاء صلاحية"
     }
 }

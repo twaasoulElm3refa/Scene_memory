@@ -38,7 +38,8 @@
         "login": "Login",
         "cart": "Cart",
         "scemoryHome": "Scemory home",
-        "toggleMenu": "Toggle menu"
+        "toggleMenu": "Toggle menu",
+        "mediaCredits": "Media Credits"
     },
     "login_to_comment": "Please log in to leave a comment",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "Create account",
         "profileInvalid": "Enter a country and a valid date of birth that is not in the future.",
         "retry": "Try again",
-        "backToLogin": "Back to sign in"
+        "backToLogin": "Back to sign in",
+        "linkAccountTitle": "Link your Google account",
+        "linkAccountDesc": "An account with this email already exists. Enter your password to securely link your Google account.",
+        "accountPassword": "Account password",
+        "confirmLink": "Confirm and link account",
+        "invalidCredentials": "Invalid password. Please check your credentials and try again.",
+        "linkSuccess": "Google account linked successfully.",
+        "unlinkSuccess": "Google account unlinked successfully."
     },
     "facebookAuth": {
         "continue": "Continue with Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "Resend in {seconds}s",
         "resend": "Resend code",
         "profileInvalid": "Enter a valid email, country, and date of birth that is not in the future."
+    },
+    "mediaCredits": {
+        "myCredits": "My Media Credits",
+        "photosAvailable": "Photos Available",
+        "videosAvailable": "Videos Available",
+        "photos": "Photos",
+        "videos": "Videos",
+        "photoQuotaDesc": "Permanent photo redemption quota",
+        "videoQuotaDesc": "Permanent video redemption quota",
+        "activeTier": "Active Access Tier",
+        "breakdownByTier": "Breakdown by Tier",
+        "viewDashboard": "Credit Dashboard",
+        "getMoreCredits": "Get More Credits",
+        "browseMarketplace": "Browse Marketplace",
+        "noTier": "No Active Plan",
+        "getWithPlan": "Get with Plan",
+        "redeemed": "Redeemed",
+        "redeemSuccess": "Media redeemed successfully with your plan!",
+        "redeemFailed": "Failed to redeem media with plan.",
+        "activeGrants": "Active Quota Grants",
+        "redemptionHistory": "Redemption History",
+        "noGrants": "No active media quotas. Subscribe to a plan to get photo and video credits.",
+        "noRedemptions": "No redemptions yet. Browse the marketplace to use your credits.",
+        "tier": "Tier",
+        "plan": "Plan",
+        "tierRank": "Tier Rank",
+        "grantedOn": "Granted On",
+        "payoutCap": "Creator Payout Cap",
+        "payWithWallet": "Pay with Wallet",
+        "payWithPaypal": "Pay with PayPal",
+        "insufficientCredits": "Insufficient credits or tier rank too low for this media.",
+        "includedQuotas": "Included Media Quotas",
+        "permanentQuotas": "Permanent non-expiring media quotas"
     }
 }

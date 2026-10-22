@@ -63,6 +63,6 @@ class PayPalReconciliationTest extends TestCase
 
         $this->assertSame('completed', $payment->fresh()->status);
         $this->assertDatabaseHas('entitlements', ['user_id' => $buyer->id, 'media_id' => $image->id]);
-        $this->assertDatabaseHas('wallet_transactions', ['source' => 'media_sale', 'amount_minor' => 1000]);
+        $this->assertDatabaseHas('wallet_transactions', ['source' => 'media_sale', 'amount_minor' => 850]);
     }
 }

@@ -23,8 +23,16 @@ class PlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>['required','string','max:20'],
-            'price'=>['required','numeric'],
+            'name' => ['required', 'string', 'max:50'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'media_tier_id' => ['nullable', 'exists:media_tiers,id'],
+            'photo_quota' => ['nullable', 'integer', 'min:0'],
+            'video_quota' => ['nullable', 'integer', 'min:0'],
+            'max_accumulated_photos' => ['nullable', 'integer', 'min:0'],
+            'max_accumulated_videos' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
+            'allow_subsidized' => ['prohibited'],
+            'bypass_financial_check' => ['prohibited'],
         ];
     }
 }

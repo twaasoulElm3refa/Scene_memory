@@ -150,6 +150,22 @@
                     ]"
                 ></div>
 
+                <!-- Plan Quotas & Tier Highlights -->
+                <div v-if="plan.media_tier || plan.photo_quota || plan.video_quota" class="mb-5 space-y-1.5 p-3 rounded-2xl bg-gray-50/80 border border-gray-200 text-xs text-gray-800">
+                    <div v-if="plan.media_tier" class="flex justify-between items-center font-bold">
+                        <span>Tier:</span>
+                        <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 uppercase">{{ plan.media_tier.name }}</span>
+                    </div>
+                    <div v-if="plan.photo_quota" class="flex justify-between items-center text-gray-600">
+                        <span>Photos:</span>
+                        <span class="font-bold text-blue-600">{{ plan.photo_quota }} included</span>
+                    </div>
+                    <div v-if="plan.video_quota" class="flex justify-between items-center text-gray-600">
+                        <span>Videos:</span>
+                        <span class="font-bold text-purple-600">{{ plan.video_quota }} included</span>
+                    </div>
+                </div>
+
                 <!-- Advantages -->
                 <ul class="flex-1 space-y-3 mb-8">
                     <li

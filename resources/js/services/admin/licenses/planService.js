@@ -52,6 +52,52 @@ const PlanService = {
         }
     },
 
+    // Media Tiers
+    getMediaTiers: async () => {
+        try {
+            const response = await api.get('/admin/media-tiers');
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    saveMediaTier: async (data) => {
+        try {
+            const response = await api.post('/admin/media-tiers', data);
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    deleteMediaTier: async (id) => {
+        try {
+            const response = await api.delete(`/admin/media-tiers/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    validatePricing: async (params) => {
+        try {
+            const response = await api.get('/admin/plans/validate', { params });
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    getCreditReports: async () => {
+        try {
+            const response = await api.get('/admin/plan-credit-reports');
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
     // planService.js
     createBenefit(planId, data) {
         return api.post(`/benefits/create/${planId}`, data);

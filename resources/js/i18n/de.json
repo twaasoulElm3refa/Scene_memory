@@ -38,7 +38,8 @@
         "login": "Anmelden",
         "cart": "Warenkorb",
         "scemoryHome": "Scemory-Startseite",
-        "toggleMenu": "Menü umschalten"
+        "toggleMenu": "Menü umschalten",
+        "mediaCredits": "Medien-Guthaben"
     },
     "login_to_comment": "Bitte anmelden, um Kommentare zu hinterlassen",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "Konto erstellen",
         "profileInvalid": "Geben Sie ein Land und ein gültiges Geburtsdatum ein, das nicht in der Zukunft liegt.",
         "retry": "Erneut versuchen",
-        "backToLogin": "Zurück zur Anmeldung"
+        "backToLogin": "Zurück zur Anmeldung",
+        "linkAccountTitle": "Google-Konto verknüpfen",
+        "linkAccountDesc": "Ein Konto mit dieser E-Mail-Adresse existiert bereits. Geben Sie Ihr Passwort ein, um Ihr Google-Konto sicher zu verknüpfen.",
+        "accountPassword": "Kontopasswort",
+        "confirmLink": "Bestätigen und Konto verknüpfen",
+        "invalidCredentials": "Ungültiges Passwort. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
+        "linkSuccess": "Google-Konto erfolgreich verknüpft.",
+        "unlinkSuccess": "Google-Konto erfolgreich getrennt."
     },
     "facebookAuth": {
         "continue": "Weiter mit Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "Erneut senden in {seconds} s",
         "resend": "Code erneut senden",
         "profileInvalid": "Geben Sie eine gültige E-Mail, ein Land und ein Geburtsdatum ein, das nicht in der Zukunft liegt."
+    },
+    "mediaCredits": {
+        "myCredits": "Mein Medien-Guthaben",
+        "photosAvailable": "Verfügbare Fotos",
+        "videosAvailable": "Verfügbare Videos",
+        "photos": "Fotos",
+        "videos": "Videos",
+        "photoQuotaDesc": "Dauerhaftes Foto-Einlösekontingent",
+        "videoQuotaDesc": "Dauerhaftes Video-Einlösekontingent",
+        "activeTier": "Aktive Zugriffsklasse",
+        "breakdownByTier": "Aufteilung nach Klasse",
+        "viewDashboard": "Guthaben-Dashboard",
+        "getMoreCredits": "Mehr Guthaben holen",
+        "browseMarketplace": "Marktplatz durchsuchen",
+        "noTier": "Kein aktiver Plan",
+        "getWithPlan": "Mit Plan holen",
+        "redeemed": "Eingelöst",
+        "redeemSuccess": "Medien erfolgreich mit Plan-Guthaben eingelöst!",
+        "redeemFailed": "Einlösung fehlgeschlagen.",
+        "activeGrants": "Aktive Kontingente",
+        "redemptionHistory": "Einlösungshistorie",
+        "noGrants": "Keine aktiven Kontingente. Abonnieren Sie einen Plan für Foto- und Video-Guthaben.",
+        "noRedemptions": "Noch keine Einlösungen vorhanden.",
+        "tier": "Klasse",
+        "plan": "Plan",
+        "tierRank": "Klassen-Rang",
+        "grantedOn": "Gewährt am",
+        "payoutCap": "Ersteller-Auszahlungsobergrenze",
+        "payWithWallet": "Mit Wallet bezahlen",
+        "payWithPaypal": "Mit PayPal bezahlen",
+        "insufficientCredits": "Unzureichendes Guthaben oder zu niedrige Klasse für dieses Medium.",
+        "includedQuotas": "Enthaltene Medien-Kontingente",
+        "permanentQuotas": "Dauerhafte Medienkontingente ohne Verfall"
     }
 }

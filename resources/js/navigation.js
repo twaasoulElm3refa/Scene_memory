@@ -26,6 +26,7 @@ export const navigationGroups = {
     account: [
         { labelKey: 'nav.profile', path: '/profile', authenticated: true },
         { labelKey: 'nav.timeline', path: '/profile/timeline', authenticated: true },
+        { labelKey: 'nav.mediaCredits', path: '/profile?tab=credits', authenticated: true },
         { labelKey: 'nav.downloads', path: '/downloads', authenticated: true },
         { labelKey: 'nav.dashboard', path: '/creator/events', authenticated: true, creator: true },
     ],

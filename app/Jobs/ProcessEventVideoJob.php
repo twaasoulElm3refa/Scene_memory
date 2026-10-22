@@ -110,6 +110,7 @@ class ProcessEventVideoJob implements ShouldQueue
                 'original_disk' => 'media', 'preview_disk' => 'media',
                 'is_active' => 1,
             ]);
+            app(\App\Services\MediaTierService::class)->assignTierToMedia($media);
 
             $cache->invalidateEvent((int) $event->id, [(int) $media->id]);
             Storage::disk($this->sourceDisk)->delete($this->filePath);

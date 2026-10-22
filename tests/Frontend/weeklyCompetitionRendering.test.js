@@ -69,7 +69,7 @@ describe('weekly competition rendering', () => {
     });
 
     it('refreshes at the server-provided Saturday boundary', async () => {
-        vi.useFakeTimers();
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date', 'performance'] });
         vi.setSystemTime(new Date('2026-10-23T20:59:59Z'));
         getWeeklyLeaderboardPreview.mockResolvedValueOnce(payload([{ id: 1, rank: 1, points: 250, name: 'Memory Author', badge: 'Memory Master' }]))
             .mockResolvedValueOnce({ data: { ...payload().data, week_start: '2026-10-24', week_end: '2026-10-30', ends_at: '2026-10-30T21:00:00Z' } });

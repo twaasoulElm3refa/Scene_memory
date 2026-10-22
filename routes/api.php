@@ -44,6 +44,7 @@ use App\Http\Controllers\api\home\LikesController;
 use App\Http\Controllers\api\home\MediaDeliveryController;
 use App\Http\Controllers\api\home\MediaValidationController;
 use App\Http\Controllers\api\home\PlanController;
+use App\Http\Controllers\api\home\PlanSubscriptionController;
 use App\Http\Controllers\api\home\ProfileController;
 use App\Http\Controllers\api\home\SpecialCoverageCityController;
 use App\Http\Controllers\api\home\SpecialCoverageRequestController;
@@ -107,11 +108,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/facebook-callback', [FacebookAuthController::class, 'callback'])->middleware(['web', 'guest', 'throttle:20,1']);
         Route::post('/facebook-exchange', [FacebookAuthController::class, 'exchange'])->middleware(['web', 'throttle:10,1']);
         Route::get('/google-login', [GoogleAuthController::class, 'googleLogin'])->middleware(['web', 'guest', 'throttle:10,1']);
-        Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware(['web', 'guest', 'throttle:20,1']);
+        Route::get('/google-callback', [GoogleAuthController::class, 'googleCallback'])->middleware(['web', 'throttle:20,1']);
         Route::post('/google-exchange', [GoogleAuthController::class, 'exchangeWebCode'])->middleware(['web', 'throttle:10,1']);
         Route::post('/google-mobile-exchange', [GoogleAuthController::class, 'exchangeMobileCode'])->middleware('throttle:10,1');
+        Route::post('/google-link-confirm', [GoogleAuthController::class, 'confirmLinkWithPassword'])->middleware(['web', 'throttle:10,1']);
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
+            Route::get('/google-link-start', [GoogleAuthController::class, 'linkStart'])->middleware(['web', 'throttle:10,1']);
+            Route::post('/google-unlink', [GoogleAuthController::class, 'unlink'])->middleware(['throttle:10,1']);
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::get('/profile', [AuthController::class, 'profile']);
             Route::get('/timeline', [ProfileController::class, 'activity']);
@@ -407,7 +411,29 @@ Route::prefix('v1')->group(function () {
             ->middleware('auth:sanctum', AdminMiddleware::class);
         Route::delete('/delete/{id}', [AdminPlanController::class, 'delete'])
             ->middleware('auth:sanctum', AdminMiddleware::class);
-        // 131
+
+        // Plan Subscriptions with wallet & paypal
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/subscribe/{plan}/wallet', [PlanSubscriptionController::class, 'subscribeWallet']);
+            Route::post('/subscribe/{plan}/paypal', [PlanSubscriptionController::class, 'subscribePayPal']);
+        });
+    });
+
+    // Media Credits & Plan Redemptions
+    Route::prefix('media-credits')->middleware('auth:sanctum')->group(function () {
+        Route::get('/balance', [PlanSubscriptionController::class, 'userCredits']);
+        Route::get('/history', [PlanSubscriptionController::class, 'creditHistory']);
+        Route::get('/check/{media}', [PlanSubscriptionController::class, 'checkEligibility']);
+        Route::post('/redeem/{media}', [PlanSubscriptionController::class, 'redeem']);
+    });
+
+    // Admin Media Tiers & Financial Reports
+    Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
+        Route::get('/media-tiers', [AdminPlanController::class, 'allTiers']);
+        Route::post('/media-tiers', [AdminPlanController::class, 'saveTier']);
+        Route::delete('/media-tiers/{id}', [AdminPlanController::class, 'deleteTier']);
+        Route::get('/plans/validate', [AdminPlanController::class, 'validatePricing']);
+        Route::get('/plan-credit-reports', [AdminPlanController::class, 'creditReports']);
     });
 
     // Benefits

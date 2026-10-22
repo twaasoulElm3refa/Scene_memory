@@ -38,7 +38,8 @@
         "login": "लॉग इन",
         "cart": "कार्ट",
         "scemoryHome": "Scemory होम",
-        "toggleMenu": "मेनू टॉगल करें"
+        "toggleMenu": "मेनू टॉगल करें",
+        "mediaCredits": "मीडिया क्रेडिट"
     },
     "languages": {
         "AR": "العربية",
@@ -1373,7 +1374,14 @@
         "finishSignup": "खाता बनाएँ",
         "profileInvalid": "देश और एक मान्य जन्म तिथि दर्ज करें जो भविष्य की न हो।",
         "retry": "फिर कोशिश करें",
-        "backToLogin": "साइन इन पर वापस जाएँ"
+        "backToLogin": "साइन इन पर वापस जाएँ",
+        "linkAccountTitle": "अपना Google खाता जोड़ें",
+        "linkAccountDesc": "इस ईमेल से एक खाता पहले से मौजूद है। अपने Google खाते को सुरक्षित रूप से जोड़ने के लिए अपना पासवर्ड दर्ज करें।",
+        "accountPassword": "खाता पासवर्ड",
+        "confirmLink": "पुष्टि करें और खाता जोड़ें",
+        "invalidCredentials": "अमान्य पासवर्ड। कृपया अपने विवरण जांचें और पुनः प्रयास करें।",
+        "linkSuccess": "Google खाता सफलतापूर्वक जोड़ दिया गया।",
+        "unlinkSuccess": "Google खाता सफलतापूर्वक अलग कर दिया गया।"
     },
     "facebookAuth": {
         "continue": "Facebook से जारी रखें",
@@ -1410,5 +1418,38 @@
         "resendIn": "{seconds} सेकंड में फिर भेजें",
         "resend": "कोड फिर भेजें",
         "profileInvalid": "मान्य ईमेल, देश और ऐसी जन्म तिथि दर्ज करें जो भविष्य की न हो।"
+    },
+    "mediaCredits": {
+        "myCredits": "मेरे मीडिया क्रेडिट",
+        "photosAvailable": "उपलब्ध तस्वीरें",
+        "videosAvailable": "उपलब्ध वीडियो",
+        "photos": "तस्वीरें",
+        "videos": "वीडियो",
+        "photoQuotaDesc": "स्थायी फ़ोटो रिडेम्पशन कोटा",
+        "videoQuotaDesc": "स्थायी वीडियो रिडेम्पशन कोटा",
+        "activeTier": "सक्रिय एक्सेस टियर",
+        "breakdownByTier": "टियर के अनुसार विवरण",
+        "viewDashboard": "क्रेडिट डैशबोर्ड",
+        "getMoreCredits": "अधिक क्रेडिट प्राप्त करें",
+        "browseMarketplace": "मार्केटप्लेस देखें",
+        "noTier": "कोई सक्रिय प्लान नहीं",
+        "getWithPlan": "प्लान के साथ प्राप्त करें",
+        "redeemed": "रिडीम किया गया",
+        "redeemSuccess": "आपके प्लान क्रेडिट के साथ मीडिया सफलतापूर्वक रिडीम किया गया!",
+        "redeemFailed": "प्लान के साथ मीडिया रिडीम करने में विफल।",
+        "activeGrants": "सक्रिय कोटा अनुदान",
+        "redemptionHistory": "रिडेम्पशन इतिहास",
+        "noGrants": "कोई सक्रिय मीडिया कोटा नहीं है। क्रेडिट प्राप्त करने के लिए प्लान सब्सक्राइब करें।",
+        "noRedemptions": "अभी तक कोई रिडेम्पशन नहीं हुआ है।",
+        "tier": "टियर",
+        "plan": "प्लान",
+        "tierRank": "टियर रैंक",
+        "grantedOn": "प्रदान किया गया",
+        "payoutCap": "निर्माता भुगतान सीमा",
+        "payWithWallet": "वॉलेट से भुगतान करें",
+        "payWithPaypal": "पेपाल से भुगतान करें",
+        "insufficientCredits": "अपर्याप्त क्रेडिट या इस मीडिया के लिए टियर रैंक कम है।",
+        "includedQuotas": "शामिल मीडिया कोटा",
+        "permanentQuotas": "स्थायी गैर-समाप्ति मीडिया कोटा"
     }
 }

@@ -143,6 +143,7 @@ class ProcessEventImageJob implements ShouldQueue
                 'validation_status' => $this->metadata['validation_status'] ?? null,
                 'validation_message' => $this->metadata['validation_message'] ?? null,
             ]);
+            app(\App\Services\MediaTierService::class)->assignTierToMedia($eventImage);
 
             $photoTagsJson = $this->metadata['tags_json'] ?? null;
 

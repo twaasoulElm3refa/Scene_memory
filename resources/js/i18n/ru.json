@@ -38,7 +38,8 @@
         "login": "Войти",
         "cart": "Корзина",
         "scemoryHome": "Главная Scemory",
-        "toggleMenu": "Переключить меню"
+        "toggleMenu": "Переключить меню",
+        "mediaCredits": "Кредиты медиа"
     },
     "login_to_comment": "Пожалуйста, войдите, чтобы оставить комментарий",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "Создать аккаунт",
         "profileInvalid": "Укажите страну и корректную дату рождения, которая не находится в будущем.",
         "retry": "Повторить",
-        "backToLogin": "Вернуться ко входу"
+        "backToLogin": "Вернуться ко входу",
+        "linkAccountTitle": "Привязать аккаунт Google",
+        "linkAccountDesc": "Аккаунт с таким email уже существует. Введите пароль, чтобы безопасно связать аккаунт Google.",
+        "accountPassword": "Пароль аккаунта",
+        "confirmLink": "Подтвердить и привязать аккаунт",
+        "invalidCredentials": "Неверный пароль. Проверьте данные и повторите попытку.",
+        "linkSuccess": "Аккаунт Google успешно привязан.",
+        "unlinkSuccess": "Привязка аккаунта Google успешно отменена."
     },
     "facebookAuth": {
         "continue": "Продолжить с Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "Отправить повторно через {seconds} с",
         "resend": "Отправить код повторно",
         "profileInvalid": "Укажите корректную почту, страну и дату рождения, которая не находится в будущем."
+    },
+    "mediaCredits": {
+        "myCredits": "Мои кредиты медиа",
+        "photosAvailable": "Доступно фото",
+        "videosAvailable": "Доступно видео",
+        "photos": "Фото",
+        "videos": "Видео",
+        "photoQuotaDesc": "Постоянная квота на получение фото",
+        "videoQuotaDesc": "Постоянная квота на получение видео",
+        "activeTier": "Активный уровень доступа",
+        "breakdownByTier": "Разбивка по уровням",
+        "viewDashboard": "Панель кредитов",
+        "getMoreCredits": "Получить больше кредитов",
+        "browseMarketplace": "В каталог",
+        "noTier": "Нет активного плана",
+        "getWithPlan": "Получить по плану",
+        "redeemed": "Получено",
+        "redeemSuccess": "Медиа успешно получено по вашему плану!",
+        "redeemFailed": "Не удалось получить медиа по плану.",
+        "activeGrants": "Активные квоты",
+        "redemptionHistory": "История получений",
+        "noGrants": "Нет активных квот. Подпишитесь на план для получения кредитов.",
+        "noRedemptions": "Пока нет получений.",
+        "tier": "Уровень",
+        "plan": "План",
+        "tierRank": "Ранг уровня",
+        "grantedOn": "Дата начисления",
+        "payoutCap": "Лимит выплаты автору",
+        "payWithWallet": "Оплатить с кошелька",
+        "payWithPaypal": "Оплатить через PayPal",
+        "insufficientCredits": "Недостаточно кредитов или уровень плана ниже требуемого.",
+        "includedQuotas": "Включенные квоты медиа",
+        "permanentQuotas": "Бессрочные квоты медиа без сгорания"
     }
 }

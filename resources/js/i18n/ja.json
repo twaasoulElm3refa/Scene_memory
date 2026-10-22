@@ -38,7 +38,8 @@
         "login": "ログイン",
         "cart": "カート",
         "scemoryHome": "Scemoryホーム",
-        "toggleMenu": "メニューを切り替え"
+        "toggleMenu": "メニューを切り替え",
+        "mediaCredits": "メディアクレジット"
     },
     "login_to_comment": "コメントを残すにはログインしてください",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "アカウントを作成",
         "profileInvalid": "国と、未来の日付ではない有効な生年月日を入力してください。",
         "retry": "再試行",
-        "backToLogin": "ログインに戻る"
+        "backToLogin": "ログインに戻る",
+        "linkAccountTitle": "Google アカウントを連携",
+        "linkAccountDesc": "このメールアドレスのアカウントが既に存在します。Google アカウントを安全に連携するにはパスワードを入力してください。",
+        "accountPassword": "アカウントのパスワード",
+        "confirmLink": "確認してアカウントを連携",
+        "invalidCredentials": "無効なパスワードです。認証情報を確認してやり直してください。",
+        "linkSuccess": "Google アカウントが正常に連携されました。",
+        "unlinkSuccess": "Google アカウントの連携を解除しました。"
     },
     "facebookAuth": {
         "continue": "Facebook で続行",
@@ -1410,5 +1418,38 @@
         "resendIn": "{seconds} 秒後に再送信",
         "resend": "コードを再送信",
         "profileInvalid": "有効なメールアドレス、国、および未来の日付ではない生年月日を入力してください。"
+    },
+    "mediaCredits": {
+        "myCredits": "保有メディアクレジット",
+        "photosAvailable": "利用可能写真数",
+        "videosAvailable": "利用可能動画数",
+        "photos": "写真",
+        "videos": "動画",
+        "photoQuotaDesc": "無期限の写真引き換え枠",
+        "videoQuotaDesc": "無期限の動画引き換え枠",
+        "activeTier": "有効なアクセスティア",
+        "breakdownByTier": "ティア別内訳",
+        "viewDashboard": "クレジット管理",
+        "getMoreCredits": "クレジットを追加",
+        "browseMarketplace": "マーケットを見る",
+        "noTier": "有効なプランがありません",
+        "getWithPlan": "プランで取得",
+        "redeemed": "取得済み",
+        "redeemSuccess": "プランのクレジットでメディアを取得しました！",
+        "redeemFailed": "メディアの取得に失敗しました。",
+        "activeGrants": "有効な付与枠",
+        "redemptionHistory": "取得履歴",
+        "noGrants": "有効なメディア枠がありません。プランに加入してクレジットを取得してください。",
+        "noRedemptions": "取得履歴はありません。",
+        "tier": "ティア",
+        "plan": "プラン",
+        "tierRank": "ティアランク",
+        "grantedOn": "付与日",
+        "payoutCap": "クリエイター報酬上限",
+        "payWithWallet": "ウォレットで支払う",
+        "payWithPaypal": "PayPalで支払う",
+        "insufficientCredits": "クレジット不足、またはプランのティアが不足しています。",
+        "includedQuotas": "含まれるメディア枠",
+        "permanentQuotas": "期限切れのない無期限メディア枠"
     }
 }

@@ -38,7 +38,8 @@
         "login": "Giriş yap",
         "cart": "Sepet",
         "scemoryHome": "Scemory ana sayfası",
-        "toggleMenu": "Menüyü aç/kapat"
+        "toggleMenu": "Menüyü aç/kapat",
+        "mediaCredits": "Medya Kredileri"
     },
     "languages": {
         "AR": "العربية",
@@ -1373,7 +1374,14 @@
         "finishSignup": "Hesap oluştur",
         "profileInvalid": "Bir ülke ve gelecekte olmayan geçerli bir doğum tarihi girin.",
         "retry": "Tekrar dene",
-        "backToLogin": "Girişe dön"
+        "backToLogin": "Girişe dön",
+        "linkAccountTitle": "Google hesabınızı bağlayın",
+        "linkAccountDesc": "Bu e-posta adresine sahip bir hesap zaten var. Google hesabınızı güvenle bağlamak için şifrenizi girin.",
+        "accountPassword": "Hesap şifresi",
+        "confirmLink": "Onayla ve hesabı bağla",
+        "invalidCredentials": "Geçersiz şifre. Lütfen bilgilerinizi kontrol edip tekrar deneyin.",
+        "linkSuccess": "Google hesabı başarıyla bağlandı.",
+        "unlinkSuccess": "Google hesabı başarıyla kaldırıldı."
     },
     "facebookAuth": {
         "continue": "Facebook ile devam et",
@@ -1410,5 +1418,38 @@
         "resendIn": "{seconds} sn sonra yeniden gönder",
         "resend": "Kodu yeniden gönder",
         "profileInvalid": "Geçerli bir e-posta, ülke ve gelecekte olmayan bir doğum tarihi girin."
+    },
+    "mediaCredits": {
+        "myCredits": "Medya Kredilerim",
+        "photosAvailable": "Kullanılabilir Fotoğraflar",
+        "videosAvailable": "Kullanılabilir Videolar",
+        "photos": "Fotoğraflar",
+        "videos": "Videolar",
+        "photoQuotaDesc": "Kalıcı fotoğraf kullanım kotası",
+        "videoQuotaDesc": "Kalıcı video kullanım kotası",
+        "activeTier": "Aktif Erişim Seviyesi",
+        "breakdownByTier": "Seviyeye Göre Dağılım",
+        "viewDashboard": "Kredi Paneli",
+        "getMoreCredits": "Daha Fazla Kredi Al",
+        "browseMarketplace": "Pazara Göz At",
+        "noTier": "Aktif Plan Yok",
+        "getWithPlan": "Planla Al",
+        "redeemed": "Alındı",
+        "redeemSuccess": "Medya planınızla başarıyla alındı!",
+        "redeemFailed": "Medyayı planla alma başarısız oldu.",
+        "activeGrants": "Aktif Kotalar",
+        "redemptionHistory": "Kullanım Geçmişi",
+        "noGrants": "Aktif kota yok. Fotoğraf ve video kredileri için bir plana abone olun.",
+        "noRedemptions": "Henüz kullanım yok.",
+        "tier": "Seviye",
+        "plan": "Plan",
+        "tierRank": "Seviye Derecesi",
+        "grantedOn": "Verilme Tarihi",
+        "payoutCap": "İçerik Üreticisi Ödeme Sınırı",
+        "payWithWallet": "Cüzdanla Öde",
+        "payWithPaypal": "PayPal ile Öde",
+        "insufficientCredits": "Yetersiz kredi veya seviye bu medya için yetersiz.",
+        "includedQuotas": "Dahil Olan Medya Kotaları",
+        "permanentQuotas": "Süresi dolmayan kalıcı medya kotaları"
     }
 }

@@ -82,6 +82,9 @@ class PayPalServices implements PaymentInterface
         if ($payment?->operation === 'virtual_gift' && $payment->method === 'paypal') {
             return $this->giftWebhook($payment, $payload);
         }
+        if ($payment?->operation === 'plan_subscription' && $payment->method === 'paypal') {
+            return $this->planSubscriptionWebhook($payment, $payload);
+        }
 
         return match ($payload['event_type'] ?? null) {
             'CHECKOUT.ORDER.APPROVED' => $this->approved($payload),
@@ -97,6 +100,9 @@ class PayPalServices implements PaymentInterface
     {
         if ($payment->operation === 'virtual_gift') {
             return $this->reconcileGift($payment);
+        }
+        if ($payment->operation === 'plan_subscription') {
+            return $this->reconcilePlanSubscription($payment);
         }
         $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
         if (($details['status'] ?? null) === 'COMPLETED') {
@@ -276,6 +282,72 @@ class PayPalServices implements PaymentInterface
         }
 
         return $gift;
+    }
+
+    private function planSubscriptionWebhook(Payment $payment, array $payload): string
+    {
+        $resource = $payload['resource'] ?? [];
+        $type = $payload['event_type'] ?? '';
+
+        if ($type === 'CHECKOUT.ORDER.APPROVED') {
+            $this->reconcilePlanSubscription($payment);
+
+            return 'ok';
+        }
+
+        if ($type === 'PAYMENT.CAPTURE.COMPLETED') {
+            $this->finalizer->finalizeCompletedPlanSubscriptionCapture($payment, $resource);
+
+            return 'ok';
+        }
+
+        if (in_array($type, ['PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED'], true)) {
+            DB::transaction(function () use ($payment) {
+                $payment->update(['status' => 'failed']);
+                $payment->order->update(['status' => 'failed']);
+            }, 5);
+
+            return 'ok';
+        }
+
+        if ($type === 'PAYMENT.CAPTURE.PENDING') {
+            return 'ok';
+        }
+
+        return 'ignored';
+    }
+
+    public function reconcilePlanSubscription(Payment $original): string
+    {
+        $payment = $original->fresh();
+        if ($payment->operation !== 'plan_subscription' || $payment->method !== 'paypal' || ! $payment->paypal_order_id) {
+            throw new CommerceException('No PayPal plan subscription order exists.');
+        }
+
+        $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
+        $capture = data_get($details, 'purchase_units.0.payments.captures.0');
+
+        if (($details['status'] ?? null) === 'COMPLETED' || (is_array($capture) && ($capture['status'] ?? null) === 'COMPLETED')) {
+            $this->finalizer->finalizeCompletedPlanSubscriptionCapture($payment, is_array($capture) ? $capture : $details);
+
+            return 'completed';
+        }
+
+        if (($details['status'] ?? null) === 'APPROVED') {
+            $capture = $this->gateway->capturePaymentOrder($payment->paypal_order_id, 'capture-plan-'.$payment->id);
+            if (($capture['status'] ?? null) === 'COMPLETED') {
+                $this->finalizer->finalizeCompletedPlanSubscriptionCapture($payment, $capture);
+
+                return 'completed';
+            }
+            if (($capture['status'] ?? null) === 'PENDING') {
+                $payment->update(['gateway_response' => $capture]);
+
+                return 'pending';
+            }
+        }
+
+        return $payment->fresh()->status === 'completed' ? 'completed' : 'pending';
     }
 
     private function giftWebhook(Payment $payment, array $payload): string

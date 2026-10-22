@@ -9,9 +9,11 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\GoogleProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class GoogleWebAuthTest extends TestCase
@@ -313,5 +315,115 @@ class GoogleWebAuthTest extends TestCase
         $response = $this->getJson('/api/v1/users/google-login?return_url=https://attacker.test&lang=../../attacker');
         $response->assertOk();
         $this->assertStringNotContainsString('attacker.test', $response->json('url'));
+    }
+
+    public function test_historical_google_token_name_is_not_account_ownership_proof(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'role' => 'user',
+        ]);
+        $user->createToken('google-auth-token');
+        $this->assertDatabaseCount('personal_access_tokens', 1);
+
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
+            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=linking_required');
+
+        $this->assertNull($user->fresh()->google_id);
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    #[DataProvider('placeholderPasswordProvider')]
+    public function test_placeholder_password_hash_is_not_account_ownership_proof(string $placeholder): void
+    {
+        $user = User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'password' => Hash::make($placeholder),
+        ]);
+
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
+            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=linking_required');
+
+        $this->postJson('/api/v1/users/google-link-confirm', ['password' => $placeholder])
+            ->assertUnprocessable();
+
+        $this->assertNull($user->fresh()->google_id);
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public static function placeholderPasswordProvider(): array
+    {
+        return [
+            'shared password placeholder' => ['password'],
+            'legacy Google placeholder' => ['legacy_google_oauth_user_scemory_default'],
+        ];
+    }
+
+    public function test_existing_password_user_can_explicitly_link_google_using_password(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'password' => Hash::make('custom-secure-pass'),
+        ]);
+
+        $query = $this->start();
+        $this->provider();
+        $response = $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']));
+        $response->assertRedirect('https://scemory.com/en/auth/google-callback?error=linking_required');
+        $this->assertNull($user->fresh()->google_id);
+
+        // Wrong password rejected
+        $this->postJson('/api/v1/users/google-link-confirm', ['password' => 'wrong-pass'])
+            ->assertStatus(422);
+        $this->assertNull($user->fresh()->google_id);
+
+        // Correct password links account and returns token
+        $linkResponse = $this->postJson('/api/v1/users/google-link-confirm', ['password' => 'custom-secure-pass'])
+            ->assertOk()
+            ->assertJsonPath('user.id', $user->id);
+
+        $this->assertNotEmpty($linkResponse->json('token'));
+        $this->assertSame('google-sub-123', $user->fresh()->google_id);
+    }
+
+    public function test_authenticated_user_can_link_and_unlink_google_account(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'auth-link@example.test',
+            'google_id' => null,
+            'password' => Hash::make('secure-pass'),
+        ]);
+
+        $this->actingAs($user, 'sanctum');
+        $startResponse = $this->getJson('/api/v1/users/google-link-start?lang=en');
+        $startResponse->assertOk();
+        $this->withCookie(config('session.cookie'), $this->app['session']->getId());
+        parse_str(parse_url($startResponse->json('url'), PHP_URL_QUERY), $query);
+        Socialite::forgetDrivers();
+
+        $this->provider(['sub' => 'new-linked-sub', 'email' => 'auth-link@example.test']);
+        $callbackResponse = $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']));
+        $callbackResponse->assertRedirect('https://scemory.com/en/profile?google_linked=1');
+
+        $this->assertSame('new-linked-sub', $user->fresh()->google_id);
+
+        // Unlink works when password exists
+        $this->actingAs($user->fresh(), 'sanctum');
+        $this->postJson('/api/v1/users/google-unlink')->assertOk();
+        $this->assertNull($user->fresh()->google_id);
+
+        // Unlink fails if no password and no facebook
+        $user->fresh()->forceFill(['google_id' => 'new-linked-sub', 'password' => null])->save();
+        $this->actingAs($user->fresh(), 'sanctum');
+        $this->postJson('/api/v1/users/google-unlink')->assertStatus(422);
+        $this->assertSame('new-linked-sub', $user->fresh()->google_id);
     }
 }

@@ -120,17 +120,39 @@
                             </div>
                         </div>
 
-                        <!-- Subscribe Button -->
-                        <button @click="subscribe" :disabled="subscribing"
-                            class="w-full bg-black text-white py-5 text-sm font-bold tracking-[0.2em] uppercase hover:bg-gray-800 transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3">
-                            <svg v-if="subscribing" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4" />
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                            </svg>
-                            <span>{{ subscribing ? 'Processing...' : 'Subscribe Now' }}</span>
-                        </button>
+                        <!-- Quotas summary -->
+                        <div v-if="plan.photo_quota || plan.video_quota || plan.media_tier" class="border border-black p-5 mb-6 bg-gray-50">
+                            <h4 class="text-xs tracking-[0.2em] uppercase font-bold text-gray-700 mb-3">{{ $t('mediaCredits.includedQuotas') }}</h4>
+                            <div v-if="plan.media_tier" class="flex justify-between items-center text-sm py-1">
+                                <span class="text-gray-600">{{ $t('mediaCredits.tier') }}</span>
+                                <span class="font-bold text-black">{{ plan.media_tier.name }} Tier (Rank {{ plan.media_tier.rank }})</span>
+                            </div>
+                            <div v-if="plan.photo_quota" class="flex justify-between items-center text-sm py-1">
+                                <span class="text-gray-600">{{ $t('mediaCredits.photos') }}</span>
+                                <span class="font-bold text-blue-600">{{ plan.photo_quota }} {{ $t('mediaCredits.photosAvailable') }}</span>
+                            </div>
+                            <div v-if="plan.video_quota" class="flex justify-between items-center text-sm py-1">
+                                <span class="text-gray-600">{{ $t('mediaCredits.videos') }}</span>
+                                <span class="font-bold text-purple-600">{{ plan.video_quota }} {{ $t('mediaCredits.videosAvailable') }}</span>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-2 border-t pt-2">
+                                <i class="bi bi-infinity"></i> {{ $t('mediaCredits.permanentQuotas') }}
+                            </div>
+                        </div>
+
+                        <!-- Subscribe Buttons (Wallet & PayPal) -->
+                        <div class="flex flex-col gap-3">
+                            <button @click="subscribeWithWallet" :disabled="subscribing"
+                                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 text-xs font-bold tracking-[0.2em] uppercase transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                                <i class="bi bi-wallet2"></i>
+                                <span>{{ subscribingMethod === 'wallet' ? 'Processing...' : $t('mediaCredits.payWithWallet') }}</span>
+                            </button>
+                            <button @click="subscribeWithPayPal" :disabled="subscribing"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 text-xs font-bold tracking-[0.2em] uppercase transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                                <i class="bi bi-paypal"></i>
+                                <span>{{ subscribingMethod === 'paypal' ? 'Redirecting to PayPal...' : $t('mediaCredits.payWithPaypal') }}</span>
+                            </button>
+                        </div>
 
                         <!-- Trust -->
                         <div class="mt-6 space-y-2">
@@ -310,23 +332,54 @@ const fetchPlan = async () => {
     }
 };
 
-const subscribe = async () => {
-    subscribing.value = true;
-    try {
-        await PlanService.subscribe(plan.value.id);
-        showToast(t('plans.subscribeSuccess'), 'success');
-        const lang = localStorage.getItem('language') || 'en';
+const subscribingMethod = ref(null);
 
-        setTimeout(() => {
-            router.push(`/${lang}/profile`);
-        }, 1200);
+const subscribeWithWallet = async () => {
+    subscribing.value = true;
+    subscribingMethod.value = 'wallet';
+    try {
+        const res = await PlanService.subscribeWallet(plan.value.id);
+        if (res.data?.status === 'success') {
+            showToast(t('plans.subscribeSuccess') || 'Plan purchased successfully with wallet!', 'success');
+            window.dispatchEvent(new CustomEvent('credits-updated'));
+            const lang = localStorage.getItem('language') || 'en';
+
+            setTimeout(() => {
+                router.push(`/${lang}/profile?tab=credits`);
+            }, 1200);
+        } else {
+            showToast(res.data?.message || t('plans.errors.subscribeFailed'), 'error');
+        }
     } catch (error) {
         console.error(error);
-        showToast(t('plans.errors.subscribeFailed'), 'error');
+        showToast(error.response?.data?.message || t('plans.errors.subscribeFailed'), 'error');
     } finally {
         subscribing.value = false;
+        subscribingMethod.value = null;
     }
 };
+
+const subscribeWithPayPal = async () => {
+    subscribing.value = true;
+    subscribingMethod.value = 'paypal';
+    try {
+        const res = await PlanService.subscribePayPal(plan.value.id);
+        if (res.data?.data?.approval_url) {
+            window.location.href = res.data.data.approval_url;
+        } else {
+            showToast(t('plans.errors.subscribeFailed'), 'error');
+            subscribing.value = false;
+            subscribingMethod.value = null;
+        }
+    } catch (error) {
+        console.error(error);
+        showToast(error.response?.data?.message || t('plans.errors.subscribeFailed'), 'error');
+        subscribing.value = false;
+        subscribingMethod.value = null;
+    }
+};
+
+const subscribe = subscribeWithWallet;
 
 onMounted(fetchPlan);
 </script>

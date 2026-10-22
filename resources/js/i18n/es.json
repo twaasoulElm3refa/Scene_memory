@@ -38,7 +38,8 @@
         "login": "Iniciar sesión",
         "cart": "Carrito",
         "scemoryHome": "Inicio de Scemory",
-        "toggleMenu": "Alternar menú"
+        "toggleMenu": "Alternar menú",
+        "mediaCredits": "Créditos de Medios"
     },
     "languages": {
         "AR": "العربية",
@@ -1373,7 +1374,14 @@
         "finishSignup": "Crear cuenta",
         "profileInvalid": "Introduce un país y una fecha de nacimiento válida que no sea futura.",
         "retry": "Reintentar",
-        "backToLogin": "Volver al inicio de sesión"
+        "backToLogin": "Volver al inicio de sesión",
+        "linkAccountTitle": "Vincular tu cuenta de Google",
+        "linkAccountDesc": "Ya existe una cuenta con este correo electrónico. Introduce tu contraseña para vincular de forma segura tu cuenta de Google.",
+        "accountPassword": "Contraseña de la cuenta",
+        "confirmLink": "Confirmar y vincular cuenta",
+        "invalidCredentials": "Contraseña incorrecta. Comprueba tus credenciales e inténtalo de nuevo.",
+        "linkSuccess": "Cuenta de Google vinculada con éxito.",
+        "unlinkSuccess": "Cuenta de Google desvinculada con éxito."
     },
     "facebookAuth": {
         "continue": "Continuar con Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "Reenviar en {seconds} s",
         "resend": "Reenviar código",
         "profileInvalid": "Introduce un correo válido, un país y una fecha de nacimiento que no sea futura."
+    },
+    "mediaCredits": {
+        "myCredits": "Mis Créditos de Medios",
+        "photosAvailable": "Fotos Disponibles",
+        "videosAvailable": "Videos Disponibles",
+        "photos": "Fotos",
+        "videos": "Videos",
+        "photoQuotaDesc": "Cupo permanente de canje de fotos",
+        "videoQuotaDesc": "Cupo permanente de canje de videos",
+        "activeTier": "Nivel de Acceso Activo",
+        "breakdownByTier": "Desglose por Nivel",
+        "viewDashboard": "Panel de Créditos",
+        "getMoreCredits": "Obtener Más Créditos",
+        "browseMarketplace": "Explorar Mercado",
+        "noTier": "Sin Plan Activo",
+        "getWithPlan": "Obtener con Plan",
+        "redeemed": "Canjeado",
+        "redeemSuccess": "¡Medio canjeado con éxito con tu plan!",
+        "redeemFailed": "Error al canjear el medio con el plan.",
+        "activeGrants": "Cupos Activos Asignados",
+        "redemptionHistory": "Historial de Canjes",
+        "noGrants": "Sin cupos activos. Suscríbete a un plan para recibir créditos de fotos y videos.",
+        "noRedemptions": "Aún no hay canjes registrados.",
+        "tier": "Nivel",
+        "plan": "Plan",
+        "tierRank": "Rango de Nivel",
+        "grantedOn": "Otorgado el",
+        "payoutCap": "Límite de Pago al Creador",
+        "payWithWallet": "Pagar con Billetera",
+        "payWithPaypal": "Pagar con PayPal",
+        "insufficientCredits": "Créditos insuficientes o nivel insuficiente para este medio.",
+        "includedQuotas": "Cupos de Medios Incluidos",
+        "permanentQuotas": "Cupos de medios permanentes sin vencimiento"
     }
 }

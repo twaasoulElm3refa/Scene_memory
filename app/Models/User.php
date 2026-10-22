@@ -158,6 +158,26 @@ class User extends Authenticatable
         return $this->hasMany(Withdraw::class, 'user_id');
     }
 
+    public function creditGrants()
+    {
+        return $this->hasMany(UserCreditGrant::class, 'user_id');
+    }
+
+    public function creditTransactions()
+    {
+        return $this->hasMany(CreditTransaction::class, 'user_id');
+    }
+
+    public function remainingPhotos(): int
+    {
+        return (int) $this->creditGrants()->sum('remaining_photos');
+    }
+
+    public function remainingVideos(): int
+    {
+        return (int) $this->creditGrants()->sum('remaining_videos');
+    }
+
     public function approving()
     {
         return $this->hasMany(Withdraw::class, 'approved_by');

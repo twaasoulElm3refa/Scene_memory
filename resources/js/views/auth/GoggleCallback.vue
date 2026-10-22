@@ -15,6 +15,14 @@
                 <p v-if="error" role="alert" class="text-danger">{{ error }}</p>
                 <button type="submit" class="btn btn-primary w-100">{{ t('googleAuth.finishSignup') }}</button>
             </form>
+            <form v-else-if="linkingRequired" @submit.prevent="confirmLink">
+                <h1 class="h4 mb-3">{{ t('googleAuth.linkAccountTitle') }}</h1>
+                <p class="text-muted mb-3">{{ t('googleAuth.linkAccountDesc') }}</p>
+                <label for="link-password" class="form-label">{{ t('googleAuth.accountPassword') }}</label>
+                <input id="link-password" v-model="linkPassword" type="password" class="form-control mb-3" required />
+                <p v-if="error" role="alert" class="text-danger">{{ error }}</p>
+                <button type="submit" class="btn btn-primary w-100 mb-2">{{ t('googleAuth.confirmLink') }}</button>
+            </form>
             <div v-else-if="error" class="text-center">
                 <p role="alert" class="text-danger">{{ error }}</p>
                 <button v-if="retryable" type="button" class="btn btn-primary mb-3" @click="exchange">{{ t('googleAuth.retry') }}</button>
@@ -40,6 +48,8 @@ const loading = ref(true);
 const error = ref('');
 const retryable = ref(false);
 const profileRequired = ref(false);
+const linkingRequired = ref(false);
+const linkPassword = ref('');
 const profile = ref({ country: '', date_of_birth: '' });
 const code = ref('');
 const currentLang = computed(() => String(route.params.lang || 'en').toLowerCase());
@@ -91,6 +101,35 @@ const exchange = async () => {
     }
 };
 
+const confirmLink = async () => {
+    loading.value = true;
+    error.value = '';
+    try {
+        const response = await AuthService.confirmGoogleLink(linkPassword.value);
+        const { token, role, user, is_profile_complete: complete } = response.data;
+        if (!token || !user) throw new Error('callback_failed');
+        await setAuthToken(token);
+        await clearGoogleOAuthVerifier();
+        localStorage.setItem('user_role', role);
+        localStorage.setItem('user_data', JSON.stringify(user));
+        localStorage.setItem('is_profile_complete', String(Boolean(complete)));
+        localStorage.setItem('is_profile_filled', String(Boolean(complete)));
+        localStorage.setItem('lang', currentLang.value);
+        localStorage.setItem('language', currentLang.value);
+        window.dispatchEvent(new Event('login'));
+        const destination = role === 'admin' ? '/admin'
+            : safePostAuthRedirect(sessionStorage.getItem('post_auth_redirect'), currentLang.value);
+        sessionStorage.removeItem('post_auth_redirect');
+        await router.replace(destination);
+    } catch (err) {
+        error.value = err.response?.data?.errors?.password?.[0]
+            || err.response?.data?.message
+            || t('googleAuth.invalidCredentials');
+    } finally {
+        loading.value = false;
+    }
+};
+
 onMounted(async () => {
     code.value = typeof route.query.code === 'string' ? route.query.code : '';
     const callbackError = typeof route.query.error === 'string' ? route.query.error : '';
@@ -98,6 +137,12 @@ onMounted(async () => {
     // Remove the short-lived delivery code (and any legacy or hostile parameters)
     // from history before any API call or navigation to a third-party resource.
     await router.replace({ name: 'google-callback', params: { lang: currentLang.value } });
+    if (callbackError === 'linking_required') {
+        linkingRequired.value = true;
+        loading.value = false;
+        await clearGoogleOAuthVerifier();
+        return;
+    }
     if (callbackError || !/^[A-Za-z0-9]{64}$/.test(code.value)) {
         error.value = t(googleErrorKey(callbackError || 'invalid_state'));
         loading.value = false;

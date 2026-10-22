@@ -232,18 +232,34 @@
                                 <!-- DARK OVERLAY -->
                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition z-10"></div>
 
-                                <!-- PRICE + CART -->
+                                <!-- PRICE + CART + GET WITH PLAN -->
                                 <div
-                                    class="absolute bottom-0 left-0 right-0 z-20 bg-black/70 text-white p-3 flex items-center justify-between opacity-100 transition">
-                                    <!-- PRICE -->
-                                    <div class="text-sm font-bold">
-                                        Price {{ formatPrice(getImagePrice(media)) }} $
+                                    class="absolute bottom-0 left-0 right-0 z-20 bg-black/80 text-white p-3 flex items-center justify-between opacity-100 transition">
+                                    <!-- PRICE & TIER -->
+                                    <div class="text-sm font-bold flex flex-col text-left">
+                                        <span>${{ formatPrice(getImagePrice(media)) }}</span>
+                                        <span v-if="media?.media_tier" class="text-xs text-emerald-400 font-medium">
+                                            {{ media.media_tier.name }} Tier
+                                        </span>
                                     </div>
-                                    <!-- ADD TO CART -->
-                                    <button @click.stop="addToCart(media?.id)"
-                                        class="bg-gray-500 hover:bg-gray-600 px-3 py-1 rounded text-sm font-semibold transition">
-                                        Add
-                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <!-- GET WITH PLAN -->
+                                        <button v-if="media?.is_plan_redeemable !== false"
+                                            @click.stop="redeemWithPlan(media)"
+                                            :disabled="redeemingMediaId === media?.id || isMediaRedeemed(media?.id)"
+                                            class="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-800 text-white px-3 py-1 rounded text-xs font-semibold transition flex items-center gap-1 shadow">
+                                            <i v-if="redeemingMediaId === media?.id" class="spinner-border spinner-border-sm" style="width: 12px; height: 12px;"></i>
+                                            <i v-else-if="isMediaRedeemed(media?.id)" class="bi bi-check-lg text-xs"></i>
+                                            <i v-else class="bi bi-gift-fill text-xs"></i>
+                                            <span>{{ isMediaRedeemed(media?.id) ? $t('mediaCredits.redeemed') : $t('mediaCredits.getWithPlan') }}</span>
+                                        </button>
+
+                                        <!-- ADD TO CART -->
+                                        <button @click.stop="addToCart(media?.id)"
+                                            class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-xs font-semibold transition">
+                                            Add
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -785,6 +801,7 @@ import { useI18n } from "vue-i18n";
 import { EventService } from "@/services/singleEventService/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService/CommentService";
 import { CartService } from "@/services/CartService/CartService";
+import { PlanService } from "@/services/planService/planService";
 import api from "@/services/ApiClient";
 import { isMobileRuntime } from "@/services/runtimeUrls";
 import { ReplyService } from "../../services/ReplyService/ReplyService";
@@ -978,6 +995,37 @@ const addToCart = async (mediaId) => {
         showCartAlert("error", err?.message || t("cart.errors.addFailed"));
     } finally {
         cartLoading.value = false;
+    }
+};
+
+const redeemingMediaId = ref(null);
+const redeemedMediaIds = ref(new Set());
+
+const isMediaRedeemed = (mediaId) => redeemedMediaIds.value.has(mediaId);
+
+const redeemWithPlan = async (media) => {
+    if (!media?.id) return;
+    const token = getAuthToken();
+    if (!token) {
+        showCartAlert("error", t("event.comment_login_required"));
+        return;
+    }
+
+    redeemingMediaId.value = media.id;
+    try {
+        const res = await PlanService.redeemMedia(media.id);
+        if (res.data?.status === 'success') {
+            redeemedMediaIds.value.add(media.id);
+            window.dispatchEvent(new CustomEvent('credits-updated'));
+            showCartAlert("success", t("mediaCredits.redeemSuccess") || "Redeemed successfully with your plan!");
+        } else {
+            showCartAlert("error", res.data?.message || t("mediaCredits.redeemFailed"));
+        }
+    } catch (err) {
+        const msg = err.response?.data?.message || t("mediaCredits.redeemFailed") || "Redemption failed";
+        showCartAlert("error", msg);
+    } finally {
+        redeemingMediaId.value = null;
     }
 };
 

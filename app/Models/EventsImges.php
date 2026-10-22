@@ -11,6 +11,10 @@ class EventsImges extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'is_plan_redeemable' => 'boolean',
+    ];
+
     public function toArray(): array
     {
         $data = parent::toArray();
@@ -62,5 +66,10 @@ class EventsImges extends Model
     {
         return $this->hasOne(ImageTranslations::class, 'image_id')
             ->where('locale', app()->getLocale());
+    }
+
+    public function mediaTier()
+    {
+        return $this->belongsTo(MediaTier::class, 'media_tier_id');
     }
 }

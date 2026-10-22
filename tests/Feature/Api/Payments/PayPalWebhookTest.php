@@ -9,6 +9,7 @@ use App\Models\PaypalWebhookEvent;
 use App\Models\Purchases;
 use App\Models\User;
 use App\Models\Wallet;
+use App\Models\WalletTransactions;
 use App\Services\PayPalWebhookVerifier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
@@ -117,7 +118,12 @@ class PayPalWebhookTest extends TestCase
         $this->assertDatabaseCount('entitlements', 1);
         $this->assertDatabaseHas('entitlements', ['user_id' => $order->user_id, 'media_id' => $image->id]);
         $this->assertDatabaseCount('wallet_transactions', 1);
-        $this->assertSame(1500, $seller->wallet()->first()->balance_minor);
+        $this->assertSame(1350, $seller->wallet()->first()->balance_minor);
+        $this->assertDatabaseHas('wallet_transactions', [
+            'source' => 'media_sale',
+            'amount_minor' => 850,
+        ]);
+        $this->assertSame(150, WalletTransactions::where('source', 'media_sale')->sole()->metadata['platform_commission_minor']);
     }
 
     #[DataProvider('mismatchProvider')]
@@ -194,6 +200,7 @@ class PayPalWebhookTest extends TestCase
         $order = $this->order($buyer, 'checkout', 1000);
         $order->items()->create(['image_id' => $image->id, 'price' => '10.00', 'purchased_type' => 'single']);
         $payment = $this->payment($order, 'purchase', 'PAYPAL-PURCHASE');
+
         return [$order, $payment, $image, $seller];
     }
 
@@ -201,6 +208,7 @@ class PayPalWebhookTest extends TestCase
     {
         static $sequence = 0;
         $sequence++;
+
         return Purchases::create([
             'user_id' => $user->id, 'payment_method' => 'paypal', 'status' => 'approved', 'currency' => 'USD',
             'amount' => number_format($minor / 100, 2, '.', ''), 'amount_minor' => $minor,
@@ -221,6 +229,7 @@ class PayPalWebhookTest extends TestCase
             'reference_id' => (string) $payment->id,
         ]);
         $order->update(['paypal_order_id' => $paypalOrderId]);
+
         return $payment;
     }
 

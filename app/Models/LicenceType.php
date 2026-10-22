@@ -34,4 +34,44 @@ class LicenceType extends Model
     {
         return $this->hasMany(PlanBenefits::class, 'plan_id');
     }
+
+    public function mediaTier()
+    {
+        return $this->belongsTo(MediaTier::class, 'media_tier_id');
+    }
+
+    public function maxEligiblePhotoPrice(): float
+    {
+        return $this->mediaTier ? $this->mediaTier->maxEligiblePhotoPrice() : 0.0;
+    }
+
+    public function maxEligibleVideoPrice(): float
+    {
+        return $this->mediaTier ? $this->mediaTier->maxEligibleVideoPrice() : 0.0;
+    }
+
+    public function calculateMaxPotentialValue(): float
+    {
+        $photoVal = (int) $this->photo_quota * $this->maxEligiblePhotoPrice();
+        $videoVal = (int) $this->video_quota * $this->maxEligibleVideoPrice();
+
+        return round($photoVal + $videoVal, 2);
+    }
+
+    public function calculateMaxCreatorLiability(): float
+    {
+        $photoCap = $this->mediaTier ? (float) $this->mediaTier->payout_cap_photo : 0.0;
+        $videoCap = $this->mediaTier ? (float) $this->mediaTier->payout_cap_video : 0.0;
+
+        return round(((int) $this->photo_quota * $photoCap) + ((int) $this->video_quota * $videoCap), 2);
+    }
+
+    public function isFinanciallyValid(): bool
+    {
+        if ((float) $this->price <= 0 && ((int) $this->photo_quota > 0 || (int) $this->video_quota > 0)) {
+            return false;
+        }
+
+        return $this->calculateMaxPotentialValue() <= (float) $this->price;
+    }
 }

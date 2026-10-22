@@ -46,4 +46,16 @@ export const AuthService = {
   getProfile() {
     return api.get("/users/profile");
   },
+
+  confirmGoogleLink(password) {
+    return api.post("/users/google-link-confirm", { password }, { suppressGlobalErrorToast: true });
+  },
+
+  startGoogleLink() {
+    return api.get("/users/google-link-start");
+  },
+
+  unlinkGoogle() {
+    return api.post("/users/google-unlink");
+  },
 };

@@ -25,4 +25,14 @@ describe('Google authentication API transport', () => {
         expect(api.get).not.toHaveBeenCalled();
         expect(api.post).toHaveBeenCalledWith('https://scemory.com/api/v1/users/google-mobile-exchange', { code: 'delivery-code', code_verifier: 'verifier' }, { suppressGlobalErrorToast: true });
     });
+    it('sends explicit linking confirmation and link start requests properly', async () => {
+        api.post.mockResolvedValue({ data: { status: 'success' } });
+        api.get.mockResolvedValue({ data: { status: 'success', url: 'https://accounts.google.com' } });
+        await AuthService.confirmGoogleLink('my-password');
+        expect(api.post).toHaveBeenCalledWith('/users/google-link-confirm', { password: 'my-password' }, { suppressGlobalErrorToast: true });
+        await AuthService.startGoogleLink();
+        expect(api.get).toHaveBeenCalledWith('/users/google-link-start');
+        await AuthService.unlinkGoogle();
+        expect(api.post).toHaveBeenCalledWith('/users/google-unlink');
+    });
 });

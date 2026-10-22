@@ -8,6 +8,9 @@
             :class="{ 'is-previewable': previewEnabled && hasMediaSource }"
             @click="handleMediaClick"
         >
+            <div v-if="result?.media_tier" class="discovery-media-card__tier-badge">
+                {{ result.media_tier.name }} Tier
+            </div>
             <!-- VIDEO -->
             <template v-if="isVideoResult">
                 <video
@@ -713,6 +716,22 @@ const addToCart = async () => {
 .discovery-media-card__media video {
     transform:
         scale(1.035);
+}
+
+.discovery-media-card__tier-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(13, 77, 151, 0.88);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+    z-index: 5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
 }
 
 

@@ -331,6 +331,141 @@
                     </div>
                 </div>
                 <ProfileGiftsEarnings v-if="currentTab === 5" />
+
+                <!-- TAB 6: أرصدتي للوسائط (My Media Credits) -->
+                <div v-if="currentTab === 6">
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-2xl p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-semibold text-blue-800">{{ $t('mediaCredits.photosAvailable') }}</span>
+                                <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center shadow">
+                                    <i class="bi bi-camera-fill text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="text-3xl font-extrabold text-blue-900">{{ creditStats.total_photos }}</div>
+                            <p class="text-xs text-blue-600 mt-2">{{ $t('mediaCredits.photoQuotaDesc') }}</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-2xl p-6 shadow-sm">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-semibold text-purple-800">{{ $t('mediaCredits.videosAvailable') }}</span>
+                                <div class="w-10 h-10 rounded-full bg-purple-500 text-white flex items-center justify-center shadow">
+                                    <i class="bi bi-camera-reels-fill text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="text-3xl font-extrabold text-purple-900">{{ creditStats.total_videos }}</div>
+                            <p class="text-xs text-purple-600 mt-2">{{ $t('mediaCredits.videoQuotaDesc') }}</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-semibold text-emerald-800">{{ $t('mediaCredits.activeTier') }}</span>
+                                    <span class="px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-full uppercase">
+                                        {{ creditStats.highest_tier || $t('mediaCredits.noTier') }}
+                                    </span>
+                                </div>
+                                <div class="text-lg font-bold text-emerald-900">
+                                    {{ creditStats.grants?.length || 0 }} {{ $t('mediaCredits.activeGrants') }}
+                                </div>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                <router-link :to="`/${routeLang}/plans`" class="flex-1 text-center py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition">
+                                    {{ $t('mediaCredits.getMoreCredits') }}
+                                </router-link>
+                                <router-link :to="`/${routeLang}/all_events`" class="flex-1 text-center py-2 px-3 bg-white border border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-xs font-bold rounded-lg transition">
+                                    {{ $t('mediaCredits.browseMarketplace') }}
+                                </router-link>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Grants Section -->
+                    <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="bi bi-shield-check text-emerald-600"></i>
+                            {{ $t('mediaCredits.activeGrants') }}
+                        </h3>
+                        <div v-if="creditStats.grants && creditStats.grants.length > 0" class="overflow-x-auto">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr class="text-left text-gray-500 border-b">
+                                        <th class="pb-3">{{ $t('mediaCredits.plan') }}</th>
+                                        <th class="pb-3">{{ $t('mediaCredits.tier') }}</th>
+                                        <th class="pb-3">{{ $t('mediaCredits.photos') }}</th>
+                                        <th class="pb-3">{{ $t('mediaCredits.videos') }}</th>
+                                        <th class="pb-3">{{ $t('mediaCredits.payoutCap') }}</th>
+                                        <th class="pb-3">{{ $t('mediaCredits.grantedOn') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr v-for="grant in creditStats.grants" :key="grant.id" class="hover:bg-white transition">
+                                        <td class="py-3 font-semibold text-gray-800">{{ grant.plan?.name || grant.tier_name }}</td>
+                                        <td class="py-3">
+                                            <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-medium text-xs">
+                                                {{ grant.tier_name }} (Rank {{ grant.tier_rank }})
+                                            </span>
+                                        </td>
+                                        <td class="py-3">
+                                            <span class="font-bold text-blue-600">{{ grant.remaining_photos }}</span>
+                                            <span class="text-gray-400 text-xs"> / {{ grant.photo_count }}</span>
+                                        </td>
+                                        <td class="py-3">
+                                            <span class="font-bold text-purple-600">{{ grant.remaining_videos }}</span>
+                                            <span class="text-gray-400 text-xs"> / {{ grant.video_count }}</span>
+                                        </td>
+                                        <td class="py-3 text-xs text-gray-600">
+                                            ${{ grant.payout_cap_photo }} / ${{ grant.payout_cap_video }}
+                                        </td>
+                                        <td class="py-3 text-xs text-gray-500">{{ formatDate(grant.created_at) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p v-else class="text-gray-500 text-center py-6">
+                            {{ $t('mediaCredits.noGrants') }}
+                        </p>
+                    </div>
+
+                    <!-- Redemption History Ledger -->
+                    <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="bi bi-clock-history text-indigo-600"></i>
+                            {{ $t('mediaCredits.redemptionHistory') }}
+                        </h3>
+                        <div v-if="creditHistory && creditHistory.length > 0" class="divide-y divide-gray-200">
+                            <div v-for="item in creditHistory" :key="item.id" class="py-3 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-full flex items-center justify-center"
+                                        :class="item.media_type === 'video' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'">
+                                        <i :class="item.media_type === 'video' ? 'bi bi-camera-reels' : 'bi bi-camera'"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-800 mb-0">
+                                            {{ item.snapshot?.media_title || item.snapshot?.plan_name || (item.media_type === 'video' ? 'Video' : 'Photo') }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 mb-0">
+                                            {{ formatDate(item.created_at) }} •
+                                            <span class="capitalize">{{ item.action }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span :class="item.quantity < 0 ? 'text-red-600 font-bold' : 'text-emerald-600 font-bold'">
+                                        {{ item.quantity > 0 ? '+' : '' }}{{ item.quantity }}
+                                    </span>
+                                    <div v-if="item.action === 'redemption'" class="text-xs text-emerald-600 font-medium">
+                                        {{ $t('mediaCredits.redeemed') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p v-else class="text-gray-500 text-center py-6">
+                            {{ $t('mediaCredits.noRedemptions') }}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -344,6 +479,7 @@ import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import WeeklyStatsCard from "@/components/profile/WeeklyStatsCard.vue";
 import ProfileGiftsEarnings from "@/components/profile/ProfileGiftsEarnings.vue";
+import { PlanService } from "@/services/planService/planService";
 
 export default {
     name: "UserProfile",
@@ -619,16 +755,53 @@ export default {
 
         const originalEditData = ref({});
 
+        const routeLang = computed(() => (route.params.lang || "en").toLowerCase());
+
+        const creditStats = ref({
+            total_photos: 0,
+            total_videos: 0,
+            highest_tier: null,
+            grants: []
+        });
+        const creditHistory = ref([]);
+
+        const fetchCreditsData = async () => {
+            try {
+                const [statsRes, historyRes] = await Promise.all([
+                    PlanService.getUserCredits(),
+                    PlanService.getCreditHistory()
+                ]);
+                if (statsRes.data?.data) {
+                    creditStats.value = statsRes.data.data;
+                }
+                if (historyRes.data?.data) {
+                    creditHistory.value = historyRes.data.data.data || historyRes.data.data || [];
+                }
+            } catch (e) {
+                console.error("Error fetching credit data:", e);
+            }
+        };
+
         const tabs = computed(() => [
             { id: 1, label: t("profilePage.tabs.userInfo") },
             { id: 2, label: t("profilePage.tabs.editData") },
             { id: 3, label: t("profilePage.tabs.password") },
             { id: 4, label: t("profilePage.tabs.wallet") },
-            { id: 5, label: t("gifts.history") }
+            { id: 5, label: t("gifts.history") },
+            { id: 6, label: t("mediaCredits.myCredits") }
         ]);
 
-        const currentTab = ref(route.query.tab === 'gifts' ? 5 : 1);
-        watch(() => route.query.tab, (value) => { if (value === 'gifts') currentTab.value = 5; });
+        const currentTab = ref(route.query.tab === 'credits' ? 6 : (route.query.tab === 'gifts' ? 5 : 1));
+        watch(() => route.query.tab, (value) => {
+            if (value === 'credits') currentTab.value = 6;
+            else if (value === 'gifts') currentTab.value = 5;
+        });
+
+        watch(currentTab, (val) => {
+            if (val === 6) {
+                fetchCreditsData();
+            }
+        });
         const isUpdatingProfile = ref(false);
         const statusMessage = ref("");
         const statusMessageType = ref("success");
@@ -790,6 +963,7 @@ export default {
 
         onMounted(() => {
             fetchProfile();
+            fetchCreditsData();
             document.addEventListener("click", handleClickOutsideCountry);
         });
 
@@ -799,6 +973,10 @@ export default {
 
         return {
             route,
+            routeLang,
+            creditStats,
+            creditHistory,
+            fetchCreditsData,
             profile,
             weeklyStats,
             fetchProfile,

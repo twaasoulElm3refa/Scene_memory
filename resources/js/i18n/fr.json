@@ -38,7 +38,8 @@
         "login": "Connexion",
         "cart": "Panier",
         "scemoryHome": "Accueil Scemory",
-        "toggleMenu": "Basculer le menu"
+        "toggleMenu": "Basculer le menu",
+        "mediaCredits": "Crédits Médias"
     },
     "languages": {
         "AR": "العربية",
@@ -1373,7 +1374,14 @@
         "finishSignup": "Créer un compte",
         "profileInvalid": "Saisissez un pays et une date de naissance valide qui ne soit pas dans le futur.",
         "retry": "Réessayer",
-        "backToLogin": "Retour à la connexion"
+        "backToLogin": "Retour à la connexion",
+        "linkAccountTitle": "Associer votre compte Google",
+        "linkAccountDesc": "Un compte existe déjà avec cette adresse e-mail. Saisissez votre mot de passe pour associer votre compte Google en toute sécurité.",
+        "accountPassword": "Mot de passe du compte",
+        "confirmLink": "Confirmer et associer le compte",
+        "invalidCredentials": "Mot de passe incorrect. Veuillez vérifier vos identifiants et réessayer.",
+        "linkSuccess": "Compte Google associé avec succès.",
+        "unlinkSuccess": "Compte Google dissocié avec succès."
     },
     "facebookAuth": {
         "continue": "Continuer avec Facebook",
@@ -1410,5 +1418,38 @@
         "resendIn": "Renvoyer dans {seconds} s",
         "resend": "Renvoyer le code",
         "profileInvalid": "Saisissez un e-mail, un pays et une date de naissance valide qui ne soit pas dans le futur."
+    },
+    "mediaCredits": {
+        "myCredits": "Mes Crédits Médias",
+        "photosAvailable": "Photos Disponibles",
+        "videosAvailable": "Vidéos Disponibles",
+        "photos": "Photos",
+        "videos": "Vidéos",
+        "photoQuotaDesc": "Quota d'échange de photos permanent",
+        "videoQuotaDesc": "Quota d'échange de vidéos permanent",
+        "activeTier": "Niveau d'Accès Actif",
+        "breakdownByTier": "Répartition par Niveau",
+        "viewDashboard": "Tableau de Bord des Crédits",
+        "getMoreCredits": "Obtenir Plus de Crédits",
+        "browseMarketplace": "Parcourir la Boutique",
+        "noTier": "Aucun Forfait Actif",
+        "getWithPlan": "Obtenir avec le Forfait",
+        "redeemed": "Échangé",
+        "redeemSuccess": "Média échangé avec succès grâce à votre forfait !",
+        "redeemFailed": "Échec de l'échange du média avec le forfait.",
+        "activeGrants": "Quotas Actifs Accordés",
+        "redemptionHistory": "Historique des Échanges",
+        "noGrants": "Aucun quota média actif. Abonnez-vous pour obtenir des crédits photos et vidéos.",
+        "noRedemptions": "Aucun échange pour l'instant. Parcourez la boutique pour utiliser vos crédits.",
+        "tier": "Niveau",
+        "plan": "Forfait",
+        "tierRank": "Rang du Niveau",
+        "grantedOn": "Accordé le",
+        "payoutCap": "Plafond de Paiement Créateur",
+        "payWithWallet": "Payer avec le Portefeuille",
+        "payWithPaypal": "Payer avec PayPal",
+        "insufficientCredits": "Crédits insuffisants ou niveau trop bas pour ce média.",
+        "includedQuotas": "Quotas Médias Inclus",
+        "permanentQuotas": "Quotas médias permanents sans expiration"
     }
 }

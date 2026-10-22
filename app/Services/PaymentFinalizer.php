@@ -7,8 +7,11 @@ use App\Jobs\SendPaymentReceipt;
 use App\Models\CartItems;
 use App\Models\Entitlement;
 use App\Models\GiftTransaction;
+use App\Models\LicenceType;
 use App\Models\Payment;
 use App\Models\Purchases;
+use App\Models\Subscriptions;
+use App\Models\User;
 use App\Models\Wallet;
 use App\Support\SecurityMessage;
 use Illuminate\Support\Facades\Cache;
@@ -18,6 +21,8 @@ use RuntimeException;
 
 class PaymentFinalizer
 {
+    private const DIRECT_SALE_COMMISSION_PERCENT = 15;
+
     public function finalizeVirtualGift(Payment $payment, ?array $resource = null): GiftTransaction
     {
         return app(VirtualGiftService::class)->finalize($payment, $resource);
@@ -53,6 +58,49 @@ class PaymentFinalizer
             $this->cleanPurchasedCartItems($order);
             $this->queueReceipt($payment);
             Log::info('purchase_finalize_committed', ['payment_id' => $payment->id, 'order_id' => $order->id]);
+
+            return $order->fresh();
+        }, 5);
+    }
+
+    public function finalizeCompletedPlanSubscriptionCapture(Payment $payment, array $resource): Purchases
+    {
+        return DB::transaction(function () use ($payment, $resource) {
+            $payment = Payment::query()->lockForUpdate()->findOrFail($payment->id);
+            $order = Purchases::query()->lockForUpdate()->findOrFail($payment->order_id);
+            $payment->setRelation('order', $order);
+
+            if ($payment->status === 'completed') {
+                return $order;
+            }
+            if ($payment->operation !== 'plan_subscription' || $payment->method !== 'paypal') {
+                throw new RuntimeException('Payment operation is not a PayPal plan subscription.');
+            }
+
+            $validated = $this->validator->assertCompletedCapture($payment, $resource);
+
+            // Extract plan_id from custom_id e.g. "plan:1"
+            $planId = null;
+            if (preg_match('/plan:(\d+)/', (string) $payment->custom_id, $matches)) {
+                $planId = (int) $matches[1];
+            }
+            $plan = $planId ? LicenceType::findOrFail($planId) : null;
+            if (! $plan) {
+                throw new RuntimeException('Plan not found for this subscription payment.');
+            }
+
+            $user = User::query()->lockForUpdate()->findOrFail($order->user_id);
+            app(PlanQuotaService::class)->grantCredits($user, $plan, $order, 'paypal', $validated['captureId']);
+            $user->update(['licence_type_id' => $plan->id]);
+
+            Subscriptions::updateOrCreate(
+                ['user_id' => $user->id, 'licence_id' => $plan->id],
+                ['status' => 'active', 'start_at' => now()->toDateString(), 'end_at' => now()->addMonth()->toDateString()]
+            );
+
+            $this->complete($order, $payment, $resource, $validated['captureId'], [
+                'purchase_granted' => true,
+            ]);
 
             return $order->fresh();
         }, 5);
@@ -170,17 +218,29 @@ class PaymentFinalizer
             }
 
             $wallet = $this->lockedWallet($seller->id, $order->currency);
-            $amountMinor = $this->money->fromDecimal((string) $item->price);
+            $grossMinor = $this->money->fromDecimal((string) $item->price);
+            $commissionMinor = intdiv(
+                ($grossMinor * self::DIRECT_SALE_COMMISSION_PERCENT) + 50,
+                100
+            );
+            $creatorPayoutMinor = $grossMinor - $commissionMinor;
             $this->ledger->post(
                 $wallet,
                 $order,
                 null,
                 'credit',
                 'media_sale',
-                $amountMinor,
+                $creatorPayoutMinor,
                 'seller-credit:'.$payment->id.':'.$item->id,
                 'payment:'.$payment->id.':item:'.$item->id,
-                ['payment_id' => $payment->id, 'media_id' => $item->image_id],
+                [
+                    'payment_id' => $payment->id,
+                    'media_id' => $item->image_id,
+                    'gross_amount_minor' => $grossMinor,
+                    'platform_commission_minor' => $commissionMinor,
+                    'creator_payout_minor' => $creatorPayoutMinor,
+                    'commission_rate_percent' => self::DIRECT_SALE_COMMISSION_PERCENT,
+                ],
             );
         }
     }

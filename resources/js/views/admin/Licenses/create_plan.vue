@@ -84,11 +84,92 @@
                         <p class="mt-1 text-xs text-gray-500">Enter the monthly subscription price (e.g., 9.99, 19.99, 49.99)</p>
                     </div>
 
+                    <!-- Media Tier Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Access Media Tier
+                        </label>
+                        <select
+                            v-model="form.media_tier_id"
+                            class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
+                        >
+                            <option :value="null">-- Select Media Tier --</option>
+                            <option v-for="tier in tiers" :key="tier.id" :value="tier.id">
+                                {{ tier.name }} (Rank {{ tier.rank }}) — Max Photo: ${{ tier.max_photo_price }}, Max Video: ${{ tier.max_video_price }}
+                            </option>
+                        </select>
+                        <p class="mt-1 text-xs text-gray-500">Tier determines the highest priced media eligible for this plan.</p>
+                    </div>
+
+                    <!-- Photo & Video Quotas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Photo Quota (Units)
+                            </label>
+                            <input
+                                type="number"
+                                v-model.number="form.photo_quota"
+                                min="0"
+                                class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
+                                placeholder="e.g. 50"
+                            />
+                            <p class="mt-1 text-xs text-gray-500">Number of photos included in this plan.</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Video Quota (Units)
+                            </label>
+                            <input
+                                type="number"
+                                v-model.number="form.video_quota"
+                                min="0"
+                                class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
+                                placeholder="e.g. 10"
+                            />
+                            <p class="mt-1 text-xs text-gray-500">Number of videos included in this plan.</p>
+                        </div>
+                    </div>
+
+                    <!-- Real-time Financial Validation Card -->
+                    <div v-if="selectedTier || hasQuota" class="mb-6 p-4 rounded-xl border" :class="isFinanciallyValid ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-300'">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider" :class="isFinanciallyValid ? 'text-emerald-800' : 'text-amber-800'">
+                                <i :class="isFinanciallyValid ? 'bi bi-check-circle-fill' : 'bi bi-exclamation-triangle-fill'" class="me-1"></i>
+                                Financial Validation & Solvency Model
+                            </span>
+                            <span class="px-2 py-0.5 rounded text-xs font-bold" :class="isFinanciallyValid ? 'bg-emerald-200 text-emerald-900' : 'bg-amber-200 text-amber-900'">
+                                {{ isFinanciallyValid ? 'SOLVENT / VALID' : 'WARNING / UNHEDGED' }}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs mt-3">
+                            <div>
+                                <span class="text-gray-500 block">Max Catalog Value:</span>
+                                <strong class="text-gray-900 text-sm">${{ maxPotentialCatalogValue.toFixed(2) }}</strong>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 block">Max Creator Liability:</span>
+                                <strong class="text-gray-900 text-sm text-blue-700">${{ maxCreatorLiability.toFixed(2) }}</strong>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 block">Catalog Headroom:</span>
+                                <strong class="text-sm" :class="catalogPriceHeadroom >= 0 ? 'text-emerald-700' : 'text-red-700'">${{ catalogPriceHeadroom.toFixed(2) }}</strong>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 block">Payout Headroom:</span>
+                                <strong class="text-sm" :class="creatorLiabilityHeadroom >= 0 ? 'text-emerald-700' : 'text-red-700'">${{ creatorLiabilityHeadroom.toFixed(2) }}</strong>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-3 mb-0">
+                            {{ financialValidationMessage }}
+                        </p>
+                    </div>
+
                     <!-- Form Actions -->
                     <div class="flex gap-4 pt-4 border-t border-gray-200">
                         <button
                             type="submit"
-                            :disabled="loading"
+                            :disabled="loading || !isFinanciallyValid"
                             class="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <svg v-if="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import PlanService from '@/services/admin/licenses/planService';
@@ -143,7 +224,75 @@ const router = useRouter();
 const form = ref({
     name: '',
     price: '',
-    description: ''
+    description: '',
+    media_tier_id: null,
+    photo_quota: 0,
+    video_quota: 0
+});
+
+const tiers = ref([]);
+
+const fetchTiers = async () => {
+    try {
+        const res = await PlanService.getMediaTiers();
+        tiers.value = res.data || [];
+    } catch (e) {
+        console.error('Error fetching tiers:', e);
+    }
+};
+
+onMounted(fetchTiers);
+
+const selectedTier = computed(() => {
+    if (!form.value.media_tier_id) return null;
+    return tiers.value.find(t => t.id === form.value.media_tier_id) || null;
+});
+
+const maxPotentialCatalogValue = computed(() => {
+    if (!selectedTier.value) return 0;
+    const photoVal = (form.value.photo_quota || 0) * Number(selectedTier.value.max_photo_price || 0);
+    const videoVal = (form.value.video_quota || 0) * Number(selectedTier.value.max_video_price || 0);
+    return photoVal + videoVal;
+});
+
+const maxCreatorLiability = computed(() => {
+    if (!selectedTier.value) return 0;
+    const photoLiab = (form.value.photo_quota || 0) * Number(selectedTier.value.max_photo_payout_cap || 0);
+    const videoLiab = (form.value.video_quota || 0) * Number(selectedTier.value.max_video_payout_cap || 0);
+    return photoLiab + videoLiab;
+});
+
+const catalogPriceHeadroom = computed(() => {
+    const price = Number(form.value.price || 0);
+    return price - maxPotentialCatalogValue.value;
+});
+
+const creatorLiabilityHeadroom = computed(() => {
+    const price = Number(form.value.price || 0);
+    return price - maxCreatorLiability.value;
+});
+
+const hasQuota = computed(() => (form.value.photo_quota || 0) > 0 || (form.value.video_quota || 0) > 0);
+const isCatalogValueValid = computed(() => catalogPriceHeadroom.value >= 0);
+const isCreatorLiabilityValid = computed(() => creatorLiabilityHeadroom.value >= 0);
+
+const isFinanciallyValid = computed(() => {
+    if (!hasQuota.value) return true;
+    if (!selectedTier.value) return false;
+    return isCatalogValueValid.value && isCreatorLiabilityValid.value && Number(form.value.price || 0) > 0;
+});
+
+const financialValidationMessage = computed(() => {
+    if (hasQuota.value && !selectedTier.value) {
+        return 'Select a media tier when the plan includes photo or video quotas.';
+    }
+    if (isFinanciallyValid.value) {
+        return `Both checks pass: listing value $${maxPotentialCatalogValue.value.toFixed(2)} and creator payout liability $${maxCreatorLiability.value.toFixed(2)} are within the effective plan price of $${Number(form.value.price || 0).toFixed(2)}.`;
+    }
+    const failures = [];
+    if (!isCatalogValueValid.value) failures.push(`listing value exceeds price by $${Math.abs(catalogPriceHeadroom.value).toFixed(2)}`);
+    if (!isCreatorLiabilityValid.value) failures.push(`creator payout liability exceeds price by $${Math.abs(creatorLiabilityHeadroom.value).toFixed(2)}`);
+    return `Plan cannot be saved: ${failures.join(' and ')}.`;
 });
 
 const loading = ref(false);
@@ -186,6 +335,11 @@ const validateForm = () => {
         isValid = false;
     }
 
+    if (!isFinanciallyValid.value) {
+        errorMessage.value = financialValidationMessage.value;
+        isValid = false;
+    }
+
     return isValid;
 };
 
@@ -203,7 +357,10 @@ const resetForm = () => {
     form.value = {
         name: '',
         price: '',
-        description: ''
+        description: '',
+        media_tier_id: null,
+        photo_quota: 0,
+        video_quota: 0
     };
     errors.value = { name: '', price: '' };
     successMessage.value = '';
@@ -228,6 +385,9 @@ const handleSubmit = async () => {
         const planData = {
             name: form.value.name.trim(),
             price: parseFloat(form.value.price),
+            media_tier_id: form.value.media_tier_id,
+            photo_quota: form.value.photo_quota || 0,
+            video_quota: form.value.video_quota || 0,
             ...(form.value.description && { description: form.value.description.trim() })
         };
 

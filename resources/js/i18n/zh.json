@@ -38,7 +38,8 @@
         "login": "登录",
         "cart": "购物车",
         "scemoryHome": "Scemory 首页",
-        "toggleMenu": "切换菜单"
+        "toggleMenu": "切换菜单",
+        "mediaCredits": "媒体额度"
     },
     "login_to_comment": "请登录以发表评论",
     "languages": {
@@ -1373,7 +1374,14 @@
         "finishSignup": "创建账户",
         "profileInvalid": "请输入国家或地区以及不晚于今天的有效出生日期。",
         "retry": "重试",
-        "backToLogin": "返回登录"
+        "backToLogin": "返回登录",
+        "linkAccountTitle": "关联您的 Google 账户",
+        "linkAccountDesc": "已存在使用此邮箱的账户。请输入密码以安全关联您的 Google 账户。",
+        "accountPassword": "账户密码",
+        "confirmLink": "确认并关联账户",
+        "invalidCredentials": "密码无效。请检查您的凭据后重试。",
+        "linkSuccess": "Google 账户已成功关联。",
+        "unlinkSuccess": "Google 账户已成功解绑。"
     },
     "facebookAuth": {
         "continue": "使用 Facebook 继续",
@@ -1410,5 +1418,38 @@
         "resendIn": "{seconds} 秒后重新发送",
         "resend": "重新发送验证码",
         "profileInvalid": "请输入有效邮箱、国家或地区以及不晚于今天的出生日期。"
+    },
+    "mediaCredits": {
+        "myCredits": "我的媒体额度",
+        "photosAvailable": "可用照片数",
+        "videosAvailable": "可用视频数",
+        "photos": "照片",
+        "videos": "视频",
+        "photoQuotaDesc": "永久照片兑换配额",
+        "videoQuotaDesc": "永久视频兑换配额",
+        "activeTier": "当前访问层级",
+        "breakdownByTier": "按层级明细",
+        "viewDashboard": "额度仪表板",
+        "getMoreCredits": "获取更多额度",
+        "browseMarketplace": "浏览市场",
+        "noTier": "无有效套餐",
+        "getWithPlan": "使用套餐兑换",
+        "redeemed": "已兑换",
+        "redeemSuccess": "已成功使用套餐额度兑换该媒体！",
+        "redeemFailed": "兑换媒体失败。",
+        "activeGrants": "有效套餐配额",
+        "redemptionHistory": "兑换历史",
+        "noGrants": "暂无有效媒体配额。订阅套餐即可获取照片和视频兑换额度。",
+        "noRedemptions": "暂无兑换记录。",
+        "tier": "层级",
+        "plan": "套餐",
+        "tierRank": "层级排序",
+        "grantedOn": "获得日期",
+        "payoutCap": "创作者收益上限",
+        "payWithWallet": "钱包支付",
+        "payWithPaypal": "PayPal 支付",
+        "insufficientCredits": "额度不足或套餐层级不满足该媒体要求。",
+        "includedQuotas": "包含的媒体配额",
+        "permanentQuotas": "永久有效不失效媒体配额"
     }
 }

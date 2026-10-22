@@ -117,6 +117,59 @@
 
                     </div>
 
+                    <!-- Media Credits / Quotas Pill -->
+                    <div v-if="isLoggedIn" class="navbar-dropdown-wrap credits-control">
+                        <button class="control-btn credits-menu-button d-flex align-items-center gap-2"
+                            @click="creditsDropdownOpen = !creditsDropdownOpen"
+                            :title="$t('mediaCredits.myCredits')">
+                            <span class="credit-pill photo-pill d-flex align-items-center gap-1">
+                                <i class="bi bi-camera-fill text-primary"></i>
+                                <span class="credit-count">{{ userCredits.total_photos }}</span>
+                            </span>
+                            <span class="credit-pill-divider">|</span>
+                            <span class="credit-pill video-pill d-flex align-items-center gap-1">
+                                <i class="bi bi-camera-reels-fill text-info"></i>
+                                <span class="credit-count">{{ userCredits.total_videos }}</span>
+                            </span>
+                            <i class="bi chevron" :class="creditsDropdownOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                        </button>
+
+                        <transition name="fade-slide">
+                            <div v-if="creditsDropdownOpen" class="dropdown-menu show navbar-dropdown credits-dropdown p-3" style="min-width: 260px;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold">{{ $t('mediaCredits.myCredits') }}</span>
+                                    <span class="badge bg-primary text-uppercase">{{ userCredits.highest_tier || $t('mediaCredits.noTier') }}</span>
+                                </div>
+                                <hr class="dropdown-divider my-2" />
+                                <div class="d-flex justify-content-between align-items-center py-1">
+                                    <span class="text-muted"><i class="bi bi-camera-fill text-primary me-1"></i> {{ $t('mediaCredits.photosAvailable') }}</span>
+                                    <strong class="fs-6">{{ userCredits.total_photos }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center py-1 mb-2">
+                                    <span class="text-muted"><i class="bi bi-camera-reels-fill text-info me-1"></i> {{ $t('mediaCredits.videosAvailable') }}</span>
+                                    <strong class="fs-6">{{ userCredits.total_videos }}</strong>
+                                </div>
+
+                                <div v-if="userCredits.by_tier && userCredits.by_tier.length > 0" class="mb-3">
+                                    <div class="small text-muted mb-1">{{ $t('mediaCredits.breakdownByTier') }}:</div>
+                                    <div v-for="t in userCredits.by_tier" :key="t.tier_rank" class="d-flex justify-content-between small py-1 border-bottom border-light">
+                                        <span class="fw-semibold">{{ t.tier_name }}</span>
+                                        <span>{{ t.remaining_photos }} <i class="bi bi-camera-fill text-muted"></i> / {{ t.remaining_videos }} <i class="bi bi-camera-reels-fill text-muted"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column gap-2 mt-2">
+                                    <RouterLink :to="localizedPath('/profile?tab=credits')" class="btn btn-sm btn-outline-primary text-center" @click="creditsDropdownOpen = false">
+                                        {{ $t('mediaCredits.viewDashboard') }}
+                                    </RouterLink>
+                                    <RouterLink :to="localizedPath('/plans')" class="btn btn-sm btn-primary text-center" @click="creditsDropdownOpen = false">
+                                        {{ $t('mediaCredits.getMoreCredits') }}
+                                    </RouterLink>
+                                </div>
+                            </div>
+                        </transition>
+                    </div>
+
                     <!-- User / Login -->
 
                     <div class="navbar-dropdown-wrap user-control">
@@ -271,6 +324,7 @@ import axios from "axios";
 import api from "@/services/ApiClient";
 import { isMobileRuntime } from "@/services/runtimeUrls";
 import { clearAuthToken, getAuthToken } from "@/services/authTokenStorage";
+import { PlanService } from '@/services/planService/planService';
 
 import { useRouter, useRoute, RouterLink } from "vue-router";
 
@@ -297,6 +351,27 @@ const userImage = ref(null);
 const eventCount = toRef(navigationSession, 'eventCount');
 
 const dropdownOpen = ref(false);
+
+const creditsDropdownOpen = ref(false);
+
+const userCredits = ref({
+    total_photos: 0,
+    total_videos: 0,
+    highest_tier: null,
+    by_tier: []
+});
+
+const fetchCredits = async () => {
+    if (!isLoggedIn.value) return;
+    try {
+        const res = await PlanService.getUserCredits();
+        if (res.data?.data) {
+            userCredits.value = res.data.data;
+        }
+    } catch {
+        // Non-blocking
+    }
+};
 
 const mobileMenu = ref(false);
 
@@ -485,6 +560,8 @@ const fetchProfile = async () => {
 
             isLoggedIn.value = true;
 
+            void fetchCredits();
+
         }
 
     } catch (err) {
@@ -523,6 +600,8 @@ onMounted(() => {
 
     window.addEventListener("cart-updated", handleCartUpdated);
 
+    window.addEventListener("credits-updated", fetchCredits);
+
 });
 
 onUnmounted(() => {
@@ -530,6 +609,8 @@ onUnmounted(() => {
     window.removeEventListener("login", fetchProfile);
 
     window.removeEventListener("cart-updated", handleCartUpdated);
+
+    window.removeEventListener("credits-updated", fetchCredits);
 
 });
 
@@ -548,6 +629,26 @@ const goToCart = () => {
 
     transition: opacity 0.22s ease, transform 0.22s ease;
 
+}
+
+.credit-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.credit-pill-divider {
+    opacity: 0.35;
+    margin: 0 1px;
+}
+
+.credits-dropdown {
+    width: 280px;
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #c9ddef;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(13, 77, 151, 0.15);
 }
 
 .fade-slide-enter-from,

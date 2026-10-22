@@ -17,6 +17,11 @@ use Throwable;
 
 class GoogleAccountService
 {
+    private const LEGACY_PLACEHOLDER_PASSWORDS = [
+        'password',
+        'legacy_google_oauth_user_scemory_default',
+    ];
+
     public function verifiedIdentity(GoogleUser $google): array
     {
         // Socialite obtains this from Google's authenticated HTTPS userinfo endpoint,
@@ -44,6 +49,27 @@ class GoogleAccountService
         ];
     }
 
+    public function hasUsablePasswordCredential(User $user): bool
+    {
+        if (! is_string($user->password) || $user->password === '') {
+            return false;
+        }
+
+        foreach (self::LEGACY_PLACEHOLDER_PASSWORDS as $placeholder) {
+            if (password_verify($placeholder, $user->password)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function passwordProvesOwnership(User $user, string $password): bool
+    {
+        return $this->hasUsablePasswordCredential($user)
+            && password_verify($password, $user->password);
+    }
+
     public function existingAccount(array $identity): ?User
     {
         $user = User::where('google_id', $identity['sub'])->first();
@@ -55,12 +81,32 @@ class GoogleAccountService
             return $user;
         }
 
-        // Email is never sufficient evidence to take ownership of an existing account.
-        if (User::whereRaw('LOWER(email) = ?', [$identity['email']])->exists()) {
+        $candidate = User::whereRaw('LOWER(email) = ?', [$identity['email']])->first();
+        if ($candidate) {
+            // Email alone is never sufficient evidence to take ownership of an existing account.
             throw new GoogleAuthException('linking_required', 409);
         }
 
         return null;
+    }
+
+    public function linkAccount(User $user, array $identity): User
+    {
+        if (! $user->is_active || $user->deleted_at !== null) {
+            throw new GoogleAuthException('disabled', 403);
+        }
+
+        $conflict = User::where('google_id', $identity['sub'])->where('id', '!=', $user->id)->first();
+        if ($conflict) {
+            throw new GoogleAuthException('identity_conflict', 409);
+        }
+
+        $user->forceFill([
+            'google_id' => $identity['sub'],
+            'google_avatar_url' => $user->google_avatar_url ?: $identity['avatar'],
+        ])->save();
+
+        return $user;
     }
 
     public function complete(array $identity, array $profile): User

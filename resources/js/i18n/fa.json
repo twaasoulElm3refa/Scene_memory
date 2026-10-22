@@ -38,7 +38,8 @@
         "login": "ورود",
         "cart": "سبد خرید",
         "scemoryHome": "خانه Scemory",
-        "toggleMenu": "تغییر منو"
+        "toggleMenu": "تغییر منو",
+        "mediaCredits": "اعتبارهای رسانه"
     },
     "languages": {
         "AR": "العربية",
@@ -1229,7 +1230,14 @@
         "finishSignup": "ساخت حساب",
         "profileInvalid": "کشور و تاریخ تولد معتبری را وارد کنید که در آینده نباشد.",
         "retry": "تلاش دوباره",
-        "backToLogin": "بازگشت به ورود"
+        "backToLogin": "بازگشت به ورود",
+        "linkAccountTitle": "اتصال حساب Google",
+        "linkAccountDesc": "حسابی با این ایمیل وجود دارد. برای اتصال امن حساب Google، گذرواژه خود را وارد کنید.",
+        "accountPassword": "گذرواژه حساب",
+        "confirmLink": "تأیید و اتصال حساب",
+        "invalidCredentials": "گذرواژه نامعتبر است. لطفاً اطلاعات خود را بررسی کرده و دوباره امتحان کنید.",
+        "linkSuccess": "حساب Google با موفقیت متصل شد.",
+        "unlinkSuccess": "اتصال حساب Google با موفقیت لغو شد."
     },
     "facebookAuth": {
         "continue": "ادامه با Facebook",
@@ -1266,5 +1274,38 @@
         "resendIn": "ارسال دوباره پس از {seconds} ثانیه",
         "resend": "ارسال دوباره کد",
         "profileInvalid": "ایمیل معتبر، کشور و تاریخ تولدی وارد کنید که در آینده نباشد."
+    },
+    "mediaCredits": {
+        "myCredits": "اعتبارهای رسانه من",
+        "photosAvailable": "عکس‌های موجود",
+        "videosAvailable": "ویدیوهای موجود",
+        "photos": "عکس",
+        "videos": "ویدیو",
+        "photoQuotaDesc": "سهمیه دائمی دریافت عکس",
+        "videoQuotaDesc": "سهمیه دائمی دریافت ویدیو",
+        "activeTier": "سطح دسترسی فعال",
+        "breakdownByTier": "تفکیک بر اساس سطح",
+        "viewDashboard": "داشبورد اعتبارها",
+        "getMoreCredits": "خرید اعتبار بیشتر",
+        "browseMarketplace": "مرور فروشگاه",
+        "noTier": "بدون طرح فعال",
+        "getWithPlan": "دریافت با اشتراک",
+        "redeemed": "دریافت شد",
+        "redeemSuccess": "رسانه با موفقیت با اعتبار طرح شما دریافت شد!",
+        "redeemFailed": "دریافت رسانه با طرح ناموفق بود.",
+        "activeGrants": "سهمیه‌های فعال",
+        "redemptionHistory": "تاریخچه دریافت‌ها",
+        "noGrants": "هیچ سهمیه فعالی وجود ندارد. برای دریافت اعتبار مشترک شوید.",
+        "noRedemptions": "هنوز دریافتی ثبت نشده است.",
+        "tier": "سطح",
+        "plan": "طرح",
+        "tierRank": "رتبه سطح",
+        "grantedOn": "تاریخ اعطا",
+        "payoutCap": "سقف پرداخت به سازنده",
+        "payWithWallet": "پرداخت از کیف پول",
+        "payWithPaypal": "پرداخت با پی‌پال",
+        "insufficientCredits": "اعتبار ناکافی یا رتبه طرح برای این رسانه پایین است.",
+        "includedQuotas": "سهمیه‌های رسانه شامل شده",
+        "permanentQuotas": "سهمیه‌های رسانه دائمی بدون انقضا"
     }
 }
