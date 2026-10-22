@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\api\auth;
 
 use App\Exceptions\FacebookAuthException;
-use App\Exceptions\RegistrationOtpException;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Services\FacebookAccountService;
-use App\Services\RegistrationOtpService;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 use Throwable;
@@ -23,10 +18,7 @@ class FacebookAuthController extends Controller
 {
     private const DELIVERY_SECONDS = 900;
 
-    public function __construct(
-        private readonly FacebookAccountService $accounts,
-        private readonly RegistrationOtpService $emailVerification
-    ) {}
+    public function __construct(private readonly FacebookAccountService $accounts) {}
 
     public function login(Request $request)
     {
@@ -101,7 +93,6 @@ class FacebookAuthController extends Controller
     {
         $code = $request->validate([
             'code' => ['required', 'string', 'size:64', 'regex:/\A[A-Za-z0-9]+\z/'],
-            'otp' => ['nullable', 'digits:6'], 'resend' => ['sometimes', 'boolean'],
         ])['code'];
         $key = $this->deliveryKey($code);
         try {
@@ -113,15 +104,7 @@ class FacebookAuthController extends Controller
                 if (! hash_equals($delivery['session_hash'], hash('sha256', $request->session()->getId()))) {
                     throw new FacebookAuthException('invalid_state', 422);
                 }
-                $user = $this->accounts->existingAccount($delivery['identity']);
-                if (! $user) {
-                    $user = $this->completeRegistration($request, $key, $delivery);
-                    if (! $user instanceof User) {
-                        return $user;
-                    }
-                }
-                // The email challenge and identity always resolve an existing account
-                // by its provider ID; no client-supplied role or email can choose it.
+                $user = $this->accounts->registerIdentity($delivery['identity']);
                 $user->forceFill(['last_login_at' => now()])->save();
                 $token = $user->createToken('facebook-auth-token')->plainTextToken;
                 Cache::forget($key);
@@ -136,79 +119,13 @@ class FacebookAuthController extends Controller
             });
         } catch (FacebookAuthException $e) {
             return $this->jsonError($e->errorCode, $e->status);
-        } catch (RegistrationOtpException) {
-            return $this->jsonError('email_unavailable', 503);
         } catch (LockTimeoutException) {
             return $this->jsonError('busy', 409);
-        } catch (ValidationException $e) {
-            throw $e;
         } catch (Throwable $e) {
             Log::warning('Facebook token exchange failed.', ['exception' => $e::class]);
 
             return $this->jsonError('callback_failed', 500);
         }
-    }
-
-    private function completeRegistration(Request $request, string $key, array $delivery)
-    {
-        $challenge = $delivery['verification'] ?? null;
-        if ($request->filled('otp')) {
-            if (! is_array($challenge) || $challenge['expires_at'] <= now()->timestamp) {
-                throw new FacebookAuthException('otp_expired', 422);
-            }
-            if ($challenge['attempts'] >= RegistrationOtpService::MAX_ATTEMPTS) {
-                throw new FacebookAuthException('otp_attempts', 429);
-            }
-            $delivery['verification']['attempts']++;
-            $this->saveDelivery($key, $delivery);
-            if (! Hash::check((string) $request->input('otp'), $challenge['hash'])) {
-                throw new FacebookAuthException('otp_invalid', 422);
-            }
-
-            return $this->accounts->registerVerified($delivery['identity'], $challenge['profile']);
-        }
-        if (is_array($challenge) && ! $request->boolean('resend')) {
-            return $this->otpRequired($challenge);
-        }
-        if (is_array($challenge) && $challenge['resend_at'] > now()->timestamp) {
-            throw new FacebookAuthException('otp_cooldown', 429);
-        }
-        if ($challenge === null && (! $request->filled('email') || ! $request->filled('country') || ! $request->filled('date_of_birth'))) {
-            return response()->json(['status' => 'profile_required', 'email' => $delivery['identity']['email']])
-                ->header('Cache-Control', 'no-store, private')->setStatusCode(202);
-        }
-        // A resend uses the original challenge profile; editing email cannot move a
-        // challenge to another account. No User row is created before verification.
-        $profile = $challenge['profile'] ?? $request->validate([
-            'email' => ['required', 'email', 'max:255'], 'country' => ['required', 'string', 'max:255'],
-            'date_of_birth' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
-        ]);
-        $profile['email'] = Str::lower($profile['email']);
-        $this->accounts->assertEmailAvailable($profile['email']);
-        $otp = (string) random_int(100000, 999999);
-        // Reuse the existing mail delivery safety checks and registration template.
-        $this->emailVerification->send(new User(['email' => $profile['email']]), $otp);
-        $delivery['verification'] = [
-            'hash' => Hash::make($otp), 'attempts' => 0, 'profile' => $profile,
-            'expires_at' => now()->addSeconds(RegistrationOtpService::EXPIRES_SECONDS)->timestamp,
-            'resend_at' => now()->addSeconds(RegistrationOtpService::RESEND_COOLDOWN_SECONDS)->timestamp,
-        ];
-        $this->saveDelivery($key, $delivery);
-
-        return $this->otpRequired($delivery['verification']);
-    }
-
-    private function saveDelivery(string $key, array $delivery): void
-    {
-        Cache::put($key, $delivery, max(1, $delivery['expires_at'] - now()->timestamp));
-    }
-
-    private function otpRequired(array $challenge)
-    {
-        return response()->json([
-            'status' => 'otp_required', 'email' => $this->emailVerification->maskEmail($challenge['profile']['email']),
-            'resend_after' => max(0, $challenge['resend_at'] - now()->timestamp),
-        ], 202)->header('Cache-Control', 'no-store, private');
     }
 
     private function withFacebookState(Request $request, ?string $state, callable $operation): mixed

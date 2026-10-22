@@ -95,7 +95,7 @@ describe('Facebook authentication UI', () => {
         const login = vi.fn(); window.addEventListener('login', login);
         sessionStorage.setItem('post_auth_redirect', '/en/events?country=EG');
         const { router } = await mount(Callback, {}, 'en', `/en/auth/facebook-callback?code=${code}&token=hostile&role=admin`);
-        expect(FacebookAuthService.exchange).toHaveBeenCalledWith(code, { email: '', country: '', date_of_birth: '' });
+        expect(FacebookAuthService.exchange).toHaveBeenCalledWith(code);
         expect(setAuthToken).toHaveBeenCalledWith('facebook-body-token');
         expect(localStorage.getItem('user_role')).toBe('user');
         expect(JSON.parse(localStorage.getItem('user_data')).id).toBe(12);
@@ -126,36 +126,28 @@ describe('Facebook authentication UI', () => {
         expect(facebookErrorKey('<script>raw details</script>')).toBe('facebookAuth.callback_failed');
     });
 
-    it('completes profile and email-code verification without a password', async () => {
-        FacebookAuthService.exchange.mockResolvedValueOnce({ data: { status: 'profile_required', email: 'new@example.test' } })
-            .mockResolvedValueOnce({ data: { status: 'otp_required', email: 'n**@example.test', resend_after: 60 } })
-            .mockResolvedValueOnce(success());
-        const { target } = await mount(Callback, {}, 'ur', `/ur/auth/facebook-callback?code=${code}`);
-        expect(target.querySelector('#facebook-email').value).toBe('new@example.test');
-        const country = target.querySelector('#facebook-country'); country.value = 'Egypt'; country.dispatchEvent(new Event('input'));
-        const birthday = target.querySelector('#facebook-birthday'); birthday.value = '2000-01-01'; birthday.dispatchEvent(new Event('input'));
-        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); await settle();
-        expect(setAuthToken).not.toHaveBeenCalled();
-        expect(target.querySelector('#facebook-otp')).not.toBeNull();
-        expect(target.querySelector('button[type=button]').disabled).toBe(true);
-        const otp = target.querySelector('#facebook-otp'); otp.value = '123456'; otp.dispatchEvent(new Event('input'));
-        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); await settle();
-        expect(FacebookAuthService.exchange).toHaveBeenLastCalledWith(code, { email: 'new@example.test', country: 'Egypt', date_of_birth: '2000-01-01', otp: '123456' });
+    it('signs in immediately without any account-completion form when profile is incomplete', async () => {
+        const response = success(); response.data.is_profile_complete = false;
+        FacebookAuthService.exchange.mockResolvedValue(response);
+        const { target, router } = await mount(Callback, {}, 'en', `/en/auth/facebook-callback?code=${code}`);
+        expect(FacebookAuthService.exchange).toHaveBeenCalledTimes(1);
+        expect(FacebookAuthService.exchange).toHaveBeenCalledWith(code);
+        expect(target.querySelector('form')).toBeNull();
+        expect(target.querySelector('input')).toBeNull();
+        expect(target.textContent).not.toContain(messages.en.facebookAuth.completeProfile);
+        expect(localStorage.getItem('is_profile_complete')).toBe('false');
+        expect(router.currentRoute.value.path).toBe('/en/home');
         expect(setAuthToken).toHaveBeenCalledWith('facebook-body-token');
     });
 
-    it('shows localized profile validation and invalid-code errors while preserving the form', async () => {
-        FacebookAuthService.exchange.mockResolvedValueOnce({ data: { status: 'profile_required' } })
-            .mockRejectedValueOnce({ response: { status: 422, data: { message: 'raw validation error' } } })
-            .mockResolvedValueOnce({ data: { status: 'otp_required', email: 'n**@example.test' } })
-            .mockRejectedValueOnce({ response: { status: 422, data: { error_code: 'otp_invalid' } } });
-        const { target } = await mount(Callback, {}, 'en', `/en/auth/facebook-callback?code=${code}`);
-        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); await settle();
-        expect(target.querySelector('[role=alert]').textContent).toBe(messages.en.facebookAuth.profileInvalid);
-        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); await settle();
-        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); await settle();
-        expect(target.querySelector('[role=alert]').textContent).toBe(messages.en.facebookAuth.otp_invalid);
-        expect(target.querySelector('#facebook-otp')).not.toBeNull();
+    it('accepts a Facebook-only account without email and never asks for email or a code', async () => {
+        const response = success(); response.data.user.email = null;
+        FacebookAuthService.exchange.mockResolvedValue(response);
+        const { target, router } = await mount(Callback, {}, 'ur', `/ur/auth/facebook-callback?code=${code}`);
+        expect(JSON.parse(localStorage.getItem('user_data')).email).toBeNull();
+        expect(target.querySelector('form')).toBeNull();
+        expect(router.currentRoute.value.path).toBe('/ur/home');
+        expect(localStorage.getItem('language')).toBe('ur');
     });
 
     it('permits a network retry but stops on account-linking or suspension errors', async () => {

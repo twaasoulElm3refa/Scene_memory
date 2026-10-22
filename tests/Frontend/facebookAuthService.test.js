@@ -11,9 +11,9 @@ describe('Facebook API transport', () => {
         expect(api.get).toHaveBeenCalledWith('/users/facebook-login', { suppressGlobalErrorToast: true, params: { lang: 'ar' } });
     });
     it('initializes CSRF then sends codes in a POST body', async () => {
-        await FacebookAuthService.exchange('delivery', { otp: '123456' });
+        await FacebookAuthService.exchange('delivery');
         expect(api.get).toHaveBeenCalledWith('/sanctum/csrf-cookie', { suppressGlobalErrorToast: true, baseURL: '/' });
-        expect(api.post).toHaveBeenCalledWith('/users/facebook-exchange', { code: 'delivery', otp: '123456' }, { suppressGlobalErrorToast: true });
+        expect(api.post).toHaveBeenCalledWith('/users/facebook-exchange', { code: 'delivery' }, { suppressGlobalErrorToast: true });
         expect(api.get.mock.invocationCallOrder[0]).toBeLessThan(api.post.mock.invocationCallOrder[0]);
     });
     it('does not exchange if CSRF initialization fails', async () => {

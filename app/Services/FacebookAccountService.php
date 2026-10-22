@@ -3,17 +3,13 @@
 namespace App\Services;
 
 use App\Exceptions\FacebookAuthException;
-use App\Mail\WelcomeMail;
 use App\Models\LicenceType;
 use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Two\User as ProviderUser;
-use Throwable;
 
 class FacebookAccountService
 {
@@ -47,9 +43,6 @@ class FacebookAccountService
             if (! $user->is_active || $user->deleted_at !== null) {
                 throw new FacebookAuthException('disabled', 403);
             }
-            if ($user->email_verified_at === null) {
-                throw new FacebookAuthException('verification_required', 403);
-            }
 
             return $user;
         }
@@ -67,18 +60,20 @@ class FacebookAccountService
         }
     }
 
-    // Called only after the session-bound registration email challenge is verified.
-    public function registerVerified(array $identity, array $profile): User
+    // Identity comes only from the authenticated server-side provider response.
+    public function registerIdentity(array $identity): User
     {
         return Cache::lock('facebook-account:'.hash('sha256', $identity['id']), 10)->block(3,
-            fn () => Cache::lock('facebook-email:'.hash('sha256', $profile['email']), 10)->block(3,
-                function () use ($identity, $profile) {
+            fn () => Cache::lock('facebook-email:'.hash('sha256', $identity['email'] ?? 'subject:'.$identity['id']), 10)->block(3,
+                function () use ($identity) {
                     if ($user = $this->existingAccount($identity)) {
                         return $user;
                     }
-                    $this->assertEmailAvailable($profile['email']);
+                    if ($identity['email'] !== null) {
+                        $this->assertEmailAvailable($identity['email']);
+                    }
                     try {
-                        $user = DB::transaction(function () use ($identity, $profile) {
+                        $user = DB::transaction(function () use ($identity) {
                             $name = $identity['name'];
                             if (User::where('name', $name)->exists()) {
                                 $name .= ' '.Str::random(12);
@@ -86,24 +81,20 @@ class FacebookAccountService
 
                             return User::create([
                                 'facebook_id' => $identity['id'], 'facebook_avatar_url' => $identity['avatar'],
-                                'name' => $name, 'email' => $profile['email'], 'password' => null,
-                                'role' => 'user', 'is_active' => true, 'email_verified_at' => now(),
-                                'country' => $profile['country'], 'date_of_birth' => $profile['date_of_birth'],
+                                'name' => $name, 'email' => $identity['email'], 'password' => null,
+                                // Facebook authenticates its subject. It does not supply
+                                // explicit email-verification evidence in this flow.
+                                'role' => 'user', 'is_active' => true, 'email_verified_at' => null,
                                 'licence_type_id' => LicenceType::whereKey(1)->exists() ? 1 : null,
                             ]);
                         });
                     } catch (UniqueConstraintViolationException) {
                         $user = $this->existingAccount($identity);
                         if (! $user) {
-                            $this->assertEmailAvailable($profile['email']);
+                            if ($identity['email'] !== null) {
+                                $this->assertEmailAvailable($identity['email']);
+                            }
                             throw new FacebookAuthException('callback_failed');
-                        }
-                    }
-                    if ($user->wasRecentlyCreated) {
-                        try {
-                            Mail::to($user->email)->queue(new WelcomeMail($user));
-                        } catch (Throwable $e) {
-                            Log::warning('Facebook welcome email could not be queued.', ['exception' => $e::class]);
                         }
                     }
 

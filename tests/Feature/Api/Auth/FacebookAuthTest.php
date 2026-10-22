@@ -10,7 +10,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Socialite\Facades\Socialite;
@@ -74,19 +73,9 @@ class FacebookAuthTest extends TestCase
         return $result['code'];
     }
 
-    private function profile(): array
-    {
-        return ['email' => 'facebook@example.test', 'country' => 'Egypt', 'date_of_birth' => '2000-01-01'];
-    }
-
     private function exchange(string $code, array $payload = [])
     {
         return $this->postJson('/api/v1/users/facebook-exchange', ['code' => $code] + $payload);
-    }
-
-    private function otp(): string
-    {
-        return Mail::sent(RegisterOtpMail::class)->last()->otp;
     }
 
     private function linked(array $attributes = []): User
@@ -104,38 +93,38 @@ class FacebookAuthTest extends TestCase
         $this->assertArrayNotHasKey('client_secret', $query);
     }
 
-    public function test_new_registration_requires_profile_and_email_proof_before_creating_a_passwordless_account(): void
+    public function test_new_facebook_account_signs_in_immediately_without_profile_or_email_code(): void
     {
         $code = $this->deliver();
-        $this->exchange($code)->assertStatus(202)->assertJsonPath('status', 'profile_required')->assertJsonPath('email', 'facebook@example.test');
-        $this->exchange($code, $this->profile() + ['role' => 'admin'])
-            ->assertStatus(202)->assertJsonPath('status', 'otp_required');
-        $this->assertDatabaseCount('users', 0);
-        $this->assertDatabaseCount('personal_access_tokens', 0);
-        $this->exchange($code, ['otp' => $this->otp(), 'email' => 'attacker@example.test', 'role' => 'admin'])
-            ->assertOk()->assertJsonPath('role', 'user')->assertJsonPath('user.email', 'facebook@example.test');
+        $this->exchange($code, ['role' => 'admin', 'email' => 'attacker@example.test'])
+            ->assertOk()->assertJsonPath('status', 'success')->assertJsonPath('role', 'user')
+            ->assertJsonPath('user.email', 'facebook@example.test')->assertJsonPath('is_profile_complete', false);
         $user = User::sole();
         $this->assertNull($user->password);
         $this->assertSame('123456789', $user->facebook_id);
-        $this->assertNotNull($user->email_verified_at);
-        $this->assertSame('Egypt', $user->country);
+        $this->assertNull($user->email_verified_at);
+        $this->assertNull($user->country);
+        $this->assertNull($user->date_of_birth);
+        $this->assertTrue($user->is_active);
         $this->assertSame('https://platform-lookaside.fbsbx.com/fixture', $user->facebook_avatar_url);
         $this->assertDatabaseCount('personal_access_tokens', 1);
-        $this->assertStringNotContainsString($this->otp(), json_encode(Cache::get('facebook-delivery:'.hash('sha256', $code))));
+        $this->assertDatabaseCount('registration_otps', 0);
+        Mail::assertNotSent(RegisterOtpMail::class);
+        Mail::assertNothingOutgoing();
     }
 
-    public function test_facebook_verified_flag_is_not_treated_as_email_verification(): void
+    public function test_facebook_verified_flag_does_not_falsely_mark_email_verified_or_block_sign_in(): void
     {
         $code = $this->deliver(['verified' => true]);
-        $this->exchange($code, $this->profile())->assertStatus(202)->assertJsonPath('status', 'otp_required');
-        $this->assertDatabaseCount('users', 0);
+        $this->exchange($code)->assertOk();
+        $this->assertNull(User::sole()->email_verified_at);
+        Mail::assertNotSent(RegisterOtpMail::class);
     }
 
     public function test_repeated_registration_and_sign_in_reuse_the_same_provider_account(): void
     {
         $code = $this->deliver();
-        $this->exchange($code, $this->profile())->assertStatus(202);
-        $first = $this->exchange($code, ['otp' => $this->otp()])->assertOk();
+        $first = $this->exchange($code)->assertOk();
         Socialite::forgetDrivers();
         $code = $this->deliver(['email' => null, 'name' => 'Changed Facebook Name']);
         $second = $this->exchange($code)->assertOk();
@@ -144,22 +133,31 @@ class FacebookAuthTest extends TestCase
         $this->assertDatabaseCount('users', 1);
     }
 
-    public function test_unsafe_email_delivery_configuration_cannot_create_or_verify_an_account(): void
+    public function test_log_mailer_cannot_break_facebook_registration_or_login(): void
     {
         $code = $this->deliver();
         config()->set('mail.default', 'log');
-        $this->exchange($code, $this->profile())->assertStatus(503);
-        $this->assertDatabaseCount('users', 0);
-        $this->assertDatabaseCount('personal_access_tokens', 0);
+        config()->set('app.debug', false);
+        $this->exchange($code)->assertOk()->assertJsonPath('status', 'success');
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('personal_access_tokens', 1);
         Mail::assertNotSent(RegisterOtpMail::class);
     }
 
-    public function test_missing_facebook_email_can_be_entered_and_must_be_verified(): void
+    public function test_missing_facebook_email_creates_distinct_email_less_accounts_without_fabricated_values(): void
     {
         $code = $this->deliver(['email' => null]);
-        $this->exchange($code)->assertStatus(202)->assertJsonPath('email', null);
-        $this->exchange($code, $this->profile())->assertStatus(202);
-        $this->exchange($code, ['otp' => $this->otp()])->assertOk();
+        $first = $this->exchange($code)->assertOk()->assertJsonPath('user.email', null);
+        Socialite::forgetDrivers();
+        $code = $this->deliver(['id' => '987654321', 'email' => null]);
+        $second = $this->exchange($code)->assertOk()->assertJsonPath('user.email', null);
+        $this->assertNotSame($first->json('user.id'), $second->json('user.id'));
+        $this->assertDatabaseCount('users', 2);
+        foreach (User::all() as $user) {
+            $this->assertNull($user->email);
+            $this->assertNull($user->country);
+            $this->assertNull($user->date_of_birth);
+        }
     }
 
     public function test_existing_linked_user_is_found_by_provider_id_even_without_email_and_preserves_all_profile_data(): void
@@ -198,21 +196,21 @@ class FacebookAuthTest extends TestCase
         }
     }
 
-    public function test_email_entered_in_onboarding_cannot_claim_an_existing_account(): void
+    public function test_client_supplied_email_cannot_choose_or_claim_an_existing_account(): void
     {
         $code = $this->deliver(['email' => null]);
         $user = User::factory()->create(['email' => 'facebook@example.test']);
-        $this->exchange($code, $this->profile())->assertStatus(409)->assertJsonPath('error_code', 'linking_required');
+        $this->exchange($code, ['email' => $user->email, 'role' => 'admin'])->assertOk()->assertJsonPath('user.email', null);
         $this->assertNull($user->fresh()->facebook_id);
+        $this->assertDatabaseCount('users', 2);
         Mail::assertNotSent(RegisterOtpMail::class);
     }
 
-    public function test_duplicate_email_claim_between_email_challenge_and_completion_cannot_link_or_duplicate(): void
+    public function test_concurrent_email_claim_between_callback_and_exchange_cannot_link_or_duplicate(): void
     {
-        $code = $this->deliver(['email' => null]);
-        $this->exchange($code, $this->profile())->assertStatus(202);
+        $code = $this->deliver();
         User::factory()->create(['email' => 'facebook@example.test']);
-        $this->exchange($code, ['otp' => $this->otp()])->assertStatus(409);
+        $this->exchange($code)->assertStatus(409)->assertJsonPath('error_code', 'linking_required');
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
@@ -312,42 +310,44 @@ class FacebookAuthTest extends TestCase
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
 
-    public function test_required_profile_fields_are_validated_before_email_is_sent(): void
+    public function test_client_profile_and_verification_fields_are_not_needed_or_trusted(): void
     {
         $code = $this->deliver();
-        $this->exchange($code, ['email' => 'invalid', 'country' => 'Egypt', 'date_of_birth' => '2000-01-01'])->assertUnprocessable();
-        $this->exchange($code, ['email' => 'new@example.test', 'country' => 'Egypt', 'date_of_birth' => '2999-01-01'])->assertUnprocessable();
+        $this->exchange($code, ['email' => 'invalid', 'country' => 'fabricated', 'date_of_birth' => '2999-01-01', 'otp' => 'invalid', 'facebook_id' => '999'])
+            ->assertOk()->assertJsonPath('user.email', 'facebook@example.test');
+        $user = User::sole();
+        $this->assertSame('123456789', $user->facebook_id);
+        $this->assertNull($user->country);
+        $this->assertNull($user->date_of_birth);
         Mail::assertNotSent(RegisterOtpMail::class);
-        $this->assertDatabaseCount('users', 0);
     }
 
-    public function test_wrong_expired_and_excessive_email_codes_cannot_create_accounts(): void
+    public function test_unverified_facebook_email_is_not_an_anonymous_registration_or_recovery_credential(): void
     {
-        $code = $this->deliver();
-        $this->exchange($code, $this->profile())->assertStatus(202);
-        $correct = $this->otp();
-        $wrong = $correct === '111111' ? '222222' : '111111';
-        for ($i = 0; $i < 5; $i++) {
-            $this->exchange($code, ['otp' => $wrong])->assertStatus(422)->assertJsonPath('error_code', 'otp_invalid');
+        $user = $this->linked(['email_verified_at' => null]);
+        $before = $user->fresh()->getAttributes();
+        foreach (['register', 'register/resend-otp', 'register/verify-otp', 'login', 'forgot-password', 'reset-password'] as $index => $path) {
+            $this->withServerVariables(['REMOTE_ADDR' => '127.0.0.'.($index + 10)]);
+            $this->postJson('/api/v1/users/'.$path, ['email' => $user->email, 'otp' => '123456', 'password' => 'LocalPassword123!'])
+                ->assertForbidden();
         }
-        $this->exchange($code, ['otp' => $correct])->assertStatus(429)->assertJsonPath('error_code', 'otp_attempts');
-        $this->travel(11)->minutes();
-        $this->exchange($code, ['otp' => $correct])->assertStatus(422)->assertJsonPath('error_code', 'otp_expired');
-        $this->assertDatabaseCount('users', 0);
+        $this->assertSame($before, $user->fresh()->getAttributes());
+        $this->assertDatabaseCount('registration_otps', 0);
+        $this->assertDatabaseCount('password_reset_tokens', 0);
+        Mail::assertNothingSent();
+        $code = $this->deliver();
+        $this->exchange($code)->assertOk()->assertJsonPath('user.id', $user->id);
     }
 
-    public function test_resends_enforce_cooldown_and_invalidate_old_code(): void
+    public function test_facebook_authenticated_owner_can_verify_contact_email_later_with_existing_verification_flow(): void
     {
-        $code = $this->deliver();
-        $this->exchange($code, $this->profile())->assertStatus(202);
-        $old = $this->otp();
-        $this->exchange($code, ['resend' => true])->assertStatus(429)->assertJsonPath('error_code', 'otp_cooldown');
-        $this->travel(61)->seconds();
-        $this->exchange($code, ['resend' => true, 'email' => 'changed@example.test'])->assertStatus(202);
-        $challenge = Cache::get('facebook-delivery:'.hash('sha256', $code));
-        $this->assertSame('facebook@example.test', $challenge['verification']['profile']['email']);
-        $this->assertNotSame($old, $challenge['verification']['hash']);
-        $this->exchange($code, ['otp' => $this->otp()])->assertOk();
+        $user = $this->linked(['email_verified_at' => null]);
+        $token = $user->createToken('facebook-auth-token')->plainTextToken;
+        $this->withToken($token)->postJson('/api/v1/users/register/resend-otp', ['email' => $user->email])->assertOk();
+        $otp = Mail::sent(RegisterOtpMail::class)->last()->otp;
+        $this->postJson('/api/v1/users/register/verify-otp', ['email' => $user->email, 'otp' => $otp])->assertOk();
+        $this->assertNotNull($user->fresh()->email_verified_at);
+        $this->assertTrue($user->fresh()->is_active);
     }
 
     public function test_existing_google_oauth_state_and_pkce_are_not_changed_by_facebook_flow(): void
@@ -387,5 +387,18 @@ class FacebookAuthTest extends TestCase
             $this->assertEquals($before[$field], $user->fresh()->getRawOriginal($field));
         }
         $this->assertNull($user->fresh()->facebook_id);
+    }
+
+    public function test_nullable_email_migration_preserves_existing_users_and_refuses_destructive_rollback(): void
+    {
+        $migration = require database_path('migrations/2026_10_22_000003_allow_email_less_social_accounts.php');
+        $migration->down();
+        $user = User::factory()->create(['google_id' => 'existing-google-sub']);
+        $before = $user->fresh()->getAttributes();
+        $migration->up();
+        $this->assertSame($before, $user->fresh()->getAttributes());
+        $this->linked(['email' => null]);
+        $this->expectException(\RuntimeException::class);
+        $migration->down();
     }
 }

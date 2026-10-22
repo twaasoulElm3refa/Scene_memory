@@ -63,6 +63,7 @@ use App\Http\Controllers\api\webhook\WebhookController;
 use App\Http\Controllers\home\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\OwnEvent;
+use App\Http\Middleware\ProtectFacebookEmailRecovery;
 use App\Http\Middleware\VerifyN8nWebhookSecret;
 use Illuminate\Support\Facades\Route;
 
@@ -92,14 +93,14 @@ Route::prefix('v1')->group(function () {
     // AUTH
     Route::prefix('users')->group(function () {
         // Auth Routes
-        Route::post('/register', [AuthController::class, 'register'])->middleware(['throttle:4,1']);
-        Route::post('/register/verify-otp', [AuthController::class, 'verifyRegisterOtp'])->middleware(['throttle:6,1']);
-        Route::post('/register/resend-otp', [AuthController::class, 'resendRegisterOtp'])->middleware(['throttle:3,1']);
-        Route::post('/login', [AuthController::class, 'login'])->middleware(['throttle:6,1']);
+        Route::post('/register', [AuthController::class, 'register'])->middleware([ProtectFacebookEmailRecovery::class, 'throttle:4,1']);
+        Route::post('/register/verify-otp', [AuthController::class, 'verifyRegisterOtp'])->middleware([ProtectFacebookEmailRecovery::class, 'throttle:6,1']);
+        Route::post('/register/resend-otp', [AuthController::class, 'resendRegisterOtp'])->middleware([ProtectFacebookEmailRecovery::class, 'throttle:3,1']);
+        Route::post('/login', [AuthController::class, 'login'])->middleware([ProtectFacebookEmailRecovery::class, 'throttle:6,1']);
         Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
-            ->middleware(['throttle:5,1', 'guest']);
+            ->middleware([ProtectFacebookEmailRecovery::class, 'throttle:5,1', 'guest']);
         Route::post('/reset-password', [AuthController::class, 'resetPassword'])
-            ->middleware(['throttle:5,1', 'guest']);
+            ->middleware([ProtectFacebookEmailRecovery::class, 'throttle:5,1', 'guest']);
 
         // Social Auth
         Route::get('/facebook-login', [FacebookAuthController::class, 'login'])->middleware(['web', 'guest', 'throttle:10,1']);

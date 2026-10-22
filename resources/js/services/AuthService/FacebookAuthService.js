@@ -6,8 +6,8 @@ export const FacebookAuthService = {
     start(lang) {
         return api.get('/users/facebook-login', { ...options, params: { lang } });
     },
-    async exchange(code, payload = {}) {
+    async exchange(code) {
         await api.get('/sanctum/csrf-cookie', { ...options, baseURL: '/' });
-        return api.post('/users/facebook-exchange', { ...payload, code }, options);
+        return api.post('/users/facebook-exchange', { code }, options);
     },
 };
