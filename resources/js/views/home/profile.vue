@@ -466,6 +466,190 @@
                         </p>
                     </div>
                 </div>
+
+                <!-- TAB 7: الحساب والخصوصية (Account & Privacy / Data Deletion) -->
+                <div v-if="currentTab === 7" class="space-y-8">
+                    <!-- Danger Zone Card -->
+                    <div class="bg-red-50/50 border border-red-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-2xl flex-shrink-0">
+                                <i class="bi bi-shield-x"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-red-900 mb-1">
+                                    {{ $t('dataDeletion.profile.cardTitle') }}
+                                </h3>
+                                <p class="text-sm text-red-700 leading-relaxed mb-0">
+                                    {{ $t('dataDeletion.profile.cardDesc') }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Warning List -->
+                        <div class="bg-white/80 border border-red-100 rounded-xl p-5 mb-6">
+                            <h4 class="text-sm font-bold text-red-800 mb-3 flex items-center gap-2">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                {{ $t('dataDeletion.profile.warningHeader') }}
+                            </h4>
+                            <ul class="space-y-2 text-sm text-gray-700 list-disc list-inside">
+                                <li v-for="(point, idx) in tm('dataDeletion.profile.warningPoints')" :key="idx">
+                                    {{ rt(point) }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Active Deletion Status Box (if exists) -->
+                        <div v-if="activeDeletionRequest && activeDeletionRequest.status !== 'cancelled' && activeDeletionRequest.status !== 'failed'"
+                             class="bg-white border border-amber-200 rounded-xl p-6 mb-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-semibold text-gray-600">
+                                    {{ $t('dataDeletion.statusResult.reference') }}:
+                                    <strong class="font-mono text-gray-900">{{ activeDeletionRequest.reference }}</strong>
+                                </span>
+                                <span :class="[
+                                    'px-3 py-1 rounded-full text-xs font-bold uppercase',
+                                    activeDeletionRequest.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
+                                    activeDeletionRequest.status === 'under_review' ? 'bg-amber-100 text-amber-800' :
+                                    'bg-blue-100 text-blue-800'
+                                ]">
+                                    {{ $t('dataDeletion.statusResult.statuses.' + activeDeletionRequest.status, activeDeletionRequest.status) }}
+                                </span>
+                            </div>
+
+                            <p v-if="activeDeletionRequest.financial_obligations_detected" class="text-sm text-amber-700 mb-3">
+                                <i class="bi bi-info-circle-fill me-1"></i>
+                                {{ activeDeletionRequest.financial_hold_reason || $t('dataDeletion.statusResult.financialNotice') }}
+                            </p>
+
+                            <div class="flex items-center gap-3 mt-4">
+                                <button v-if="['pending_confirmation', 'pending', 'under_review'].includes(activeDeletionRequest.status)"
+                                        @click="handleCancelDeletion"
+                                        :disabled="isCancellingDeletion"
+                                        type="button"
+                                        class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                                    {{ isCancellingDeletion ? '...' : $t('dataDeletion.profile.cancelButton') }}
+                                </button>
+                                <button v-if="activeDeletionRequest.status === 'pending_confirmation'"
+                                        @click="openDeleteModal"
+                                        type="button"
+                                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition">
+                                    {{ $t('dataDeletion.profile.confirmDeleteButton') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Initiate Deletion Trigger Button (when no active request) -->
+                        <div v-else>
+                            <button @click="openDeleteModal"
+                                    type="button"
+                                    class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold shadow transition flex items-center gap-2">
+                                <i class="bi bi-trash3-fill"></i>
+                                <span>{{ $t('dataDeletion.profile.deleteButton') }}</span>
+                            </button>
+                        </div>
+
+                        <!-- Link to Public Instructions Page -->
+                        <div class="mt-6 pt-4 border-t border-red-200/60 flex items-center justify-between text-xs text-gray-500">
+                            <span>Scemory Platform & Meta Compliance</span>
+                            <RouterLink :to="'/' + locale + '/data-deletion'" class="text-red-700 hover:underline font-semibold flex items-center gap-1">
+                                <span>{{ $t('footer.dataDeletion') }}</span>
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </RouterLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account & Data Modal -->
+    <div v-if="isDeleteModalOpen" class="fixed inset-0 z-50 overflow-y-auto bg-black/60 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 relative">
+            <button @click="closeDeleteModal" class="absolute top-4 end-4 text-gray-400 hover:text-gray-600 text-xl">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+            <div class="flex items-center gap-3 text-red-600 mb-4">
+                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-xl">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-0">
+                    {{ $t('dataDeletion.profile.modalTitle') }}
+                </h3>
+            </div>
+
+            <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+                {{ $t('dataDeletion.profile.modalDesc') }}
+            </p>
+
+            <div v-if="deletionErrorMessage" class="p-3 mb-4 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200">
+                {{ deletionErrorMessage }}
+            </div>
+
+            <div class="space-y-4">
+                <!-- Typed Confirmation: DELETE -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        {{ $t('dataDeletion.profile.typeDeletePrompt') }}
+                    </label>
+                    <input v-model="deleteConfirmPhrase"
+                           type="text"
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-red-500 focus:outline-none font-mono"
+                           :placeholder="$t('dataDeletion.profile.typeDeletePlaceholder')" />
+                </div>
+
+                <!-- Credential Check (Password or Code) -->
+                <div v-if="!activeDeletionRequest?.requires_code">
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        {{ $t('dataDeletion.profile.passwordPrompt') }}
+                    </label>
+                    <input v-model="deletePassword"
+                           type="password"
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-red-500 focus:outline-none"
+                           :placeholder="$t('dataDeletion.profile.passwordPlaceholder')" />
+                </div>
+
+                <div v-if="activeDeletionRequest?.requires_code">
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">
+                            {{ $t('dataDeletion.profile.codePrompt') }}
+                        </label>
+                        <button @click="handleResendCode" type="button" class="text-xs text-blue-600 hover:underline">
+                            {{ $t('dataDeletion.profile.resendCode') }}
+                        </button>
+                    </div>
+                    <input v-model="deleteCode"
+                           type="text"
+                           maxlength="6"
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:border-red-500 focus:outline-none font-mono text-center tracking-widest text-lg"
+                           :placeholder="$t('dataDeletion.profile.codePlaceholder')" />
+                </div>
+
+                <!-- Reason (Optional) -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Reason (Optional)
+                    </label>
+                    <textarea v-model="deleteReason"
+                              rows="2"
+                              class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-red-500 focus:outline-none text-sm"
+                              placeholder="Why are you leaving? (optional)"></textarea>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+                <button @click="closeDeleteModal"
+                        type="button"
+                        class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                    {{ $t('dataDeletion.profile.cancelModalButton') }}
+                </button>
+                <button @click="handleInitiateOrConfirmDeletion"
+                        :disabled="deleteConfirmPhrase.trim().toUpperCase() !== 'DELETE' || isSubmittingDeletion"
+                        type="button"
+                        class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold text-white transition flex items-center gap-2">
+                    <span v-if="isSubmittingDeletion" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span>{{ isSubmittingDeletion ? $t('dataDeletion.profile.processing') : $t('dataDeletion.profile.confirmDeleteButton') }}</span>
+                </button>
             </div>
         </div>
     </div>
@@ -480,6 +664,14 @@ import { useI18n } from "vue-i18n";
 import WeeklyStatsCard from "@/components/profile/WeeklyStatsCard.vue";
 import ProfileGiftsEarnings from "@/components/profile/ProfileGiftsEarnings.vue";
 import { PlanService } from "@/services/planService/planService";
+import {
+    submitDataDeletionRequest,
+    confirmDataDeletionRequest,
+    getDataDeletionStatus,
+    resendDataDeletionCode,
+    cancelDataDeletionRequest,
+} from "@/services/userDataDeletionService";
+import { clearAuthToken, clearGoogleOAuthVerifier } from "@/services/authTokenStorage";
 
 export default {
     name: "UserProfile",
@@ -788,18 +980,26 @@ export default {
             { id: 3, label: t("profilePage.tabs.password") },
             { id: 4, label: t("profilePage.tabs.wallet") },
             { id: 5, label: t("gifts.history") },
-            { id: 6, label: t("mediaCredits.myCredits") }
+            { id: 6, label: t("mediaCredits.myCredits") },
+            { id: 7, label: t("profilePage.tabs.privacy") }
         ]);
 
-        const currentTab = ref(route.query.tab === 'credits' ? 6 : (route.query.tab === 'gifts' ? 5 : 1));
+        const currentTab = ref(
+            route.query.tab === 'privacy' ? 7 :
+            route.query.tab === 'credits' ? 6 :
+            (route.query.tab === 'gifts' ? 5 : 1)
+        );
         watch(() => route.query.tab, (value) => {
-            if (value === 'credits') currentTab.value = 6;
+            if (value === 'privacy') currentTab.value = 7;
+            else if (value === 'credits') currentTab.value = 6;
             else if (value === 'gifts') currentTab.value = 5;
         });
 
         watch(currentTab, (val) => {
             if (val === 6) {
                 fetchCreditsData();
+            } else if (val === 7) {
+                fetchDeletionStatus();
             }
         });
         const isUpdatingProfile = ref(false);
@@ -961,9 +1161,126 @@ export default {
             alert(t("profilePage.wallet.withdrawComingSoon"));
         };
 
+        // Data Deletion State
+        const activeDeletionRequest = ref(null);
+        const isDeleteModalOpen = ref(false);
+        const deleteConfirmPhrase = ref("");
+        const deletePassword = ref("");
+        const deleteCode = ref("");
+        const deleteReason = ref("");
+        const deletionErrorMessage = ref("");
+        const isSubmittingDeletion = ref(false);
+        const isCancellingDeletion = ref(false);
+
+        const fetchDeletionStatus = async () => {
+            try {
+                const res = await getDataDeletionStatus();
+                activeDeletionRequest.value = res?.data || null;
+            } catch (err) {
+                console.error("Failed to fetch deletion status:", err);
+            }
+        };
+
+        const openDeleteModal = () => {
+            isDeleteModalOpen.value = true;
+            deleteConfirmPhrase.value = "";
+            deletePassword.value = "";
+            deleteCode.value = "";
+            deleteReason.value = "";
+            deletionErrorMessage.value = "";
+        };
+
+        const closeDeleteModal = () => {
+            isDeleteModalOpen.value = false;
+            deletionErrorMessage.value = "";
+        };
+
+        const handleInitiateOrConfirmDeletion = async () => {
+            if (deleteConfirmPhrase.value.trim().toUpperCase() !== "DELETE") {
+                deletionErrorMessage.value = t("dataDeletion.profile.typeDeletePrompt");
+                return;
+            }
+
+            isSubmittingDeletion.value = true;
+            deletionErrorMessage.value = "";
+
+            try {
+                if (!activeDeletionRequest.value || activeDeletionRequest.value.status === 'cancelled' || activeDeletionRequest.value.status === 'failed') {
+                    const submitRes = await submitDataDeletionRequest({
+                        reason: deleteReason.value,
+                        confirmation_phrase: "DELETE"
+                    });
+                    activeDeletionRequest.value = submitRes.data;
+
+                    if (submitRes.data.requires_code && !deleteCode.value) {
+                        isSubmittingDeletion.value = false;
+                        return;
+                    }
+                }
+
+                if (activeDeletionRequest.value.requires_code && !deleteCode.value) {
+                    deletionErrorMessage.value = t("dataDeletion.profile.codePrompt");
+                    isSubmittingDeletion.value = false;
+                    return;
+                }
+
+                const confirmRes = await confirmDataDeletionRequest({
+                    password: deletePassword.value || undefined,
+                    code: deleteCode.value || undefined,
+                    confirmation_phrase: "DELETE"
+                });
+
+                const updated = confirmRes.data;
+                activeDeletionRequest.value = updated;
+
+                if (updated.status === 'completed') {
+                    await clearAuthToken();
+                    await clearGoogleOAuthVerifier();
+                    localStorage.removeItem("admin_token");
+                    localStorage.removeItem("admin_user");
+                    localStorage.removeItem("user_role");
+                    localStorage.removeItem("licence_name");
+                    localStorage.removeItem("is_profile_filled");
+                    closeDeleteModal();
+                    router.push(`/${locale.value}/home`);
+                } else if (updated.status === 'under_review') {
+                    closeDeleteModal();
+                }
+            } catch (err) {
+                const apiError = err?.response?.data?.message || err?.response?.data?.errors?.password?.[0] || err?.response?.data?.errors?.code?.[0] || err?.message;
+                deletionErrorMessage.value = apiError || "An error occurred while processing your request.";
+            } finally {
+                isSubmittingDeletion.value = false;
+            }
+        };
+
+        const handleCancelDeletion = async () => {
+            isCancellingDeletion.value = true;
+            try {
+                const res = await cancelDataDeletionRequest();
+                activeDeletionRequest.value = res.data;
+            } catch (err) {
+                console.error("Failed to cancel deletion request:", err);
+            } finally {
+                isCancellingDeletion.value = false;
+            }
+        };
+
+        const handleResendCode = async () => {
+            try {
+                await resendDataDeletionCode();
+                deletionErrorMessage.value = "";
+            } catch (err) {
+                deletionErrorMessage.value = err?.response?.data?.message || "Failed to resend code.";
+            }
+        };
+
         onMounted(() => {
             fetchProfile();
             fetchCreditsData();
+            if (currentTab.value === 7) {
+                fetchDeletionStatus();
+            }
             document.addEventListener("click", handleClickOutsideCountry);
         });
 
@@ -1009,6 +1326,22 @@ export default {
             updatePassword,
             deposit,
             withdraw,
+            locale,
+            activeDeletionRequest,
+            isDeleteModalOpen,
+            deleteConfirmPhrase,
+            deletePassword,
+            deleteCode,
+            deleteReason,
+            deletionErrorMessage,
+            isSubmittingDeletion,
+            isCancellingDeletion,
+            openDeleteModal,
+            closeDeleteModal,
+            handleInitiateOrConfirmDeletion,
+            handleCancelDeletion,
+            handleResendCode,
+            fetchDeletionStatus,
         };
     },
 };

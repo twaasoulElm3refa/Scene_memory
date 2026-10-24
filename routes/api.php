@@ -20,6 +20,7 @@ use App\Http\Controllers\api\admin\ReportController;
 use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SpecialCoverageRequestController as AdminSpecialCoverageRequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
+use App\Http\Controllers\api\admin\AdminUserDataDeletionController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Controllers\api\admin\WithdrawlController;
@@ -58,6 +59,7 @@ use App\Http\Controllers\api\payment\CollectionController;
 use App\Http\Controllers\api\payment\DepositController;
 use App\Http\Controllers\api\payment\PaymentController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
+use App\Http\Controllers\api\userDshboard\UserDataDeletionController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
 use App\Http\Controllers\api\webhook\WalletWebhookController;
 use App\Http\Controllers\api\webhook\WebhookController;
@@ -125,8 +127,19 @@ Route::prefix('v1')->group(function () {
             Route::get('/downloads', [DownloadController::class, 'downloads']);
             Route::post('/update-profile', [AuthController::class, 'updateProfile']);
             Route::put('/password', [AuthController::class, 'updatePassword']);
+
+            // User Data Deletion Routes
+            Route::post('/data-deletion-request', [UserDataDeletionController::class, 'submit'])->middleware('throttle:5,1');
+            Route::post('/data-deletion-confirm', [UserDataDeletionController::class, 'confirm'])->middleware('throttle:5,1');
+            Route::get('/data-deletion-status', [UserDataDeletionController::class, 'status']);
+            Route::post('/data-deletion-resend-code', [UserDataDeletionController::class, 'resendCode'])->middleware('throttle:3,1');
+            Route::post('/data-deletion-cancel', [UserDataDeletionController::class, 'cancel'])->middleware('throttle:10,1');
         });
     });
+
+    // Public Data Deletion status & Meta Callback
+    Route::get('/data-deletion-status/{reference}', [UserDataDeletionController::class, 'publicStatus'])->middleware('throttle:30,1');
+    Route::post('/facebook/data-deletion', [UserDataDeletionController::class, 'facebookCallback'])->middleware('throttle:30,1');
 
     Route::prefix('admin')->group(function () {
         Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:6,1');
@@ -134,6 +147,13 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         Route::get('/dashboard/stats', [AdminDashboardController::class, 'stats']);
+
+        Route::prefix('data-deletion-requests')->group(function () {
+            Route::get('/', [AdminUserDataDeletionController::class, 'index']);
+            Route::get('/{id}', [AdminUserDataDeletionController::class, 'show']);
+            Route::post('/{id}/process', [AdminUserDataDeletionController::class, 'process']);
+            Route::post('/{id}/reject', [AdminUserDataDeletionController::class, 'reject']);
+        });
 
         Route::prefix('special-coverage-requests')->group(function () {
             Route::get('/', [AdminSpecialCoverageRequestController::class, 'index']);

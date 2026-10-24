@@ -237,4 +237,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SpecialCoverageRequest::class, 'reviewed_by');
     }
+
+    public function dataDeletionRequests(): HasMany
+    {
+        return $this->hasMany(UserDataDeletionRequest::class);
+    }
 }

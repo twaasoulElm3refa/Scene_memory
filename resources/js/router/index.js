@@ -13,6 +13,7 @@ const privacy = () => import("../views/home/privacy.vue");
 const who = () => import("../views/home/who.vue");
 const terms = () => import("../views/home/terms.vue");
 const dataProtction = () => import("../views/home/data-protction.vue");
+const DataDeletion = () => import("../views/home/DataDeletion.vue");
 const single_event = () => import("../views/home/single_event.vue");
 const all_events = () => import("../views/home/all_events.vue");
 const events_search = () => import("../views/home/EventsSearchPage.vue");
@@ -299,6 +300,16 @@ const routes = [
         path: "/:lang/data-protection",
         component: dataProtction,
         meta: { hideNavbar: false, hideFooter: false, legalPolicy: true },
+    },
+    {
+        path: "/:lang/data-deletion",
+        name: "data-deletion",
+        component: DataDeletion,
+        meta: { hideNavbar: false, hideFooter: false, legalPolicy: true },
+    },
+    {
+        path: "/data-deletion",
+        redirect: () => `/${getCurrentLang()}/data-deletion`,
     },
     {
         path: "/:lang/leaderboard",

@@ -338,7 +338,8 @@
         "copyrightLink": "Urheberrecht",
         "termsOfService": "Nutzungsbedingungen",
         "privacyPolicy": "Datenschutzerklärung",
-        "dataProtection": "Datenschutz"
+        "dataProtection": "Datenschutz",
+        "dataDeletion": "Anweisungen zur Datenlöschung"
     },
     "contact": {
         "hero": {
@@ -1182,7 +1183,8 @@
             "userInfo": "Benutzerinformationen",
             "editData": "Daten bearbeiten",
             "password": "Passwort aktualisieren",
-            "wallet": "Brieftasche"
+            "wallet": "Brieftasche",
+            "privacy": "Konto & Datenschutz"
         },
         "fields": {
             "name": "Name",
@@ -1464,5 +1466,120 @@
         "insufficientCredits": "Unzureichendes Guthaben oder zu niedrige Klasse für dieses Medium.",
         "includedQuotas": "Enthaltene Medien-Kontingente",
         "permanentQuotas": "Dauerhafte Medienkontingente ohne Verfall"
+    },
+    "dataDeletion": {
+        "title": "Anweisungen zur Datenlöschung",
+        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+        "effectiveDate": "Effective Date: October 2026",
+        "checkStatusTitle": "Check Deletion Request Status",
+        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+        "checkButton": "Check Status",
+        "checking": "Checking...",
+        "statusNotFound": "No deletion request found for this reference code.",
+        "statusResult": {
+            "reference": "Reference Code",
+            "status": "Current Status",
+            "type": "Request Type",
+            "maskedEmail": "Associated Account",
+            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+            "statuses": {
+                "pending_confirmation": "Pending Confirmation",
+                "pending": "Pending Processing",
+                "under_review": "Under Administrative Review",
+                "processing": "Processing Deletion",
+                "completed": "Completed & Scrubbed",
+                "cancelled": "Cancelled",
+                "failed": "Failed"
+            }
+        },
+        "sections": {
+            "sectionA": {
+                "title": "A. How to Delete Your Account and Data from Within Scemory",
+                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+                "steps": [
+                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+                    "Select the 'Account & Privacy' tab.",
+                    "Click the red 'Delete Account & Data' button located in the danger zone.",
+                    "Type the required confirmation phrase DELETE into the input box.",
+                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+                ]
+            },
+            "sectionB": {
+                "title": "B. Alternative Request if Unable to Access Your Account",
+                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+            },
+            "sectionC": {
+                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+            },
+            "sectionD": {
+                "title": "D. Types of Personal Data Deleted",
+                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+                "items": [
+                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+                    "Profile photos, avatars, and personal media files stored in public and private storage.",
+                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+                    "Unpurchased event media and inactive personal event listings."
+                ]
+            },
+            "sectionE": {
+                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+                "items": [
+                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+                ],
+                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+            },
+            "sectionF": {
+                "title": "F. Processing Timeline & Review Safeguards",
+                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+            },
+            "sectionG": {
+                "title": "G. Reference Tracking & Status Verification",
+                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+            }
+        },
+        "profile": {
+            "cardTitle": "Anweisungen zur Datenlöschung",
+            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+            "warningHeader": "Important: This action cannot be undone",
+            "warningPoints": [
+                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+            ],
+            "deleteButton": "Anweisungen zur Datenlöschung",
+            "activeRequestNotice": "You have an active deletion request in progress.",
+            "cancelButton": "Cancel Deletion Request",
+            "modalTitle": "Confirm Account Deletion",
+            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+            "typeDeletePrompt": "Type DELETE to confirm:",
+            "typeDeletePlaceholder": "DELETE",
+            "passwordPrompt": "Enter your account password:",
+            "passwordPlaceholder": "Current password",
+            "codePrompt": "Enter the 6-digit verification code sent to your email:",
+            "codePlaceholder": "123456",
+            "resendCode": "Resend Code",
+            "confirmDeleteButton": "Permanently Delete My Data",
+            "cancelModalButton": "Cancel",
+            "processing": "Processing...",
+            "successToast": "Account and data deletion completed. You have been signed out.",
+            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+            "cancelSuccessToast": "Deletion request has been successfully cancelled."
+        }
     }
 }

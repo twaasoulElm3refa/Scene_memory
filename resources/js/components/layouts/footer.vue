@@ -23,6 +23,7 @@
             <li><RouterLink :to="path('/who')">{{ t('nav.about') }}</RouterLink></li>
             <li><RouterLink :to="path('/contact')">{{ t('nav.contact') }}</RouterLink></li>
             <li><RouterLink :to="path('/policies')">{{ t('policies.ui.legal') }}</RouterLink></li>
+            <li><RouterLink :to="path('/data-deletion')">{{ t('footer.dataDeletion') }}</RouterLink></li>
             <li v-for="policy in policies" :key="policy.id"><RouterLink :to="path(policy.path)">{{ t('policies.pages.' + policy.id + '.title') }}</RouterLink></li>
           </ul>
         </nav>
@@ -74,7 +75,7 @@ const route = useRoute();
 const currentYear = new Date().getFullYear();
 const direction = computed(() => ['ar', 'fa', 'ur'].includes(locale.value) ? 'rtl' : 'ltr');
 const path = suffix => '/' + locale.value + suffix;
-const supportPaths = new Set(['/who', '/contact', ...policies.map(policy => policy.path)]);
+const supportPaths = new Set(['/who', '/contact', '/data-deletion', ...policies.map(policy => policy.path)]);
 const quickLinks = computed(() => footerNavigation(navigationSession).filter(link => !supportPaths.has(link.path)));
 const destination = link => link.action === 'specialCoverage'
   ? specialCoverageDestination(locale.value, Boolean(getAuthToken()), route.path === path('/home') ? route.query : {})
