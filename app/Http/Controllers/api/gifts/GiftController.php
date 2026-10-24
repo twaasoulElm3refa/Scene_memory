@@ -15,6 +15,7 @@ use App\Models\Wallet;
 use App\Services\GiftEarningsService;
 use App\Services\MinorMoney;
 use App\Services\PayPalServices;
+use App\Services\PayPalPaymentVerification;
 use App\Services\VirtualGiftService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -58,7 +59,7 @@ class GiftController extends Controller
         $gift = GiftTransaction::where('sender_user_id', $request->user()->id)->where('reference', $data['reference'])->firstOrFail();
 
         return $this->attempt(function () use ($gift) {
-            $this->paypal->reconcileGift($gift->payment);
+            app(PayPalPaymentVerification::class)->verify($gift->payment, 'gift_capture');
 
             return $this->serialize($gift->fresh());
         });

@@ -79,14 +79,14 @@ class PayPalWalletServices implements PaymentInterface
             'PAYMENT.CAPTURE.COMPLETED' => $this->completed($payload),
             'PAYMENT.CAPTURE.PENDING' => $this->pending($payload),
             'PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED' => $this->declined($payload),
-            'PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED' => 'ignored',
+            'PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED', 'CUSTOMER.DISPUTE.CREATED', 'CUSTOMER.DISPUTE.RESOLVED' => app(PayPalReversalReview::class)->flag($payload),
             default => 'ignored',
         };
     }
 
-    public function reconcile(Payment $payment): string
+    public function reconcile(Payment $payment, ?array $verifiedOrder = null): string
     {
-        $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
+        $details = $verifiedOrder ?? $this->gateway->showOrderDetails($payment->paypal_order_id);
         if (($details['status'] ?? null) === 'COMPLETED') {
             $this->finalizer->finalizeCompletedWalletDepositCapture($payment, $details);
             return 'completed';

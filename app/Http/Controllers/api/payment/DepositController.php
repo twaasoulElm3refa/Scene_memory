@@ -8,6 +8,7 @@ use App\Http\Requests\WalletDepositRequest;
 use App\Models\Payment;
 use App\Models\Purchases;
 use App\Services\PayPalWalletServices;
+use App\Services\PayPalPaymentVerification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,10 @@ use Throwable;
 
 class DepositController extends Controller
 {
-    public function __construct(private readonly PayPalWalletServices $paypal) {}
+    public function __construct(
+        private readonly PayPalWalletServices $paypal,
+        private readonly PayPalPaymentVerification $verification,
+    ) {}
 
     public function create(WalletDepositRequest $request): JsonResponse
     {
@@ -70,6 +74,11 @@ class DepositController extends Controller
             ->where('operation', 'wallet_deposit')
             ->latest('id')
             ->first();
+        if ($payment && in_array($payment->status, ['pending', 'approved', 'failed'], true)) {
+            $this->verification->verify($payment, 'owner_status');
+            $payment->refresh();
+            $order->refresh();
+        }
 
         return response()->json([
             'order_id' => $order->id,

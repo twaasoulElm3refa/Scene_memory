@@ -176,11 +176,12 @@ class PlanSubscriptionController extends Controller
                 'amount_minor' => $priceMinor,
                 'currency' => 'USD',
                 'idempotency_key' => $idempotencyKey,
+                'paypal_request_id' => $idempotencyKey,
                 'custom_id' => 'plan:'.$plan->id,
                 'reference_id' => (string) $order->id,
             ]);
 
-            $gateway = app(\App\Services\PayPalGatewayInterface::class);
+            $gateway = app(\App\Services\PayPalGateway::class);
             $paypalOrder = $gateway->createOrder([
                 'intent' => 'CAPTURE',
                 'application_context' => [
@@ -188,8 +189,8 @@ class PlanSubscriptionController extends Controller
                     'cancel_url' => rtrim((string) config('app.url'), '/').route('paypal.cancel', [], false),
                 ],
                 'purchase_units' => [[
-                    'reference_id' => (string) $payment->id,
-                    'custom_id' => 'plan_subscription:'.$payment->id,
+                    'reference_id' => (string) $order->id,
+                    'custom_id' => 'plan:'.$plan->id,
                     'amount' => [
                         'currency_code' => 'USD',
                         'value' => $this->money->toDecimal($priceMinor),
@@ -199,7 +200,8 @@ class PlanSubscriptionController extends Controller
             ], $idempotencyKey);
 
             $approvalUrl = collect($paypalOrder['links'] ?? [])->firstWhere('rel', 'approve')['href'] ?? null;
-            if (! $approvalUrl) {
+            if (! is_string($paypalOrder['id'] ?? null) || $paypalOrder['id'] === ''
+                || ($paypalOrder['status'] ?? null) !== 'CREATED' || ! $approvalUrl) {
                 throw new CommerceException('Unable to obtain PayPal approval URL.', 502);
             }
 

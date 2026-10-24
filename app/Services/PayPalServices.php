@@ -69,7 +69,7 @@ class PayPalServices implements PaymentInterface
     {
         $payment = Payment::with('order')
             ->where('paypal_order_id', $token)
-            ->where('operation', 'purchase')
+            ->whereIn('operation', ['purchase', 'plan_subscription'])
             ->where('method', 'paypal')
             ->firstOrFail();
 
@@ -91,20 +91,20 @@ class PayPalServices implements PaymentInterface
             'PAYMENT.CAPTURE.COMPLETED' => $this->completed($payload),
             'PAYMENT.CAPTURE.PENDING' => $this->pending($payload),
             'PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED' => $this->declined($payload),
-            'PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED' => $this->unhandledReversal($payload),
+            'PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED', 'CUSTOMER.DISPUTE.CREATED', 'CUSTOMER.DISPUTE.RESOLVED' => $this->unhandledReversal($payload),
             default => 'ignored',
         };
     }
 
-    public function reconcile(Payment $payment): string
+    public function reconcile(Payment $payment, ?array $verifiedOrder = null): string
     {
         if ($payment->operation === 'virtual_gift') {
-            return $this->reconcileGift($payment);
+            return $this->reconcileGift($payment, $verifiedOrder);
         }
         if ($payment->operation === 'plan_subscription') {
-            return $this->reconcilePlanSubscription($payment);
+            return $this->reconcilePlanSubscription($payment, $verifiedOrder);
         }
-        $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
+        $details = $verifiedOrder ?? $this->gateway->showOrderDetails($payment->paypal_order_id);
         if (($details['status'] ?? null) === 'COMPLETED') {
             $this->finalizer->finalizeCompletedPurchaseCapture($payment, $details);
 
@@ -164,14 +164,14 @@ class PayPalServices implements PaymentInterface
         return ['transaction' => $gift, 'approval_url' => $approval];
     }
 
-    public function reconcileGift(Payment $original): string
+    public function reconcileGift(Payment $original, ?array $verifiedOrder = null): string
     {
         $payment = $original->fresh();
         if ($payment->operation !== 'virtual_gift' || $payment->method !== 'paypal' || ! $payment->paypal_order_id) {
             throw new CommerceException('No PayPal gift order exists.');
         }
         $gift = GiftTransaction::where('payment_id', $payment->id)->firstOrFail();
-        $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
+        $details = $verifiedOrder ?? $this->gateway->showOrderDetails($payment->paypal_order_id);
         $capture = data_get($details, 'purchase_units.0.payments.captures.0');
         if (is_array($capture) && in_array($capture['status'] ?? null, ['REFUNDED', 'PARTIALLY_REFUNDED'], true) && ! $gift->paid_at) {
             // Authoritative terminal capture evidence can arrive before its completion webhook.
@@ -314,21 +314,25 @@ class PayPalServices implements PaymentInterface
             return 'ok';
         }
 
+        if (in_array($type, ['PAYMENT.CAPTURE.REFUNDED', 'PAYMENT.CAPTURE.REVERSED', 'CUSTOMER.DISPUTE.CREATED', 'CUSTOMER.DISPUTE.RESOLVED'], true)) {
+            return $this->unhandledReversal($payload);
+        }
+
         return 'ignored';
     }
 
-    public function reconcilePlanSubscription(Payment $original): string
+    public function reconcilePlanSubscription(Payment $original, ?array $verifiedOrder = null): string
     {
         $payment = $original->fresh();
         if ($payment->operation !== 'plan_subscription' || $payment->method !== 'paypal' || ! $payment->paypal_order_id) {
             throw new CommerceException('No PayPal plan subscription order exists.');
         }
 
-        $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
+        $details = $verifiedOrder ?? $this->gateway->showOrderDetails($payment->paypal_order_id);
         $capture = data_get($details, 'purchase_units.0.payments.captures.0');
 
         if (($details['status'] ?? null) === 'COMPLETED' || (is_array($capture) && ($capture['status'] ?? null) === 'COMPLETED')) {
-            $this->finalizer->finalizeCompletedPlanSubscriptionCapture($payment, is_array($capture) ? $capture : $details);
+            $this->finalizer->finalizeCompletedPlanSubscriptionCapture($payment, $details);
 
             return 'completed';
         }
@@ -518,9 +522,7 @@ class PayPalServices implements PaymentInterface
 
     private function unhandledReversal(array $payload): string
     {
-        Log::warning('PayPal reversal requires manual financial policy', ['event_id' => $payload['id'] ?? null]);
-
-        return 'ignored';
+        return app(PayPalReversalReview::class)->flag($payload);
     }
 
     private function purchasePayment(array $payload): ?Payment

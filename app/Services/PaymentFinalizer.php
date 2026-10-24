@@ -81,7 +81,7 @@ class PaymentFinalizer
 
             // Extract plan_id from custom_id e.g. "plan:1"
             $planId = null;
-            if (preg_match('/plan:(\d+)/', (string) $payment->custom_id, $matches)) {
+            if (preg_match('/^plan:(\d+)$/', (string) $payment->custom_id, $matches)) {
                 $planId = (int) $matches[1];
             }
             $plan = $planId ? LicenceType::findOrFail($planId) : null;
@@ -260,6 +260,8 @@ class PaymentFinalizer
             'gateway_response' => $resource,
             'paid_at' => $now,
             'fulfilled_at' => $now,
+            'verification_lease_until' => null,
+            'next_verification_at' => null,
         ], $flags));
 
         $order->update([

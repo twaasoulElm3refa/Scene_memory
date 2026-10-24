@@ -189,6 +189,28 @@ class PayPalWebhookTest extends TestCase
 
         $this->postWebhook('/api/v1/paypal/webhook', $payload)->assertOk()->assertJson(['status' => 'ignored']);
         $this->assertSame('completed', $payment->fresh()->status);
+        $this->assertTrue($payment->fresh()->verification_review_required);
+        $this->assertSame('reversal_review', $payment->fresh()->verification_error_category);
+    }
+
+    public function test_wallet_refund_is_flagged_without_undoing_credit_without_a_policy(): void
+    {
+        $this->mockVerifier(true, 2, 'wallet-webhook-test');
+        $user = User::factory()->create();
+        $order = $this->order($user, 'wallet_deposit', 1500);
+        $payment = $this->payment($order, 'wallet_deposit', 'PAYPAL-WALLET-REFUND');
+        Wallet::create(['user_id' => $user->id, 'amount' => '0.00', 'balance_minor' => 0, 'currency' => 'USD']);
+        $this->postWebhook('/api/v1/wallet/webhook', $this->capturePayload('WH-WALLET-PAID', $payment, 'CAPTURE-WALLET-REFUND'))->assertOk();
+        $this->postWebhook('/api/v1/wallet/webhook', [
+            'id' => 'WH-WALLET-REFUND', 'event_type' => 'PAYMENT.CAPTURE.REFUNDED',
+            'resource' => ['id' => 'REFUND-WALLET',
+                'supplementary_data' => ['related_ids' => ['capture_id' => 'CAPTURE-WALLET-REFUND']]],
+        ])->assertOk()->assertJson(['status' => 'ignored']);
+
+        $this->assertTrue($payment->fresh()->verification_review_required);
+        $this->assertSame('reversal_review', $payment->fresh()->verification_error_category);
+        $this->assertSame(1500, $user->wallet()->first()->balance_minor);
+        $this->assertDatabaseCount('wallet_transactions', 1);
     }
 
     private function purchasePayment(): array

@@ -32,10 +32,14 @@ migrations=(
     2026_05_05_131439_create_wallet_transactions_table.php
     2026_06_03_095044_add_column_to_purchase_items_table.php
     2026_07_18_000002_add_paypal_lifecycle_columns_to_purchases_table.php
+    2026_07_18_000003_add_source_cart_item_id_to_purchase_items_table.php
     2026_07_19_000001_create_payment_hardening_tables.php
     2026_07_19_000002_harden_existing_payment_tables.php
     2026_09_15_000001_add_total_points_to_users_table.php
     2026_10_18_000001_create_virtual_gift_tables.php
+    2026_10_18_000003_add_gift_withdrawal_review_fields.php
+    2026_10_20_000001_add_media_storage_and_withdrawal_audit.php
+    2026_10_24_000001_add_payment_verification_tracking.php
 )
 # Legacy migrations disagree about the media table spelling. Keep both empty
 # names only in this disposable fixture; never alter the application's tables.
@@ -43,6 +47,7 @@ base_paths=()
 for migration in "${migrations[@]:0:5}"; do base_paths+=("--path=database/migrations/$migration"); done
 "${run[@]}" artisan migrate --force "${base_paths[@]}"
 docker exec "$server" mysql scemory_gifts_test -e 'CREATE TABLE events_images LIKE events_imges;'
+docker exec "$server" mysql scemory_gifts_test -e 'CREATE TRIGGER sync_images_to_imges AFTER INSERT ON events_images FOR EACH ROW INSERT INTO events_imges (id, event_id, price, is_active, created_at, updated_at) VALUES (NEW.id, NEW.event_id, NEW.price, NEW.is_active, NEW.created_at, NEW.updated_at);'
 paths=()
 for migration in "${migrations[@]:5}"; do paths+=("--path=database/migrations/$migration"); done
 "${run[@]}" artisan migrate --force "${paths[@]}"

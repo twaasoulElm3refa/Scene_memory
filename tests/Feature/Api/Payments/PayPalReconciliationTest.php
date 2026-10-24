@@ -49,6 +49,7 @@ class PayPalReconciliationTest extends TestCase
             'purchase_units' => [[
                 'reference_id' => (string) $payment->id,
                 'custom_id' => 'purchase:'.$payment->id,
+                'amount' => ['value' => '10.00', 'currency_code' => 'USD'],
                 'payee' => ['merchant_id' => 'MERCHANT-RECONCILE'],
                 'payments' => ['captures' => [[
                     'id' => 'CAPTURE-RECONCILE',

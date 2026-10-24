@@ -15,6 +15,10 @@ class Payment extends Model
         'capture_requested_at' => 'datetime',
         'paid_at' => 'datetime',
         'fulfilled_at' => 'datetime',
+        'last_verification_at' => 'datetime',
+        'next_verification_at' => 'datetime',
+        'verification_lease_until' => 'datetime',
+        'verification_review_required' => 'boolean',
     ];
 
     public function order()

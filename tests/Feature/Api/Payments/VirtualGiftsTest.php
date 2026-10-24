@@ -430,7 +430,7 @@ class VirtualGiftsTest extends TestCase
         $gift = $this->paypalGift();
         $resource = $this->captureResource($gift);
         $gateway = Mockery::mock(PayPalGateway::class);
-        $gateway->shouldReceive('showOrderDetails')->with('ORDER-GIFT')->once()->andReturn(['id' => 'ORDER-GIFT', 'status' => 'COMPLETED', 'purchase_units' => [['custom_id' => $gift->payment->custom_id, 'payee' => ['merchant_id' => 'MERCHANT-TEST'], 'payments' => ['captures' => [$resource]]]]]);
+        $gateway->shouldReceive('showOrderDetails')->with('ORDER-GIFT')->once()->andReturn(['id' => 'ORDER-GIFT', 'status' => 'COMPLETED', 'purchase_units' => [['reference_id' => $gift->payment->reference_id, 'custom_id' => $gift->payment->custom_id, 'amount' => ['value' => '1.00', 'currency_code' => 'USD'], 'payee' => ['merchant_id' => 'MERCHANT-TEST'], 'payments' => ['captures' => [$resource]]]]]);
         $gateway->shouldReceive('showCaptureDetails')->with('CAPTURE-GIFT')->once()->andReturn($resource);
         $this->instance(PayPalGateway::class, $gateway);
         Sanctum::actingAs($this->recipient);
@@ -475,12 +475,57 @@ class VirtualGiftsTest extends TestCase
         $this->get('/api/gifts/paypal/return?reference='.$gift->reference.'&token=ORDER-GIFT')->assertRedirect();
         $this->assertSame('pending', $gift->fresh()->delivery_status);
         $gateway = Mockery::mock(PayPalGateway::class);
-        $gateway->shouldReceive('showOrderDetails')->once()->andReturn(['id' => 'ORDER-GIFT', 'status' => 'APPROVED']);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn(['id' => 'ORDER-GIFT', 'status' => 'APPROVED', 'purchase_units' => [['reference_id' => $gift->payment->reference_id, 'custom_id' => $gift->payment->custom_id, 'amount' => ['value' => '1.00', 'currency_code' => 'USD'], 'payee' => ['merchant_id' => 'MERCHANT-TEST']]]]);
         $gateway->shouldReceive('capturePaymentOrder')->with('ORDER-GIFT', 'gift-capture-'.$gift->reference)->once()->andReturn(['status' => 'COMPLETED', 'purchase_units' => [['payments' => ['captures' => [['status' => 'PENDING']]]]]]);
         $this->instance(PayPalGateway::class, $gateway);
         $this->postJson('/api/gifts/paypal/capture', ['reference' => $gift->reference])->assertOk()->assertJsonPath('data.delivery_status', 'pending');
         $this->postJson('/api/gifts/'.$gift->reference.'/cancel')->assertOk()->assertJsonPath('data.payment_status', 'cancelled');
         $this->assertDatabaseCount('gift_earning_entries', 0);
+    }
+
+    public function test_verified_voided_gift_order_updates_gift_and_payment_together(): void
+    {
+        $gift = $this->paypalGift();
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn([
+            'id' => 'ORDER-GIFT', 'status' => 'VOIDED', 'intent' => 'CAPTURE',
+            'purchase_units' => [[
+                'reference_id' => $gift->payment->reference_id,
+                'custom_id' => $gift->payment->custom_id,
+                'amount' => ['value' => '1.00', 'currency_code' => 'USD'],
+                'payee' => ['merchant_id' => 'MERCHANT-TEST'],
+            ]],
+        ]);
+        $this->instance(PayPalGateway::class, $gateway);
+
+        $this->postJson('/api/gifts/paypal/capture', ['reference' => $gift->reference])
+            ->assertOk()->assertJsonPath('data.payment_status', 'cancelled');
+        $this->assertSame('cancelled', $gift->payment->fresh()->status);
+        $this->assertDatabaseCount('gift_earning_entries', 0);
+    }
+
+    public function test_direct_verification_reconciles_gift_refunded_before_webhook(): void
+    {
+        $gift = $this->paypalGift();
+        $capture = $this->captureResource($gift, ['status' => 'REFUNDED']);
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn([
+            'id' => 'ORDER-GIFT', 'status' => 'COMPLETED', 'intent' => 'CAPTURE',
+            'purchase_units' => [[
+                'reference_id' => $gift->payment->reference_id,
+                'custom_id' => $gift->payment->custom_id,
+                'amount' => ['value' => '1.00', 'currency_code' => 'USD'],
+                'payee' => ['merchant_id' => 'MERCHANT-TEST'],
+                'payments' => ['captures' => [$capture]],
+            ]],
+        ]);
+        $gateway->shouldReceive('showCaptureDetails')->once()->andReturn($capture);
+        $this->instance(PayPalGateway::class, $gateway);
+
+        $this->postJson('/api/gifts/paypal/capture', ['reference' => $gift->reference])
+            ->assertOk()->assertJsonPath('data.payment_status', 'refunded');
+        $this->assertSame('reversed', $gift->fresh()->delivery_status);
+        $this->assertSame(85, GiftEarningEntry::sole()->reversed_minor);
     }
 
     public function test_refund_gateway_uses_existing_sandbox_credentials_and_exact_decimal_strings(): void

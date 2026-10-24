@@ -104,7 +104,7 @@ class VirtualGiftConcurrencyTest extends TestCase
         $this->workers(6, function ($index) use ($payments) {
             try {
                 app(PaymentFinalizer::class)->finalizeWalletPurchase($payments[$index]);
-            } catch (CommerceException $exception) {
+            } catch (CommerceException|\RuntimeException $exception) {
                 if ($exception->getMessage() !== 'Insufficient wallet balance.') {
                     throw $exception;
                 }
@@ -181,6 +181,7 @@ class VirtualGiftConcurrencyTest extends TestCase
     {
         [$sender, $recipient, $input] = $this->fixture(1000);
         $gift = app(VirtualGiftService::class)->sendWallet($sender->id, $input + ['idempotency_key' => 'withdrawal-concurrent-gift']);
+        $gift->update(['paid_at' => now()->subDays(2)]);
         $gift->earning->update(['release_at' => now()->subDay()]);
         app(GiftEarningsService::class)->release();
         $this->workers(6, function (int $index) use ($recipient) {

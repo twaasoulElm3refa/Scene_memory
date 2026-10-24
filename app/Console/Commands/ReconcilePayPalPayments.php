@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Payment;
 use App\Services\PayPalServices;
-use App\Services\PayPalWalletServices;
+use App\Services\PayPalPaymentVerification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -13,9 +13,9 @@ class ReconcilePayPalPayments extends Command
 {
     protected $signature = 'payments:reconcile {--limit=100} {--age=10}';
 
-    protected $description = 'Reconcile old pending PayPal purchases and wallet deposits';
+    protected $description = 'Verify unresolved PayPal payments and reconcile gift reversals';
 
-    public function handle(PayPalServices $purchases, PayPalWalletServices $deposits): int
+    public function handle(PayPalPaymentVerification $verification, PayPalServices $purchases): int
     {
         $limit = max(1, min((int) $this->option('limit'), 500));
         $age = max(1, (int) $this->option('age'));
@@ -25,7 +25,7 @@ class ReconcilePayPalPayments extends Command
         Payment::query()
             ->where('method', 'paypal')
             ->where(function ($query) {
-                $query->whereIn('status', ['pending', 'approved'])
+                $query->whereIn('status', ['pending', 'approved', 'failed'])
                     ->orWhere(function ($query) {
                         $query->where('operation', 'virtual_gift')->whereIn('status', ['completed', 'partially_refunded'])
                             ->whereExists(function ($query) {
@@ -35,16 +35,19 @@ class ReconcilePayPalPayments extends Command
                     });
             })
             ->whereNotNull('paypal_order_id')
+            ->where('verification_review_required', false)
+            ->where(fn ($query) => $query->whereNull('next_verification_at')->orWhere('next_verification_at', '<=', now()))
+            ->where(fn ($query) => $query->whereNull('verification_lease_until')->orWhere('verification_lease_until', '<=', now()))
             ->where('created_at', '<=', now()->subMinutes($age))
             ->orderBy('id')
             ->limit($limit)
             ->get()
-            ->each(function (Payment $payment) use ($purchases, $deposits, &$stats) {
+            ->each(function (Payment $payment) use ($verification, $purchases, &$stats) {
                 $stats['checked']++;
                 try {
-                    $result = $payment->operation === 'wallet_deposit'
-                        ? $deposits->reconcile($payment)
-                        : $purchases->reconcile($payment);
+                    $result = $payment->operation === 'virtual_gift' && in_array($payment->status, ['completed', 'partially_refunded'], true)
+                        ? $purchases->reconcileGift($payment)
+                        : $verification->verify($payment, 'scheduler');
                     $stats[$result === 'completed' ? 'completed' : 'pending']++;
                 } catch (Throwable $exception) {
                     $stats['failed']++;

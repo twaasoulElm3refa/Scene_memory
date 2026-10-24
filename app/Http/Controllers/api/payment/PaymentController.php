@@ -13,6 +13,7 @@ use App\Services\CheckoutCartSnapshot;
 use App\Services\MinorMoney;
 use App\Services\PayPalServices;
 use App\Services\PaymentFinalizer;
+use App\Services\PayPalPaymentVerification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,7 @@ class PaymentController extends Controller
         private readonly CheckoutCartSnapshot $orderBuilder,
         private readonly PaymentFinalizer $finalizer,
         private readonly MinorMoney $money,
+        private readonly PayPalPaymentVerification $verification,
     ) {}
 
     public function pay(CheckoutRequest $request): JsonResponse
@@ -100,12 +102,17 @@ class PaymentController extends Controller
         $order = Purchases::query()
             ->whereKey($id)
             ->where('user_id', $request->user()->id)
-            ->where('type', 'checkout')
+            ->where(fn ($query) => $query->where('type', 'checkout')->orWhere('order_type', 'plan_subscription'))
             ->first();
         if (! $order) {
             return response()->json(['message' => 'Order not found.'], 404);
         }
         $payment = Payment::query()->where('order_id', $order->id)->latest('id')->first();
+        if ($payment && $payment->method === 'paypal' && in_array($payment->status, ['pending', 'approved', 'failed'], true)) {
+            $this->verification->verify($payment, 'owner_status');
+            $payment->refresh();
+            $order->refresh();
+        }
 
         return response()->json([
             'order_id' => $order->id,
