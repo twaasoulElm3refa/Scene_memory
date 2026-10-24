@@ -2,10 +2,10 @@
     <div class="facebook-auth mt-3" :dir="['ar', 'fa', 'ur'].includes(locale) ? 'rtl' : 'ltr'">
         <button type="button" class="facebook-button" :disabled="disabled || loading" :aria-busy="loading" @click="$emit('continue')">
             <span v-if="loading" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-            <svg v-else width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="currentColor" d="M24 12a12 12 0 1 0-13.875 11.854v-8.385H7.078V12h3.047V9.356c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.491 0-1.956.925-1.956 1.874V12h3.328l-.532 3.469h-2.796v8.385A12 12 0 0 0 24 12Z" />
+            <svg class="text-white" v-else width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M24 12a12 12 0 1 0-13.875 11.854v-8.385H7.078V12h3.047V9.356c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.491 0-1.956.925-1.956 1.874V12h3.328l-.532 3.469h-2.796v8.385A12 12 0 0 0 24 12Z" />
             </svg>
-            <span>{{ t(loading ? 'facebookAuth.signingIn' : 'facebookAuth.continue') }}</span>
+            <span class="text-white">{{ t(loading ? 'facebookAuth.signingIn' : 'facebookAuth.continue') }}</span>
         </button>
     </div>
 </template>

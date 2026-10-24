@@ -52,6 +52,7 @@ const linkPassword = ref('');
 const recoveryCode = ref('');
 const maskedEmail = ref('');
 const code = ref('');
+const processing = ref(false);
 const currentLang = computed(() => String(route.params.lang || 'en').toLowerCase());
 const rtl = computed(() => ['ar', 'fa', 'ur'].includes(currentLang.value));
 
@@ -143,6 +144,8 @@ const confirmRecovery = async () => {
 };
 
 onMounted(async () => {
+    if (processing.value) return;
+    processing.value = true;
     code.value = typeof route.query.code === 'string' ? route.query.code : '';
     const callbackError = typeof route.query.error === 'string' ? route.query.error : '';
     sessionStorage.removeItem('mobile_google_oauth_pending');

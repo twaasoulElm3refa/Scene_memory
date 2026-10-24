@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import api from '../../resources/js/services/ApiClient';
 import { AuthService } from '../../resources/js/services/AuthService/AuthService';
+import { GoogleAuthService } from '../../resources/js/services/AuthService/GoogleAuthService';
 
 vi.mock('../../resources/js/services/ApiClient', () => ({ default: { get: vi.fn(), post: vi.fn() } }));
 vi.mock('../../resources/js/services/runtimeUrls', () => ({ googleAuthOrigin: () => 'https://scemory.com' }));
@@ -8,6 +9,11 @@ vi.mock('../../resources/js/services/runtimeUrls', () => ({ googleAuthOrigin: ()
 beforeEach(() => { vi.resetAllMocks(); });
 
 describe('Google authentication API transport', () => {
+    it('GoogleAuthService starts Google OAuth with language', async () => {
+        api.get.mockResolvedValue({ data: { url: 'https://accounts.google.com' } });
+        await GoogleAuthService.start('ar');
+        expect(api.get).toHaveBeenCalledWith('/users/google-login', { params: { lang: 'ar' }, suppressGlobalErrorToast: true });
+    });
     it('loads the Laravel CSRF cookie before exchanging the web delivery code in a POST body', async () => {
         api.get.mockResolvedValue({}); api.post.mockResolvedValue({ data: { token: 'body-only' } });
         await AuthService.exchangeGoogleCode('delivery-code');

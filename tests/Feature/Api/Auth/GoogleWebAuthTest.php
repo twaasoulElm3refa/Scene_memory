@@ -341,6 +341,27 @@ class GoogleWebAuthTest extends TestCase
         $this->assertDatabaseCount('users', 1);
     }
 
+    public function test_historical_google_account_with_established_token_signs_in_directly(): void
+    {
+        $user = User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'password' => Hash::make('password'),
+            'role' => 'user',
+        ]);
+        $user->createToken('google-auth-token');
+        $this->assertDatabaseCount('personal_access_tokens', 1);
+
+        $code = $this->completeCallback(['email' => 'google@example.test']);
+        $response = $this->postJson('/api/v1/users/google-exchange', ['code' => $code])
+            ->assertOk()
+            ->assertJsonPath('user.id', $user->id)
+            ->assertJsonPath('role', 'user');
+
+        $this->assertNotEmpty($response->json('token'));
+        $this->assertSame('google-sub-123', $user->fresh()->google_id);
+    }
+
     public function test_legacy_account_with_authoritative_google_subject_mapping_signs_in_directly(): void
     {
         $user = User::factory()->create([

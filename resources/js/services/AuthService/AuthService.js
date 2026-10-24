@@ -1,5 +1,5 @@
 import api from "../ApiClient";
-import { googleAuthOrigin } from "../runtimeUrls";
+import { GoogleAuthService } from "./GoogleAuthService";
 
 export const AuthService = {
   login(payload) {
@@ -27,19 +27,15 @@ export const AuthService = {
   },
 
   googleLogin(params = {}) {
-    return api.get("/users/google-login", { params, suppressGlobalErrorToast: true });
+    return GoogleAuthService.start(params?.lang);
   },
 
-  async exchangeGoogleCode(code) {
-    await api.get("/sanctum/csrf-cookie", { baseURL: "/", suppressGlobalErrorToast: true });
-    return api.post("/users/google-exchange", { code }, { suppressGlobalErrorToast: true });
+  exchangeGoogleCode(code) {
+    return GoogleAuthService.exchangeWebCode(code);
   },
 
   exchangeMobileGoogleCode(code, codeVerifier) {
-    return api.post(`${googleAuthOrigin()}/api/v1/users/google-mobile-exchange`, {
-      code,
-      code_verifier: codeVerifier,
-    }, { suppressGlobalErrorToast: true });
+    return GoogleAuthService.exchangeMobileGoogleCode(code, codeVerifier);
   },
 
   getProfile() {
@@ -47,23 +43,23 @@ export const AuthService = {
   },
 
   confirmGoogleLink(password) {
-    return api.post("/users/google-link-confirm", { password }, { suppressGlobalErrorToast: true });
+    return GoogleAuthService.confirmLink(password);
   },
 
-  async startGoogleRecovery() {
-    await api.get("/sanctum/csrf-cookie", { baseURL: "/", suppressGlobalErrorToast: true });
-    return api.post("/users/google-recovery-start", {}, { suppressGlobalErrorToast: true });
+  startGoogleRecovery() {
+    return GoogleAuthService.startRecovery();
   },
 
   confirmGoogleRecovery(code) {
-    return api.post("/users/google-recovery-confirm", { code }, { suppressGlobalErrorToast: true });
+    return GoogleAuthService.confirmRecovery(code);
   },
 
   startGoogleLink() {
-    return api.get("/users/google-link-start");
+    return GoogleAuthService.startLink();
   },
 
   unlinkGoogle() {
-    return api.post("/users/google-unlink");
+    return GoogleAuthService.unlink();
   },
 };
+

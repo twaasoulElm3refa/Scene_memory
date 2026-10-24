@@ -70,6 +70,23 @@ class GoogleAccountService
             && password_verify($password, $user->password);
     }
 
+    public function hasHistoricalGoogleLink(User $user): bool
+    {
+        if ($user->google_id !== null) {
+            return true;
+        }
+
+        if (! empty($user->google_avatar_url)) {
+            return true;
+        }
+
+        if ($user->tokens()->whereIn('name', ['google-auth-token', 'google-mobile-auth-token'])->exists()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function existingAccount(array $identity): ?User
     {
         $user = User::where('google_id', $identity['sub'])->first();
@@ -93,6 +110,14 @@ class GoogleAccountService
                 // Email alone is never sufficient evidence to take ownership of an existing account.
                 throw new GoogleAuthException('linking_required', 409);
             }
+
+            // Historical Google accounts created on or before October 4 have an established Google link
+            // (e.g. personal access tokens named google-auth-token / google-mobile-auth-token or stored avatar)
+            // and no usable password credential. Recognize, persist google_id, and sign in directly.
+            if ($this->hasHistoricalGoogleLink($candidate)) {
+                return $this->linkAccount($candidate, $identity);
+            }
+
             if ($candidate->facebook_id !== null) {
                 // An account already controlled through another provider must be linked
                 // from an authenticated profile, never through an unusable password form.
