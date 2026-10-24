@@ -492,8 +492,8 @@
                                 {{ $t('dataDeletion.profile.warningHeader') }}
                             </h4>
                             <ul class="space-y-2 text-sm text-gray-700 list-disc list-inside">
-                                <li v-for="(point, idx) in tm('dataDeletion.profile.warningPoints')" :key="idx">
-                                    {{ rt(point) }}
+                                <li v-for="(point, idx) in warningPoints" :key="idx">
+                                    {{ point }}
                                 </li>
                             </ul>
                         </div>
@@ -551,7 +551,7 @@
                         <!-- Link to Public Instructions Page -->
                         <div class="mt-6 pt-4 border-t border-red-200/60 flex items-center justify-between text-xs text-gray-500">
                             <span>Scemory Platform & Meta Compliance</span>
-                            <RouterLink :to="'/' + locale + '/data-deletion'" class="text-red-700 hover:underline font-semibold flex items-center gap-1">
+                            <RouterLink :to="'/' + (locale.value || locale || 'en') + '/data-deletion'" class="text-red-700 hover:underline font-semibold flex items-center gap-1">
                                 <span>{{ $t('footer.dataDeletion') }}</span>
                                 <i class="bi bi-box-arrow-up-right"></i>
                             </RouterLink>
@@ -679,7 +679,20 @@ export default {
     setup() {
         const router = useRouter();
         const route = useRoute();
-        const { t, locale } = useI18n();
+        const { t, tm, rt, locale } = useI18n();
+
+        const warningPoints = computed(() => {
+            try {
+                const points = tm("dataDeletion.profile.warningPoints");
+                if (Array.isArray(points)) {
+                    return points.map((p) => (typeof p === "string" ? p : (typeof rt === "function" ? rt(p) : String(p))));
+                }
+            } catch (e) {
+                console.error("Error reading warning points:", e);
+            }
+            return [];
+        });
+
         // Profile Data
         const profile = ref({
             id: "",
@@ -1342,6 +1355,9 @@ export default {
             handleCancelDeletion,
             handleResendCode,
             fetchDeletionStatus,
+            warningPoints,
+            tm,
+            rt,
         };
     },
 };

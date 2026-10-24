@@ -238,34 +238,40 @@ class AuthController extends Controller
         }
         $items = $this->authRepository->countCartItems($cart->id);
         $EventCount = Events::where('user_id', $user->id)->count();
-        $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
-            ->remember($cacheKey, 60, function () use ($user, $items, $EventCount) {
-                $user->load('licenceType');
+        $profileResolver = function () use ($user, $items, $EventCount) {
+            $user->load('licenceType');
 
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'position' => $user->position,
-                    'country' => $user->country,
-                    'date_of_birth' => $user->date_of_birth,
-                    'phone' => $user->phone,
-                    'event_count' => $EventCount,
-                    'role' => $user->role,
-                    'items' => $items,
-                    'points' => $user->total_points,
-                    'total_points' => $user->total_points,
-                    'last_login_at' => $user->last_login_at,
-                    'wallet' => $user->wallet,
-                    'licenceType' => [
-                        'id' => $user->licenceType?->id,
-                        'name' => $user->licenceType?->name,
-                        'price' => $user->licenceType?->price,
-                        'is_active' => $user->licenceType?->is_active,
-                        'created_at' => $user->licenceType?->created_at,
-                    ],
-                ];
-            });
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'position' => $user->position,
+                'country' => $user->country,
+                'date_of_birth' => $user->date_of_birth,
+                'phone' => $user->phone,
+                'event_count' => $EventCount,
+                'role' => $user->role,
+                'items' => $items,
+                'points' => $user->total_points,
+                'total_points' => $user->total_points,
+                'last_login_at' => $user->last_login_at,
+                'wallet' => $user->wallet,
+                'licenceType' => [
+                    'id' => $user->licenceType?->id,
+                    'name' => $user->licenceType?->name,
+                    'price' => $user->licenceType?->price,
+                    'is_active' => $user->licenceType?->is_active,
+                    'created_at' => $user->licenceType?->created_at,
+                ],
+            ];
+        };
+
+        try {
+            $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
+                ->remember($cacheKey, 60, $profileResolver);
+        } catch (\BadMethodCallException $e) {
+            $cachedProfile = Cache::remember($cacheKey, 60, $profileResolver);
+        }
 
         return $this->success([
             'user' => $cachedProfile,
@@ -349,7 +355,11 @@ class AuthController extends Controller
 
         $user->update($validated);
 
-        Cache::tags(['user_profile', 'user_'.$user->id])->flush();
+        try {
+            Cache::tags(['user_profile', 'user_'.$user->id])->flush();
+        } catch (\BadMethodCallException $e) {
+            Cache::forget('user_profile_'.$user->id);
+        }
 
         return $this->success($user, 'User updated Successfully');
     }
