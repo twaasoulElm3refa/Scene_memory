@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "Etkinlikleri ara..."
+  "search": {
+    "placeholder": "Etkinlikleri ara..."
+  },
+  "filters": {
+    "title": "Filtreler",
+    "allCategories": "Tüm kategoriler",
+    "country": "Ülke",
+    "category": "Kategori",
+    "subCategory": "Alt kategori",
+    "from": "Başlangıç",
+    "to": "Bitiş",
+    "city": "Şehir",
+    "allSubCategories": "Tüm alt kategoriler"
+  },
+  "upload_media": "Medya Yükle",
+  "view_all_comments": "Tüm Yorumları Görüntüle",
+  "nav": {
+    "timeline": "Takvim",
+    "favourites": "Favoriler",
+    "plans": "Planlar",
+    "specialCoverage": "Özel Haber",
+    "more": "Daha fazla",
+    "terms": "Şartlar",
+    "historical": "Tarihi",
+    "home": "Ana sayfa",
+    "downloads": "İndirilenler",
+    "about": "Hakkında",
+    "dashboard": "Panel",
+    "events": "Etkinlikler",
+    "scemoryGate": "Scemory Kapısı",
+    "allEvents": "Tüm etkinlikler",
+    "contact": "İletişim",
+    "addEvent": "Etkinlik ekle",
+    "wishlist": "Favoriler",
+    "profile": "Profil",
+    "logout": "Çıkış yap",
+    "login": "Giriş yap",
+    "cart": "Sepet",
+    "scemoryHome": "Scemory ana sayfası",
+    "toggleMenu": "Menüyü aç/kapat",
+    "mediaCredits": "Medya Kredileri"
+  },
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "DE": "Deutsch",
+    "TR": "Turkish",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "login_to_comment": "Yorum yapmak için lütfen giriş yapın",
+  "event": {
+    "reply": "Yanıtla",
+    "delete": "Sil",
+    "no_media_yet": "Henüz medya yok",
+    "reply_placeholder": "Yanıtınızı buraya yazın...",
+    "loading": "Etkinlik yükleniyor...",
+    "not_found": "Etkinlik bulunamadı veya silinmiş.",
+    "city_default": "Belirtilmemiş",
+    "visitor": "Ziyaretçi",
+    "media_gallery_title": "Etkinlik Medyası",
+    "no_media": "Medya yok",
+    "about_event_title": "Etkinlik Hakkında",
+    "comments_title": "Yorumlar",
+    "add_comment_title": "Yorumunuzu Ekleyin",
+    "comment_placeholder": "Yorumunuzu buraya yazın...",
+    "submit_comment": "Gönder",
+    "sending_comment": "Gönderiliyor...",
+    "comment_login_required": "Lütfen önce giriş yapın",
+    "comment_added_success": "Yorumunuz başarıyla eklendi!",
+    "delete_comment_title": "Yorumu Sil",
+    "event_info_title": "Etkinlik Bilgileri",
+    "from_date": "Başlangıç",
+    "to_date": "Bitiş",
+    "time_label": "Saat",
+    "time_default": "Belirtilmemiş",
+    "location": "Konum",
+    "organizer": "Etkinlik Düzenleyicisi",
+    "add_to_wishlist": "Favorilere Ekle",
+    "already_in_wishlist": "Favorilerde Var",
+    "adding_to_wishlist": "Ekleniyor...",
+    "wishlist_success": "Favorilere başarıyla eklendi!",
+    "collection_benefit_4": "Same secure checkout",
+    "collection_benefit_3": "Easy access in your downloads",
+    "collection_benefit_2": "Automatic 10% discount applied",
+    "collection_benefit_1": "Buy all images at once",
+    "add_collection_to_cart": "🎁 Add Full Collection to Cart",
+    "you_save": "You Save",
+    "save_discount": "10% OFF",
+    "total_images": "Total Images",
+    "buy_collection_title": "Buy Full Collection",
+    "upload_media_to_event": "Etkinliğe medya yükle",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "Görsel ekle ({count}/{max})",
+    "comment_image_limit": "En fazla 2 görsel, her biri 5 MB",
+    "selected_comment_image_alt": "Seçilen görsel {number}",
+    "remove_selected_comment_image": "Seçilen görsel {number} öğesini kaldır"
+  },
+  "common": {
+    "search": "Ara",
+    "placeholder": "Etkinlik ara...",
+    "searching": "Aranıyor...",
+    "details": "Detaylar",
+    "notSpecified": "Belirtilmedi",
+    "loadingEvents": "Etkinlikler yükleniyor...",
+    "loading": "Yükleniyor...",
+    "close": "Kapat",
+    "tryAgain": "Tekrar dene",
+    "back": "Geri",
+    "remove": "Kaldır",
+    "clear": "Temizle",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "noResults": "Sonuç yok",
+    "unknownError": "Bilinmeyen hata",
+    "learnMore": "Daha fazla bilgi",
+    "cancel": "İptal",
+    "sending": "Gönderiliyor...",
+    "show": "Göster",
+    "hide": "Gizle"
+  },
+  "events": {
+    "add_historical_event": "Tarihi Kişi Ekle",
+    "brand_footer": "Dünyanın her yerindeki en sevdiğiniz etkinlikler",
+    "cities": "Şehir",
+    "categories": "Kategori",
+    "all_memories": "Tüm Etkinlik Anıları",
+    "showing_snapshots": "Dünyanın her yerinden {total} tarihi anı gösteriliyor",
+    "sort_by": "Sırala",
+    "sort": {
+      "newest": "En Yeni Önce",
+      "oldest": "En Eski Önce",
+      "title": "Başlık"
     },
-    "filters": {
-        "title": "Filtreler",
-        "allCategories": "Tüm kategoriler",
-        "country": "Ülke",
-        "category": "Kategori",
-        "subCategory": "Alt kategori",
-        "from": "Başlangıç",
-        "to": "Bitiş",
-        "city": "Şehir",
-        "allSubCategories": "Tüm alt kategoriler"
+    "loading": "Etkinlikler yükleniyor...",
+    "retry": "Tekrar Dene",
+    "page_info": "Sayfa {current} / {last}",
+    "active_memories": "Aktif Etkinlikler",
+    "latestEvents": "En Yeni Etkinlikler",
+    "recentMemories": "Son Etkinlikler",
+    "discoverAroundYou": "Çevrenizde neler olduğunu keşfedin ve en güzel anlara hazırlanın",
+    "noEventsFound": "Etkinlik bulunamadı",
+    "noMatchingEvents": "Arama ölçütlerinize veya konumunuza uyan etkinlik yok",
+    "event": "Etkinlik",
+    "startDate": "Başlangıç tarihi",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "Medya Yükle",
-    "view_all_comments": "Tüm Yorumları Görüntüle",
-    "nav": {
-        "timeline": "Takvim",
-        "favourites": "Favoriler",
-        "plans": "Planlar",
-        "specialCoverage": "Özel Haber",
-        "more": "Daha fazla",
-        "terms": "Şartlar",
-        "historical": "Tarihi",
-        "home": "Ana sayfa",
-        "downloads": "İndirilenler",
-        "about": "Hakkında",
-        "dashboard": "Panel",
-        "events": "Etkinlikler",
-        "scemoryGate": "Scemory Kapısı",
-        "allEvents": "Tüm etkinlikler",
-        "contact": "İletişim",
-        "addEvent": "Etkinlik ekle",
-        "wishlist": "Favoriler",
-        "profile": "Profil",
-        "logout": "Çıkış yap",
-        "login": "Giriş yap",
-        "cart": "Sepet",
-        "scemoryHome": "Scemory ana sayfası",
-        "toggleMenu": "Menüyü aç/kapat",
-        "mediaCredits": "Medya Kredileri"
+    "emptyAvailable": "No events are currently available.",
+    "no_title": "Başlıksız etkinlik",
+    "directory": {
+      "eyebrow": "Scemory’yi keşfedin",
+      "eventsTitle": "Etkinlikler",
+      "eventsDescription": "Dünyanın dört bir yanındaki güncel ve yaklaşan etkinlikleri keşfedin.",
+      "historicalTitle": "Tarihi Etkinlikler",
+      "historicalDescription": "Geçmişten belgelenmiş etkinlikleri ve korunmuş anıları keşfedin.",
+      "events": "etkinlik",
+      "historicalEvents": "tarihi etkinlik",
+      "collection": "Etkinlik koleksiyonu",
+      "filters": "Filtreler",
+      "refine": "Sonuçları daralt",
+      "closeFilters": "Filtreleri kapat",
+      "searchLabel": "Ara",
+      "searchPlaceholder": "Etkinlik ara...",
+      "eventType": "Etkinlik türü",
+      "types": {
+        "all": "Tüm etkinlikler",
+        "real": "Gerçek etkinlikler",
+        "general": "Genel etkinlikler"
+      },
+      "country": "Ülke",
+      "allCountries": "Tüm ülkeler",
+      "category": "Kategori",
+      "allCategories": "Tüm kategoriler",
+      "city": "Şehir",
+      "allCities": "Tüm şehirler",
+      "subcategory": "Alt kategori",
+      "allSubcategories": "Tüm alt kategoriler",
+      "fromDate": "Başlangıç tarihi",
+      "toDate": "Bitiş tarihi",
+      "clearFilters": "Filtreleri temizle",
+      "createEvent": "Etkinlik oluştur",
+      "createHistorical": "Tarihi etkinlik ekle",
+      "results": "{count} etkinlik",
+      "showing": "{total} sonuçtan {from}–{to} arası gösteriliyor",
+      "errorTitle": "Etkinlikler yüklenemedi",
+      "errorDescription": "Etkinlikler yüklenirken bir hata oluştu. Lütfen tekrar deneyin.",
+      "emptyTitle": "Etkinlik bulunamadı",
+      "historicalEmptyTitle": "Tarihi etkinlik bulunamadı",
+      "emptyDescription": "Filtrelerinizi değiştirmeyi veya temizlemeyi deneyin.",
+      "eventBadge": "Etkinlik",
+      "historicalBadge": "Tarihi",
+      "unknownLocation": "Bilinmeyen konum",
+      "uncategorized": "Kategorisiz",
+      "viewEvent": "Etkinliği görüntüle",
+      "pagination": "Etkinlik sayfaları",
+      "previous": "Önceki",
+      "next": "Sonraki"
     },
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "DE": "Deutsch",
-        "TR": "Turkish",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
+    "from_map": "Haritadan",
+    "undefined_city": "Belirtilmemiş"
+  },
+  "pagination": {
+    "previous": "Önceki",
+    "next": "Sonraki"
+  },
+  "about": {
+    "title": "Hakkımızda - Scene Memory",
+    "subtitle": "En değerli anlarınızı sahne sahne koruyoruz",
+    "text1": "Scene Memory'de, hayatın en güzel anlarının netlik ve duyguyla saklanmayı hak ettiğine inanıyoruz. Biz sadece bir depolama platformu değiliz – hayat yolculuğunuzun dijital anı albümüyüz.",
+    "features": {
+      "immersiveAlbums": "Fotoğraflar, videolar ve sesli notlar içeren sürükleyici anı albümleri oluşturun",
+      "aiOrganize": "Yapay zeka destekli organizasyon – anılarınızı otomatik olarak sınıflandırır ve etiketler",
+      "privacy": "Tam gizlilik ve güvenlik – anılarınız şifrelenir ve sadece siz erişebilirsiniz"
     },
-    "login_to_comment": "Yorum yapmak için lütfen giriş yapın",
-    "event": {
-        "reply": "Yanıtla",
-        "delete": "Sil",
-        "no_media_yet": "Henüz medya yok",
-        "reply_placeholder": "Yanıtınızı buraya yazın...",
-        "loading": "Etkinlik yükleniyor...",
-        "not_found": "Etkinlik bulunamadı veya silinmiş.",
-        "city_default": "Belirtilmemiş",
-        "visitor": "Ziyaretçi",
-        "media_gallery_title": "Etkinlik Medyası",
-        "no_media": "Medya yok",
-        "about_event_title": "Etkinlik Hakkında",
-        "comments_title": "Yorumlar",
-        "add_comment_title": "Yorumunuzu Ekleyin",
-        "comment_placeholder": "Yorumunuzu buraya yazın...",
-        "submit_comment": "Gönder",
-        "sending_comment": "Gönderiliyor...",
-        "comment_login_required": "Lütfen önce giriş yapın",
-        "comment_added_success": "Yorumunuz başarıyla eklendi!",
-        "delete_comment_title": "Yorumu Sil",
-        "event_info_title": "Etkinlik Bilgileri",
-        "from_date": "Başlangıç",
-        "to_date": "Bitiş",
-        "time_label": "Saat",
-        "time_default": "Belirtilmemiş",
-        "location": "Konum",
-        "organizer": "Etkinlik Düzenleyicisi",
-        "add_to_wishlist": "Favorilere Ekle",
-        "already_in_wishlist": "Favorilerde Var",
-        "adding_to_wishlist": "Ekleniyor...",
-        "wishlist_success": "Favorilere başarıyla eklendi!",
-        "collection_benefit_4": "Same secure checkout",
-        "collection_benefit_3": "Easy access in your downloads",
-        "collection_benefit_2": "Automatic 10% discount applied",
-        "collection_benefit_1": "Buy all images at once",
-        "add_collection_to_cart": "🎁 Add Full Collection to Cart",
-        "you_save": "You Save",
-        "save_discount": "10% OFF",
-        "total_images": "Total Images",
-        "buy_collection_title": "Buy Full Collection",
-        "upload_media_to_event": "Etkinliğe medya yükle",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "Görsel ekle ({count}/{max})",
-        "comment_image_limit": "En fazla 2 görsel, her biri 5 MB",
-        "selected_comment_image_alt": "Seçilen görsel {number}",
-        "remove_selected_comment_image": "Seçilen görsel {number} öğesini kaldır"
-    },
-    "common": {
-        "search": "Ara",
-        "placeholder": "Etkinlik ara...",
-        "searching": "Aranıyor...",
-        "details": "Detaylar",
-        "notSpecified": "Belirtilmedi",
-        "loadingEvents": "Etkinlikler yükleniyor...",
-        "loading": "Yükleniyor...",
-        "close": "Kapat",
-        "tryAgain": "Tekrar dene",
-        "back": "Geri",
-        "remove": "Kaldır",
-        "clear": "Temizle",
-        "previous": "Önceki",
-        "next": "Sonraki",
-        "noResults": "Sonuç yok",
-        "unknownError": "Bilinmeyen hata",
-        "learnMore": "Daha fazla bilgi",
-        "cancel": "İptal",
-        "sending": "Gönderiliyor...",
-        "show": "Göster",
-        "hide": "Gizle"
-    },
-    "events": {
-        "add_historical_event": "Tarihi Kişi Ekle",
-        "brand_footer": "Dünyanın her yerindeki en sevdiğiniz etkinlikler",
-        "cities": "Şehir",
-        "categories": "Kategori",
-        "all_memories": "Tüm Etkinlik Anıları",
-        "showing_snapshots": "Dünyanın her yerinden {total} tarihi anı gösteriliyor",
-        "sort_by": "Sırala",
-        "sort": {
-            "newest": "En Yeni Önce",
-            "oldest": "En Eski Önce",
-            "title": "Başlık"
-        },
-        "loading": "Etkinlikler yükleniyor...",
-        "retry": "Tekrar Dene",
-        "page_info": "Sayfa {current} / {last}",
-        "active_memories": "Aktif Etkinlikler",
-        "latestEvents": "En Yeni Etkinlikler",
-        "recentMemories": "Son Etkinlikler",
-        "discoverAroundYou": "Çevrenizde neler olduğunu keşfedin ve en güzel anlara hazırlanın",
-        "noEventsFound": "Etkinlik bulunamadı",
-        "noMatchingEvents": "Arama ölçütlerinize veya konumunuza uyan etkinlik yok",
-        "event": "Etkinlik",
-        "startDate": "Başlangıç tarihi",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "no_title": "Başlıksız etkinlik",
-        "directory": {
-            "eyebrow": "Scemory’yi keşfedin",
-            "eventsTitle": "Etkinlikler",
-            "eventsDescription": "Dünyanın dört bir yanındaki güncel ve yaklaşan etkinlikleri keşfedin.",
-            "historicalTitle": "Tarihi Etkinlikler",
-            "historicalDescription": "Geçmişten belgelenmiş etkinlikleri ve korunmuş anıları keşfedin.",
-            "events": "etkinlik",
-            "historicalEvents": "tarihi etkinlik",
-            "collection": "Etkinlik koleksiyonu",
-            "filters": "Filtreler",
-            "refine": "Sonuçları daralt",
-            "closeFilters": "Filtreleri kapat",
-            "searchLabel": "Ara",
-            "searchPlaceholder": "Etkinlik ara...",
-            "eventType": "Etkinlik türü",
-            "types": {
-                "all": "Tüm etkinlikler",
-                "real": "Gerçek etkinlikler",
-                "general": "Genel etkinlikler"
-            },
-            "country": "Ülke",
-            "allCountries": "Tüm ülkeler",
-            "category": "Kategori",
-            "allCategories": "Tüm kategoriler",
-            "city": "Şehir",
-            "allCities": "Tüm şehirler",
-            "subcategory": "Alt kategori",
-            "allSubcategories": "Tüm alt kategoriler",
-            "fromDate": "Başlangıç tarihi",
-            "toDate": "Bitiş tarihi",
-            "clearFilters": "Filtreleri temizle",
-            "createEvent": "Etkinlik oluştur",
-            "createHistorical": "Tarihi etkinlik ekle",
-            "results": "{count} etkinlik",
-            "showing": "{total} sonuçtan {from}–{to} arası gösteriliyor",
-            "errorTitle": "Etkinlikler yüklenemedi",
-            "errorDescription": "Etkinlikler yüklenirken bir hata oluştu. Lütfen tekrar deneyin.",
-            "emptyTitle": "Etkinlik bulunamadı",
-            "historicalEmptyTitle": "Tarihi etkinlik bulunamadı",
-            "emptyDescription": "Filtrelerinizi değiştirmeyi veya temizlemeyi deneyin.",
-            "eventBadge": "Etkinlik",
-            "historicalBadge": "Tarihi",
-            "unknownLocation": "Bilinmeyen konum",
-            "uncategorized": "Kategorisiz",
-            "viewEvent": "Etkinliği görüntüle",
-            "pagination": "Etkinlik sayfaları",
-            "previous": "Önceki",
-            "next": "Sonraki"
-        },
-        "from_map": "Haritadan",
-        "undefined_city": "Belirtilmemiş"
-    },
-    "pagination": {
-        "previous": "Önceki",
-        "next": "Sonraki"
-    },
-    "about": {
-        "title": "Hakkımızda - Scene Memory",
-        "subtitle": "En değerli anlarınızı sahne sahne koruyoruz",
-        "text1": "Scene Memory'de, hayatın en güzel anlarının netlik ve duyguyla saklanmayı hak ettiğine inanıyoruz. Biz sadece bir depolama platformu değiliz – hayat yolculuğunuzun dijital anı albümüyüz.",
-        "features": {
-            "immersiveAlbums": "Fotoğraflar, videolar ve sesli notlar içeren sürükleyici anı albümleri oluşturun",
-            "aiOrganize": "Yapay zeka destekli organizasyon – anılarınızı otomatik olarak sınıflandırır ve etiketler",
-            "privacy": "Tam gizlilik ve güvenlik – anılarınız şifrelenir ve sadece siz erişebilirsiniz"
-        },
-        "startJourney": "Anı yolculuğunuza şimdi başlayın",
-        "highlightMoments": "Hayatınızın öne çıkan anları",
-        "organizedBy": "Sahnelere, kişilere ve mekanlara göre düzenlenmiş",
-        "stats": {
-            "memories": "Kayıtlı Anı",
-            "users": "Mutlu Kullanıcı",
-            "backup": "Güvenli Yedekleme"
-        }
-    },
-    "newsletter": {
-        "title": "Anılarınızla bağlantıda kalın",
-        "description": "Haftalık anı ipuçları, özellik güncellemeleri ve ilham verici hikayeleri e-postanıza alın",
-        "firstName": "Ad",
-        "firstNamePlaceholder": "Adınız",
-        "email": "E-posta",
-        "emailPlaceholder": "you@example.com",
-        "consent": "Anı ipuçları, güncellemeler ve zaman zaman promosyon teklifleri almak istiyorum. İstediğim zaman aboneliği iptal edebilirim.",
-        "subscribe": "Anı Güncellemelerine Abone Ol",
-        "community": "Topluluğumuzdaki 5.000'den fazla anı koruyucusuna katılın",
-        "kicker": "Bülten",
-        "verifiedTitle": "Doğrulanmış etkinlik hikayelerinden haberdar olun",
-        "verifiedDescription": "Trend etkinlikler, yeni medya arşivleri ve dünya çapındaki katkıcılar tarafından belgelenen önemli hikayeler hakkında seçilmiş güncellemeler alın.",
-        "subscribeShort": "Abone ol",
-        "pendingApiMessage": "Abone olduğunuz için teşekkürler. Bülten API’si yakında bağlanacak.",
-        "errors": {
-            "emailRequired": "Lütfen e-posta adresinizi girin.",
-            "emailInvalid": "Lütfen geçerli bir e-posta adresi girin."
-        }
-    },
-    "map": {
-        "exploreMap": "Haritayı Keşfet"
-    },
-    "hero": {
-        "title_main": "Anılarınızı Koruyoruz",
-        "title_highlight": "Sonsuza Kadar Canlı Kalsın",
-        "description": "Scene Memory'de her anın korunmayı hak ettiğine inanıyoruz. Hayatınızdaki önemli olayları kaydetmenize, düzenlemenize ve hatırlamanıza yardımcı olmak için buradayız.",
-        "cta_start": "Bizimle Yolculuğunuza Başlayın",
-        "cta_watch": "Tanıtım Videosunu İzle",
-        "feature_organized": "Düzenlenmiş Anılar",
-        "feature_organized_desc": "Her an doğru yerinde",
-        "feature_private": "Garantili Gizlilik",
-        "feature_private_desc": "Anılarınız tam güvende",
-        "feature_reminders": "Akıllı Hatırlatmalar",
-        "feature_reminders_desc": "Hiçbir önemli günü kaçırmayın",
-        "feature_evolving": "Sürekli Gelişim",
-        "feature_evolving_desc": "Deneyiminizi sürekli iyileştiriyoruz"
-    },
-    "our_story": {
-        "badge": "Hikayemiz",
-        "title": "Nasıl Başladık",
-        "intro": "Hikayemiz basit bir fikirle başladı: İnsanlara hayatlarını şekillendiren değerli anıları korumada nasıl yardımcı olabiliriz?",
-        "stage1_title": "Başlangıç",
-        "stage1_desc": "2020 yılında kurucularımız, birçok önemli anın zamanla kaybolduğunu fark etti. Bu anıları korumak için basit ama güçlü bir araç yapmaya karar verdiler.",
-        "stage2_title": "Büyüme",
-        "stage2_desc": "Kullanıcı sayısı arttıkça, akıllı hatırlatmalar, gelişmiş sınıflandırma ve sevdiklerinizle güvenli paylaşım gibi yeni özellikler ekledik.",
-        "stage3_title": "Vizyon",
-        "stage3_desc": "Bugün, gizlilik ve sorunsuz deneyim odaklı olarak dünyanın en iyi anı koruma ve düzenleme platformu olmayı hedefliyoruz."
-    },
-    "mission_vision": {
-        "mission_badge": "Misyonumuz",
-        "mission_title": "Neye İnanıyoruz",
-        "mission_text": "Misyonumuz, her insanın değerli anılarını kolay, güvenli ve düzenli bir şekilde korumasına olanak sağlamaktır. Hayatımızdaki her anın korunmayı ve hatırlanmayı hak ettiğine inanıyoruz.",
-        "value_people_first": "İnsan Önce",
-        "value_people_first_desc": "Kullanıcı deneyimi aldığımız her kararın merkezindedir",
-        "value_privacy": "Gizlilik Kutsaldır",
-        "value_privacy_desc": "Anılarınız sadece size aittir ve kimseyle paylaşmayız",
-        "value_growth": "Sürekli Büyüme",
-        "value_growth_desc": "Kullanıcılarımızın ihtiyaçlarını karşılamak için sürekli gelişiyoruz",
-        "vision_badge": "Vizyonumuz",
-        "vision_title": "Nereye Gidiyoruz",
-        "vision_text": "Dünyanın lider anı koruma ve düzenleme platformu olmayı hedefliyoruz. Herkesin her yerde önemli anlarını kolay ve güvenli bir şekilde saklayabilmesi için.",
-        "goals_2025": "2025 Hedeflerimiz",
-        "goal_users": "Bir milyon kullanıcıya ulaşmak",
-        "goal_languages": "10 yeni dil eklemek",
-        "goal_ai": "Yapay zeka özelliklerini başlatmak"
-    },
-    "team": {
-        "badge": "Ekibimiz",
-        "title": "Scene Memory'nin Arkasındaki Beyinler",
-        "description": "Geliştiriciler, tasarımcılar ve kullanıcı deneyimi uzmanlarından oluşan çeşitli ekibimiz, unutulmaz bir anı koruma deneyimi yaratmak için birlikte çalışıyor."
-    },
-    "values": {
-        "badge": "Değerlerimiz",
-        "title": "Bizi Farklı Kılanlar"
-    },
+    "startJourney": "Anı yolculuğunuza şimdi başlayın",
+    "highlightMoments": "Hayatınızın öne çıkan anları",
+    "organizedBy": "Sahnelere, kişilere ve mekanlara göre düzenlenmiş",
     "stats": {
-        "title": "Rakamlar Konuşuyor",
-        "description": "Başlangıcımızdan beri binlerce kişiye milyonlarca değerli anıyı korumada yardımcı olduk"
+      "memories": "Kayıtlı Anı",
+      "users": "Mutlu Kullanıcı",
+      "backup": "Güvenli Yedekleme"
+    }
+  },
+  "newsletter": {
+    "title": "Anılarınızla bağlantıda kalın",
+    "description": "Haftalık anı ipuçları, özellik güncellemeleri ve ilham verici hikayeleri e-postanıza alın",
+    "firstName": "Ad",
+    "firstNamePlaceholder": "Adınız",
+    "email": "E-posta",
+    "emailPlaceholder": "you@example.com",
+    "consent": "Anı ipuçları, güncellemeler ve zaman zaman promosyon teklifleri almak istiyorum. İstediğim zaman aboneliği iptal edebilirim.",
+    "subscribe": "Anı Güncellemelerine Abone Ol",
+    "community": "Topluluğumuzdaki 5.000'den fazla anı koruyucusuna katılın",
+    "kicker": "Bülten",
+    "verifiedTitle": "Doğrulanmış etkinlik hikayelerinden haberdar olun",
+    "verifiedDescription": "Trend etkinlikler, yeni medya arşivleri ve dünya çapındaki katkıcılar tarafından belgelenen önemli hikayeler hakkında seçilmiş güncellemeler alın.",
+    "subscribeShort": "Abone ol",
+    "pendingApiMessage": "Abone olduğunuz için teşekkürler. Bülten API’si yakında bağlanacak.",
+    "errors": {
+      "emailRequired": "Lütfen e-posta adresinizi girin.",
+      "emailInvalid": "Lütfen geçerli bir e-posta adresi girin."
+    }
+  },
+  "map": {
+    "exploreMap": "Haritayı Keşfet"
+  },
+  "hero": {
+    "title_main": "Anılarınızı Koruyoruz",
+    "title_highlight": "Sonsuza Kadar Canlı Kalsın",
+    "description": "Scene Memory'de her anın korunmayı hak ettiğine inanıyoruz. Hayatınızdaki önemli olayları kaydetmenize, düzenlemenize ve hatırlamanıza yardımcı olmak için buradayız.",
+    "cta_start": "Bizimle Yolculuğunuza Başlayın",
+    "cta_watch": "Tanıtım Videosunu İzle",
+    "feature_organized": "Düzenlenmiş Anılar",
+    "feature_organized_desc": "Her an doğru yerinde",
+    "feature_private": "Garantili Gizlilik",
+    "feature_private_desc": "Anılarınız tam güvende",
+    "feature_reminders": "Akıllı Hatırlatmalar",
+    "feature_reminders_desc": "Hiçbir önemli günü kaçırmayın",
+    "feature_evolving": "Sürekli Gelişim",
+    "feature_evolving_desc": "Deneyiminizi sürekli iyileştiriyoruz"
+  },
+  "our_story": {
+    "badge": "Hikayemiz",
+    "title": "Nasıl Başladık",
+    "intro": "Hikayemiz basit bir fikirle başladı: İnsanlara hayatlarını şekillendiren değerli anıları korumada nasıl yardımcı olabiliriz?",
+    "stage1_title": "Başlangıç",
+    "stage1_desc": "2020 yılında kurucularımız, birçok önemli anın zamanla kaybolduğunu fark etti. Bu anıları korumak için basit ama güçlü bir araç yapmaya karar verdiler.",
+    "stage2_title": "Büyüme",
+    "stage2_desc": "Kullanıcı sayısı arttıkça, akıllı hatırlatmalar, gelişmiş sınıflandırma ve sevdiklerinizle güvenli paylaşım gibi yeni özellikler ekledik.",
+    "stage3_title": "Vizyon",
+    "stage3_desc": "Bugün, gizlilik ve sorunsuz deneyim odaklı olarak dünyanın en iyi anı koruma ve düzenleme platformu olmayı hedefliyoruz."
+  },
+  "mission_vision": {
+    "mission_badge": "Misyonumuz",
+    "mission_title": "Neye İnanıyoruz",
+    "mission_text": "Misyonumuz, her insanın değerli anılarını kolay, güvenli ve düzenli bir şekilde korumasına olanak sağlamaktır. Hayatımızdaki her anın korunmayı ve hatırlanmayı hak ettiğine inanıyoruz.",
+    "value_people_first": "İnsan Önce",
+    "value_people_first_desc": "Kullanıcı deneyimi aldığımız her kararın merkezindedir",
+    "value_privacy": "Gizlilik Kutsaldır",
+    "value_privacy_desc": "Anılarınız sadece size aittir ve kimseyle paylaşmayız",
+    "value_growth": "Sürekli Büyüme",
+    "value_growth_desc": "Kullanıcılarımızın ihtiyaçlarını karşılamak için sürekli gelişiyoruz",
+    "vision_badge": "Vizyonumuz",
+    "vision_title": "Nereye Gidiyoruz",
+    "vision_text": "Dünyanın lider anı koruma ve düzenleme platformu olmayı hedefliyoruz. Herkesin her yerde önemli anlarını kolay ve güvenli bir şekilde saklayabilmesi için.",
+    "goals_2025": "2025 Hedeflerimiz",
+    "goal_users": "Bir milyon kullanıcıya ulaşmak",
+    "goal_languages": "10 yeni dil eklemek",
+    "goal_ai": "Yapay zeka özelliklerini başlatmak"
+  },
+  "team": {
+    "badge": "Ekibimiz",
+    "title": "Scene Memory'nin Arkasındaki Beyinler",
+    "description": "Geliştiriciler, tasarımcılar ve kullanıcı deneyimi uzmanlarından oluşan çeşitli ekibimiz, unutulmaz bir anı koruma deneyimi yaratmak için birlikte çalışıyor."
+  },
+  "values": {
+    "badge": "Değerlerimiz",
+    "title": "Bizi Farklı Kılanlar"
+  },
+  "stats": {
+    "title": "Rakamlar Konuşuyor",
+    "description": "Başlangıcımızdan beri binlerce kişiye milyonlarca değerli anıyı korumada yardımcı olduk"
+  },
+  "cta": {
+    "title": "Scene Memory Ailesine Katılın",
+    "description": "Anılarınızı kaydetme yolculuğunuza bugün başlayın. Ücretsiz, güvenli ve size özel tasarlandı.",
+    "btn_signup": "Ücretsiz Hesap Oluştur",
+    "btn_features": "Özellikleri Keşfet",
+    "trust": "Anılarını korumak için bize güvenen 50.000'den fazla kişiye katıl"
+  },
+  "footer": {
+    "slogan": "Anılarınızı sonsuza kadar canlı tutmak için",
+    "terms": "Şartlar ve Koşullar",
+    "privacy": "Gizlilik Politikası",
+    "contact": "Bize Ulaşın",
+    "copyright": "© 2024 Scene Memory. Tüm hakları saklıdır.",
+    "made_with": "Anılarınızı korumak için yapıldı",
+    "quickLinks": "Hızlı Bağlantılar",
+    "supportContact": "Destek ve İletişim",
+    "logoAlt": "Logo",
+    "googlePlayAlt": "Google Play'den indirin",
+    "appStoreAlt": "App Store'dan indirin",
+    "copyright2025": "© 2025 Scene Memory. Tüm hakları saklıdır.",
+    "services": "Hizmetler",
+    "copyrightLink": "Telif Hakkı",
+    "termsOfService": "Hizmet Şartları",
+    "privacyPolicy": "Gizlilik Politikası",
+    "dataProtection": "Veri Koruma",
+    "dataDeletion": "Veri Silme Talimatları"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "Buradayız",
+      "title_highlight": "Yardım Etmek İçin",
+      "description": "Scene Memory ekibi tüm sorularınızı yanıtlamak ve her zaman size yardımcı olmak için burada",
+      "stat_24_7": "7/24 Destek",
+      "stat_response_time": "Ortalama Yanıt Süresi",
+      "stat_satisfaction": "Müşteri Memnuniyeti",
+      "stat_happy_users": "Mutlu Kullanıcı"
     },
-    "cta": {
-        "title": "Scene Memory Ailesine Katılın",
-        "description": "Anılarınızı kaydetme yolculuğunuza bugün başlayın. Ücretsiz, güvenli ve size özel tasarlandı.",
-        "btn_signup": "Ücretsiz Hesap Oluştur",
-        "btn_features": "Özellikleri Keşfet",
-        "trust": "Anılarını korumak için bize güvenen 50.000'den fazla kişiye katıl"
+    "tabs": {
+      "form": "Mesaj Gönder",
+      "info": "İletişim Bilgileri"
     },
-    "footer": {
-        "slogan": "Anılarınızı sonsuza kadar canlı tutmak için",
-        "terms": "Şartlar ve Koşullar",
-        "privacy": "Gizlilik Politikası",
-        "contact": "Bize Ulaşın",
-        "copyright": "© 2024 Scene Memory. Tüm hakları saklıdır.",
-        "made_with": "Anılarınızı korumak için yapıldı",
-        "quickLinks": "Hızlı Bağlantılar",
-        "supportContact": "Destek ve İletişim",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Google Play'den indirin",
-        "appStoreAlt": "App Store'dan indirin",
-        "copyright2025": "© 2025 Scene Memory. Tüm hakları saklıdır.",
-        "services": "Hizmetler",
-        "copyrightLink": "Telif Hakkı",
-        "termsOfService": "Hizmet Şartları",
-        "privacyPolicy": "Gizlilik Politikası",
-        "dataProtection": "Veri Koruma",
-        "dataDeletion": "Veri Silme Talimatları"
+    "form": {
+      "fullName": "Tam Ad",
+      "fullNamePlaceholder": "Adınız buraya",
+      "emailAddress": "E-posta Adresi",
+      "messagePlaceholder": "Mesajınızı buraya yazın...",
+      "emailPlaceholder": "E-posta buraya",
+      "title": "Bize Mesaj Gönderin",
+      "subtitle": "En kısa sürede size döneceğiz. Yardım etmek için buradayız!",
+      "full_name": "Tam Ad",
+      "email": "E-posta",
+      "subject": "Konu",
+      "message": "Mesaj",
+      "message_placeholder": "Mesajınızı buraya yazın...",
+      "newsletter": "Scene Memory bülteni ve tekliflerini almak istiyorum",
+      "submit": "Mesajı Gönder",
+      "submitting": "Gönderiliyor...",
+      "success_title": "Başarıyla Gönderildi!",
+      "success_message": "Bizimle iletişime geçtiğiniz için teşekkürler, en kısa sürede size döneceğiz."
     },
-    "contact": {
-        "hero": {
-            "title_main": "Buradayız",
-            "title_highlight": "Yardım Etmek İçin",
-            "description": "Scene Memory ekibi tüm sorularınızı yanıtlamak ve her zaman size yardımcı olmak için burada",
-            "stat_24_7": "7/24 Destek",
-            "stat_response_time": "Ortalama Yanıt Süresi",
-            "stat_satisfaction": "Müşteri Memnuniyeti",
-            "stat_happy_users": "Mutlu Kullanıcı"
-        },
-        "tabs": {
-            "form": "Mesaj Gönder",
-            "info": "İletişim Bilgileri"
-        },
-        "form": {
-            "fullName": "Tam Ad",
-            "fullNamePlaceholder": "Adınız buraya",
-            "emailAddress": "E-posta Adresi",
-            "messagePlaceholder": "Mesajınızı buraya yazın...",
-            "emailPlaceholder": "E-posta buraya",
-            "title": "Bize Mesaj Gönderin",
-            "subtitle": "En kısa sürede size döneceğiz. Yardım etmek için buradayız!",
-            "full_name": "Tam Ad",
-            "email": "E-posta",
-            "subject": "Konu",
-            "message": "Mesaj",
-            "message_placeholder": "Mesajınızı buraya yazın...",
-            "newsletter": "Scene Memory bülteni ve tekliflerini almak istiyorum",
-            "submit": "Mesajı Gönder",
-            "submitting": "Gönderiliyor...",
-            "success_title": "Başarıyla Gönderildi!",
-            "success_message": "Bizimle iletişime geçtiğiniz için teşekkürler, en kısa sürede size döneceğiz."
-        },
-        "info": {
-            "title": "İletişim Bilgileri",
-            "address_title": "Merkez Ofis",
-            "address": "Nil Caddesi, Kahire, Mısır",
-            "view_map": "Haritada Göster",
-            "phone_title": "Telefon",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "09:00 - 21:00 arası hizmet veriyoruz",
-            "email_title": "E-posta",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "24 saat içinde yanıt",
-            "follow_us": "Bizi Takip Edin",
-            "map_title": "Haritadaki Konumumuz",
-            "map_location": "Kahire, Mısır",
-            "open_map": "Haritayı Aç"
-        },
-        "faq": {
-            "title": "Sık Sorulan Sorular",
-            "subtitle": "En çok sorulan soruların cevapları"
-        },
-        "live_support": {
-            "title": "Canlı Destek",
-            "description": "Anında yardım için ekibimizden biriyle hemen konuşun",
-            "btn_chat": "Canlı Sohbete Başla",
-            "btn_schedule": "Görüşme Planla",
-            "available": "Şu anda 3 destek görevlisi müsait"
-        }
-    },
-    "contacts": {
-        "badge": "Bize ulaşın",
-        "title": "Konuşalım",
-        "description": "Bir sorunuz mu var, desteğe mi ihtiyacınız var ya da özel bir plan mı istiyorsunuz? Bize mesaj gönderin, ekibimiz size geri dönecektir.",
-        "form": {
-            "title": "Bize mesaj gönderin",
-            "description": "Aşağıdaki formu doldurun, size en kısa sürede yanıt verelim.",
-            "fullName": "Ad soyad",
-            "fullNamePlaceholder": "Adınızı ve soyadınızı girin",
-            "emailAddress": "E-posta adresi",
-            "emailPlaceholder": "E-posta adresinizi girin",
-            "subject": "Konu",
-            "generalInquiry": "Genel soru",
-            "customPlan": "Özel plan",
-            "support": "Teknik destek",
-            "feedback": "Geri bildirim",
-            "other": "Diğer",
-            "message": "Mesaj",
-            "messagePlaceholder": "Size nasıl yardımcı olabileceğimizi anlatın...",
-            "minimumCharacters": "Lütfen yeterli ayrıntı paylaşın.",
-            "sendMessage": "Mesaj gönder",
-            "sending": "Gönderiliyor...",
-            "successMessage": "Mesajınız başarıyla gönderildi.",
-            "errorMessage": "Mesajınız gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
-        },
-        "info": {
-            "getInTouch": "İletişime geçin",
-            "title": "Yardım etmek için buradayız",
-            "description": "Genel sorular, teknik destek veya özel fiyatlandırma için ekibimize ulaşın.",
-            "emailUs": "Bize e-posta gönderin",
-            "available": "Ekibimiz en kısa sürede yanıt verecektir.",
-            "customPlans": "Özel planlar",
-            "customPlansDescription": "Ekibiniz veya işletmeniz için size özel bir çözüme mi ihtiyacınız var? Bize neye ihtiyacınız olduğunu anlatın.",
-            "customerSupport": "Müşteri desteği",
-            "supportDescription": "Hesabınız, aboneliğiniz veya hizmetler hakkında yardıma ihtiyacınız varsa bizimle iletişime geçin.",
-            "followJourney": "Yolculuğumuzu takip edin",
-            "responseTime": "Hızlı yanıt",
-            "responseTimeDescription": "Mesajlara genellikle bir iş günü içinde yanıt veririz."
-        },
-        "map": {
-            "title": "Scene Memory Dünya Haritası",
-            "description": "140'tan fazla ülkede binlerce anıyı hayal edin."
-        }
+    "info": {
+      "title": "İletişim Bilgileri",
+      "address_title": "Merkez Ofis",
+      "address": "Nil Caddesi, Kahire, Mısır",
+      "view_map": "Haritada Göster",
+      "phone_title": "Telefon",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "09:00 - 21:00 arası hizmet veriyoruz",
+      "email_title": "E-posta",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "24 saat içinde yanıt",
+      "follow_us": "Bizi Takip Edin",
+      "map_title": "Haritadaki Konumumuz",
+      "map_location": "Kahire, Mısır",
+      "open_map": "Haritayı Aç"
     },
     "faq": {
-        "badge": "SSS",
-        "title": "Sıkça sorulan sorular",
-        "description": "En sık sorulan sorulardan bazılarına hızlı yanıtlar.",
-        "questions": {
-            "0": {
-                "question": "Ne kadar sürede yanıt alırım?",
-                "answer": "Ekibimiz genellikle bir iş günü içinde yanıt verir."
-            },
-            "1": {
-                "question": "Özel plan talep edebilir miyim?",
-                "answer": "Evet. Konu alanında Özel planı seçin ve gereksinimlerinizi açıklayın."
-            },
-            "2": {
-                "question": "Teknik destek için sizinle iletişime geçebilir miyim?",
-                "answer": "Evet. Teknik desteği seçin ve sorunla ilgili tüm ayrıntıları ekleyin."
-            }
-        }
+      "title": "Sık Sorulan Sorular",
+      "subtitle": "En çok sorulan soruların cevapları"
     },
-    "eventForm": {
-        "admin": {
-            "title": "Yönetici Olarak Etkinlik Ekle",
-            "trending": "Trend Etkinlik",
-            "trendingHelp": "Bu etkinliği trend olarak işaretle",
-            "generateTags": "Yapay Zekâ Etiketleri Oluştur",
-            "generatingTags": "Etiketler oluşturuluyor...",
-            "generateTagsHelp": "Mevcut yapay zekâ hizmetiyle etkinlik ve fotoğraf etiketleri önerin. Yayınlamadan önce inceleyebilir veya kaldırabilirsiniz.",
-            "generateTagsError": "Yapay zekâ etiketleri şu anda oluşturulamıyor.",
-            "created": "Etkinlik başarıyla oluşturuldu ve yayınlandı."
-        },
-        "chooseFiles": "Fotoğraflar / Videolar Seç",
-        "mediaCount": "Medya Sayısı",
-        "title": "Yeni Etkinlik Ekle",
-        "basicInfo": "Temel Bilgiler",
-        "locationCategory": "Konum ve Kategori",
-        "dates": "Tarihler",
-        "images": "Etkinlik Fotoğrafları",
-        "eventTitle": "Etkinlik Başlığı",
-        "description": "Açıklama",
-        "country": "Ülke",
-        "searchCountry": "Ülke ara...",
-        "selectCountry": "Ülke Seç",
-        "city": "Şehir",
-        "selectCity": "Şehir Seç",
-        "selectCityFirst": "Önce ülkeyi seçin",
-        "mainCategory": "Ana Kategori",
-        "subCategory": "Alt Kategori",
-        "selectSubFirst": "Önce kategoriyi seçin",
-        "selectLocationMap": "Haritada Konum Seç",
-        "selectedCoords": "Seçilen Koordinatlar: Lat: {lat} , Lng: {lng}",
-        "lat": "Enlem",
-        "lng": "Boylam",
-        "pleaseSelectLocation": "Lütfen haritada bir konum seçin",
-        "startDate": "Başlangıç Tarihi",
-        "endDate": "Bitiş Tarihi",
-        "startTime": "Başlangıç Saati",
-        "dragDropHere": "Fotoğrafları buraya tıklayın veya sürükleyin",
-        "formatsMax": "PNG • JPG • WEBP | her fotoğraf için max 5MB",
-        "chooseImages": "Fotoğraf Seç",
-        "addMore": "Daha Fazla Ekle",
-        "imagesCount": "{count} / 8 fotoğraf",
-        "remove": "Kaldır",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
-            "mediaRequired": "Lütfen en az bir görsel veya video yükleyin."
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        },
-        "minimumRequirementsHint": "Bir etkinlik oluşturmak için yalnızca başlık, açıklama ve en az bir görsel veya video gerekir. Diğer tüm alanlar isteğe bağlıdır."
-    },
-    "commons": {
-        "required": "Zorunlu",
-        "cancel": "İptal",
-        "saveDraft": "Taslak Olarak Kaydet",
-        "create": "Etkinliği Oluştur",
-        "creating": "Oluşturuluyor...",
-        "choose": "Seç"
-    },
-    "eventss": {
-        "no_title": "Başlıksız Etkinlik",
-        "undefined_city": "Belirtilmemiş",
-        "from_map": "Haritadan"
-    },
-    "wishlist": {
-        "title": "Favori Listesi",
-        "loading": "Yükleniyor...",
-        "empty": {
-            "main": "Favori listenizde şu anda hiçbir öğe yok",
-            "hint": "Favori etkinliklerinizi eklemeye başlayın!"
-        },
-        "fallback_image_alt": "Etkinlik için varsayılan resim",
-        "uncategorized": "Kategorisiz",
-        "no_title": "Başlıksız",
-        "city_label": "Şehir:",
-        "date_label": "Tarih:",
-        "time_label": "Saat:",
-        "not_specified": "Belirtilmemiş",
-        "view_details": "Detayları Görüntüle",
-        "remove": "Favorilerden Kaldır",
-        "deleting": "Siliniyor...",
-        "added_at": "Eklendiği tarih",
-        "pagination": {
-            "previous": "Önceki",
-            "next": "Sonraki",
-            "page_info": "Sayfa {current} / {total}"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "Kullanım Şartları",
-        "last_updated": "Son Güncelleme: 2026",
-        "acceptance_title": "Şartların Kabulü",
-        "acceptance_text": "Bu platformu kullanarak kullanım şartlarını ve geçerli tüm yasa ve yönetmelikleri kabul etmiş sayılırsınız.",
-        "accounts_title": "Kullanıcı Hesapları",
-        "accounts_text": "Kullanıcı, hesabının gizliliğinden ve hesabı üzerinden gerçekleştirilen tüm faaliyetlerden sorumludur.",
-        "content_title": "İçerik Mülkiyeti",
-        "content_text": "Platformdaki tüm içerikler (metinler, resimler, veriler dahil) fikri mülkiyet yasalarıyla korunmaktadır.",
-        "ai_title": "Yapay Zeka Kısıtlamaları",
-        "ai_text": "Platform içeriğinin yapay zeka modellerini eğitmek, makine öğrenimi sistemleri veya veri çıkarma için resmi lisans olmadan kullanılması yasaktır.",
-        "prohibited_title": "Yasaklanmış Kullanımlar",
-        "prohibited_text": "Kullanıcı, platformu kötüye kullanamaz, yetkisiz erişim denemesi yapamaz, veri çıkaramaz veya platformun çalışmasını engelleyemez.",
-        "liability_title": "Sorumluluk Sınırlaması",
-        "liability_text": "Platform, hizmetin kullanımından kaynaklanan herhangi bir dolaylı, tesadüfi veya sonuçsal zarardan sorumlu değildir.",
-        "changes_title": "Şartlarda Değişiklik",
-        "changes_text": "Kullanım şartlarını herhangi bir zamanda değiştirme veya güncelleme hakkını saklı tutarız.",
-        "contact_title": "İletişim",
-        "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
-    },
-    "plans": {
-        "customPrice": "Bize ulaşın",
-        "customPricingDescription": "İhtiyaçlarınıza özel fiyatlandırma",
-        "contactUs": "Bize ulaşın",
-        "chooseYourPlan": "Planınızı seçin",
-        "getStarted": "Başla",
-        "subscribe": "Şimdi abone ol",
-        "free": "Ücretsiz",
-        "ourPlans": "Planlarımız",
-        "noFeatures": "Henüz özellik yok",
-        "mostPopular": "En popüler",
-        "noCreditCard": "Kredi kartı gerekmez",
-        "description": "Ücretsiz başlayın veya size en uygun planı seçin.",
-        "price": "Fiyat",
-        "features": "Özellikler",
-        "cancelAnytime": "İstediğiniz zaman iptal edin",
-        "Monthly": "Aylık",
-        "Yearly": "Yıllık",
-        "unlimitedEvents": "Sınırsız etkinlik",
-        "addEvents": "Etkinlik ekleme",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Plan",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "Planlar yüklenemedi. Lütfen tekrar deneyin."
-        },
-        "customPlanNote": "Gereksinimlerinize göre tasarlandı",
-        "basicAccessIncluded": "Temel erişim dahildir",
-        "moneyBack": "30 gün garanti",
-        "perMonth": "aylık",
-        "securePayments": "Güvenli ödemeler",
-        "support247": "7/24 destek",
-        "usd": "USD",
-        "prioritySupport": "Öncelikli destek"
-    },
-    "free": "Ücretsiz",
-    "basic": "Temel",
-    "professional": "Profesyonel",
-    "premium": "Premium",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "Tarayıcınız video etiketini desteklemiyor.",
-            "badge": "Scemory Etkinlik Arşivi",
-            "title": "Belgelenmiş etkinlikleri keşfedin",
-            "titleHighlight": "harita üzerinden",
-            "description": "Dünyanın dört bir yanındaki gazeteciler, medya ekipleri ve görgü tanığı katkıcılar tarafından yüklenen etkinlik medyalarını keşfedin.",
-            "searchEvents": "Etkinlik Ara",
-            "uploadStory": "Hikayeni Yükle",
-            "bottomText": "Dünyanın dört bir yanından hikayeleri, yerleri ve anları keşfedin.",
-            "searchPlaceholder": "  "
-        },
-        "profileToast": {
-            "title": "Profil tamamlanmadı",
-            "message": "Profiliniz tamamlanmadı. Lütfen güncelleyin:",
-            "complete": "Tamamlamak için tıklayın",
-            "fields": {
-                "phone": "Telefon",
-                "country": "Ülke",
-                "position": "Pozisyon",
-                "dateOfBirth": "Doğum tarihi"
-            }
-        },
-        "trending": {
-            "loadError": "Trend etkinlikler şu anda yüklenemiyor.",
-            "kicker": "Trend",
-            "title": "Trend Etkinlikler",
-            "description": "Arşivde ilgi gören etkinlikler.",
-            "emptyTitle": "Henüz trend etkinlik yok",
-            "emptyDescription": "Öne çıkan etkinlikler için yakında tekrar kontrol edin.",
-            "views": "görüntüleme",
-            "likes": "beğeni",
-            "slidesLabel": "Trend etkinlik slaytları",
-            "untitledEvent": "Başlıksız etkinlik",
-            "showSlide": "Trend etkinliği göster {number}"
-        },
-        "map": {
-            "tilesSlow": "Harita döşemeleri çok uzun sürede işleniyor.",
-            "loadError": "Harita şu anda yüklenemiyor.",
-            "loadMap": "Haritayı yükle",
-            "loading": "Harita yükleniyor...",
-            "retry": "Haritayı yeniden yükle",
-            "openFullscreen": "Haritayı tam ekran aç",
-            "closeFullscreen": "Tam ekran haritayı kapat"
-        },
-        "about": {
-            "imageAlt": "Scemory belgeleme platformu",
-            "kicker": "Güvenilir Etkinlik Hafızası",
-            "title": "Scemory Hakkında",
-            "description": "Scemory, olaylar yaşanırken bunları belgelemek için güvenilir bir yere ihtiyaç duyan gazeteciler, medya ekipleri ve görgü tanığı katkıcılar için tasarlanmıştır. Platform, yüklenen medyayı, etkinlik meta verilerini ve konum bağlamını birleştirerek insanların kamuya açık hikayeleri net biçimde keşfetmesini sağlar.",
-            "features": {
-                "upload": "Fotoğraf, video ve saha verisi yükleyin",
-                "explore": "Etkinlikleri etkileşimli haritada keşfedin",
-                "preserve": "Doğrulanmış hikayeleri dijital arşivde koruyun"
-            }
-        },
-        "events": {
-            "showing": "Gösteriliyor",
-            "of": "/",
-            "events": "etkinlik",
-            "seeMore": "Daha fazla göster",
-            "badge": "ETKİNLİKLER"
-        },
-        "tags": {
-            "loading": "Etiketler yükleniyor...",
-            "showingFirst": "İlk",
-            "searchToFindMore": "etiket gösteriliyor. Daha fazlası için arayın.",
-            "none": "Etiket bulunamadı",
-            "helper": "Harita etkinliklerini filtrelemek için bir veya daha fazla etiket seçin.",
-            "clearSelected": "Seçili etiketleri temizle",
-            "searchMore": "Daha fazla etiket ara"
-        },
-        "search": {
-            "clearText": "Temizle",
-            "clearTags": "Temizle"
-        },
-        "specialCoverage": {
-            "badge": "Özel Haber",
-            "title": "Haber yapılmaya değer bir etkinliğiniz mi var?",
-            "description": "Özel olarak ele alınmayı hak eden bir etkinliği Scemory’ye bildirin ve hikâyesinin daha geniş bir kitleye ulaşmasına yardımcı olun.",
-            "contactUs": "Bize Ulaşın",
-            "modal": {
-                "title": "Özel Haber",
-                "eventName": "Etkinlik Adı",
-                "eventNamePlaceholder": "Etkinlik adını girin",
-                "description": "Etkinlik Açıklaması",
-                "descriptionPlaceholder": "Bize etkinliği ve neden haberleştirilmesi gerektiğini anlatın",
-                "cancel": "İptal",
-                "send": "Gönder",
-                "close": "Kapat",
-                "country": "Ülke",
-                "city": "Şehir",
-                "searchCity": "Şehir ara",
-                "addNewCity": "Yeni şehir ekle",
-                "createCity": "Şehir oluştur",
-                "startDate": "Başlangıç tarihi",
-                "coverageTime": "Haber saati",
-                "eventType": "Etkinlik türü",
-                "personalEvent": "Kişisel etkinlik",
-                "publicEvent": "Halka açık etkinlik",
-                "selectCountry": "Ülke seçin",
-                "selectCity": "Şehir seçin",
-                "noCitiesFound": "Şehir bulunamadı",
-                "noCountriesFound": "Ülke bulunamadı",
-                "countryRequired": "Lütfen bir ülke seçin.",
-                "cityRequired": "Lütfen bir şehir seçin.",
-                "startDateRequired": "Lütfen bir başlangıç tarihi seçin.",
-                "eventTypeRequired": "Lütfen bir etkinlik türü seçin.",
-                "cityCreateFailed": "Şehir oluşturulamadı. Lütfen tekrar deneyin.",
-                "sending": "Gönderiliyor...",
-                "eventNameRequired": "Lütfen etkinlik adını girin.",
-                "descriptionRequired": "Lütfen etkinlik açıklamasını girin.",
-                "success": "Özel haber talebiniz başarıyla gönderildi."
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "kalite uyarısı"
-        },
-        "videoReady": "Video yüklemeye hazır.",
-        "qualityWarning": "Kalite kontrolleri bilgilendirme amaçlıdır ve etkinlik oluşturmayı engellemez."
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "Satın aldığınız dosyalar burada görünecek"
-    },
-    "experience": {
-        "kicker": "SCEMORY DENEYİMİ",
-        "title": "Tek platform. Hikayenin her yönü.",
-        "pathsLabel": "Scemory deneyim yolları",
-        "highlightsLabel": "Bölüm öne çıkanları",
-        "tabs": {
-            "explore": {
-                "label": "Etkinlikleri keşfet",
-                "eyebrow": "ETKİNLİKLERLE DÜNYAYI KEŞFEDİN",
-                "heading": "Dünyanın dört bir yanındaki hikayeleri, etkinlikleri ve yerleri keşfedin",
-                "description": "Haritadan belgelenmiş kamusal etkinliklere, kişisel anılara ve gerçek konumlar ile katkıcı bağlamıyla şekillenen görsel hikayelere geçin.",
-                "cta": "Etkinlikleri keşfet",
-                "imageAlt": "Belgelenmiş medya panelleriyle Scemory etkinlik keşif arayüzü",
-                "features": {
-                    "browse": "Etkinlik medyasını yer ve zaman çizelgesine göre gezin",
-                    "discover": "Görsel arşiv üzerinden yakındaki hikayeleri keşfedin",
-                    "move": "Genel görünümden belgelenmiş etkinlik detayına geçin"
-                },
-                "visual": {
-                    "kicker": "Canlı keşif",
-                    "title": "Haritaya bağlı etkinlik hikayeleri",
-                    "stat": "Küresel arşiv",
-                    "note": "Yerler, tarihler ve medya tek görünümde"
-                }
-            },
-            "share": {
-                "label": "Hikayeni paylaş",
-                "eyebrow": "ANLARI BELGELENMİŞ HİKAYELERE DÖNÜŞTÜRÜN",
-                "heading": "Önemli anları belgeleyin",
-                "description": "Bir etkinlik oluşturun, fotoğraf ve medya yükleyin, konum ayrıntıları ekleyin ve Scemory arşivine kendi bakış açınızı katın.",
-                "cta": "Hikayeni yükle",
-                "imageAlt": "Etkinlik medyasını belgelemek için Scemory katkıcı alanı",
-                "features": {
-                    "add": "Medya, açıklama ve konum bağlamı ekleyin",
-                    "build": "Ham anlardan yapılandırılmış bir hafıza oluşturun",
-                    "keep": "Katkıcı hikayelerini arşive bağlı tutun"
-                },
-                "visual": {
-                    "kicker": "Katkıcı akışı",
-                    "title": "Medya, bağlam ve konum",
-                    "stat": "Hikaye oluşturucu",
-                    "note": "Anları anlamlı ayrıntılarla yükleyin"
-                }
-            },
-            "license": {
-                "label": "Medyayı lisansla",
-                "eyebrow": "KULLANIMA HAZIR MEDYAYI KEŞFEDİN",
-                "heading": "Etkinlik medyasını güvenle bulun ve lisanslayın",
-                "description": "Görsel içeriği gezin, mevcut etkinlik medyasını önizleyin ve Scemory keşif deneyimi üzerinden lisans seçeneklerine ilerleyin.",
-                "cta": "Medyayı keşfet",
-                "imageAlt": "Lisanslanabilir etkinlik içeriğini gezmek için Scemory medya panelleri",
-                "features": {
-                    "preview": "Detayları açmadan önce etkinlik görsellerini önizleyin",
-                    "use": "Medya seçeneklerine geçiş için etkinlik sayfalarını kullanın",
-                    "keep": "Keşif ve lisanslama niyetini bağlı tutun"
-                },
-                "visual": {
-                    "kicker": "Medya erişimi",
-                    "title": "İncelemeye hazır etkinlik görselleri",
-                    "stat": "Lisans yolu",
-                    "note": "Keşiften detay sayfalarına"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "Tekrar dene",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "Medya",
-        "locationShort": "Konum",
-        "dateShort": "Tarih",
-        "searchCountry": "Bir ülke arayın...",
-        "featuredEvents": "Öne çıkan etkinlikler"
-    },
-    "country": {
-        "discoverFeaturedIn": "Öne çıkan etkinlikleri keşfedin:",
-        "cities": "Şehirler",
-        "availableCity": "Mevcut şehir",
-        "currentEvent": "Güncel etkinlik",
-        "eventMarkers": "Etkinlik işaretleri",
-        "clickableMarker": "Tıklanabilir işaret",
-        "differentCategory": "Farklı kategori",
-        "availableCities": "Mevcut şehirler",
-        "noEvents": "Şu anda mevcut etkinlik yok",
-        "checkBack": "Yakında tekrar kontrol edin",
-        "noImage": "Görsel yok",
-        "viewEvent": "Etkinliği gör",
-        "noCategory": "Kategori yok",
-        "countryFallback": "Ülke",
-        "cityFallback": "Şehir",
-        "eventFallback": "Etkinlik",
-        "clickMarkerToOpen": "Açmak için işarete tıklayın",
-        "errors": {
-            "unauthorized": "Yetkisiz. Lütfen giriş yapın.",
-            "notFound": "Ülke bulunamadı.",
-            "loadFailed": "Veriler yüklenirken bir hata oluştu.",
-            "mapLibraryFailed": "Harita kitaplığı yüklenemedi.",
-            "bordersFailed": "Ülke sınırları yüklenemedi",
-            "invalidBorders": "Ülke sınırları dosyası geçersiz.",
-            "countryBordersNotFound": "Ülke sınırları bulunamadı",
-            "countryBoundsFailed": "Ülke alanı hesaplanamadı.",
-            "mapLoadFailed": "Harita yüklenirken bir hata oluştu."
-        }
-    },
-    "cancel": "İptal et",
-    "login": "Giriş yap",
-    "sending": "Gönderiliyor...",
-    "send_reply": "Yanıtı gönder",
-    "report": {
-        "action": "Şikayet et",
-        "commentTitle": "Bu yorumu şikayet et",
-        "modalTitle": "Yorumu şikayet et",
-        "reasonPrompt": "Bu yorumu şikayet etme nedeninizi seçin:",
-        "submit": "Şikayeti gönder",
-        "submitting": "Gönderiliyor...",
-        "successTitle": "Şikayet gönderildi",
-        "successMessage": "Teşekkürler. Bu yorumu yakında inceleyeceğiz.",
-        "errors": {
-            "selectReason": "Lütfen bir şikayet nedeni seçin.",
-            "submitFailed": "Şikayet gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
-        },
-        "reasons": {
-            "spam": "Spam",
-            "offensive": "Saldırgan içerik",
-            "inappropriate": "Uygunsuz",
-            "illegal": "Yasadışı içerik",
-            "untrue": "Yanlış içerik",
-            "falseInformation": "Yanıltıcı bilgi",
-            "other": "Diğer neden"
-        }
-    },
-    "commentsPage": {
-        "title": "Yorumlar",
-        "emptyLabel": "Yorumlar",
-        "emptyMessage": "Henüz yorum yok. İlk yorumu yapan siz olun.",
-        "attachmentAlt": "Yorum eki",
-        "pageInfo": "Sayfa {current} / {total}",
-        "confirmDelete": "Bu yorumu silmek istediğinizden emin misiniz?",
-        "errors": {
-            "loadFailed": "Yorumlar yüklenirken bir hata oluştu."
-        },
-        "reactions": {
-            "support": "Katılıyorum",
-            "neutral": "Nötr",
-            "oppose": "Katılmıyorum"
-        },
-        "you": "Sen"
-    },
-    "profilePage": {
-        "title": "Profilim",
-        "subtitle": "Hesap bilgilerinizi yönetin ve şifrenizi güncelleyin",
-        "noPlan": "Plan yok",
-        "lastLogin": "Son giriş",
-        "accountInfo": "Hesap bilgileri",
-        "systemInfo": "Sistem bilgileri",
-        "currentPlan": "Mevcut plan",
-        "planType": "Plan türü",
-        "editAccount": "Hesap detaylarını düzenle",
-        "saving": "Kaydediliyor...",
-        "saveChanges": "Değişiklikleri kaydet",
-        "tabs": {
-            "userInfo": "Kullanıcı bilgileri",
-            "editData": "Verileri düzenle",
-            "password": "Şifreyi güncelle",
-            "wallet": "Cüzdan",
-            "privacy": "Hesap ve Gizlilik"
-        },
-        "fields": {
-            "name": "İsim",
-            "fullName": "Tam isim",
-            "email": "E-posta",
-            "phone": "Telefon",
-            "phoneNumber": "Telefon numarası",
-            "country": "Ülke",
-            "position": "Pozisyon",
-            "positionJob": "Pozisyon / İş",
-            "birthDate": "Doğum tarihi",
-            "role": "Rol",
-            "status": "Durum",
-            "points": "Puanlar",
-            "rank": "Sıralama",
-            "price": "Fiyat"
-        },
-        "placeholders": {
-            "fullName": "Tam adınızı girin",
-            "countrySearch": "Bir ülke arayın",
-            "position": "Yazılım mühendisi"
-        },
-        "status": {
-            "active": "Aktif"
-        },
-        "password": {
-            "title": "Şifreyi güncelle",
-            "current": "Mevcut şifre",
-            "new": "Yeni şifre",
-            "confirm": "Şifreyi onayla",
-            "updating": "Güncelleniyor...",
-            "update": "Şifreyi güncelle"
-        },
-        "messages": {
-            "fillAllFields": "Lütfen tüm alanları doldurun.",
-            "passwordMismatch": "Şifreler uyuşmuyor.",
-            "passwordUpdated": "Şifre başarıyla güncellendi.",
-            "passwordUpdateFailed": "Şifre güncellenirken bir hata oluştu.",
-            "chooseCountry": "Lütfen listeden bir ülke seçin.",
-            "noChanges": "Herhangi bir değişiklik yapmadınız.",
-            "profileUpdated": "Profiliniz başarıyla güncellendi.",
-            "profileUpdateFailed": "Profiliniz güncellenirken bir hata oluştu."
-        },
-        "wallet": {
-            "title": "Cüzdan",
-            "availableBalance": "Mevcut bakiye",
-            "deposit": "Para ekle",
-            "recentTransactions": "Son işlemler",
-            "depositType": "Para yatırma",
-            "withdrawType": "Para çekme",
-            "noTransactions": "Henüz işlem yok",
-            "withdrawComingSoon": "Para çekme özelliği yakında kullanıma sunulacak."
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "Dosya başına maksimum: 100 MB",
-        "dragFiles": "Dosyaları buraya sürükleyin veya",
-        "clickToChoose": "seçmek için tıklayın",
-        "supportedFiles": "Görseller ve videolar (dosya başına maksimum 100 MB)",
-        "selectedFiles": "Seçilen dosyalar ({count})",
-        "uploading": "Yükleniyor...",
-        "uploadFiles": "Dosya yükle",
-        "success": "Dosyalar başarıyla yüklendi!",
-        "errors": {
-            "fileTooLarge": "\"{name}\" dosyası 100 MB'tan büyük.",
-            "unsupportedType": "\"{name}\" dosya türü desteklenmiyor."
-        }
-    },
-    "discovery": {
-        "title": "Arama sonuçları",
-        "description": "Scemory genelindeki etkinlikleri, görselleri ve videoları keşfedin.",
-        "showing": "Gösteriliyor",
-        "of": "/",
-        "results": "sonuç",
-        "details": "Ayrıntıları görüntüle",
-        "noResultsTitle": "Sonuç bulunamadı",
-        "noResultsDescription": "Aramanızı veya filtrelerinizi değiştirmeyi deneyin.",
-        "filters": {
-            "allCities": "Tüm şehirler",
-            "allCountries": "Tüm ülkeler"
-        },
-        "tabs": {
-            "all": "Tümü",
-            "event": "Etkinlikler",
-            "image": "Görseller",
-            "video": "Videolar"
-        },
-        "resultLabels": {
-            "event": "Etkinlik",
-            "image": "Görsel",
-            "video": "Video"
-        },
-        "media": {
-            "price": "Fiyat",
-            "addToCart": "Sepete ekle",
-            "added": "Eklendi",
-            "adding": "Ekleniyor...",
-            "playVideo": "Videoyu oynat",
-            "pauseVideo": "Videoyu duraklat"
-        }
-    },
-    "timeline": {
-        "title": "Etkinlik zaman çizelgeniz",
-        "subtitle": "Etkinliklerinizi, tepkilerinizi, yorumlarınızı ve kaydettiklerinizi tek yerde inceleyin.",
-        "totalActivity": "Toplam etkinlik",
-        "latestActivity": "Son etkinlik",
-        "noLatestActivity": "Henüz etkinlik yok",
-        "loading": "Etkinlikler yükleniyor...",
-        "loadError": "Etkinlikleriniz yüklenemedi.",
-        "retry": "Tekrar dene",
-        "viewAll": "Tümünü görüntüle",
-        "empty": "Bu bölümde etkinlik yok.",
-        "previous": "Önceki",
-        "next": "Sonraki",
-        "pageOf": "Sayfa {current} / {last}",
-        "unknownEvent": "Bilinmeyen etkinlik",
-        "parentComment": "Şuna yanıt: {comment}",
-        "reactionTo": "Şuna tepki: {comment}",
-        "onEvent": "{event} etkinliğinde",
-        "tabs": {
-            "all": "Tüm etkinlikler",
-            "events": "Etkinlikler",
-            "likes": "Beğeniler",
-            "comments": "Yorumlar",
-            "replies": "Yanıtlar",
-            "comment_images": "Yorum görselleri",
-            "comment_interactions": "Yorum tepkileri",
-            "wishlists": "Favoriler"
-        },
-        "filters": {
-            "label": "Dönem",
-            "all": "Tüm zamanlar",
-            "today": "Bugün",
-            "this_week": "Bu hafta",
-            "this_month": "Bu ay",
-            "custom": "Özel aralık",
-            "from": "Başlangıç",
-            "to": "Bitiş",
-            "apply": "Uygula",
-            "invalidRange": "Geçerli bir tarih aralığı seçin."
-        },
-        "reactions": {
-            "support": "Destek",
-            "neutral": "Tarafsız",
-            "exhibitions": "Karşı"
-        },
-        "status": {
-            "pending": "Beklemede",
-            "approved": "Onaylandı",
-            "rejected": "Reddedildi",
-            "active": "Aktif",
-            "inactive": "Pasif"
-        }
-    },
-    "security": {
-        "denied": "Bu kaynağa erişim yetkiniz yok.",
-        "notFound": "İstenen kaynak bulunamadı.",
-        "disabled": "Bu hesap devre dışı. Destekle iletişime geçin.",
-        "invalidMedia": "Medya dosyası geçersiz, desteklenmiyor veya güvenli işleme sınırlarını aşıyor.",
-        "unavailable": "Bu medya şu anda kullanılamıyor.",
-        "currencyMismatch": "Cüzdan para birimi işlemle eşleşmiyor.",
-        "insufficientBalance": "Kullanılabilir bakiye yetersiz.",
-        "invalidWithdrawal": "Para çekme bu durumda değiştirilemez. Destekle iletişime geçin.",
-        "paymentRequired": "Bu plan doğrulanmış ödeme gerektirir. Destekle iletişime geçin.",
-        "invalidCode": "Doğrulama kodu geçersiz veya süresi dolmuş.",
-        "requestFailed": "İstek tamamlanamadı. Tekrar deneyin.",
-        "rateLimit": "Çok fazla istek. Daha sonra tekrar deneyin."
-    },
-    "googleAuth": {
-        "continue": "Google ile devam et",
-        "signup": "Google ile kaydol",
-        "or": "VEYA",
-        "signingIn": "Giriş yapılıyor…",
-        "cancelled": "Kimlik doğrulama iptal edildi.",
-        "expired_state": "Bu giriş denemesinin süresi doldu. Yeniden başlayın.",
-        "invalid_state": "Bu istek geçersiz veya daha önce kullanılmış. Yeniden başlayın.",
-        "oauth_failed": "Google kimlik doğrulamayı tamamlayamadı. Tekrar deneyin.",
-        "callback_failed": "Kimlik doğrulama başarısız. Tekrar deneyin.",
-        "identity_invalid": "Google kimliğinizi ve e-postanızı doğrulayamadı. Başka bir giriş yöntemi kullanın.",
-        "disabled": "Bu hesap kullanılamıyor. Destek ekibiyle iletişime geçin.",
-        "linking_required": "Mevcut hesabınızın giriş yöntemini kullanın. Google bağlantısı için önce o hesaba giriş yapmak gerekir; bağlantı özelliği henüz kullanılamıyor. Gerekirse destek ekibiyle iletişime geçin.",
-        "unavailable": "Google kimlik doğrulaması şu anda kullanılamıyor. E-posta ve parola kullanın veya daha sonra deneyin.",
-        "busy": "Giriş zaten tamamlanıyor. Tekrar deneyin.",
-        "alreadyLinked": "Bu Google hesabı zaten bağlı.",
-        "completeProfile": "Hesabınızı tamamlayın",
-        "profileRequired": "Hesabınızı oluşturmayı bitirmek için gerekli bilgileri girin.",
-        "country": "Ülke",
-        "dateOfBirth": "Doğum tarihi",
-        "finishSignup": "Hesap oluştur",
-        "profileInvalid": "Bir ülke ve gelecekte olmayan geçerli bir doğum tarihi girin.",
-        "retry": "Tekrar dene",
-        "backToLogin": "Girişe dön",
-        "linkAccountTitle": "Google hesabınızı bağlayın",
-        "linkAccountDesc": "Bu e-posta adresine sahip bir hesap zaten var. Google hesabınızı güvenle bağlamak için şifrenizi girin.",
-        "accountPassword": "Hesap şifresi",
-        "confirmLink": "Onayla ve hesabı bağla",
-        "invalidCredentials": "Geçersiz şifre. Lütfen bilgilerinizi kontrol edip tekrar deneyin.",
-        "linkSuccess": "Google hesabı başarıyla bağlandı.",
-        "unlinkSuccess": "Google hesabı başarıyla kaldırıldı.",
-        "identity_conflict": "Bu e-posta farklı bir Google kimliğine bağlı. Mevcut hesap yöntemini kullanın veya destekle iletişime geçin.",
-        "account_login_required": "Mevcut hesap yönteminizle giriş yapın, ardından profilinizden Google’ı bağlayın.",
-        "recovery_required": "Google’ı yeniden bağlamak için bir defalık hesap kurtarma gereklidir.",
-        "recovery_web_required": "Bir defalık kurtarmayı Scemory web sitesinde tamamlayın. Sonraki Google girişleri otomatik olacaktır.",
-        "invalid_recovery_code": "Kurtarma kodu yanlış. Kodu kontrol edip tekrar deneyin.",
-        "recovery_expired": "Bu kurtarma isteğinin süresi doldu. Google girişini yeniden başlatın.",
-        "recovery_attempts_exceeded": "Çok fazla yanlış deneme. Google girişini yeniden başlatın.",
-        "recovery_rate_limited": "Yakın zamanda bir kod gönderildi. Tekrar denemeden önce bekleyin.",
-        "recovery_unavailable": "Kurtarma kodu gönderilemedi. Daha sonra tekrar deneyin.",
-        "recoveryTitle": "Google hesabınızı yeniden bağlayın",
-        "recoverySent": "{email} adresine gönderilen tek kullanımlık kodu girin. Bu yalnızca bir kez gereklidir.",
-        "recoveryCode": "Kurtarma kodu",
-        "confirmRecovery": "Doğrula ve devam et"
-    },
-    "facebookAuth": {
-        "continue": "Facebook ile devam et",
-        "signup": "Facebook ile kaydol",
-        "signingIn": "Giriş yapılıyor…",
-        "unavailable": "Facebook kimlik doğrulaması şu anda kullanılamıyor. E-posta ve parola kullanın veya daha sonra deneyin.",
-        "cancelled": "Kimlik doğrulama iptal edildi.",
-        "invalid_state": "Bu istek geçersiz veya daha önce kullanılmış. Yeniden başlayın.",
-        "expired": "Bu giriş denemesinin süresi doldu. Yeniden başlayın.",
-        "callback_failed": "Kimlik doğrulama başarısız. Tekrar deneyin.",
-        "disabled": "Bu hesap kullanılamıyor. Destek ekibiyle iletişime geçin.",
-        "linking_required": "Mevcut hesabınızın giriş yöntemini kullanın. Facebook bağlantısı için önce o hesaba giriş yapmak gerekir; bağlantı özelliği henüz kullanılamıyor. Gerekirse destek ekibiyle iletişime geçin.",
-        "busy": "Giriş zaten tamamlanıyor. Tekrar deneyin.",
-        "completeProfile": "Hesabınızı tamamlayın",
-        "profileRequired": "Hesabınızı oluşturmayı bitirmek için gerekli bilgileri girin.",
-        "country": "Ülke",
-        "dateOfBirth": "Doğum tarihi",
-        "finishSignup": "Hesap oluştur",
-        "retry": "Tekrar dene",
-        "backToLogin": "Girişe dön",
-        "identity_invalid": "Facebook kimliğinizi doğrulayamadı. Tekrar deneyin.",
-        "verification_required": "Mevcut hesabınızın e-postasını asıl giriş yönteminizle doğrulayın.",
-        "email_unavailable": "Doğrulama e-postası gönderilemedi. Daha sonra deneyin.",
-        "otp_expired": "Bu kodun süresi doldu. Yeni bir kod isteyin.",
-        "otp_invalid": "Doğrulama kodu yanlış.",
-        "otp_attempts": "Çok fazla deneme. Bekleme süresinden sonra yeni bir kod isteyin.",
-        "otp_cooldown": "Başka bir kod istemeden önce bekleyin.",
-        "native_unavailable": "Facebook girişi Scemory web sitesinde kullanılabilir. Bir tarayıcı kullanın.",
-        "email": "E-posta adresi",
-        "sendCode": "Doğrulama kodu gönder",
-        "verifyEmail": "E-postanızı doğrulayın",
-        "codeSent": "{email} adresine gönderilen kodu girin.",
-        "verificationCode": "Doğrulama kodu",
-        "resendIn": "{seconds} sn sonra yeniden gönder",
-        "resend": "Kodu yeniden gönder",
-        "profileInvalid": "Geçerli bir e-posta, ülke ve gelecekte olmayan bir doğum tarihi girin."
-    },
-    "mediaCredits": {
-        "myCredits": "Medya Kredilerim",
-        "photosAvailable": "Kullanılabilir Fotoğraflar",
-        "videosAvailable": "Kullanılabilir Videolar",
-        "photos": "Fotoğraflar",
-        "videos": "Videolar",
-        "photoQuotaDesc": "Kalıcı fotoğraf kullanım kotası",
-        "videoQuotaDesc": "Kalıcı video kullanım kotası",
-        "activeTier": "Aktif Erişim Seviyesi",
-        "breakdownByTier": "Seviyeye Göre Dağılım",
-        "viewDashboard": "Kredi Paneli",
-        "getMoreCredits": "Daha Fazla Kredi Al",
-        "browseMarketplace": "Pazara Göz At",
-        "noTier": "Aktif Plan Yok",
-        "getWithPlan": "Planla Al",
-        "redeemed": "Alındı",
-        "redeemSuccess": "Medya planınızla başarıyla alındı!",
-        "redeemFailed": "Medyayı planla alma başarısız oldu.",
-        "activeGrants": "Aktif Kotalar",
-        "redemptionHistory": "Kullanım Geçmişi",
-        "noGrants": "Aktif kota yok. Fotoğraf ve video kredileri için bir plana abone olun.",
-        "noRedemptions": "Henüz kullanım yok.",
-        "tier": "Seviye",
-        "plan": "Plan",
-        "tierRank": "Seviye Derecesi",
-        "grantedOn": "Verilme Tarihi",
-        "payoutCap": "İçerik Üreticisi Ödeme Sınırı",
-        "payWithWallet": "Cüzdanla Öde",
-        "payWithPaypal": "PayPal ile Öde",
-        "insufficientCredits": "Yetersiz kredi veya seviye bu medya için yetersiz.",
-        "includedQuotas": "Dahil Olan Medya Kotaları",
-        "permanentQuotas": "Süresi dolmayan kalıcı medya kotaları"
-    },
-    "dataDeletion": {
-        "title": "Veri Silme Talimatları",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "Veri Silme Talimatları",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "Veri Silme Talimatları",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "Canlı Destek",
+      "description": "Anında yardım için ekibimizden biriyle hemen konuşun",
+      "btn_chat": "Canlı Sohbete Başla",
+      "btn_schedule": "Görüşme Planla",
+      "available": "Şu anda 3 destek görevlisi müsait"
     }
+  },
+  "contacts": {
+    "badge": "Bize ulaşın",
+    "title": "Konuşalım",
+    "description": "Bir sorunuz mu var, desteğe mi ihtiyacınız var ya da özel bir plan mı istiyorsunuz? Bize mesaj gönderin, ekibimiz size geri dönecektir.",
+    "form": {
+      "title": "Bize mesaj gönderin",
+      "description": "Aşağıdaki formu doldurun, size en kısa sürede yanıt verelim.",
+      "fullName": "Ad soyad",
+      "fullNamePlaceholder": "Adınızı ve soyadınızı girin",
+      "emailAddress": "E-posta adresi",
+      "emailPlaceholder": "E-posta adresinizi girin",
+      "subject": "Konu",
+      "generalInquiry": "Genel soru",
+      "customPlan": "Özel plan",
+      "support": "Teknik destek",
+      "feedback": "Geri bildirim",
+      "other": "Diğer",
+      "message": "Mesaj",
+      "messagePlaceholder": "Size nasıl yardımcı olabileceğimizi anlatın...",
+      "minimumCharacters": "Lütfen yeterli ayrıntı paylaşın.",
+      "sendMessage": "Mesaj gönder",
+      "sending": "Gönderiliyor...",
+      "successMessage": "Mesajınız başarıyla gönderildi.",
+      "errorMessage": "Mesajınız gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
+    },
+    "info": {
+      "getInTouch": "İletişime geçin",
+      "title": "Yardım etmek için buradayız",
+      "description": "Genel sorular, teknik destek veya özel fiyatlandırma için ekibimize ulaşın.",
+      "emailUs": "Bize e-posta gönderin",
+      "available": "Ekibimiz en kısa sürede yanıt verecektir.",
+      "customPlans": "Özel planlar",
+      "customPlansDescription": "Ekibiniz veya işletmeniz için size özel bir çözüme mi ihtiyacınız var? Bize neye ihtiyacınız olduğunu anlatın.",
+      "customerSupport": "Müşteri desteği",
+      "supportDescription": "Hesabınız, aboneliğiniz veya hizmetler hakkında yardıma ihtiyacınız varsa bizimle iletişime geçin.",
+      "followJourney": "Yolculuğumuzu takip edin",
+      "responseTime": "Hızlı yanıt",
+      "responseTimeDescription": "Mesajlara genellikle bir iş günü içinde yanıt veririz."
+    },
+    "map": {
+      "title": "Scene Memory Dünya Haritası",
+      "description": "140'tan fazla ülkede binlerce anıyı hayal edin."
+    }
+  },
+  "faq": {
+    "badge": "SSS",
+    "title": "Sıkça sorulan sorular",
+    "description": "En sık sorulan sorulardan bazılarına hızlı yanıtlar.",
+    "questions": {
+      "0": {
+        "question": "Ne kadar sürede yanıt alırım?",
+        "answer": "Ekibimiz genellikle bir iş günü içinde yanıt verir."
+      },
+      "1": {
+        "question": "Özel plan talep edebilir miyim?",
+        "answer": "Evet. Konu alanında Özel planı seçin ve gereksinimlerinizi açıklayın."
+      },
+      "2": {
+        "question": "Teknik destek için sizinle iletişime geçebilir miyim?",
+        "answer": "Evet. Teknik desteği seçin ve sorunla ilgili tüm ayrıntıları ekleyin."
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "Yönetici Olarak Etkinlik Ekle",
+      "trending": "Trend Etkinlik",
+      "trendingHelp": "Bu etkinliği trend olarak işaretle",
+      "generateTags": "Yapay Zekâ Etiketleri Oluştur",
+      "generatingTags": "Etiketler oluşturuluyor...",
+      "generateTagsHelp": "Mevcut yapay zekâ hizmetiyle etkinlik ve fotoğraf etiketleri önerin. Yayınlamadan önce inceleyebilir veya kaldırabilirsiniz.",
+      "generateTagsError": "Yapay zekâ etiketleri şu anda oluşturulamıyor.",
+      "created": "Etkinlik başarıyla oluşturuldu ve yayınlandı."
+    },
+    "chooseFiles": "Fotoğraflar / Videolar Seç",
+    "mediaCount": "Medya Sayısı",
+    "title": "Yeni Etkinlik Ekle",
+    "basicInfo": "Temel Bilgiler",
+    "locationCategory": "Konum ve Kategori",
+    "dates": "Tarihler",
+    "images": "Etkinlik Fotoğrafları",
+    "eventTitle": "Etkinlik Başlığı",
+    "description": "Açıklama",
+    "country": "Ülke",
+    "searchCountry": "Ülke ara...",
+    "selectCountry": "Ülke Seç",
+    "city": "Şehir",
+    "selectCity": "Şehir Seç",
+    "selectCityFirst": "Önce ülkeyi seçin",
+    "mainCategory": "Ana Kategori",
+    "subCategory": "Alt Kategori",
+    "selectSubFirst": "Önce kategoriyi seçin",
+    "selectLocationMap": "Haritada Konum Seç",
+    "selectedCoords": "Seçilen Koordinatlar: Lat: {lat} , Lng: {lng}",
+    "lat": "Enlem",
+    "lng": "Boylam",
+    "pleaseSelectLocation": "Lütfen haritada bir konum seçin",
+    "startDate": "Başlangıç Tarihi",
+    "endDate": "Bitiş Tarihi",
+    "startTime": "Başlangıç Saati",
+    "dragDropHere": "Fotoğrafları buraya tıklayın veya sürükleyin",
+    "formatsMax": "PNG • JPG • WEBP | her fotoğraf için max 5MB",
+    "chooseImages": "Fotoğraf Seç",
+    "addMore": "Daha Fazla Ekle",
+    "imagesCount": "{count} / 8 fotoğraf",
+    "remove": "Kaldır",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+      "mediaRequired": "Lütfen en az bir görsel veya video yükleyin."
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    },
+    "minimumRequirementsHint": "Bir etkinlik oluşturmak için yalnızca başlık, açıklama ve en az bir görsel veya video gerekir. Diğer tüm alanlar isteğe bağlıdır."
+  },
+  "commons": {
+    "required": "Zorunlu",
+    "cancel": "İptal",
+    "saveDraft": "Taslak Olarak Kaydet",
+    "create": "Etkinliği Oluştur",
+    "creating": "Oluşturuluyor...",
+    "choose": "Seç"
+  },
+  "eventss": {
+    "no_title": "Başlıksız Etkinlik",
+    "undefined_city": "Belirtilmemiş",
+    "from_map": "Haritadan"
+  },
+  "wishlist": {
+    "title": "Favori Listesi",
+    "loading": "Yükleniyor...",
+    "empty": {
+      "main": "Favori listenizde şu anda hiçbir öğe yok",
+      "hint": "Favori etkinliklerinizi eklemeye başlayın!"
+    },
+    "fallback_image_alt": "Etkinlik için varsayılan resim",
+    "uncategorized": "Kategorisiz",
+    "no_title": "Başlıksız",
+    "city_label": "Şehir:",
+    "date_label": "Tarih:",
+    "time_label": "Saat:",
+    "not_specified": "Belirtilmemiş",
+    "view_details": "Detayları Görüntüle",
+    "remove": "Favorilerden Kaldır",
+    "deleting": "Siliniyor...",
+    "added_at": "Eklendiği tarih",
+    "pagination": {
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "page_info": "Sayfa {current} / {total}"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "Kullanım Şartları",
+    "last_updated": "Son Güncelleme: 2026",
+    "acceptance_title": "Şartların Kabulü",
+    "acceptance_text": "Bu platformu kullanarak kullanım şartlarını ve geçerli tüm yasa ve yönetmelikleri kabul etmiş sayılırsınız.",
+    "accounts_title": "Kullanıcı Hesapları",
+    "accounts_text": "Kullanıcı, hesabının gizliliğinden ve hesabı üzerinden gerçekleştirilen tüm faaliyetlerden sorumludur.",
+    "content_title": "İçerik Mülkiyeti",
+    "content_text": "Platformdaki tüm içerikler (metinler, resimler, veriler dahil) fikri mülkiyet yasalarıyla korunmaktadır.",
+    "ai_title": "Yapay Zeka Kısıtlamaları",
+    "ai_text": "Platform içeriğinin yapay zeka modellerini eğitmek, makine öğrenimi sistemleri veya veri çıkarma için resmi lisans olmadan kullanılması yasaktır.",
+    "prohibited_title": "Yasaklanmış Kullanımlar",
+    "prohibited_text": "Kullanıcı, platformu kötüye kullanamaz, yetkisiz erişim denemesi yapamaz, veri çıkaramaz veya platformun çalışmasını engelleyemez.",
+    "liability_title": "Sorumluluk Sınırlaması",
+    "liability_text": "Platform, hizmetin kullanımından kaynaklanan herhangi bir dolaylı, tesadüfi veya sonuçsal zarardan sorumlu değildir.",
+    "changes_title": "Şartlarda Değişiklik",
+    "changes_text": "Kullanım şartlarını herhangi bir zamanda değiştirme veya güncelleme hakkını saklı tutarız.",
+    "contact_title": "İletişim",
+    "contact_text": "Bu şartlar hakkında herhangi bir sorunuz varsa lütfen platform yönetimiyle iletişime geçin."
+  },
+  "plans": {
+    "customPrice": "Bize ulaşın",
+    "customPricingDescription": "İhtiyaçlarınıza özel fiyatlandırma",
+    "contactUs": "Bize ulaşın",
+    "chooseYourPlan": "Planınızı seçin",
+    "getStarted": "Başla",
+    "subscribe": "Şimdi abone ol",
+    "free": "Ücretsiz",
+    "ourPlans": "Planlarımız",
+    "noFeatures": "Henüz özellik yok",
+    "mostPopular": "En popüler",
+    "noCreditCard": "Kredi kartı gerekmez",
+    "description": "Ücretsiz başlayın veya size en uygun planı seçin.",
+    "price": "Fiyat",
+    "features": "Özellikler",
+    "cancelAnytime": "İstediğiniz zaman iptal edin",
+    "Monthly": "Aylık",
+    "Yearly": "Yıllık",
+    "unlimitedEvents": "Sınırsız etkinlik",
+    "addEvents": "Etkinlik ekleme",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "Plan",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "Planlar yüklenemedi. Lütfen tekrar deneyin."
+    },
+    "customPlanNote": "Gereksinimlerinize göre tasarlandı",
+    "basicAccessIncluded": "Temel erişim dahildir",
+    "moneyBack": "30 gün garanti",
+    "perMonth": "aylık",
+    "securePayments": "Güvenli ödemeler",
+    "support247": "7/24 destek",
+    "usd": "USD",
+    "prioritySupport": "Öncelikli destek"
+  },
+  "free": "Ücretsiz",
+  "basic": "Temel",
+  "professional": "Profesyonel",
+  "premium": "Premium",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "Tarayıcınız video etiketini desteklemiyor.",
+      "badge": "Scemory Etkinlik Arşivi",
+      "title": "Belgelenmiş etkinlikleri keşfedin",
+      "titleHighlight": "harita üzerinden",
+      "description": "Dünyanın dört bir yanındaki gazeteciler, medya ekipleri ve görgü tanığı katkıcılar tarafından yüklenen etkinlik medyalarını keşfedin.",
+      "searchEvents": "Etkinlik Ara",
+      "uploadStory": "Hikayeni Yükle",
+      "bottomText": "Dünyanın dört bir yanından hikayeleri, yerleri ve anları keşfedin.",
+      "searchPlaceholder": "  "
+    },
+    "profileToast": {
+      "title": "Profil tamamlanmadı",
+      "message": "Profiliniz tamamlanmadı. Lütfen güncelleyin:",
+      "complete": "Tamamlamak için tıklayın",
+      "fields": {
+        "phone": "Telefon",
+        "country": "Ülke",
+        "position": "Pozisyon",
+        "dateOfBirth": "Doğum tarihi"
+      }
+    },
+    "trending": {
+      "loadError": "Trend etkinlikler şu anda yüklenemiyor.",
+      "kicker": "Trend",
+      "title": "Trend Etkinlikler",
+      "description": "Arşivde ilgi gören etkinlikler.",
+      "emptyTitle": "Henüz trend etkinlik yok",
+      "emptyDescription": "Öne çıkan etkinlikler için yakında tekrar kontrol edin.",
+      "views": "görüntüleme",
+      "likes": "beğeni",
+      "slidesLabel": "Trend etkinlik slaytları",
+      "untitledEvent": "Başlıksız etkinlik",
+      "showSlide": "Trend etkinliği göster {number}"
+    },
+    "map": {
+      "tilesSlow": "Harita döşemeleri çok uzun sürede işleniyor.",
+      "loadError": "Harita şu anda yüklenemiyor.",
+      "loadMap": "Haritayı yükle",
+      "loading": "Harita yükleniyor...",
+      "retry": "Haritayı yeniden yükle",
+      "openFullscreen": "Haritayı tam ekran aç",
+      "closeFullscreen": "Tam ekran haritayı kapat"
+    },
+    "about": {
+      "imageAlt": "Scemory belgeleme platformu",
+      "kicker": "Güvenilir Etkinlik Hafızası",
+      "title": "Scemory Hakkında",
+      "description": "Scemory, olaylar yaşanırken bunları belgelemek için güvenilir bir yere ihtiyaç duyan gazeteciler, medya ekipleri ve görgü tanığı katkıcılar için tasarlanmıştır. Platform, yüklenen medyayı, etkinlik meta verilerini ve konum bağlamını birleştirerek insanların kamuya açık hikayeleri net biçimde keşfetmesini sağlar.",
+      "features": {
+        "upload": "Fotoğraf, video ve saha verisi yükleyin",
+        "explore": "Etkinlikleri etkileşimli haritada keşfedin",
+        "preserve": "Doğrulanmış hikayeleri dijital arşivde koruyun"
+      }
+    },
+    "events": {
+      "showing": "Gösteriliyor",
+      "of": "/",
+      "events": "etkinlik",
+      "seeMore": "Daha fazla göster",
+      "badge": "ETKİNLİKLER"
+    },
+    "tags": {
+      "loading": "Etiketler yükleniyor...",
+      "showingFirst": "İlk",
+      "searchToFindMore": "etiket gösteriliyor. Daha fazlası için arayın.",
+      "none": "Etiket bulunamadı",
+      "helper": "Harita etkinliklerini filtrelemek için bir veya daha fazla etiket seçin.",
+      "clearSelected": "Seçili etiketleri temizle",
+      "searchMore": "Daha fazla etiket ara"
+    },
+    "search": {
+      "clearText": "Temizle",
+      "clearTags": "Temizle"
+    },
+    "specialCoverage": {
+      "badge": "Özel Haber",
+      "title": "Haber yapılmaya değer bir etkinliğiniz mi var?",
+      "description": "Özel olarak ele alınmayı hak eden bir etkinliği Scemory’ye bildirin ve hikâyesinin daha geniş bir kitleye ulaşmasına yardımcı olun.",
+      "contactUs": "Bize Ulaşın",
+      "modal": {
+        "title": "Özel Haber",
+        "eventName": "Etkinlik Adı",
+        "eventNamePlaceholder": "Etkinlik adını girin",
+        "description": "Etkinlik Açıklaması",
+        "descriptionPlaceholder": "Bize etkinliği ve neden haberleştirilmesi gerektiğini anlatın",
+        "cancel": "İptal",
+        "send": "Gönder",
+        "close": "Kapat",
+        "country": "Ülke",
+        "city": "Şehir",
+        "searchCity": "Şehir ara",
+        "addNewCity": "Yeni şehir ekle",
+        "createCity": "Şehir oluştur",
+        "startDate": "Başlangıç tarihi",
+        "coverageTime": "Haber saati",
+        "eventType": "Etkinlik türü",
+        "personalEvent": "Kişisel etkinlik",
+        "publicEvent": "Halka açık etkinlik",
+        "selectCountry": "Ülke seçin",
+        "selectCity": "Şehir seçin",
+        "noCitiesFound": "Şehir bulunamadı",
+        "noCountriesFound": "Ülke bulunamadı",
+        "countryRequired": "Lütfen bir ülke seçin.",
+        "cityRequired": "Lütfen bir şehir seçin.",
+        "startDateRequired": "Lütfen bir başlangıç tarihi seçin.",
+        "eventTypeRequired": "Lütfen bir etkinlik türü seçin.",
+        "cityCreateFailed": "Şehir oluşturulamadı. Lütfen tekrar deneyin.",
+        "sending": "Gönderiliyor...",
+        "eventNameRequired": "Lütfen etkinlik adını girin.",
+        "descriptionRequired": "Lütfen etkinlik açıklamasını girin.",
+        "success": "Özel haber talebiniz başarıyla gönderildi."
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "kalite uyarısı"
+    },
+    "videoReady": "Video yüklemeye hazır.",
+    "qualityWarning": "Kalite kontrolleri bilgilendirme amaçlıdır ve etkinlik oluşturmayı engellemez."
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "Satın aldığınız dosyalar burada görünecek"
+  },
+  "experience": {
+    "kicker": "SCEMORY DENEYİMİ",
+    "title": "Tek platform. Hikayenin her yönü.",
+    "pathsLabel": "Scemory deneyim yolları",
+    "highlightsLabel": "Bölüm öne çıkanları",
+    "tabs": {
+      "explore": {
+        "label": "Etkinlikleri keşfet",
+        "eyebrow": "ETKİNLİKLERLE DÜNYAYI KEŞFEDİN",
+        "heading": "Dünyanın dört bir yanındaki hikayeleri, etkinlikleri ve yerleri keşfedin",
+        "description": "Haritadan belgelenmiş kamusal etkinliklere, kişisel anılara ve gerçek konumlar ile katkıcı bağlamıyla şekillenen görsel hikayelere geçin.",
+        "cta": "Etkinlikleri keşfet",
+        "imageAlt": "Belgelenmiş medya panelleriyle Scemory etkinlik keşif arayüzü",
+        "features": {
+          "browse": "Etkinlik medyasını yer ve zaman çizelgesine göre gezin",
+          "discover": "Görsel arşiv üzerinden yakındaki hikayeleri keşfedin",
+          "move": "Genel görünümden belgelenmiş etkinlik detayına geçin"
+        },
+        "visual": {
+          "kicker": "Canlı keşif",
+          "title": "Haritaya bağlı etkinlik hikayeleri",
+          "stat": "Küresel arşiv",
+          "note": "Yerler, tarihler ve medya tek görünümde"
+        }
+      },
+      "share": {
+        "label": "Hikayeni paylaş",
+        "eyebrow": "ANLARI BELGELENMİŞ HİKAYELERE DÖNÜŞTÜRÜN",
+        "heading": "Önemli anları belgeleyin",
+        "description": "Bir etkinlik oluşturun, fotoğraf ve medya yükleyin, konum ayrıntıları ekleyin ve Scemory arşivine kendi bakış açınızı katın.",
+        "cta": "Hikayeni yükle",
+        "imageAlt": "Etkinlik medyasını belgelemek için Scemory katkıcı alanı",
+        "features": {
+          "add": "Medya, açıklama ve konum bağlamı ekleyin",
+          "build": "Ham anlardan yapılandırılmış bir hafıza oluşturun",
+          "keep": "Katkıcı hikayelerini arşive bağlı tutun"
+        },
+        "visual": {
+          "kicker": "Katkıcı akışı",
+          "title": "Medya, bağlam ve konum",
+          "stat": "Hikaye oluşturucu",
+          "note": "Anları anlamlı ayrıntılarla yükleyin"
+        }
+      },
+      "license": {
+        "label": "Medyayı lisansla",
+        "eyebrow": "KULLANIMA HAZIR MEDYAYI KEŞFEDİN",
+        "heading": "Etkinlik medyasını güvenle bulun ve lisanslayın",
+        "description": "Görsel içeriği gezin, mevcut etkinlik medyasını önizleyin ve Scemory keşif deneyimi üzerinden lisans seçeneklerine ilerleyin.",
+        "cta": "Medyayı keşfet",
+        "imageAlt": "Lisanslanabilir etkinlik içeriğini gezmek için Scemory medya panelleri",
+        "features": {
+          "preview": "Detayları açmadan önce etkinlik görsellerini önizleyin",
+          "use": "Medya seçeneklerine geçiş için etkinlik sayfalarını kullanın",
+          "keep": "Keşif ve lisanslama niyetini bağlı tutun"
+        },
+        "visual": {
+          "kicker": "Medya erişimi",
+          "title": "İncelemeye hazır etkinlik görselleri",
+          "stat": "Lisans yolu",
+          "note": "Keşiften detay sayfalarına"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "Tekrar dene",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "Medya",
+    "locationShort": "Konum",
+    "dateShort": "Tarih",
+    "searchCountry": "Bir ülke arayın...",
+    "featuredEvents": "Öne çıkan etkinlikler"
+  },
+  "country": {
+    "discoverFeaturedIn": "Öne çıkan etkinlikleri keşfedin:",
+    "cities": "Şehirler",
+    "availableCity": "Mevcut şehir",
+    "currentEvent": "Güncel etkinlik",
+    "eventMarkers": "Etkinlik işaretleri",
+    "clickableMarker": "Tıklanabilir işaret",
+    "differentCategory": "Farklı kategori",
+    "availableCities": "Mevcut şehirler",
+    "noEvents": "Şu anda mevcut etkinlik yok",
+    "checkBack": "Yakında tekrar kontrol edin",
+    "noImage": "Görsel yok",
+    "viewEvent": "Etkinliği gör",
+    "noCategory": "Kategori yok",
+    "countryFallback": "Ülke",
+    "cityFallback": "Şehir",
+    "eventFallback": "Etkinlik",
+    "clickMarkerToOpen": "Açmak için işarete tıklayın",
+    "errors": {
+      "unauthorized": "Yetkisiz. Lütfen giriş yapın.",
+      "notFound": "Ülke bulunamadı.",
+      "loadFailed": "Veriler yüklenirken bir hata oluştu.",
+      "mapLibraryFailed": "Harita kitaplığı yüklenemedi.",
+      "bordersFailed": "Ülke sınırları yüklenemedi",
+      "invalidBorders": "Ülke sınırları dosyası geçersiz.",
+      "countryBordersNotFound": "Ülke sınırları bulunamadı",
+      "countryBoundsFailed": "Ülke alanı hesaplanamadı.",
+      "mapLoadFailed": "Harita yüklenirken bir hata oluştu."
+    }
+  },
+  "cancel": "İptal et",
+  "login": "Giriş yap",
+  "sending": "Gönderiliyor...",
+  "send_reply": "Yanıtı gönder",
+  "report": {
+    "action": "Şikayet et",
+    "commentTitle": "Bu yorumu şikayet et",
+    "modalTitle": "Yorumu şikayet et",
+    "reasonPrompt": "Bu yorumu şikayet etme nedeninizi seçin:",
+    "submit": "Şikayeti gönder",
+    "submitting": "Gönderiliyor...",
+    "successTitle": "Şikayet gönderildi",
+    "successMessage": "Teşekkürler. Bu yorumu yakında inceleyeceğiz.",
+    "errors": {
+      "selectReason": "Lütfen bir şikayet nedeni seçin.",
+      "submitFailed": "Şikayet gönderilirken bir hata oluştu. Lütfen tekrar deneyin."
+    },
+    "reasons": {
+      "spam": "Spam",
+      "offensive": "Saldırgan içerik",
+      "inappropriate": "Uygunsuz",
+      "illegal": "Yasadışı içerik",
+      "untrue": "Yanlış içerik",
+      "falseInformation": "Yanıltıcı bilgi",
+      "other": "Diğer neden"
+    }
+  },
+  "commentsPage": {
+    "title": "Yorumlar",
+    "emptyLabel": "Yorumlar",
+    "emptyMessage": "Henüz yorum yok. İlk yorumu yapan siz olun.",
+    "attachmentAlt": "Yorum eki",
+    "pageInfo": "Sayfa {current} / {total}",
+    "confirmDelete": "Bu yorumu silmek istediğinizden emin misiniz?",
+    "errors": {
+      "loadFailed": "Yorumlar yüklenirken bir hata oluştu."
+    },
+    "reactions": {
+      "support": "Katılıyorum",
+      "neutral": "Nötr",
+      "oppose": "Katılmıyorum"
+    },
+    "you": "Sen"
+  },
+  "profilePage": {
+    "title": "Profilim",
+    "subtitle": "Hesap bilgilerinizi yönetin ve şifrenizi güncelleyin",
+    "noPlan": "Plan yok",
+    "lastLogin": "Son giriş",
+    "accountInfo": "Hesap bilgileri",
+    "systemInfo": "Sistem bilgileri",
+    "currentPlan": "Mevcut plan",
+    "planType": "Plan türü",
+    "editAccount": "Hesap detaylarını düzenle",
+    "saving": "Kaydediliyor...",
+    "saveChanges": "Değişiklikleri kaydet",
+    "tabs": {
+      "userInfo": "Kullanıcı bilgileri",
+      "editData": "Verileri düzenle",
+      "password": "Şifreyi güncelle",
+      "wallet": "Cüzdan",
+      "privacy": "Hesap ve Gizlilik"
+    },
+    "fields": {
+      "name": "İsim",
+      "fullName": "Tam isim",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "phoneNumber": "Telefon numarası",
+      "country": "Ülke",
+      "position": "Pozisyon",
+      "positionJob": "Pozisyon / İş",
+      "birthDate": "Doğum tarihi",
+      "role": "Rol",
+      "status": "Durum",
+      "points": "Puanlar",
+      "rank": "Sıralama",
+      "price": "Fiyat"
+    },
+    "placeholders": {
+      "fullName": "Tam adınızı girin",
+      "countrySearch": "Bir ülke arayın",
+      "position": "Yazılım mühendisi"
+    },
+    "status": {
+      "active": "Aktif"
+    },
+    "password": {
+      "title": "Şifreyi güncelle",
+      "current": "Mevcut şifre",
+      "new": "Yeni şifre",
+      "confirm": "Şifreyi onayla",
+      "updating": "Güncelleniyor...",
+      "update": "Şifreyi güncelle"
+    },
+    "messages": {
+      "fillAllFields": "Lütfen tüm alanları doldurun.",
+      "passwordMismatch": "Şifreler uyuşmuyor.",
+      "passwordUpdated": "Şifre başarıyla güncellendi.",
+      "passwordUpdateFailed": "Şifre güncellenirken bir hata oluştu.",
+      "chooseCountry": "Lütfen listeden bir ülke seçin.",
+      "noChanges": "Herhangi bir değişiklik yapmadınız.",
+      "profileUpdated": "Profiliniz başarıyla güncellendi.",
+      "profileUpdateFailed": "Profiliniz güncellenirken bir hata oluştu."
+    },
+    "wallet": {
+      "title": "Cüzdan",
+      "availableBalance": "Mevcut bakiye",
+      "deposit": "Para ekle",
+      "recentTransactions": "Son işlemler",
+      "depositType": "Para yatırma",
+      "withdrawType": "Para çekme",
+      "noTransactions": "Henüz işlem yok",
+      "withdrawComingSoon": "Para çekme özelliği yakında kullanıma sunulacak."
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "Dosya başına maksimum: 100 MB",
+    "dragFiles": "Dosyaları buraya sürükleyin veya",
+    "clickToChoose": "seçmek için tıklayın",
+    "supportedFiles": "Görseller ve videolar (dosya başına maksimum 100 MB)",
+    "selectedFiles": "Seçilen dosyalar ({count})",
+    "uploading": "Yükleniyor...",
+    "uploadFiles": "Dosya yükle",
+    "success": "Dosyalar başarıyla yüklendi!",
+    "errors": {
+      "fileTooLarge": "\"{name}\" dosyası 100 MB'tan büyük.",
+      "unsupportedType": "\"{name}\" dosya türü desteklenmiyor."
+    }
+  },
+  "discovery": {
+    "title": "Arama sonuçları",
+    "description": "Scemory genelindeki etkinlikleri, görselleri ve videoları keşfedin.",
+    "showing": "Gösteriliyor",
+    "of": "/",
+    "results": "sonuç",
+    "details": "Ayrıntıları görüntüle",
+    "noResultsTitle": "Sonuç bulunamadı",
+    "noResultsDescription": "Aramanızı veya filtrelerinizi değiştirmeyi deneyin.",
+    "filters": {
+      "allCities": "Tüm şehirler",
+      "allCountries": "Tüm ülkeler"
+    },
+    "tabs": {
+      "all": "Tümü",
+      "event": "Etkinlikler",
+      "image": "Görseller",
+      "video": "Videolar"
+    },
+    "resultLabels": {
+      "event": "Etkinlik",
+      "image": "Görsel",
+      "video": "Video"
+    },
+    "media": {
+      "price": "Fiyat",
+      "addToCart": "Sepete ekle",
+      "added": "Eklendi",
+      "adding": "Ekleniyor...",
+      "playVideo": "Videoyu oynat",
+      "pauseVideo": "Videoyu duraklat"
+    }
+  },
+  "timeline": {
+    "title": "Etkinlik zaman çizelgeniz",
+    "subtitle": "Etkinliklerinizi, tepkilerinizi, yorumlarınızı ve kaydettiklerinizi tek yerde inceleyin.",
+    "totalActivity": "Toplam etkinlik",
+    "latestActivity": "Son etkinlik",
+    "noLatestActivity": "Henüz etkinlik yok",
+    "loading": "Etkinlikler yükleniyor...",
+    "loadError": "Etkinlikleriniz yüklenemedi.",
+    "retry": "Tekrar dene",
+    "viewAll": "Tümünü görüntüle",
+    "empty": "Bu bölümde etkinlik yok.",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "pageOf": "Sayfa {current} / {last}",
+    "unknownEvent": "Bilinmeyen etkinlik",
+    "parentComment": "Şuna yanıt: {comment}",
+    "reactionTo": "Şuna tepki: {comment}",
+    "onEvent": "{event} etkinliğinde",
+    "tabs": {
+      "all": "Tüm etkinlikler",
+      "events": "Etkinlikler",
+      "likes": "Beğeniler",
+      "comments": "Yorumlar",
+      "replies": "Yanıtlar",
+      "comment_images": "Yorum görselleri",
+      "comment_interactions": "Yorum tepkileri",
+      "wishlists": "Favoriler"
+    },
+    "filters": {
+      "label": "Dönem",
+      "all": "Tüm zamanlar",
+      "today": "Bugün",
+      "this_week": "Bu hafta",
+      "this_month": "Bu ay",
+      "custom": "Özel aralık",
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "apply": "Uygula",
+      "invalidRange": "Geçerli bir tarih aralığı seçin."
+    },
+    "reactions": {
+      "support": "Destek",
+      "neutral": "Tarafsız",
+      "exhibitions": "Karşı"
+    },
+    "status": {
+      "pending": "Beklemede",
+      "approved": "Onaylandı",
+      "rejected": "Reddedildi",
+      "active": "Aktif",
+      "inactive": "Pasif"
+    }
+  },
+  "security": {
+    "denied": "Bu kaynağa erişim yetkiniz yok.",
+    "notFound": "İstenen kaynak bulunamadı.",
+    "disabled": "Bu hesap devre dışı. Destekle iletişime geçin.",
+    "invalidMedia": "Medya dosyası geçersiz, desteklenmiyor veya güvenli işleme sınırlarını aşıyor.",
+    "unavailable": "Bu medya şu anda kullanılamıyor.",
+    "currencyMismatch": "Cüzdan para birimi işlemle eşleşmiyor.",
+    "insufficientBalance": "Kullanılabilir bakiye yetersiz.",
+    "invalidWithdrawal": "Para çekme bu durumda değiştirilemez. Destekle iletişime geçin.",
+    "paymentRequired": "Bu plan doğrulanmış ödeme gerektirir. Destekle iletişime geçin.",
+    "invalidCode": "Doğrulama kodu geçersiz veya süresi dolmuş.",
+    "requestFailed": "İstek tamamlanamadı. Tekrar deneyin.",
+    "rateLimit": "Çok fazla istek. Daha sonra tekrar deneyin."
+  },
+  "googleAuth": {
+    "continue": "Google ile devam et",
+    "signup": "Google ile kaydol",
+    "or": "VEYA",
+    "signingIn": "Giriş yapılıyor…",
+    "cancelled": "Kimlik doğrulama iptal edildi.",
+    "expired_state": "Bu giriş denemesinin süresi doldu. Yeniden başlayın.",
+    "invalid_state": "Bu istek geçersiz veya daha önce kullanılmış. Yeniden başlayın.",
+    "oauth_failed": "Google kimlik doğrulamayı tamamlayamadı. Tekrar deneyin.",
+    "callback_failed": "Kimlik doğrulama başarısız. Tekrar deneyin.",
+    "identity_invalid": "Google kimliğinizi ve e-postanızı doğrulayamadı. Başka bir giriş yöntemi kullanın.",
+    "disabled": "Bu hesap kullanılamıyor. Destek ekibiyle iletişime geçin.",
+    "linking_required": "Mevcut hesabınızın giriş yöntemini kullanın. Google bağlantısı için önce o hesaba giriş yapmak gerekir; bağlantı özelliği henüz kullanılamıyor. Gerekirse destek ekibiyle iletişime geçin.",
+    "unavailable": "Google kimlik doğrulaması şu anda kullanılamıyor. E-posta ve parola kullanın veya daha sonra deneyin.",
+    "busy": "Giriş zaten tamamlanıyor. Tekrar deneyin.",
+    "alreadyLinked": "Bu Google hesabı zaten bağlı.",
+    "completeProfile": "Hesabınızı tamamlayın",
+    "profileRequired": "Hesabınızı oluşturmayı bitirmek için gerekli bilgileri girin.",
+    "country": "Ülke",
+    "dateOfBirth": "Doğum tarihi",
+    "finishSignup": "Hesap oluştur",
+    "profileInvalid": "Bir ülke ve gelecekte olmayan geçerli bir doğum tarihi girin.",
+    "retry": "Tekrar dene",
+    "backToLogin": "Girişe dön",
+    "linkAccountTitle": "Google hesabınızı bağlayın",
+    "linkAccountDesc": "Bu e-posta adresine sahip bir hesap zaten var. Google hesabınızı güvenle bağlamak için şifrenizi girin.",
+    "accountPassword": "Hesap şifresi",
+    "confirmLink": "Onayla ve hesabı bağla",
+    "invalidCredentials": "Geçersiz şifre. Lütfen bilgilerinizi kontrol edip tekrar deneyin.",
+    "linkSuccess": "Google hesabı başarıyla bağlandı.",
+    "unlinkSuccess": "Google hesabı başarıyla kaldırıldı.",
+    "identity_conflict": "Bu e-posta farklı bir Google kimliğine bağlı. Mevcut hesap yöntemini kullanın veya destekle iletişime geçin.",
+    "account_login_required": "Mevcut hesap yönteminizle giriş yapın, ardından profilinizden Google’ı bağlayın.",
+    "recovery_required": "Google’ı yeniden bağlamak için bir defalık hesap kurtarma gereklidir.",
+    "recovery_web_required": "Bir defalık kurtarmayı Scemory web sitesinde tamamlayın. Sonraki Google girişleri otomatik olacaktır.",
+    "invalid_recovery_code": "Kurtarma kodu yanlış. Kodu kontrol edip tekrar deneyin.",
+    "recovery_expired": "Bu kurtarma isteğinin süresi doldu. Google girişini yeniden başlatın.",
+    "recovery_attempts_exceeded": "Çok fazla yanlış deneme. Google girişini yeniden başlatın.",
+    "recovery_rate_limited": "Yakın zamanda bir kod gönderildi. Tekrar denemeden önce bekleyin.",
+    "recovery_unavailable": "Kurtarma kodu gönderilemedi. Daha sonra tekrar deneyin.",
+    "recoveryTitle": "Google hesabınızı yeniden bağlayın",
+    "recoverySent": "{email} adresine gönderilen tek kullanımlık kodu girin. Bu yalnızca bir kez gereklidir.",
+    "recoveryCode": "Kurtarma kodu",
+    "confirmRecovery": "Doğrula ve devam et"
+  },
+  "facebookAuth": {
+    "continue": "Facebook ile devam et",
+    "signup": "Facebook ile kaydol",
+    "signingIn": "Giriş yapılıyor…",
+    "unavailable": "Facebook kimlik doğrulaması şu anda kullanılamıyor. E-posta ve parola kullanın veya daha sonra deneyin.",
+    "cancelled": "Kimlik doğrulama iptal edildi.",
+    "invalid_state": "Bu istek geçersiz veya daha önce kullanılmış. Yeniden başlayın.",
+    "expired": "Bu giriş denemesinin süresi doldu. Yeniden başlayın.",
+    "callback_failed": "Kimlik doğrulama başarısız. Tekrar deneyin.",
+    "disabled": "Bu hesap kullanılamıyor. Destek ekibiyle iletişime geçin.",
+    "linking_required": "Mevcut hesabınızın giriş yöntemini kullanın. Facebook bağlantısı için önce o hesaba giriş yapmak gerekir; bağlantı özelliği henüz kullanılamıyor. Gerekirse destek ekibiyle iletişime geçin.",
+    "busy": "Giriş zaten tamamlanıyor. Tekrar deneyin.",
+    "completeProfile": "Hesabınızı tamamlayın",
+    "profileRequired": "Hesabınızı oluşturmayı bitirmek için gerekli bilgileri girin.",
+    "country": "Ülke",
+    "dateOfBirth": "Doğum tarihi",
+    "finishSignup": "Hesap oluştur",
+    "retry": "Tekrar dene",
+    "backToLogin": "Girişe dön",
+    "identity_invalid": "Facebook kimliğinizi doğrulayamadı. Tekrar deneyin.",
+    "verification_required": "Mevcut hesabınızın e-postasını asıl giriş yönteminizle doğrulayın.",
+    "email_unavailable": "Doğrulama e-postası gönderilemedi. Daha sonra deneyin.",
+    "otp_expired": "Bu kodun süresi doldu. Yeni bir kod isteyin.",
+    "otp_invalid": "Doğrulama kodu yanlış.",
+    "otp_attempts": "Çok fazla deneme. Bekleme süresinden sonra yeni bir kod isteyin.",
+    "otp_cooldown": "Başka bir kod istemeden önce bekleyin.",
+    "native_unavailable": "Facebook girişi Scemory web sitesinde kullanılabilir. Bir tarayıcı kullanın.",
+    "email": "E-posta adresi",
+    "sendCode": "Doğrulama kodu gönder",
+    "verifyEmail": "E-postanızı doğrulayın",
+    "codeSent": "{email} adresine gönderilen kodu girin.",
+    "verificationCode": "Doğrulama kodu",
+    "resendIn": "{seconds} sn sonra yeniden gönder",
+    "resend": "Kodu yeniden gönder",
+    "profileInvalid": "Geçerli bir e-posta, ülke ve gelecekte olmayan bir doğum tarihi girin."
+  },
+  "mediaCredits": {
+    "myCredits": "Medya Kredilerim",
+    "photosAvailable": "Kullanılabilir Fotoğraflar",
+    "videosAvailable": "Kullanılabilir Videolar",
+    "photos": "Fotoğraflar",
+    "videos": "Videolar",
+    "photoQuotaDesc": "Kalıcı fotoğraf kullanım kotası",
+    "videoQuotaDesc": "Kalıcı video kullanım kotası",
+    "activeTier": "Aktif Erişim Seviyesi",
+    "breakdownByTier": "Seviyeye Göre Dağılım",
+    "viewDashboard": "Kredi Paneli",
+    "getMoreCredits": "Daha Fazla Kredi Al",
+    "browseMarketplace": "Pazara Göz At",
+    "noTier": "Aktif Plan Yok",
+    "getWithPlan": "Planla Al",
+    "redeemed": "Alındı",
+    "redeemSuccess": "Medya planınızla başarıyla alındı!",
+    "redeemFailed": "Medyayı planla alma başarısız oldu.",
+    "activeGrants": "Aktif Kotalar",
+    "redemptionHistory": "Kullanım Geçmişi",
+    "noGrants": "Aktif kota yok. Fotoğraf ve video kredileri için bir plana abone olun.",
+    "noRedemptions": "Henüz kullanım yok.",
+    "tier": "Seviye",
+    "plan": "Plan",
+    "tierRank": "Seviye Derecesi",
+    "grantedOn": "Verilme Tarihi",
+    "payoutCap": "İçerik Üreticisi Ödeme Sınırı",
+    "payWithWallet": "Cüzdanla Öde",
+    "payWithPaypal": "PayPal ile Öde",
+    "insufficientCredits": "Yetersiz kredi veya seviye bu medya için yetersiz.",
+    "includedQuotas": "Dahil Olan Medya Kotaları",
+    "permanentQuotas": "Süresi dolmayan kalıcı medya kotaları"
+  },
+  "dataDeletion": {
+    "title": "Veri Silme Talimatları",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "Veri Silme Talimatları",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "Veri Silme Talimatları",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "Karşılaştırmalar",
+    "links": {
+      "historypin": "Scemory ve Historypin Karşılaştırması",
+      "pastvu": "Scemory ve PastVu Karşılaştırması",
+      "theClio": "Scemory ve The Clio Karşılaştırması"
+    },
+    "common": {
+      "exploreScemory": "Scemory'yi Keşfedin",
+      "visitOfficialWebsite": "Resmi Web Sitesini Ziyaret Edin",
+      "createAccount": "Hesap Oluşturun",
+      "feature": "Özellik ve Yetenek",
+      "scemory": "Scemory",
+      "verifiedDate": "Doğrulandı: 24 Ekim 2026",
+      "disclaimer": "Scemory bağımsız bir platformdur ve burada karşılaştırılan kuruluşların hiçbiriyle bir ortaklığı, sponsorluğu veya resmi bağı bulunmamaktadır. Tüm ticari markalar ve logolar ilgili sahiplerine aittir. Karşılaştırma noktaları 24 Ekim 2026 tarihi itibarıyla kamuya açık ve doğrulanmış belgelere dayanmaktadır.",
+      "methodologyTitle": "Kaynaklar ve Doğrulama Metodolojisi",
+      "methodologyDesc": "Bu nesnel karşılaştırma, platformların resmi belgeleri, web siteleri ve doğrudan gözlemlenebilir teknik yetenekleri incelenerek hazırlanmıştır. Tam olarak desteklenen özellikler, kısmi imkanlar, sunulmayan işlevler ve kamuya açık belgelenmemiş nitelikler açıkça birbirinden ayrılmıştır.",
+      "whyChooseTitle": "Neden Scemory'yi Seçmelisiniz?",
+      "ctaTitle": "Anları Koruyun. Olayları Belgeleyin. Ortak Bir Bellek Oluşturun.",
+      "ctaSubtitle": "Çağdaş olay haberciliğini, tarihi bellek korumacılığını ve üreticiler için adil bir medya pazarını birleştiren modern küresel platforma katılın.",
+      "beyondTitle": "Scemory, {competitor} Platformuna Kıyasla Neler Sunuyor?",
+      "whoShouldUseTitle": "Hangi Platform Hangi Kullanıcılar İçin Uygundur?",
+      "overviewTitle": "Platform Genel Bakışı",
+      "tableTitle": "Ayrıntılı Yetenek ve Özellik Karşılaştırması",
+      "vs": "ve",
+      "keyHighlights": "Öne Çıkan Özellikler",
+      "organizationType": "Kuruluş Türü",
+      "founded": "Kuruluş / Lansman Yılı",
+      "headquarters": "Merkez / Kapsam",
+      "coreMission": "Temel Misyon",
+      "officialWebsite": "Resmi Web Sitesi",
+      "independentNotice": "Doğrulanabilir açık kaynaklı platform belgelerine dayalı bağımsız karşılaştırma.",
+      "audienceScemoryHeading": "Scemory Kimler İçin Geliştirildi?",
+      "audienceCompetitorHeading": "{competitor} Kimler İçin Geliştirildi?"
+    },
+    "status": {
+      "supported": "Kullanılabilir ve İşlevsel",
+      "partial": "Kısmen Destekleniyor",
+      "not_offered": "Sunulmuyor",
+      "not_documented": "Kamuya Açık Belgelenmemiş"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "Tarihi Olayların Belgelenmesi",
+        "desc": "Tarihi dönüm noktalarının, toplumsal gelişmelerin ve geçmiş anıların zengin bağlamla kaydedilmesi."
+      },
+      "locationMemories": {
+        "name": "Konum Tabanlı Anılar ve Haritalama",
+        "desc": "Anıların, fotoğrafların ve anlatıların interaktif haritalar üzerinde kesin coğrafi koordinatlarla konumlandırılması."
+      },
+      "photoArchives": {
+        "name": "Tarihi Fotoğraf Arşivleri",
+        "desc": "Tarihi fotoğrafların arşiv üst verileri, etiketler ve kaynak referanslarıyla korunması ve sergilenmesi."
+      },
+      "videoDocumentation": {
+        "name": "Video Katkısı ve Oynatma",
+        "desc": "Yüksek çözünürlüklü video görüntülerinin yerel olarak yüklenmesi, işlenmesi, filigranlanması ve kesintisiz yayını."
+      },
+      "userContributions": {
+        "name": "Kullanıcı Tarafından Oluşturulan İçerikler",
+        "desc": "Kayıtlı topluluk üyelerinin kendi anılarını, fotoğraflarını ve etkinliklerini serbestçe yükleyebilmesi."
+      },
+      "communityParticipation": {
+        "name": "Topluluk Etkileşimi ve Yorumlar",
+        "desc": "Yorumlar, zincirleme yanıtlar, ifadeler, favori listeleri ve haftalık liderlik tablolarıyla etkileşimli tartışma."
+      },
+      "chronologicalBrowsing": {
+        "name": "Kronolojik Keşif ve Zaman Çizelgesi",
+        "desc": "İçeriklerin tarihi zaman aralıkları, yıl kaydırıcıları ve kronolojik olay sıralamalarıyla taranması."
+      },
+      "eventCentricOrg": {
+        "name": "Olay Odaklı İçerik Mimarisi",
+        "desc": "İçeriğin birden fazla katılımcıyı ve medyayı bir araya getiren bağımsız bir olay kimliği etrafında yapılandırılması."
+      },
+      "contributorProfiles": {
+        "name": "Katılımcı Profilleri ve Portföyler",
+        "desc": "Kullanıcıların yükledikleri olayları, medya galerilerini, lisanslarını ve istatistiklerini sergileyen özel sayfalar."
+      },
+      "discoveryMap": {
+        "name": "İnteraktif Harita ile Keşif ve Arama",
+        "desc": "Dinamik kümeleme, kategori filtreleri, tarih filtreleri ve metin araması sunan mekansal harita gezintisi."
+      },
+      "mediaMarketplace": {
+        "name": "Fotoğraf ve Video Pazaryeri",
+        "desc": "Üreticilerin yüksek çözünürlüklü fotoğraflarını ve videolarını lisanslayıp satışa sunabildiği dijital pazar."
+      },
+      "mediaPurchases": {
+        "name": "Doğrudan Medya Satın Alma ve İndirme",
+        "desc": "Alıcıya filigransız orijinal dosyalara anında ve güvenli indirme hakkı tanıyan dijital satın alma süreci."
+      },
+      "commercialLicensing": {
+        "name": "Ticari Lisanslama Hakları",
+        "desc": "Satın alınan medya varlıklarının ticari ve editoryal kullanımını düzenleyen yasal lisans koşulları."
+      },
+      "creatorMonetization": {
+        "name": "Üretici Gelir Modeli ve Paylaşımı",
+        "desc": "Görsel üreticilerine doğrudan satışlardan %85 oranında gelir payı aktaran adil kazanç sistemi."
+      },
+      "payoutSystem": {
+        "name": "Ödeme Alma ve Para Çekme Sistemi",
+        "desc": "PayPal ve banka havalesiyle resmi para çekme talepleri sunan şeffaf gelir bakiyesi takibi."
+      },
+      "subscriptionPlans": {
+        "name": "Kademeli Abonelik Paketleri",
+        "desc": "Düzenli fotoğraf ve video kullanım hakları ile platform ayrıcalıkları sunan ücretsiz ve ücretli üyelikler."
+      },
+      "mediaCredits": {
+        "name": "Kalıcı Medya Kredileri",
+        "desc": "Görsel varlıkların satın alınması ve lisanslanması için son kullanma tarihi olmayan ön ödemeli krediler."
+      },
+      "multilingual": {
+        "name": "Çok Dilli Platform (13 Dil + RTL Desteği)",
+        "desc": "Arapça, Farsça ve Urduca için sağdan sola (RTL) okuma düzeni dahil 13 dilde tam kapsamlı yerel deneyim."
+      },
+      "institutionalUse": {
+        "name": "Kurumsal, Eğitsel ve Akademik Kullanım",
+        "desc": "Müzeler, üniversiteler ve kamu arşivleriyle ortak çalışma ve arşiv yönetimi araçları."
+      }
+    },
+    "historypin": {
+      "heroTitle": "Scemory ve Historypin: Anıları Korumak ve Olayları Belgelemek İçin İki Yaklaşım",
+      "heroSubtitle": "Historypin'in topluluk mirası arşivi ile Scemory'nin olay odaklı multimedya ve pazaryeri ekosistemi arasında nesnel bir karşılaştırma.",
+      "primaryFocus": "Topluluk tarihi, kolektif bellek, katılımcı tarihi fotoğraflar, anlatılar ve yerel miras alanları.",
+      "logoAlt": "Resmi Historypin Logosu",
+      "seoTitle": "Scemory ve Historypin Karşılaştırması: Kapsamlı Platform İncelemesi",
+      "seoDescription": "Scemory ile Historypin'i karşılaştırın. Tarihi fotoğraf arşivleme, video desteği, üretici gelir modeli ve çok dilli erişim alanındaki farkları keşfedin.",
+      "aboutScemory": "Scemory, tarihi belleğin korunmasını güncel olayların canlı takibiyle buluşturan modern bir olay belgeleme platformu ve multimedya pazaryeridir. Olay odaklı mimarisi sayesinde fotoğrafçılar, gazeteciler, araştırmacılar ve kent sakinleri yüksek çözünürlüklü fotoğraflar ve videolar paylaşabilir, etkileşim kurabilir ve eserlerini ticari lisanslarla değerlendirebilir.",
+      "aboutCompetitor": "Historypin, 2010 yılında kâr amacı gütmeyen Shift kuruluşu tarafından Google iş birliğiyle kurulmuştur. Yerel toplulukların, kütüphanelerin ve müzelerin tarihi fotoğrafları ve sözlü tanıklıkları dünya haritası üzerine iğnelemelerine ve eski fotoğrafları Google Street View ile karşılaştırarak zaman içindeki değişimi görmelerine olanak tanır.",
+      "scemoryAdvantages": [
+        {
+          "title": "Olay Odaklı Bağımsız Varlık Mimarisi",
+          "desc": "Yalnızca harita üzerine işaretleme yapmanın ötesinde Scemory, içerikleri birden fazla katılımcıyı, doğrulanmış tarihleri ve albümleri bir araya getiren bağımsız olaylar şeklinde yapılandırır."
+        },
+        {
+          "title": "Yerel Yüksek Çözünürlüklü Video Desteği",
+          "desc": "Historypin çoğunlukla hareketsiz fotoğraflara odaklanırken, Scemory videolar için uçtan uca yükleme, koruyucu filigranlama ve akıcı oynatma altyapısı sunar."
+        },
+        {
+          "title": "Üretici Ekonomisi ve Entegre Pazaryeri",
+          "desc": "Scemory, üreticilere satışlardan %85 pay ödeyerek ve yasal ticari lisanslar düzenleyerek sivil arşivlerde bulunmayan bir gelir imkanı sağlar."
+        },
+        {
+          "title": "13 Dilde Küresel Erişim ve RTL Desteği",
+          "desc": "Scemory, Arapça, Farsça ve Urduca gibi dillerde sağdan sola kusursuz arayüz uyumuyla 13 dilde tam teşekküllü yerelleştirme sunar."
+        }
+      ],
+      "audienceScemory": "Tarihi ve çağdaş olayları fotoğraf ve videoyla belgelemek, çalışmalarını telif haklarıyla lisanslamak ve gelir elde etmek isteyen fotoğrafçılar, videograflar, haberciler ve arşiv meraklıları.",
+      "audienceCompetitor": "Tarihi fotoğrafları sokak görünümü koordinatları üzerinde haritalandırmak için ticari olmayan ücretsiz bir platform arayan yerel tarih dernekleri, halk kütüphaneleri, okullar ve gönüllüler.",
+      "whyChooseSummary": "Historypin, katılımcı yerel miras alanında ilham verici bir öncüdür. Projeleriniz olay merkezli yapılandırma, yüksek tanımlı video barındırma, üretici gelir paylaşımı ve 13 dilde dünya çapında erişim gerektiriyorsa Scemory'yi tercih edebilirsiniz."
+    },
+    "pastvu": {
+      "heroTitle": "Scemory ve PastVu: Nostaljik Fotoğraf Haritalama ile Multimedya Olay Belgelemesi",
+      "heroSubtitle": "PastVu'nun coğrafi açılı retro fotoğraf arşivi ile Scemory'nin modern olay tabanlı multimedya ve pazaryeri platformu arasında gerçeklere dayalı bir kıyaslama.",
+      "primaryFocus": "Çekim açısı yönleriyle birlikte coğrafi koordinatlandırılmış tarihi fotoğraf arşivi (1826–2000).",
+      "logoAlt": "Resmi PastVu Logosu",
+      "seoTitle": "Scemory ve PastVu Karşılaştırması: Ayrıntılı Teknik İnceleme",
+      "seoDescription": "Scemory ile PastVu arasındaki farkları inceleyin: çekim açısı geolokasyonu, video desteği, ticari lisanslama ve çok dillilik olanakları.",
+      "aboutScemory": "Scemory, güncel olayların belgelenmesiyle geçmiş hafızanın korunmasını tek bir platformda birleştirir. İnteraktif harita keşfi ve topluluk etkileşiminin yanı sıra, üreticilerin ve kurumların görsel varlıklarını adil şartlarda lisanslamalarını sağlayan bir pazaryeri sunar.",
+      "aboutCompetitor": "PastVu, 2009 yılında kurulan ve 1826 ile 2000 yılları arasında insan yaşam alanlarını gösteren tarihi fotoğrafları toplamaya, tarihlendirmeye ve coğrafi olarak konumlandırmaya adanmış bağımsız bir sivil arşivdir. Kameranın çekim açısı yön okları ve titiz topluluk denetimiyle öne çıkar.",
+      "scemoryAdvantages": [
+        {
+          "title": "Hem Tarihi Hem Güncel Olayların Kapsanması",
+          "desc": "PastVu, paylaşımları 2000 yılı öncesiyle sınırlandırır. Scemory ise geçmiş miras ile bugünün canlı kültür, spor ve toplum olayları arasında köprü kurar."
+        },
+        {
+          "title": "Kapsamlı Video Yükleme ve Yayını",
+          "desc": "PastVu yalnızca sabit fotoğraflarla çalışır. Scemory ise tarihi ve güncel video kayıtları için işleme, koruma filigranı ve uyarlanabilir video oynatma sunar."
+        },
+        {
+          "title": "Dijital Pazaryeri ve Ticari Lisanslar",
+          "desc": "Scemory, üreticilere %85 kazanç payı aktaran lisans satış modülüyle görsel arşivlerin ekonomik değere dönüştürülmesini sağlar."
+        },
+        {
+          "title": "13 Dilde Kapsamlı Dil Desteği",
+          "desc": "PastVu İngilizce ve Rusça arayüz sağlarken, Scemory Arapça ve Farsça gibi RTL dilleri de içeren 13 dilde eksiksiz hizmet verir."
+        }
+      ],
+      "audienceScemory": "Canlı olayları fotoğraf ve videoyla belgelemek, arşivlerini güvenli lisanslarla satmak ve uluslararası kitlelere ulaşmak isteyen görsel üreticileri, yayıncılar ve tarih meraklıları.",
+      "audienceCompetitor": "1826-2000 yılları arasındaki kentsel dönüşümü kesin çekim yönleriyle inceleyen mimarlık tarihçileri, vintage fotoğraf koleksiyonerleri ve şehir araştırmacıları.",
+      "whyChooseSummary": "PastVu, tarihi sokak fotoğraflarını çekim açılarıyla konumlandırmada eşsiz bir uzmanlık arşividir. Yaşayan olayları da kapsayan, video barındıran, üreticileri ödüllendiren ve 13 dilde hizmet veren bir multimedya ekosistemi için Scemory doğru tercihtir."
+    },
+    "theClio": {
+      "heroTitle": "Scemory ve The Clio: Tarihi Anıtları Keşfetmek ve Canlı Olayları Belgelemek",
+      "heroSubtitle": "Tarihi miras rehberi The Clio ile interaktif olay ve medya platformu Scemory arasında nesnel bir karşılaştırma.",
+      "primaryFocus": "Tarihi anıtlar, müzeler, miras alanları ve yürüyüş turları için eğitici rehber.",
+      "logoAlt": "Resmi The Clio Logosu",
+      "seoTitle": "Scemory ve The Clio Karşılaştırması: Platform Yetenekleri Analizi",
+      "seoDescription": "The Clio ile Scemory'yi karşılaştırın: tarihi anıt yürüyüş turları ile Scemory'nin olay odaklı multimedya ve pazaryeri yaklaşımı arasındaki farkları görün.",
+      "aboutScemory": "Scemory, bireylerin ve kuruluşların zamana damga vuran anları kaydetmelerini ve keşfetmelerini sağlayan olay merkezli bir platformdur. Yüksek kaliteli fotoğraf ve video barındırmayı, harita gezintisini, topluluk etkileşimini ve ticari medya lisanslamasını modern bir deneyimde buluşturur.",
+      "aboutCompetitor": "The Clio, tarih profesörü Dr. David Trowbridge tarafından kurulan ve kâr amacı gütmeyen The Clio Foundation (501c3) tarafından geliştirilen bir eğitim platformudur. Kuzey Amerika'daki anıtlar ve müzeler için akademisyenler ve öğrenciler tarafından hazırlanan sesli yürüyüş turları sunan sanal bir rehberdir.",
+      "scemoryAdvantages": [
+        {
+          "title": "Sabit Anıtların Ötesinde Dinamik Olay Belgelemesi",
+          "desc": "The Clio fiziksel anıtlara ve tabelalara odaklanır. Scemory ise fiziksel bir heykel olmasa dahi yaşayan festivalleri, törenleri ve anlık olayları kayıt altına alır."
+        },
+        {
+          "title": "Ticari Lisanslama ve Üretici Gelir Modeli",
+          "desc": "Eğitici bir hayır kurumu olarak The Clio'da pazar bulunmaz. Scemory ise fotoğrafçılara satışlardan %85 pay vererek profesyonel içerik üretimini destekler."
+        },
+        {
+          "title": "Doğrudan Medya Deposu ve Orijinal Dosya İndirme",
+          "desc": "Scemory alıcılar için orijinal dosya indirme hakları sunan doğrudan bir medya deposuyken, The Clio dış kaynaklara yalnızca başvuru amacıyla bağlantı verir."
+        },
+        {
+          "title": "13 Dilde Küresel Kapsam ve RTL Uyumu",
+          "desc": "The Clio Kuzey Amerika ve İngilizce odaklıdır. Scemory ise 13 dilde eksiksiz tercüme ve RTL uyumuyla tüm dünya topluluklarına hitap eder."
+        }
+      ],
+      "audienceScemory": "Geçmiş ve güncel olayları video ve fotoğrafla ölümsüzleştirmek, telifli lisanslar vermek ve uluslararası kitlelere açılmak isteyen bağımsız üreticiler, gazeteciler ve kuruluşlar.",
+      "audienceCompetitor": "Kuzey Amerika'daki tarihi yapılar ve anıtlar hakkında denetimli makaleler ve yürüyüş turları arayan üniversite öğrencileri, tarihçiler, müze uzmanları ve kültür turistleri.",
+      "whyChooseSummary": "The Clio, fiziksel anıtları tanımak için değerli bir eğitim girişimidir. Yaşayan tarihi anları belgelemek, video yüklemek ve üreticilere dünya çapında lisanslama olanakları sunmak istediğinizde Scemory ideal bir çözümdür."
+    }
+  }
 }

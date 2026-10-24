@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "ایونٹس تلاش کریں..."
+  "search": {
+    "placeholder": "ایونٹس تلاش کریں..."
+  },
+  "filters": {
+    "title": "فلٹرز",
+    "allCategories": "تمام زمرے",
+    "country": "ملک",
+    "category": "زمرہ",
+    "subCategory": "ذیلی زمرہ",
+    "from": "سے",
+    "to": "تک",
+    "city": "شہر",
+    "allSubCategories": "تمام ذیلی زمرے"
+  },
+  "upload_media": "میڈیا اپ لوڈ کریں",
+  "view_all_comments": "تمام تبصرے دیکھیں",
+  "nav": {
+    "timeline": "میرا ٹائم لائن",
+    "favourites": "پسندیدہ",
+    "plans": "پلانز",
+    "specialCoverage": "خصوصی کوریج",
+    "more": "مزید",
+    "terms": "شرائط",
+    "historical": "تاریخی",
+    "events": "ایونٹس",
+    "scemoryGate": "Scemory گیٹ",
+    "home": "ہوم",
+    "about": "متعلق",
+    "dashboard": "ڈیش بورڈ",
+    "allEvents": "تمام ایونٹس",
+    "contact": "رابطہ",
+    "addEvent": "ایونٹ شامل کریں",
+    "wishlist": "پسندیدہ",
+    "profile": "پروفائل",
+    "logout": "لاگ آؤٹ",
+    "downloads": "ڈاؤن لوڈز",
+    "login": "لاگ ان",
+    "cart": "کارٹ",
+    "scemoryHome": "Scemory ہوم",
+    "toggleMenu": "مینو ٹوگل کریں",
+    "mediaCredits": "میڈیا کریڈٹس"
+  },
+  "login_to_comment": "لوگ ان کریں تا جواب دیں",
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "DE": "Deutsch",
+    "TR": "Turkish",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "event": {
+    "reply": "جواب دیں",
+    "delete": " حذف کریں    ",
+    "no_media_yet": "کوئی میڈیا نہیں",
+    "reply_placeholder": "اپنا جواب یہاں لکھیں...",
+    "loading": "ایونٹ لوڈ ہو رہا ہے...",
+    "not_found": "ایونٹ موجود نہیں یا حذف کر دیا گیا ہے۔",
+    "city_default": "غیر واضح",
+    "visitor": "وزیٹر",
+    "media_gallery_title": "ایونٹ کی میڈیا",
+    "no_media": "کوئی میڈیا نہیں",
+    "about_event_title": "ایونٹ کے بارے میں",
+    "comments_title": "تبصرے",
+    "add_comment_title": "اپنا تبصرہ شامل کریں",
+    "comment_placeholder": "اپنا تبصرہ یہاں لکھیں...",
+    "submit_comment": "جمع کریں",
+    "sending_comment": "بھیجا جا رہا ہے...",
+    "comment_login_required": "براہ کرم پہلے لاگ ان کریں",
+    "comment_added_success": "آپ کا تبصرہ کامیابی سے شامل ہو گیا!",
+    "delete_comment_title": "تبصرہ حذف کریں",
+    "event_info_title": "ایونٹ کی معلومات",
+    "from_date": "سے",
+    "to_date": "تک",
+    "time_label": "وقت",
+    "time_default": "غیر واضح",
+    "location": "مقام",
+    "organizer": "ایونٹ کا منتظم",
+    "add_to_wishlist": "پسندیدہ میں شامل کریں",
+    "already_in_wishlist": "پسندیدہ میں موجود ہے",
+    "adding_to_wishlist": "شامل کیا جا رہا ہے...",
+    "wishlist_success": "کامیابی سے پسندیدہ میں شامل ہو گیا!",
+    "collection_benefit_4": "Same secure checkout",
+    "collection_benefit_3": "Easy access in your downloads",
+    "collection_benefit_2": "Automatic 10% discount applied",
+    "collection_benefit_1": "Buy all images at once",
+    "add_collection_to_cart": "🎁 Add Full Collection to Cart",
+    "you_save": "You Save",
+    "save_discount": "10% OFF",
+    "total_images": "Total Images",
+    "buy_collection_title": "Buy Full Collection",
+    "upload_media_to_event": "ایونٹ میں میڈیا اپ لوڈ کریں",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "تصاویر شامل کریں ({count}/{max})",
+    "comment_image_limit": "زیادہ سے زیادہ 2 تصاویر، ہر ایک 5 MB",
+    "selected_comment_image_alt": "منتخب تصویر {number}",
+    "remove_selected_comment_image": "منتخب تصویر {number} ہٹائیں"
+  },
+  "common": {
+    "search": "تلاش",
+    "placeholder": "ایونٹس تلاش کریں...",
+    "searching": "تلاش ہو رہی ہے...",
+    "details": "تفصیلات",
+    "notSpecified": "متعین نہیں",
+    "loadingEvents": "ایونٹس لوڈ ہو رہے ہیں...",
+    "loading": "لوڈ ہو رہا ہے...",
+    "close": "بند کریں",
+    "tryAgain": "دوبارہ کوشش کریں",
+    "back": "واپس",
+    "remove": "ہٹائیں",
+    "clear": "صاف کریں",
+    "previous": "پچھلا",
+    "next": "اگلا",
+    "noResults": "کوئی نتیجہ نہیں",
+    "unknownError": "نامعلوم خرابی",
+    "learnMore": "مزید جانیں",
+    "cancel": "منسوخ کریں",
+    "sending": "بھیجا جا رہا ہے...",
+    "show": "دکھائیں",
+    "hide": "چھپائیں"
+  },
+  "events": {
+    "add_historical_event": "ایونٹ شامل کریں",
+    "brand_footer": "دنیا بھر سے تمام ایونٹس",
+    "cities": "شہر",
+    "categories": "کیٹیگری",
+    "all_memories": "تمام ایونٹس کی یادیں",
+    "showing_snapshots": "دنیا بھر سے {total} تاریخی لمحات دکھائے جا رہے ہیں",
+    "sort_by": "ترتیب دیں بہ",
+    "sort": {
+      "newest": "تازہ ترین پہلے",
+      "oldest": "پرانے پہلے",
+      "title": "عنوان"
     },
-    "filters": {
-        "title": "فلٹرز",
-        "allCategories": "تمام زمرے",
-        "country": "ملک",
-        "category": "زمرہ",
-        "subCategory": "ذیلی زمرہ",
-        "from": "سے",
-        "to": "تک",
-        "city": "شہر",
-        "allSubCategories": "تمام ذیلی زمرے"
+    "loading": "ایونٹس لوڈ ہو رہے ہیں...",
+    "retry": "دوبارہ کوشش کریں",
+    "page_info": "صفحہ {current} از {last}",
+    "active_memories": "فعال ایونٹس",
+    "latestEvents": "تازہ ترین ایونٹس",
+    "recentMemories": "حالیہ ایونٹس",
+    "discoverAroundYou": "اپنے اردگرد کیا ہو رہا ہے دریافت کریں اور بہترین لمحات کے لیے تیار ہو جائیں",
+    "noEventsFound": "کوئی ایونٹ نہیں ملا",
+    "noMatchingEvents": "آپ کی تلاش یا مقام کے مطابق کوئی ایونٹ نہیں",
+    "event": "ایونٹ",
+    "startDate": "شروع کی تاریخ",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "میڈیا اپ لوڈ کریں",
-    "view_all_comments": "تمام تبصرے دیکھیں",
-    "nav": {
-        "timeline": "میرا ٹائم لائن",
-        "favourites": "پسندیدہ",
-        "plans": "پلانز",
-        "specialCoverage": "خصوصی کوریج",
-        "more": "مزید",
-        "terms": "شرائط",
-        "historical": "تاریخی",
-        "events": "ایونٹس",
-        "scemoryGate": "Scemory گیٹ",
-        "home": "ہوم",
-        "about": "متعلق",
-        "dashboard": "ڈیش بورڈ",
-        "allEvents": "تمام ایونٹس",
-        "contact": "رابطہ",
-        "addEvent": "ایونٹ شامل کریں",
-        "wishlist": "پسندیدہ",
-        "profile": "پروفائل",
-        "logout": "لاگ آؤٹ",
-        "downloads": "ڈاؤن لوڈز",
-        "login": "لاگ ان",
-        "cart": "کارٹ",
-        "scemoryHome": "Scemory ہوم",
-        "toggleMenu": "مینو ٹوگل کریں",
-        "mediaCredits": "میڈیا کریڈٹس"
+    "emptyAvailable": "No events are currently available.",
+    "no_title": "بے عنوان ایونٹ",
+    "directory": {
+      "eyebrow": "Scemory دریافت کریں",
+      "eventsTitle": "ایونٹس",
+      "eventsDescription": "دنیا بھر کے موجودہ اور آنے والے ایونٹس دریافت کریں۔",
+      "historicalTitle": "تاریخی ایونٹس",
+      "historicalDescription": "ماضی کے دستاویزی ایونٹس اور محفوظ یادیں دریافت کریں۔",
+      "events": "ایونٹس",
+      "historicalEvents": "تاریخی ایونٹس",
+      "collection": "ایونٹس کا مجموعہ",
+      "filters": "فلٹرز",
+      "refine": "نتائج محدود کریں",
+      "closeFilters": "فلٹرز بند کریں",
+      "searchLabel": "تلاش",
+      "searchPlaceholder": "ایونٹس تلاش کریں...",
+      "eventType": "ایونٹ کی قسم",
+      "types": {
+        "all": "تمام ایونٹس",
+        "real": "حقیقی ایونٹس",
+        "general": "عمومی ایونٹس"
+      },
+      "country": "ملک",
+      "allCountries": "تمام ممالک",
+      "category": "زمرہ",
+      "allCategories": "تمام زمرے",
+      "city": "شہر",
+      "allCities": "تمام شہر",
+      "subcategory": "ذیلی زمرہ",
+      "allSubcategories": "تمام ذیلی زمرے",
+      "fromDate": "ابتدائی تاریخ",
+      "toDate": "آخری تاریخ",
+      "clearFilters": "فلٹرز صاف کریں",
+      "createEvent": "ایونٹ بنائیں",
+      "createHistorical": "تاریخی ایونٹ شامل کریں",
+      "results": "{count} ایونٹس",
+      "showing": "{total} میں سے {from}–{to} دکھائے جا رہے ہیں",
+      "errorTitle": "ایونٹس لوڈ نہیں ہو سکے",
+      "errorDescription": "ایونٹس لوڈ کرتے وقت خرابی پیش آئی۔ دوبارہ کوشش کریں۔",
+      "emptyTitle": "کوئی ایونٹ نہیں ملا",
+      "historicalEmptyTitle": "کوئی تاریخی ایونٹ نہیں ملا",
+      "emptyDescription": "فلٹرز تبدیل یا صاف کر کے دیکھیں۔",
+      "eventBadge": "ایونٹ",
+      "historicalBadge": "تاریخی",
+      "unknownLocation": "نامعلوم مقام",
+      "uncategorized": "بلا زمرہ",
+      "viewEvent": "ایونٹ دیکھیں",
+      "pagination": "ایونٹس کی صفحہ بندی",
+      "previous": "پچھلا",
+      "next": "اگلا"
     },
-    "login_to_comment": "لوگ ان کریں تا جواب دیں",
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "DE": "Deutsch",
-        "TR": "Turkish",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
+    "from_map": "نقشے سے",
+    "undefined_city": "غیر واضح"
+  },
+  "pagination": {
+    "previous": "پچھلا",
+    "next": "اگلا"
+  },
+  "about": {
+    "title": "ہمارے بارے میں - سین میموری",
+    "subtitle": "ہم آپ کے سب سے قیمتی لمحات کو محفوظ رکھتے ہیں، ایک منظر کے بعد دوسرا",
+    "text1": "سین میموری میں، ہم یقین رکھتے ہیں کہ زندگی کے خوبصورت لمحات کو واضح اور جذباتی انداز میں محفوظ رکھنے کا حق ہے۔ ہم صرف ایک اسٹوریج پلیٹ فارم سے زیادہ ہیں – ہم آپ کی زندگی کے سفر کے لیے ایک ڈیجیٹل یادوں کا البم ہیں۔",
+    "features": {
+      "immersiveAlbums": "غوطه خور یادوں کے البم بنائیں جن میں تصاویر، ویڈیوز اور آڈیو نوٹس شامل ہوں",
+      "aiOrganize": "AI سے چلنے والا خودکار تنظیمی نظام جو آپ کی یادوں کو خود بخود درجہ بندی اور ٹیگ کرتا ہے",
+      "privacy": "مکمل رازداری اور سیکیورٹی – آپ کی یادیں انکرپٹڈ ہیں اور صرف آپ ہی تک رسائی ہے"
     },
-    "event": {
-        "reply": "جواب دیں",
-        "delete": " حذف کریں    ",
-        "no_media_yet": "کوئی میڈیا نہیں",
-        "reply_placeholder": "اپنا جواب یہاں لکھیں...",
-        "loading": "ایونٹ لوڈ ہو رہا ہے...",
-        "not_found": "ایونٹ موجود نہیں یا حذف کر دیا گیا ہے۔",
-        "city_default": "غیر واضح",
-        "visitor": "وزیٹر",
-        "media_gallery_title": "ایونٹ کی میڈیا",
-        "no_media": "کوئی میڈیا نہیں",
-        "about_event_title": "ایونٹ کے بارے میں",
-        "comments_title": "تبصرے",
-        "add_comment_title": "اپنا تبصرہ شامل کریں",
-        "comment_placeholder": "اپنا تبصرہ یہاں لکھیں...",
-        "submit_comment": "جمع کریں",
-        "sending_comment": "بھیجا جا رہا ہے...",
-        "comment_login_required": "براہ کرم پہلے لاگ ان کریں",
-        "comment_added_success": "آپ کا تبصرہ کامیابی سے شامل ہو گیا!",
-        "delete_comment_title": "تبصرہ حذف کریں",
-        "event_info_title": "ایونٹ کی معلومات",
-        "from_date": "سے",
-        "to_date": "تک",
-        "time_label": "وقت",
-        "time_default": "غیر واضح",
-        "location": "مقام",
-        "organizer": "ایونٹ کا منتظم",
-        "add_to_wishlist": "پسندیدہ میں شامل کریں",
-        "already_in_wishlist": "پسندیدہ میں موجود ہے",
-        "adding_to_wishlist": "شامل کیا جا رہا ہے...",
-        "wishlist_success": "کامیابی سے پسندیدہ میں شامل ہو گیا!",
-        "collection_benefit_4": "Same secure checkout",
-        "collection_benefit_3": "Easy access in your downloads",
-        "collection_benefit_2": "Automatic 10% discount applied",
-        "collection_benefit_1": "Buy all images at once",
-        "add_collection_to_cart": "🎁 Add Full Collection to Cart",
-        "you_save": "You Save",
-        "save_discount": "10% OFF",
-        "total_images": "Total Images",
-        "buy_collection_title": "Buy Full Collection",
-        "upload_media_to_event": "ایونٹ میں میڈیا اپ لوڈ کریں",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "تصاویر شامل کریں ({count}/{max})",
-        "comment_image_limit": "زیادہ سے زیادہ 2 تصاویر، ہر ایک 5 MB",
-        "selected_comment_image_alt": "منتخب تصویر {number}",
-        "remove_selected_comment_image": "منتخب تصویر {number} ہٹائیں"
-    },
-    "common": {
-        "search": "تلاش",
-        "placeholder": "ایونٹس تلاش کریں...",
-        "searching": "تلاش ہو رہی ہے...",
-        "details": "تفصیلات",
-        "notSpecified": "متعین نہیں",
-        "loadingEvents": "ایونٹس لوڈ ہو رہے ہیں...",
-        "loading": "لوڈ ہو رہا ہے...",
-        "close": "بند کریں",
-        "tryAgain": "دوبارہ کوشش کریں",
-        "back": "واپس",
-        "remove": "ہٹائیں",
-        "clear": "صاف کریں",
-        "previous": "پچھلا",
-        "next": "اگلا",
-        "noResults": "کوئی نتیجہ نہیں",
-        "unknownError": "نامعلوم خرابی",
-        "learnMore": "مزید جانیں",
-        "cancel": "منسوخ کریں",
-        "sending": "بھیجا جا رہا ہے...",
-        "show": "دکھائیں",
-        "hide": "چھپائیں"
-    },
-    "events": {
-        "add_historical_event": "ایونٹ شامل کریں",
-        "brand_footer": "دنیا بھر سے تمام ایونٹس",
-        "cities": "شہر",
-        "categories": "کیٹیگری",
-        "all_memories": "تمام ایونٹس کی یادیں",
-        "showing_snapshots": "دنیا بھر سے {total} تاریخی لمحات دکھائے جا رہے ہیں",
-        "sort_by": "ترتیب دیں بہ",
-        "sort": {
-            "newest": "تازہ ترین پہلے",
-            "oldest": "پرانے پہلے",
-            "title": "عنوان"
-        },
-        "loading": "ایونٹس لوڈ ہو رہے ہیں...",
-        "retry": "دوبارہ کوشش کریں",
-        "page_info": "صفحہ {current} از {last}",
-        "active_memories": "فعال ایونٹس",
-        "latestEvents": "تازہ ترین ایونٹس",
-        "recentMemories": "حالیہ ایونٹس",
-        "discoverAroundYou": "اپنے اردگرد کیا ہو رہا ہے دریافت کریں اور بہترین لمحات کے لیے تیار ہو جائیں",
-        "noEventsFound": "کوئی ایونٹ نہیں ملا",
-        "noMatchingEvents": "آپ کی تلاش یا مقام کے مطابق کوئی ایونٹ نہیں",
-        "event": "ایونٹ",
-        "startDate": "شروع کی تاریخ",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "no_title": "بے عنوان ایونٹ",
-        "directory": {
-            "eyebrow": "Scemory دریافت کریں",
-            "eventsTitle": "ایونٹس",
-            "eventsDescription": "دنیا بھر کے موجودہ اور آنے والے ایونٹس دریافت کریں۔",
-            "historicalTitle": "تاریخی ایونٹس",
-            "historicalDescription": "ماضی کے دستاویزی ایونٹس اور محفوظ یادیں دریافت کریں۔",
-            "events": "ایونٹس",
-            "historicalEvents": "تاریخی ایونٹس",
-            "collection": "ایونٹس کا مجموعہ",
-            "filters": "فلٹرز",
-            "refine": "نتائج محدود کریں",
-            "closeFilters": "فلٹرز بند کریں",
-            "searchLabel": "تلاش",
-            "searchPlaceholder": "ایونٹس تلاش کریں...",
-            "eventType": "ایونٹ کی قسم",
-            "types": {
-                "all": "تمام ایونٹس",
-                "real": "حقیقی ایونٹس",
-                "general": "عمومی ایونٹس"
-            },
-            "country": "ملک",
-            "allCountries": "تمام ممالک",
-            "category": "زمرہ",
-            "allCategories": "تمام زمرے",
-            "city": "شہر",
-            "allCities": "تمام شہر",
-            "subcategory": "ذیلی زمرہ",
-            "allSubcategories": "تمام ذیلی زمرے",
-            "fromDate": "ابتدائی تاریخ",
-            "toDate": "آخری تاریخ",
-            "clearFilters": "فلٹرز صاف کریں",
-            "createEvent": "ایونٹ بنائیں",
-            "createHistorical": "تاریخی ایونٹ شامل کریں",
-            "results": "{count} ایونٹس",
-            "showing": "{total} میں سے {from}–{to} دکھائے جا رہے ہیں",
-            "errorTitle": "ایونٹس لوڈ نہیں ہو سکے",
-            "errorDescription": "ایونٹس لوڈ کرتے وقت خرابی پیش آئی۔ دوبارہ کوشش کریں۔",
-            "emptyTitle": "کوئی ایونٹ نہیں ملا",
-            "historicalEmptyTitle": "کوئی تاریخی ایونٹ نہیں ملا",
-            "emptyDescription": "فلٹرز تبدیل یا صاف کر کے دیکھیں۔",
-            "eventBadge": "ایونٹ",
-            "historicalBadge": "تاریخی",
-            "unknownLocation": "نامعلوم مقام",
-            "uncategorized": "بلا زمرہ",
-            "viewEvent": "ایونٹ دیکھیں",
-            "pagination": "ایونٹس کی صفحہ بندی",
-            "previous": "پچھلا",
-            "next": "اگلا"
-        },
-        "from_map": "نقشے سے",
-        "undefined_city": "غیر واضح"
-    },
-    "pagination": {
-        "previous": "پچھلا",
-        "next": "اگلا"
-    },
-    "about": {
-        "title": "ہمارے بارے میں - سین میموری",
-        "subtitle": "ہم آپ کے سب سے قیمتی لمحات کو محفوظ رکھتے ہیں، ایک منظر کے بعد دوسرا",
-        "text1": "سین میموری میں، ہم یقین رکھتے ہیں کہ زندگی کے خوبصورت لمحات کو واضح اور جذباتی انداز میں محفوظ رکھنے کا حق ہے۔ ہم صرف ایک اسٹوریج پلیٹ فارم سے زیادہ ہیں – ہم آپ کی زندگی کے سفر کے لیے ایک ڈیجیٹل یادوں کا البم ہیں۔",
-        "features": {
-            "immersiveAlbums": "غوطه خور یادوں کے البم بنائیں جن میں تصاویر، ویڈیوز اور آڈیو نوٹس شامل ہوں",
-            "aiOrganize": "AI سے چلنے والا خودکار تنظیمی نظام جو آپ کی یادوں کو خود بخود درجہ بندی اور ٹیگ کرتا ہے",
-            "privacy": "مکمل رازداری اور سیکیورٹی – آپ کی یادیں انکرپٹڈ ہیں اور صرف آپ ہی تک رسائی ہے"
-        },
-        "startJourney": "اپنے یادوں کے سفر کا آغاز کریں",
-        "highlightMoments": "اپنی زندگی کے نمایاں لمحات",
-        "organizedBy": "منظم کردہ مناظر، لوگوں اور مقامات کے لحاظ سے",
-        "stats": {
-            "memories": "محفوظ یادیں",
-            "users": "خوش صارفین",
-            "backup": "محفوظ بیک اپ"
-        }
-    },
-    "newsletter": {
-        "title": "اپنی یادوں سے جڑے رہیں",
-        "description": "ہر ہفتے یادوں کے ٹپس، فیچرز کی اپ ڈیٹس، اور متاثر کن کہانیاں اپنے ای میل میں حاصل کریں",
-        "firstName": "پہلا نام",
-        "firstNamePlaceholder": "آپ کا پہلا نام",
-        "email": "ای میل",
-        "emailPlaceholder": "you@example.com",
-        "consent": "میں سین میموری سے یادوں کے ٹپس، اپ ڈیٹس اور پروموشنز وقتاً فوقتاً وصول کرنے سے متفق ہوں۔ میں کسی بھی وقت ان سبسکرپشن کو منسوخ کر سکتا ہوں۔",
-        "subscribe": "یادوں کی اپ ڈیٹس میں سبسکرائب کریں",
-        "community": "ہمارے ٥,٠٠٠+ یادوں کے محافظ کمیونٹی میں شامل ہوں",
-        "kicker": "نیوز لیٹر",
-        "verifiedTitle": "تصدیق شدہ ایونٹ کہانیوں سے باخبر رہیں",
-        "verifiedDescription": "رجحان ساز ایونٹس، نئے میڈیا آرکائیوز اور دنیا بھر کے معاونین کی دستاویزی اہم کہانیوں کے بارے میں منتخب اپ ڈیٹس حاصل کریں۔",
-        "subscribeShort": "سبسکرائب کریں",
-        "pendingApiMessage": "سبسکرائب کرنے کا شکریہ۔ نیوز لیٹر API جلد منسلک ہو جائے گی۔",
-        "errors": {
-            "emailRequired": "براہ کرم اپنا ای میل درج کریں۔",
-            "emailInvalid": "براہ کرم درست ای میل پتہ درج کریں۔"
-        }
-    },
-    "map": {
-        "exploreMap": "نقشہ دریافت کریں"
-    },
-    "hero": {
-        "title_main": "ہم آپ کی یادیں محفوظ کرتے ہیں",
-        "title_highlight": "تاکہ وہ ہمیشہ زندہ رہیں",
-        "description": "سین میموری میں، ہم یقین رکھتے ہیں کہ ہر لمحہ محفوظ رہنے کے لائق ہے۔ ہم یہاں ہیں تاکہ آپ کی زندگی کے اہم ایونٹس کو محفوظ، منظم اور یاد رکھنے میں مدد کریں۔",
-        "cta_start": "ہمارے ساتھ اپنا سفر شروع کریں",
-        "cta_watch": "تعارفی ویڈیو دیکھیں",
-        "feature_organized": "منظم یادیں",
-        "feature_organized_desc": "ہر لمحہ اپنی جگہ پر",
-        "feature_private": "ضمانتی رازداری",
-        "feature_private_desc": "آپ کی یادیں مکمل طور پر محفوظ",
-        "feature_reminders": "سمارٹ یاد دہانیاں",
-        "feature_reminders_desc": "کوئی اہم موقع نہ بھولیں",
-        "feature_evolving": "مسلسل ترقی",
-        "feature_evolving_desc": "ہم آپ کے تجربے کو بہتر بنانے پر مسلسل کام کر رہے ہیں"
-    },
-    "our_story": {
-        "badge": "ہماری کہانی",
-        "title": "ہمارا سفر کیسے شروع ہوا",
-        "intro": "ہماری کہانی ایک سادہ خیال سے شروع ہوئی: ہم لوگوں کو ان کی قیمتی یادوں کو محفوظ رکھنے میں کیسے مدد دے سکتے ہیں جو ان کی زندگی بناتی ہیں؟",
-        "stage1_title": "آغاز",
-        "stage1_desc": "2020 میں، ہمارے بانیوں نے دیکھا کہ کتنے اہم لمحات وقت کے ساتھ ضائع ہو جاتے ہیں۔ انہوں نے ان یادوں کو محفوظ کرنے کے لیے ایک سادہ مگر طاقتور ٹول بنانے کا فیصلہ کیا۔",
-        "stage2_title": "ترقی",
-        "stage2_desc": "صارفین کی تعداد بڑھنے کے ساتھ، ہم نے سمارٹ یاد دہانیاں، ایڈوانسڈ درجہ بندی، اور پیاروں کے ساتھ یادوں کو محفوظ طریقے سے شیئر کرنے کی سہولیات شامل کیں۔",
-        "stage3_title": "وژن",
-        "stage3_desc": "آج، ہم دنیا کی بہترین یادوں کو محفوظ اور منظم کرنے والی پلیٹ فارم بننے کی کوشش کر رہے ہیں، جس میں رازداری اور ہموار تجربہ سب سے اہم ہے۔"
-    },
-    "mission_vision": {
-        "mission_badge": "ہمارا مشن",
-        "mission_title": "ہم جس پر یقین رکھتے ہیں",
-        "mission_text": "ہمارا مشن ہر شخص کو آسان، محفوظ اور منظم طریقے سے اپنی قیمتی یادوں کو محفوظ رکھنے کی صلاحیت دینا ہے۔ ہم یقین رکھتے ہیں کہ زندگی کا ہر لمحہ محفوظ اور یاد رکھنے کے لائق ہے۔",
-        "value_people_first": "انسان سب سے پہلے",
-        "value_people_first_desc": "صارف کا تجربہ ہمارے ہر فیصلے کا مرکز ہے",
-        "value_privacy": "رازداری مقدس ہے",
-        "value_privacy_desc": "آپ کی یادیں صرف آپ کی رہتی ہیں، ہم انہیں کسی کے ساتھ شیئر نہیں کرتے",
-        "value_growth": "مسلسل ترقی",
-        "value_growth_desc": "ہم اپنے صارفین کی ضروریات کے مطابق مسلسل بہتر ہو رہے ہیں",
-        "vision_badge": "ہمارا وژن",
-        "vision_title": "ہم کہاں جا رہے ہیں",
-        "vision_text": "ہم دنیا کی پہلی عالمی پلیٹ فارم بننا چاہتے ہیں جو یادوں کو محفوظ اور منظم کرنے کے لیے ہو، جہاں کوئی بھی شخص کہیں بھی آسانی اور حفاظت سے اپنے اہم لمحات محفوظ کر سکے۔",
-        "goals_2025": "2025 کے ہمارے اہداف",
-        "goal_users": "ایک ملین صارفین تک پہنچنا",
-        "goal_languages": "10 نئی زبانیں شامل کرنا",
-        "goal_ai": "AI فیچرز لانچ کرنا"
-    },
-    "team": {
-        "badge": "ہماری ٹیم",
-        "title": "سین میموری کے پیچھے ذہین لوگ",
-        "description": "ہماری متنوع ٹیم — ڈویلپرز، ڈیزائنرز اور یوزر ایکسپیریئنس کے ماہرین — مل کر یادوں کو محفوظ کرنے کا ایک ناقابل فراموش تجربہ تخلیق کر رہی ہے۔"
-    },
-    "values": {
-        "badge": "ہماری اقدار",
-        "title": "ہمیں کیا منفرد بناتا ہے"
-    },
+    "startJourney": "اپنے یادوں کے سفر کا آغاز کریں",
+    "highlightMoments": "اپنی زندگی کے نمایاں لمحات",
+    "organizedBy": "منظم کردہ مناظر، لوگوں اور مقامات کے لحاظ سے",
     "stats": {
-        "title": "اعداد و شمار بولتے ہیں",
-        "description": "ہمارے آغاز سے، ہم نے ہزاروں لوگوں کو لاکھوں قیمتی یادوں کو محفوظ کرنے میں مدد دی ہے"
+      "memories": "محفوظ یادیں",
+      "users": "خوش صارفین",
+      "backup": "محفوظ بیک اپ"
+    }
+  },
+  "newsletter": {
+    "title": "اپنی یادوں سے جڑے رہیں",
+    "description": "ہر ہفتے یادوں کے ٹپس، فیچرز کی اپ ڈیٹس، اور متاثر کن کہانیاں اپنے ای میل میں حاصل کریں",
+    "firstName": "پہلا نام",
+    "firstNamePlaceholder": "آپ کا پہلا نام",
+    "email": "ای میل",
+    "emailPlaceholder": "you@example.com",
+    "consent": "میں سین میموری سے یادوں کے ٹپس، اپ ڈیٹس اور پروموشنز وقتاً فوقتاً وصول کرنے سے متفق ہوں۔ میں کسی بھی وقت ان سبسکرپشن کو منسوخ کر سکتا ہوں۔",
+    "subscribe": "یادوں کی اپ ڈیٹس میں سبسکرائب کریں",
+    "community": "ہمارے ٥,٠٠٠+ یادوں کے محافظ کمیونٹی میں شامل ہوں",
+    "kicker": "نیوز لیٹر",
+    "verifiedTitle": "تصدیق شدہ ایونٹ کہانیوں سے باخبر رہیں",
+    "verifiedDescription": "رجحان ساز ایونٹس، نئے میڈیا آرکائیوز اور دنیا بھر کے معاونین کی دستاویزی اہم کہانیوں کے بارے میں منتخب اپ ڈیٹس حاصل کریں۔",
+    "subscribeShort": "سبسکرائب کریں",
+    "pendingApiMessage": "سبسکرائب کرنے کا شکریہ۔ نیوز لیٹر API جلد منسلک ہو جائے گی۔",
+    "errors": {
+      "emailRequired": "براہ کرم اپنا ای میل درج کریں۔",
+      "emailInvalid": "براہ کرم درست ای میل پتہ درج کریں۔"
+    }
+  },
+  "map": {
+    "exploreMap": "نقشہ دریافت کریں"
+  },
+  "hero": {
+    "title_main": "ہم آپ کی یادیں محفوظ کرتے ہیں",
+    "title_highlight": "تاکہ وہ ہمیشہ زندہ رہیں",
+    "description": "سین میموری میں، ہم یقین رکھتے ہیں کہ ہر لمحہ محفوظ رہنے کے لائق ہے۔ ہم یہاں ہیں تاکہ آپ کی زندگی کے اہم ایونٹس کو محفوظ، منظم اور یاد رکھنے میں مدد کریں۔",
+    "cta_start": "ہمارے ساتھ اپنا سفر شروع کریں",
+    "cta_watch": "تعارفی ویڈیو دیکھیں",
+    "feature_organized": "منظم یادیں",
+    "feature_organized_desc": "ہر لمحہ اپنی جگہ پر",
+    "feature_private": "ضمانتی رازداری",
+    "feature_private_desc": "آپ کی یادیں مکمل طور پر محفوظ",
+    "feature_reminders": "سمارٹ یاد دہانیاں",
+    "feature_reminders_desc": "کوئی اہم موقع نہ بھولیں",
+    "feature_evolving": "مسلسل ترقی",
+    "feature_evolving_desc": "ہم آپ کے تجربے کو بہتر بنانے پر مسلسل کام کر رہے ہیں"
+  },
+  "our_story": {
+    "badge": "ہماری کہانی",
+    "title": "ہمارا سفر کیسے شروع ہوا",
+    "intro": "ہماری کہانی ایک سادہ خیال سے شروع ہوئی: ہم لوگوں کو ان کی قیمتی یادوں کو محفوظ رکھنے میں کیسے مدد دے سکتے ہیں جو ان کی زندگی بناتی ہیں؟",
+    "stage1_title": "آغاز",
+    "stage1_desc": "2020 میں، ہمارے بانیوں نے دیکھا کہ کتنے اہم لمحات وقت کے ساتھ ضائع ہو جاتے ہیں۔ انہوں نے ان یادوں کو محفوظ کرنے کے لیے ایک سادہ مگر طاقتور ٹول بنانے کا فیصلہ کیا۔",
+    "stage2_title": "ترقی",
+    "stage2_desc": "صارفین کی تعداد بڑھنے کے ساتھ، ہم نے سمارٹ یاد دہانیاں، ایڈوانسڈ درجہ بندی، اور پیاروں کے ساتھ یادوں کو محفوظ طریقے سے شیئر کرنے کی سہولیات شامل کیں۔",
+    "stage3_title": "وژن",
+    "stage3_desc": "آج، ہم دنیا کی بہترین یادوں کو محفوظ اور منظم کرنے والی پلیٹ فارم بننے کی کوشش کر رہے ہیں، جس میں رازداری اور ہموار تجربہ سب سے اہم ہے۔"
+  },
+  "mission_vision": {
+    "mission_badge": "ہمارا مشن",
+    "mission_title": "ہم جس پر یقین رکھتے ہیں",
+    "mission_text": "ہمارا مشن ہر شخص کو آسان، محفوظ اور منظم طریقے سے اپنی قیمتی یادوں کو محفوظ رکھنے کی صلاحیت دینا ہے۔ ہم یقین رکھتے ہیں کہ زندگی کا ہر لمحہ محفوظ اور یاد رکھنے کے لائق ہے۔",
+    "value_people_first": "انسان سب سے پہلے",
+    "value_people_first_desc": "صارف کا تجربہ ہمارے ہر فیصلے کا مرکز ہے",
+    "value_privacy": "رازداری مقدس ہے",
+    "value_privacy_desc": "آپ کی یادیں صرف آپ کی رہتی ہیں، ہم انہیں کسی کے ساتھ شیئر نہیں کرتے",
+    "value_growth": "مسلسل ترقی",
+    "value_growth_desc": "ہم اپنے صارفین کی ضروریات کے مطابق مسلسل بہتر ہو رہے ہیں",
+    "vision_badge": "ہمارا وژن",
+    "vision_title": "ہم کہاں جا رہے ہیں",
+    "vision_text": "ہم دنیا کی پہلی عالمی پلیٹ فارم بننا چاہتے ہیں جو یادوں کو محفوظ اور منظم کرنے کے لیے ہو، جہاں کوئی بھی شخص کہیں بھی آسانی اور حفاظت سے اپنے اہم لمحات محفوظ کر سکے۔",
+    "goals_2025": "2025 کے ہمارے اہداف",
+    "goal_users": "ایک ملین صارفین تک پہنچنا",
+    "goal_languages": "10 نئی زبانیں شامل کرنا",
+    "goal_ai": "AI فیچرز لانچ کرنا"
+  },
+  "team": {
+    "badge": "ہماری ٹیم",
+    "title": "سین میموری کے پیچھے ذہین لوگ",
+    "description": "ہماری متنوع ٹیم — ڈویلپرز، ڈیزائنرز اور یوزر ایکسپیریئنس کے ماہرین — مل کر یادوں کو محفوظ کرنے کا ایک ناقابل فراموش تجربہ تخلیق کر رہی ہے۔"
+  },
+  "values": {
+    "badge": "ہماری اقدار",
+    "title": "ہمیں کیا منفرد بناتا ہے"
+  },
+  "stats": {
+    "title": "اعداد و شمار بولتے ہیں",
+    "description": "ہمارے آغاز سے، ہم نے ہزاروں لوگوں کو لاکھوں قیمتی یادوں کو محفوظ کرنے میں مدد دی ہے"
+  },
+  "cta": {
+    "title": "سین میموری فیملی میں شامل ہوں",
+    "description": "آج ہی اپنی یادوں کو محفوظ کرنے کا سفر شروع کریں۔ مفت، محفوظ، اور خاص طور پر آپ کے لیے بنایا گیا۔",
+    "btn_signup": "مفت اکاؤنٹ بنائیں",
+    "btn_features": "فیچرز جانیں",
+    "trust": "50,000+ لوگ ہم پر بھروسہ کرتے ہیں کہ ہم ان کی یادیں محفوظ رکھیں"
+  },
+  "footer": {
+    "slogan": "اپنی یادیں محفوظ کریں تاکہ وہ ہمیشہ زندہ رہیں",
+    "terms": "شرائط و ضوابط",
+    "privacy": "پرائیویسی پالیسی",
+    "contact": "رابطہ کریں",
+    "copyright": "© 2024 سین میموری۔ جميع حقوق محفوظ ہیں۔",
+    "made_with": "محبت سے بنایا گیا — آپ کی یادوں کو محفوظ رکھنے کے لیے",
+    "quickLinks": "فوری روابط",
+    "supportContact": "مدد اور رابطہ",
+    "logoAlt": "لوگو",
+    "googlePlayAlt": "Google Play سے ڈاؤن لوڈ کریں",
+    "appStoreAlt": "App Store سے ڈاؤن لوڈ کریں",
+    "copyright2025": "© 2025 Scene Memory. جملہ حقوق محفوظ ہیں۔",
+    "services": "خدمات",
+    "copyrightLink": "حقوقِ اشاعت",
+    "termsOfService": "سروس کی شرائط",
+    "privacyPolicy": "رازداری کی پالیسی",
+    "dataProtection": "ڈیٹا کا تحفظ",
+    "dataDeletion": "ڈیٹا حذف کرنے کی ہدایات"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "ہم یہاں ہیں",
+      "title_highlight": "آپ کی مدد کے لیے",
+      "description": "سین میموری کی ٹیم آپ کے تمام سوالات کے جواب اور کسی بھی وقت مدد کے لیے موجود ہے",
+      "stat_24_7": "24/7 سپورٹ",
+      "stat_response_time": "اوسط جواب کا وقت",
+      "stat_satisfaction": "صارفین کی اطمینان",
+      "stat_happy_users": "خوش صارفین"
     },
-    "cta": {
-        "title": "سین میموری فیملی میں شامل ہوں",
-        "description": "آج ہی اپنی یادوں کو محفوظ کرنے کا سفر شروع کریں۔ مفت، محفوظ، اور خاص طور پر آپ کے لیے بنایا گیا۔",
-        "btn_signup": "مفت اکاؤنٹ بنائیں",
-        "btn_features": "فیچرز جانیں",
-        "trust": "50,000+ لوگ ہم پر بھروسہ کرتے ہیں کہ ہم ان کی یادیں محفوظ رکھیں"
+    "tabs": {
+      "form": "پیغام بھیجیں",
+      "info": "رابطہ کی معلومات"
     },
-    "footer": {
-        "slogan": "اپنی یادیں محفوظ کریں تاکہ وہ ہمیشہ زندہ رہیں",
-        "terms": "شرائط و ضوابط",
-        "privacy": "پرائیویسی پالیسی",
-        "contact": "رابطہ کریں",
-        "copyright": "© 2024 سین میموری۔ جميع حقوق محفوظ ہیں۔",
-        "made_with": "محبت سے بنایا گیا — آپ کی یادوں کو محفوظ رکھنے کے لیے",
-        "quickLinks": "فوری روابط",
-        "supportContact": "مدد اور رابطہ",
-        "logoAlt": "لوگو",
-        "googlePlayAlt": "Google Play سے ڈاؤن لوڈ کریں",
-        "appStoreAlt": "App Store سے ڈاؤن لوڈ کریں",
-        "copyright2025": "© 2025 Scene Memory. جملہ حقوق محفوظ ہیں۔",
-        "services": "خدمات",
-        "copyrightLink": "حقوقِ اشاعت",
-        "termsOfService": "سروس کی شرائط",
-        "privacyPolicy": "رازداری کی پالیسی",
-        "dataProtection": "ڈیٹا کا تحفظ",
-        "dataDeletion": "ڈیٹا حذف کرنے کی ہدایات"
+    "form": {
+      "fullName": "مکمل نام",
+      "fullNamePlaceholder": "نام یہاں",
+      "emailAddress": "ای میل ایڈریس",
+      "messagePlaceholder": "اپنا پیغام یہاں لکھیں...",
+      "emailPlaceholder": "ای میل یہاں",
+      "title": "ہمیں پیغام بھیجیں",
+      "subtitle": "ہم جلد از جلد آپ کو جواب دیں گے۔ ہم آپ کی مدد کے لیے موجود ہیں!",
+      "full_name": "مکمل نام",
+      "email": "ای میل",
+      "subject": "موضوع",
+      "message": "پیغام",
+      "message_placeholder": "ہمیں بتائیں کہ ہم آپ کی کس طرح مدد کر سکتے ہیں...",
+      "newsletter": "میں سین میموری کی نیوز لیٹر اور آفرز وصول کرنا چاہتا ہوں",
+      "submit": "پیغام بھیجیں",
+      "submitting": "بھیجا جا رہا ہے...",
+      "success_title": "کامیابی سے بھیج دیا گیا!",
+      "success_message": "رابطہ کرنے کا شکریہ، ہم جلد از جلد آپ کو جواب دیں گے۔"
     },
-    "contact": {
-        "hero": {
-            "title_main": "ہم یہاں ہیں",
-            "title_highlight": "آپ کی مدد کے لیے",
-            "description": "سین میموری کی ٹیم آپ کے تمام سوالات کے جواب اور کسی بھی وقت مدد کے لیے موجود ہے",
-            "stat_24_7": "24/7 سپورٹ",
-            "stat_response_time": "اوسط جواب کا وقت",
-            "stat_satisfaction": "صارفین کی اطمینان",
-            "stat_happy_users": "خوش صارفین"
-        },
-        "tabs": {
-            "form": "پیغام بھیجیں",
-            "info": "رابطہ کی معلومات"
-        },
-        "form": {
-            "fullName": "مکمل نام",
-            "fullNamePlaceholder": "نام یہاں",
-            "emailAddress": "ای میل ایڈریس",
-            "messagePlaceholder": "اپنا پیغام یہاں لکھیں...",
-            "emailPlaceholder": "ای میل یہاں",
-            "title": "ہمیں پیغام بھیجیں",
-            "subtitle": "ہم جلد از جلد آپ کو جواب دیں گے۔ ہم آپ کی مدد کے لیے موجود ہیں!",
-            "full_name": "مکمل نام",
-            "email": "ای میل",
-            "subject": "موضوع",
-            "message": "پیغام",
-            "message_placeholder": "ہمیں بتائیں کہ ہم آپ کی کس طرح مدد کر سکتے ہیں...",
-            "newsletter": "میں سین میموری کی نیوز لیٹر اور آفرز وصول کرنا چاہتا ہوں",
-            "submit": "پیغام بھیجیں",
-            "submitting": "بھیجا جا رہا ہے...",
-            "success_title": "کامیابی سے بھیج دیا گیا!",
-            "success_message": "رابطہ کرنے کا شکریہ، ہم جلد از جلد آپ کو جواب دیں گے۔"
-        },
-        "info": {
-            "title": "رابطہ کی معلومات",
-            "address_title": "ہیڈ آفس",
-            "address": "نین روڈ، قاہرہ، مصر",
-            "view_map": "نقشے پر دیکھیں",
-            "phone_title": "فون",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "صبح 9 بجے سے رات 9 بجے تک دستیاب",
-            "email_title": "ای میل",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "24 گھنٹوں میں جواب",
-            "follow_us": "ہمیں فالو کریں",
-            "map_title": "ہمارا مقام نقشے پر",
-            "map_location": "قاہرہ، مصر",
-            "open_map": "نقشہ کھولیں"
-        },
-        "faq": {
-            "title": "اکثر پوچھے جانے والے سوالات",
-            "subtitle": "سب سے زیادہ پوچھے جانے والے سوالات کے جوابات"
-        },
-        "live_support": {
-            "title": "لائیو سپورٹ",
-            "description": "ابھی ہماری ٹیم کے کسی رکن سے بات کریں فوری مدد کے لیے",
-            "btn_chat": "لائیو چیٹ شروع کریں",
-            "btn_schedule": "کال شیڈول کریں",
-            "available": "ابھی 3 سپورٹ نمائندے دستیاب ہیں"
-        }
-    },
-    "contacts": {
-        "badge": "ہم سے رابطہ کریں",
-        "title": "آئیں بات کریں",
-        "description": "کوئی سوال ہے، مدد چاہیے، یا ایک مخصوص پلان چاہتے ہیں؟ ہمیں پیغام بھیجیں اور ہماری ٹیم آپ سے رابطہ کرے گی۔",
-        "form": {
-            "title": "ہمیں پیغام بھیجیں",
-            "description": "نیچے دیا گیا فارم مکمل کریں، ہم جلد از جلد جواب دیں گے۔",
-            "fullName": "مکمل نام",
-            "fullNamePlaceholder": "اپنا مکمل نام درج کریں",
-            "emailAddress": "ای میل ایڈریس",
-            "emailPlaceholder": "اپنا ای میل ایڈریس درج کریں",
-            "subject": "موضوع",
-            "generalInquiry": "عمومی سوال",
-            "customPlan": "مخصوص پلان",
-            "support": "تکنیکی مدد",
-            "feedback": "رائے",
-            "other": "دیگر",
-            "message": "پیغام",
-            "messagePlaceholder": "ہمیں بتائیں ہم آپ کی کیسے مدد کر سکتے ہیں...",
-            "minimumCharacters": "براہ کرم کافی تفصیلات فراہم کریں۔",
-            "sendMessage": "پیغام بھیجیں",
-            "sending": "بھیجا جا رہا ہے...",
-            "successMessage": "آپ کا پیغام کامیابی سے بھیج دیا گیا ہے۔",
-            "errorMessage": "آپ کا پیغام بھیجتے وقت کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔"
-        },
-        "info": {
-            "getInTouch": "رابطے میں رہیں",
-            "title": "ہم مدد کے لیے حاضر ہیں",
-            "description": "عمومی سوالات، تکنیکی مدد، یا مخصوص قیمت کے لیے ہماری ٹیم سے رابطہ کریں۔",
-            "emailUs": "ہمیں ای میل کریں",
-            "available": "ہماری ٹیم جلد از جلد جواب دے گی۔",
-            "customPlans": "مخصوص پلانز",
-            "customPlansDescription": "اپنی ٹیم یا کاروبار کے لیے مخصوص حل چاہیے؟ ہمیں اپنی ضرورت بتائیں۔",
-            "customerSupport": "کسٹمر سپورٹ",
-            "supportDescription": "اگر آپ کو اپنے اکاؤنٹ، سبسکرپشن، یا خدمات کے بارے میں مدد چاہیے تو ہم سے رابطہ کریں۔",
-            "followJourney": "ہمارا سفر فالو کریں",
-            "responseTime": "فوری جواب",
-            "responseTimeDescription": "ہم عموماً ایک کاروباری دن کے اندر پیغامات کا جواب دیتے ہیں۔"
-        },
-        "map": {
-            "title": "سین میموری کا عالمی نقشہ",
-            "description": "140+ ممالک میں ہزاروں یادوں کا تصور کریں۔"
-        }
+    "info": {
+      "title": "رابطہ کی معلومات",
+      "address_title": "ہیڈ آفس",
+      "address": "نین روڈ، قاہرہ، مصر",
+      "view_map": "نقشے پر دیکھیں",
+      "phone_title": "فون",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "صبح 9 بجے سے رات 9 بجے تک دستیاب",
+      "email_title": "ای میل",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "24 گھنٹوں میں جواب",
+      "follow_us": "ہمیں فالو کریں",
+      "map_title": "ہمارا مقام نقشے پر",
+      "map_location": "قاہرہ، مصر",
+      "open_map": "نقشہ کھولیں"
     },
     "faq": {
-        "badge": "عمومی سوالات",
-        "title": "اکثر پوچھے جانے والے سوالات",
-        "description": "کچھ عام سوالات کے فوری جوابات۔",
-        "questions": {
-            "0": {
-                "question": "مجھے کتنی جلدی جواب ملے گا؟",
-                "answer": "ہماری ٹیم عموماً ایک کاروباری دن کے اندر جواب دیتی ہے۔"
-            },
-            "1": {
-                "question": "کیا میں مخصوص پلان کی درخواست کر سکتا ہوں؟",
-                "answer": "جی ہاں۔ موضوع کے خانے میں مخصوص پلان منتخب کریں اور اپنی ضروریات بیان کریں۔"
-            },
-            "2": {
-                "question": "کیا میں تکنیکی مدد کے لیے رابطہ کر سکتا ہوں؟",
-                "answer": "جی ہاں۔ تکنیکی مدد منتخب کریں اور مسئلے سے متعلق تمام ضروری تفصیلات شامل کریں۔"
-            }
-        }
+      "title": "اکثر پوچھے جانے والے سوالات",
+      "subtitle": "سب سے زیادہ پوچھے جانے والے سوالات کے جوابات"
     },
-    "eventForm": {
-        "admin": {
-            "title": "ایڈمن کی جانب سے ایونٹ شامل کریں",
-            "trending": "ٹرینڈنگ ایونٹ",
-            "trendingHelp": "اس ایونٹ کو ٹرینڈنگ کے طور پر نشان زد کریں",
-            "generateTags": "AI ٹیگز بنائیں",
-            "generatingTags": "ٹیگز بنائے جا رہے ہیں...",
-            "generateTagsHelp": "موجودہ AI سروس سے ایونٹ اور تصاویر کے ٹیگز تجویز کریں۔ اشاعت سے پہلے آپ ان کا جائزہ لے یا انہیں ہٹا سکتے ہیں۔",
-            "generateTagsError": "اس وقت AI ٹیگز نہیں بنائے جا سکے۔",
-            "created": "ایونٹ کامیابی سے بنا کر شائع کر دیا گیا۔"
-        },
-        "chooseFiles": "تصاویر منتخب کریں",
-        "mediaCount": "میڈیا کا تعداد",
-        "title": "نیا ایونٹ شامل کریں",
-        "basicInfo": "بنیادی معلومات",
-        "locationCategory": "مقام اور کیٹیگری",
-        "dates": "تاریخیں",
-        "images": "ایونٹ کی تصاویر",
-        "eventTitle": "ایونٹ کا عنوان",
-        "description": "تفصیل",
-        "country": "ملک",
-        "searchCountry": "ملک تلاش کریں...",
-        "selectCountry": "ملک منتخب کریں",
-        "city": "شہر",
-        "selectCity": "شہر منتخب کریں",
-        "selectCityFirst": "پہلے ملک منتخب کریں",
-        "mainCategory": "مرکزی کیٹیگری",
-        "subCategory": "ذیلی کیٹیگری",
-        "selectSubFirst": "پہلے کیٹیگری منتخب کریں",
-        "selectLocationMap": "نقشے پر مقام منتخب کریں",
-        "selectedCoords": "منتخب کردہ کوآرڈینیٹس: Lat: {lat} , Lng: {lng}",
-        "lat": "Lat",
-        "lng": "Lng",
-        "pleaseSelectLocation": "براہ کرم نقشے پر ایک مقام منتخب کریں",
-        "startDate": "شروع ہونے کی تاریخ",
-        "endDate": "ختم ہونے کی تاریخ",
-        "startTime": "شروع ہونے کا وقت",
-        "dragDropHere": "تصاویر یہاں کلک کریں یا ڈریگ کریں",
-        "formatsMax": "PNG • JPG • WEBP | فی تصویر زیادہ سے زیادہ 5MB",
-        "chooseImages": "تصاویر منتخب کریں",
-        "addMore": "مزید شامل کریں",
-        "imagesCount": "{count} / 8 تصاویر",
-        "remove": "ہٹائیں",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
-            "mediaRequired": "کم از کم ایک تصویر یا ویڈیو اپ لوڈ کریں۔"
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        },
-        "minimumRequirementsHint": "ایونٹ بنانے کے لیے صرف عنوان، تفصیل اور کم از کم ایک تصویر یا ویڈیو درکار ہے۔ باقی تمام خانے اختیاری ہیں۔"
-    },
-    "commons": {
-        "required": "ضروری",
-        "cancel": "منسوخ کریں",
-        "saveDraft": "ڈرافٹ محفوظ کریں",
-        "create": "ایونٹ بنائیں",
-        "creating": "بنایا جا رہا ہے...",
-        "choose": "منتخب کریں"
-    },
-    "eventss": {
-        "no_title": "بغیر عنوان ایونٹ",
-        "undefined_city": "غیر واضح",
-        "from_map": "نقشے سے"
-    },
-    "wishlist": {
-        "title": "پسندیدہ لسٹ",
-        "loading": "لوڈ ہو رہا ہے...",
-        "empty": {
-            "main": "فی الحال پسندیدہ میں کوئی آئٹم نہیں ہے",
-            "hint": "اپنے پسندیدہ ایونٹس شامل کرنا شروع کریں!"
-        },
-        "fallback_image_alt": "ایونٹ کی ڈیفالٹ تصویر",
-        "uncategorized": "غیر درجہ بند",
-        "no_title": "بغیر عنوان",
-        "city_label": "شہر:",
-        "date_label": "تاریخ:",
-        "time_label": "وقت:",
-        "not_specified": "غیر واضح",
-        "view_details": "تفصیلات دیکھیں",
-        "remove": "پسندیدہ سے ہٹائیں",
-        "deleting": "ہٹایا جا رہا ہے...",
-        "added_at": "شامل کیا گیا",
-        "pagination": {
-            "previous": "پچھلا",
-            "next": "اگلا",
-            "page_info": "صفحہ {current} از {total}"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "سروس کی شرائط",
-        "last_updated": "آخری اپ ڈیٹ: 2026",
-        "acceptance_title": "شرائط کی منظوری",
-        "acceptance_text": "اس پلیٹ فارم تک رسائی حاصل کرنے یا اسے استعمال کرنے سے آپ ان شرائط و ضوابط سے متفق ہوتے ہیں۔",
-        "accounts_title": "صارف اکاؤنٹس",
-        "accounts_text": "صارف اپنے اکاؤنٹ کی معلومات کی رازداری برقرار رکھنے کے ذمہ دار ہیں۔",
-        "content_title": "مواد کی ملکیت",
-        "content_text": "پلیٹ فارم پر موجود تمام مواد کاپی رائٹ اور دانشورانہ املاک کے قوانین کے تحت محفوظ ہے۔",
-        "ai_title": "مصنوعی ذہانت کی پابندیاں",
-        "ai_text": "سرکاری اجازت کے بغیر پلیٹ فارم کے مواد کو مصنوعی ذہانت کے ماڈلز کی تربیت کے لیے استعمال کرنا سختی سے منع ہے۔",
-        "prohibited_title": "ممنوعہ استعمال",
-        "prohibited_text": "صارفین کو پلیٹ فارم کا غلط استعمال کرنے یا غیر مجاز رسائی حاصل کرنے کی اجازت نہیں ہے۔",
-        "liability_title": "ذمہ داری کی حد",
-        "liability_text": "پلیٹ فارم سروس کے استعمال سے ہونے والے کسی بھی بالواسطہ نقصان کا ذمہ دار نہیں ہوگا۔",
-        "changes_title": "شرائط میں تبدیلی",
-        "changes_text": "ہم کسی بھی وقت ان شرائط کو تبدیل کرنے کا حق محفوظ رکھتے ہیں۔",
-        "contact_title": "رابطہ",
-        "contact_text": "ان شرائط کے بارے میں کسی بھی سوال کے لیے پلیٹ فارم انتظامیہ سے رابطہ کریں۔"
-    },
-    "plans": {
-        "customPrice": "ہم سے رابطہ کریں",
-        "customPricingDescription": "آپ کی ضروریات کے مطابق قیمت",
-        "contactUs": "ہم سے رابطہ کریں",
-        "chooseYourPlan": "اپنا پلان منتخب کریں",
-        "getStarted": "شروع کریں",
-        "subscribe": "ابھی سبسکرائب کریں",
-        "noFeatures": "ابھی کوئی فیچر نہیں",
-        "mostPopular": "سب سے مقبول",
-        "free": "مفت",
-        "ourPlans": "ہمارے پلانز",
-        "description": "مفت شروع کریں یا اپنے لیے بہترین پلان منتخب کریں۔",
-        "price": "قیمت",
-        "features": "خصوصیات",
-        "Monthly": "ماہانہ",
-        "perMonth": "ماہانہ",
-        "noCreditCard": "کریڈٹ کارڈ درکار نہیں",
-        "prioritySupport": "ترجیحی مدد",
-        "securePayments": "محفوظ ادائیگیاں",
-        "moneyBack": "30 دن کی ضمانت",
-        "support247": "24/7 سپورٹ",
-        "Yearly": "سالانہ",
-        "cancelAnytime": "کسی بھی وقت منسوخ کریں",
-        "unlimitedEvents": "لامحدود ایونٹس",
-        "addEvents": "ایونٹس شامل کریں",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "پلان",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "پلان لوڈ نہیں ہو سکے۔ دوبارہ کوشش کریں۔"
-        },
-        "customPlanNote": "آپ کی ضروریات کے مطابق بنایا گیا",
-        "basicAccessIncluded": "بنیادی رسائی شامل ہے",
-        "usd": "امریکی ڈالر"
-    },
-    "free": "مفت",
-    "basic": "بنیادی",
-    "professional": "پیشہ ور",
-    "premium": "پریمیم",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "آپ کا براؤزر ویڈیو ٹیگ کو سپورٹ نہیں کرتا۔",
-            "badge": "Scemory ایونٹ آرکائیو",
-            "title": "دستاویزی ایونٹس دریافت کریں",
-            "titleHighlight": "نقشے کے ذریعے",
-            "description": "دنیا بھر کے صحافیوں، میڈیا ٹیموں اور عینی شاہد معاونین کی جانب سے اپ لوڈ کردہ ایونٹ میڈیا دریافت کریں۔",
-            "searchEvents": "ایونٹس تلاش کریں",
-            "uploadStory": "اپنی کہانی اپ لوڈ کریں",
-            "bottomText": "دنیا بھر کی کہانیاں، مقامات اور لمحات دریافت کریں۔",
-            "searchPlaceholder": "  ایونٹس، مقامات یا ٹیگز تلاش کریں"
-        },
-        "profileToast": {
-            "title": "پروفائل مکمل نہیں",
-            "message": "آپ کا پروفائل مکمل نہیں۔ براہ کرم اپ ڈیٹ کریں:",
-            "complete": "مکمل کرنے کے لیے کلک کریں",
-            "fields": {
-                "phone": "فون",
-                "country": "ملک",
-                "position": "عہدہ",
-                "dateOfBirth": "تاریخ پیدائش"
-            }
-        },
-        "trending": {
-            "loadError": "رجحان ساز ایونٹس ابھی لوڈ نہیں ہو سکے۔",
-            "kicker": "رجحان",
-            "title": "رجحان ساز ایونٹس",
-            "description": "آرکائیو میں توجہ حاصل کرنے والے ایونٹس۔",
-            "emptyTitle": "ابھی کوئی رجحان ساز ایونٹ نہیں",
-            "emptyDescription": "نمایاں ایونٹس کے لیے جلد دوبارہ دیکھیں۔",
-            "views": "مناظر",
-            "likes": "پسندیدگیاں",
-            "slidesLabel": "رجحان ساز ایونٹ سلائیڈز",
-            "untitledEvent": "بے عنوان ایونٹ",
-            "showSlide": "رجحان ساز ایونٹ {number} دکھائیں"
-        },
-        "map": {
-            "tilesSlow": "نقشے کی ٹائلز ظاہر ہونے میں زیادہ وقت لے رہی ہیں۔",
-            "loadError": "نقشہ ابھی لوڈ نہیں ہو سکا۔",
-            "loadMap": "نقشہ لوڈ کریں",
-            "loading": "نقشہ لوڈ ہو رہا ہے...",
-            "retry": "نقشہ دوبارہ لوڈ کریں",
-            "openFullscreen": "نقشہ فل اسکرین کھولیں",
-            "closeFullscreen": "فل اسکرین نقشہ بند کریں"
-        },
-        "about": {
-            "imageAlt": "Scemory دستاویزی پلیٹ فارم",
-            "kicker": "قابل اعتماد ایونٹ میموری",
-            "title": "Scemory کے بارے میں",
-            "description": "Scemory صحافیوں، میڈیا ٹیموں اور عینی شاہد معاونین کے لیے بنایا گیا ہے جنہیں واقعات کے وقت انہیں دستاویز کرنے کے لیے قابل اعتماد جگہ چاہیے۔ یہ پلیٹ فارم اپ لوڈ شدہ میڈیا، ایونٹ میٹا ڈیٹا اور مقام کے سیاق کو جوڑتا ہے تاکہ لوگ عوامی کہانیاں وضاحت کے ساتھ دریافت کر سکیں۔",
-            "features": {
-                "upload": "تصاویر، ویڈیوز اور فیلڈ ڈیٹا اپ لوڈ کریں",
-                "explore": "ایونٹس کو انٹرایکٹو نقشے پر دریافت کریں",
-                "preserve": "تصدیق شدہ کہانیوں کو ڈیجیٹل آرکائیو میں محفوظ کریں"
-            }
-        },
-        "events": {
-            "showing": "دکھایا جا رہا ہے",
-            "of": "میں سے",
-            "events": "ایونٹس",
-            "seeMore": "مزید دیکھیں",
-            "badge": "ایونٹس"
-        },
-        "tags": {
-            "loading": "ٹیگز لوڈ ہو رہے ہیں...",
-            "showingFirst": "پہلے دکھائے جا رہے ہیں",
-            "searchToFindMore": "ٹیگز۔ مزید تلاش کرنے کے لیے تلاش کریں۔",
-            "none": "کوئی ٹیگ نہیں ملا",
-            "helper": "نقشے کے ایونٹس فلٹر کرنے کے لیے ایک یا زیادہ ٹیگز منتخب کریں۔",
-            "clearSelected": "منتخب ٹیگز صاف کریں",
-            "searchMore": "مزید ٹیگز تلاش کریں"
-        },
-        "search": {
-            "clearText": "صاف کریں",
-            "clearTags": "صاف کریں"
-        },
-        "specialCoverage": {
-            "badge": "خصوصی کوریج",
-            "title": "کیا آپ کے پاس کوئی ایسا ایونٹ ہے جو کوریج کا مستحق ہو؟",
-            "description": "Scemory کو ایسے ایونٹ کے بارے میں بتائیں جو خصوصی کوریج کا مستحق ہے اور اس کی کہانی کو وسیع تر سامعین تک پہنچانے میں مدد کریں۔",
-            "contactUs": "ہم سے رابطہ کریں",
-            "modal": {
-                "title": "خصوصی کوریج",
-                "eventName": "ایونٹ کا نام",
-                "eventNamePlaceholder": "ایونٹ کا نام درج کریں",
-                "description": "ایونٹ کی تفصیل",
-                "descriptionPlaceholder": "ہمیں ایونٹ اور اس کی کوریج کی اہمیت کے بارے میں بتائیں",
-                "cancel": "منسوخ کریں",
-                "send": "بھیجیں",
-                "close": "بند کریں",
-                "country": "ملک",
-                "city": "شہر",
-                "searchCity": "شہر تلاش کریں",
-                "addNewCity": "نیا شہر شامل کریں",
-                "createCity": "شہر بنائیں",
-                "startDate": "آغاز کی تاریخ",
-                "coverageTime": "کوریج کا وقت",
-                "eventType": "ایونٹ کی قسم",
-                "personalEvent": "ذاتی ایونٹ",
-                "publicEvent": "عوامی ایونٹ",
-                "selectCountry": "ملک منتخب کریں",
-                "selectCity": "شہر منتخب کریں",
-                "noCitiesFound": "کوئی شہر نہیں ملا",
-                "noCountriesFound": "کوئی ملک نہیں ملا",
-                "countryRequired": "براہ کرم ملک منتخب کریں۔",
-                "cityRequired": "براہ کرم شہر منتخب کریں۔",
-                "startDateRequired": "براہ کرم آغاز کی تاریخ منتخب کریں۔",
-                "eventTypeRequired": "براہ کرم ایونٹ کی قسم منتخب کریں۔",
-                "cityCreateFailed": "شہر نہیں بنایا جا سکا۔ براہ کرم دوبارہ کوشش کریں۔",
-                "sending": "بھیجا جا رہا ہے...",
-                "eventNameRequired": "ایونٹ کا نام درج کریں۔",
-                "descriptionRequired": "ایونٹ کی تفصیل درج کریں۔",
-                "success": "خصوصی کوریج کی درخواست کامیابی سے بھیج دی گئی ہے۔"
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "معیار کا انتباہ"
-        },
-        "videoReady": "ویڈیو اپ لوڈ کے لیے تیار ہے۔",
-        "qualityWarning": "معیار کی جانچ صرف رہنمائی کے لیے ہے اور ایونٹ بنانے سے نہیں روکتی۔"
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "آپ کی خریدی ہوئی فائلیں یہاں دکھائی دیں گی"
-    },
-    "experience": {
-        "kicker": "SCEMORY تجربہ",
-        "title": "ایک پلیٹ فارم۔ کہانی کا ہر پہلو۔",
-        "pathsLabel": "Scemory تجربے کے راستے",
-        "highlightsLabel": "سیکشن کی جھلکیاں",
-        "tabs": {
-            "explore": {
-                "label": "ایونٹس دریافت کریں",
-                "eyebrow": "ایونٹس کے ذریعے دنیا دریافت کریں",
-                "heading": "دنیا بھر کی کہانیاں، ایونٹس اور مقامات دریافت کریں",
-                "description": "نقشے سے دستاویزی عوامی ایونٹس، ذاتی یادوں اور حقیقی مقامات و معاونین کے سیاق سے بنی بصری کہانیوں تک جائیں۔",
-                "cta": "ایونٹس دریافت کریں",
-                "imageAlt": "دستاویزی میڈیا پینلز کے ساتھ Scemory ایونٹ دریافت انٹرفیس",
-                "features": {
-                    "browse": "ایونٹ میڈیا کو مقام اور ٹائم لائن کے لحاظ سے براؤز کریں",
-                    "discover": "بصری آرکائیو کے ذریعے قریبی کہانیاں دریافت کریں",
-                    "move": "جائزے سے دستاویزی ایونٹ تفصیل تک جائیں"
-                },
-                "visual": {
-                    "kicker": "براہ راست دریافت",
-                    "title": "نقشے سے منسلک ایونٹ کہانیاں",
-                    "stat": "عالمی آرکائیو",
-                    "note": "مقامات، تاریخیں اور میڈیا ایک منظر میں"
-                }
-            },
-            "share": {
-                "label": "اپنی کہانی شیئر کریں",
-                "eyebrow": "لمحات کو دستاویزی کہانیوں میں بدلیں",
-                "heading": "اہم لمحات کو دستاویز کریں",
-                "description": "ایونٹ بنائیں، تصاویر اور میڈیا اپ لوڈ کریں، مقام کی تفصیلات شامل کریں اور Scemory آرکائیو میں اپنا نقطہ نظر شامل کریں۔",
-                "cta": "اپنی کہانی اپ لوڈ کریں",
-                "imageAlt": "ایونٹ میڈیا دستاویز کرنے کے لیے Scemory معاون ورک اسپیس",
-                "features": {
-                    "add": "میڈیا، وضاحتیں اور مقام کا سیاق شامل کریں",
-                    "build": "خام لمحات سے منظم یاد بنائیں",
-                    "keep": "معاون کہانیوں کو آرکائیو سے منسلک رکھیں"
-                },
-                "visual": {
-                    "kicker": "معاون فلو",
-                    "title": "میڈیا، سیاق اور مقام",
-                    "stat": "کہانی بنانے والا",
-                    "note": "لمحات کو بامعنی تفصیل کے ساتھ اپ لوڈ کریں"
-                }
-            },
-            "license": {
-                "label": "میڈیا لائسنس کریں",
-                "eyebrow": "استعمال کے لیے تیار میڈیا دریافت کریں",
-                "heading": "ایونٹ میڈیا اعتماد کے ساتھ تلاش اور لائسنس کریں",
-                "description": "بصری مواد براؤز کریں، دستیاب ایونٹ میڈیا کا پیش منظر دیکھیں اور Scemory کے موجودہ دریافت تجربے سے لائسنسنگ اختیارات تک جائیں۔",
-                "cta": "میڈیا دریافت کریں",
-                "imageAlt": "لائسنس کے قابل ایونٹ مواد براؤز کرنے کے لیے Scemory میڈیا پینلز",
-                "features": {
-                    "preview": "تفصیلات کھولنے سے پہلے ایونٹ بصریات دیکھیں",
-                    "use": "میڈیا اختیارات کے راستے کے طور پر ایونٹ صفحات استعمال کریں",
-                    "keep": "دریافت اور لائسنسنگ نیت کو منسلک رکھیں"
-                },
-                "visual": {
-                    "kicker": "میڈیا رسائی",
-                    "title": "ایونٹ بصریات جائزے کے لیے تیار",
-                    "stat": "لائسنسنگ راستہ",
-                    "note": "دریافت سے تفصیل صفحات تک"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "دوبارہ کوشش کریں",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "میڈیا",
-        "locationShort": "مقام",
-        "dateShort": "تاریخ",
-        "searchCountry": "کسی ملک کو تلاش کریں...",
-        "featuredEvents": "نمایاں ایونٹس"
-    },
-    "country": {
-        "discoverFeaturedIn": "نمایاں ایونٹس دریافت کریں",
-        "cities": "شہر",
-        "availableCity": "دستیاب شہر",
-        "currentEvent": "موجودہ ایونٹ",
-        "eventMarkers": "ایونٹ مارکرز",
-        "clickableMarker": "قابل کلک مارکر",
-        "differentCategory": "مختلف زمرہ",
-        "availableCities": "دستیاب شہر",
-        "noEvents": "اس وقت کوئی ایونٹ دستیاب نہیں",
-        "checkBack": "جلد دوبارہ چیک کریں",
-        "noImage": "کوئی تصویر نہیں",
-        "viewEvent": "ایونٹ دیکھیں",
-        "noCategory": "کوئی زمرہ نہیں",
-        "countryFallback": "ملک",
-        "cityFallback": "شہر",
-        "eventFallback": "ایونٹ",
-        "clickMarkerToOpen": "کھولنے کے لیے مارکر پر کلک کریں",
-        "errors": {
-            "unauthorized": "غیر مجاز. براہ کرم سائن ان کریں۔",
-            "notFound": "ملک نہیں ملا۔",
-            "loadFailed": "ڈیٹا لوڈ کرتے وقت ایک خرابی پیش آئی۔",
-            "mapLibraryFailed": "میپ لائبریری لوڈ نہیں ہو سکی۔",
-            "bordersFailed": "ملک کی سرحدیں لوڈ نہیں ہو سکیں",
-            "invalidBorders": "ملک کی سرحدوں کی فائل درست نہیں۔",
-            "countryBordersNotFound": "ملک کی سرحدیں نہیں مل سکیں",
-            "countryBoundsFailed": "ملک کی حدود کا حساب نہیں لگایا جا سکا۔",
-            "mapLoadFailed": "میپ لوڈ کرتے وقت ایک خرابی پیش آئی۔"
-        }
-    },
-    "cancel": "منسوخ کریں",
-    "login": "لاگ ان کریں",
-    "sending": "بھیج رہا ہے...",
-    "send_reply": "جواب بھیجیں",
-    "report": {
-        "action": "رپورٹ کریں",
-        "commentTitle": "اس تبصرے کی رپورٹ کریں",
-        "modalTitle": "تبصرے کی رپورٹ کریں",
-        "reasonPrompt": "اس تبصرے کی رپورٹ کرنے کی وجہ منتخب کریں:",
-        "submit": "رپورٹ جمع کریں",
-        "submitting": "جمع کر رہا ہے...",
-        "successTitle": "رپورٹ جمع کر دی گئی",
-        "successMessage": "شکریہ۔ ہم جلد ہی اس تبصرے کا جائزہ لیں گے۔",
-        "errors": {
-            "selectReason": "براہ کرم رپورٹ کی وجہ منتخب کریں۔",
-            "submitFailed": "رپورٹ جمع کراتے وقت ایک خرابی پیش آئی۔ براہ کرم دوبارہ کوشش کریں۔"
-        },
-        "reasons": {
-            "spam": "اسپام",
-            "offensive": "فحش مواد",
-            "inappropriate": "غیر موزوں",
-            "illegal": "غیر قانونی مواد",
-            "untrue": "جھوٹا مواد",
-            "falseInformation": "گمراہ کن معلومات",
-            "other": "دوسری وجہ"
-        }
-    },
-    "commentsPage": {
-        "title": "تبصرے",
-        "emptyLabel": "تبصرے",
-        "emptyMessage": "ابھی تک کوئی تبصرہ نہیں۔ پہلا تبصرہ کریں۔",
-        "attachmentAlt": "تبصرے کی منسلکہ",
-        "pageInfo": "صفحہ {current} از {total}",
-        "confirmDelete": "کیا آپ واقعی اس تبصرے کو حذف کرنا چاہتے ہیں؟",
-        "errors": {
-            "loadFailed": "تبصرے لوڈ کرتے وقت ایک خرابی پیش آئی۔"
-        },
-        "reactions": {
-            "support": "متفق",
-            "neutral": "غیر جانبدار",
-            "oppose": "اختلاف"
-        },
-        "you": "آپ"
-    },
-    "profilePage": {
-        "title": "میرا پروفائل",
-        "subtitle": "اپنے اکاؤنٹ کی معلومات کا انتظام کریں اور اپنا پاس ورڈ اپ ڈیٹ کریں",
-        "noPlan": "کوئی منصوبہ نہیں",
-        "lastLogin": "آخری لاگ ان",
-        "accountInfo": "اکاؤنٹ کی معلومات",
-        "systemInfo": "سسٹم کی معلومات",
-        "currentPlan": "موجودہ منصوبہ",
-        "planType": "منصوبے کی قسم",
-        "editAccount": "اکاؤنٹ کی تفصیلات میں ترمیم کریں",
-        "saving": "محفوظ کیا جا رہا ہے...",
-        "saveChanges": "تبدیلیاں محفوظ کریں",
-        "tabs": {
-            "userInfo": "صارف کی معلومات",
-            "editData": "ڈیٹا میں ترمیم کریں",
-            "password": "پاس ورڈ اپ ڈیٹ کریں",
-            "wallet": "والٹ",
-            "privacy": "اکاؤنٹ اور رازداری"
-        },
-        "fields": {
-            "name": "نام",
-            "fullName": "پورا نام",
-            "email": "ای میل",
-            "phone": "فون",
-            "phoneNumber": "فون نمبر",
-            "country": "ملک",
-            "position": "عہدہ",
-            "positionJob": "عہدہ / ملازمت",
-            "birthDate": "تاریخ پیدائش",
-            "role": "کردار",
-            "status": "حیثیت",
-            "points": "پوائنٹس",
-            "rank": "درجہ بندی",
-            "price": "قیمت"
-        },
-        "placeholders": {
-            "fullName": "اپنا پورا نام درج کریں",
-            "countrySearch": "ملک تلاش کریں",
-            "position": "سافٹ ویئر انجینئر"
-        },
-        "status": {
-            "active": "فعال"
-        },
-        "password": {
-            "title": "پاس ورڈ اپ ڈیٹ کریں",
-            "current": "موجودہ پاس ورڈ",
-            "new": "نیا پاس ورڈ",
-            "confirm": "پاس ورڈ کی تصدیق کریں",
-            "updating": "اپ ڈیٹ ہو رہا ہے...",
-            "update": "پاس ورڈ اپ ڈیٹ کریں"
-        },
-        "messages": {
-            "fillAllFields": "براہ کرم تمام خانے پُر کریں۔",
-            "passwordMismatch": "پاس ورڈز میل نہیں کھاتے۔",
-            "passwordUpdated": "پاس ورڈ کامیابی سے اپ ڈیٹ ہو گیا۔",
-            "passwordUpdateFailed": "پاس ورڈ اپ ڈیٹ کرتے وقت ایک خرابی پیش آگئی۔",
-            "chooseCountry": "براہ کرم فہرست سے ملک منتخب کریں۔",
-            "noChanges": "آپ نے کوئی تبدیلی نہیں کی۔",
-            "profileUpdated": "آپ کی پروفائل کامیابی سے اپ ڈیٹ ہو گئی۔",
-            "profileUpdateFailed": "آپ کی پروفائل اپ ڈیٹ کرتے وقت ایک خرابی پیش آگئی۔"
-        },
-        "wallet": {
-            "title": "والٹ",
-            "availableBalance": "دستیاب بیلنس",
-            "deposit": "فنڈز شامل کریں",
-            "recentTransactions": "تازہ ترین لین دین",
-            "depositType": "جمع",
-            "withdrawType": "رقم نکالنا",
-            "noTransactions": "ابھی تک کوئی لین دین نہیں",
-            "withdrawComingSoon": "رقم نکالنے کی سہولت جلد دستیاب ہوگی۔"
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "فی فائل زیادہ سے زیادہ: 100 MB",
-        "dragFiles": "فائلیں یہاں ڈریگ کریں یا",
-        "clickToChoose": "منتخب کرنے کے لیے کلک کریں",
-        "supportedFiles": "تصاویر اور ویڈیوز (فی فائل زیادہ سے زیادہ 100 MB)",
-        "selectedFiles": "منتخب شدہ فائلیں ({count})",
-        "uploading": "اپ لوڈ ہو رہا ہے...",
-        "uploadFiles": "فائلیں اپلوڈ کریں",
-        "success": "فائلیں کامیابی کے ساتھ اپلوڈ ہو گئیں!",
-        "errors": {
-            "fileTooLarge": "فائل \"{name}\" 100 MB سے بڑی ہے۔",
-            "unsupportedType": "فائل کی قسم \"{name}\" معاون نہیں ہے۔"
-        }
-    },
-    "discovery": {
-        "title": "تلاش کے نتائج",
-        "description": "Scemory پر ایونٹس، تصاویر اور ویڈیوز دریافت کریں۔",
-        "showing": "دکھائے جا رہے ہیں",
-        "of": "از",
-        "results": "نتائج",
-        "details": "تفصیلات دیکھیں",
-        "noResultsTitle": "کوئی نتیجہ نہیں ملا",
-        "noResultsDescription": "اپنی تلاش یا فلٹرز تبدیل کر کے دیکھیں۔",
-        "filters": {
-            "allCities": "تمام شہر",
-            "allCountries": "تمام ممالک"
-        },
-        "tabs": {
-            "all": "سب",
-            "event": "ایونٹس",
-            "image": "تصاویر",
-            "video": "ویڈیوز"
-        },
-        "resultLabels": {
-            "event": "ایونٹ",
-            "image": "تصویر",
-            "video": "ویڈیو"
-        },
-        "media": {
-            "price": "قیمت",
-            "addToCart": "کارٹ میں شامل کریں",
-            "added": "شامل ہو گیا",
-            "adding": "شامل کیا جا رہا ہے...",
-            "playVideo": "ویڈیو چلائیں",
-            "pauseVideo": "ویڈیو روکیں"
-        }
-    },
-    "timeline": {
-        "title": "آپ کی سرگرمیوں کی ٹائم لائن",
-        "subtitle": "اپنے ایونٹس، ردعمل، تبصرے اور محفوظ اشیا ایک جگہ دیکھیں۔",
-        "totalActivity": "کل سرگرمی",
-        "latestActivity": "تازہ ترین سرگرمی",
-        "noLatestActivity": "ابھی کوئی سرگرمی نہیں",
-        "loading": "سرگرمی لوڈ ہو رہی ہے...",
-        "loadError": "آپ کی سرگرمی لوڈ نہیں ہو سکی۔",
-        "retry": "دوبارہ کوشش کریں",
-        "viewAll": "سب دیکھیں",
-        "empty": "اس حصے میں کوئی سرگرمی نہیں۔",
-        "previous": "پچھلا",
-        "next": "اگلا",
-        "pageOf": "صفحہ {current} از {last}",
-        "unknownEvent": "نامعلوم ایونٹ",
-        "parentComment": "اس کے جواب میں: {comment}",
-        "reactionTo": "اس پر ردعمل: {comment}",
-        "onEvent": "{event} پر",
-        "tabs": {
-            "all": "تمام سرگرمی",
-            "events": "ایونٹس",
-            "likes": "پسندیدگیاں",
-            "comments": "تبصرے",
-            "replies": "جوابات",
-            "comment_images": "تبصروں کی تصاویر",
-            "comment_interactions": "تبصروں پر ردعمل",
-            "wishlists": "پسندیدہ"
-        },
-        "filters": {
-            "label": "مدت",
-            "all": "تمام وقت",
-            "today": "آج",
-            "this_week": "اس ہفتے",
-            "this_month": "اس مہینے",
-            "custom": "مخصوص مدت",
-            "from": "سے",
-            "to": "تک",
-            "apply": "لاگو کریں",
-            "invalidRange": "درست تاریخوں کی حد منتخب کریں۔"
-        },
-        "reactions": {
-            "support": "حمایت",
-            "neutral": "غیر جانب دار",
-            "exhibitions": "مخالفت"
-        },
-        "status": {
-            "pending": "زیر التوا",
-            "approved": "منظور شدہ",
-            "rejected": "مسترد شدہ",
-            "active": "فعال",
-            "inactive": "غیر فعال"
-        }
-    },
-    "security": {
-        "denied": "اس وسیلے تک رسائی کی اجازت نہیں۔",
-        "notFound": "مطلوبہ وسیلہ نہیں ملا۔",
-        "disabled": "اکاؤنٹ غیر فعال ہے۔ معاونت سے رابطہ کریں۔",
-        "invalidMedia": "میڈیا فائل غلط، غیر معاون یا محفوظ پروسیسنگ حد سے زیادہ ہے۔",
-        "unavailable": "یہ میڈیا ابھی دستیاب نہیں۔",
-        "currencyMismatch": "والیٹ کی کرنسی لین دین سے مطابقت نہیں رکھتی۔",
-        "insufficientBalance": "دستیاب رقم ناکافی ہے۔",
-        "invalidWithdrawal": "موجودہ حالت میں نکاسی بدلی نہیں جا سکتی۔ معاونت سے رابطہ کریں۔",
-        "paymentRequired": "اس منصوبے کے لیے تصدیق شدہ ادائیگی چاہیے۔ معاونت سے رابطہ کریں۔",
-        "invalidCode": "تصدیقی کوڈ غلط یا زائد المیعاد ہے۔",
-        "requestFailed": "درخواست مکمل نہ ہوئی۔ دوبارہ کوشش کریں۔",
-        "rateLimit": "درخواستیں بہت زیادہ ہیں۔ بعد میں کوشش کریں۔"
-    },
-    "googleAuth": {
-        "continue": "Google کے ساتھ جاری رکھیں",
-        "signup": "Google کے ساتھ سائن اپ کریں",
-        "or": "یا",
-        "signingIn": "سائن ان ہو رہا ہے…",
-        "cancelled": "تصدیق منسوخ کر دی گئی۔",
-        "expired_state": "سائن ان کی اس کوشش کی میعاد ختم ہو گئی۔ دوبارہ شروع کریں۔",
-        "invalid_state": "یہ درخواست غلط ہے یا پہلے استعمال ہو چکی ہے۔ دوبارہ شروع کریں۔",
-        "oauth_failed": "Google تصدیق مکمل نہیں کر سکا۔ دوبارہ کوشش کریں۔",
-        "callback_failed": "تصدیق ناکام ہو گئی۔ دوبارہ کوشش کریں۔",
-        "identity_invalid": "Google آپ کی شناخت اور ای میل کی تصدیق نہیں کر سکا۔ سائن ان کا دوسرا طریقہ استعمال کریں۔",
-        "disabled": "یہ اکاؤنٹ دستیاب نہیں ہے۔ مدد کے لیے سپورٹ سے رابطہ کریں۔",
-        "linking_required": "اپنے اکاؤنٹ کے موجودہ طریقے سے سائن ان کریں۔ Google کو منسلک کرنے سے پہلے اس اکاؤنٹ میں سائن ان ضروری ہے؛ منسلک کرنے کی سہولت ابھی دستیاب نہیں۔ ضرورت ہو تو سپورٹ سے رابطہ کریں۔",
-        "unavailable": "Google کی تصدیق فی الحال دستیاب نہیں ہے۔ ای میل اور پاس ورڈ استعمال کریں یا بعد میں کوشش کریں۔",
-        "busy": "سائن ان پہلے سے جاری ہے۔ دوبارہ کوشش کریں۔",
-        "alreadyLinked": "یہ Google اکاؤنٹ پہلے سے منسلک ہے۔",
-        "completeProfile": "اپنا اکاؤنٹ مکمل کریں",
-        "profileRequired": "اکاؤنٹ بنانے کا عمل مکمل کرنے کے لیے ضروری معلومات درج کریں۔",
-        "country": "ملک",
-        "dateOfBirth": "تاریخ پیدائش",
-        "finishSignup": "اکاؤنٹ بنائیں",
-        "profileInvalid": "ملک اور درست تاریخ پیدائش درج کریں جو مستقبل کی نہ ہو۔",
-        "retry": "دوبارہ کوشش کریں",
-        "backToLogin": "سائن ان پر واپس جائیں",
-        "linkAccountTitle": "اپنا Google اکاؤنٹ منسلک کریں",
-        "linkAccountDesc": "اس ای میل سے ایک اکاؤنٹ پہلے ہی موجود ہے۔ اپنا Google اکاؤنٹ محفوظ طریقے سے منسلک کرنے کے لیے اپنا پاس ورڈ درج کریں۔",
-        "accountPassword": "اکاؤنٹ کا پاس ورڈ",
-        "confirmLink": "تصدیق کریں اور اکاؤنٹ منسلک کریں",
-        "invalidCredentials": "غلط پاس ورڈ۔ براہ کرم اپنی معلومات چیک کریں اور دوبارہ کوشش کریں۔",
-        "linkSuccess": "Google اکاؤنٹ کامیابی سے منسلک ہو گیا۔",
-        "unlinkSuccess": "Google اکاؤنٹ کامیابی سے غیر منسلک کر دیا گیا۔",
-        "identity_conflict": "یہ ای میل ایک مختلف Google شناخت سے منسلک ہے۔ موجودہ طریقے سے سائن ان کریں یا سپورٹ سے رابطہ کریں۔",
-        "account_login_required": "اپنے اکاؤنٹ کے موجودہ طریقے سے سائن ان کریں، پھر پروفائل سے Google منسلک کریں۔",
-        "recovery_required": "Google کو دوبارہ منسلک کرنے کے لیے ایک بار اکاؤنٹ بحالی ضروری ہے۔",
-        "recovery_web_required": "Scemory ویب سائٹ پر ایک بار بحالی مکمل کریں۔ آئندہ Google سائن ان خودکار ہوں گے۔",
-        "invalid_recovery_code": "بحالی کوڈ غلط ہے۔ کوڈ چیک کرکے دوبارہ کوشش کریں۔",
-        "recovery_expired": "بحالی کی درخواست ختم ہو گئی۔ Google سائن ان دوبارہ شروع کریں۔",
-        "recovery_attempts_exceeded": "بہت زیادہ غلط کوششیں۔ Google سائن ان دوبارہ شروع کریں۔",
-        "recovery_rate_limited": "حال ہی میں کوڈ بھیجا گیا ہے۔ دوبارہ کوشش سے پہلے انتظار کریں۔",
-        "recovery_unavailable": "بحالی کوڈ نہیں بھیجا جا سکا۔ بعد میں کوشش کریں۔",
-        "recoveryTitle": "اپنا Google اکاؤنٹ دوبارہ منسلک کریں",
-        "recoverySent": "{email} پر بھیجا گیا ایک بار استعمال کا کوڈ درج کریں۔ یہ صرف ایک بار ضروری ہے۔",
-        "recoveryCode": "بحالی کوڈ",
-        "confirmRecovery": "تصدیق کریں اور جاری رکھیں"
-    },
-    "facebookAuth": {
-        "continue": "Facebook کے ساتھ جاری رکھیں",
-        "signup": "Facebook کے ساتھ سائن اپ کریں",
-        "signingIn": "سائن ان ہو رہا ہے…",
-        "unavailable": "Facebook کی تصدیق فی الحال دستیاب نہیں ہے۔ ای میل اور پاس ورڈ استعمال کریں یا بعد میں کوشش کریں۔",
-        "cancelled": "تصدیق منسوخ کر دی گئی۔",
-        "invalid_state": "یہ درخواست غلط ہے یا پہلے استعمال ہو چکی ہے۔ دوبارہ شروع کریں۔",
-        "expired": "سائن ان کی اس کوشش کی میعاد ختم ہو گئی۔ دوبارہ شروع کریں۔",
-        "callback_failed": "تصدیق ناکام ہو گئی۔ دوبارہ کوشش کریں۔",
-        "disabled": "یہ اکاؤنٹ دستیاب نہیں ہے۔ مدد کے لیے سپورٹ سے رابطہ کریں۔",
-        "linking_required": "اپنے اکاؤنٹ کے موجودہ طریقے سے سائن ان کریں۔ Facebook کو منسلک کرنے سے پہلے اس اکاؤنٹ میں سائن ان ضروری ہے؛ منسلک کرنے کی سہولت ابھی دستیاب نہیں۔ ضرورت ہو تو سپورٹ سے رابطہ کریں۔",
-        "busy": "سائن ان پہلے سے جاری ہے۔ دوبارہ کوشش کریں۔",
-        "completeProfile": "اپنا اکاؤنٹ مکمل کریں",
-        "profileRequired": "اکاؤنٹ بنانے کا عمل مکمل کرنے کے لیے ضروری معلومات درج کریں۔",
-        "country": "ملک",
-        "dateOfBirth": "تاریخ پیدائش",
-        "finishSignup": "اکاؤنٹ بنائیں",
-        "retry": "دوبارہ کوشش کریں",
-        "backToLogin": "سائن ان پر واپس جائیں",
-        "identity_invalid": "Facebook آپ کی شناخت کی تصدیق نہیں کر سکا۔ دوبارہ کوشش کریں۔",
-        "verification_required": "اپنے موجودہ اکاؤنٹ کی ای میل اس کے اصل سائن ان طریقے سے تصدیق کریں۔",
-        "email_unavailable": "تصدیقی ای میل نہیں بھیج سکے۔ بعد میں کوشش کریں۔",
-        "otp_expired": "اس کوڈ کی میعاد ختم ہو گئی۔ نیا کوڈ طلب کریں۔",
-        "otp_invalid": "تصدیقی کوڈ غلط ہے۔",
-        "otp_attempts": "کوششیں بہت زیادہ ہیں۔ انتظار کی مدت کے بعد نیا کوڈ طلب کریں۔",
-        "otp_cooldown": "دوسرا کوڈ طلب کرنے سے پہلے انتظار کریں۔",
-        "native_unavailable": "Facebook سائن ان Scemory ویب سائٹ پر دستیاب ہے۔ براوزر استعمال کریں۔",
-        "email": "ای میل پتہ",
-        "sendCode": "تصدیقی کوڈ بھیجیں",
-        "verifyEmail": "اپنی ای میل کی تصدیق کریں",
-        "codeSent": "{email} پر بھیجا گیا کوڈ درج کریں۔",
-        "verificationCode": "تصدیقی کوڈ",
-        "resendIn": "{seconds} سیکنڈ میں دوبارہ بھیجیں",
-        "resend": "کوڈ دوبارہ بھیجیں",
-        "profileInvalid": "درست ای میل، ملک اور تاریخ پیدائش درج کریں جو مستقبل کی نہ ہو۔"
-    },
-    "mediaCredits": {
-        "myCredits": "میرے میڈیا کریڈٹس",
-        "photosAvailable": "دستیاب تصاویر",
-        "videosAvailable": "دستیاب ویڈیوز",
-        "photos": "تصاویر",
-        "videos": "ویڈیوز",
-        "photoQuotaDesc": "مستقل تصویر ریڈیمپشن کوٹہ",
-        "videoQuotaDesc": "مستقل ویڈیو ریڈیمپشن کوٹہ",
-        "activeTier": "فعال رسائی کا درجہ",
-        "breakdownByTier": "درجہ وار تفصیل",
-        "viewDashboard": "کریڈٹ ڈیش بورڈ",
-        "getMoreCredits": "مزید کریڈٹس حاصل کریں",
-        "browseMarketplace": "مارکیٹ دیکھیں",
-        "noTier": "کوئی فعال پلان نہیں",
-        "getWithPlan": "پلان کے ساتھ حاصل کریں",
-        "redeemed": "حاصل شدہ",
-        "redeemSuccess": "پلان کے ساتھ میڈیا کامیابی سے حاصل کر لیا گیا!",
-        "redeemFailed": "پلان کے ساتھ میڈیا حاصل کرنے میں ناکامی۔",
-        "activeGrants": "فعال کوٹہ گرانٹس",
-        "redemptionHistory": "ریڈیمپشن کی تاریخ",
-        "noGrants": "کوئی فعال میڈیا کوٹہ نہیں ہے۔ کریڈٹس حاصل کرنے کے لیے پلان سبسکرائب کریں۔",
-        "noRedemptions": "ابھی تک کوئی میڈیا حاصل نہیں کیا گیا۔",
-        "tier": "درجہ",
-        "plan": "پلان",
-        "tierRank": "درجہ رینک",
-        "grantedOn": "حصول کی تاریخ",
-        "payoutCap": "تخلیق کار ادائیگی کی حد",
-        "payWithWallet": "والٹ سے ادائیگی کریں",
-        "payWithPaypal": "پے پال سے ادائیگی کریں",
-        "insufficientCredits": "ناکافی کریڈٹس یا اس میڈیا کے لیے درجہ ناکافی ہے۔",
-        "includedQuotas": "شامل میڈیا کوٹہ",
-        "permanentQuotas": "مستقل غیر منسوخ شدہ میڈیا کوٹہ"
-    },
-    "dataDeletion": {
-        "title": "ڈیٹا حذف کرنے کی ہدایات",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "ڈیٹا حذف کرنے کی ہدایات",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "ڈیٹا حذف کرنے کی ہدایات",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "لائیو سپورٹ",
+      "description": "ابھی ہماری ٹیم کے کسی رکن سے بات کریں فوری مدد کے لیے",
+      "btn_chat": "لائیو چیٹ شروع کریں",
+      "btn_schedule": "کال شیڈول کریں",
+      "available": "ابھی 3 سپورٹ نمائندے دستیاب ہیں"
     }
+  },
+  "contacts": {
+    "badge": "ہم سے رابطہ کریں",
+    "title": "آئیں بات کریں",
+    "description": "کوئی سوال ہے، مدد چاہیے، یا ایک مخصوص پلان چاہتے ہیں؟ ہمیں پیغام بھیجیں اور ہماری ٹیم آپ سے رابطہ کرے گی۔",
+    "form": {
+      "title": "ہمیں پیغام بھیجیں",
+      "description": "نیچے دیا گیا فارم مکمل کریں، ہم جلد از جلد جواب دیں گے۔",
+      "fullName": "مکمل نام",
+      "fullNamePlaceholder": "اپنا مکمل نام درج کریں",
+      "emailAddress": "ای میل ایڈریس",
+      "emailPlaceholder": "اپنا ای میل ایڈریس درج کریں",
+      "subject": "موضوع",
+      "generalInquiry": "عمومی سوال",
+      "customPlan": "مخصوص پلان",
+      "support": "تکنیکی مدد",
+      "feedback": "رائے",
+      "other": "دیگر",
+      "message": "پیغام",
+      "messagePlaceholder": "ہمیں بتائیں ہم آپ کی کیسے مدد کر سکتے ہیں...",
+      "minimumCharacters": "براہ کرم کافی تفصیلات فراہم کریں۔",
+      "sendMessage": "پیغام بھیجیں",
+      "sending": "بھیجا جا رہا ہے...",
+      "successMessage": "آپ کا پیغام کامیابی سے بھیج دیا گیا ہے۔",
+      "errorMessage": "آپ کا پیغام بھیجتے وقت کچھ غلط ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔"
+    },
+    "info": {
+      "getInTouch": "رابطے میں رہیں",
+      "title": "ہم مدد کے لیے حاضر ہیں",
+      "description": "عمومی سوالات، تکنیکی مدد، یا مخصوص قیمت کے لیے ہماری ٹیم سے رابطہ کریں۔",
+      "emailUs": "ہمیں ای میل کریں",
+      "available": "ہماری ٹیم جلد از جلد جواب دے گی۔",
+      "customPlans": "مخصوص پلانز",
+      "customPlansDescription": "اپنی ٹیم یا کاروبار کے لیے مخصوص حل چاہیے؟ ہمیں اپنی ضرورت بتائیں۔",
+      "customerSupport": "کسٹمر سپورٹ",
+      "supportDescription": "اگر آپ کو اپنے اکاؤنٹ، سبسکرپشن، یا خدمات کے بارے میں مدد چاہیے تو ہم سے رابطہ کریں۔",
+      "followJourney": "ہمارا سفر فالو کریں",
+      "responseTime": "فوری جواب",
+      "responseTimeDescription": "ہم عموماً ایک کاروباری دن کے اندر پیغامات کا جواب دیتے ہیں۔"
+    },
+    "map": {
+      "title": "سین میموری کا عالمی نقشہ",
+      "description": "140+ ممالک میں ہزاروں یادوں کا تصور کریں۔"
+    }
+  },
+  "faq": {
+    "badge": "عمومی سوالات",
+    "title": "اکثر پوچھے جانے والے سوالات",
+    "description": "کچھ عام سوالات کے فوری جوابات۔",
+    "questions": {
+      "0": {
+        "question": "مجھے کتنی جلدی جواب ملے گا؟",
+        "answer": "ہماری ٹیم عموماً ایک کاروباری دن کے اندر جواب دیتی ہے۔"
+      },
+      "1": {
+        "question": "کیا میں مخصوص پلان کی درخواست کر سکتا ہوں؟",
+        "answer": "جی ہاں۔ موضوع کے خانے میں مخصوص پلان منتخب کریں اور اپنی ضروریات بیان کریں۔"
+      },
+      "2": {
+        "question": "کیا میں تکنیکی مدد کے لیے رابطہ کر سکتا ہوں؟",
+        "answer": "جی ہاں۔ تکنیکی مدد منتخب کریں اور مسئلے سے متعلق تمام ضروری تفصیلات شامل کریں۔"
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "ایڈمن کی جانب سے ایونٹ شامل کریں",
+      "trending": "ٹرینڈنگ ایونٹ",
+      "trendingHelp": "اس ایونٹ کو ٹرینڈنگ کے طور پر نشان زد کریں",
+      "generateTags": "AI ٹیگز بنائیں",
+      "generatingTags": "ٹیگز بنائے جا رہے ہیں...",
+      "generateTagsHelp": "موجودہ AI سروس سے ایونٹ اور تصاویر کے ٹیگز تجویز کریں۔ اشاعت سے پہلے آپ ان کا جائزہ لے یا انہیں ہٹا سکتے ہیں۔",
+      "generateTagsError": "اس وقت AI ٹیگز نہیں بنائے جا سکے۔",
+      "created": "ایونٹ کامیابی سے بنا کر شائع کر دیا گیا۔"
+    },
+    "chooseFiles": "تصاویر منتخب کریں",
+    "mediaCount": "میڈیا کا تعداد",
+    "title": "نیا ایونٹ شامل کریں",
+    "basicInfo": "بنیادی معلومات",
+    "locationCategory": "مقام اور کیٹیگری",
+    "dates": "تاریخیں",
+    "images": "ایونٹ کی تصاویر",
+    "eventTitle": "ایونٹ کا عنوان",
+    "description": "تفصیل",
+    "country": "ملک",
+    "searchCountry": "ملک تلاش کریں...",
+    "selectCountry": "ملک منتخب کریں",
+    "city": "شہر",
+    "selectCity": "شہر منتخب کریں",
+    "selectCityFirst": "پہلے ملک منتخب کریں",
+    "mainCategory": "مرکزی کیٹیگری",
+    "subCategory": "ذیلی کیٹیگری",
+    "selectSubFirst": "پہلے کیٹیگری منتخب کریں",
+    "selectLocationMap": "نقشے پر مقام منتخب کریں",
+    "selectedCoords": "منتخب کردہ کوآرڈینیٹس: Lat: {lat} , Lng: {lng}",
+    "lat": "Lat",
+    "lng": "Lng",
+    "pleaseSelectLocation": "براہ کرم نقشے پر ایک مقام منتخب کریں",
+    "startDate": "شروع ہونے کی تاریخ",
+    "endDate": "ختم ہونے کی تاریخ",
+    "startTime": "شروع ہونے کا وقت",
+    "dragDropHere": "تصاویر یہاں کلک کریں یا ڈریگ کریں",
+    "formatsMax": "PNG • JPG • WEBP | فی تصویر زیادہ سے زیادہ 5MB",
+    "chooseImages": "تصاویر منتخب کریں",
+    "addMore": "مزید شامل کریں",
+    "imagesCount": "{count} / 8 تصاویر",
+    "remove": "ہٹائیں",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+      "mediaRequired": "کم از کم ایک تصویر یا ویڈیو اپ لوڈ کریں۔"
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    },
+    "minimumRequirementsHint": "ایونٹ بنانے کے لیے صرف عنوان، تفصیل اور کم از کم ایک تصویر یا ویڈیو درکار ہے۔ باقی تمام خانے اختیاری ہیں۔"
+  },
+  "commons": {
+    "required": "ضروری",
+    "cancel": "منسوخ کریں",
+    "saveDraft": "ڈرافٹ محفوظ کریں",
+    "create": "ایونٹ بنائیں",
+    "creating": "بنایا جا رہا ہے...",
+    "choose": "منتخب کریں"
+  },
+  "eventss": {
+    "no_title": "بغیر عنوان ایونٹ",
+    "undefined_city": "غیر واضح",
+    "from_map": "نقشے سے"
+  },
+  "wishlist": {
+    "title": "پسندیدہ لسٹ",
+    "loading": "لوڈ ہو رہا ہے...",
+    "empty": {
+      "main": "فی الحال پسندیدہ میں کوئی آئٹم نہیں ہے",
+      "hint": "اپنے پسندیدہ ایونٹس شامل کرنا شروع کریں!"
+    },
+    "fallback_image_alt": "ایونٹ کی ڈیفالٹ تصویر",
+    "uncategorized": "غیر درجہ بند",
+    "no_title": "بغیر عنوان",
+    "city_label": "شہر:",
+    "date_label": "تاریخ:",
+    "time_label": "وقت:",
+    "not_specified": "غیر واضح",
+    "view_details": "تفصیلات دیکھیں",
+    "remove": "پسندیدہ سے ہٹائیں",
+    "deleting": "ہٹایا جا رہا ہے...",
+    "added_at": "شامل کیا گیا",
+    "pagination": {
+      "previous": "پچھلا",
+      "next": "اگلا",
+      "page_info": "صفحہ {current} از {total}"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "سروس کی شرائط",
+    "last_updated": "آخری اپ ڈیٹ: 2026",
+    "acceptance_title": "شرائط کی منظوری",
+    "acceptance_text": "اس پلیٹ فارم تک رسائی حاصل کرنے یا اسے استعمال کرنے سے آپ ان شرائط و ضوابط سے متفق ہوتے ہیں۔",
+    "accounts_title": "صارف اکاؤنٹس",
+    "accounts_text": "صارف اپنے اکاؤنٹ کی معلومات کی رازداری برقرار رکھنے کے ذمہ دار ہیں۔",
+    "content_title": "مواد کی ملکیت",
+    "content_text": "پلیٹ فارم پر موجود تمام مواد کاپی رائٹ اور دانشورانہ املاک کے قوانین کے تحت محفوظ ہے۔",
+    "ai_title": "مصنوعی ذہانت کی پابندیاں",
+    "ai_text": "سرکاری اجازت کے بغیر پلیٹ فارم کے مواد کو مصنوعی ذہانت کے ماڈلز کی تربیت کے لیے استعمال کرنا سختی سے منع ہے۔",
+    "prohibited_title": "ممنوعہ استعمال",
+    "prohibited_text": "صارفین کو پلیٹ فارم کا غلط استعمال کرنے یا غیر مجاز رسائی حاصل کرنے کی اجازت نہیں ہے۔",
+    "liability_title": "ذمہ داری کی حد",
+    "liability_text": "پلیٹ فارم سروس کے استعمال سے ہونے والے کسی بھی بالواسطہ نقصان کا ذمہ دار نہیں ہوگا۔",
+    "changes_title": "شرائط میں تبدیلی",
+    "changes_text": "ہم کسی بھی وقت ان شرائط کو تبدیل کرنے کا حق محفوظ رکھتے ہیں۔",
+    "contact_title": "رابطہ",
+    "contact_text": "ان شرائط کے بارے میں کسی بھی سوال کے لیے پلیٹ فارم انتظامیہ سے رابطہ کریں۔"
+  },
+  "plans": {
+    "customPrice": "ہم سے رابطہ کریں",
+    "customPricingDescription": "آپ کی ضروریات کے مطابق قیمت",
+    "contactUs": "ہم سے رابطہ کریں",
+    "chooseYourPlan": "اپنا پلان منتخب کریں",
+    "getStarted": "شروع کریں",
+    "subscribe": "ابھی سبسکرائب کریں",
+    "noFeatures": "ابھی کوئی فیچر نہیں",
+    "mostPopular": "سب سے مقبول",
+    "free": "مفت",
+    "ourPlans": "ہمارے پلانز",
+    "description": "مفت شروع کریں یا اپنے لیے بہترین پلان منتخب کریں۔",
+    "price": "قیمت",
+    "features": "خصوصیات",
+    "Monthly": "ماہانہ",
+    "perMonth": "ماہانہ",
+    "noCreditCard": "کریڈٹ کارڈ درکار نہیں",
+    "prioritySupport": "ترجیحی مدد",
+    "securePayments": "محفوظ ادائیگیاں",
+    "moneyBack": "30 دن کی ضمانت",
+    "support247": "24/7 سپورٹ",
+    "Yearly": "سالانہ",
+    "cancelAnytime": "کسی بھی وقت منسوخ کریں",
+    "unlimitedEvents": "لامحدود ایونٹس",
+    "addEvents": "ایونٹس شامل کریں",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "پلان",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "پلان لوڈ نہیں ہو سکے۔ دوبارہ کوشش کریں۔"
+    },
+    "customPlanNote": "آپ کی ضروریات کے مطابق بنایا گیا",
+    "basicAccessIncluded": "بنیادی رسائی شامل ہے",
+    "usd": "امریکی ڈالر"
+  },
+  "free": "مفت",
+  "basic": "بنیادی",
+  "professional": "پیشہ ور",
+  "premium": "پریمیم",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "آپ کا براؤزر ویڈیو ٹیگ کو سپورٹ نہیں کرتا۔",
+      "badge": "Scemory ایونٹ آرکائیو",
+      "title": "دستاویزی ایونٹس دریافت کریں",
+      "titleHighlight": "نقشے کے ذریعے",
+      "description": "دنیا بھر کے صحافیوں، میڈیا ٹیموں اور عینی شاہد معاونین کی جانب سے اپ لوڈ کردہ ایونٹ میڈیا دریافت کریں۔",
+      "searchEvents": "ایونٹس تلاش کریں",
+      "uploadStory": "اپنی کہانی اپ لوڈ کریں",
+      "bottomText": "دنیا بھر کی کہانیاں، مقامات اور لمحات دریافت کریں۔",
+      "searchPlaceholder": "  ایونٹس، مقامات یا ٹیگز تلاش کریں"
+    },
+    "profileToast": {
+      "title": "پروفائل مکمل نہیں",
+      "message": "آپ کا پروفائل مکمل نہیں۔ براہ کرم اپ ڈیٹ کریں:",
+      "complete": "مکمل کرنے کے لیے کلک کریں",
+      "fields": {
+        "phone": "فون",
+        "country": "ملک",
+        "position": "عہدہ",
+        "dateOfBirth": "تاریخ پیدائش"
+      }
+    },
+    "trending": {
+      "loadError": "رجحان ساز ایونٹس ابھی لوڈ نہیں ہو سکے۔",
+      "kicker": "رجحان",
+      "title": "رجحان ساز ایونٹس",
+      "description": "آرکائیو میں توجہ حاصل کرنے والے ایونٹس۔",
+      "emptyTitle": "ابھی کوئی رجحان ساز ایونٹ نہیں",
+      "emptyDescription": "نمایاں ایونٹس کے لیے جلد دوبارہ دیکھیں۔",
+      "views": "مناظر",
+      "likes": "پسندیدگیاں",
+      "slidesLabel": "رجحان ساز ایونٹ سلائیڈز",
+      "untitledEvent": "بے عنوان ایونٹ",
+      "showSlide": "رجحان ساز ایونٹ {number} دکھائیں"
+    },
+    "map": {
+      "tilesSlow": "نقشے کی ٹائلز ظاہر ہونے میں زیادہ وقت لے رہی ہیں۔",
+      "loadError": "نقشہ ابھی لوڈ نہیں ہو سکا۔",
+      "loadMap": "نقشہ لوڈ کریں",
+      "loading": "نقشہ لوڈ ہو رہا ہے...",
+      "retry": "نقشہ دوبارہ لوڈ کریں",
+      "openFullscreen": "نقشہ فل اسکرین کھولیں",
+      "closeFullscreen": "فل اسکرین نقشہ بند کریں"
+    },
+    "about": {
+      "imageAlt": "Scemory دستاویزی پلیٹ فارم",
+      "kicker": "قابل اعتماد ایونٹ میموری",
+      "title": "Scemory کے بارے میں",
+      "description": "Scemory صحافیوں، میڈیا ٹیموں اور عینی شاہد معاونین کے لیے بنایا گیا ہے جنہیں واقعات کے وقت انہیں دستاویز کرنے کے لیے قابل اعتماد جگہ چاہیے۔ یہ پلیٹ فارم اپ لوڈ شدہ میڈیا، ایونٹ میٹا ڈیٹا اور مقام کے سیاق کو جوڑتا ہے تاکہ لوگ عوامی کہانیاں وضاحت کے ساتھ دریافت کر سکیں۔",
+      "features": {
+        "upload": "تصاویر، ویڈیوز اور فیلڈ ڈیٹا اپ لوڈ کریں",
+        "explore": "ایونٹس کو انٹرایکٹو نقشے پر دریافت کریں",
+        "preserve": "تصدیق شدہ کہانیوں کو ڈیجیٹل آرکائیو میں محفوظ کریں"
+      }
+    },
+    "events": {
+      "showing": "دکھایا جا رہا ہے",
+      "of": "میں سے",
+      "events": "ایونٹس",
+      "seeMore": "مزید دیکھیں",
+      "badge": "ایونٹس"
+    },
+    "tags": {
+      "loading": "ٹیگز لوڈ ہو رہے ہیں...",
+      "showingFirst": "پہلے دکھائے جا رہے ہیں",
+      "searchToFindMore": "ٹیگز۔ مزید تلاش کرنے کے لیے تلاش کریں۔",
+      "none": "کوئی ٹیگ نہیں ملا",
+      "helper": "نقشے کے ایونٹس فلٹر کرنے کے لیے ایک یا زیادہ ٹیگز منتخب کریں۔",
+      "clearSelected": "منتخب ٹیگز صاف کریں",
+      "searchMore": "مزید ٹیگز تلاش کریں"
+    },
+    "search": {
+      "clearText": "صاف کریں",
+      "clearTags": "صاف کریں"
+    },
+    "specialCoverage": {
+      "badge": "خصوصی کوریج",
+      "title": "کیا آپ کے پاس کوئی ایسا ایونٹ ہے جو کوریج کا مستحق ہو؟",
+      "description": "Scemory کو ایسے ایونٹ کے بارے میں بتائیں جو خصوصی کوریج کا مستحق ہے اور اس کی کہانی کو وسیع تر سامعین تک پہنچانے میں مدد کریں۔",
+      "contactUs": "ہم سے رابطہ کریں",
+      "modal": {
+        "title": "خصوصی کوریج",
+        "eventName": "ایونٹ کا نام",
+        "eventNamePlaceholder": "ایونٹ کا نام درج کریں",
+        "description": "ایونٹ کی تفصیل",
+        "descriptionPlaceholder": "ہمیں ایونٹ اور اس کی کوریج کی اہمیت کے بارے میں بتائیں",
+        "cancel": "منسوخ کریں",
+        "send": "بھیجیں",
+        "close": "بند کریں",
+        "country": "ملک",
+        "city": "شہر",
+        "searchCity": "شہر تلاش کریں",
+        "addNewCity": "نیا شہر شامل کریں",
+        "createCity": "شہر بنائیں",
+        "startDate": "آغاز کی تاریخ",
+        "coverageTime": "کوریج کا وقت",
+        "eventType": "ایونٹ کی قسم",
+        "personalEvent": "ذاتی ایونٹ",
+        "publicEvent": "عوامی ایونٹ",
+        "selectCountry": "ملک منتخب کریں",
+        "selectCity": "شہر منتخب کریں",
+        "noCitiesFound": "کوئی شہر نہیں ملا",
+        "noCountriesFound": "کوئی ملک نہیں ملا",
+        "countryRequired": "براہ کرم ملک منتخب کریں۔",
+        "cityRequired": "براہ کرم شہر منتخب کریں۔",
+        "startDateRequired": "براہ کرم آغاز کی تاریخ منتخب کریں۔",
+        "eventTypeRequired": "براہ کرم ایونٹ کی قسم منتخب کریں۔",
+        "cityCreateFailed": "شہر نہیں بنایا جا سکا۔ براہ کرم دوبارہ کوشش کریں۔",
+        "sending": "بھیجا جا رہا ہے...",
+        "eventNameRequired": "ایونٹ کا نام درج کریں۔",
+        "descriptionRequired": "ایونٹ کی تفصیل درج کریں۔",
+        "success": "خصوصی کوریج کی درخواست کامیابی سے بھیج دی گئی ہے۔"
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "معیار کا انتباہ"
+    },
+    "videoReady": "ویڈیو اپ لوڈ کے لیے تیار ہے۔",
+    "qualityWarning": "معیار کی جانچ صرف رہنمائی کے لیے ہے اور ایونٹ بنانے سے نہیں روکتی۔"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "آپ کی خریدی ہوئی فائلیں یہاں دکھائی دیں گی"
+  },
+  "experience": {
+    "kicker": "SCEMORY تجربہ",
+    "title": "ایک پلیٹ فارم۔ کہانی کا ہر پہلو۔",
+    "pathsLabel": "Scemory تجربے کے راستے",
+    "highlightsLabel": "سیکشن کی جھلکیاں",
+    "tabs": {
+      "explore": {
+        "label": "ایونٹس دریافت کریں",
+        "eyebrow": "ایونٹس کے ذریعے دنیا دریافت کریں",
+        "heading": "دنیا بھر کی کہانیاں، ایونٹس اور مقامات دریافت کریں",
+        "description": "نقشے سے دستاویزی عوامی ایونٹس، ذاتی یادوں اور حقیقی مقامات و معاونین کے سیاق سے بنی بصری کہانیوں تک جائیں۔",
+        "cta": "ایونٹس دریافت کریں",
+        "imageAlt": "دستاویزی میڈیا پینلز کے ساتھ Scemory ایونٹ دریافت انٹرفیس",
+        "features": {
+          "browse": "ایونٹ میڈیا کو مقام اور ٹائم لائن کے لحاظ سے براؤز کریں",
+          "discover": "بصری آرکائیو کے ذریعے قریبی کہانیاں دریافت کریں",
+          "move": "جائزے سے دستاویزی ایونٹ تفصیل تک جائیں"
+        },
+        "visual": {
+          "kicker": "براہ راست دریافت",
+          "title": "نقشے سے منسلک ایونٹ کہانیاں",
+          "stat": "عالمی آرکائیو",
+          "note": "مقامات، تاریخیں اور میڈیا ایک منظر میں"
+        }
+      },
+      "share": {
+        "label": "اپنی کہانی شیئر کریں",
+        "eyebrow": "لمحات کو دستاویزی کہانیوں میں بدلیں",
+        "heading": "اہم لمحات کو دستاویز کریں",
+        "description": "ایونٹ بنائیں، تصاویر اور میڈیا اپ لوڈ کریں، مقام کی تفصیلات شامل کریں اور Scemory آرکائیو میں اپنا نقطہ نظر شامل کریں۔",
+        "cta": "اپنی کہانی اپ لوڈ کریں",
+        "imageAlt": "ایونٹ میڈیا دستاویز کرنے کے لیے Scemory معاون ورک اسپیس",
+        "features": {
+          "add": "میڈیا، وضاحتیں اور مقام کا سیاق شامل کریں",
+          "build": "خام لمحات سے منظم یاد بنائیں",
+          "keep": "معاون کہانیوں کو آرکائیو سے منسلک رکھیں"
+        },
+        "visual": {
+          "kicker": "معاون فلو",
+          "title": "میڈیا، سیاق اور مقام",
+          "stat": "کہانی بنانے والا",
+          "note": "لمحات کو بامعنی تفصیل کے ساتھ اپ لوڈ کریں"
+        }
+      },
+      "license": {
+        "label": "میڈیا لائسنس کریں",
+        "eyebrow": "استعمال کے لیے تیار میڈیا دریافت کریں",
+        "heading": "ایونٹ میڈیا اعتماد کے ساتھ تلاش اور لائسنس کریں",
+        "description": "بصری مواد براؤز کریں، دستیاب ایونٹ میڈیا کا پیش منظر دیکھیں اور Scemory کے موجودہ دریافت تجربے سے لائسنسنگ اختیارات تک جائیں۔",
+        "cta": "میڈیا دریافت کریں",
+        "imageAlt": "لائسنس کے قابل ایونٹ مواد براؤز کرنے کے لیے Scemory میڈیا پینلز",
+        "features": {
+          "preview": "تفصیلات کھولنے سے پہلے ایونٹ بصریات دیکھیں",
+          "use": "میڈیا اختیارات کے راستے کے طور پر ایونٹ صفحات استعمال کریں",
+          "keep": "دریافت اور لائسنسنگ نیت کو منسلک رکھیں"
+        },
+        "visual": {
+          "kicker": "میڈیا رسائی",
+          "title": "ایونٹ بصریات جائزے کے لیے تیار",
+          "stat": "لائسنسنگ راستہ",
+          "note": "دریافت سے تفصیل صفحات تک"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "دوبارہ کوشش کریں",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "میڈیا",
+    "locationShort": "مقام",
+    "dateShort": "تاریخ",
+    "searchCountry": "کسی ملک کو تلاش کریں...",
+    "featuredEvents": "نمایاں ایونٹس"
+  },
+  "country": {
+    "discoverFeaturedIn": "نمایاں ایونٹس دریافت کریں",
+    "cities": "شہر",
+    "availableCity": "دستیاب شہر",
+    "currentEvent": "موجودہ ایونٹ",
+    "eventMarkers": "ایونٹ مارکرز",
+    "clickableMarker": "قابل کلک مارکر",
+    "differentCategory": "مختلف زمرہ",
+    "availableCities": "دستیاب شہر",
+    "noEvents": "اس وقت کوئی ایونٹ دستیاب نہیں",
+    "checkBack": "جلد دوبارہ چیک کریں",
+    "noImage": "کوئی تصویر نہیں",
+    "viewEvent": "ایونٹ دیکھیں",
+    "noCategory": "کوئی زمرہ نہیں",
+    "countryFallback": "ملک",
+    "cityFallback": "شہر",
+    "eventFallback": "ایونٹ",
+    "clickMarkerToOpen": "کھولنے کے لیے مارکر پر کلک کریں",
+    "errors": {
+      "unauthorized": "غیر مجاز. براہ کرم سائن ان کریں۔",
+      "notFound": "ملک نہیں ملا۔",
+      "loadFailed": "ڈیٹا لوڈ کرتے وقت ایک خرابی پیش آئی۔",
+      "mapLibraryFailed": "میپ لائبریری لوڈ نہیں ہو سکی۔",
+      "bordersFailed": "ملک کی سرحدیں لوڈ نہیں ہو سکیں",
+      "invalidBorders": "ملک کی سرحدوں کی فائل درست نہیں۔",
+      "countryBordersNotFound": "ملک کی سرحدیں نہیں مل سکیں",
+      "countryBoundsFailed": "ملک کی حدود کا حساب نہیں لگایا جا سکا۔",
+      "mapLoadFailed": "میپ لوڈ کرتے وقت ایک خرابی پیش آئی۔"
+    }
+  },
+  "cancel": "منسوخ کریں",
+  "login": "لاگ ان کریں",
+  "sending": "بھیج رہا ہے...",
+  "send_reply": "جواب بھیجیں",
+  "report": {
+    "action": "رپورٹ کریں",
+    "commentTitle": "اس تبصرے کی رپورٹ کریں",
+    "modalTitle": "تبصرے کی رپورٹ کریں",
+    "reasonPrompt": "اس تبصرے کی رپورٹ کرنے کی وجہ منتخب کریں:",
+    "submit": "رپورٹ جمع کریں",
+    "submitting": "جمع کر رہا ہے...",
+    "successTitle": "رپورٹ جمع کر دی گئی",
+    "successMessage": "شکریہ۔ ہم جلد ہی اس تبصرے کا جائزہ لیں گے۔",
+    "errors": {
+      "selectReason": "براہ کرم رپورٹ کی وجہ منتخب کریں۔",
+      "submitFailed": "رپورٹ جمع کراتے وقت ایک خرابی پیش آئی۔ براہ کرم دوبارہ کوشش کریں۔"
+    },
+    "reasons": {
+      "spam": "اسپام",
+      "offensive": "فحش مواد",
+      "inappropriate": "غیر موزوں",
+      "illegal": "غیر قانونی مواد",
+      "untrue": "جھوٹا مواد",
+      "falseInformation": "گمراہ کن معلومات",
+      "other": "دوسری وجہ"
+    }
+  },
+  "commentsPage": {
+    "title": "تبصرے",
+    "emptyLabel": "تبصرے",
+    "emptyMessage": "ابھی تک کوئی تبصرہ نہیں۔ پہلا تبصرہ کریں۔",
+    "attachmentAlt": "تبصرے کی منسلکہ",
+    "pageInfo": "صفحہ {current} از {total}",
+    "confirmDelete": "کیا آپ واقعی اس تبصرے کو حذف کرنا چاہتے ہیں؟",
+    "errors": {
+      "loadFailed": "تبصرے لوڈ کرتے وقت ایک خرابی پیش آئی۔"
+    },
+    "reactions": {
+      "support": "متفق",
+      "neutral": "غیر جانبدار",
+      "oppose": "اختلاف"
+    },
+    "you": "آپ"
+  },
+  "profilePage": {
+    "title": "میرا پروفائل",
+    "subtitle": "اپنے اکاؤنٹ کی معلومات کا انتظام کریں اور اپنا پاس ورڈ اپ ڈیٹ کریں",
+    "noPlan": "کوئی منصوبہ نہیں",
+    "lastLogin": "آخری لاگ ان",
+    "accountInfo": "اکاؤنٹ کی معلومات",
+    "systemInfo": "سسٹم کی معلومات",
+    "currentPlan": "موجودہ منصوبہ",
+    "planType": "منصوبے کی قسم",
+    "editAccount": "اکاؤنٹ کی تفصیلات میں ترمیم کریں",
+    "saving": "محفوظ کیا جا رہا ہے...",
+    "saveChanges": "تبدیلیاں محفوظ کریں",
+    "tabs": {
+      "userInfo": "صارف کی معلومات",
+      "editData": "ڈیٹا میں ترمیم کریں",
+      "password": "پاس ورڈ اپ ڈیٹ کریں",
+      "wallet": "والٹ",
+      "privacy": "اکاؤنٹ اور رازداری"
+    },
+    "fields": {
+      "name": "نام",
+      "fullName": "پورا نام",
+      "email": "ای میل",
+      "phone": "فون",
+      "phoneNumber": "فون نمبر",
+      "country": "ملک",
+      "position": "عہدہ",
+      "positionJob": "عہدہ / ملازمت",
+      "birthDate": "تاریخ پیدائش",
+      "role": "کردار",
+      "status": "حیثیت",
+      "points": "پوائنٹس",
+      "rank": "درجہ بندی",
+      "price": "قیمت"
+    },
+    "placeholders": {
+      "fullName": "اپنا پورا نام درج کریں",
+      "countrySearch": "ملک تلاش کریں",
+      "position": "سافٹ ویئر انجینئر"
+    },
+    "status": {
+      "active": "فعال"
+    },
+    "password": {
+      "title": "پاس ورڈ اپ ڈیٹ کریں",
+      "current": "موجودہ پاس ورڈ",
+      "new": "نیا پاس ورڈ",
+      "confirm": "پاس ورڈ کی تصدیق کریں",
+      "updating": "اپ ڈیٹ ہو رہا ہے...",
+      "update": "پاس ورڈ اپ ڈیٹ کریں"
+    },
+    "messages": {
+      "fillAllFields": "براہ کرم تمام خانے پُر کریں۔",
+      "passwordMismatch": "پاس ورڈز میل نہیں کھاتے۔",
+      "passwordUpdated": "پاس ورڈ کامیابی سے اپ ڈیٹ ہو گیا۔",
+      "passwordUpdateFailed": "پاس ورڈ اپ ڈیٹ کرتے وقت ایک خرابی پیش آگئی۔",
+      "chooseCountry": "براہ کرم فہرست سے ملک منتخب کریں۔",
+      "noChanges": "آپ نے کوئی تبدیلی نہیں کی۔",
+      "profileUpdated": "آپ کی پروفائل کامیابی سے اپ ڈیٹ ہو گئی۔",
+      "profileUpdateFailed": "آپ کی پروفائل اپ ڈیٹ کرتے وقت ایک خرابی پیش آگئی۔"
+    },
+    "wallet": {
+      "title": "والٹ",
+      "availableBalance": "دستیاب بیلنس",
+      "deposit": "فنڈز شامل کریں",
+      "recentTransactions": "تازہ ترین لین دین",
+      "depositType": "جمع",
+      "withdrawType": "رقم نکالنا",
+      "noTransactions": "ابھی تک کوئی لین دین نہیں",
+      "withdrawComingSoon": "رقم نکالنے کی سہولت جلد دستیاب ہوگی۔"
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "فی فائل زیادہ سے زیادہ: 100 MB",
+    "dragFiles": "فائلیں یہاں ڈریگ کریں یا",
+    "clickToChoose": "منتخب کرنے کے لیے کلک کریں",
+    "supportedFiles": "تصاویر اور ویڈیوز (فی فائل زیادہ سے زیادہ 100 MB)",
+    "selectedFiles": "منتخب شدہ فائلیں ({count})",
+    "uploading": "اپ لوڈ ہو رہا ہے...",
+    "uploadFiles": "فائلیں اپلوڈ کریں",
+    "success": "فائلیں کامیابی کے ساتھ اپلوڈ ہو گئیں!",
+    "errors": {
+      "fileTooLarge": "فائل \"{name}\" 100 MB سے بڑی ہے۔",
+      "unsupportedType": "فائل کی قسم \"{name}\" معاون نہیں ہے۔"
+    }
+  },
+  "discovery": {
+    "title": "تلاش کے نتائج",
+    "description": "Scemory پر ایونٹس، تصاویر اور ویڈیوز دریافت کریں۔",
+    "showing": "دکھائے جا رہے ہیں",
+    "of": "از",
+    "results": "نتائج",
+    "details": "تفصیلات دیکھیں",
+    "noResultsTitle": "کوئی نتیجہ نہیں ملا",
+    "noResultsDescription": "اپنی تلاش یا فلٹرز تبدیل کر کے دیکھیں۔",
+    "filters": {
+      "allCities": "تمام شہر",
+      "allCountries": "تمام ممالک"
+    },
+    "tabs": {
+      "all": "سب",
+      "event": "ایونٹس",
+      "image": "تصاویر",
+      "video": "ویڈیوز"
+    },
+    "resultLabels": {
+      "event": "ایونٹ",
+      "image": "تصویر",
+      "video": "ویڈیو"
+    },
+    "media": {
+      "price": "قیمت",
+      "addToCart": "کارٹ میں شامل کریں",
+      "added": "شامل ہو گیا",
+      "adding": "شامل کیا جا رہا ہے...",
+      "playVideo": "ویڈیو چلائیں",
+      "pauseVideo": "ویڈیو روکیں"
+    }
+  },
+  "timeline": {
+    "title": "آپ کی سرگرمیوں کی ٹائم لائن",
+    "subtitle": "اپنے ایونٹس، ردعمل، تبصرے اور محفوظ اشیا ایک جگہ دیکھیں۔",
+    "totalActivity": "کل سرگرمی",
+    "latestActivity": "تازہ ترین سرگرمی",
+    "noLatestActivity": "ابھی کوئی سرگرمی نہیں",
+    "loading": "سرگرمی لوڈ ہو رہی ہے...",
+    "loadError": "آپ کی سرگرمی لوڈ نہیں ہو سکی۔",
+    "retry": "دوبارہ کوشش کریں",
+    "viewAll": "سب دیکھیں",
+    "empty": "اس حصے میں کوئی سرگرمی نہیں۔",
+    "previous": "پچھلا",
+    "next": "اگلا",
+    "pageOf": "صفحہ {current} از {last}",
+    "unknownEvent": "نامعلوم ایونٹ",
+    "parentComment": "اس کے جواب میں: {comment}",
+    "reactionTo": "اس پر ردعمل: {comment}",
+    "onEvent": "{event} پر",
+    "tabs": {
+      "all": "تمام سرگرمی",
+      "events": "ایونٹس",
+      "likes": "پسندیدگیاں",
+      "comments": "تبصرے",
+      "replies": "جوابات",
+      "comment_images": "تبصروں کی تصاویر",
+      "comment_interactions": "تبصروں پر ردعمل",
+      "wishlists": "پسندیدہ"
+    },
+    "filters": {
+      "label": "مدت",
+      "all": "تمام وقت",
+      "today": "آج",
+      "this_week": "اس ہفتے",
+      "this_month": "اس مہینے",
+      "custom": "مخصوص مدت",
+      "from": "سے",
+      "to": "تک",
+      "apply": "لاگو کریں",
+      "invalidRange": "درست تاریخوں کی حد منتخب کریں۔"
+    },
+    "reactions": {
+      "support": "حمایت",
+      "neutral": "غیر جانب دار",
+      "exhibitions": "مخالفت"
+    },
+    "status": {
+      "pending": "زیر التوا",
+      "approved": "منظور شدہ",
+      "rejected": "مسترد شدہ",
+      "active": "فعال",
+      "inactive": "غیر فعال"
+    }
+  },
+  "security": {
+    "denied": "اس وسیلے تک رسائی کی اجازت نہیں۔",
+    "notFound": "مطلوبہ وسیلہ نہیں ملا۔",
+    "disabled": "اکاؤنٹ غیر فعال ہے۔ معاونت سے رابطہ کریں۔",
+    "invalidMedia": "میڈیا فائل غلط، غیر معاون یا محفوظ پروسیسنگ حد سے زیادہ ہے۔",
+    "unavailable": "یہ میڈیا ابھی دستیاب نہیں۔",
+    "currencyMismatch": "والیٹ کی کرنسی لین دین سے مطابقت نہیں رکھتی۔",
+    "insufficientBalance": "دستیاب رقم ناکافی ہے۔",
+    "invalidWithdrawal": "موجودہ حالت میں نکاسی بدلی نہیں جا سکتی۔ معاونت سے رابطہ کریں۔",
+    "paymentRequired": "اس منصوبے کے لیے تصدیق شدہ ادائیگی چاہیے۔ معاونت سے رابطہ کریں۔",
+    "invalidCode": "تصدیقی کوڈ غلط یا زائد المیعاد ہے۔",
+    "requestFailed": "درخواست مکمل نہ ہوئی۔ دوبارہ کوشش کریں۔",
+    "rateLimit": "درخواستیں بہت زیادہ ہیں۔ بعد میں کوشش کریں۔"
+  },
+  "googleAuth": {
+    "continue": "Google کے ساتھ جاری رکھیں",
+    "signup": "Google کے ساتھ سائن اپ کریں",
+    "or": "یا",
+    "signingIn": "سائن ان ہو رہا ہے…",
+    "cancelled": "تصدیق منسوخ کر دی گئی۔",
+    "expired_state": "سائن ان کی اس کوشش کی میعاد ختم ہو گئی۔ دوبارہ شروع کریں۔",
+    "invalid_state": "یہ درخواست غلط ہے یا پہلے استعمال ہو چکی ہے۔ دوبارہ شروع کریں۔",
+    "oauth_failed": "Google تصدیق مکمل نہیں کر سکا۔ دوبارہ کوشش کریں۔",
+    "callback_failed": "تصدیق ناکام ہو گئی۔ دوبارہ کوشش کریں۔",
+    "identity_invalid": "Google آپ کی شناخت اور ای میل کی تصدیق نہیں کر سکا۔ سائن ان کا دوسرا طریقہ استعمال کریں۔",
+    "disabled": "یہ اکاؤنٹ دستیاب نہیں ہے۔ مدد کے لیے سپورٹ سے رابطہ کریں۔",
+    "linking_required": "اپنے اکاؤنٹ کے موجودہ طریقے سے سائن ان کریں۔ Google کو منسلک کرنے سے پہلے اس اکاؤنٹ میں سائن ان ضروری ہے؛ منسلک کرنے کی سہولت ابھی دستیاب نہیں۔ ضرورت ہو تو سپورٹ سے رابطہ کریں۔",
+    "unavailable": "Google کی تصدیق فی الحال دستیاب نہیں ہے۔ ای میل اور پاس ورڈ استعمال کریں یا بعد میں کوشش کریں۔",
+    "busy": "سائن ان پہلے سے جاری ہے۔ دوبارہ کوشش کریں۔",
+    "alreadyLinked": "یہ Google اکاؤنٹ پہلے سے منسلک ہے۔",
+    "completeProfile": "اپنا اکاؤنٹ مکمل کریں",
+    "profileRequired": "اکاؤنٹ بنانے کا عمل مکمل کرنے کے لیے ضروری معلومات درج کریں۔",
+    "country": "ملک",
+    "dateOfBirth": "تاریخ پیدائش",
+    "finishSignup": "اکاؤنٹ بنائیں",
+    "profileInvalid": "ملک اور درست تاریخ پیدائش درج کریں جو مستقبل کی نہ ہو۔",
+    "retry": "دوبارہ کوشش کریں",
+    "backToLogin": "سائن ان پر واپس جائیں",
+    "linkAccountTitle": "اپنا Google اکاؤنٹ منسلک کریں",
+    "linkAccountDesc": "اس ای میل سے ایک اکاؤنٹ پہلے ہی موجود ہے۔ اپنا Google اکاؤنٹ محفوظ طریقے سے منسلک کرنے کے لیے اپنا پاس ورڈ درج کریں۔",
+    "accountPassword": "اکاؤنٹ کا پاس ورڈ",
+    "confirmLink": "تصدیق کریں اور اکاؤنٹ منسلک کریں",
+    "invalidCredentials": "غلط پاس ورڈ۔ براہ کرم اپنی معلومات چیک کریں اور دوبارہ کوشش کریں۔",
+    "linkSuccess": "Google اکاؤنٹ کامیابی سے منسلک ہو گیا۔",
+    "unlinkSuccess": "Google اکاؤنٹ کامیابی سے غیر منسلک کر دیا گیا۔",
+    "identity_conflict": "یہ ای میل ایک مختلف Google شناخت سے منسلک ہے۔ موجودہ طریقے سے سائن ان کریں یا سپورٹ سے رابطہ کریں۔",
+    "account_login_required": "اپنے اکاؤنٹ کے موجودہ طریقے سے سائن ان کریں، پھر پروفائل سے Google منسلک کریں۔",
+    "recovery_required": "Google کو دوبارہ منسلک کرنے کے لیے ایک بار اکاؤنٹ بحالی ضروری ہے۔",
+    "recovery_web_required": "Scemory ویب سائٹ پر ایک بار بحالی مکمل کریں۔ آئندہ Google سائن ان خودکار ہوں گے۔",
+    "invalid_recovery_code": "بحالی کوڈ غلط ہے۔ کوڈ چیک کرکے دوبارہ کوشش کریں۔",
+    "recovery_expired": "بحالی کی درخواست ختم ہو گئی۔ Google سائن ان دوبارہ شروع کریں۔",
+    "recovery_attempts_exceeded": "بہت زیادہ غلط کوششیں۔ Google سائن ان دوبارہ شروع کریں۔",
+    "recovery_rate_limited": "حال ہی میں کوڈ بھیجا گیا ہے۔ دوبارہ کوشش سے پہلے انتظار کریں۔",
+    "recovery_unavailable": "بحالی کوڈ نہیں بھیجا جا سکا۔ بعد میں کوشش کریں۔",
+    "recoveryTitle": "اپنا Google اکاؤنٹ دوبارہ منسلک کریں",
+    "recoverySent": "{email} پر بھیجا گیا ایک بار استعمال کا کوڈ درج کریں۔ یہ صرف ایک بار ضروری ہے۔",
+    "recoveryCode": "بحالی کوڈ",
+    "confirmRecovery": "تصدیق کریں اور جاری رکھیں"
+  },
+  "facebookAuth": {
+    "continue": "Facebook کے ساتھ جاری رکھیں",
+    "signup": "Facebook کے ساتھ سائن اپ کریں",
+    "signingIn": "سائن ان ہو رہا ہے…",
+    "unavailable": "Facebook کی تصدیق فی الحال دستیاب نہیں ہے۔ ای میل اور پاس ورڈ استعمال کریں یا بعد میں کوشش کریں۔",
+    "cancelled": "تصدیق منسوخ کر دی گئی۔",
+    "invalid_state": "یہ درخواست غلط ہے یا پہلے استعمال ہو چکی ہے۔ دوبارہ شروع کریں۔",
+    "expired": "سائن ان کی اس کوشش کی میعاد ختم ہو گئی۔ دوبارہ شروع کریں۔",
+    "callback_failed": "تصدیق ناکام ہو گئی۔ دوبارہ کوشش کریں۔",
+    "disabled": "یہ اکاؤنٹ دستیاب نہیں ہے۔ مدد کے لیے سپورٹ سے رابطہ کریں۔",
+    "linking_required": "اپنے اکاؤنٹ کے موجودہ طریقے سے سائن ان کریں۔ Facebook کو منسلک کرنے سے پہلے اس اکاؤنٹ میں سائن ان ضروری ہے؛ منسلک کرنے کی سہولت ابھی دستیاب نہیں۔ ضرورت ہو تو سپورٹ سے رابطہ کریں۔",
+    "busy": "سائن ان پہلے سے جاری ہے۔ دوبارہ کوشش کریں۔",
+    "completeProfile": "اپنا اکاؤنٹ مکمل کریں",
+    "profileRequired": "اکاؤنٹ بنانے کا عمل مکمل کرنے کے لیے ضروری معلومات درج کریں۔",
+    "country": "ملک",
+    "dateOfBirth": "تاریخ پیدائش",
+    "finishSignup": "اکاؤنٹ بنائیں",
+    "retry": "دوبارہ کوشش کریں",
+    "backToLogin": "سائن ان پر واپس جائیں",
+    "identity_invalid": "Facebook آپ کی شناخت کی تصدیق نہیں کر سکا۔ دوبارہ کوشش کریں۔",
+    "verification_required": "اپنے موجودہ اکاؤنٹ کی ای میل اس کے اصل سائن ان طریقے سے تصدیق کریں۔",
+    "email_unavailable": "تصدیقی ای میل نہیں بھیج سکے۔ بعد میں کوشش کریں۔",
+    "otp_expired": "اس کوڈ کی میعاد ختم ہو گئی۔ نیا کوڈ طلب کریں۔",
+    "otp_invalid": "تصدیقی کوڈ غلط ہے۔",
+    "otp_attempts": "کوششیں بہت زیادہ ہیں۔ انتظار کی مدت کے بعد نیا کوڈ طلب کریں۔",
+    "otp_cooldown": "دوسرا کوڈ طلب کرنے سے پہلے انتظار کریں۔",
+    "native_unavailable": "Facebook سائن ان Scemory ویب سائٹ پر دستیاب ہے۔ براوزر استعمال کریں۔",
+    "email": "ای میل پتہ",
+    "sendCode": "تصدیقی کوڈ بھیجیں",
+    "verifyEmail": "اپنی ای میل کی تصدیق کریں",
+    "codeSent": "{email} پر بھیجا گیا کوڈ درج کریں۔",
+    "verificationCode": "تصدیقی کوڈ",
+    "resendIn": "{seconds} سیکنڈ میں دوبارہ بھیجیں",
+    "resend": "کوڈ دوبارہ بھیجیں",
+    "profileInvalid": "درست ای میل، ملک اور تاریخ پیدائش درج کریں جو مستقبل کی نہ ہو۔"
+  },
+  "mediaCredits": {
+    "myCredits": "میرے میڈیا کریڈٹس",
+    "photosAvailable": "دستیاب تصاویر",
+    "videosAvailable": "دستیاب ویڈیوز",
+    "photos": "تصاویر",
+    "videos": "ویڈیوز",
+    "photoQuotaDesc": "مستقل تصویر ریڈیمپشن کوٹہ",
+    "videoQuotaDesc": "مستقل ویڈیو ریڈیمپشن کوٹہ",
+    "activeTier": "فعال رسائی کا درجہ",
+    "breakdownByTier": "درجہ وار تفصیل",
+    "viewDashboard": "کریڈٹ ڈیش بورڈ",
+    "getMoreCredits": "مزید کریڈٹس حاصل کریں",
+    "browseMarketplace": "مارکیٹ دیکھیں",
+    "noTier": "کوئی فعال پلان نہیں",
+    "getWithPlan": "پلان کے ساتھ حاصل کریں",
+    "redeemed": "حاصل شدہ",
+    "redeemSuccess": "پلان کے ساتھ میڈیا کامیابی سے حاصل کر لیا گیا!",
+    "redeemFailed": "پلان کے ساتھ میڈیا حاصل کرنے میں ناکامی۔",
+    "activeGrants": "فعال کوٹہ گرانٹس",
+    "redemptionHistory": "ریڈیمپشن کی تاریخ",
+    "noGrants": "کوئی فعال میڈیا کوٹہ نہیں ہے۔ کریڈٹس حاصل کرنے کے لیے پلان سبسکرائب کریں۔",
+    "noRedemptions": "ابھی تک کوئی میڈیا حاصل نہیں کیا گیا۔",
+    "tier": "درجہ",
+    "plan": "پلان",
+    "tierRank": "درجہ رینک",
+    "grantedOn": "حصول کی تاریخ",
+    "payoutCap": "تخلیق کار ادائیگی کی حد",
+    "payWithWallet": "والٹ سے ادائیگی کریں",
+    "payWithPaypal": "پے پال سے ادائیگی کریں",
+    "insufficientCredits": "ناکافی کریڈٹس یا اس میڈیا کے لیے درجہ ناکافی ہے۔",
+    "includedQuotas": "شامل میڈیا کوٹہ",
+    "permanentQuotas": "مستقل غیر منسوخ شدہ میڈیا کوٹہ"
+  },
+  "dataDeletion": {
+    "title": "ڈیٹا حذف کرنے کی ہدایات",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "ڈیٹا حذف کرنے کی ہدایات",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "ڈیٹا حذف کرنے کی ہدایات",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "موازنے",
+    "links": {
+      "historypin": "سیموری بمقابلہ Historypin",
+      "pastvu": "سیموری بمقابلہ PastVu",
+      "theClio": "سیموری بمقابلہ The Clio"
+    },
+    "common": {
+      "exploreScemory": "سیموری دریافت کریں",
+      "visitOfficialWebsite": "سرکاری ویب سائٹ ملاحظہ کریں",
+      "createAccount": "اکاؤنٹ بنائیں",
+      "feature": "خصوصیت اور صلاحیت",
+      "scemory": "سیموری",
+      "verifiedDate": "تصدیق شدہ تاریخ: 24 اکتوبر 2026ء",
+      "disclaimer": "سیموری ایک خود مختار پلیٹ فارم ہے اور اس کا یہاں موازنہ کیے گئے اداروں سے کوئی الحاق، کفالت یا توثیق کا تعلق نہیں ہے۔ تمام ٹریڈ مارکس اور لوگوز ان کے قانونی مالکان کی ملکیت ہیں۔ موازنے کے تمام نکات 24 اکتوبر 2026 تک تصدیق شدہ عوامی معلومات پر مبنی ہیں۔",
+      "methodologyTitle": "ذرائع اور تصدیقی طریقہ کار",
+      "methodologyDesc": "یہ تقابلی جائزہ پلیٹ فارمز کی باضابطہ دستاویزات، ان کی باضابطہ ویب سائٹس اور براہ راست قابل مشاہدہ تکنیکی صلاحیتوں کی بنیاد پر تیار کیا گیا ہے۔ ہم مکمل دستیاب خصوصیات، جزوی سہولیات، غیر دستیاب طریقوں اور غیر دستاویزی نکات کے درمیان واضح فرق کرتے ہیں۔",
+      "whyChooseTitle": "سیموری کا انتخاب کیوں کریں؟",
+      "ctaTitle": "لمحات کو محفوظ کریں۔ واقعات کو دستاویزی شکل دیں۔ مشترکہ یادداشت بنائیں!",
+      "ctaSubtitle": "ایک جدید عالمی پلیٹ فارم میں شامل ہوں جو عصری واقعات کی کوریج، تاریخی یادداشت کے تحفظ اور تخلیق کاروں کے لیے منصفانہ میڈیا مارکیٹ پلیس کو یکجا کرتا ہے۔",
+      "beyondTitle": "سیموری {competitor} کے مقابلے میں کیا اضافی پیش کرتا ہے؟",
+      "whoShouldUseTitle": "کون سا پلیٹ فارم کن صارفین کے لیے موزوں ہے؟",
+      "overviewTitle": "پلیٹ فارمز کا عمومی جائزہ",
+      "tableTitle": "خصوصیات اور صلاحیتوں کا تفصیلی موازنہ",
+      "vs": "بمقابلہ",
+      "keyHighlights": "اہم جھلکیاں",
+      "organizationType": "ادارے کی نوعیت",
+      "founded": "قیام / آغاز کا سال",
+      "headquarters": "ہیڈ کوارٹر / دائرہ کار",
+      "coreMission": "بنیادی مقصد",
+      "officialWebsite": "سرکاری ویب سائٹ",
+      "independentNotice": "عوامی طور پر تصدیق شدہ دستاویزات پر مبنی ایک غیر جانبدار موازنہ۔",
+      "audienceScemoryHeading": "سیموری کن صارفین کے لیے بنایا گیا ہے",
+      "audienceCompetitorHeading": "{competitor} کن صارفین کے لیے بنایا گیا ہے"
+    },
+    "status": {
+      "supported": "دستیاب اور فعال",
+      "partial": "جزوی طور پر دستیاب",
+      "not_offered": "دستیاب نہیں ہے",
+      "not_documented": "عوامی سطح پر غیر دستاویزی"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "تاریخی واقعات کی دستاویز کاری",
+        "desc": "جامع سیاق و سباق کے ساتھ تاریخی سنگ میلوں، ثقافتی لمحات اور ماضی کے واقعات کو محفوظ بنانا۔"
+      },
+      "locationMemories": {
+        "name": "مقام پر مبنی یادیں اور نقشہ سازی",
+        "desc": "درست جغرافیائی نقاط کے ساتھ انٹرایکٹو نقشوں پر یادوں، تصاویر اور داستانوں کی نشاندہی۔"
+      },
+      "photoArchives": {
+        "name": "تاریخی تصاویر کا محفوظ ذخیرہ",
+        "desc": "آرکائیول میٹا ڈیٹا، ٹیگز اور مستند حوالوں کے ساتھ تاریخی تصاویر کو محفوظ رکھنا اور دکھانا۔"
+      },
+      "videoDocumentation": {
+        "name": "ویڈیو اپ لوڈ اور اسٹریمنگ",
+        "desc": "ہائی ڈیفینیشن ویڈیو فوٹیج کا براہ راست اپ لوڈ، پروسیسنگ، حفاظتی واٹر مارک اور ہموار پلے بیک۔"
+      },
+      "userContributions": {
+        "name": "صارفین کی تخلیق کردہ مواد کی ترسیل",
+        "desc": "رجسٹرڈ صارفین کے لیے واقعات، تصاویر، ویڈیوز اور یادوں کو بلا روک ٹوک اپ لوڈ کرنے کی سہولت۔"
+      },
+      "communityParticipation": {
+        "name": "کمیونٹی کا تبادلہ خیال اور تبصرے",
+        "desc": "تبصروں، مکالماتی جوابات، ردعمل کے بیجز، پسندیدہ فہرستوں اور ہفتہ وار لیڈر بورڈ کے ذریعے باہمی رابطہ۔"
+      },
+      "chronologicalBrowsing": {
+        "name": "تاریخی ترتیب اور ٹائم لائن براؤزنگ",
+        "desc": "تاریخی سالوں، ٹائم لائن سلائیڈرز اور واقعات کی باریک بین ترتیبات کے ساتھ مواد کی تلاش۔"
+      },
+      "eventCentricOrg": {
+        "name": "واقعہ پر مبنی تنظیمی ڈھانچہ",
+        "desc": "ایسا جدید اسٹرکچر جس میں ہر واقعہ ایک خودمختار اکائی ہے جس سے مختلف میڈیا اور شراکت دار جڑے ہوتے ہیں۔"
+      },
+      "contributorProfiles": {
+        "name": "تخلیق کاروں کے پورٹ فولیو پروفائلز",
+        "desc": "صارفین کے لیے مخصوص صفحات جہاں ان کے شائع کردہ واقعات، میڈیا گیلریز، اعداد و شمار اور لائسنس دکھائی دیتے ہیں۔"
+      },
+      "discoveryMap": {
+        "name": "انٹرایکٹو نقشہ پر تلاش اور دریافت",
+        "desc": "متحرک کلسٹرز، زمرہ جاتی فلٹرز، تاریخ کے انتخاب اور تحریری تلاش کے ساتھ جغرافیائی تلاش۔"
+      },
+      "mediaMarketplace": {
+        "name": "تصاویر اور ویڈیوز کا ڈیجیٹل بازار",
+        "desc": "انٹیگریٹڈ میڈیا مارکیٹ جہاں تخلیق کار اپنی بنائی ہوئی تصاویر اور ویڈیوز کی فروخت اور لائسنسنگ کر سکتے ہیں۔"
+      },
+      "mediaPurchases": {
+        "name": "براہ راست میڈیا خریداری اور ڈاؤن لوڈ",
+        "desc": "محفوظ خریداری کا عمل جو گاہک کو بغیر واٹر مارک والی اصل ہائی ریزولیوشن فائل کے ڈاؤن لوڈ کا فوری حق دیتا ہے۔"
+      },
+      "commercialLicensing": {
+        "name": "تجارتی لائسنسنگ کے حقوق",
+        "desc": "خریدی گئی میڈیا اشیاء کے تجارتی اور صحافتی استعمال کے متعلق واضح قانونی ضوابط۔"
+      },
+      "creatorMonetization": {
+        "name": "تخلیق کاروں کی آمدنی اور منافع کی تقسیم",
+        "desc": "براہ راست میڈیا کی فروخت پر تخلیق کار کو 85 فیصد ادائیگی کے ساتھ منصفانہ مالیاتی معاوضہ۔"
+      },
+      "payoutSystem": {
+        "name": "آمدنی کی ادائیگی اور رقم نکلوانے کا نظام",
+        "desc": "PayPal اور بینک ٹرانسفر کے ذریعے باقاعدہ رقم نکالنے کی سہولت کے ساتھ شفاف مالیاتی کھاتہ۔"
+      },
+      "subscriptionPlans": {
+        "name": "ماہانہ سبسکرپشن پلانز",
+        "desc": "مفت اور پریمیم ممبرشپس جن میں تصاویر، ویڈیوز اور دیگر خصوصی پلیٹ فارم فوائد ملتے ہیں۔"
+      },
+      "mediaCredits": {
+        "name": "دائمی میڈیا کریڈٹس",
+        "desc": "پہلے سے خریدی گئی کریڈٹس جن کی میعاد ختم نہیں ہوتی، بصری مواد کی باآسانی خریداری کے لیے۔"
+      },
+      "multilingual": {
+        "name": "کثیر لسانی نظام (13 زبانیں بمعہ RTL)",
+        "desc": "13 زبانوں میں مکمل مقامی ترجمہ، اردو، عربی اور فارسی کے لیے دائیں سے بائیں (RTL) کے ساتھ۔"
+      },
+      "institutionalUse": {
+        "name": "تعلیمی اور دستاویزی اداروں کے لیے تعاون",
+        "desc": "میوزیمز، جامعات اور آرکائیوز کے ساتھ تاریخی منصوبوں کے اشتراک کے لیے مخصوص ٹولز۔"
+      }
+    },
+    "historypin": {
+      "heroTitle": "سیموری بمقابلہ Historypin: یادوں کو محفوظ کرنے اور واقعات کی دستاویز کاری کے دو راستے",
+      "heroSubtitle": "Historypin کے کمیونٹی ورثے کے ذخیرے اور سیموری کے واقعہ جاتی ملٹی میڈیا اور مارکیٹ پلیس کا ایک حقائق پر مبنی جائزہ۔",
+      "primaryFocus": "کمیونٹی کی تاریخ، اجتماعی یادداشت، تاریخی تصاویر، کہانیاں اور مقامی ورثے کے مقامات۔",
+      "logoAlt": "Historypin کا سرکاری لوگو",
+      "seoTitle": "سیموری بمقابلہ Historypin: پلیٹ فارمز کا جامع تقابلی جائزہ",
+      "seoDescription": "سیموری اور Historypin کے درمیان تصدیق شدہ فرق جانیں۔ تصاویر کی آرکائیونگ، ویڈیو سپورٹ، تخلیق کاروں کی آمدنی اور زبانوں کی معلومات حاصل کریں۔",
+      "aboutScemory": "سیموری ایک جدید ایونٹ ڈاکیومینٹیشن پلیٹ فارم اور ملٹی میڈیا مارکیٹ پلیس ہے جو ماضی کی تاریخ اور حال کے اہم واقعات کو یکجا کرتا ہے۔ اس کا ڈھانچہ واقعات کے گرد گھومتا ہے، جس کے ذریعے فوٹوگرافرز، صحافی اور عام شہری اعلیٰ معیاری میڈیا شیئر کر سکتے ہیں اور لائسنسنگ سے آمدنی حاصل کر سکتے ہیں۔",
+      "aboutCompetitor": "Historypin کا قیام 2010 میں گوگل کے اشتراک سے ایک غیر منافع بخش تنظیم Shift نے کیا تھا۔ یہ عام لوگوں اور میوزیمز کو دنیا کے نقشے پر پرانی تصاویر اور زبانی یادداشتیں لگانے کی سہولت دیتا ہے، جہاں تاریخی تصاویر کا جدید Google Street View سے تقابل کر کے بستیوں کے ارتقا کو دیکھا جا سکتا ہے۔",
+      "scemoryAdvantages": [
+        {
+          "title": "واقعہ کو مرکزی اکائی ماننے والا اسٹرکچر",
+          "desc": "صرف سادہ نقشوں پر پوائنٹس لگانے کے بجائے، سیموری مواد کو باضابطہ واقعات کے تحت منظم کرتی ہے جس میں مختلف مصنفین، تاریخیں اور میڈیا گیلریز یکجا ہوتے ہیں۔"
+        },
+        {
+          "title": "ہائی ریزولیوشن ویڈیو کا مکمل سپورٹ",
+          "desc": "Historypin زیادہ تر ساکت تصاویر تک محدود ہے، جبکہ سیموری ویڈیوز کی براہ راست اپ لوڈنگ، واٹر مارکنگ اور ہموار پلے بیک کی مکمل سہولت دیتی ہے۔"
+        },
+        {
+          "title": "تخلیق کاروں کی معیشت اور ڈیجیٹل مارکیٹ پلیس",
+          "desc": "سیموری تخلیق کاروں کو فروخت پر 85 فیصد حصہ اور قانونی تجارتی لائسنس فراہم کرتی ہے، جو روایتی غیر تجارتی آرکائیوز میں ناپید ہے۔"
+        },
+        {
+          "title": "13 زبانوں میں عالمی رسائی اور مکمل دائیں سے بائیں (RTL) لے آؤٹ",
+          "desc": "سیموری اردو، عربی اور فارسی کے لیے مکمل دائیں سے بائیں سپورٹ سمیت 13 عالمی زبانوں میں یکساں مقامی انداز فراہم کرتی ہے۔"
+        }
+      ],
+      "audienceScemory": "پیشہ ور اور شوقین فوٹوگرافرز، ویڈیو میکرز، صحافی، ایونٹ آرگنائزرز اور تاریخ دان جو ماضی اور حال کے واقعات کو محفوظ بنانے کے ساتھ اپنے کام کی فروخت اور لائسنسنگ چاہتے ہیں۔",
+      "audienceCompetitor": "تاریخ کے مقامی ادارے، لائبریریاں، اسکولز اور رضاکار محققین جو بغیر کسی تجارتی مقصد کے پرانی تصاویر کو گلیوں کے نقشوں پر لگانا چاہتے ہیں۔",
+      "whyChooseSummary": "Historypin عوامی ورثے کے فروغ میں قابل قدر خدمات سرانجام دے چکا ہے۔ اگر آپ کو واقعات پر مبنی تنظیم، بہترین ویڈیو سپورٹ، تخلیق کاروں کے لیے منافع بخش مارکیٹ اور 13 زبانوں میں رسائی چاہیے تو سیموری آپ کا بہترین انتخاب ہے۔"
+    },
+    "pastvu": {
+      "heroTitle": "سیموری بمقابلہ PastVu: تاریخی تصویری نقشہ سازی اور ملٹی میڈیا ایونٹ ڈاکیومینٹیشن",
+      "heroSubtitle": "PastVu کے زاویہ بند تاریخی تصویری ذخیرے اور سیموری کے کثیر الجہتی ایونٹ اور مارکیٹ پلیس پلیٹ فارم کا تکنیکی موازنہ۔",
+      "primaryFocus": "تاریخی تصاویر کا ذخیرہ (1826 تا 2000) بمعہ جغرافیائی مقامات اور کیمرے کے شوٹنگ اینگل کا زاویہ۔",
+      "logoAlt": "PastVu کا سرکاری لوگو",
+      "seoTitle": "سیموری بمقابلہ PastVu: پلیٹ فارم کی صلاحیتوں کا تجزیہ",
+      "seoDescription": "سیموری اور PastVu کا فرق سمجھیں: شوٹنگ اینگل لوکیشن، ویڈیو سپورٹ، کمرشل لائسنسنگ اور بین الاقوامی زبانوں کی سہولیات۔",
+      "aboutScemory": "سیموری عصری واقعات اور تاریخی یادداشتوں کو ایک ہی نظام میں اکٹھا کرتی ہے۔ نقشے پر تلاش اور کمیونٹی بات چیت کے ساتھ، یہ ایک ایسا بازار بھی مہیا کرتی ہے جہاں تخلیق کار اپنے بصری اثاثوں کو شفاف شرائط پر لائسنس کر کے معقول آمدنی کما سکتے ہیں۔",
+      "aboutCompetitor": "PastVu ایک آزاد رضاکارانہ پروجیکٹ ہے جو 2009 میں شروع کیا گیا تھا۔ اس کا مقصد 1826 سے 2000 کے درمیان انسانی بستیوں کی تصاویر جمع کرنا اور ان کی لوکیشن اور کیمرے کے زاویے کے رخ کا تعین کرنا ہے۔ کمیونٹی کی جانب سے کی جانے والی جانچ پڑتال اس کی خاص پہچان ہے۔",
+      "scemoryAdvantages": [
+        {
+          "title": "ماضی اور حال دونوں کے واقعات کا احاطہ",
+          "desc": "PastVu کا دائرہ صرف سن 2000 تک محدود ہے۔ سیموری ماضی کی تاریخ کو آج کے ثقافتی، سماجی اور کھیلوں کے واقعات سے جوڑتی ہے۔"
+        },
+        {
+          "title": "مکمل ویڈیو اپ لوڈ اور اسٹریمنگ",
+          "desc": "PastVu صرف تصاویر کے لیے مختص ہے۔ سیموری پرانی اور نئی ویڈیوز کی باقاعدہ حفاظت، واٹر مارکنگ اور چلانے کی تمام سہولیات دیتی ہے۔"
+        },
+        {
+          "title": "ڈیجیٹل مارکیٹ پلیس اور کمرشل لائسنس",
+          "desc": "سیموری میں خریداروں کے لیے قانونی لائسنسنگ اور تخلیق کار کے لیے 85 فیصد منافع کا نظام موجود ہے جو تصاویر کو معاشی لحاظ سے کارآمد بناتا ہے۔"
+        },
+        {
+          "title": "13 زبانوں میں جامع دستیابی",
+          "desc": "PastVu صرف انگریزی اور روسی تک محدود ہے، جبکہ سیموری اردو اور عربی جیسی RTL زبانوں سمیت 13 زبانوں میں مکمل طور پر دستیاب ہے۔"
+        }
+      ],
+      "audienceScemory": "تصویر کش، ویڈیو جرنلسٹس، پبلشرز اور ایونٹ کیوریٹرز جنہیں رواں اور تاریخی دونوں قسم کے مواد کی اشاعت، ویڈیو اسٹریمنگ اور لائسنسنگ کی ضرورت ہو۔",
+      "audienceCompetitor": "شہری تاریخ دان، پرانی عمارتوں کے محققین اور ونٹیج فوٹو گرافی کے شائقین جو 1826 سے 2000 کے مناظر کو کیمرے کے درست زاویوں کے ساتھ کھوجنا چاہتے ہیں۔",
+      "whyChooseSummary": "PastVu پرانی تصاویر کو کیمرے کے زاویے سے دیکھانے کا ایک شاہکار ہے۔ لیکن جب آپ کو ایک ہمہ جہت میڈیا پلیٹ فارم درکار ہو جس میں ویڈیوز، تخلیق کاروں کی کمائی اور عالمی زبانیں شامل ہوں، تو سیموری بلاشبہ فوقیت رکھتی ہے۔"
+    },
+    "theClio": {
+      "heroTitle": "سیموری بمقابلہ The Clio: تاریخی یادگاروں کی تلاش اور زندہ واقعات کی دستاویز کاری",
+      "heroSubtitle": "The Clio کے تعلیمی یادگاری گائیڈ اور سیموری کے انٹرایکٹو ملٹی میڈیا ایونٹ پلیٹ فارم کا حقائق پر مبنی جائزہ۔",
+      "primaryFocus": "تاریخی یادگاروں، عجائب گھروں، نوادرات اور پیدل دوروں کے لیے تعلیمی گائیڈ۔",
+      "logoAlt": "The Clio کا باضابطہ لوگو",
+      "seoTitle": "سیموری بمقابلہ The Clio: تقابلی مطالعہ اور تجزیہ",
+      "seoDescription": "The Clio اور سیموری کا موازنہ کریں: تاریخی یادگاروں کے پیدل ٹورز اور سیموری کے واقعہ جاتی ملٹی میڈیا مارکیٹ پلیس میں فرق جانیے۔",
+      "aboutScemory": "سیموری ایک ایونٹ سینٹرک پلیٹ فارم ہے جو افراد اور اداروں کو اہم لمحات کو ہمیشہ کے لیے محفوظ کرنے کا موقع فراہم کرتا ہے۔ یہ ہائی کوالٹی تصاویر اور ویڈیوز، نقشوں پر تلاش، باہمی مکالمہ اور تجارتی لائسنسنگ کو ایک خوبصورت ماحول میں پیش کرتا ہے۔",
+      "aboutCompetitor": "The Clio ایک غیر منافع بخش تعلیمی پلیٹ فارم (501c3 فاؤنڈیشن) ہے جسے تاریخ کے پروفیسر ڈاکٹر ڈیوڈ ٹروبرج نے بنایا ہے۔ یہ شمالی امریکہ کی تاریخی جگہوں اور میوزیمز کے لیے ایک گائیڈ ہے جس میں اساتذہ اور طلبہ کے تحریر کردہ آڈیو واکنگ ٹورز شامل ہیں۔",
+      "scemoryAdvantages": [
+        {
+          "title": "جامد یادگاروں سے بڑھ کر متحرک واقعات کی دستاویز",
+          "desc": "The Clio کا دائرہ کار صرف پکی یادگاروں تک محدود ہے۔ سیموری میلوں، تقریبات، کانفرنسز اور عوامی تحریکوں جیسے لمحاتی واقعات کو بغیر کسی یادگاری کتبے کے بھی محفوظ کرتی ہے۔"
+        },
+        {
+          "title": "تجارتی لائسنسنگ اور تخلیق کاروں کے لیے آمدنی",
+          "desc": "The Clio میں کوئی مالیاتی سرگرمی نہیں ہوتی۔ سیموری فوٹوگرافرز کو 85 فیصد آمدنی کے ساتھ قانونی لائسنس کی باقاعدہ فروخت کا موقع دیتی ہے۔"
+        },
+        {
+          "title": "براہ راست میڈیا ذخیرہ اور اصل فائل ڈاؤن لوڈ",
+          "desc": "سیموری ایک مکمل ملٹی میڈیا ذخیرہ ہے جہاں خریداروں کو اصل فائل ملتی ہے، جبکہ The Clio صرف بیرونی حوالوں کے لیے میڈیا استعمال کرتا ہے۔"
+        },
+        {
+          "title": "13 زبانوں کے ذریعے عالمی پھیلاؤ",
+          "desc": "The Clio بنیادی طور پر انگریزی اور شمالی امریکہ کے لیے ہے۔ سیموری کو پوری دنیا کے لیے بنایا گیا ہے جو اردو کے خوبصورت دائیں سے بائیں رسم الخط کو بھی شاندار انداز میں پیش کرتی ہے۔"
+        }
+      ],
+      "audienceScemory": "آزاد تخلیق کار، صحافی، ثقافتی ادارے اور ایونٹ مینیجرز جنہیں ویڈیو اور تصاویر کی اشاعت، تجارتی لائسنس اور عالمی سامعین تک رسائی درکار ہو۔",
+      "audienceCompetitor": "طلبہ، تاریخ کے اساتذہ، میوزیم کے منتظمین اور سیاح جو شمالی امریکہ کے تاریخی مقامات کے بارے میں معتبر مضامین اور ٹورز پڑھنا چاہتے ہیں۔",
+      "whyChooseSummary": "The Clio تاریخی مقامات کو جاننے کے لیے ایک بہترین اور نیک مقصد پر مبنی فلاحی ادارہ ہے۔ اگر آپ کو زندہ واقعات، اعلیٰ معیاری ویڈیوز، تخلیق کاروں کے لیے مالیاتی مواقع اور بین الاقوامی کثیر لسانی رسائی چاہیے تو سیموری آپ کی تمام توقعات پوری کرتی ہے۔"
+    }
+  }
 }

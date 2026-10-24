@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "Nach Veranstaltungen suchen..."
+  "search": {
+    "placeholder": "Nach Veranstaltungen suchen..."
+  },
+  "filters": {
+    "title": "Filter",
+    "allCategories": "Alle Kategorien",
+    "country": "Land",
+    "category": "Kategorie",
+    "subCategory": "Unterkategorie",
+    "from": "Von",
+    "to": "Bis",
+    "city": "Stadt",
+    "allSubCategories": "Alle Unterkategorien"
+  },
+  "upload_media": "Media hochladen",
+  "view_all_comments": "Alle Kommentare anzeigen",
+  "nav": {
+    "timeline": "Mein Zeitstrahl",
+    "favourites": "Favoriten",
+    "downloads": "Downloads",
+    "dashboard": "Dashboard",
+    "scemoryGate": "Scemory-Tor",
+    "events": "Veranstaltungen",
+    "plans": "Pläne",
+    "specialCoverage": "Sonderberichterstattung",
+    "more": "Mehr",
+    "terms": "Bedingungen",
+    "historical": "Historisch",
+    "home": "Startseite",
+    "about": "Über uns",
+    "allEvents": "Alle Veranstaltungen",
+    "contact": "Kontakt",
+    "addEvent": "Veranstaltung hinzufügen",
+    "wishlist": "Favoriten",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "cart": "Warenkorb",
+    "scemoryHome": "Scemory-Startseite",
+    "toggleMenu": "Menü umschalten",
+    "mediaCredits": "Medien-Guthaben"
+  },
+  "login_to_comment": "Bitte anmelden, um Kommentare zu hinterlassen",
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "DE": "Deutsch",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "TR": "Turkish",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "event": {
+    "reply": "Antworten",
+    "delete": " Löschen",
+    "no_media_yet": "Keine Medien vorhanden",
+    "reply_placeholder": "Schreibe deine Antwort hier...",
+    "loading": "Veranstaltung wird geladen...",
+    "not_found": "Die Veranstaltung existiert nicht oder wurde gelöscht.",
+    "city_default": "Nicht angegeben",
+    "visitor": "Besucher",
+    "media_gallery_title": "Medien der Veranstaltung",
+    "no_media": "Keine Medien vorhanden",
+    "about_event_title": "Über die Veranstaltung",
+    "comments_title": "Kommentare",
+    "add_comment_title": "Deinen Kommentar hinzufügen",
+    "comment_placeholder": "Schreibe deinen Kommentar hier...",
+    "submit_comment": "Absenden",
+    "sending_comment": "Wird gesendet...",
+    "comment_login_required": "Bitte zuerst anmelden",
+    "comment_added_success": "Dein Kommentar wurde erfolgreich hinzugefügt!",
+    "delete_comment_title": "Kommentar löschen",
+    "event_info_title": "Veranstaltungs-Informationen",
+    "from_date": "Von",
+    "to_date": "Bis",
+    "time_label": "Zeit",
+    "time_default": "Nicht angegeben",
+    "location": "Ort",
+    "organizer": "Veranstalter",
+    "add_to_wishlist": "Zu Favoriten hinzufügen",
+    "already_in_wishlist": "Bereits in Favoriten",
+    "adding_to_wishlist": "Wird hinzugefügt...",
+    "wishlist_success": "Erfolgreich zu Favoriten hinzugefügt!",
+    "buy_collection_title": "Vollständige Sammlung kaufen",
+    "total_images": "Total Images",
+    "save_discount": "10% RABATT",
+    "you_save": "Sie sparen",
+    "add_collection_to_cart": "🎁 Vollständige Sammlung zum Warenkorb hinzufügen",
+    "collection_benefit_1": "✓ Kaufen Sie alle Bilder auf einmal",
+    "collection_benefit_2": "Automatischer 10% Rabatt",
+    "collection_benefit_3": "✓ Sparen Sie Zeit und Geld",
+    "collection_benefit_4": "✓ Erhalten Sie sofort alle Erinnerungen an die Veranstaltung",
+    "upload_media_to_event": "Medien zum Ereignis hochladen",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "Bilder hinzufügen ({count}/{max})",
+    "comment_image_limit": "Maximal 2 Bilder, je 5 MB",
+    "selected_comment_image_alt": "Ausgewähltes Bild {number}",
+    "remove_selected_comment_image": "Ausgewähltes Bild {number} entfernen"
+  },
+  "common": {
+    "search": "Suchen",
+    "placeholder": "Nach Veranstaltungen suchen...",
+    "searching": "Suche läuft...",
+    "details": "Details",
+    "notSpecified": "Nicht angegeben",
+    "loadingEvents": "Veranstaltungen werden geladen...",
+    "loading": "Wird geladen...",
+    "close": "Schließen",
+    "tryAgain": "Erneut versuchen",
+    "back": "Zurück",
+    "remove": "Entfernen",
+    "clear": "Löschen",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "noResults": "Keine Ergebnisse",
+    "unknownError": "Unbekannter Fehler",
+    "learnMore": "Mehr erfahren",
+    "cancel": "Abbrechen",
+    "sending": "Wird gesendet...",
+    "show": "Anzeigen",
+    "hide": "Ausblenden"
+  },
+  "events": {
+    "add_historical_event": "Veranstaltung hinzufügen",
+    "brand_footer": "Alle beliebtesten Veranstaltungen auf der Welt",
+    "no_title": "Unbenannte Veranstaltung",
+    "undefined_city": "Nicht definiert",
+    "from_map": "Von der Karte",
+    "cities": "Stadt",
+    "categories": "Kategorie",
+    "all_memories": "Alle Veranstaltungserinnerungen",
+    "showing_snapshots": "Zeige {total} historische Schnappschüsse aus der ganzen Welt",
+    "sort_by": "Sortieren nach",
+    "sort": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "title": "Titel"
     },
-    "filters": {
-        "title": "Filter",
-        "allCategories": "Alle Kategorien",
-        "country": "Land",
-        "category": "Kategorie",
-        "subCategory": "Unterkategorie",
-        "from": "Von",
-        "to": "Bis",
-        "city": "Stadt",
-        "allSubCategories": "Alle Unterkategorien"
+    "loading": "Veranstaltungen werden geladen...",
+    "retry": "Erneut versuchen",
+    "page_info": "Seite {current} von {last}",
+    "active_memories": "Aktive Veranstaltungen",
+    "latestEvents": "Neueste Veranstaltungen",
+    "recentMemories": "Kürzliche Erinnerungen",
+    "discoverAroundYou": "Entdecke, was in deiner Nähe passiert und bereite dich auf die schönsten Momente vor",
+    "noEventsFound": "Keine Veranstaltungen gefunden",
+    "noMatchingEvents": "Keine Veranstaltungen entsprechen Ihren Suchkriterien oder Ihrem Standort",
+    "event": "Veranstaltung",
+    "startDate": "Startdatum",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "Media hochladen",
-    "view_all_comments": "Alle Kommentare anzeigen",
-    "nav": {
-        "timeline": "Mein Zeitstrahl",
-        "favourites": "Favoriten",
-        "downloads": "Downloads",
-        "dashboard": "Dashboard",
-        "scemoryGate": "Scemory-Tor",
-        "events": "Veranstaltungen",
-        "plans": "Pläne",
-        "specialCoverage": "Sonderberichterstattung",
-        "more": "Mehr",
-        "terms": "Bedingungen",
-        "historical": "Historisch",
-        "home": "Startseite",
-        "about": "Über uns",
-        "allEvents": "Alle Veranstaltungen",
-        "contact": "Kontakt",
-        "addEvent": "Veranstaltung hinzufügen",
-        "wishlist": "Favoriten",
-        "profile": "Profil",
-        "logout": "Abmelden",
-        "login": "Anmelden",
-        "cart": "Warenkorb",
-        "scemoryHome": "Scemory-Startseite",
-        "toggleMenu": "Menü umschalten",
-        "mediaCredits": "Medien-Guthaben"
+    "emptyAvailable": "No events are currently available.",
+    "directory": {
+      "eyebrow": "Scemory entdecken",
+      "eventsTitle": "Veranstaltungen",
+      "eventsDescription": "Entdecken Sie aktuelle und kommende Veranstaltungen aus aller Welt.",
+      "historicalTitle": "Historische Veranstaltungen",
+      "historicalDescription": "Entdecken Sie dokumentierte Veranstaltungen und bewahrte Erinnerungen aus der Vergangenheit.",
+      "events": "Veranstaltungen",
+      "historicalEvents": "historische Veranstaltungen",
+      "collection": "Veranstaltungssammlung",
+      "filters": "Filter",
+      "refine": "Ergebnisse verfeinern",
+      "closeFilters": "Filter schließen",
+      "searchLabel": "Suchen",
+      "searchPlaceholder": "Veranstaltungen suchen...",
+      "eventType": "Veranstaltungstyp",
+      "types": {
+        "all": "Alle Veranstaltungen",
+        "real": "Reale Veranstaltungen",
+        "general": "Allgemeine Veranstaltungen"
+      },
+      "country": "Land",
+      "allCountries": "Alle Länder",
+      "category": "Kategorie",
+      "allCategories": "Alle Kategorien",
+      "city": "Stadt",
+      "allCities": "Alle Städte",
+      "subcategory": "Unterkategorie",
+      "allSubcategories": "Alle Unterkategorien",
+      "fromDate": "Von Datum",
+      "toDate": "Bis Datum",
+      "clearFilters": "Filter löschen",
+      "createEvent": "Veranstaltung erstellen",
+      "createHistorical": "Historische Veranstaltung hinzufügen",
+      "results": "{count} Veranstaltungen",
+      "showing": "{from}–{to} von {total} werden angezeigt",
+      "errorTitle": "Veranstaltungen konnten nicht geladen werden",
+      "errorDescription": "Beim Laden der Veranstaltungen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+      "emptyTitle": "Keine Veranstaltungen gefunden",
+      "historicalEmptyTitle": "Keine historischen Veranstaltungen gefunden",
+      "emptyDescription": "Ändern oder löschen Sie Ihre Filter.",
+      "eventBadge": "Veranstaltung",
+      "historicalBadge": "Historisch",
+      "unknownLocation": "Unbekannter Ort",
+      "uncategorized": "Nicht kategorisiert",
+      "viewEvent": "Veranstaltung ansehen",
+      "pagination": "Seitennavigation der Veranstaltungen",
+      "previous": "Zurück",
+      "next": "Weiter"
+    }
+  },
+  "pagination": {
+    "previous": "Zurück",
+    "next": "Weiter"
+  },
+  "about": {
+    "title": "Über uns – Scene Memory",
+    "subtitle": "Wir bewahren deine kostbarsten Momente – Szene für Szene",
+    "text1": "Bei Scene Memory glauben wir, dass die schönsten Momente des Lebens es verdienen, klar und emotional bewahrt zu werden. Wir sind weit mehr als nur eine Speicherplattform – wir sind ein digitales Erinnerungsalbum für die Reise deines Lebens.",
+    "features": {
+      "immersiveAlbums": "Erstelle immersive Erinnerungsalben mit Fotos, Videos und Sprachnotizen",
+      "aiOrganize": "KI-gestützte Organisation, die deine Erinnerungen automatisch klassifiziert und tagt",
+      "privacy": "Vollständige Privatsphäre und Sicherheit – deine Erinnerungen sind verschlüsselt und nur für dich zugänglich"
     },
-    "login_to_comment": "Bitte anmelden, um Kommentare zu hinterlassen",
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "DE": "Deutsch",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "TR": "Turkish",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
-    },
-    "event": {
-        "reply": "Antworten",
-        "delete": " Löschen",
-        "no_media_yet": "Keine Medien vorhanden",
-        "reply_placeholder": "Schreibe deine Antwort hier...",
-        "loading": "Veranstaltung wird geladen...",
-        "not_found": "Die Veranstaltung existiert nicht oder wurde gelöscht.",
-        "city_default": "Nicht angegeben",
-        "visitor": "Besucher",
-        "media_gallery_title": "Medien der Veranstaltung",
-        "no_media": "Keine Medien vorhanden",
-        "about_event_title": "Über die Veranstaltung",
-        "comments_title": "Kommentare",
-        "add_comment_title": "Deinen Kommentar hinzufügen",
-        "comment_placeholder": "Schreibe deinen Kommentar hier...",
-        "submit_comment": "Absenden",
-        "sending_comment": "Wird gesendet...",
-        "comment_login_required": "Bitte zuerst anmelden",
-        "comment_added_success": "Dein Kommentar wurde erfolgreich hinzugefügt!",
-        "delete_comment_title": "Kommentar löschen",
-        "event_info_title": "Veranstaltungs-Informationen",
-        "from_date": "Von",
-        "to_date": "Bis",
-        "time_label": "Zeit",
-        "time_default": "Nicht angegeben",
-        "location": "Ort",
-        "organizer": "Veranstalter",
-        "add_to_wishlist": "Zu Favoriten hinzufügen",
-        "already_in_wishlist": "Bereits in Favoriten",
-        "adding_to_wishlist": "Wird hinzugefügt...",
-        "wishlist_success": "Erfolgreich zu Favoriten hinzugefügt!",
-        "buy_collection_title": "Vollständige Sammlung kaufen",
-        "total_images": "Total Images",
-        "save_discount": "10% RABATT",
-        "you_save": "Sie sparen",
-        "add_collection_to_cart": "🎁 Vollständige Sammlung zum Warenkorb hinzufügen",
-        "collection_benefit_1": "✓ Kaufen Sie alle Bilder auf einmal",
-        "collection_benefit_2": "Automatischer 10% Rabatt",
-        "collection_benefit_3": "✓ Sparen Sie Zeit und Geld",
-        "collection_benefit_4": "✓ Erhalten Sie sofort alle Erinnerungen an die Veranstaltung",
-        "upload_media_to_event": "Medien zum Ereignis hochladen",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "Bilder hinzufügen ({count}/{max})",
-        "comment_image_limit": "Maximal 2 Bilder, je 5 MB",
-        "selected_comment_image_alt": "Ausgewähltes Bild {number}",
-        "remove_selected_comment_image": "Ausgewähltes Bild {number} entfernen"
-    },
-    "common": {
-        "search": "Suchen",
-        "placeholder": "Nach Veranstaltungen suchen...",
-        "searching": "Suche läuft...",
-        "details": "Details",
-        "notSpecified": "Nicht angegeben",
-        "loadingEvents": "Veranstaltungen werden geladen...",
-        "loading": "Wird geladen...",
-        "close": "Schließen",
-        "tryAgain": "Erneut versuchen",
-        "back": "Zurück",
-        "remove": "Entfernen",
-        "clear": "Löschen",
-        "previous": "Zurück",
-        "next": "Weiter",
-        "noResults": "Keine Ergebnisse",
-        "unknownError": "Unbekannter Fehler",
-        "learnMore": "Mehr erfahren",
-        "cancel": "Abbrechen",
-        "sending": "Wird gesendet...",
-        "show": "Anzeigen",
-        "hide": "Ausblenden"
-    },
-    "events": {
-        "add_historical_event": "Veranstaltung hinzufügen",
-        "brand_footer": "Alle beliebtesten Veranstaltungen auf der Welt",
-        "no_title": "Unbenannte Veranstaltung",
-        "undefined_city": "Nicht definiert",
-        "from_map": "Von der Karte",
-        "cities": "Stadt",
-        "categories": "Kategorie",
-        "all_memories": "Alle Veranstaltungserinnerungen",
-        "showing_snapshots": "Zeige {total} historische Schnappschüsse aus der ganzen Welt",
-        "sort_by": "Sortieren nach",
-        "sort": {
-            "newest": "Neueste zuerst",
-            "oldest": "Älteste zuerst",
-            "title": "Titel"
-        },
-        "loading": "Veranstaltungen werden geladen...",
-        "retry": "Erneut versuchen",
-        "page_info": "Seite {current} von {last}",
-        "active_memories": "Aktive Veranstaltungen",
-        "latestEvents": "Neueste Veranstaltungen",
-        "recentMemories": "Kürzliche Erinnerungen",
-        "discoverAroundYou": "Entdecke, was in deiner Nähe passiert und bereite dich auf die schönsten Momente vor",
-        "noEventsFound": "Keine Veranstaltungen gefunden",
-        "noMatchingEvents": "Keine Veranstaltungen entsprechen Ihren Suchkriterien oder Ihrem Standort",
-        "event": "Veranstaltung",
-        "startDate": "Startdatum",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "directory": {
-            "eyebrow": "Scemory entdecken",
-            "eventsTitle": "Veranstaltungen",
-            "eventsDescription": "Entdecken Sie aktuelle und kommende Veranstaltungen aus aller Welt.",
-            "historicalTitle": "Historische Veranstaltungen",
-            "historicalDescription": "Entdecken Sie dokumentierte Veranstaltungen und bewahrte Erinnerungen aus der Vergangenheit.",
-            "events": "Veranstaltungen",
-            "historicalEvents": "historische Veranstaltungen",
-            "collection": "Veranstaltungssammlung",
-            "filters": "Filter",
-            "refine": "Ergebnisse verfeinern",
-            "closeFilters": "Filter schließen",
-            "searchLabel": "Suchen",
-            "searchPlaceholder": "Veranstaltungen suchen...",
-            "eventType": "Veranstaltungstyp",
-            "types": {
-                "all": "Alle Veranstaltungen",
-                "real": "Reale Veranstaltungen",
-                "general": "Allgemeine Veranstaltungen"
-            },
-            "country": "Land",
-            "allCountries": "Alle Länder",
-            "category": "Kategorie",
-            "allCategories": "Alle Kategorien",
-            "city": "Stadt",
-            "allCities": "Alle Städte",
-            "subcategory": "Unterkategorie",
-            "allSubcategories": "Alle Unterkategorien",
-            "fromDate": "Von Datum",
-            "toDate": "Bis Datum",
-            "clearFilters": "Filter löschen",
-            "createEvent": "Veranstaltung erstellen",
-            "createHistorical": "Historische Veranstaltung hinzufügen",
-            "results": "{count} Veranstaltungen",
-            "showing": "{from}–{to} von {total} werden angezeigt",
-            "errorTitle": "Veranstaltungen konnten nicht geladen werden",
-            "errorDescription": "Beim Laden der Veranstaltungen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
-            "emptyTitle": "Keine Veranstaltungen gefunden",
-            "historicalEmptyTitle": "Keine historischen Veranstaltungen gefunden",
-            "emptyDescription": "Ändern oder löschen Sie Ihre Filter.",
-            "eventBadge": "Veranstaltung",
-            "historicalBadge": "Historisch",
-            "unknownLocation": "Unbekannter Ort",
-            "uncategorized": "Nicht kategorisiert",
-            "viewEvent": "Veranstaltung ansehen",
-            "pagination": "Seitennavigation der Veranstaltungen",
-            "previous": "Zurück",
-            "next": "Weiter"
-        }
-    },
-    "pagination": {
-        "previous": "Zurück",
-        "next": "Weiter"
-    },
-    "about": {
-        "title": "Über uns – Scene Memory",
-        "subtitle": "Wir bewahren deine kostbarsten Momente – Szene für Szene",
-        "text1": "Bei Scene Memory glauben wir, dass die schönsten Momente des Lebens es verdienen, klar und emotional bewahrt zu werden. Wir sind weit mehr als nur eine Speicherplattform – wir sind ein digitales Erinnerungsalbum für die Reise deines Lebens.",
-        "features": {
-            "immersiveAlbums": "Erstelle immersive Erinnerungsalben mit Fotos, Videos und Sprachnotizen",
-            "aiOrganize": "KI-gestützte Organisation, die deine Erinnerungen automatisch klassifiziert und tagt",
-            "privacy": "Vollständige Privatsphäre und Sicherheit – deine Erinnerungen sind verschlüsselt und nur für dich zugänglich"
-        },
-        "startJourney": "Starte jetzt deine Erinnerungsreise",
-        "highlightMoments": "Hebe die Momente deines Lebens hervor",
-        "organizedBy": "Sortiert nach Szenen, Personen und Orten",
-        "stats": {
-            "memories": "Erinnerung bewahrt",
-            "users": "Glücklicher Nutzer",
-            "backup": "Sicheres Backup"
-        }
-    },
-    "newsletter": {
-        "title": "Bleib in Verbindung mit deinen Erinnerungen",
-        "description": "Erhalte wöchentlich Tipps zu Erinnerungen, Funktions-Updates und inspirierende Geschichten per E-Mail",
-        "firstName": "Vorname",
-        "firstNamePlaceholder": "Dein Vorname",
-        "email": "E-Mail",
-        "emailPlaceholder": "you@example.com",
-        "consent": "Ich stimme zu, gelegentlich Tipps, Updates und Werbeangebote von Scene Memory zu erhalten. Ich kann mich jederzeit abmelden.",
-        "subscribe": "Für Erinnerungs-Updates anmelden",
-        "community": "Werde Teil von über 5.000 Erinnerungshütern in unserer Community",
-        "kicker": "Newsletter",
-        "verifiedTitle": "Bleiben Sie über verifizierte Ereignisgeschichten informiert",
-        "verifiedDescription": "Erhalten Sie kuratierte Updates zu Trendveranstaltungen, neuen Medienarchiven und wichtigen Geschichten, die von Mitwirkenden weltweit dokumentiert werden.",
-        "subscribeShort": "Abonnieren",
-        "pendingApiMessage": "Danke für Ihre Anmeldung. Die Newsletter-API wird bald verbunden.",
-        "errors": {
-            "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
-            "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
-        }
-    },
-    "map": {
-        "exploreMap": "Karte erkunden"
-    },
-    "hero": {
-        "title_main": "Wir bewahren deine Erinnerungen",
-        "title_highlight": "damit sie für immer leben",
-        "description": "Bei Scene Memory glauben wir, dass jeder Moment es verdient, zu bleiben. Wir sind hier, um dir zu helfen, wichtige Ereignisse deines Lebens zu bewahren, zu organisieren und dich daran zu erinnern.",
-        "cta_start": "Starte deine Reise mit uns",
-        "cta_watch": "Intro-Video ansehen",
-        "feature_organized": "Organisierte Erinnerungen",
-        "feature_organized_desc": "Jeder Moment an seinem perfekten Platz",
-        "feature_private": "Garantierte Privatsphäre",
-        "feature_private_desc": "Deine Erinnerungen absolut sicher",
-        "feature_reminders": "Intelligente Erinnerungen",
-        "feature_reminders_desc": "Vergiss nie wieder einen wichtigen Anlass",
-        "feature_evolving": "Ständige Weiterentwicklung",
-        "feature_evolving_desc": "Wir verbessern deine Erfahrung kontinuierlich"
-    },
-    "our_story": {
-        "badge": "Unsere Geschichte",
-        "title": "Wie unsere Reise begann",
-        "intro": "Unsere Geschichte begann mit einer einfachen Idee: Wie können wir Menschen helfen, die kostbaren Erinnerungen zu bewahren, die ihr Leben prägen?",
-        "stage1_title": "Der Anfang",
-        "stage1_desc": "Im Jahr 2020 bemerkten unsere Gründer, wie viele wichtige Momente mit der Zeit verblassen. Sie beschlossen, ein einfaches, aber starkes Werkzeug zu entwickeln, um sie zu erhalten.",
-        "stage2_title": "Das Wachstum",
-        "stage2_desc": "Mit wachsender Nutzerzahl haben wir smarte Erinnerungen, erweiterte Kategorisierung und sicheres Teilen mit Liebsten hinzugefügt.",
-        "stage3_title": "Die Vision",
-        "stage3_desc": "Heute streben wir danach, die weltbeste Plattform zum Bewahren und Organisieren von Erinnerungen zu sein – mit starkem Fokus auf Privatsphäre und nahtloser Nutzung."
-    },
-    "mission_vision": {
-        "mission_badge": "Unsere Mission",
-        "mission_title": "Woran wir glauben",
-        "mission_text": "Unsere Mission ist es, jeden Menschen zu befähigen, seine kostbaren Erinnerungen einfach, sicher und organisiert zu bewahren. Wir glauben, dass jeder Moment unseres Lebens es verdient, festgehalten und erinnert zu werden.",
-        "value_people_first": "Der Mensch zuerst",
-        "value_people_first_desc": "Die Nutzererfahrung steht im Mittelpunkt jeder Entscheidung",
-        "value_privacy": "Privatsphäre ist heilig",
-        "value_privacy_desc": "Deine Erinnerungen gehören nur dir – wir teilen sie mit niemandem",
-        "value_growth": "Kontinuierliches Wachstum",
-        "value_growth_desc": "Wir entwickeln uns ständig weiter, um den Bedürfnissen unserer Nutzer gerecht zu werden",
-        "vision_badge": "Unsere Vision",
-        "vision_title": "Wohin wir gehen",
-        "vision_text": "Wir streben danach, die weltweit führende Plattform zum Bewahren und Organisieren von Erinnerungen zu werden – wo jeder Mensch überall seine wichtigen Momente einfach und sicher festhalten kann.",
-        "goals_2025": "Unsere Ziele für 2025",
-        "goal_users": "Eine Million Nutzer erreichen",
-        "goal_languages": "10 neue Sprachen hinzufügen",
-        "goal_ai": "Erweiterte KI-Funktionen starten"
-    },
-    "team": {
-        "badge": "Unser Team",
-        "title": "Die Köpfe hinter Scene Memory",
-        "description": "Unser vielfältiges Team aus Entwicklern, Designern und UX-Experten arbeitet gemeinsam daran, ein unvergessliches Erlebnis zum Bewahren von Erinnerungen zu schaffen."
-    },
-    "values": {
-        "badge": "Unsere Werte",
-        "title": "Was uns ausmacht"
-    },
+    "startJourney": "Starte jetzt deine Erinnerungsreise",
+    "highlightMoments": "Hebe die Momente deines Lebens hervor",
+    "organizedBy": "Sortiert nach Szenen, Personen und Orten",
     "stats": {
-        "title": "Unsere Zahlen sprechen für sich",
-        "description": "Seit unserem Start haben wir Tausenden von Menschen geholfen, Millionen kostbarer Erinnerungen zu bewahren"
+      "memories": "Erinnerung bewahrt",
+      "users": "Glücklicher Nutzer",
+      "backup": "Sicheres Backup"
+    }
+  },
+  "newsletter": {
+    "title": "Bleib in Verbindung mit deinen Erinnerungen",
+    "description": "Erhalte wöchentlich Tipps zu Erinnerungen, Funktions-Updates und inspirierende Geschichten per E-Mail",
+    "firstName": "Vorname",
+    "firstNamePlaceholder": "Dein Vorname",
+    "email": "E-Mail",
+    "emailPlaceholder": "you@example.com",
+    "consent": "Ich stimme zu, gelegentlich Tipps, Updates und Werbeangebote von Scene Memory zu erhalten. Ich kann mich jederzeit abmelden.",
+    "subscribe": "Für Erinnerungs-Updates anmelden",
+    "community": "Werde Teil von über 5.000 Erinnerungshütern in unserer Community",
+    "kicker": "Newsletter",
+    "verifiedTitle": "Bleiben Sie über verifizierte Ereignisgeschichten informiert",
+    "verifiedDescription": "Erhalten Sie kuratierte Updates zu Trendveranstaltungen, neuen Medienarchiven und wichtigen Geschichten, die von Mitwirkenden weltweit dokumentiert werden.",
+    "subscribeShort": "Abonnieren",
+    "pendingApiMessage": "Danke für Ihre Anmeldung. Die Newsletter-API wird bald verbunden.",
+    "errors": {
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+    }
+  },
+  "map": {
+    "exploreMap": "Karte erkunden"
+  },
+  "hero": {
+    "title_main": "Wir bewahren deine Erinnerungen",
+    "title_highlight": "damit sie für immer leben",
+    "description": "Bei Scene Memory glauben wir, dass jeder Moment es verdient, zu bleiben. Wir sind hier, um dir zu helfen, wichtige Ereignisse deines Lebens zu bewahren, zu organisieren und dich daran zu erinnern.",
+    "cta_start": "Starte deine Reise mit uns",
+    "cta_watch": "Intro-Video ansehen",
+    "feature_organized": "Organisierte Erinnerungen",
+    "feature_organized_desc": "Jeder Moment an seinem perfekten Platz",
+    "feature_private": "Garantierte Privatsphäre",
+    "feature_private_desc": "Deine Erinnerungen absolut sicher",
+    "feature_reminders": "Intelligente Erinnerungen",
+    "feature_reminders_desc": "Vergiss nie wieder einen wichtigen Anlass",
+    "feature_evolving": "Ständige Weiterentwicklung",
+    "feature_evolving_desc": "Wir verbessern deine Erfahrung kontinuierlich"
+  },
+  "our_story": {
+    "badge": "Unsere Geschichte",
+    "title": "Wie unsere Reise begann",
+    "intro": "Unsere Geschichte begann mit einer einfachen Idee: Wie können wir Menschen helfen, die kostbaren Erinnerungen zu bewahren, die ihr Leben prägen?",
+    "stage1_title": "Der Anfang",
+    "stage1_desc": "Im Jahr 2020 bemerkten unsere Gründer, wie viele wichtige Momente mit der Zeit verblassen. Sie beschlossen, ein einfaches, aber starkes Werkzeug zu entwickeln, um sie zu erhalten.",
+    "stage2_title": "Das Wachstum",
+    "stage2_desc": "Mit wachsender Nutzerzahl haben wir smarte Erinnerungen, erweiterte Kategorisierung und sicheres Teilen mit Liebsten hinzugefügt.",
+    "stage3_title": "Die Vision",
+    "stage3_desc": "Heute streben wir danach, die weltbeste Plattform zum Bewahren und Organisieren von Erinnerungen zu sein – mit starkem Fokus auf Privatsphäre und nahtloser Nutzung."
+  },
+  "mission_vision": {
+    "mission_badge": "Unsere Mission",
+    "mission_title": "Woran wir glauben",
+    "mission_text": "Unsere Mission ist es, jeden Menschen zu befähigen, seine kostbaren Erinnerungen einfach, sicher und organisiert zu bewahren. Wir glauben, dass jeder Moment unseres Lebens es verdient, festgehalten und erinnert zu werden.",
+    "value_people_first": "Der Mensch zuerst",
+    "value_people_first_desc": "Die Nutzererfahrung steht im Mittelpunkt jeder Entscheidung",
+    "value_privacy": "Privatsphäre ist heilig",
+    "value_privacy_desc": "Deine Erinnerungen gehören nur dir – wir teilen sie mit niemandem",
+    "value_growth": "Kontinuierliches Wachstum",
+    "value_growth_desc": "Wir entwickeln uns ständig weiter, um den Bedürfnissen unserer Nutzer gerecht zu werden",
+    "vision_badge": "Unsere Vision",
+    "vision_title": "Wohin wir gehen",
+    "vision_text": "Wir streben danach, die weltweit führende Plattform zum Bewahren und Organisieren von Erinnerungen zu werden – wo jeder Mensch überall seine wichtigen Momente einfach und sicher festhalten kann.",
+    "goals_2025": "Unsere Ziele für 2025",
+    "goal_users": "Eine Million Nutzer erreichen",
+    "goal_languages": "10 neue Sprachen hinzufügen",
+    "goal_ai": "Erweiterte KI-Funktionen starten"
+  },
+  "team": {
+    "badge": "Unser Team",
+    "title": "Die Köpfe hinter Scene Memory",
+    "description": "Unser vielfältiges Team aus Entwicklern, Designern und UX-Experten arbeitet gemeinsam daran, ein unvergessliches Erlebnis zum Bewahren von Erinnerungen zu schaffen."
+  },
+  "values": {
+    "badge": "Unsere Werte",
+    "title": "Was uns ausmacht"
+  },
+  "stats": {
+    "title": "Unsere Zahlen sprechen für sich",
+    "description": "Seit unserem Start haben wir Tausenden von Menschen geholfen, Millionen kostbarer Erinnerungen zu bewahren"
+  },
+  "cta": {
+    "title": "Werde Teil der Scene Memory Familie",
+    "description": "Beginne heute damit, deine Erinnerungen zu bewahren. Kostenlos, sicher und genau für dich gemacht.",
+    "btn_signup": "Kostenlos registrieren",
+    "btn_features": "Funktionen entdecken",
+    "trust": "Schließe dich über 50.000 Menschen an, die uns ihre Erinnerungen anvertrauen"
+  },
+  "footer": {
+    "slogan": "Bewahre deine Erinnerungen, damit sie für immer leben",
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzrichtlinie",
+    "contact": "Kontaktieren Sie uns",
+    "copyright": "© 2024 Scene Memory. Alle Rechte vorbehalten.",
+    "made_with": "Mit ♥ gemacht, um deine Erinnerungen zu bewahren",
+    "quickLinks": "Schnellzugriffe",
+    "supportContact": "Support & Kontakt",
+    "logoAlt": "Logo",
+    "googlePlayAlt": "Bei Google Play herunterladen",
+    "appStoreAlt": "Im App Store herunterladen",
+    "copyright2025": "© 2025 Scene Memory. Alle Rechte vorbehalten.",
+    "services": "Dienstleistungen",
+    "copyrightLink": "Urheberrecht",
+    "termsOfService": "Nutzungsbedingungen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "dataProtection": "Datenschutz",
+    "dataDeletion": "Anweisungen zur Datenlöschung"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "Wir sind hier",
+      "title_highlight": "um dir zu helfen",
+      "description": "Das Scene Memory Team steht bereit, all deine Fragen zu beantworten und dir jederzeit zu helfen",
+      "stat_24_7": "Rund-um-die-Uhr-Support",
+      "stat_response_time": "Durchschnittliche Antwortzeit",
+      "stat_satisfaction": "Kundenzufriedenheit",
+      "stat_happy_users": "Glücklicher Nutzer"
     },
-    "cta": {
-        "title": "Werde Teil der Scene Memory Familie",
-        "description": "Beginne heute damit, deine Erinnerungen zu bewahren. Kostenlos, sicher und genau für dich gemacht.",
-        "btn_signup": "Kostenlos registrieren",
-        "btn_features": "Funktionen entdecken",
-        "trust": "Schließe dich über 50.000 Menschen an, die uns ihre Erinnerungen anvertrauen"
+    "tabs": {
+      "form": "Nachricht senden",
+      "info": "Kontaktinformationen"
     },
-    "footer": {
-        "slogan": "Bewahre deine Erinnerungen, damit sie für immer leben",
-        "terms": "Nutzungsbedingungen",
-        "privacy": "Datenschutzrichtlinie",
-        "contact": "Kontaktieren Sie uns",
-        "copyright": "© 2024 Scene Memory. Alle Rechte vorbehalten.",
-        "made_with": "Mit ♥ gemacht, um deine Erinnerungen zu bewahren",
-        "quickLinks": "Schnellzugriffe",
-        "supportContact": "Support & Kontakt",
-        "logoAlt": "Logo",
-        "googlePlayAlt": "Bei Google Play herunterladen",
-        "appStoreAlt": "Im App Store herunterladen",
-        "copyright2025": "© 2025 Scene Memory. Alle Rechte vorbehalten.",
-        "services": "Dienstleistungen",
-        "copyrightLink": "Urheberrecht",
-        "termsOfService": "Nutzungsbedingungen",
-        "privacyPolicy": "Datenschutzerklärung",
-        "dataProtection": "Datenschutz",
-        "dataDeletion": "Anweisungen zur Datenlöschung"
+    "form": {
+      "fullName": "Vollständiger Name",
+      "fullNamePlaceholder": "Dein Name hier",
+      "emailAddress": "E-Mail-Adresse",
+      "messagePlaceholder": "Schreibe deine Nachricht hier...",
+      "emailPlaceholder": "deine@email.de",
+      "title": "Schreibe uns eine Nachricht",
+      "subtitle": "Wir melden uns so schnell wie möglich bei dir. Wir sind für dich da!",
+      "full_name": "Vollständiger Name",
+      "email": "E-Mail",
+      "subject": "Betreff",
+      "message": "Nachricht",
+      "message_placeholder": "Schreibe deine Nachricht hier...",
+      "newsletter": "Ich möchte den Scene Memory Newsletter und Angebote erhalten",
+      "submit": "Nachricht senden",
+      "submitting": "Wird gesendet...",
+      "success_title": "Erfolgreich gesendet!",
+      "success_message": "Vielen Dank für deine Nachricht – wir melden uns schnellstmöglich."
     },
-    "contact": {
-        "hero": {
-            "title_main": "Wir sind hier",
-            "title_highlight": "um dir zu helfen",
-            "description": "Das Scene Memory Team steht bereit, all deine Fragen zu beantworten und dir jederzeit zu helfen",
-            "stat_24_7": "Rund-um-die-Uhr-Support",
-            "stat_response_time": "Durchschnittliche Antwortzeit",
-            "stat_satisfaction": "Kundenzufriedenheit",
-            "stat_happy_users": "Glücklicher Nutzer"
-        },
-        "tabs": {
-            "form": "Nachricht senden",
-            "info": "Kontaktinformationen"
-        },
-        "form": {
-            "fullName": "Vollständiger Name",
-            "fullNamePlaceholder": "Dein Name hier",
-            "emailAddress": "E-Mail-Adresse",
-            "messagePlaceholder": "Schreibe deine Nachricht hier...",
-            "emailPlaceholder": "deine@email.de",
-            "title": "Schreibe uns eine Nachricht",
-            "subtitle": "Wir melden uns so schnell wie möglich bei dir. Wir sind für dich da!",
-            "full_name": "Vollständiger Name",
-            "email": "E-Mail",
-            "subject": "Betreff",
-            "message": "Nachricht",
-            "message_placeholder": "Schreibe deine Nachricht hier...",
-            "newsletter": "Ich möchte den Scene Memory Newsletter und Angebote erhalten",
-            "submit": "Nachricht senden",
-            "submitting": "Wird gesendet...",
-            "success_title": "Erfolgreich gesendet!",
-            "success_message": "Vielen Dank für deine Nachricht – wir melden uns schnellstmöglich."
-        },
-        "info": {
-            "title": "Kontaktinformationen",
-            "address_title": "Hauptsitz",
-            "address": "Nilstraße, Kairo, Ägypten",
-            "view_map": "Auf Karte anzeigen",
-            "phone_title": "Telefon",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "Verfügbar von 9:00 bis 21:00 Uhr",
-            "email_title": "E-Mail",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "Antwort innerhalb von 24 Stunden",
-            "follow_us": "Folge uns auf",
-            "map_title": "Unser Standort auf der Karte",
-            "map_location": "Kairo, Ägypten",
-            "open_map": "Karte öffnen"
-        },
-        "faq": {
-            "title": "Häufig gestellte Fragen",
-            "subtitle": "Antworten auf die häufigsten Fragen"
-        },
-        "live_support": {
-            "title": "Live-Support",
-            "description": "Sprich jetzt mit einem Teammitglied für sofortige Hilfe",
-            "btn_chat": "Live-Chat starten",
-            "btn_schedule": "Anruf planen",
-            "available": "Jetzt verfügbar: 3 Support-Mitarbeiter"
-        }
-    },
-    "contacts": {
-        "badge": "Kontakt",
-        "title": "Lassen Sie uns sprechen",
-        "description": "Haben Sie eine Frage, benötigen Sie Unterstützung oder wünschen Sie einen individuellen Plan? Senden Sie uns eine Nachricht, und unser Team meldet sich bei Ihnen.",
-        "form": {
-            "title": "Senden Sie uns eine Nachricht",
-            "description": "Füllen Sie das Formular aus, und wir antworten so schnell wie möglich.",
-            "fullName": "Vollständiger Name",
-            "fullNamePlaceholder": "Geben Sie Ihren vollständigen Namen ein",
-            "emailAddress": "E-Mail-Adresse",
-            "emailPlaceholder": "Geben Sie Ihre E-Mail-Adresse ein",
-            "subject": "Betreff",
-            "generalInquiry": "Allgemeine Anfrage",
-            "customPlan": "Individueller Plan",
-            "support": "Technischer Support",
-            "feedback": "Feedback",
-            "other": "Sonstiges",
-            "message": "Nachricht",
-            "messagePlaceholder": "Sagen Sie uns, wie wir helfen können...",
-            "minimumCharacters": "Bitte geben Sie ausreichend Details an.",
-            "sendMessage": "Nachricht senden",
-            "sending": "Wird gesendet...",
-            "successMessage": "Ihre Nachricht wurde erfolgreich gesendet.",
-            "errorMessage": "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
-        },
-        "info": {
-            "getInTouch": "Kontakt aufnehmen",
-            "title": "Wir sind für Sie da",
-            "description": "Erreichen Sie unser Team bei allgemeinen Fragen, technischem Support oder individueller Preisgestaltung.",
-            "emailUs": "Schreiben Sie uns",
-            "available": "Unser Team antwortet so schnell wie möglich.",
-            "customPlans": "Individuelle Pläne",
-            "customPlansDescription": "Benötigen Sie eine passende Lösung für Ihr Team oder Unternehmen? Teilen Sie uns mit, was Sie brauchen.",
-            "customerSupport": "Kundensupport",
-            "supportDescription": "Kontaktieren Sie uns, wenn Sie Hilfe mit Ihrem Konto, Abonnement oder unseren Services benötigen.",
-            "followJourney": "Folgen Sie unserer Reise",
-            "responseTime": "Schnelle Antwort",
-            "responseTimeDescription": "Wir antworten in der Regel innerhalb eines Werktags."
-        },
-        "map": {
-            "title": "Scene Memory Weltkarte",
-            "description": "Visualisiere Tausende Erinnerungen in über 140 Ländern."
-        }
+    "info": {
+      "title": "Kontaktinformationen",
+      "address_title": "Hauptsitz",
+      "address": "Nilstraße, Kairo, Ägypten",
+      "view_map": "Auf Karte anzeigen",
+      "phone_title": "Telefon",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "Verfügbar von 9:00 bis 21:00 Uhr",
+      "email_title": "E-Mail",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "Antwort innerhalb von 24 Stunden",
+      "follow_us": "Folge uns auf",
+      "map_title": "Unser Standort auf der Karte",
+      "map_location": "Kairo, Ägypten",
+      "open_map": "Karte öffnen"
     },
     "faq": {
-        "badge": "FAQ",
-        "title": "Häufig gestellte Fragen",
-        "description": "Kurze Antworten auf einige der häufigsten Fragen.",
-        "questions": {
-            "0": {
-                "question": "Wie schnell erhalte ich eine Antwort?",
-                "answer": "Unser Team antwortet in der Regel innerhalb eines Werktags."
-            },
-            "1": {
-                "question": "Kann ich einen individuellen Plan anfragen?",
-                "answer": "Ja. Wählen Sie im Betrefffeld Individueller Plan aus und beschreiben Sie Ihre Anforderungen."
-            },
-            "2": {
-                "question": "Kann ich Sie für technischen Support kontaktieren?",
-                "answer": "Ja. Wählen Sie Technischer Support aus und fügen Sie alle relevanten Details zum Problem hinzu."
-            }
-        }
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Antworten auf die häufigsten Fragen"
     },
-    "eventForm": {
-        "admin": {
-            "title": "Veranstaltung als Admin hinzufügen",
-            "trending": "Trendveranstaltung",
-            "trendingHelp": "Diese Veranstaltung als Trend markieren",
-            "generateTags": "KI-Tags generieren",
-            "generatingTags": "Tags werden generiert...",
-            "generateTagsHelp": "Lassen Sie mit dem bestehenden KI-Dienst Tags für Veranstaltung und Fotos vorschlagen. Vor der Veröffentlichung können Sie sie prüfen oder entfernen.",
-            "generateTagsError": "KI-Tags können derzeit nicht generiert werden.",
-            "created": "Die Veranstaltung wurde erfolgreich erstellt und veröffentlicht."
-        },
-        "chooseFiles": "Dateien auswählen",
-        "mediaCount": "Anzahl der Medien",
-        "title": "Neues Event hinzufügen",
-        "basicInfo": "Grundinformationen",
-        "locationCategory": "Ort & Kategorie",
-        "dates": "Termine",
-        "images": "Event-Bilder",
-        "eventTitle": "Event-Titel",
-        "description": "Beschreibung",
-        "country": "Land",
-        "searchCountry": "Land suchen...",
-        "selectCountry": "Land auswählen",
-        "city": "Stadt",
-        "selectCity": "Stadt auswählen",
-        "selectCityFirst": "Zuerst Land auswählen",
-        "mainCategory": "Hauptkategorie",
-        "subCategory": "Unterkategorie",
-        "selectSubFirst": "Zuerst Hauptkategorie auswählen",
-        "selectLocationMap": "Ort auf der Karte auswählen",
-        "selectedCoords": "Ausgewählte Koordinaten: Lat: {lat} , Lng: {lng}",
-        "lat": "Breitengrad",
-        "lng": "Längengrad",
-        "pleaseSelectLocation": "Bitte wählen Sie einen Ort auf der Karte",
-        "startDate": "Startdatum",
-        "endDate": "Enddatum",
-        "startTime": "Startzeit",
-        "dragDropHere": "Klicken oder Bilder hierher ziehen",
-        "formatsMax": "PNG • JPG • WEBP | max. 5 MB pro Bild",
-        "chooseImages": "Bilder auswählen",
-        "addMore": "Mehr hinzufügen",
-        "imagesCount": "{count} / 8 Bilder",
-        "remove": "Entfernen",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
-            "mediaRequired": "Bitte laden Sie mindestens ein Bild oder Video hoch."
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        },
-        "minimumRequirementsHint": "Zum Erstellen einer Veranstaltung benötigen Sie nur einen Titel, eine Beschreibung und mindestens ein Bild oder Video. Alle anderen Felder sind optional."
-    },
-    "commons": {
-        "required": "erforderlich",
-        "cancel": "Abbrechen",
-        "saveDraft": "Als Entwurf speichern",
-        "create": "Event erstellen",
-        "creating": "Wird erstellt...",
-        "choose": "Auswählen"
-    },
-    "eventss": {
-        "no_title": "Unbenanntes Ereignis",
-        "undefined_city": "Nicht definiert",
-        "from_map": "Von der Karte"
-    },
-    "wishlist": {
-        "title": "Favoritenliste",
-        "loading": "Lade...",
-        "empty": {
-            "main": "Noch keine Einträge in deiner Wunschliste",
-            "hint": "Füge deine Lieblingsveranstaltungen hinzu!"
-        },
-        "fallback_image_alt": "Standard-Veranstaltungsbild",
-        "uncategorized": "Nicht kategorisiert",
-        "no_title": "Kein Titel",
-        "city_label": "Stadt:",
-        "date_label": "Datum:",
-        "time_label": "Zeit:",
-        "not_specified": "Nicht angegeben",
-        "view_details": "Details anzeigen",
-        "remove": "Aus Favoriten entfernen",
-        "deleting": "Wird entfernt...",
-        "added_at": "Hinzugefügt am",
-        "pagination": {
-            "previous": "Zurück",
-            "next": "Weiter",
-            "page_info": "Seite {current} von {total}"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "Nutzungsbedingungen",
-        "last_updated": "Letzte Aktualisierung: 2026",
-        "acceptance_title": "Akzeptanz der Bedingungen",
-        "acceptance_text": "Durch den Zugriff auf diese Plattform erklären Sie sich mit diesen Nutzungsbedingungen und allen geltenden Gesetzen einverstanden.",
-        "accounts_title": "Benutzerkonten",
-        "accounts_text": "Benutzer sind verantwortlich für die Vertraulichkeit ihrer Kontoinformationen und für alle Aktivitäten, die über ihr Konto erfolgen.",
-        "content_title": "Eigentum an Inhalten",
-        "content_text": "Alle Inhalte der Plattform, einschließlich Texte, Bilder und Daten, sind durch Urheberrechte und Gesetze zum geistigen Eigentum geschützt.",
-        "ai_title": "KI-Beschränkungen",
-        "ai_text": "Die Verwendung von Plattforminhalten zum Training von KI- oder Machine-Learning-Modellen ohne offizielle Lizenz ist strengstens untersagt.",
-        "prohibited_title": "Verbotene Nutzung",
-        "prohibited_text": "Benutzer dürfen die Plattform nicht missbrauchen, unbefugten Zugriff versuchen, Daten scrapen oder den Betrieb der Plattform stören.",
-        "liability_title": "Haftungsbeschränkung",
-        "liability_text": "Die Plattform haftet nicht für indirekte oder Folgeschäden, die aus der Nutzung des Dienstes entstehen.",
-        "changes_title": "Änderungen der Bedingungen",
-        "changes_text": "Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern.",
-        "contact_title": "Kontakt",
-        "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
-    },
-    "plans": {
-        "customPrice": "Kontaktieren Sie uns",
-        "customPricingDescription": "Preise, die auf Ihre Anforderungen zugeschnitten sind",
-        "contactUs": "Kontaktieren Sie uns",
-        "chooseYourPlan": "Wählen Sie Ihren Tarif",
-        "getStarted": "Loslegen",
-        "noFeatures": "Noch keine Funktionen",
-        "mostPopular": "Am beliebtesten",
-        "perMonth": "pro Monat",
-        "prioritySupport": "Priorisierter Support",
-        "securePayments": "Sichere Zahlungen",
-        "moneyBack": "30-Tage-Garantie",
-        "support247": "Support rund um die Uhr",
-        "cancelAnytime": "Jederzeit kündbar",
-        "subscribe": "Jetzt abonnieren",
-        "noCreditCard": "Keine Kreditkarte erforderlich",
-        "free": "Kostenlos",
-        "ourPlans": "Unsere Tarife",
-        "description": "Starten Sie kostenlos oder wählen Sie den Tarif, der am besten passt.",
-        "price": "Preis",
-        "features": "Funktionen",
-        "Monthly": "Monatlich",
-        "Yearly": "Jährlich",
-        "unlimitedEvents": "Unbegrenzte Ereignisse",
-        "addEvents": "Ereignisse hinzufügen",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "Tarif",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "Pläne konnten nicht geladen werden. Bitte erneut versuchen."
-        },
-        "customPlanNote": "Auf Ihre Anforderungen zugeschnitten",
-        "basicAccessIncluded": "Basiszugang enthalten",
-        "usd": "USD"
-    },
-    "free": "Kostenlos",
-    "basic": "Basis",
-    "professional": "Professionell",
-    "premium": "Premium",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "Ihr Browser unterstützt das Video-Tag nicht.",
-            "badge": "Scemory-Veranstaltungsarchiv",
-            "title": "Dokumentierte Veranstaltungen entdecken",
-            "titleHighlight": "über die Karte",
-            "description": "Entdecken Sie Veranstaltungsmedien, die von Journalistinnen und Journalisten, Medienteams und Augenzeugen aus aller Welt hochgeladen wurden.",
-            "searchEvents": "Veranstaltungen suchen",
-            "uploadStory": "Ihre Geschichte hochladen",
-            "bottomText": "Entdecken Sie Geschichten, Orte und Momente aus aller Welt.",
-            "searchPlaceholder": "Nach Veranstaltungen suchen..."
-        },
-        "profileToast": {
-            "title": "Profil unvollständig",
-            "message": "Ihr Profil ist unvollständig. Bitte aktualisieren Sie:",
-            "complete": "Zum Vervollständigen klicken",
-            "fields": {
-                "phone": "Telefon",
-                "country": "Land",
-                "position": "Position",
-                "dateOfBirth": "Geburtsdatum"
-            }
-        },
-        "trending": {
-            "loadError": "Trendveranstaltungen können derzeit nicht geladen werden.",
-            "kicker": "Trend",
-            "title": "Trendveranstaltungen",
-            "description": "Veranstaltungen, die im Archiv Aufmerksamkeit gewinnen.",
-            "emptyTitle": "Noch keine Trendveranstaltungen",
-            "emptyDescription": "Schauen Sie bald wieder nach hervorgehobenen Veranstaltungen.",
-            "views": "Aufrufe",
-            "likes": "Likes",
-            "slidesLabel": "Folien zu Trendveranstaltungen",
-            "untitledEvent": "Unbenannte Veranstaltung",
-            "showSlide": "Trendveranstaltung {number} anzeigen"
-        },
-        "map": {
-            "tilesSlow": "Die Kartenkacheln brauchen zu lange zum Laden.",
-            "loadError": "Die Karte kann derzeit nicht geladen werden.",
-            "loadMap": "Karte laden",
-            "loading": "Karte wird geladen...",
-            "retry": "Karte erneut laden",
-            "openFullscreen": "Karte im Vollbild öffnen",
-            "closeFullscreen": "Vollbildkarte schließen"
-        },
-        "about": {
-            "imageAlt": "Scemory-Dokumentationsplattform",
-            "kicker": "Verlässliche Ereigniserinnerung",
-            "title": "Über Scemory",
-            "description": "Scemory richtet sich an Journalistinnen und Journalisten, Medienteams und Augenzeugen, die einen vertrauenswürdigen Ort benötigen, um Ereignisse im Moment ihres Geschehens zu dokumentieren. Die Plattform verbindet hochgeladene Medien, Ereignismetadaten und Standortkontext, damit Menschen öffentliche Geschichten klar entdecken können.",
-            "features": {
-                "upload": "Fotos, Videos und Felddaten hochladen",
-                "explore": "Veranstaltungen auf einer interaktiven Karte erkunden",
-                "preserve": "Verifizierte Geschichten in einem digitalen Archiv bewahren"
-            }
-        },
-        "events": {
-            "showing": "Anzeige",
-            "of": "von",
-            "events": "Veranstaltungen",
-            "seeMore": "Mehr anzeigen",
-            "badge": "VERANSTALTUNGEN"
-        },
-        "tags": {
-            "loading": "Tags werden geladen...",
-            "showingFirst": "Zeige die ersten",
-            "searchToFindMore": "Tags. Suchen Sie, um mehr zu finden.",
-            "none": "Keine Tags gefunden",
-            "helper": "Wählen Sie einen oder mehrere Tags, um Kartenereignisse zu filtern.",
-            "clearSelected": "Ausgewählte Tags löschen",
-            "searchMore": "Weitere Tags suchen"
-        },
-        "search": {
-            "clearText": "Löschen",
-            "clearTags": "Löschen"
-        },
-        "specialCoverage": {
-            "badge": "Sonderberichterstattung",
-            "title": "Haben Sie ein berichtenswertes Ereignis?",
-            "description": "Informieren Sie Scemory über ein Ereignis, das eine besondere Berichterstattung verdient, und helfen Sie, seine Geschichte einem größeren Publikum zugänglich zu machen.",
-            "contactUs": "Kontakt aufnehmen",
-            "modal": {
-                "title": "Sonderberichterstattung",
-                "eventName": "Veranstaltungsname",
-                "eventNamePlaceholder": "Veranstaltungsnamen eingeben",
-                "description": "Veranstaltungsbeschreibung",
-                "descriptionPlaceholder": "Erzählen Sie uns von der Veranstaltung und warum sie eine Berichterstattung verdient",
-                "cancel": "Abbrechen",
-                "send": "Senden",
-                "close": "Schließen",
-                "country": "Land",
-                "city": "Stadt",
-                "searchCity": "Stadt suchen",
-                "addNewCity": "Neue Stadt hinzufügen",
-                "createCity": "Stadt erstellen",
-                "startDate": "Startdatum",
-                "coverageTime": "Uhrzeit der Berichterstattung",
-                "eventType": "Veranstaltungstyp",
-                "personalEvent": "Private Veranstaltung",
-                "publicEvent": "Öffentliche Veranstaltung",
-                "selectCountry": "Land auswählen",
-                "selectCity": "Stadt auswählen",
-                "noCitiesFound": "Keine Städte gefunden",
-                "noCountriesFound": "Keine Länder gefunden",
-                "countryRequired": "Bitte wählen Sie ein Land aus.",
-                "cityRequired": "Bitte wählen Sie eine Stadt aus.",
-                "startDateRequired": "Bitte wählen Sie ein Startdatum aus.",
-                "eventTypeRequired": "Bitte wählen Sie einen Veranstaltungstyp aus.",
-                "cityCreateFailed": "Die Stadt konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
-                "sending": "Wird gesendet...",
-                "eventNameRequired": "Bitte geben Sie den Namen der Veranstaltung ein.",
-                "descriptionRequired": "Bitte geben Sie die Beschreibung der Veranstaltung ein.",
-                "success": "Ihre Anfrage für eine Sonderberichterstattung wurde erfolgreich übermittelt."
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "Qualitätswarnung"
-        },
-        "videoReady": "Das Video kann hochgeladen werden.",
-        "qualityWarning": "Die Qualitätsprüfungen dienen nur als Hinweis und verhindern die Erstellung der Veranstaltung nicht."
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "Gekaufte Dateien werden hier angezeigt"
-    },
-    "experience": {
-        "kicker": "SCEMORY ERLEBNIS",
-        "title": "Eine Plattform. Jede Seite der Geschichte.",
-        "pathsLabel": "Scemory-Erlebnispfade",
-        "highlightsLabel": "Abschnittshighlights",
-        "tabs": {
-            "explore": {
-                "label": "Veranstaltungen erkunden",
-                "eyebrow": "DIE WELT DURCH VERANSTALTUNGEN ENTDECKEN",
-                "heading": "Geschichten, Veranstaltungen und Orte weltweit erkunden",
-                "description": "Wechseln Sie von der Karte zu dokumentierten öffentlichen Ereignissen, persönlichen Erinnerungen und visuellen Geschichten, die durch reale Orte und Beitragskontext geprägt sind.",
-                "cta": "Veranstaltungen erkunden",
-                "imageAlt": "Scemory-Oberfläche zur Ereignisentdeckung mit dokumentierten Medienfeldern",
-                "features": {
-                    "browse": "Ereignismedien nach Ort und Zeitachse durchsuchen",
-                    "discover": "Nahegelegene Geschichten über ein visuelles Archiv entdecken",
-                    "move": "Von der Übersicht zu dokumentierten Ereignisdetails wechseln"
-                },
-                "visual": {
-                    "kicker": "Live-Entdeckung",
-                    "title": "Kartengebundene Ereignisgeschichten",
-                    "stat": "Globales Archiv",
-                    "note": "Orte, Daten und Medien in einer Ansicht"
-                }
-            },
-            "share": {
-                "label": "Ihre Geschichte teilen",
-                "eyebrow": "MOMENTE IN DOKUMENTIERTE GESCHICHTEN VERWANDELN",
-                "heading": "Dokumentieren Sie die Momente, die zählen",
-                "description": "Erstellen Sie eine Veranstaltung, laden Sie Fotos und Medien hoch, ergänzen Sie Standortdetails und bringen Sie Ihre Perspektive in das Scemory-Archiv ein.",
-                "cta": "Ihre Geschichte hochladen",
-                "imageAlt": "Scemory-Arbeitsbereich für Mitwirkende zur Dokumentation von Ereignismedien",
-                "features": {
-                    "add": "Medien, Beschreibungen und Standortkontext hinzufügen",
-                    "build": "Aus rohen Momenten eine strukturierte Erinnerung erstellen",
-                    "keep": "Geschichten von Mitwirkenden mit dem Archiv verbunden halten"
-                },
-                "visual": {
-                    "kicker": "Beitragsablauf",
-                    "title": "Medien, Kontext und Standort",
-                    "stat": "Story-Builder",
-                    "note": "Momente mit aussagekräftigen Details hochladen"
-                }
-            },
-            "license": {
-                "label": "Medien lizenzieren",
-                "eyebrow": "NUTZUNGSBEREITE MEDIEN ENTDECKEN",
-                "heading": "Ereignismedien sicher finden und lizenzieren",
-                "description": "Durchsuchen Sie visuelle Inhalte, sehen Sie verfügbare Ereignismedien vorab an und wechseln Sie direkt über Scemorys bestehende Entdeckungserfahrung zu Lizenzoptionen.",
-                "cta": "Medien entdecken",
-                "imageAlt": "Scemory-Medienfelder zum Durchsuchen lizenzierbarer Ereignisinhalte",
-                "features": {
-                    "preview": "Ereignisvisuals vor dem Öffnen der Details ansehen",
-                    "use": "Ereignisseiten als Weg zu Medienoptionen nutzen",
-                    "keep": "Entdeckung und Lizenzierungsabsicht verbunden halten"
-                },
-                "visual": {
-                    "kicker": "Medienzugang",
-                    "title": "Ereignisvisuals zur Prüfung bereit",
-                    "stat": "Lizenzierungspfad",
-                    "note": "Von der Entdeckung zu Detailseiten"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "Erneut versuchen",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "Medien",
-        "locationShort": "Ort",
-        "dateShort": "Datum",
-        "searchCountry": "Nach einem Land suchen...",
-        "featuredEvents": "Ausgewählte Ereignisse"
-    },
-    "country": {
-        "discoverFeaturedIn": "Ausgewählte Ereignisse entdecken in",
-        "cities": "Städte",
-        "availableCity": "Verfügbare Stadt",
-        "currentEvent": "Aktuelles Ereignis",
-        "eventMarkers": "Ereignismarker",
-        "clickableMarker": "Anklickbarer Marker",
-        "differentCategory": "Andere Kategorie",
-        "availableCities": "Verfügbare Städte",
-        "noEvents": "Derzeit sind keine Ereignisse verfügbar",
-        "checkBack": "Schauen Sie bald wieder vorbei",
-        "noImage": "Kein Bild",
-        "viewEvent": "Ereignis anzeigen",
-        "noCategory": "Keine Kategorie",
-        "countryFallback": "Land",
-        "cityFallback": "Stadt",
-        "eventFallback": "Ereignis",
-        "clickMarkerToOpen": "Marker anklicken, um zu öffnen",
-        "errors": {
-            "unauthorized": "Nicht autorisiert. Bitte melden Sie sich an.",
-            "notFound": "Land nicht gefunden.",
-            "loadFailed": "Beim Laden der Daten ist ein Fehler aufgetreten.",
-            "mapLibraryFailed": "Die Kartenbibliothek konnte nicht geladen werden.",
-            "bordersFailed": "Ländergrenzen konnten nicht geladen werden",
-            "invalidBorders": "Ungültige Datei mit Ländergrenzen.",
-            "countryBordersNotFound": "Grenzen für das Land konnten nicht gefunden werden",
-            "countryBoundsFailed": "Der Länderbereich konnte nicht berechnet werden.",
-            "mapLoadFailed": "Beim Laden der Karte ist ein Fehler aufgetreten."
-        }
-    },
-    "cancel": "Abbrechen",
-    "login": "Einloggen",
-    "sending": "Wird gesendet...",
-    "send_reply": "Antwort senden",
-    "report": {
-        "action": "Melden",
-        "commentTitle": "Diesen Kommentar melden",
-        "modalTitle": "Kommentar melden",
-        "reasonPrompt": "Wählen Sie den Grund für die Meldung dieses Kommentars:",
-        "submit": "Meldung absenden",
-        "submitting": "Wird übermittelt...",
-        "successTitle": "Meldung gesendet",
-        "successMessage": "Danke. Wir werden diesen Kommentar bald prüfen.",
-        "errors": {
-            "selectReason": "Bitte wählen Sie einen Meldegrund.",
-            "submitFailed": "Ein Fehler ist beim Senden der Meldung aufgetreten. Bitte versuchen Sie es erneut."
-        },
-        "reasons": {
-            "spam": "Spam",
-            "offensive": "Beleidigender Inhalt",
-            "inappropriate": "Unangemessen",
-            "illegal": "Illegale Inhalte",
-            "untrue": "Falsche Inhalte",
-            "falseInformation": "Irreführende Informationen",
-            "other": "Anderer Grund"
-        }
-    },
-    "commentsPage": {
-        "title": "Kommentare",
-        "emptyLabel": "Kommentare",
-        "emptyMessage": "Noch keine Kommentare. Sei der Erste, der kommentiert.",
-        "attachmentAlt": "Kommentaranhang",
-        "pageInfo": "Seite {current} von {total}",
-        "confirmDelete": "Sind Sie sicher, dass Sie diesen Kommentar löschen möchten?",
-        "errors": {
-            "loadFailed": "Ein Fehler ist beim Laden der Kommentare aufgetreten."
-        },
-        "reactions": {
-            "support": "Zustimmen",
-            "neutral": "Neutral",
-            "oppose": "Ablehnen"
-        },
-        "you": "Du"
-    },
-    "profilePage": {
-        "title": "Mein Profil",
-        "subtitle": "Verwalte deine Kontoinformationen und aktualisiere dein Passwort",
-        "noPlan": "Kein Plan",
-        "lastLogin": "Letzte Anmeldung",
-        "accountInfo": "Kontoinformationen",
-        "systemInfo": "Systeminformationen",
-        "currentPlan": "Aktueller Plan",
-        "planType": "Plantyp",
-        "editAccount": "Kontodetails bearbeiten",
-        "saving": "Speichern...",
-        "saveChanges": "Änderungen speichern",
-        "tabs": {
-            "userInfo": "Benutzerinformationen",
-            "editData": "Daten bearbeiten",
-            "password": "Passwort aktualisieren",
-            "wallet": "Brieftasche",
-            "privacy": "Konto & Datenschutz"
-        },
-        "fields": {
-            "name": "Name",
-            "fullName": "Vollständiger Name",
-            "email": "E-Mail",
-            "phone": "Telefon",
-            "phoneNumber": "Telefonnummer",
-            "country": "Land",
-            "position": "Position",
-            "positionJob": "Position / Beruf",
-            "birthDate": "Geburtsdatum",
-            "role": "Rolle",
-            "status": "Status",
-            "points": "Punkte",
-            "rank": "Rang",
-            "price": "Preis"
-        },
-        "placeholders": {
-            "fullName": "Deinen vollständigen Namen eingeben",
-            "countrySearch": "Nach einem Land suchen",
-            "position": "Softwareentwickler"
-        },
-        "status": {
-            "active": "Aktiv"
-        },
-        "password": {
-            "title": "Passwort aktualisieren",
-            "current": "Aktuelles Passwort",
-            "new": "Neues Passwort",
-            "confirm": "Passwort bestätigen",
-            "updating": "Wird aktualisiert...",
-            "update": "Passwort aktualisieren"
-        },
-        "messages": {
-            "fillAllFields": "Bitte füllen Sie alle Felder aus.",
-            "passwordMismatch": "Die Passwörter stimmen nicht überein.",
-            "passwordUpdated": "Passwort erfolgreich aktualisiert.",
-            "passwordUpdateFailed": "Beim Aktualisieren des Passworts ist ein Fehler aufgetreten.",
-            "chooseCountry": "Bitte wählen Sie ein Land aus der Liste.",
-            "noChanges": "Sie haben keine Änderungen vorgenommen.",
-            "profileUpdated": "Ihr Profil wurde erfolgreich aktualisiert.",
-            "profileUpdateFailed": "Beim Aktualisieren Ihres Profils ist ein Fehler aufgetreten."
-        },
-        "wallet": {
-            "title": "Brieftasche",
-            "availableBalance": "Verfügbarer Kontostand",
-            "deposit": "Geld hinzufügen",
-            "recentTransactions": "Letzte Transaktionen",
-            "depositType": "Einzahlung",
-            "withdrawType": "Abhebung",
-            "noTransactions": "Noch keine Transaktionen",
-            "withdrawComingSoon": "Die Auszahlungsfunktion wird bald verfügbar sein."
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "Maximal pro Datei: 100 MB",
-        "dragFiles": "Dateien hierher ziehen oder",
-        "clickToChoose": "klicken, um auszuwählen",
-        "supportedFiles": "Bilder und Videos (max. 100 MB pro Datei)",
-        "selectedFiles": "Ausgewählte Dateien ({count})",
-        "uploading": "Hochladen...",
-        "uploadFiles": "Dateien hochladen",
-        "success": "Dateien erfolgreich hochgeladen!",
-        "errors": {
-            "fileTooLarge": "Datei \"{name}\" ist größer als 100 MB.",
-            "unsupportedType": "Dateityp \"{name}\" wird nicht unterstützt."
-        }
-    },
-    "discovery": {
-        "title": "Suchergebnisse",
-        "description": "Entdecken Sie Veranstaltungen, Bilder und Videos auf Scemory.",
-        "showing": "Anzeige",
-        "of": "von",
-        "results": "Ergebnisse",
-        "details": "Details anzeigen",
-        "noResultsTitle": "Keine Ergebnisse gefunden",
-        "noResultsDescription": "Ändern Sie Ihre Suche oder die Filter.",
-        "filters": {
-            "allCities": "Alle Städte",
-            "allCountries": "Alle Länder"
-        },
-        "tabs": {
-            "all": "Alle",
-            "event": "Veranstaltungen",
-            "image": "Bilder",
-            "video": "Videos"
-        },
-        "resultLabels": {
-            "event": "Veranstaltung",
-            "image": "Bild",
-            "video": "Video"
-        },
-        "media": {
-            "price": "Preis",
-            "addToCart": "In den Warenkorb",
-            "added": "Hinzugefügt",
-            "adding": "Wird hinzugefügt...",
-            "playVideo": "Video abspielen",
-            "pauseVideo": "Video anhalten"
-        }
-    },
-    "timeline": {
-        "title": "Ihre Aktivitätsübersicht",
-        "subtitle": "Sehen Sie Ihre Veranstaltungen, Reaktionen, Kommentare und gespeicherten Elemente an einem Ort.",
-        "totalActivity": "Gesamtaktivität",
-        "latestActivity": "Letzte Aktivität",
-        "noLatestActivity": "Noch keine Aktivität",
-        "loading": "Aktivität wird geladen...",
-        "loadError": "Ihre Aktivität konnte nicht geladen werden.",
-        "retry": "Erneut versuchen",
-        "viewAll": "Alle anzeigen",
-        "empty": "In diesem Bereich gibt es keine Aktivitäten.",
-        "previous": "Zurück",
-        "next": "Weiter",
-        "pageOf": "Seite {current} von {last}",
-        "unknownEvent": "Unbekannte Veranstaltung",
-        "parentComment": "Antwort auf: {comment}",
-        "reactionTo": "Reaktion auf: {comment}",
-        "onEvent": "Bei {event}",
-        "tabs": {
-            "all": "Alle Aktivitäten",
-            "events": "Veranstaltungen",
-            "likes": "Gefällt mir",
-            "comments": "Kommentare",
-            "replies": "Antworten",
-            "comment_images": "Kommentar-Bilder",
-            "comment_interactions": "Kommentarreaktionen",
-            "wishlists": "Favoriten"
-        },
-        "filters": {
-            "label": "Zeitraum",
-            "all": "Gesamter Zeitraum",
-            "today": "Heute",
-            "this_week": "Diese Woche",
-            "this_month": "Dieser Monat",
-            "custom": "Benutzerdefinierter Zeitraum",
-            "from": "Von",
-            "to": "Bis",
-            "apply": "Anwenden",
-            "invalidRange": "Wählen Sie einen gültigen Zeitraum."
-        },
-        "reactions": {
-            "support": "Zustimmung",
-            "neutral": "Neutral",
-            "exhibitions": "Ablehnung"
-        },
-        "status": {
-            "pending": "Ausstehend",
-            "approved": "Genehmigt",
-            "rejected": "Abgelehnt",
-            "active": "Aktiv",
-            "inactive": "Inaktiv"
-        }
-    },
-    "security": {
-        "denied": "Sie dürfen auf diese Ressource nicht zugreifen.",
-        "notFound": "Die angeforderte Ressource wurde nicht gefunden.",
-        "disabled": "Dieses Konto ist deaktiviert. Kontaktieren Sie den Support.",
-        "invalidMedia": "Die Mediendatei ist ungültig, nicht unterstützt oder überschreitet sichere Verarbeitungsgrenzen.",
-        "unavailable": "Dieses Medium ist derzeit nicht verfügbar.",
-        "currencyMismatch": "Die Guthabenwährung passt nicht zur Transaktion.",
-        "insufficientBalance": "Unzureichendes verfügbares Guthaben.",
-        "invalidWithdrawal": "Die Auszahlung kann in diesem Zustand nicht geändert werden. Kontaktieren Sie den Support.",
-        "paymentRequired": "Dieser Tarif erfordert eine bestätigte Zahlung. Kontaktieren Sie den Support.",
-        "invalidCode": "Der Bestätigungscode ist ungültig oder abgelaufen.",
-        "requestFailed": "Die Anfrage konnte nicht abgeschlossen werden. Erneut versuchen.",
-        "rateLimit": "Zu viele Anfragen. Später erneut versuchen."
-    },
-    "googleAuth": {
-        "continue": "Weiter mit Google",
-        "signup": "Mit Google registrieren",
-        "or": "ODER",
-        "signingIn": "Anmeldung läuft…",
-        "cancelled": "Authentifizierung abgebrochen.",
-        "expired_state": "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut.",
-        "invalid_state": "Diese Anfrage ist ungültig oder wurde bereits verwendet. Bitte beginnen Sie erneut.",
-        "oauth_failed": "Google konnte die Authentifizierung nicht abschließen. Bitte erneut versuchen.",
-        "callback_failed": "Authentifizierung fehlgeschlagen. Bitte erneut versuchen.",
-        "identity_invalid": "Google konnte Ihre Identität und E-Mail-Adresse nicht bestätigen. Nutzen Sie eine andere Anmeldemethode.",
-        "disabled": "Dieses Konto ist nicht verfügbar. Wenden Sie sich an den Support.",
-        "linking_required": "Melden Sie sich mit der bisherigen Methode Ihres Kontos an. Die Google-Verknüpfung erfordert zuerst diese Anmeldung; sie ist noch nicht verfügbar. Wenden Sie sich bei Bedarf an den Support.",
-        "unavailable": "Die Google-Authentifizierung ist derzeit nicht verfügbar. Nutzen Sie E-Mail und Passwort oder versuchen Sie es später.",
-        "busy": "Die Anmeldung wird bereits abgeschlossen. Bitte erneut versuchen.",
-        "alreadyLinked": "Dieses Google-Konto ist bereits verknüpft.",
-        "completeProfile": "Konto vervollständigen",
-        "profileRequired": "Geben Sie die erforderlichen Angaben ein, um Ihr Konto zu erstellen.",
-        "country": "Land",
-        "dateOfBirth": "Geburtsdatum",
-        "finishSignup": "Konto erstellen",
-        "profileInvalid": "Geben Sie ein Land und ein gültiges Geburtsdatum ein, das nicht in der Zukunft liegt.",
-        "retry": "Erneut versuchen",
-        "backToLogin": "Zurück zur Anmeldung",
-        "linkAccountTitle": "Google-Konto verknüpfen",
-        "linkAccountDesc": "Ein Konto mit dieser E-Mail-Adresse existiert bereits. Geben Sie Ihr Passwort ein, um Ihr Google-Konto sicher zu verknüpfen.",
-        "accountPassword": "Kontopasswort",
-        "confirmLink": "Bestätigen und Konto verknüpfen",
-        "invalidCredentials": "Ungültiges Passwort. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
-        "linkSuccess": "Google-Konto erfolgreich verknüpft.",
-        "unlinkSuccess": "Google-Konto erfolgreich getrennt.",
-        "identity_conflict": "Diese E-Mail ist mit einer anderen Google-Identität verknüpft. Nutzen Sie die bestehende Anmeldemethode oder den Support.",
-        "account_login_required": "Melden Sie sich mit der bestehenden Methode an und verbinden Sie Google anschließend im Profil.",
-        "recovery_required": "Zum erneuten Verbinden von Google ist eine einmalige Kontowiederherstellung erforderlich.",
-        "recovery_web_required": "Schließen Sie die einmalige Wiederherstellung auf der Scemory-Website ab. Künftige Google-Anmeldungen erfolgen automatisch.",
-        "invalid_recovery_code": "Der Wiederherstellungscode ist falsch. Prüfen Sie ihn und versuchen Sie es erneut.",
-        "recovery_expired": "Diese Wiederherstellung ist abgelaufen. Starten Sie die Google-Anmeldung erneut.",
-        "recovery_attempts_exceeded": "Zu viele falsche Versuche. Starten Sie die Google-Anmeldung erneut.",
-        "recovery_rate_limited": "Kürzlich wurde ein Code gesendet. Warten Sie kurz und versuchen Sie es erneut.",
-        "recovery_unavailable": "Der Wiederherstellungscode konnte nicht gesendet werden. Versuchen Sie es später erneut.",
-        "recoveryTitle": "Google-Konto erneut verbinden",
-        "recoverySent": "Geben Sie den einmaligen Code ein, der an {email} gesendet wurde. Dies ist nur einmal nötig.",
-        "recoveryCode": "Wiederherstellungscode",
-        "confirmRecovery": "Prüfen und fortfahren"
-    },
-    "facebookAuth": {
-        "continue": "Weiter mit Facebook",
-        "signup": "Mit Facebook registrieren",
-        "signingIn": "Anmeldung läuft…",
-        "unavailable": "Die Facebook-Authentifizierung ist derzeit nicht verfügbar. Nutzen Sie E-Mail und Passwort oder versuchen Sie es später.",
-        "cancelled": "Authentifizierung abgebrochen.",
-        "invalid_state": "Diese Anfrage ist ungültig oder wurde bereits verwendet. Bitte beginnen Sie erneut.",
-        "expired": "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut.",
-        "callback_failed": "Authentifizierung fehlgeschlagen. Bitte erneut versuchen.",
-        "disabled": "Dieses Konto ist nicht verfügbar. Wenden Sie sich an den Support.",
-        "linking_required": "Melden Sie sich mit der bisherigen Methode Ihres Kontos an. Die Facebook-Verknüpfung erfordert zuerst diese Anmeldung; sie ist noch nicht verfügbar. Wenden Sie sich bei Bedarf an den Support.",
-        "busy": "Die Anmeldung wird bereits abgeschlossen. Bitte erneut versuchen.",
-        "completeProfile": "Konto vervollständigen",
-        "profileRequired": "Geben Sie die erforderlichen Angaben ein, um Ihr Konto zu erstellen.",
-        "country": "Land",
-        "dateOfBirth": "Geburtsdatum",
-        "finishSignup": "Konto erstellen",
-        "retry": "Erneut versuchen",
-        "backToLogin": "Zurück zur Anmeldung",
-        "identity_invalid": "Facebook konnte Ihre Identität nicht bestätigen. Bitte erneut versuchen.",
-        "verification_required": "Bestätigen Sie die E-Mail Ihres bestehenden Kontos mit Ihrer bisherigen Anmeldemethode.",
-        "email_unavailable": "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie es später.",
-        "otp_expired": "Dieser Code ist abgelaufen. Fordern Sie einen neuen an.",
-        "otp_invalid": "Der Bestätigungscode ist falsch.",
-        "otp_attempts": "Zu viele Versuche. Fordern Sie nach der Wartezeit einen neuen Code an.",
-        "otp_cooldown": "Bitte warten Sie, bevor Sie einen weiteren Code anfordern.",
-        "native_unavailable": "Die Facebook-Anmeldung ist auf der Scemory-Website verfügbar. Nutzen Sie einen Browser.",
-        "email": "E-Mail-Adresse",
-        "sendCode": "Bestätigungscode senden",
-        "verifyEmail": "E-Mail bestätigen",
-        "codeSent": "Geben Sie den an {email} gesendeten Code ein.",
-        "verificationCode": "Bestätigungscode",
-        "resendIn": "Erneut senden in {seconds} s",
-        "resend": "Code erneut senden",
-        "profileInvalid": "Geben Sie eine gültige E-Mail, ein Land und ein Geburtsdatum ein, das nicht in der Zukunft liegt."
-    },
-    "mediaCredits": {
-        "myCredits": "Mein Medien-Guthaben",
-        "photosAvailable": "Verfügbare Fotos",
-        "videosAvailable": "Verfügbare Videos",
-        "photos": "Fotos",
-        "videos": "Videos",
-        "photoQuotaDesc": "Dauerhaftes Foto-Einlösekontingent",
-        "videoQuotaDesc": "Dauerhaftes Video-Einlösekontingent",
-        "activeTier": "Aktive Zugriffsklasse",
-        "breakdownByTier": "Aufteilung nach Klasse",
-        "viewDashboard": "Guthaben-Dashboard",
-        "getMoreCredits": "Mehr Guthaben holen",
-        "browseMarketplace": "Marktplatz durchsuchen",
-        "noTier": "Kein aktiver Plan",
-        "getWithPlan": "Mit Plan holen",
-        "redeemed": "Eingelöst",
-        "redeemSuccess": "Medien erfolgreich mit Plan-Guthaben eingelöst!",
-        "redeemFailed": "Einlösung fehlgeschlagen.",
-        "activeGrants": "Aktive Kontingente",
-        "redemptionHistory": "Einlösungshistorie",
-        "noGrants": "Keine aktiven Kontingente. Abonnieren Sie einen Plan für Foto- und Video-Guthaben.",
-        "noRedemptions": "Noch keine Einlösungen vorhanden.",
-        "tier": "Klasse",
-        "plan": "Plan",
-        "tierRank": "Klassen-Rang",
-        "grantedOn": "Gewährt am",
-        "payoutCap": "Ersteller-Auszahlungsobergrenze",
-        "payWithWallet": "Mit Wallet bezahlen",
-        "payWithPaypal": "Mit PayPal bezahlen",
-        "insufficientCredits": "Unzureichendes Guthaben oder zu niedrige Klasse für dieses Medium.",
-        "includedQuotas": "Enthaltene Medien-Kontingente",
-        "permanentQuotas": "Dauerhafte Medienkontingente ohne Verfall"
-    },
-    "dataDeletion": {
-        "title": "Anweisungen zur Datenlöschung",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "Anweisungen zur Datenlöschung",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "Anweisungen zur Datenlöschung",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "Live-Support",
+      "description": "Sprich jetzt mit einem Teammitglied für sofortige Hilfe",
+      "btn_chat": "Live-Chat starten",
+      "btn_schedule": "Anruf planen",
+      "available": "Jetzt verfügbar: 3 Support-Mitarbeiter"
     }
+  },
+  "contacts": {
+    "badge": "Kontakt",
+    "title": "Lassen Sie uns sprechen",
+    "description": "Haben Sie eine Frage, benötigen Sie Unterstützung oder wünschen Sie einen individuellen Plan? Senden Sie uns eine Nachricht, und unser Team meldet sich bei Ihnen.",
+    "form": {
+      "title": "Senden Sie uns eine Nachricht",
+      "description": "Füllen Sie das Formular aus, und wir antworten so schnell wie möglich.",
+      "fullName": "Vollständiger Name",
+      "fullNamePlaceholder": "Geben Sie Ihren vollständigen Namen ein",
+      "emailAddress": "E-Mail-Adresse",
+      "emailPlaceholder": "Geben Sie Ihre E-Mail-Adresse ein",
+      "subject": "Betreff",
+      "generalInquiry": "Allgemeine Anfrage",
+      "customPlan": "Individueller Plan",
+      "support": "Technischer Support",
+      "feedback": "Feedback",
+      "other": "Sonstiges",
+      "message": "Nachricht",
+      "messagePlaceholder": "Sagen Sie uns, wie wir helfen können...",
+      "minimumCharacters": "Bitte geben Sie ausreichend Details an.",
+      "sendMessage": "Nachricht senden",
+      "sending": "Wird gesendet...",
+      "successMessage": "Ihre Nachricht wurde erfolgreich gesendet.",
+      "errorMessage": "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "info": {
+      "getInTouch": "Kontakt aufnehmen",
+      "title": "Wir sind für Sie da",
+      "description": "Erreichen Sie unser Team bei allgemeinen Fragen, technischem Support oder individueller Preisgestaltung.",
+      "emailUs": "Schreiben Sie uns",
+      "available": "Unser Team antwortet so schnell wie möglich.",
+      "customPlans": "Individuelle Pläne",
+      "customPlansDescription": "Benötigen Sie eine passende Lösung für Ihr Team oder Unternehmen? Teilen Sie uns mit, was Sie brauchen.",
+      "customerSupport": "Kundensupport",
+      "supportDescription": "Kontaktieren Sie uns, wenn Sie Hilfe mit Ihrem Konto, Abonnement oder unseren Services benötigen.",
+      "followJourney": "Folgen Sie unserer Reise",
+      "responseTime": "Schnelle Antwort",
+      "responseTimeDescription": "Wir antworten in der Regel innerhalb eines Werktags."
+    },
+    "map": {
+      "title": "Scene Memory Weltkarte",
+      "description": "Visualisiere Tausende Erinnerungen in über 140 Ländern."
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Häufig gestellte Fragen",
+    "description": "Kurze Antworten auf einige der häufigsten Fragen.",
+    "questions": {
+      "0": {
+        "question": "Wie schnell erhalte ich eine Antwort?",
+        "answer": "Unser Team antwortet in der Regel innerhalb eines Werktags."
+      },
+      "1": {
+        "question": "Kann ich einen individuellen Plan anfragen?",
+        "answer": "Ja. Wählen Sie im Betrefffeld Individueller Plan aus und beschreiben Sie Ihre Anforderungen."
+      },
+      "2": {
+        "question": "Kann ich Sie für technischen Support kontaktieren?",
+        "answer": "Ja. Wählen Sie Technischer Support aus und fügen Sie alle relevanten Details zum Problem hinzu."
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "Veranstaltung als Admin hinzufügen",
+      "trending": "Trendveranstaltung",
+      "trendingHelp": "Diese Veranstaltung als Trend markieren",
+      "generateTags": "KI-Tags generieren",
+      "generatingTags": "Tags werden generiert...",
+      "generateTagsHelp": "Lassen Sie mit dem bestehenden KI-Dienst Tags für Veranstaltung und Fotos vorschlagen. Vor der Veröffentlichung können Sie sie prüfen oder entfernen.",
+      "generateTagsError": "KI-Tags können derzeit nicht generiert werden.",
+      "created": "Die Veranstaltung wurde erfolgreich erstellt und veröffentlicht."
+    },
+    "chooseFiles": "Dateien auswählen",
+    "mediaCount": "Anzahl der Medien",
+    "title": "Neues Event hinzufügen",
+    "basicInfo": "Grundinformationen",
+    "locationCategory": "Ort & Kategorie",
+    "dates": "Termine",
+    "images": "Event-Bilder",
+    "eventTitle": "Event-Titel",
+    "description": "Beschreibung",
+    "country": "Land",
+    "searchCountry": "Land suchen...",
+    "selectCountry": "Land auswählen",
+    "city": "Stadt",
+    "selectCity": "Stadt auswählen",
+    "selectCityFirst": "Zuerst Land auswählen",
+    "mainCategory": "Hauptkategorie",
+    "subCategory": "Unterkategorie",
+    "selectSubFirst": "Zuerst Hauptkategorie auswählen",
+    "selectLocationMap": "Ort auf der Karte auswählen",
+    "selectedCoords": "Ausgewählte Koordinaten: Lat: {lat} , Lng: {lng}",
+    "lat": "Breitengrad",
+    "lng": "Längengrad",
+    "pleaseSelectLocation": "Bitte wählen Sie einen Ort auf der Karte",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "startTime": "Startzeit",
+    "dragDropHere": "Klicken oder Bilder hierher ziehen",
+    "formatsMax": "PNG • JPG • WEBP | max. 5 MB pro Bild",
+    "chooseImages": "Bilder auswählen",
+    "addMore": "Mehr hinzufügen",
+    "imagesCount": "{count} / 8 Bilder",
+    "remove": "Entfernen",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+      "mediaRequired": "Bitte laden Sie mindestens ein Bild oder Video hoch."
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    },
+    "minimumRequirementsHint": "Zum Erstellen einer Veranstaltung benötigen Sie nur einen Titel, eine Beschreibung und mindestens ein Bild oder Video. Alle anderen Felder sind optional."
+  },
+  "commons": {
+    "required": "erforderlich",
+    "cancel": "Abbrechen",
+    "saveDraft": "Als Entwurf speichern",
+    "create": "Event erstellen",
+    "creating": "Wird erstellt...",
+    "choose": "Auswählen"
+  },
+  "eventss": {
+    "no_title": "Unbenanntes Ereignis",
+    "undefined_city": "Nicht definiert",
+    "from_map": "Von der Karte"
+  },
+  "wishlist": {
+    "title": "Favoritenliste",
+    "loading": "Lade...",
+    "empty": {
+      "main": "Noch keine Einträge in deiner Wunschliste",
+      "hint": "Füge deine Lieblingsveranstaltungen hinzu!"
+    },
+    "fallback_image_alt": "Standard-Veranstaltungsbild",
+    "uncategorized": "Nicht kategorisiert",
+    "no_title": "Kein Titel",
+    "city_label": "Stadt:",
+    "date_label": "Datum:",
+    "time_label": "Zeit:",
+    "not_specified": "Nicht angegeben",
+    "view_details": "Details anzeigen",
+    "remove": "Aus Favoriten entfernen",
+    "deleting": "Wird entfernt...",
+    "added_at": "Hinzugefügt am",
+    "pagination": {
+      "previous": "Zurück",
+      "next": "Weiter",
+      "page_info": "Seite {current} von {total}"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen",
+    "last_updated": "Letzte Aktualisierung: 2026",
+    "acceptance_title": "Akzeptanz der Bedingungen",
+    "acceptance_text": "Durch den Zugriff auf diese Plattform erklären Sie sich mit diesen Nutzungsbedingungen und allen geltenden Gesetzen einverstanden.",
+    "accounts_title": "Benutzerkonten",
+    "accounts_text": "Benutzer sind verantwortlich für die Vertraulichkeit ihrer Kontoinformationen und für alle Aktivitäten, die über ihr Konto erfolgen.",
+    "content_title": "Eigentum an Inhalten",
+    "content_text": "Alle Inhalte der Plattform, einschließlich Texte, Bilder und Daten, sind durch Urheberrechte und Gesetze zum geistigen Eigentum geschützt.",
+    "ai_title": "KI-Beschränkungen",
+    "ai_text": "Die Verwendung von Plattforminhalten zum Training von KI- oder Machine-Learning-Modellen ohne offizielle Lizenz ist strengstens untersagt.",
+    "prohibited_title": "Verbotene Nutzung",
+    "prohibited_text": "Benutzer dürfen die Plattform nicht missbrauchen, unbefugten Zugriff versuchen, Daten scrapen oder den Betrieb der Plattform stören.",
+    "liability_title": "Haftungsbeschränkung",
+    "liability_text": "Die Plattform haftet nicht für indirekte oder Folgeschäden, die aus der Nutzung des Dienstes entstehen.",
+    "changes_title": "Änderungen der Bedingungen",
+    "changes_text": "Wir behalten uns das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern.",
+    "contact_title": "Kontakt",
+    "contact_text": "Bei Fragen zu diesen Bedingungen wenden Sie sich bitte an die Plattformverwaltung."
+  },
+  "plans": {
+    "customPrice": "Kontaktieren Sie uns",
+    "customPricingDescription": "Preise, die auf Ihre Anforderungen zugeschnitten sind",
+    "contactUs": "Kontaktieren Sie uns",
+    "chooseYourPlan": "Wählen Sie Ihren Tarif",
+    "getStarted": "Loslegen",
+    "noFeatures": "Noch keine Funktionen",
+    "mostPopular": "Am beliebtesten",
+    "perMonth": "pro Monat",
+    "prioritySupport": "Priorisierter Support",
+    "securePayments": "Sichere Zahlungen",
+    "moneyBack": "30-Tage-Garantie",
+    "support247": "Support rund um die Uhr",
+    "cancelAnytime": "Jederzeit kündbar",
+    "subscribe": "Jetzt abonnieren",
+    "noCreditCard": "Keine Kreditkarte erforderlich",
+    "free": "Kostenlos",
+    "ourPlans": "Unsere Tarife",
+    "description": "Starten Sie kostenlos oder wählen Sie den Tarif, der am besten passt.",
+    "price": "Preis",
+    "features": "Funktionen",
+    "Monthly": "Monatlich",
+    "Yearly": "Jährlich",
+    "unlimitedEvents": "Unbegrenzte Ereignisse",
+    "addEvents": "Ereignisse hinzufügen",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "Tarif",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "Pläne konnten nicht geladen werden. Bitte erneut versuchen."
+    },
+    "customPlanNote": "Auf Ihre Anforderungen zugeschnitten",
+    "basicAccessIncluded": "Basiszugang enthalten",
+    "usd": "USD"
+  },
+  "free": "Kostenlos",
+  "basic": "Basis",
+  "professional": "Professionell",
+  "premium": "Premium",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "Ihr Browser unterstützt das Video-Tag nicht.",
+      "badge": "Scemory-Veranstaltungsarchiv",
+      "title": "Dokumentierte Veranstaltungen entdecken",
+      "titleHighlight": "über die Karte",
+      "description": "Entdecken Sie Veranstaltungsmedien, die von Journalistinnen und Journalisten, Medienteams und Augenzeugen aus aller Welt hochgeladen wurden.",
+      "searchEvents": "Veranstaltungen suchen",
+      "uploadStory": "Ihre Geschichte hochladen",
+      "bottomText": "Entdecken Sie Geschichten, Orte und Momente aus aller Welt.",
+      "searchPlaceholder": "Nach Veranstaltungen suchen..."
+    },
+    "profileToast": {
+      "title": "Profil unvollständig",
+      "message": "Ihr Profil ist unvollständig. Bitte aktualisieren Sie:",
+      "complete": "Zum Vervollständigen klicken",
+      "fields": {
+        "phone": "Telefon",
+        "country": "Land",
+        "position": "Position",
+        "dateOfBirth": "Geburtsdatum"
+      }
+    },
+    "trending": {
+      "loadError": "Trendveranstaltungen können derzeit nicht geladen werden.",
+      "kicker": "Trend",
+      "title": "Trendveranstaltungen",
+      "description": "Veranstaltungen, die im Archiv Aufmerksamkeit gewinnen.",
+      "emptyTitle": "Noch keine Trendveranstaltungen",
+      "emptyDescription": "Schauen Sie bald wieder nach hervorgehobenen Veranstaltungen.",
+      "views": "Aufrufe",
+      "likes": "Likes",
+      "slidesLabel": "Folien zu Trendveranstaltungen",
+      "untitledEvent": "Unbenannte Veranstaltung",
+      "showSlide": "Trendveranstaltung {number} anzeigen"
+    },
+    "map": {
+      "tilesSlow": "Die Kartenkacheln brauchen zu lange zum Laden.",
+      "loadError": "Die Karte kann derzeit nicht geladen werden.",
+      "loadMap": "Karte laden",
+      "loading": "Karte wird geladen...",
+      "retry": "Karte erneut laden",
+      "openFullscreen": "Karte im Vollbild öffnen",
+      "closeFullscreen": "Vollbildkarte schließen"
+    },
+    "about": {
+      "imageAlt": "Scemory-Dokumentationsplattform",
+      "kicker": "Verlässliche Ereigniserinnerung",
+      "title": "Über Scemory",
+      "description": "Scemory richtet sich an Journalistinnen und Journalisten, Medienteams und Augenzeugen, die einen vertrauenswürdigen Ort benötigen, um Ereignisse im Moment ihres Geschehens zu dokumentieren. Die Plattform verbindet hochgeladene Medien, Ereignismetadaten und Standortkontext, damit Menschen öffentliche Geschichten klar entdecken können.",
+      "features": {
+        "upload": "Fotos, Videos und Felddaten hochladen",
+        "explore": "Veranstaltungen auf einer interaktiven Karte erkunden",
+        "preserve": "Verifizierte Geschichten in einem digitalen Archiv bewahren"
+      }
+    },
+    "events": {
+      "showing": "Anzeige",
+      "of": "von",
+      "events": "Veranstaltungen",
+      "seeMore": "Mehr anzeigen",
+      "badge": "VERANSTALTUNGEN"
+    },
+    "tags": {
+      "loading": "Tags werden geladen...",
+      "showingFirst": "Zeige die ersten",
+      "searchToFindMore": "Tags. Suchen Sie, um mehr zu finden.",
+      "none": "Keine Tags gefunden",
+      "helper": "Wählen Sie einen oder mehrere Tags, um Kartenereignisse zu filtern.",
+      "clearSelected": "Ausgewählte Tags löschen",
+      "searchMore": "Weitere Tags suchen"
+    },
+    "search": {
+      "clearText": "Löschen",
+      "clearTags": "Löschen"
+    },
+    "specialCoverage": {
+      "badge": "Sonderberichterstattung",
+      "title": "Haben Sie ein berichtenswertes Ereignis?",
+      "description": "Informieren Sie Scemory über ein Ereignis, das eine besondere Berichterstattung verdient, und helfen Sie, seine Geschichte einem größeren Publikum zugänglich zu machen.",
+      "contactUs": "Kontakt aufnehmen",
+      "modal": {
+        "title": "Sonderberichterstattung",
+        "eventName": "Veranstaltungsname",
+        "eventNamePlaceholder": "Veranstaltungsnamen eingeben",
+        "description": "Veranstaltungsbeschreibung",
+        "descriptionPlaceholder": "Erzählen Sie uns von der Veranstaltung und warum sie eine Berichterstattung verdient",
+        "cancel": "Abbrechen",
+        "send": "Senden",
+        "close": "Schließen",
+        "country": "Land",
+        "city": "Stadt",
+        "searchCity": "Stadt suchen",
+        "addNewCity": "Neue Stadt hinzufügen",
+        "createCity": "Stadt erstellen",
+        "startDate": "Startdatum",
+        "coverageTime": "Uhrzeit der Berichterstattung",
+        "eventType": "Veranstaltungstyp",
+        "personalEvent": "Private Veranstaltung",
+        "publicEvent": "Öffentliche Veranstaltung",
+        "selectCountry": "Land auswählen",
+        "selectCity": "Stadt auswählen",
+        "noCitiesFound": "Keine Städte gefunden",
+        "noCountriesFound": "Keine Länder gefunden",
+        "countryRequired": "Bitte wählen Sie ein Land aus.",
+        "cityRequired": "Bitte wählen Sie eine Stadt aus.",
+        "startDateRequired": "Bitte wählen Sie ein Startdatum aus.",
+        "eventTypeRequired": "Bitte wählen Sie einen Veranstaltungstyp aus.",
+        "cityCreateFailed": "Die Stadt konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        "sending": "Wird gesendet...",
+        "eventNameRequired": "Bitte geben Sie den Namen der Veranstaltung ein.",
+        "descriptionRequired": "Bitte geben Sie die Beschreibung der Veranstaltung ein.",
+        "success": "Ihre Anfrage für eine Sonderberichterstattung wurde erfolgreich übermittelt."
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "Qualitätswarnung"
+    },
+    "videoReady": "Das Video kann hochgeladen werden.",
+    "qualityWarning": "Die Qualitätsprüfungen dienen nur als Hinweis und verhindern die Erstellung der Veranstaltung nicht."
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "Gekaufte Dateien werden hier angezeigt"
+  },
+  "experience": {
+    "kicker": "SCEMORY ERLEBNIS",
+    "title": "Eine Plattform. Jede Seite der Geschichte.",
+    "pathsLabel": "Scemory-Erlebnispfade",
+    "highlightsLabel": "Abschnittshighlights",
+    "tabs": {
+      "explore": {
+        "label": "Veranstaltungen erkunden",
+        "eyebrow": "DIE WELT DURCH VERANSTALTUNGEN ENTDECKEN",
+        "heading": "Geschichten, Veranstaltungen und Orte weltweit erkunden",
+        "description": "Wechseln Sie von der Karte zu dokumentierten öffentlichen Ereignissen, persönlichen Erinnerungen und visuellen Geschichten, die durch reale Orte und Beitragskontext geprägt sind.",
+        "cta": "Veranstaltungen erkunden",
+        "imageAlt": "Scemory-Oberfläche zur Ereignisentdeckung mit dokumentierten Medienfeldern",
+        "features": {
+          "browse": "Ereignismedien nach Ort und Zeitachse durchsuchen",
+          "discover": "Nahegelegene Geschichten über ein visuelles Archiv entdecken",
+          "move": "Von der Übersicht zu dokumentierten Ereignisdetails wechseln"
+        },
+        "visual": {
+          "kicker": "Live-Entdeckung",
+          "title": "Kartengebundene Ereignisgeschichten",
+          "stat": "Globales Archiv",
+          "note": "Orte, Daten und Medien in einer Ansicht"
+        }
+      },
+      "share": {
+        "label": "Ihre Geschichte teilen",
+        "eyebrow": "MOMENTE IN DOKUMENTIERTE GESCHICHTEN VERWANDELN",
+        "heading": "Dokumentieren Sie die Momente, die zählen",
+        "description": "Erstellen Sie eine Veranstaltung, laden Sie Fotos und Medien hoch, ergänzen Sie Standortdetails und bringen Sie Ihre Perspektive in das Scemory-Archiv ein.",
+        "cta": "Ihre Geschichte hochladen",
+        "imageAlt": "Scemory-Arbeitsbereich für Mitwirkende zur Dokumentation von Ereignismedien",
+        "features": {
+          "add": "Medien, Beschreibungen und Standortkontext hinzufügen",
+          "build": "Aus rohen Momenten eine strukturierte Erinnerung erstellen",
+          "keep": "Geschichten von Mitwirkenden mit dem Archiv verbunden halten"
+        },
+        "visual": {
+          "kicker": "Beitragsablauf",
+          "title": "Medien, Kontext und Standort",
+          "stat": "Story-Builder",
+          "note": "Momente mit aussagekräftigen Details hochladen"
+        }
+      },
+      "license": {
+        "label": "Medien lizenzieren",
+        "eyebrow": "NUTZUNGSBEREITE MEDIEN ENTDECKEN",
+        "heading": "Ereignismedien sicher finden und lizenzieren",
+        "description": "Durchsuchen Sie visuelle Inhalte, sehen Sie verfügbare Ereignismedien vorab an und wechseln Sie direkt über Scemorys bestehende Entdeckungserfahrung zu Lizenzoptionen.",
+        "cta": "Medien entdecken",
+        "imageAlt": "Scemory-Medienfelder zum Durchsuchen lizenzierbarer Ereignisinhalte",
+        "features": {
+          "preview": "Ereignisvisuals vor dem Öffnen der Details ansehen",
+          "use": "Ereignisseiten als Weg zu Medienoptionen nutzen",
+          "keep": "Entdeckung und Lizenzierungsabsicht verbunden halten"
+        },
+        "visual": {
+          "kicker": "Medienzugang",
+          "title": "Ereignisvisuals zur Prüfung bereit",
+          "stat": "Lizenzierungspfad",
+          "note": "Von der Entdeckung zu Detailseiten"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "Erneut versuchen",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "Medien",
+    "locationShort": "Ort",
+    "dateShort": "Datum",
+    "searchCountry": "Nach einem Land suchen...",
+    "featuredEvents": "Ausgewählte Ereignisse"
+  },
+  "country": {
+    "discoverFeaturedIn": "Ausgewählte Ereignisse entdecken in",
+    "cities": "Städte",
+    "availableCity": "Verfügbare Stadt",
+    "currentEvent": "Aktuelles Ereignis",
+    "eventMarkers": "Ereignismarker",
+    "clickableMarker": "Anklickbarer Marker",
+    "differentCategory": "Andere Kategorie",
+    "availableCities": "Verfügbare Städte",
+    "noEvents": "Derzeit sind keine Ereignisse verfügbar",
+    "checkBack": "Schauen Sie bald wieder vorbei",
+    "noImage": "Kein Bild",
+    "viewEvent": "Ereignis anzeigen",
+    "noCategory": "Keine Kategorie",
+    "countryFallback": "Land",
+    "cityFallback": "Stadt",
+    "eventFallback": "Ereignis",
+    "clickMarkerToOpen": "Marker anklicken, um zu öffnen",
+    "errors": {
+      "unauthorized": "Nicht autorisiert. Bitte melden Sie sich an.",
+      "notFound": "Land nicht gefunden.",
+      "loadFailed": "Beim Laden der Daten ist ein Fehler aufgetreten.",
+      "mapLibraryFailed": "Die Kartenbibliothek konnte nicht geladen werden.",
+      "bordersFailed": "Ländergrenzen konnten nicht geladen werden",
+      "invalidBorders": "Ungültige Datei mit Ländergrenzen.",
+      "countryBordersNotFound": "Grenzen für das Land konnten nicht gefunden werden",
+      "countryBoundsFailed": "Der Länderbereich konnte nicht berechnet werden.",
+      "mapLoadFailed": "Beim Laden der Karte ist ein Fehler aufgetreten."
+    }
+  },
+  "cancel": "Abbrechen",
+  "login": "Einloggen",
+  "sending": "Wird gesendet...",
+  "send_reply": "Antwort senden",
+  "report": {
+    "action": "Melden",
+    "commentTitle": "Diesen Kommentar melden",
+    "modalTitle": "Kommentar melden",
+    "reasonPrompt": "Wählen Sie den Grund für die Meldung dieses Kommentars:",
+    "submit": "Meldung absenden",
+    "submitting": "Wird übermittelt...",
+    "successTitle": "Meldung gesendet",
+    "successMessage": "Danke. Wir werden diesen Kommentar bald prüfen.",
+    "errors": {
+      "selectReason": "Bitte wählen Sie einen Meldegrund.",
+      "submitFailed": "Ein Fehler ist beim Senden der Meldung aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "reasons": {
+      "spam": "Spam",
+      "offensive": "Beleidigender Inhalt",
+      "inappropriate": "Unangemessen",
+      "illegal": "Illegale Inhalte",
+      "untrue": "Falsche Inhalte",
+      "falseInformation": "Irreführende Informationen",
+      "other": "Anderer Grund"
+    }
+  },
+  "commentsPage": {
+    "title": "Kommentare",
+    "emptyLabel": "Kommentare",
+    "emptyMessage": "Noch keine Kommentare. Sei der Erste, der kommentiert.",
+    "attachmentAlt": "Kommentaranhang",
+    "pageInfo": "Seite {current} von {total}",
+    "confirmDelete": "Sind Sie sicher, dass Sie diesen Kommentar löschen möchten?",
+    "errors": {
+      "loadFailed": "Ein Fehler ist beim Laden der Kommentare aufgetreten."
+    },
+    "reactions": {
+      "support": "Zustimmen",
+      "neutral": "Neutral",
+      "oppose": "Ablehnen"
+    },
+    "you": "Du"
+  },
+  "profilePage": {
+    "title": "Mein Profil",
+    "subtitle": "Verwalte deine Kontoinformationen und aktualisiere dein Passwort",
+    "noPlan": "Kein Plan",
+    "lastLogin": "Letzte Anmeldung",
+    "accountInfo": "Kontoinformationen",
+    "systemInfo": "Systeminformationen",
+    "currentPlan": "Aktueller Plan",
+    "planType": "Plantyp",
+    "editAccount": "Kontodetails bearbeiten",
+    "saving": "Speichern...",
+    "saveChanges": "Änderungen speichern",
+    "tabs": {
+      "userInfo": "Benutzerinformationen",
+      "editData": "Daten bearbeiten",
+      "password": "Passwort aktualisieren",
+      "wallet": "Brieftasche",
+      "privacy": "Konto & Datenschutz"
+    },
+    "fields": {
+      "name": "Name",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "phoneNumber": "Telefonnummer",
+      "country": "Land",
+      "position": "Position",
+      "positionJob": "Position / Beruf",
+      "birthDate": "Geburtsdatum",
+      "role": "Rolle",
+      "status": "Status",
+      "points": "Punkte",
+      "rank": "Rang",
+      "price": "Preis"
+    },
+    "placeholders": {
+      "fullName": "Deinen vollständigen Namen eingeben",
+      "countrySearch": "Nach einem Land suchen",
+      "position": "Softwareentwickler"
+    },
+    "status": {
+      "active": "Aktiv"
+    },
+    "password": {
+      "title": "Passwort aktualisieren",
+      "current": "Aktuelles Passwort",
+      "new": "Neues Passwort",
+      "confirm": "Passwort bestätigen",
+      "updating": "Wird aktualisiert...",
+      "update": "Passwort aktualisieren"
+    },
+    "messages": {
+      "fillAllFields": "Bitte füllen Sie alle Felder aus.",
+      "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+      "passwordUpdated": "Passwort erfolgreich aktualisiert.",
+      "passwordUpdateFailed": "Beim Aktualisieren des Passworts ist ein Fehler aufgetreten.",
+      "chooseCountry": "Bitte wählen Sie ein Land aus der Liste.",
+      "noChanges": "Sie haben keine Änderungen vorgenommen.",
+      "profileUpdated": "Ihr Profil wurde erfolgreich aktualisiert.",
+      "profileUpdateFailed": "Beim Aktualisieren Ihres Profils ist ein Fehler aufgetreten."
+    },
+    "wallet": {
+      "title": "Brieftasche",
+      "availableBalance": "Verfügbarer Kontostand",
+      "deposit": "Geld hinzufügen",
+      "recentTransactions": "Letzte Transaktionen",
+      "depositType": "Einzahlung",
+      "withdrawType": "Abhebung",
+      "noTransactions": "Noch keine Transaktionen",
+      "withdrawComingSoon": "Die Auszahlungsfunktion wird bald verfügbar sein."
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "Maximal pro Datei: 100 MB",
+    "dragFiles": "Dateien hierher ziehen oder",
+    "clickToChoose": "klicken, um auszuwählen",
+    "supportedFiles": "Bilder und Videos (max. 100 MB pro Datei)",
+    "selectedFiles": "Ausgewählte Dateien ({count})",
+    "uploading": "Hochladen...",
+    "uploadFiles": "Dateien hochladen",
+    "success": "Dateien erfolgreich hochgeladen!",
+    "errors": {
+      "fileTooLarge": "Datei \"{name}\" ist größer als 100 MB.",
+      "unsupportedType": "Dateityp \"{name}\" wird nicht unterstützt."
+    }
+  },
+  "discovery": {
+    "title": "Suchergebnisse",
+    "description": "Entdecken Sie Veranstaltungen, Bilder und Videos auf Scemory.",
+    "showing": "Anzeige",
+    "of": "von",
+    "results": "Ergebnisse",
+    "details": "Details anzeigen",
+    "noResultsTitle": "Keine Ergebnisse gefunden",
+    "noResultsDescription": "Ändern Sie Ihre Suche oder die Filter.",
+    "filters": {
+      "allCities": "Alle Städte",
+      "allCountries": "Alle Länder"
+    },
+    "tabs": {
+      "all": "Alle",
+      "event": "Veranstaltungen",
+      "image": "Bilder",
+      "video": "Videos"
+    },
+    "resultLabels": {
+      "event": "Veranstaltung",
+      "image": "Bild",
+      "video": "Video"
+    },
+    "media": {
+      "price": "Preis",
+      "addToCart": "In den Warenkorb",
+      "added": "Hinzugefügt",
+      "adding": "Wird hinzugefügt...",
+      "playVideo": "Video abspielen",
+      "pauseVideo": "Video anhalten"
+    }
+  },
+  "timeline": {
+    "title": "Ihre Aktivitätsübersicht",
+    "subtitle": "Sehen Sie Ihre Veranstaltungen, Reaktionen, Kommentare und gespeicherten Elemente an einem Ort.",
+    "totalActivity": "Gesamtaktivität",
+    "latestActivity": "Letzte Aktivität",
+    "noLatestActivity": "Noch keine Aktivität",
+    "loading": "Aktivität wird geladen...",
+    "loadError": "Ihre Aktivität konnte nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "viewAll": "Alle anzeigen",
+    "empty": "In diesem Bereich gibt es keine Aktivitäten.",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "pageOf": "Seite {current} von {last}",
+    "unknownEvent": "Unbekannte Veranstaltung",
+    "parentComment": "Antwort auf: {comment}",
+    "reactionTo": "Reaktion auf: {comment}",
+    "onEvent": "Bei {event}",
+    "tabs": {
+      "all": "Alle Aktivitäten",
+      "events": "Veranstaltungen",
+      "likes": "Gefällt mir",
+      "comments": "Kommentare",
+      "replies": "Antworten",
+      "comment_images": "Kommentar-Bilder",
+      "comment_interactions": "Kommentarreaktionen",
+      "wishlists": "Favoriten"
+    },
+    "filters": {
+      "label": "Zeitraum",
+      "all": "Gesamter Zeitraum",
+      "today": "Heute",
+      "this_week": "Diese Woche",
+      "this_month": "Dieser Monat",
+      "custom": "Benutzerdefinierter Zeitraum",
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Anwenden",
+      "invalidRange": "Wählen Sie einen gültigen Zeitraum."
+    },
+    "reactions": {
+      "support": "Zustimmung",
+      "neutral": "Neutral",
+      "exhibitions": "Ablehnung"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    }
+  },
+  "security": {
+    "denied": "Sie dürfen auf diese Ressource nicht zugreifen.",
+    "notFound": "Die angeforderte Ressource wurde nicht gefunden.",
+    "disabled": "Dieses Konto ist deaktiviert. Kontaktieren Sie den Support.",
+    "invalidMedia": "Die Mediendatei ist ungültig, nicht unterstützt oder überschreitet sichere Verarbeitungsgrenzen.",
+    "unavailable": "Dieses Medium ist derzeit nicht verfügbar.",
+    "currencyMismatch": "Die Guthabenwährung passt nicht zur Transaktion.",
+    "insufficientBalance": "Unzureichendes verfügbares Guthaben.",
+    "invalidWithdrawal": "Die Auszahlung kann in diesem Zustand nicht geändert werden. Kontaktieren Sie den Support.",
+    "paymentRequired": "Dieser Tarif erfordert eine bestätigte Zahlung. Kontaktieren Sie den Support.",
+    "invalidCode": "Der Bestätigungscode ist ungültig oder abgelaufen.",
+    "requestFailed": "Die Anfrage konnte nicht abgeschlossen werden. Erneut versuchen.",
+    "rateLimit": "Zu viele Anfragen. Später erneut versuchen."
+  },
+  "googleAuth": {
+    "continue": "Weiter mit Google",
+    "signup": "Mit Google registrieren",
+    "or": "ODER",
+    "signingIn": "Anmeldung läuft…",
+    "cancelled": "Authentifizierung abgebrochen.",
+    "expired_state": "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut.",
+    "invalid_state": "Diese Anfrage ist ungültig oder wurde bereits verwendet. Bitte beginnen Sie erneut.",
+    "oauth_failed": "Google konnte die Authentifizierung nicht abschließen. Bitte erneut versuchen.",
+    "callback_failed": "Authentifizierung fehlgeschlagen. Bitte erneut versuchen.",
+    "identity_invalid": "Google konnte Ihre Identität und E-Mail-Adresse nicht bestätigen. Nutzen Sie eine andere Anmeldemethode.",
+    "disabled": "Dieses Konto ist nicht verfügbar. Wenden Sie sich an den Support.",
+    "linking_required": "Melden Sie sich mit der bisherigen Methode Ihres Kontos an. Die Google-Verknüpfung erfordert zuerst diese Anmeldung; sie ist noch nicht verfügbar. Wenden Sie sich bei Bedarf an den Support.",
+    "unavailable": "Die Google-Authentifizierung ist derzeit nicht verfügbar. Nutzen Sie E-Mail und Passwort oder versuchen Sie es später.",
+    "busy": "Die Anmeldung wird bereits abgeschlossen. Bitte erneut versuchen.",
+    "alreadyLinked": "Dieses Google-Konto ist bereits verknüpft.",
+    "completeProfile": "Konto vervollständigen",
+    "profileRequired": "Geben Sie die erforderlichen Angaben ein, um Ihr Konto zu erstellen.",
+    "country": "Land",
+    "dateOfBirth": "Geburtsdatum",
+    "finishSignup": "Konto erstellen",
+    "profileInvalid": "Geben Sie ein Land und ein gültiges Geburtsdatum ein, das nicht in der Zukunft liegt.",
+    "retry": "Erneut versuchen",
+    "backToLogin": "Zurück zur Anmeldung",
+    "linkAccountTitle": "Google-Konto verknüpfen",
+    "linkAccountDesc": "Ein Konto mit dieser E-Mail-Adresse existiert bereits. Geben Sie Ihr Passwort ein, um Ihr Google-Konto sicher zu verknüpfen.",
+    "accountPassword": "Kontopasswort",
+    "confirmLink": "Bestätigen und Konto verknüpfen",
+    "invalidCredentials": "Ungültiges Passwort. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
+    "linkSuccess": "Google-Konto erfolgreich verknüpft.",
+    "unlinkSuccess": "Google-Konto erfolgreich getrennt.",
+    "identity_conflict": "Diese E-Mail ist mit einer anderen Google-Identität verknüpft. Nutzen Sie die bestehende Anmeldemethode oder den Support.",
+    "account_login_required": "Melden Sie sich mit der bestehenden Methode an und verbinden Sie Google anschließend im Profil.",
+    "recovery_required": "Zum erneuten Verbinden von Google ist eine einmalige Kontowiederherstellung erforderlich.",
+    "recovery_web_required": "Schließen Sie die einmalige Wiederherstellung auf der Scemory-Website ab. Künftige Google-Anmeldungen erfolgen automatisch.",
+    "invalid_recovery_code": "Der Wiederherstellungscode ist falsch. Prüfen Sie ihn und versuchen Sie es erneut.",
+    "recovery_expired": "Diese Wiederherstellung ist abgelaufen. Starten Sie die Google-Anmeldung erneut.",
+    "recovery_attempts_exceeded": "Zu viele falsche Versuche. Starten Sie die Google-Anmeldung erneut.",
+    "recovery_rate_limited": "Kürzlich wurde ein Code gesendet. Warten Sie kurz und versuchen Sie es erneut.",
+    "recovery_unavailable": "Der Wiederherstellungscode konnte nicht gesendet werden. Versuchen Sie es später erneut.",
+    "recoveryTitle": "Google-Konto erneut verbinden",
+    "recoverySent": "Geben Sie den einmaligen Code ein, der an {email} gesendet wurde. Dies ist nur einmal nötig.",
+    "recoveryCode": "Wiederherstellungscode",
+    "confirmRecovery": "Prüfen und fortfahren"
+  },
+  "facebookAuth": {
+    "continue": "Weiter mit Facebook",
+    "signup": "Mit Facebook registrieren",
+    "signingIn": "Anmeldung läuft…",
+    "unavailable": "Die Facebook-Authentifizierung ist derzeit nicht verfügbar. Nutzen Sie E-Mail und Passwort oder versuchen Sie es später.",
+    "cancelled": "Authentifizierung abgebrochen.",
+    "invalid_state": "Diese Anfrage ist ungültig oder wurde bereits verwendet. Bitte beginnen Sie erneut.",
+    "expired": "Dieser Anmeldeversuch ist abgelaufen. Bitte beginnen Sie erneut.",
+    "callback_failed": "Authentifizierung fehlgeschlagen. Bitte erneut versuchen.",
+    "disabled": "Dieses Konto ist nicht verfügbar. Wenden Sie sich an den Support.",
+    "linking_required": "Melden Sie sich mit der bisherigen Methode Ihres Kontos an. Die Facebook-Verknüpfung erfordert zuerst diese Anmeldung; sie ist noch nicht verfügbar. Wenden Sie sich bei Bedarf an den Support.",
+    "busy": "Die Anmeldung wird bereits abgeschlossen. Bitte erneut versuchen.",
+    "completeProfile": "Konto vervollständigen",
+    "profileRequired": "Geben Sie die erforderlichen Angaben ein, um Ihr Konto zu erstellen.",
+    "country": "Land",
+    "dateOfBirth": "Geburtsdatum",
+    "finishSignup": "Konto erstellen",
+    "retry": "Erneut versuchen",
+    "backToLogin": "Zurück zur Anmeldung",
+    "identity_invalid": "Facebook konnte Ihre Identität nicht bestätigen. Bitte erneut versuchen.",
+    "verification_required": "Bestätigen Sie die E-Mail Ihres bestehenden Kontos mit Ihrer bisherigen Anmeldemethode.",
+    "email_unavailable": "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie es später.",
+    "otp_expired": "Dieser Code ist abgelaufen. Fordern Sie einen neuen an.",
+    "otp_invalid": "Der Bestätigungscode ist falsch.",
+    "otp_attempts": "Zu viele Versuche. Fordern Sie nach der Wartezeit einen neuen Code an.",
+    "otp_cooldown": "Bitte warten Sie, bevor Sie einen weiteren Code anfordern.",
+    "native_unavailable": "Die Facebook-Anmeldung ist auf der Scemory-Website verfügbar. Nutzen Sie einen Browser.",
+    "email": "E-Mail-Adresse",
+    "sendCode": "Bestätigungscode senden",
+    "verifyEmail": "E-Mail bestätigen",
+    "codeSent": "Geben Sie den an {email} gesendeten Code ein.",
+    "verificationCode": "Bestätigungscode",
+    "resendIn": "Erneut senden in {seconds} s",
+    "resend": "Code erneut senden",
+    "profileInvalid": "Geben Sie eine gültige E-Mail, ein Land und ein Geburtsdatum ein, das nicht in der Zukunft liegt."
+  },
+  "mediaCredits": {
+    "myCredits": "Mein Medien-Guthaben",
+    "photosAvailable": "Verfügbare Fotos",
+    "videosAvailable": "Verfügbare Videos",
+    "photos": "Fotos",
+    "videos": "Videos",
+    "photoQuotaDesc": "Dauerhaftes Foto-Einlösekontingent",
+    "videoQuotaDesc": "Dauerhaftes Video-Einlösekontingent",
+    "activeTier": "Aktive Zugriffsklasse",
+    "breakdownByTier": "Aufteilung nach Klasse",
+    "viewDashboard": "Guthaben-Dashboard",
+    "getMoreCredits": "Mehr Guthaben holen",
+    "browseMarketplace": "Marktplatz durchsuchen",
+    "noTier": "Kein aktiver Plan",
+    "getWithPlan": "Mit Plan holen",
+    "redeemed": "Eingelöst",
+    "redeemSuccess": "Medien erfolgreich mit Plan-Guthaben eingelöst!",
+    "redeemFailed": "Einlösung fehlgeschlagen.",
+    "activeGrants": "Aktive Kontingente",
+    "redemptionHistory": "Einlösungshistorie",
+    "noGrants": "Keine aktiven Kontingente. Abonnieren Sie einen Plan für Foto- und Video-Guthaben.",
+    "noRedemptions": "Noch keine Einlösungen vorhanden.",
+    "tier": "Klasse",
+    "plan": "Plan",
+    "tierRank": "Klassen-Rang",
+    "grantedOn": "Gewährt am",
+    "payoutCap": "Ersteller-Auszahlungsobergrenze",
+    "payWithWallet": "Mit Wallet bezahlen",
+    "payWithPaypal": "Mit PayPal bezahlen",
+    "insufficientCredits": "Unzureichendes Guthaben oder zu niedrige Klasse für dieses Medium.",
+    "includedQuotas": "Enthaltene Medien-Kontingente",
+    "permanentQuotas": "Dauerhafte Medienkontingente ohne Verfall"
+  },
+  "dataDeletion": {
+    "title": "Anweisungen zur Datenlöschung",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "Anweisungen zur Datenlöschung",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "Anweisungen zur Datenlöschung",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "Vergleiche",
+    "links": {
+      "historypin": "Scemory vs. Historypin",
+      "pastvu": "Scemory vs. PastVu",
+      "theClio": "Scemory vs. The Clio"
+    },
+    "common": {
+      "exploreScemory": "Scemory entdecken",
+      "visitOfficialWebsite": "Offizielle Website besuchen",
+      "createAccount": "Konto erstellen",
+      "feature": "Funktion & Leistungsmerkmal",
+      "scemory": "Scemory",
+      "verifiedDate": "Verifiziert: 24. Oktober 2026",
+      "disclaimer": "Scemory ist eine unabhängige Plattform und steht in keiner Verbindung zu den hier verglichenen Organisationen. Alle Marken und Logos sind Eigentum der jeweiligen Inhaber. Die Vergleichspunkte basieren auf öffentlich zugänglichen Informationen mit Stand vom 24. Oktober 2026.",
+      "methodologyTitle": "Quellen und Prüfmethodik",
+      "methodologyDesc": "Dieser faktenbasierte Vergleich wurde auf Grundlage offizieller Plattformdokumentationen, Websites und überprüfbarer Systemfunktionen erstellt. Wir unterscheiden eindeutig zwischen voll verfügbaren Funktionen, partiellen Möglichkeiten, nicht angebotenen Workflows und nicht öffentlich dokumentierten Spezifikationen.",
+      "whyChooseTitle": "Warum Scemory wählen?",
+      "ctaTitle": "Momente bewahren. Ereignisse dokumentieren. Gemeinsames Gedächtnis schaffen.",
+      "ctaSubtitle": "Werden Sie Teil einer modernen globalen Plattform, die zeitgenössische Ereignisdokumentation, historische Erinnerungspflege und einen fairen Medienmarktplatz für Kreative vereint.",
+      "beyondTitle": "Was bietet Scemory über {competitor} hinaus?",
+      "whoShouldUseTitle": "Für wen eignet sich welche Plattform?",
+      "overviewTitle": "Überblick über die Plattformen",
+      "tableTitle": "Detaillierter Funktionsvergleich",
+      "vs": "vs.",
+      "keyHighlights": "Wichtigste Merkmale",
+      "organizationType": "Organisationsform",
+      "founded": "Gründung / Start",
+      "headquarters": "Hauptsitz / Reichweite",
+      "coreMission": "Kernmission",
+      "officialWebsite": "Offizielle Website",
+      "independentNotice": "Unabhängiger Vergleich auf Basis überprüfbarer Plattformdokumentation.",
+      "audienceScemoryHeading": "Für wen Scemory entwickelt wurde",
+      "audienceCompetitorHeading": "Für wen {competitor} entwickelt wurde"
+    },
+    "status": {
+      "supported": "Verfügbar & Funktionsfähig",
+      "partial": "Teilweise unterstützt",
+      "not_offered": "Nicht angeboten",
+      "not_documented": "Nicht öffentlich dokumentiert"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "Dokumentation historischer Ereignisse",
+        "desc": "Erfassung historischer Wegmarken, kultureller Meilensteine und gemeinschaftlicher Erinnerungen mit reichhaltigem Kontext."
+      },
+      "locationMemories": {
+        "name": "Standortbezogene Erinnerungen & Geokodierung",
+        "desc": "Präzise Verortung von Erinnerungen, Fotos und Geschichten auf interaktiven Karten mit exakten Koordinaten."
+      },
+      "photoArchives": {
+        "name": "Historische Bildarchive",
+        "desc": "Archivierung und Darstellung historischer Fotografien mit detaillierten Metadaten und Quellenangaben."
+      },
+      "videoDocumentation": {
+        "name": "Videodokumentation & Wiedergabe",
+        "desc": "Nativer Upload, Verarbeitung, geschützte Wasserzeichen-Vorschau und flüssiges Streaming von hochauflösenden Videos."
+      },
+      "userContributions": {
+        "name": "Nutzergenerierte Inhalte & Einreichungen",
+        "desc": "Möglichkeit für registrierte Mitglieder, eigene Fotos, Videos, Erinnerungen und Ereignisse einzustellen."
+      },
+      "communityParticipation": {
+        "name": "Community-Interaktion & Kommentare",
+        "desc": "Interaktiver Diskurs durch Kommentare, Antworten, Reaktionen, Merklisten und wöchentliche Ranglisten."
+      },
+      "chronologicalBrowsing": {
+        "name": "Chronologische Erkundung & Zeitstrahl",
+        "desc": "Navigation über historische Zeitspannen, Jahres-Schieberegler und exakte chronologische Ereignisreihenfolgen."
+      },
+      "eventCentricOrg": {
+        "name": "Ereigniszentrierte Inhaltsorganisation",
+        "desc": "Strukturierte Architektur, bei der das Ereignis eine eigenständige Einheit bildet, die Medien und Autoren bündelt."
+      },
+      "contributorProfiles": {
+        "name": "Autorenprofile & Medienportfolios",
+        "desc": "Eigene Profilseiten zur Präsentation von Beiträgen, Galerien, Lizenzen, Statistiken und Reputation."
+      },
+      "discoveryMap": {
+        "name": "Interaktive Kartensuche & Entdeckung",
+        "desc": "Räumliche Erkundung mit dynamischem Clustering, Kategoriefiltern, Datumsfiltern und Volltextsuche."
+      },
+      "mediaMarketplace": {
+        "name": "Marktplatz für Fotos und Videos",
+        "desc": "Integrierter digitaler Marktplatz, auf dem Kreative hochauflösende Bild- und Videoaufnahmen lizenzieren können."
+      },
+      "mediaPurchases": {
+        "name": "Direkter Medienerwerb & Download",
+        "desc": "Sicherer digitaler Kaufprozess mit unmittelbarer Downloadberechtigung für wasserzeichenfreie Originaldateien."
+      },
+      "commercialLicensing": {
+        "name": "Kommerzielle Lizenzierungsrechte",
+        "desc": "Rechtssichere Lizenzvereinbarungen für die redaktionelle und kommerzielle Weiternutzung erworbener Medien."
+      },
+      "creatorMonetization": {
+        "name": "Monetarisierung & Erlösbeteiligung",
+        "desc": "Faire Vergütung für Fotografen und Videografen mit 85 % Erlösausschüttung bei Direktverkäufen."
+      },
+      "payoutSystem": {
+        "name": "Auszahlungssystem & Einnahmenverwaltung",
+        "desc": "Transparente Guthabenführung mit formalen Auszahlungsanträgen via PayPal und Banküberweisung."
+      },
+      "subscriptionPlans": {
+        "name": "Gestaffelte Abonnementpläne",
+        "desc": "Kostenlose und Premium-Tarife mit monatlichen Foto- und Videokontingenten sowie Plattformentlastungen."
+      },
+      "mediaCredits": {
+        "name": "Dauerhafte Medienguthaben (Credits)",
+        "desc": "Prepaid-Guthaben ohne Verfallsdatum zum flexiblen Erwerb und zur Lizenzierung visueller Inhalte."
+      },
+      "multilingual": {
+        "name": "Mehrsprachigkeit (13 Sprachen + RTL)",
+        "desc": "Vollständige Lokalisierung in 13 Weltsprachen mit nativer Unterstützung für Rechts-nach-Links-Schriften."
+      },
+      "institutionalUse": {
+        "name": "Institutionelle Nutzung & Forschungskooperation",
+        "desc": "Funktionen zur Zusammenarbeit mit Universitäten, Museen, Archiven und Bildungseinrichtungen."
+      }
+    },
+    "historypin": {
+      "heroTitle": "Scemory vs. Historypin: Zwei Ansätze zur Bewahrung von Erinnerungen und Ereignissen",
+      "heroSubtitle": "Ein sachlicher Vergleich zwischen dem bürgernahen Kulturerbe-Archiv von Historypin und Scemorys multimedialer Ereignisplattform mit Marktplatzanbindung.",
+      "primaryFocus": "Gemeinschaftsgeschichte, kollektives Gedächtnis, historische Fotos, Erzählungen und lokale Kulturorte.",
+      "logoAlt": "Offizielles Historypin-Logo",
+      "seoTitle": "Scemory vs. Historypin: Umfassender Plattformvergleich",
+      "seoDescription": "Vergleichen Sie Scemory und Historypin. Erfahren Sie die Unterschiede bei historischer Fotoarchivierung, Videounterstützung, Vergütung und Mehrsprachigkeit.",
+      "aboutScemory": "Scemory ist eine moderne Plattform zur Dokumentation von Ereignissen und ein digitaler Medienmarktplatz, der historische Erinnerungen und aktuelle Geschehnisse verbindet. Dank einer ereigniszentrierten Struktur können Fotografen, Journalisten, Forscher und Geschichtsinteressierte hochauflösende Medien publizieren und über kommerzielle Lizenzen Erlöse erzielen.",
+      "aboutCompetitor": "Historypin wurde 2010 von der gemeinnützigen Organisation Shift in Kooperation mit Google gegründet. Die Plattform ermöglicht es Bürgern, Archiven und Museen, historische Fotografien und mündliche Berichte auf einer Weltkarte zu verorten und historische Straßenszenen mit Google Street View zu überblenden.",
+      "scemoryAdvantages": [
+        {
+          "title": "Ereigniszentrierte Entitätsarchitektur",
+          "desc": "Anders als bei reinen Stecknadelkarten bündelt Scemory Inhalte in eigenständigen, durchsuchbaren Ereignissen mit mehreren Autoren, Datumsangaben und Medienalben."
+        },
+        {
+          "title": "Native Unterstützung für hochauflösende Videos",
+          "desc": "Während Historypin vorrangig auf Standbilder und externe Verlinkungen setzt, bietet Scemory umfassende Videoverarbeitung, geschützte Vorschauen und flüssige Wiedergabe."
+        },
+        {
+          "title": "Integrierte Creator Economy & Marktplatz",
+          "desc": "Scemory vergütet Kreative mit 85 % Erlösanteil bei Medienverkäufen inklusive kommerzieller Lizenzen – Funktionen, die reine Bürgerarchive nicht vorhalten."
+        },
+        {
+          "title": "Globalität in 13 Sprachen mit voller RTL-Unterstützung",
+          "desc": "Scemory bietet eine vollständige Lokalisierung in 13 Sprachen einschließlich nativer Rechts-nach-Links-Ausrichtung für Arabisch, Persisch und Urdu."
+        }
+      ],
+      "audienceScemory": "Fotografen, Videografen, Journalisten, Veranstalter und Dokumentare, die eine moderne multimediale Plattform für Zeitgeschichte und Gegenwart mit Lizenzierungsoptionen suchen.",
+      "audienceCompetitor": "Heimatvereine, Stadtarchive, Bibliotheken, Schulen und ehrenamtliche Forscher, die historische Fotos kollaborativ auf historischen Street-View-Koordinaten kartieren möchten.",
+      "whyChooseSummary": "Historypin ist ein geschätzter Pionier für partizipatives Kulturerbe. Wählen Sie Scemory, wenn Ihre Vorhaben eine strukturierte Ereignisarchitektur, hochauflösende Videointegration, Erlöse für Medienurheber und 13 Sprachen erfordern."
+    },
+    "pastvu": {
+      "heroTitle": "Scemory vs. PastVu: Historische Fotokartierung im Vergleich zu multimedialer Ereignisdokumentation",
+      "heroSubtitle": "Ein objektiver Vergleich zwischen dem spezialisierten Bildarchiv von PastVu und Scemorys ereignisorientierter Multimedia- und Marktplatzplattform.",
+      "primaryFocus": "Historisches Fotoarchiv (1826–2000) mit Geokoordinaten und genauen Blickwinkel-Aufnahmerichtungen.",
+      "logoAlt": "Offizielles PastVu-Logo",
+      "seoTitle": "Scemory vs. PastVu: Detaillierter Plattformvergleich",
+      "seoDescription": "Erfahren Sie die Unterschiede zwischen Scemory und PastVu bei historischer Fotografie, Aufnahmewinkel-Geolokalisierung, Video, Lizenzen und Internationalisierung.",
+      "aboutScemory": "Scemory verknüpft aktuelle Berichterstattung mit historischer Gedächtnisarbeit auf einer gemeinsamen Plattform. Neben Kartenerkundung und Community-Diskussionen bietet Scemory einen Marktplatz, über den Urheber und Institutionen digitale Medien fair vergütet lizenzieren können.",
+      "aboutCompetitor": "PastVu ist ein unabhängiges Bürgerarchiv, das 2009 ins Leben gerufen wurde, um historische Fotografien menschlicher Lebensräume zwischen 1826 und 2000 zu sammeln und zu datieren. Markenzeichen sind exakte Standortangaben mit Richtungspfeilen für den Kamerablickwinkel und eine sorgfältige historische Verifikation.",
+      "scemoryAdvantages": [
+        {
+          "title": "Gleichzeitige Erfassung von Geschichte und Gegenwart",
+          "desc": "PastVu beschränkt Aufnahmen strikt auf die Zeit bis zum Jahr 2000. Scemory schlägt die Brücke zur Gegenwart und dokumentiert historische Ereignisse ebenso wie aktuelle Kultur- und Gesellschaftsthemen."
+        },
+        {
+          "title": "Umfassende Videoverarbeitung & Streaming",
+          "desc": "PastVu widmet sich rein der Fotografie. Scemory verarbeitet historische Filmaufnahmen und zeitgenössische Videos inklusive Voransichten mit Wasserzeichen und nativer Wiedergabe."
+        },
+        {
+          "title": "Marktplatz mit gesicherter Lizenzierung",
+          "desc": "Scemory enthält ein integriertes E-Commerce-System für Bildrechte mit 85 % Creator-Ausschüttung, wodurch historische und journalistische Bestände wirtschaftlich verwertet werden können."
+        },
+        {
+          "title": "Vollständige Übersetzung in 13 Sprachen",
+          "desc": "Während PastVu Englisch und Russisch anbietet, ist Scemory in 13 Sprachen verfügbar – inklusive fehlerfreier Darstellung für arabische und orientalische Schriften."
+        }
+      ],
+      "audienceScemory": "Bildschaffende, Videoproduzenten, Redaktionen, Kulturorganisationen und Chronisten, die bewegte Bilder dokumentieren, Medien lizenzieren und ein globales Publikum erreichen wollen.",
+      "audienceCompetitor": "Bau- und Stadthistoriker, Sammler historischer Aufnahmen und Geografen, die historische Stadtansichten von 1826 bis 2000 mit exakter Kamerarichtung analysieren möchten.",
+      "whyChooseSummary": "PastVu ist eine herausragende Referenz für die winkelgenaue Verortung historischer Stadtfotografie. Scemory ist die richtige Wahl, wenn Sie eine universelle Plattform für Geschichte und Gegenwart, Videomedien, faire Erlöse und Mehrsprachigkeit benötigen."
+    },
+    "theClio": {
+      "heroTitle": "Scemory vs. The Clio: Historische Erinnerungsorte entdecken und lebendige Ereignisse dokumentieren",
+      "heroSubtitle": "Ein fundierter Vergleich zwischen dem Bildungsführer für Geschichtsdenkmäler The Clio und der interaktiven Ereignis- und Medienplattform Scemory.",
+      "primaryFocus": "Bildungsführer zu historischen Landmarken, Denkmälern, Museen, Kulturstätten und Rundgängen.",
+      "logoAlt": "Offizielles The Clio-Logo",
+      "seoTitle": "Scemory vs. The Clio: Tiefgehender Plattformvergleich",
+      "seoDescription": "Vergleichen Sie The Clio und Scemory. Sehen Sie, wie sich geobasierte Denkmalrundgänge von Scemorys ereigniszentrierter Multimediaplattform mit Marktplatz unterscheiden.",
+      "aboutScemory": "Scemory ist eine ereigniszentrierte Plattform, die es Bürgern, Institutionen und Kreativen ermöglicht, zeitgeschichtliche Momente festzuhalten. Sie vereint Foto- und Videoverarbeitung, interaktive Kartensuche, Community-Austausch und gewerbliche Medienlizenzierung in einer modernen Benutzeroberfläche.",
+      "aboutCompetitor": "The Clio ist eine gemeinnützige Bildungsplattform (501c3-Stiftung), die von Geschichtsprofessor Dr. David Trowbridge ins Leben gerufen wurde. Als digitaler Führer zu historischen Stätten und Museen in Nordamerika bietet sie von Wissenschaftlern und Studenten verfasste Rundgänge mit Audioinhalten.",
+      "scemoryAdvantages": [
+        {
+          "title": "Dynamische Ereignisse jenseits starrer Denkmäler",
+          "desc": "The Clio fokussiert sich auf physisch existierende Denkmäler und Tafeln. Scemory dokumentiert zeitlich begrenzte Ereignisse, Festivals und Versammlungen – unabhängig davon, ob vor Ort ein Denkmal steht."
+        },
+        {
+          "title": "Gewerbliche Lizenzierung & Erlösbeteiligung",
+          "desc": "Als gemeinnützige Bildungseinrichtung führt The Clio keinen Marktplatz. Scemory ermöglicht Fotografen und Filmemachern den rechtssicheren Verkauf von Nutzungsrechten mit transparenten Auszahlungen."
+        },
+        {
+          "title": "Direktes Medienarchiv mit Originaldateien",
+          "desc": "Scemory fungiert als eigenständiges Medienarchiv mit geschützten Downloads für Lizenznehmer, während The Clio Medien vor allem als externe Belege einbindet."
+        },
+        {
+          "title": "Weltweite Ausrichtung in 13 Sprachen mit RTL",
+          "desc": "The Clio richtet sich primär an den englischsprachigen nordamerikanischen Raum. Scemory ist für weltweite Gemeinschaften mit 13 voll übersetzten Sprachen und nativer RTL-Unterstützung konzipiert."
+        }
+      ],
+      "audienceScemory": "Freie Fotografen, Bildjournalisten, Medienhäuser, Festivalorganisatoren und Chronisten, die lebendige Ereignisse in Bild und Ton festhalten, lizenzieren und international verbreiten wollen.",
+      "audienceCompetitor": "Studenten, Dozenten, Museumsmitarbeiter, Bildungsreisende und Geschichtsfreunde, die kuratierte historische Rundgänge zu physischen Denkmälern in Nordamerika suchen.",
+      "whyChooseSummary": "The Clio ist ein herausragendes gemeinnütziges Bildungsprojekt zur Erkundung historischer Orte. Scemory empfiehlt sich als moderne Lösung, wenn Sie lebendige Ereignisse dokumentieren, Videos einbinden und Urhebern weltweite Lizenzierungschancen bieten möchten."
+    }
+  }
 }

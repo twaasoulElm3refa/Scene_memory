@@ -4,6 +4,7 @@ import { getAuthToken } from "../services/authTokenStorage";
 import { policies } from '../policies';
 
 const PolicyPage = () => import('../views/home/PolicyPage.vue');
+const ComparisonPage = () => import('../views/home/ComparisonPage.vue');
 const Home = () => import("../views/home/home.vue");
 const Register = () => import("../views/auth/register.vue");
 const profile = () => import("../views/home/profile.vue");
@@ -310,6 +311,17 @@ const routes = [
     {
         path: "/data-deletion",
         redirect: () => `/${getCurrentLang()}/data-deletion`,
+    },
+    {
+        path: "/:lang/compare/:competitor",
+        name: "comparison-page",
+        component: ComparisonPage,
+        props: true,
+        meta: { hideNavbar: false, hideFooter: false, comparisonPage: true },
+    },
+    {
+        path: "/compare/:competitor",
+        redirect: (to) => `/${getCurrentLang()}/compare/${to.params.competitor}`,
     },
     {
         path: "/:lang/leaderboard",

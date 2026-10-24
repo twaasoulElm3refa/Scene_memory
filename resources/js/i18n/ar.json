@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "ابحث عن الفعاليات..."
+  "search": {
+    "placeholder": "ابحث عن الفعاليات..."
+  },
+  "filters": {
+    "title": "تصفية النتائج",
+    "allCategories": "كل الفئات",
+    "country": "الدولة",
+    "category": "الفئة",
+    "subCategory": "الفئة الفرعية",
+    "from": "من",
+    "to": "إلى",
+    "city": "المدينة",
+    "allSubCategories": "كل الفئات الفرعية"
+  },
+  "upload_media": "تحميل الميديا",
+  "view_all_comments": "عرض كل التعليقات",
+  "nav": {
+    "timeline": "التاريخ الخاص بي",
+    "favourites": "المفضلة",
+    "dashboard": "لوحة التحكم",
+    "scemoryGate": "بوابة Scemory",
+    "events": "الفعاليات",
+    "plans": "الباقات",
+    "specialCoverage": "تغطية خاصة",
+    "more": "المزيد",
+    "terms": "الشروط",
+    "historical": "تاريخية",
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "allEvents": "كل الفعاليات",
+    "downloads": "التنزيلات",
+    "contact": "اتصل بنا",
+    "addEvent": "إضافة فعالية",
+    "wishlist": "المفضلة",
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "login": "تسجيل الدخول",
+    "cart": "السلة",
+    "scemoryHome": "صفحة Scemory الرئيسية",
+    "toggleMenu": "تبديل القائمة",
+    "mediaCredits": "أرصدتي للوسائط"
+  },
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "DE": "Deutsch",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "TR": "Türkçe",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "login_to_comment": "الرجاء تسجيل الدخول للتعليق",
+  "event": {
+    "reply": "رد",
+    "delete": "حذف",
+    "no_media_yet": "لا يوجد وسائط حتى الان",
+    "reply_placeholder": "اكتب ردك هنا...",
+    "loading": "جاري تحميل الحدث...",
+    "not_found": "الحدث غير موجود أو تم حذفه.",
+    "city_default": "غير محدد",
+    "visitor": "زائر",
+    "media_gallery_title": "وسائط الحدث",
+    "no_media": "لا يوجد وسائط",
+    "about_event_title": "نبذة عن الحدث",
+    "comments_title": "التعليقات",
+    "add_comment_title": "أضف تعليقك",
+    "comment_placeholder": "اكتب تعليقك هنا...",
+    "submit_comment": "إرسال",
+    "sending_comment": "جاري الإرسال...",
+    "comment_login_required": "يرجى تسجيل الدخول أولاً",
+    "comment_added_success": "تم إضافة تعليقك بنجاح!",
+    "delete_comment_title": "حذف التعليق",
+    "event_info_title": "معلومات الحدث",
+    "from_date": "من",
+    "to_date": "إلى",
+    "time_label": "الوقت",
+    "time_default": "غير محدد",
+    "location": "المكان",
+    "organizer": "منظم الحدث",
+    "add_to_wishlist": "أضف إلى المفضلة",
+    "already_in_wishlist": "موجود في المفضلة",
+    "adding_to_wishlist": "جاري الإضافة...",
+    "wishlist_success": "تمت الإضافة إلى المفضلة بنجاح!",
+    "buy_collection_title": "شراء المجموعة كاملة",
+    "total_images": "إجمالي الصور",
+    "save_discount": "خصم 10%",
+    "you_save": "توفير",
+    "add_collection_to_cart": "🎁 أضف المجموعة كاملة إلى السلة",
+    "collection_benefit_1": "شراء كل الصور مرة واحدة",
+    "collection_benefit_2": "تطبيق خصم 10% تلقائيًا",
+    "collection_benefit_3": "وصول سهل في التنزيلات",
+    "collection_benefit_4": "نفس تجربة الدفع الآمنة",
+    "upload_media_to_event": "رفع وسائط إلى الفعالية",
+    "media_alt": "وسائط الفعالية",
+    "send_reply": "إرسال الرد",
+    "comment_add_images": "إضافة صور ({count}/{max})",
+    "comment_image_limit": "صورتان كحد أقصى، 5 ميجابايت لكل صورة",
+    "selected_comment_image_alt": "الصورة المحددة {number}",
+    "remove_selected_comment_image": "إزالة الصورة المحددة {number}"
+  },
+  "common": {
+    "search": "بحث",
+    "placeholder": "ابحث عن الفعاليات...",
+    "searching": "جاري البحث...",
+    "details": "التفاصيل",
+    "notSpecified": "غير محدد",
+    "loadingEvents": "جاري تحميل الفعاليات...",
+    "loading": "جارٍ التحميل...",
+    "close": "إغلاق",
+    "tryAgain": "حاول مرة أخرى",
+    "back": "رجوع",
+    "remove": "إزالة",
+    "clear": "مسح",
+    "previous": "السابق",
+    "next": "التالي",
+    "noResults": "لا توجد نتائج",
+    "unknownError": "خطأ غير معروف",
+    "learnMore": "اعرف المزيد",
+    "cancel": "إلغاء",
+    "sending": "جاري الإرسال...",
+    "show": "إظهار",
+    "hide": "إخفاء"
+  },
+  "events": {
+    "add_historical_event": "اضافه شخصيه تاريخية",
+    "brand_footer": "جميع الفعاليات المفضلة في كل مكان في العالم",
+    "cities": "مدينه",
+    "categories": "فئه",
+    "all_memories": "كل ذكريات الأحداث",
+    "showing_snapshots": "عرض {total} لقطة تاريخية من جميع أنحاء العالم",
+    "sort_by": "ترتيب حسب",
+    "sort": {
+      "newest": "الأحدث أولاً",
+      "oldest": "الأقدم أولاً",
+      "title": "العنوان"
     },
-    "filters": {
-        "title": "تصفية النتائج",
-        "allCategories": "كل الفئات",
-        "country": "الدولة",
-        "category": "الفئة",
-        "subCategory": "الفئة الفرعية",
-        "from": "من",
-        "to": "إلى",
-        "city": "المدينة",
-        "allSubCategories": "كل الفئات الفرعية"
+    "loading": "جاري تحميل الأحداث...",
+    "retry": "إعادة المحاولة",
+    "page_info": "الصفحة {current} من {last}",
+    "active_memories": "الاحداث النشطة",
+    "latestEvents": "أحدث الفعاليات",
+    "recentMemories": "الاحداث الأخيرة",
+    "discoverAroundYou": "اكتشف ما يحدث حولك واستعد لأجمل اللحظات",
+    "noEventsFound": "لم يتم العثور على فعاليات",
+    "noMatchingEvents": "لا توجد فعاليات تطابق معايير البحث أو الموقع",
+    "event": "فعالية",
+    "startDate": "تاريخ البدء",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "تحميل الميديا",
-    "view_all_comments": "عرض كل التعليقات",
-    "nav": {
-        "timeline": "التاريخ الخاص بي",
-        "favourites": "المفضلة",
-        "dashboard": "لوحة التحكم",
-        "scemoryGate": "بوابة Scemory",
-        "events": "الفعاليات",
-        "plans": "الباقات",
-        "specialCoverage": "تغطية خاصة",
-        "more": "المزيد",
-        "terms": "الشروط",
-        "historical": "تاريخية",
-        "home": "الرئيسية",
-        "about": "من نحن",
-        "allEvents": "كل الفعاليات",
-        "downloads": "التنزيلات",
-        "contact": "اتصل بنا",
-        "addEvent": "إضافة فعالية",
-        "wishlist": "المفضلة",
-        "profile": "الملف الشخصي",
-        "logout": "تسجيل الخروج",
-        "login": "تسجيل الدخول",
-        "cart": "السلة",
-        "scemoryHome": "صفحة Scemory الرئيسية",
-        "toggleMenu": "تبديل القائمة",
-        "mediaCredits": "أرصدتي للوسائط"
+    "emptyAvailable": "No events are currently available.",
+    "no_title": "فعالية بلا عنوان",
+    "directory": {
+      "eyebrow": "استكشف Scemory",
+      "eventsTitle": "الفعاليات",
+      "eventsDescription": "اكتشف الفعاليات الحالية والقادمة من جميع أنحاء العالم.",
+      "historicalTitle": "الفعاليات التاريخية",
+      "historicalDescription": "استكشف الفعاليات الموثقة والذكريات المحفوظة من الماضي.",
+      "events": "فعالية",
+      "historicalEvents": "فعالية تاريخية",
+      "collection": "مجموعة الفعاليات",
+      "filters": "عوامل التصفية",
+      "refine": "تحسين النتائج",
+      "closeFilters": "إغلاق عوامل التصفية",
+      "searchLabel": "بحث",
+      "searchPlaceholder": "ابحث عن فعاليات...",
+      "eventType": "نوع الفعالية",
+      "types": {
+        "all": "كل الفعاليات",
+        "real": "الفعاليات الواقعية",
+        "general": "الفعاليات العامة"
+      },
+      "country": "الدولة",
+      "allCountries": "كل الدول",
+      "category": "التصنيف",
+      "allCategories": "كل التصنيفات",
+      "city": "المدينة",
+      "allCities": "كل المدن",
+      "subcategory": "التصنيف الفرعي",
+      "allSubcategories": "كل التصنيفات الفرعية",
+      "fromDate": "من تاريخ",
+      "toDate": "إلى تاريخ",
+      "clearFilters": "مسح عوامل التصفية",
+      "createEvent": "إنشاء فعالية",
+      "createHistorical": "إضافة فعالية تاريخية",
+      "results": "{count} فعالية",
+      "showing": "عرض {from}–{to} من {total}",
+      "errorTitle": "تعذر تحميل الفعاليات",
+      "errorDescription": "حدث خطأ أثناء تحميل الفعاليات. يرجى المحاولة مرة أخرى.",
+      "emptyTitle": "لم يتم العثور على فعاليات",
+      "historicalEmptyTitle": "لم يتم العثور على فعاليات تاريخية",
+      "emptyDescription": "جرّب تغيير عوامل التصفية أو مسحها.",
+      "eventBadge": "فعالية",
+      "historicalBadge": "تاريخية",
+      "unknownLocation": "موقع غير معروف",
+      "uncategorized": "غير مصنف",
+      "viewEvent": "عرض الفعالية",
+      "pagination": "صفحات الفعاليات",
+      "previous": "السابق",
+      "next": "التالي"
     },
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "DE": "Deutsch",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "TR": "Türkçe",
-        "JA": "日本語",
-        "UR": "اردو"
+    "from_map": "من الخريطة",
+    "undefined_city": "غير محدد"
+  },
+  "pagination": {
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "about": {
+    "title": "من نحن - سين ميموري",
+    "subtitle": "نحافظ على لحظاتك الأغلى، مشهدًا تلو الآخر",
+    "text1": "في سين ميموري، نؤمن أن أجمل لحظات الحياة تستحق أن تُحفظ بوضوح وعاطفة. نحن أكثر من مجرد منصة تخزين – نحن ألبوم ذكريات رقمي لرحلة حياتك.",
+    "features": {
+      "immersiveAlbums": "إنشاء ألبومات ذكريات غامرة تحتوي على الصور والفيديوهات وملاحظات صوتية",
+      "aiOrganize": "تنظيم مدعوم بالذكاء الاصطناعي يُصنف ذكرياتك ويُعلمها تلقائيًا",
+      "privacy": "خصوصية وأمان تام – ذكرياتك مشفرة ولا يصل إليها إلا أنت"
     },
-    "login_to_comment": "الرجاء تسجيل الدخول للتعليق",
-    "event": {
-        "reply": "رد",
-        "delete": "حذف",
-        "no_media_yet": "لا يوجد وسائط حتى الان",
-        "reply_placeholder": "اكتب ردك هنا...",
-        "loading": "جاري تحميل الحدث...",
-        "not_found": "الحدث غير موجود أو تم حذفه.",
-        "city_default": "غير محدد",
-        "visitor": "زائر",
-        "media_gallery_title": "وسائط الحدث",
-        "no_media": "لا يوجد وسائط",
-        "about_event_title": "نبذة عن الحدث",
-        "comments_title": "التعليقات",
-        "add_comment_title": "أضف تعليقك",
-        "comment_placeholder": "اكتب تعليقك هنا...",
-        "submit_comment": "إرسال",
-        "sending_comment": "جاري الإرسال...",
-        "comment_login_required": "يرجى تسجيل الدخول أولاً",
-        "comment_added_success": "تم إضافة تعليقك بنجاح!",
-        "delete_comment_title": "حذف التعليق",
-        "event_info_title": "معلومات الحدث",
-        "from_date": "من",
-        "to_date": "إلى",
-        "time_label": "الوقت",
-        "time_default": "غير محدد",
-        "location": "المكان",
-        "organizer": "منظم الحدث",
-        "add_to_wishlist": "أضف إلى المفضلة",
-        "already_in_wishlist": "موجود في المفضلة",
-        "adding_to_wishlist": "جاري الإضافة...",
-        "wishlist_success": "تمت الإضافة إلى المفضلة بنجاح!",
-        "buy_collection_title": "شراء المجموعة كاملة",
-        "total_images": "إجمالي الصور",
-        "save_discount": "خصم 10%",
-        "you_save": "توفير",
-        "add_collection_to_cart": "🎁 أضف المجموعة كاملة إلى السلة",
-        "collection_benefit_1": "شراء كل الصور مرة واحدة",
-        "collection_benefit_2": "تطبيق خصم 10% تلقائيًا",
-        "collection_benefit_3": "وصول سهل في التنزيلات",
-        "collection_benefit_4": "نفس تجربة الدفع الآمنة",
-        "upload_media_to_event": "رفع وسائط إلى الفعالية",
-        "media_alt": "وسائط الفعالية",
-        "send_reply": "إرسال الرد",
-        "comment_add_images": "إضافة صور ({count}/{max})",
-        "comment_image_limit": "صورتان كحد أقصى، 5 ميجابايت لكل صورة",
-        "selected_comment_image_alt": "الصورة المحددة {number}",
-        "remove_selected_comment_image": "إزالة الصورة المحددة {number}"
-    },
-    "common": {
-        "search": "بحث",
-        "placeholder": "ابحث عن الفعاليات...",
-        "searching": "جاري البحث...",
-        "details": "التفاصيل",
-        "notSpecified": "غير محدد",
-        "loadingEvents": "جاري تحميل الفعاليات...",
-        "loading": "جارٍ التحميل...",
-        "close": "إغلاق",
-        "tryAgain": "حاول مرة أخرى",
-        "back": "رجوع",
-        "remove": "إزالة",
-        "clear": "مسح",
-        "previous": "السابق",
-        "next": "التالي",
-        "noResults": "لا توجد نتائج",
-        "unknownError": "خطأ غير معروف",
-        "learnMore": "اعرف المزيد",
-        "cancel": "إلغاء",
-        "sending": "جاري الإرسال...",
-        "show": "إظهار",
-        "hide": "إخفاء"
-    },
-    "events": {
-        "add_historical_event": "اضافه شخصيه تاريخية",
-        "brand_footer": "جميع الفعاليات المفضلة في كل مكان في العالم",
-        "cities": "مدينه",
-        "categories": "فئه",
-        "all_memories": "كل ذكريات الأحداث",
-        "showing_snapshots": "عرض {total} لقطة تاريخية من جميع أنحاء العالم",
-        "sort_by": "ترتيب حسب",
-        "sort": {
-            "newest": "الأحدث أولاً",
-            "oldest": "الأقدم أولاً",
-            "title": "العنوان"
-        },
-        "loading": "جاري تحميل الأحداث...",
-        "retry": "إعادة المحاولة",
-        "page_info": "الصفحة {current} من {last}",
-        "active_memories": "الاحداث النشطة",
-        "latestEvents": "أحدث الفعاليات",
-        "recentMemories": "الاحداث الأخيرة",
-        "discoverAroundYou": "اكتشف ما يحدث حولك واستعد لأجمل اللحظات",
-        "noEventsFound": "لم يتم العثور على فعاليات",
-        "noMatchingEvents": "لا توجد فعاليات تطابق معايير البحث أو الموقع",
-        "event": "فعالية",
-        "startDate": "تاريخ البدء",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "no_title": "فعالية بلا عنوان",
-        "directory": {
-            "eyebrow": "استكشف Scemory",
-            "eventsTitle": "الفعاليات",
-            "eventsDescription": "اكتشف الفعاليات الحالية والقادمة من جميع أنحاء العالم.",
-            "historicalTitle": "الفعاليات التاريخية",
-            "historicalDescription": "استكشف الفعاليات الموثقة والذكريات المحفوظة من الماضي.",
-            "events": "فعالية",
-            "historicalEvents": "فعالية تاريخية",
-            "collection": "مجموعة الفعاليات",
-            "filters": "عوامل التصفية",
-            "refine": "تحسين النتائج",
-            "closeFilters": "إغلاق عوامل التصفية",
-            "searchLabel": "بحث",
-            "searchPlaceholder": "ابحث عن فعاليات...",
-            "eventType": "نوع الفعالية",
-            "types": {
-                "all": "كل الفعاليات",
-                "real": "الفعاليات الواقعية",
-                "general": "الفعاليات العامة"
-            },
-            "country": "الدولة",
-            "allCountries": "كل الدول",
-            "category": "التصنيف",
-            "allCategories": "كل التصنيفات",
-            "city": "المدينة",
-            "allCities": "كل المدن",
-            "subcategory": "التصنيف الفرعي",
-            "allSubcategories": "كل التصنيفات الفرعية",
-            "fromDate": "من تاريخ",
-            "toDate": "إلى تاريخ",
-            "clearFilters": "مسح عوامل التصفية",
-            "createEvent": "إنشاء فعالية",
-            "createHistorical": "إضافة فعالية تاريخية",
-            "results": "{count} فعالية",
-            "showing": "عرض {from}–{to} من {total}",
-            "errorTitle": "تعذر تحميل الفعاليات",
-            "errorDescription": "حدث خطأ أثناء تحميل الفعاليات. يرجى المحاولة مرة أخرى.",
-            "emptyTitle": "لم يتم العثور على فعاليات",
-            "historicalEmptyTitle": "لم يتم العثور على فعاليات تاريخية",
-            "emptyDescription": "جرّب تغيير عوامل التصفية أو مسحها.",
-            "eventBadge": "فعالية",
-            "historicalBadge": "تاريخية",
-            "unknownLocation": "موقع غير معروف",
-            "uncategorized": "غير مصنف",
-            "viewEvent": "عرض الفعالية",
-            "pagination": "صفحات الفعاليات",
-            "previous": "السابق",
-            "next": "التالي"
-        },
-        "from_map": "من الخريطة",
-        "undefined_city": "غير محدد"
-    },
-    "pagination": {
-        "previous": "السابق",
-        "next": "التالي"
-    },
-    "about": {
-        "title": "من نحن - سين ميموري",
-        "subtitle": "نحافظ على لحظاتك الأغلى، مشهدًا تلو الآخر",
-        "text1": "في سين ميموري، نؤمن أن أجمل لحظات الحياة تستحق أن تُحفظ بوضوح وعاطفة. نحن أكثر من مجرد منصة تخزين – نحن ألبوم ذكريات رقمي لرحلة حياتك.",
-        "features": {
-            "immersiveAlbums": "إنشاء ألبومات ذكريات غامرة تحتوي على الصور والفيديوهات وملاحظات صوتية",
-            "aiOrganize": "تنظيم مدعوم بالذكاء الاصطناعي يُصنف ذكرياتك ويُعلمها تلقائيًا",
-            "privacy": "خصوصية وأمان تام – ذكرياتك مشفرة ولا يصل إليها إلا أنت"
-        },
-        "startJourney": "ابدأ رحلة ذكرياتك الآن",
-        "highlightMoments": "أبرز لحظات حياتك",
-        "organizedBy": "منظمة حسب المشاهد والأشخاص والأماكن",
-        "stats": {
-            "memories": "ذكرى محفوظة",
-            "users": "مستخدم سعيد",
-            "backup": "نسخ احتياطي آمن"
-        }
-    },
-    "newsletter": {
-        "title": "ابقَ على اتصال بذكرياتك",
-        "description": "احصل أسبوعيًا على نصائح للذكريات، تحديثات المزايا، وقصص ملهمة في بريدك الإلكتروني",
-        "firstName": "الاسم الأول",
-        "firstNamePlaceholder": "اسمك الأول",
-        "email": "البريد الإلكتروني",
-        "emailPlaceholder": "you@example.com",
-        "consent": "أوافق على استلام نصائح الذكريات والتحديثات والعروض الترويجية من حين لآخر. يمكنني إلغاء الاشتراك في أي وقت.",
-        "subscribe": "اشترك في تحديثات الذكريات",
-        "community": "انضم إلى أكثر من ٥,٠٠٠ حافظ للذكريات في مجتمعنا",
-        "kicker": "النشرة البريدية",
-        "verifiedTitle": "ابقَ مطلعًا على قصص الفعاليات الموثقة",
-        "verifiedDescription": "احصل على تحديثات منتقاة حول الفعاليات الرائجة والأرشيفات الإعلامية الجديدة والقصص المهمة التي يوثقها المساهمون حول العالم.",
-        "subscribeShort": "اشترك",
-        "pendingApiMessage": "شكرًا لاشتراكك. سيتم ربط واجهة النشرة البريدية قريبًا.",
-        "errors": {
-            "emailRequired": "يرجى إدخال بريدك الإلكتروني.",
-            "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح."
-        }
-    },
-    "map": {
-        "exploreMap": "استكشف الخريطة"
-    },
-    "hero": {
-        "title_main": "نحفظ ذكرياتك",
-        "title_highlight": "لتبقى حية للأبد",
-        "description": "في Scene Memory، نؤمن بأن كل لحظة تستحق أن تبقى. نحن هنا لنساعدك في حفظ وتنظيم وتذكر الأحداث المهمة في حياتك.",
-        "cta_start": "ابدأ رحلتك معنا",
-        "cta_watch": "شاهد الفيديو التعريفي",
-        "feature_organized": "ذكريات منظمة",
-        "feature_organized_desc": "كل لحظة في مكانها المناسب",
-        "feature_private": "خصوصية مضمونة",
-        "feature_private_desc": "ذكرياتك في أمان تام",
-        "feature_reminders": "تذكيرات ذكية",
-        "feature_reminders_desc": "لا تنسى أي مناسبة مهمة",
-        "feature_evolving": "تطور مستمر",
-        "feature_evolving_desc": "نعمل دائماً على تحسين تجربتك"
-    },
-    "our_story": {
-        "badge": "قصتنا",
-        "title": "كيف بدأنا رحلتنا",
-        "intro": "بدأت قصتنا بفكرة بسيطة: كيف يمكننا مساعدة الناس في الحفاظ على الذكريات الثمينة التي تشكل حياتهم؟",
-        "stage1_title": "البداية",
-        "stage1_desc": "في عام 2020، لاحظ مؤسسونا كيف أن الكثير من اللحظات المهمة تضيع مع الوقت. قرروا بناء أداة بسيطة لكنها قوية لحفظ هذه الذكريات.",
-        "stage2_title": "النمو",
-        "stage2_desc": "مع تزايد المستخدمين، أضفنا ميزات جديدة مثل التذكيرات الذكية، التصنيفات المتقدمة، ومشاركة الذكريات مع الأحباء بشكل آمن.",
-        "stage3_title": "الرؤية",
-        "stage3_desc": "اليوم، نسعى لأن نكون المنصة الأفضل عالمياً لحفظ وتنظيم الذكريات، مع التركيز على الخصوصية والتجربة السلسة."
-    },
-    "mission_vision": {
-        "mission_badge": "مهمتنا",
-        "mission_title": "ما نؤمن به",
-        "mission_text": "مهمتنا هي تمكين كل شخص من الحفاظ على ذكرياته الثمينة بطريقة سهلة وآمنة ومنظمة. نؤمن بأن كل لحظة في حياتنا تستحق أن تُحفظ وتُذكر.",
-        "value_people_first": "الإنسان أولاً",
-        "value_people_first_desc": "تجربة المستخدم هي محور كل قرار نتخذه",
-        "value_privacy": "الخصوصية مقدسة",
-        "value_privacy_desc": "ذكرياتك تبقى خاصة بك ولا نشاركها مع أحد",
-        "value_growth": "نمو مستمر",
-        "value_growth_desc": "نتطور باستمرار لنلبي احتياجات مستخدمينا",
-        "vision_badge": "رؤيتنا",
-        "vision_title": "إلى أين نتجه",
-        "vision_text": "نطمح لأن نكون المنصة العالمية الأولى لحفظ وتنظيم الذكريات، حيث يمكن لأي شخص في أي مكان أن يحفظ لحظاته المهمة بسهولة وأمان.",
-        "goals_2025": "أهدافنا لعام 2025",
-        "goal_users": "وصول مليون مستخدم",
-        "goal_languages": "إضافة 10 لغات جديدة",
-        "goal_ai": "إطلاق ميزات الذكاء الاصطناعي"
-    },
-    "team": {
-        "badge": "فريقنا",
-        "title": "العقول وراء Scene Memory",
-        "description": "فريقنا المتنوع من المطورين والمصممين وخبراء تجربة المستخدم يعملون معاً لخلق تجربة لا تُنسى لحفظ الذكريات."
-    },
-    "values": {
-        "badge": "قيمنا",
-        "title": "ما يميزنا"
-    },
+    "startJourney": "ابدأ رحلة ذكرياتك الآن",
+    "highlightMoments": "أبرز لحظات حياتك",
+    "organizedBy": "منظمة حسب المشاهد والأشخاص والأماكن",
     "stats": {
-        "title": "أرقامنا تتحدث",
-        "description": "منذ انطلاقنا، ساعدنا الآلاف من الأشخاص في حفظ ملايين الذكريات الثمينة"
+      "memories": "ذكرى محفوظة",
+      "users": "مستخدم سعيد",
+      "backup": "نسخ احتياطي آمن"
+    }
+  },
+  "newsletter": {
+    "title": "ابقَ على اتصال بذكرياتك",
+    "description": "احصل أسبوعيًا على نصائح للذكريات، تحديثات المزايا، وقصص ملهمة في بريدك الإلكتروني",
+    "firstName": "الاسم الأول",
+    "firstNamePlaceholder": "اسمك الأول",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@example.com",
+    "consent": "أوافق على استلام نصائح الذكريات والتحديثات والعروض الترويجية من حين لآخر. يمكنني إلغاء الاشتراك في أي وقت.",
+    "subscribe": "اشترك في تحديثات الذكريات",
+    "community": "انضم إلى أكثر من ٥,٠٠٠ حافظ للذكريات في مجتمعنا",
+    "kicker": "النشرة البريدية",
+    "verifiedTitle": "ابقَ مطلعًا على قصص الفعاليات الموثقة",
+    "verifiedDescription": "احصل على تحديثات منتقاة حول الفعاليات الرائجة والأرشيفات الإعلامية الجديدة والقصص المهمة التي يوثقها المساهمون حول العالم.",
+    "subscribeShort": "اشترك",
+    "pendingApiMessage": "شكرًا لاشتراكك. سيتم ربط واجهة النشرة البريدية قريبًا.",
+    "errors": {
+      "emailRequired": "يرجى إدخال بريدك الإلكتروني.",
+      "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح."
+    }
+  },
+  "map": {
+    "exploreMap": "استكشف الخريطة"
+  },
+  "hero": {
+    "title_main": "نحفظ ذكرياتك",
+    "title_highlight": "لتبقى حية للأبد",
+    "description": "في Scene Memory، نؤمن بأن كل لحظة تستحق أن تبقى. نحن هنا لنساعدك في حفظ وتنظيم وتذكر الأحداث المهمة في حياتك.",
+    "cta_start": "ابدأ رحلتك معنا",
+    "cta_watch": "شاهد الفيديو التعريفي",
+    "feature_organized": "ذكريات منظمة",
+    "feature_organized_desc": "كل لحظة في مكانها المناسب",
+    "feature_private": "خصوصية مضمونة",
+    "feature_private_desc": "ذكرياتك في أمان تام",
+    "feature_reminders": "تذكيرات ذكية",
+    "feature_reminders_desc": "لا تنسى أي مناسبة مهمة",
+    "feature_evolving": "تطور مستمر",
+    "feature_evolving_desc": "نعمل دائماً على تحسين تجربتك"
+  },
+  "our_story": {
+    "badge": "قصتنا",
+    "title": "كيف بدأنا رحلتنا",
+    "intro": "بدأت قصتنا بفكرة بسيطة: كيف يمكننا مساعدة الناس في الحفاظ على الذكريات الثمينة التي تشكل حياتهم؟",
+    "stage1_title": "البداية",
+    "stage1_desc": "في عام 2020، لاحظ مؤسسونا كيف أن الكثير من اللحظات المهمة تضيع مع الوقت. قرروا بناء أداة بسيطة لكنها قوية لحفظ هذه الذكريات.",
+    "stage2_title": "النمو",
+    "stage2_desc": "مع تزايد المستخدمين، أضفنا ميزات جديدة مثل التذكيرات الذكية، التصنيفات المتقدمة، ومشاركة الذكريات مع الأحباء بشكل آمن.",
+    "stage3_title": "الرؤية",
+    "stage3_desc": "اليوم، نسعى لأن نكون المنصة الأفضل عالمياً لحفظ وتنظيم الذكريات، مع التركيز على الخصوصية والتجربة السلسة."
+  },
+  "mission_vision": {
+    "mission_badge": "مهمتنا",
+    "mission_title": "ما نؤمن به",
+    "mission_text": "مهمتنا هي تمكين كل شخص من الحفاظ على ذكرياته الثمينة بطريقة سهلة وآمنة ومنظمة. نؤمن بأن كل لحظة في حياتنا تستحق أن تُحفظ وتُذكر.",
+    "value_people_first": "الإنسان أولاً",
+    "value_people_first_desc": "تجربة المستخدم هي محور كل قرار نتخذه",
+    "value_privacy": "الخصوصية مقدسة",
+    "value_privacy_desc": "ذكرياتك تبقى خاصة بك ولا نشاركها مع أحد",
+    "value_growth": "نمو مستمر",
+    "value_growth_desc": "نتطور باستمرار لنلبي احتياجات مستخدمينا",
+    "vision_badge": "رؤيتنا",
+    "vision_title": "إلى أين نتجه",
+    "vision_text": "نطمح لأن نكون المنصة العالمية الأولى لحفظ وتنظيم الذكريات، حيث يمكن لأي شخص في أي مكان أن يحفظ لحظاته المهمة بسهولة وأمان.",
+    "goals_2025": "أهدافنا لعام 2025",
+    "goal_users": "وصول مليون مستخدم",
+    "goal_languages": "إضافة 10 لغات جديدة",
+    "goal_ai": "إطلاق ميزات الذكاء الاصطناعي"
+  },
+  "team": {
+    "badge": "فريقنا",
+    "title": "العقول وراء Scene Memory",
+    "description": "فريقنا المتنوع من المطورين والمصممين وخبراء تجربة المستخدم يعملون معاً لخلق تجربة لا تُنسى لحفظ الذكريات."
+  },
+  "values": {
+    "badge": "قيمنا",
+    "title": "ما يميزنا"
+  },
+  "stats": {
+    "title": "أرقامنا تتحدث",
+    "description": "منذ انطلاقنا، ساعدنا الآلاف من الأشخاص في حفظ ملايين الذكريات الثمينة"
+  },
+  "cta": {
+    "title": "انضم إلى عائلة Scene Memory",
+    "description": "ابدأ رحلتك في حفظ ذكرياتك اليوم. مجاناً، آمن، ومصمم خصيصاً لك.",
+    "btn_signup": "سجل حساباً مجانياً",
+    "btn_features": "تعرف على الميزات",
+    "trust": "انضم إلى أكثر من 50,000 شخص يثقون بنا لحفظ ذكرياتهم"
+  },
+  "footer": {
+    "slogan": "حفظ ذكرياتك لتبقى حية للأبد",
+    "terms": "الشروط والأحكام",
+    "privacy": "سياسة الخصوصية",
+    "contact": "اتصل بنا",
+    "copyright": "© 2024 Scene Memory. جميع الحقوق محفوظة.",
+    "made_with": "صنع ب  لحفظ ذكرياتك",
+    "quickLinks": "روابط سريعة",
+    "supportContact": "الدعم والتواصل",
+    "logoAlt": "الشعار",
+    "googlePlayAlt": "حمّله من Google Play",
+    "appStoreAlt": "حمّله من App Store",
+    "copyright2025": "© 2025 Scene Memory. جميع الحقوق محفوظة.",
+    "services": "الخدمات",
+    "copyrightLink": "حقوق النشر",
+    "termsOfService": "شروط الخدمة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "dataProtection": "حماية البيانات",
+    "dataDeletion": "تعليمات حذف البيانات"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "نحن هنا",
+      "title_highlight": "لمساعدتك",
+      "description": "فريق Scene Memory موجود للإجابة على جميع استفساراتك ومساعدتك في أي وقت",
+      "stat_24_7": "دعم متواصل",
+      "stat_response_time": "متوسط وقت الرد",
+      "stat_satisfaction": "رضا العملاء",
+      "stat_happy_users": "مستخدم سعيد"
     },
-    "cta": {
-        "title": "انضم إلى عائلة Scene Memory",
-        "description": "ابدأ رحلتك في حفظ ذكرياتك اليوم. مجاناً، آمن، ومصمم خصيصاً لك.",
-        "btn_signup": "سجل حساباً مجانياً",
-        "btn_features": "تعرف على الميزات",
-        "trust": "انضم إلى أكثر من 50,000 شخص يثقون بنا لحفظ ذكرياتهم"
+    "tabs": {
+      "form": "ارسل رسالة",
+      "info": "معلومات التواصل"
     },
-    "footer": {
-        "slogan": "حفظ ذكرياتك لتبقى حية للأبد",
-        "terms": "الشروط والأحكام",
-        "privacy": "سياسة الخصوصية",
-        "contact": "اتصل بنا",
-        "copyright": "© 2024 Scene Memory. جميع الحقوق محفوظة.",
-        "made_with": "صنع ب  لحفظ ذكرياتك",
-        "quickLinks": "روابط سريعة",
-        "supportContact": "الدعم والتواصل",
-        "logoAlt": "الشعار",
-        "googlePlayAlt": "حمّله من Google Play",
-        "appStoreAlt": "حمّله من App Store",
-        "copyright2025": "© 2025 Scene Memory. جميع الحقوق محفوظة.",
-        "services": "الخدمات",
-        "copyrightLink": "حقوق النشر",
-        "termsOfService": "شروط الخدمة",
-        "privacyPolicy": "سياسة الخصوصية",
-        "dataProtection": "حماية البيانات",
-        "dataDeletion": "تعليمات حذف البيانات"
+    "form": {
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "الاسم هنا",
+      "emailAddress": "البريد الالكتروني",
+      "messagePlaceholder": "اكتب رسالتك هنا...",
+      "emailPlaceholder": "البريد هنا",
+      "title": "ارسل لنا رسالة",
+      "subtitle": "سنرد عليك في أقرب وقت ممكن. نحن هنا لمساعدتك!",
+      "full_name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "subject": "الموضوع",
+      "message": "الرسالة",
+      "message_placeholder": "اكتب رسالتك هنا...",
+      "newsletter": "أرغب في تلقي النشرة الإخبارية وعروض Scene Memory",
+      "submit": "إرسال الرسالة",
+      "submitting": "جاري الإرسال...",
+      "success_title": "تم الإرسال بنجاح!",
+      "success_message": "شكراً لتواصلك معنا، سنرد عليك في أقرب وقت ممكن."
     },
-    "contact": {
-        "hero": {
-            "title_main": "نحن هنا",
-            "title_highlight": "لمساعدتك",
-            "description": "فريق Scene Memory موجود للإجابة على جميع استفساراتك ومساعدتك في أي وقت",
-            "stat_24_7": "دعم متواصل",
-            "stat_response_time": "متوسط وقت الرد",
-            "stat_satisfaction": "رضا العملاء",
-            "stat_happy_users": "مستخدم سعيد"
-        },
-        "tabs": {
-            "form": "ارسل رسالة",
-            "info": "معلومات التواصل"
-        },
-        "form": {
-            "fullName": "الاسم الكامل",
-            "fullNamePlaceholder": "الاسم هنا",
-            "emailAddress": "البريد الالكتروني",
-            "messagePlaceholder": "اكتب رسالتك هنا...",
-            "emailPlaceholder": "البريد هنا",
-            "title": "ارسل لنا رسالة",
-            "subtitle": "سنرد عليك في أقرب وقت ممكن. نحن هنا لمساعدتك!",
-            "full_name": "الاسم الكامل",
-            "email": "البريد الإلكتروني",
-            "subject": "الموضوع",
-            "message": "الرسالة",
-            "message_placeholder": "اكتب رسالتك هنا...",
-            "newsletter": "أرغب في تلقي النشرة الإخبارية وعروض Scene Memory",
-            "submit": "إرسال الرسالة",
-            "submitting": "جاري الإرسال...",
-            "success_title": "تم الإرسال بنجاح!",
-            "success_message": "شكراً لتواصلك معنا، سنرد عليك في أقرب وقت ممكن."
-        },
-        "info": {
-            "title": "معلومات التواصل",
-            "address_title": "المقر الرئيسي",
-            "address": "شارع النيل، القاهرة، مصر",
-            "view_map": "عرض على الخريطة",
-            "phone_title": "الهاتف",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "متاح من 9 صباحاً حتى 9 مساءً",
-            "email_title": "البريد الإلكتروني",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "الرد خلال 24 ساعة",
-            "follow_us": "تابعنا على",
-            "map_title": "موقعنا على الخريطة",
-            "map_location": "القاهرة، مصر",
-            "open_map": "فتح الخريطة"
-        },
-        "faq": {
-            "title": "أسئلة شائعة",
-            "subtitle": "إجابات على الأسئلة الأكثر شيوعاً"
-        },
-        "live_support": {
-            "title": "دعم مباشر",
-            "description": "تتحدث مع أحد أعضاء فريقنا الآن للحصول على مساعدة فورية",
-            "btn_chat": "بدء محادثة مباشرة",
-            "btn_schedule": "جدولة مكالمة",
-            "available": "متاح الآن: 3 مندوبي دعم"
-        }
-    },
-    "contacts": {
-        "badge": "تواصل معنا",
-        "title": "دعنا نتحدث",
-        "description": "لديك سؤال، أو تحتاج إلى الدعم، أو ترغب في خطة مخصصة؟ أرسل لنا رسالة وسيتواصل معك فريقنا.",
-        "form": {
-            "title": "أرسل لنا رسالة",
-            "description": "أكمل النموذج التالي وسنرد عليك في أقرب وقت ممكن.",
-            "fullName": "الاسم الكامل",
-            "fullNamePlaceholder": "أدخل اسمك الكامل",
-            "emailAddress": "البريد الإلكتروني",
-            "emailPlaceholder": "أدخل بريدك الإلكتروني",
-            "subject": "الموضوع",
-            "generalInquiry": "استفسار عام",
-            "customPlan": "خطة مخصصة",
-            "support": "الدعم الفني",
-            "feedback": "الملاحظات والاقتراحات",
-            "other": "أخرى",
-            "message": "الرسالة",
-            "messagePlaceholder": "أخبرنا كيف يمكننا مساعدتك...",
-            "minimumCharacters": "يرجى كتابة تفاصيل كافية.",
-            "sendMessage": "إرسال الرسالة",
-            "sending": "جارٍ الإرسال...",
-            "successMessage": "تم إرسال رسالتك بنجاح.",
-            "errorMessage": "حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى."
-        },
-        "info": {
-            "getInTouch": "تواصل معنا",
-            "title": "نحن هنا لمساعدتك",
-            "description": "تواصل مع فريقنا للاستفسارات العامة أو الدعم الفني أو الأسعار المخصصة.",
-            "emailUs": "راسلنا عبر البريد الإلكتروني",
-            "available": "سيرد عليك فريقنا في أقرب وقت ممكن.",
-            "customPlans": "الخطط المخصصة",
-            "customPlansDescription": "هل تحتاج إلى حل مخصص لفريقك أو نشاطك التجاري؟ أخبرنا بما تحتاج إليه.",
-            "customerSupport": "دعم العملاء",
-            "supportDescription": "تواصل معنا إذا كنت تحتاج إلى مساعدة بشأن حسابك أو اشتراكك أو الخدمات.",
-            "followJourney": "تابع رحلتنا",
-            "responseTime": "استجابة سريعة",
-            "responseTimeDescription": "نرد عادةً على الرسائل خلال يوم عمل واحد."
-        },
-        "map": {
-            "title": "خريطة العالم لذاكرة المشهد",
-            "description": "تصور آلاف الذكريات عبر أكثر من 140 دولة."
-        }
+    "info": {
+      "title": "معلومات التواصل",
+      "address_title": "المقر الرئيسي",
+      "address": "شارع النيل، القاهرة، مصر",
+      "view_map": "عرض على الخريطة",
+      "phone_title": "الهاتف",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "متاح من 9 صباحاً حتى 9 مساءً",
+      "email_title": "البريد الإلكتروني",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "الرد خلال 24 ساعة",
+      "follow_us": "تابعنا على",
+      "map_title": "موقعنا على الخريطة",
+      "map_location": "القاهرة، مصر",
+      "open_map": "فتح الخريطة"
     },
     "faq": {
-        "badge": "الأسئلة الشائعة",
-        "title": "الأسئلة الأكثر شيوعًا",
-        "description": "إجابات سريعة عن بعض الأسئلة الأكثر تكرارًا.",
-        "questions": {
-            "0": {
-                "question": "متى سأحصل على رد؟",
-                "answer": "يرد فريقنا عادةً خلال يوم عمل واحد."
-            },
-            "1": {
-                "question": "هل يمكنني طلب خطة مخصصة؟",
-                "answer": "نعم، اختر خطة مخصصة من حقل الموضوع، ثم اكتب جميع متطلباتك."
-            },
-            "2": {
-                "question": "هل يمكنني التواصل للحصول على دعم فني؟",
-                "answer": "نعم، اختر الدعم الفني وأضف جميع التفاصيل المتعلقة بالمشكلة."
-            }
-        }
+      "title": "أسئلة شائعة",
+      "subtitle": "إجابات على الأسئلة الأكثر شيوعاً"
     },
-    "eventForm": {
-        "admin": {
-            "title": "إضافة حدث من الإدارة",
-            "trending": "حدث رائج",
-            "trendingHelp": "ضع علامة على هذا الحدث كحدث رائج",
-            "generateTags": "إنشاء وسوم بالذكاء الاصطناعي",
-            "generatingTags": "جارٍ إنشاء الوسوم...",
-            "generateTagsHelp": "اقترح وسومًا للحدث والصور باستخدام خدمة الذكاء الاصطناعي الحالية. يمكنك مراجعتها أو حذفها قبل النشر.",
-            "generateTagsError": "تعذر إنشاء وسوم الذكاء الاصطناعي الآن.",
-            "created": "تم إنشاء الحدث ونشره بنجاح."
-        },
-        "chooseFiles": "اختر صور / فيديوهات",
-        "mediaCount": "عدد الوسائط",
-        "title": "إضافة حدث جديد",
-        "minimumRequirementsHint": "لإنشاء الحدث، يكفي إدخال العنوان والوصف ورفع صورة أو فيديو واحد على الأقل. باقي البيانات اختيارية.",
-        "basicInfo": "المعلومات الأساسية",
-        "locationCategory": "الموقع والتصنيف",
-        "dates": "المواعيد",
-        "images": "صور الحدث",
-        "eventTitle": "عنوان الحدث",
-        "description": "الوصف",
-        "country": "الدولة",
-        "searchCountry": "ابحث عن دولة...",
-        "selectCountry": "اختر الدولة",
-        "city": "المدينة",
-        "selectCity": "اختر المدينة",
-        "selectCityFirst": "اختر الدولة أولاً",
-        "mainCategory": "الفئة الرئيسية",
-        "subCategory": "التصنيف الفرعي",
-        "selectSubFirst": "اختر الفئة أولاً",
-        "selectLocationMap": "اختر الموقع على الخريطة",
-        "selectedCoords": "الإحداثيات المختارة: Lat: {lat} , Lng: {lng}",
-        "lat": "Lat",
-        "lng": "Lng",
-        "pleaseSelectLocation": "من فضلك اختر موقعاً على الخريطة",
-        "startDate": "تاريخ البداية",
-        "endDate": "تاريخ النهاية",
-        "startTime": "وقت البداية",
-        "dragDropHere": "اضغط أو اسحب الصور هنا",
-        "formatsMax": "PNG • JPG • WEBP | max 5MB لكل صورة",
-        "chooseImages": "اختيار صور",
-        "addMore": "إضافة المزيد",
-        "imagesCount": "{count} / 8 صور",
-        "remove": "حذف",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "mediaRequired": "يجب رفع صورة أو فيديو واحد على الأقل.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        }
-    },
-    "commons": {
-        "required": "مطلوب",
-        "cancel": "إلغاء",
-        "saveDraft": "حفظ كمسودة",
-        "create": "إنشاء الحدث",
-        "creating": "جاري الإنشاء...",
-        "choose": "اختر"
-    },
-    "eventss": {
-        "no_title": "فعالية بدون عنوان",
-        "undefined_city": "غير محدد",
-        "from_map": "من الخريطة"
-    },
-    "wishlist": {
-        "title": "قائمة المفضلة",
-        "loading": "جاري التحميل...",
-        "empty": {
-            "main": "لا توجد عناصر في قائمة الرغبات حاليًا",
-            "hint": "ابدأ بإضافة مناسباتك المفضلة!"
-        },
-        "fallback_image_alt": "صورة افتراضية للمناسبة",
-        "uncategorized": "غير مصنف",
-        "no_title": "بدون عنوان",
-        "city_label": "المدينة:",
-        "date_label": "التاريخ:",
-        "time_label": "الوقت:",
-        "not_specified": "غير محدد",
-        "view_details": "عرض التفاصيل",
-        "remove": "إزالة من المفضلة",
-        "deleting": "جاري الحذف...",
-        "added_at": "أُضيف في",
-        "pagination": {
-            "previous": "السابق",
-            "next": "التالي",
-            "page_info": "صفحة {current} من {total}"
-        },
-        "confirmRemove": "هل أنت متأكد من إزالة هذا العنصر من المفضلة؟",
-        "errors": {
-            "deleteFailed": "حدث خطأ أثناء الحذف. يرجى المحاولة مرة أخرى.",
-            "connectionFailed": "تعذر الاتصال بالخادم. تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
-        }
-    },
-    "terms": {
-        "title": "شروط الاستخدام",
-        "last_updated": "آخر تحديث: 2026",
-        "acceptance_title": "الموافقة على الشروط",
-        "acceptance_text": "باستخدام هذه المنصة فإنك توافق على الالتزام بشروط الاستخدام وجميع القوانين واللوائح المعمول بها.",
-        "accounts_title": "حسابات المستخدمين",
-        "accounts_text": "المستخدم مسؤول عن الحفاظ على سرية معلومات حسابه وعن جميع الأنشطة التي تتم من خلال حسابه.",
-        "content_title": "ملكية المحتوى",
-        "content_text": "جميع المحتويات الموجودة على المنصة بما في ذلك النصوص والصور والبيانات محمية بقوانين حقوق الملكية الفكرية.",
-        "ai_title": "قيود الذكاء الاصطناعي",
-        "ai_text": "يُمنع استخدام محتوى المنصة لتدريب نماذج الذكاء الاصطناعي أو أنظمة التعلم الآلي أو استخراج البيانات دون الحصول على ترخيص رسمي.",
-        "prohibited_title": "الاستخدامات المحظورة",
-        "prohibited_text": "لا يجوز للمستخدم إساءة استخدام المنصة أو محاولة الوصول غير المصرح به أو استخراج البيانات أو تعطيل عمل المنصة.",
-        "liability_title": "تحديد المسؤولية",
-        "liability_text": "لن تكون المنصة مسؤولة عن أي أضرار غير مباشرة أو عرضية أو تبعية ناتجة عن استخدام الخدمة.",
-        "changes_title": "تعديل الشروط",
-        "changes_text": "نحتفظ بالحق في تعديل أو تحديث شروط الاستخدام في أي وقت.",
-        "contact_title": "التواصل",
-        "contact_text": "إذا كان لديك أي استفسار حول هذه الشروط يرجى التواصل مع إدارة المنصة."
-    },
-    "plans": {
-        "customPrice": "تواصل معنا",
-        "customPricingDescription": "تسعير مصمم حسب احتياجاتك",
-        "contactUs": "تواصل معنا",
-        "chooseYourPlan": "اختر باقتك",
-        "noFeatures": "لا توجد ميزات بعد",
-        "mostPopular": "الأكثر شيوعًا",
-        "getStarted": "ابدأ الآن",
-        "subscribe": "اشترك الآن",
-        "free": "مجانا",
-        "ourPlans": "باقاتنا",
-        "noCreditCard": "لا حاجة إلى بطاقة ائتمان",
-        "description": "ابدأ مجانًا أو اختر الباقة الأنسب لك.",
-        "price": "السعر",
-        "features": "الميزات",
-        "cancelAnytime": "يمكنك الإلغاء في أي وقت",
-        "Monthly": "شهري",
-        "Yearly": "سنوي",
-        "unlimitedEvents": "احداث غير محدودة",
-        "addEvents": "اضافة احداث",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "الباقة",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "تعذر تحميل الباقات. يرجى المحاولة مرة أخرى."
-        },
-        "customPlanNote": "مصممة حول متطلباتك",
-        "basicAccessIncluded": "الوصول الأساسي مشمول",
-        "moneyBack": "ضمان 30 يومًا",
-        "perMonth": "شهريًا",
-        "securePayments": "مدفوعات آمنة",
-        "support247": "دعم على مدار الساعة",
-        "usd": "دولار أمريكي",
-        "prioritySupport": "دعم ذو أولوية"
-    },
-    "free": "مجانا",
-    "basic": "اساسي",
-    "professional": "مهني",
-    "premium": "مميز",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "متصفحك لا يدعم وسم الفيديو.",
-            "badge": "أرشيف فعاليات Scemory",
-            "title": "استكشف الفعاليات الموثقة",
-            "titleHighlight": "عبر الخريطة",
-            "description": "اكتشف وسائط الفعاليات التي يرفعها الصحفيون وفرق الإعلام والمساهمون شهود العيان من حول العالم.",
-            "searchEvents": "ابحث عن الفعاليات",
-            "uploadStory": "ارفع قصتك",
-            "bottomText": "اكتشف القصص والأماكن واللحظات من حول العالم.",
-            "searchPlaceholder": "ابحث عن الفعاليات أو الوسوم أو المدن"
-        },
-        "profileToast": {
-            "title": "الملف الشخصي غير مكتمل",
-            "message": "ملفك الشخصي غير مكتمل. يرجى تحديث:",
-            "complete": "اضغط للإكمال",
-            "fields": {
-                "phone": "الهاتف",
-                "country": "الدولة",
-                "position": "المنصب",
-                "dateOfBirth": "تاريخ الميلاد"
-            }
-        },
-        "trending": {
-            "loadError": "تعذر تحميل الفعاليات الرائجة الآن.",
-            "kicker": "الرائج",
-            "title": "الفعاليات الرائجة",
-            "description": "فعاليات تحظى باهتمام متزايد في الأرشيف.",
-            "emptyTitle": "لا توجد فعاليات رائجة بعد",
-            "emptyDescription": "تحقق لاحقًا لمشاهدة الفعاليات المميزة.",
-            "views": "مشاهدات",
-            "likes": "إعجابات",
-            "slidesLabel": "شرائح الفعاليات الرائجة",
-            "untitledEvent": "فعالية بلا عنوان",
-            "showSlide": "عرض الفعالية الرائجة {number}"
-        },
-        "map": {
-            "tilesSlow": "تستغرق مربعات الخريطة وقتًا طويلاً للظهور.",
-            "loadError": "تعذر تحميل الخريطة الآن.",
-            "loadMap": "تحميل الخريطة",
-            "loading": "جارٍ تحميل الخريطة...",
-            "retry": "إعادة تحميل الخريطة",
-            "openFullscreen": "فتح الخريطة بملء الشاشة",
-            "closeFullscreen": "إغلاق وضع ملء الشاشة"
-        },
-        "about": {
-            "imageAlt": "منصة توثيق Scemory",
-            "kicker": "ذاكرة فعاليات موثوقة",
-            "title": "عن Scemory",
-            "description": "صُمم Scemory للصحفيين وفرق الإعلام والمساهمين شهود العيان الذين يحتاجون إلى مكان موثوق لتوثيق الفعاليات فور وقوعها. تربط المنصة الوسائط المرفوعة وبيانات الفعاليات وسياق الموقع ليتمكن الناس من اكتشاف القصص العامة بوضوح.",
-            "features": {
-                "upload": "ارفع الصور والفيديوهات وبيانات الميدان",
-                "explore": "استكشف الفعاليات عبر خريطة تفاعلية",
-                "preserve": "احفظ القصص الموثقة في أرشيف رقمي"
-            }
-        },
-        "events": {
-            "showing": "عرض",
-            "of": "من",
-            "events": "فعاليات",
-            "seeMore": "عرض المزيد",
-            "badge": "فعاليات"
-        },
-        "tags": {
-            "loading": "جارٍ تحميل الوسوم...",
-            "showingFirst": "عرض أول",
-            "searchToFindMore": "وسوم. ابحث للعثور على المزيد.",
-            "none": "لا توجد وسوم",
-            "helper": "اختر وسمًا واحدًا أو أكثر لتصفية فعاليات الخريطة.",
-            "clearSelected": "مسح الوسوم المحددة",
-            "searchMore": "ابحث عن وسوم إضافية"
-        },
-        "search": {
-            "clearText": "مسح",
-            "clearTags": "مسح"
-        },
-        "specialCoverage": {
-            "badge": "تغطية خاصة",
-            "title": "هل لديك حدث يستحق التغطية؟",
-            "description": "أخبر Scemory عن حدث يستحق تغطية مخصصة، وساعد في إيصال قصته إلى جمهور أوسع.",
-            "contactUs": "راسلنا",
-            "modal": {
-                "title": "تغطية خاصة",
-                "eventName": "اسم الحدث",
-                "eventNamePlaceholder": "أدخل اسم الحدث",
-                "description": "وصف الحدث",
-                "descriptionPlaceholder": "أخبرنا عن الحدث ولماذا يستحق التغطية",
-                "cancel": "إلغاء",
-                "send": "إرسال",
-                "sending": "جاري الإرسال...",
-                "close": "إغلاق",
-                "country": "الدولة",
-                "city": "المدينة",
-                "searchCity": "ابحث عن مدينة",
-                "addNewCity": "إضافة مدينة جديدة",
-                "createCity": "إنشاء مدينة",
-                "startDate": "تاريخ البدء",
-                "coverageTime": "وقت التغطية",
-                "eventType": "نوع الحدث",
-                "personalEvent": "حدث شخصي",
-                "publicEvent": "حدث عام",
-                "selectCountry": "اختر الدولة",
-                "selectCity": "اختر المدينة",
-                "noCitiesFound": "لم يتم العثور على مدن",
-                "noCountriesFound": "لم يتم العثور على دول",
-                "countryRequired": "يرجى اختيار الدولة.",
-                "cityRequired": "يرجى اختيار المدينة.",
-                "startDateRequired": "يرجى اختيار تاريخ البدء.",
-                "eventTypeRequired": "يرجى اختيار نوع الحدث.",
-                "cityCreateFailed": "تعذر إنشاء المدينة. يرجى المحاولة مرة أخرى.",
-                "eventNameRequired": "يرجى إدخال اسم الحدث.",
-                "descriptionRequired": "يرجى إدخال وصف الحدث.",
-                "success": "تم إرسال طلب التغطية الخاصة بنجاح."
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "رفع الوسائط *",
-        "description": "ارفع صورة أو فيديو واحدًا على الأقل. الوصف والوسوم والسعر اختيارية.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "اختر صورًا أو فيديوهات",
-        "fileHint": "صور (JPG وPNG وWEBP وGIF وBMP وAVIF وHEIC وTIFF) أو فيديو (MP4 وWEBM وOGG وMOV)، حتى 20 ميجابايت.",
-        "checking": "Checking...",
-        "choosePhotos": "اختيار الوسائط",
-        "photosCount": "{count} / {max} ملفات وسائط",
-        "empty": "لم تتم إضافة وسائط بعد.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "وصف الوسائط (اختياري)",
-        "photoDescriptionPlaceholder": "اكتب وصفًا للوسائط (اختياري)",
-        "photoTags": "وسوم الوسائط (اختيارية)",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "السعر (اختياري)",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "ارفع صورة مدعومة (JPG وPNG وWEBP وGIF وBMP وAVIF وHEIC وTIFF) أو فيديو (MP4 وWEBM وOGG وMOV).",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "videoReady": "الفيديو جاهز للرفع.",
-        "qualityWarning": "فحوص الجودة إرشادية ولا تمنع إنشاء الحدث.",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "تنبيه جودة"
-        }
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "تعذرت إضافة المجموعة إلى السلة.",
-            "itemNotIdentified": "تعذر تحديد هذا العنصر.",
-            "addFailed": "حدث خطأ أثناء الإضافة إلى السلة."
-        },
-        "messages": {
-            "collectionAddedDiscount": "تمت إضافة {count} صورة إلى السلة بخصم 10٪!",
-            "added": "تمت الإضافة إلى السلة بنجاح."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "لا توجد تنزيلات",
-        "emptyHint": "ستظهر الملفات التي تشتريها هنا"
-    },
-    "experience": {
-        "kicker": "تجربة SCEMORY",
-        "title": "منصة واحدة. كل جانب من القصة.",
-        "pathsLabel": "مسارات تجربة Scemory",
-        "highlightsLabel": "أبرز نقاط القسم",
-        "tabs": {
-            "explore": {
-                "label": "استكشف الفعاليات",
-                "eyebrow": "اكتشف العالم عبر الفعاليات",
-                "heading": "استكشف القصص والفعاليات والأماكن حول العالم",
-                "description": "انتقل من الخريطة إلى فعاليات عامة موثقة وذكريات شخصية وقصص بصرية تشكلها المواقع الحقيقية وسياق المساهمين.",
-                "cta": "استكشف الفعاليات",
-                "imageAlt": "واجهة اكتشاف فعاليات Scemory مع لوحات وسائط موثقة",
-                "features": {
-                    "browse": "تصفح وسائط الفعاليات حسب المكان والخط الزمني",
-                    "discover": "اكتشف القصص القريبة عبر أرشيف بصري",
-                    "move": "انتقل من النظرة العامة إلى تفاصيل الفعالية الموثقة"
-                },
-                "visual": {
-                    "kicker": "اكتشاف مباشر",
-                    "title": "قصص فعاليات مرتبطة بالخريطة",
-                    "stat": "أرشيف عالمي",
-                    "note": "الأماكن والتواريخ والوسائط في عرض واحد"
-                }
-            },
-            "share": {
-                "label": "شارك قصتك",
-                "eyebrow": "حوّل اللحظات إلى قصص موثقة",
-                "heading": "وثّق اللحظات المهمة",
-                "description": "أنشئ فعالية وارفع الصور والوسائط وأضف تفاصيل الموقع وساهم بمنظورك في أرشيف Scemory.",
-                "cta": "ارفع قصتك",
-                "imageAlt": "مساحة مساهمي Scemory لتوثيق وسائط الفعاليات",
-                "features": {
-                    "add": "أضف الوسائط والأوصاف وسياق الموقع",
-                    "build": "ابنِ ذاكرة منظمة من لحظات خام",
-                    "keep": "أبقِ قصص المساهمين مرتبطة بالأرشيف"
-                },
-                "visual": {
-                    "kicker": "مسار المساهم",
-                    "title": "وسائط وسياق وموقع",
-                    "stat": "منشئ القصص",
-                    "note": "ارفع اللحظات بتفاصيل ذات معنى"
-                }
-            },
-            "license": {
-                "label": "ترخيص الوسائط",
-                "eyebrow": "اكتشف وسائط جاهزة للاستخدام",
-                "heading": "اعثر على وسائط الفعاليات ورخّصها بثقة",
-                "description": "تصفح المحتوى المرئي وعاين وسائط الفعاليات المتاحة وانتقل إلى خيارات الترخيص مباشرة عبر تجربة الاكتشاف الحالية في Scemory.",
-                "cta": "اكتشف الوسائط",
-                "imageAlt": "لوحات اكتشاف وسائط Scemory لتصفح محتوى فعاليات قابل للترخيص",
-                "features": {
-                    "preview": "عاين مرئيات الفعاليات قبل فتح التفاصيل",
-                    "use": "استخدم صفحات الفعاليات كمسار إلى خيارات الوسائط",
-                    "keep": "حافظ على ارتباط الاكتشاف بنية الترخيص"
-                },
-                "visual": {
-                    "kicker": "وصول إلى الوسائط",
-                    "title": "مرئيات فعاليات جاهزة للمراجعة",
-                    "stat": "مسار الترخيص",
-                    "note": "من الاكتشاف إلى صفحات التفاصيل"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "تعذر تحميل الفعاليات. يرجى المحاولة مرة أخرى."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "حاول مرة أخرى",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "أدخل مبلغًا صالحًا (أكثر من دولار واحد)"
-        }
-    },
-    "gate": {
-        "media": "الوسائط",
-        "locationShort": "الموقع",
-        "dateShort": "التاريخ",
-        "searchCountry": "ابحث عن بلد...",
-        "featuredEvents": "أحداث مميزة"
-    },
-    "country": {
-        "discoverFeaturedIn": "اكتشف الأحداث المميزة في",
-        "cities": "المدن",
-        "availableCity": "مدينة متاحة",
-        "currentEvent": "حدث حالي",
-        "eventMarkers": "علامات الأحداث",
-        "clickableMarker": "علامة قابلة للنقر",
-        "differentCategory": "فئة مختلفة",
-        "availableCities": "المدن المتاحة",
-        "noEvents": "لا توجد أحداث متاحة حاليًا",
-        "checkBack": "تحقق مرة أخرى قريبًا",
-        "noImage": "لا توجد صورة",
-        "viewEvent": "عرض الحدث",
-        "noCategory": "بلا فئة",
-        "countryFallback": "بلد",
-        "cityFallback": "مدينة",
-        "eventFallback": "حدث",
-        "clickMarkerToOpen": "انقر على العلامة للفتح",
-        "errors": {
-            "unauthorized": "غير مصرح لك. يرجى تسجيل الدخول.",
-            "notFound": "لم يتم العثور على البلد.",
-            "loadFailed": "حدث خطأ أثناء تحميل البيانات.",
-            "mapLibraryFailed": "فشل تحميل مكتبة الخريطة.",
-            "bordersFailed": "فشل تحميل حدود البلد",
-            "invalidBorders": "ملف حدود البلد غير صالح.",
-            "countryBordersNotFound": "تعذر العثور على حدود البلد",
-            "countryBoundsFailed": "تعذر حساب نطاق البلد.",
-            "mapLoadFailed": "حدث خطأ أثناء تحميل الخريطة."
-        }
-    },
-    "cancel": "إلغاء",
-    "login": "تسجيل الدخول",
-    "sending": "جاري الإرسال...",
-    "send_reply": "إرسال الرد",
-    "report": {
-        "action": "إبلاغ",
-        "commentTitle": "الإبلاغ عن هذا التعليق",
-        "modalTitle": "الإبلاغ عن محتوى",
-        "reasonPrompt": "اختر سبب الإبلاغ عن هذا المحتوى:",
-        "submit": "إرسال البلاغ",
-        "submitting": "جاري الإرسال...",
-        "successTitle": "تم إرسال البلاغ",
-        "successMessage": "شكرًا لك، تم إرسال البلاغ بنجاح.",
-        "errors": {
-            "selectReason": "يرجى اختيار سبب البلاغ.",
-            "submitFailed": "حدث خطأ أثناء إرسال البلاغ. يرجى المحاولة مرة أخرى."
-        },
-        "reasons": {
-            "spam": "محتوى مزعج",
-            "offensive": "محتوى مسيء",
-            "inappropriate": "محتوى غير مناسب",
-            "illegal": "محتوى غير قانوني",
-            "untrue": "معلومات غير صحيحة",
-            "falseInformation": "معلومات مضللة",
-            "other": "أخرى"
-        }
-    },
-    "commentsPage": {
-        "title": "التعليقات",
-        "emptyLabel": "لا توجد تعليقات",
-        "emptyMessage": "لا توجد تعليقات هنا بعد. كن أول من يعلق!",
-        "attachmentAlt": "مرفق التعليق",
-        "pageInfo": "صفحة {current} من {total}",
-        "confirmDelete": "هل أنت متأكد من حذف هذا التعليق؟",
-        "errors": {
-            "loadFailed": "حدث خطأ أثناء تحميل التعليقات."
-        },
-        "reactions": {
-            "support": "داعم",
-            "neutral": "محايد",
-            "oppose": "معارض"
-        },
-        "you": "أنت"
-    },
-    "profilePage": {
-        "title": "الملف الشخصي",
-        "subtitle": "إدارة معلومات حسابك وبياناتك الشخصية",
-        "noPlan": "لا توجد باقة",
-        "lastLogin": "آخر تسجيل دخول",
-        "accountInfo": "معلومات الحساب",
-        "systemInfo": "معلومات النظام",
-        "currentPlan": "الباقة الحالية",
-        "planType": "نوع الباقة",
-        "editAccount": "تعديل الحساب",
-        "saving": "جارٍ الحفظ...",
-        "saveChanges": "حفظ التغييرات",
-        "tabs": {
-            "userInfo": "معلومات المستخدم",
-            "editData": "تعديل البيانات",
-            "password": "كلمة المرور",
-            "wallet": "المحفظة",
-            "privacy": "الحساب والخصوصية"
-        },
-        "fields": {
-            "name": "الاسم",
-            "fullName": "الاسم الكامل",
-            "email": "البريد الإلكتروني",
-            "phone": "الهاتف",
-            "phoneNumber": "رقم الهاتف",
-            "country": "الدولة",
-            "position": "المنصب",
-            "positionJob": "المنصب / الوظيفة",
-            "birthDate": "تاريخ الميلاد",
-            "role": "الدور",
-            "status": "الحالة",
-            "points": "النقاط",
-            "rank": "الترتيب",
-            "price": "السعر"
-        },
-        "placeholders": {
-            "fullName": "أدخل الاسم الكامل",
-            "countrySearch": "ابحث عن الدولة",
-            "position": "أدخل المنصب"
-        },
-        "status": {
-            "active": "نشط"
-        },
-        "password": {
-            "title": "تحديث كلمة المرور",
-            "current": "كلمة المرور الحالية",
-            "new": "كلمة المرور الجديدة",
-            "confirm": "تأكيد كلمة المرور",
-            "updating": "جارٍ تحديث كلمة المرور...",
-            "update": "تحديث كلمة المرور"
-        },
-        "messages": {
-            "fillAllFields": "يرجى ملء جميع الحقول.",
-            "passwordMismatch": "كلمتا المرور غير متطابقتين.",
-            "passwordUpdated": "تم تحديث كلمة المرور بنجاح.",
-            "passwordUpdateFailed": "فشل تحديث كلمة المرور.",
-            "chooseCountry": "يرجى اختيار دولة صحيحة.",
-            "noChanges": "لم يتم إجراء أي تغييرات.",
-            "profileUpdated": "تم تحديث الملف الشخصي بنجاح.",
-            "profileUpdateFailed": "حدث خطأ أثناء تحديث الملف الشخصي."
-        },
-        "wallet": {
-            "title": "المحفظة",
-            "availableBalance": "الرصيد المتاح",
-            "deposit": "إيداع",
-            "recentTransactions": "آخر المعاملات",
-            "depositType": "إيداع",
-            "withdrawType": "سحب",
-            "noTransactions": "لا توجد معاملات حتى الآن",
-            "withdrawComingSoon": "خاصية السحب ستكون متاحة قريبًا."
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "الحد الأقصى لحجم الملف: 100 ميجابايت",
-        "dragFiles": "اسحب الملفات هنا",
-        "clickToChoose": "اضغط لاختيار الملفات",
-        "supportedFiles": "الأنواع المدعومة (100 ميجابايت كحد أقصى لكل ملف)",
-        "selectedFiles": "الملفات المحددة ({count})",
-        "uploading": "جارٍ الرفع...",
-        "uploadFiles": "رفع الملفات",
-        "success": "تم رفع الملفات بنجاح!",
-        "errors": {
-            "fileTooLarge": "الملف \"{name}\" أكبر من 100 ميجابايت.",
-            "unsupportedType": "نوع الملف \"{name}\" غير مدعوم."
-        }
-    },
-    "discovery": {
-        "title": "نتائج البحث",
-        "description": "اكتشف الفعاليات والصور ومقاطع الفيديو عبر Scemory.",
-        "showing": "عرض",
-        "of": "من",
-        "results": "نتيجة",
-        "details": "عرض التفاصيل",
-        "noResultsTitle": "لم يتم العثور على نتائج",
-        "noResultsDescription": "جرّب تغيير البحث أو عوامل التصفية.",
-        "filters": {
-            "allCities": "كل المدن",
-            "allCountries": "كل الدول"
-        },
-        "tabs": {
-            "all": "الكل",
-            "event": "الفعاليات",
-            "image": "الصور",
-            "video": "مقاطع الفيديو"
-        },
-        "resultLabels": {
-            "event": "فعالية",
-            "image": "صورة",
-            "video": "فيديو"
-        },
-        "media": {
-            "price": "السعر",
-            "addToCart": "إضافة إلى السلة",
-            "added": "تمت الإضافة",
-            "adding": "جارٍ الإضافة...",
-            "playVideo": "تشغيل الفيديو",
-            "pauseVideo": "إيقاف الفيديو مؤقتًا"
-        }
-    },
-    "timeline": {
-        "title": "سجل نشاطك",
-        "subtitle": "راجع فعالياتك وتفاعلاتك وتعليقاتك وعناصرك المحفوظة في مكان واحد.",
-        "totalActivity": "إجمالي النشاط",
-        "latestActivity": "أحدث نشاط",
-        "noLatestActivity": "لا يوجد نشاط بعد",
-        "loading": "جارٍ تحميل النشاط...",
-        "loadError": "تعذر تحميل نشاطك.",
-        "retry": "حاول مرة أخرى",
-        "viewAll": "عرض الكل",
-        "empty": "لا يوجد نشاط في هذا القسم.",
-        "previous": "السابق",
-        "next": "التالي",
-        "pageOf": "صفحة {current} من {last}",
-        "unknownEvent": "فعالية غير معروفة",
-        "parentComment": "ردًا على: {comment}",
-        "reactionTo": "تفاعل مع: {comment}",
-        "onEvent": "في {event}",
-        "tabs": {
-            "all": "كل النشاط",
-            "events": "الفعاليات",
-            "likes": "الإعجابات",
-            "comments": "التعليقات",
-            "replies": "الردود",
-            "comment_images": "صور التعليقات",
-            "comment_interactions": "تفاعلات التعليقات",
-            "wishlists": "المفضلة"
-        },
-        "filters": {
-            "label": "الفترة",
-            "all": "كل الوقت",
-            "today": "اليوم",
-            "this_week": "هذا الأسبوع",
-            "this_month": "هذا الشهر",
-            "custom": "نطاق مخصص",
-            "from": "من",
-            "to": "إلى",
-            "apply": "تطبيق",
-            "invalidRange": "اختر نطاقًا زمنيًا صحيحًا."
-        },
-        "reactions": {
-            "support": "داعم",
-            "neutral": "محايد",
-            "exhibitions": "معارض"
-        },
-        "status": {
-            "pending": "قيد الانتظار",
-            "approved": "مقبول",
-            "rejected": "مرفوض",
-            "active": "نشط",
-            "inactive": "غير نشط"
-        }
-    },
-    "security": {
-        "denied": "لا تملك صلاحية الوصول إلى هذا المورد.",
-        "notFound": "لم يتم العثور على المورد المطلوب.",
-        "disabled": "هذا الحساب معطّل. تواصل مع الدعم.",
-        "invalidMedia": "ملف الوسائط غير صالح أو غير مدعوم أو يتجاوز حدود المعالجة الآمنة.",
-        "unavailable": "هذه الوسائط غير متاحة حاليًا.",
-        "currencyMismatch": "عملة المحفظة لا تطابق عملة هذه المعاملة.",
-        "insufficientBalance": "رصيد المحفظة المتاح غير كافٍ.",
-        "invalidWithdrawal": "لا يمكن تغيير طلب السحب في حالته الحالية. تواصل مع الدعم.",
-        "paymentRequired": "تتطلب هذه الخطة دفعًا متحققًا منه. تواصل مع الدعم.",
-        "invalidCode": "رمز التحقق غير صحيح أو منتهي الصلاحية.",
-        "requestFailed": "تعذر إتمام الطلب. حاول مجددًا.",
-        "rateLimit": "طلبات كثيرة جدًا. حاول لاحقًا."
-    },
-    "googleAuth": {
-        "continue": "المتابعة باستخدام Google",
-        "signup": "إنشاء حساب باستخدام Google",
-        "or": "أو",
-        "signingIn": "جارٍ تسجيل الدخول…",
-        "cancelled": "تم إلغاء المصادقة.",
-        "expired_state": "انتهت صلاحية محاولة تسجيل الدخول. يرجى البدء من جديد.",
-        "invalid_state": "طلب تسجيل الدخول غير صالح أو استُخدم سابقًا. يرجى البدء من جديد.",
-        "oauth_failed": "تعذّر على Google إكمال المصادقة. يرجى المحاولة مجددًا.",
-        "callback_failed": "فشلت المصادقة. يرجى المحاولة مجددًا.",
-        "identity_invalid": "تعذّر على Google التحقق من هويتك وبريدك الإلكتروني. يرجى استخدام طريقة أخرى لتسجيل الدخول.",
-        "disabled": "هذا الحساب غير متاح. تواصل مع الدعم للمساعدة.",
-        "linking_required": "يرجى تسجيل الدخول بالطريقة الحالية لحسابك. يتطلب ربط Google تسجيل الدخول إلى الحساب أولًا؛ الربط غير متاح حاليًا. تواصل مع الدعم عند الحاجة.",
-        "unavailable": "المصادقة باستخدام Google غير متاحة حاليًا. استخدم البريد الإلكتروني وكلمة المرور أو حاول لاحقًا.",
-        "busy": "جارٍ إكمال تسجيل الدخول بالفعل. يرجى المحاولة مجددًا.",
-        "alreadyLinked": "حساب Google هذا مرتبط بالفعل.",
-        "completeProfile": "أكمل حسابك",
-        "profileRequired": "أدخل البيانات المطلوبة لإكمال إنشاء حسابك.",
-        "country": "الدولة",
-        "dateOfBirth": "تاريخ الميلاد",
-        "finishSignup": "إنشاء حساب",
-        "profileInvalid": "أدخل دولة وتاريخ ميلاد صالحًا لا يقع في المستقبل.",
-        "retry": "إعادة المحاولة",
-        "backToLogin": "العودة لتسجيل الدخول",
-        "linkAccountTitle": "ربط حساب Google الخاص بك",
-        "linkAccountDesc": "يوجد حساب مسجل بهذا البريد الإلكتروني بالفعل. أدخل كلمة المرور لربط حساب Google بأمان.",
-        "accountPassword": "كلمة مرور الحساب",
-        "confirmLink": "تأكيد وربط الحساب",
-        "invalidCredentials": "كلمة المرور غير صحيحة. يرجى التحقق من بياناتك والمحاولة مجددًا.",
-        "linkSuccess": "تم ربط حساب Google بنجاح.",
-        "unlinkSuccess": "تم إلغاء ربط حساب Google بنجاح.",
-        "identity_conflict": "هذا البريد مرتبط بهوية Google مختلفة. سجّل الدخول بالطريقة الحالية للحساب أو تواصل مع الدعم.",
-        "account_login_required": "سجّل الدخول بالطريقة الحالية لحسابك، ثم اربط Google من ملفك الشخصي.",
-        "recovery_required": "يلزم استرداد الحساب لمرة واحدة لإعادة ربط Google.",
-        "recovery_web_required": "أكمل استرداد الحساب لمرة واحدة على موقع Scemory. ستكون عمليات الدخول التالية عبر Google تلقائية.",
-        "invalid_recovery_code": "رمز الاسترداد غير صحيح. تحقّق من الرمز وحاول مجددًا.",
-        "recovery_expired": "انتهت صلاحية طلب الاسترداد. ابدأ تسجيل الدخول عبر Google مجددًا.",
-        "recovery_attempts_exceeded": "محاولات غير صحيحة كثيرة. ابدأ تسجيل الدخول عبر Google مجددًا.",
-        "recovery_rate_limited": "تم إرسال رمز استرداد مؤخرًا. انتظر قليلًا قبل المحاولة مجددًا.",
-        "recovery_unavailable": "تعذّر إرسال رمز الاسترداد. حاول لاحقًا.",
-        "recoveryTitle": "إعادة ربط حساب Google",
-        "recoverySent": "أدخل الرمز المرسل إلى {email}. يلزم ذلك لمرة واحدة فقط.",
-        "recoveryCode": "رمز الاسترداد",
-        "confirmRecovery": "تحقق وتابع"
-    },
-    "facebookAuth": {
-        "continue": "المتابعة باستخدام Facebook",
-        "signup": "إنشاء حساب باستخدام Facebook",
-        "signingIn": "جارٍ تسجيل الدخول…",
-        "unavailable": "المصادقة باستخدام Facebook غير متاحة حاليًا. استخدم البريد الإلكتروني وكلمة المرور أو حاول لاحقًا.",
-        "cancelled": "تم إلغاء المصادقة.",
-        "invalid_state": "طلب تسجيل الدخول غير صالح أو استُخدم سابقًا. يرجى البدء من جديد.",
-        "expired": "انتهت صلاحية محاولة تسجيل الدخول. يرجى البدء من جديد.",
-        "callback_failed": "فشلت المصادقة. يرجى المحاولة مجددًا.",
-        "disabled": "هذا الحساب غير متاح. تواصل مع الدعم للمساعدة.",
-        "linking_required": "يرجى تسجيل الدخول بالطريقة الحالية لحسابك. يتطلب ربط Facebook تسجيل الدخول إلى الحساب أولًا؛ الربط غير متاح حاليًا. تواصل مع الدعم عند الحاجة.",
-        "busy": "جارٍ إكمال تسجيل الدخول بالفعل. يرجى المحاولة مجددًا.",
-        "completeProfile": "أكمل حسابك",
-        "profileRequired": "أدخل البيانات المطلوبة لإكمال إنشاء حسابك.",
-        "country": "الدولة",
-        "dateOfBirth": "تاريخ الميلاد",
-        "finishSignup": "إنشاء حساب",
-        "retry": "إعادة المحاولة",
-        "backToLogin": "العودة لتسجيل الدخول",
-        "identity_invalid": "تعذّر على Facebook التحقق من هويتك. يرجى المحاولة مجددًا.",
-        "verification_required": "يرجى تأكيد البريد الإلكتروني لحسابك الحالي باستخدام طريقة تسجيل الدخول الأصلية.",
-        "email_unavailable": "تعذّر إرسال رسالة التحقق. يرجى المحاولة لاحقًا.",
-        "otp_expired": "انتهت صلاحية رمز التحقق. اطلب رمزًا جديدًا.",
-        "otp_invalid": "رمز التحقق غير صحيح.",
-        "otp_attempts": "محاولات التحقق كثيرة جدًا. اطلب رمزًا جديدًا بعد انتهاء فترة الانتظار.",
-        "otp_cooldown": "يرجى الانتظار قبل طلب رمز تحقق آخر.",
-        "native_unavailable": "تسجيل الدخول باستخدام Facebook متاح على موقع Scemory. يرجى استخدام المتصفح.",
-        "email": "البريد الإلكتروني",
-        "sendCode": "إرسال رمز التحقق",
-        "verifyEmail": "تأكيد بريدك الإلكتروني",
-        "codeSent": "أدخل الرمز المرسل إلى {email}.",
-        "verificationCode": "رمز التحقق",
-        "resendIn": "إعادة الإرسال بعد {seconds} ثانية",
-        "resend": "إعادة إرسال الرمز",
-        "profileInvalid": "أدخل بريدًا إلكترونيًا ودولة وتاريخ ميلاد صالحًا لا يقع في المستقبل."
-    },
-    "mediaCredits": {
-        "myCredits": "أرصدتي للوسائط",
-        "photosAvailable": "الصور المتاحة",
-        "videosAvailable": "الفيديوهات المتاحة",
-        "photos": "صور",
-        "videos": "فيديوهات",
-        "photoQuotaDesc": "حصة استرداد دائمة للصور بدون تاريخ انتهاء",
-        "videoQuotaDesc": "حصة استرداد دائمة للفيديوهات بدون تاريخ انتهاء",
-        "activeTier": "فئة الوصول الحالية",
-        "breakdownByTier": "التوزيع حسب الفئة",
-        "viewDashboard": "لوحة الأرصدة",
-        "getMoreCredits": "شراء المزيد من الأرصدة",
-        "browseMarketplace": "تصفح المتجر",
-        "noTier": "لا توجد باقة نشطة",
-        "getWithPlan": "احصل عليها من باقتك",
-        "redeemed": "تم الاسترداد",
-        "redeemSuccess": "تم استرداد الوسائط بنجاح من رصيد باقتك!",
-        "redeemFailed": "فشل استرداد الوسائط من الباقة.",
-        "activeGrants": "حصص الباقات النشطة",
-        "redemptionHistory": "سجل الاستردادات",
-        "noGrants": "لا توجد حصص وسائط نشطة. اشترك في باقة للحصول على أرصدة صور وفيديوهات.",
-        "noRedemptions": "لا توجد استردادات بعد. تصفح المتجر لاستخدام أرصدتك.",
-        "tier": "الفئة",
-        "plan": "الباقة",
-        "tierRank": "رتبة الفئة",
-        "grantedOn": "تاريخ الشراء",
-        "payoutCap": "سقف مستحقات المنشئ",
-        "payWithWallet": "الدفع من المحفظة",
-        "payWithPaypal": "الدفع بواسطة باي بال",
-        "insufficientCredits": "الرصيد غير كافٍ أو فئة الباقة غير مؤهلة لهذه الوسائط.",
-        "includedQuotas": "حصص الوسائط المشمولة",
-        "permanentQuotas": "حصص وسائط دائمة بدون انتهاء صلاحية"
-    },
-    "dataDeletion": {
-        "title": "تعليمات حذف حساب المستخدم والبيانات",
-        "subtitle": "إرشادات شاملة لحذف حسابك وبياناتك الشخصية من منصة سيموري (Scemory).",
-        "metaInstructionsCompliance": "متوافق مع سياسة تعليمات حذف بيانات منصة Meta / Facebook",
-        "effectiveDate": "تاريخ السريان: أكتوبر 2026",
-        "checkStatusTitle": "التحقق من حالة طلب الحذف",
-        "checkStatusDesc": "أدخل الرمز المرجعي لطلب الحذف أدناه (مثل الرمز المستلم من ملفك الشخصي أو إزالة التطبيق عبر فيسبوك) للاطلاع على حالة الحذف في الوقت الفعلي.",
-        "referencePlaceholder": "مثال: DEL-XXXXXX-XXXX",
-        "checkButton": "تحقق من الحالة",
-        "checking": "جارٍ التحقق...",
-        "statusNotFound": "لم يتم العثور على طلب حذف لهذا الرمز المرجعي.",
-        "statusResult": {
-            "reference": "الرمز المرجعي",
-            "status": "الحالة الحالية",
-            "type": "نوع الطلب",
-            "maskedEmail": "الحساب المرتبط",
-            "financialNotice": "يتطلب مراجعة إدارية بسبب وجود رصيد معلق في المحفظة أو طلب سحب قيد المعالجة.",
-            "statuses": {
-                "pending_confirmation": "بانتظار التأكيد",
-                "pending": "قيد المعالجة",
-                "under_review": "قيد المراجعة الإدارية",
-                "processing": "جارٍ الحذف",
-                "completed": "تم الحذف ومحو البيانات",
-                "cancelled": "ملغي",
-                "failed": "فشل"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "أ. كيفية حذف حسابك وبياناتك من داخل سيموري",
-                "p1": "يمكنك حذف حسابك في سيموري وبياناتك الشخصية نهائياً مباشرة من إعدادات حسابك في أي وقت دون الحاجة للتواصل مع الدعم:",
-                "steps": [
-                    "سجّل الدخول إلى حسابك في سيموري عبر الموقع dev.scemory.com أو عبر التطبيق.",
-                    "انتقل إلى ملفك الشخصي بالنقر على صورتك أو اختيار الملف الشخصي من القائمة.",
-                    "اختر تبويب 'الحساب والخصوصية'.",
-                    "انقر على زر 'حذف الحساب والبيانات' باللون الأحمر في منطقة الخطر.",
-                    "اكتب كلمة التأكيد DELETE في الحقل المخصص.",
-                    "أكّد هويتك: أدخل كلمة مرور حسابك، أو إذا كنت مسجلاً عبر جوجل أو فيسبوك، أدخل رمز التحقق المكون من 6 أرقام المرسل إلى بريدك الإلكتروني.",
-                    "بمجرد التأكيد، يتم إنهاء جميع الجلسات النشطة وإلغاء صلاحيات الرموز، ومحو بياناتك الشخصية وإخفاء هويتك فوراً."
-                ]
-            },
-            "sectionB": {
-                "title": "ب. تقديم طلب بديل في حال تعذر الوصول إلى الحساب",
-                "p1": "إذا لم تتمكن من تسجيل الدخول إلى حسابك (مثلاً عند فقدان الوصول إلى حساب التواصل الاجتماعي أو بيانات الدخول)، يمكنك طلب حذف البيانات يدوياً عبر إرسال بريد إلكتروني من عنوانك المسجل إلى فريق الدعم والخصوصية:",
-                "p2": "يرجى كتابة 'طلب حذف البيانات' في عنوان الرسالة مع ذكر اسم المستخدم أو البريد المسجل. سيتحقق فريق الأمان من ملكيتك ويعالج الطلب خلال 30 يوماً."
-            },
-            "sectionC": {
-                "title": "ج. فصل سيموري من إعدادات فيسبوك (التطبيقات والمواقع)",
-                "p1": "عند إزالة تطبيق سيموري من حسابك في فيسبوك عبر إعدادات فيسبوك > التطبيقات ومواقع الويب، يقوم فيسبوك بقطع مشاركة البيانات المستقبلية مع سيموري وإعلامنا بإزالة التطبيق.",
-                "p2": "إزالة التطبيق من فيسبوك تلغي صلاحية الدخول عبر فيسبوك فقط. ولضمان حذف ملفك الشخصي ووسائطك المخزنة مسبقاً على خوادم سيموري، استخدم خيار الحذف الذاتي في ملفك الشخصي بسيموري أو أرسل طلباً عبر بريدك المسجل.",
-                "p3": "إذا زوّدك فيسبوك برمز تأكيد عند الإزالة، يمكنك إدخاله في أداة التحقق المرجعية أعلاه لمتابعة حالة فصل وحذف بياناتك."
-            },
-            "sectionD": {
-                "title": "د. أنواع البيانات الشخصية التي يتم حذفها",
-                "p1": "عند معالجة طلب الحذف، يتم حذف أو تعتيم الفئات التالية من البيانات الشخصية بشكل دائم:",
-                "items": [
-                    "بيانات الملف الشخصي: الاسم الحقيقي، البريد الإلكتروني، رقم الهاتف، البلد، النبذة وتاريخ الميلاد.",
-                    "صور الملف الشخصي والوسائط الشخصية المخزنة في وسائط التخزين العامة والخاصة.",
-                    "روابط الهوية الاجتماعية: معرّف Google ومعرّف Facebook والروابط المرتبطة بهما.",
-                    "الجلسات النشطة، رموز مصادقة Sanctum، ورموز الأجهزة المخزنة.",
-                    "عناصر سلة المشتريات، المفضلة، ورموز التحقق المؤقتة.",
-                    "وسائط الفعاليات غير المشتراة والفعاليات الشخصية غير النشطة."
-                ]
-            },
-            "sectionE": {
-                "title": "هـ. البيانات المحتفظ بها للامتثال القانوني والضريبي",
-                "p1": "وفقاً للمادة 17(3)(b) من اللائحة العامة لحماية البيانات (GDPR) والقوانين التجارية والمحاسبية، هناك سجلات مالية لا يمكن محوها فوراً:",
-                "items": [
-                    "سجلات المعاملات المالية: معرفات طلبات PayPal، إيصالات الودائع، وسندات صرف المسحوبات يجب الاحتفاظ بها للمدد القانونية المحددة للضرائب والمحاسبة.",
-                    "سجلات أرباح وعمولات المنشئين المطلوبة للامتثال الضريبي السنوي.",
-                    "تراخيص الوسائط التي تم شراؤها مسبقاً من قِبل مستخدمين آخرين: يحتفظ المشترون بحقوق الترخيص التجاري أو الشخصي للوسائط، مع استبدال هوية المنشئ برمز مجهول."
-                ],
-                "p2": "تُفصل جميع السجلات المحتفظ بها عن هويتك الشخصية نهائياً: يتم استبدال الاسم والبريد بمعرّف مجهول (مثل 'Deleted User #1234') بحيث لا يمكن ربط أي سجل مالي بهويتك الحقيقية."
-            },
-            "sectionF": {
-                "title": "و. الجدول الزمني للمعالجة وضمانات المراجعة",
-                "p1": "بالنسبة للحسابات العادية الخالية من الالتزامات المالية المعلقة، يتم تنفيذ الحذف ومحو البيانات فوراً بعد التأكيد بخطوتين.",
-                "p2": "إذا كان الحساب يحتوي على رصيد محفظة نشط أو طلبات سحب معلقة، يتم وضع الطلب 'قيد المراجعة الإدارية' وسيتواصل فريقنا لتسوية المستحقات قبل إتمام الحذف خلال 30 يوم عمل.",
-                "p3": "بمجرد اكتمال المعالجة، ستظهر الحالة 'مكتمل' ولن يكون بالإمكان تسجيل الدخول مجدداً أو استعادة أي بيانات."
-            },
-            "sectionG": {
-                "title": "ز. تتبع الرمز المرجعي والتحقق من الحالة",
-                "p1": "ينشئ كل طلب حذف رمزاً مرجعياً فريداً (مثال: DEL-XXXXXX-XXXX). يمكنك الاحتفاظ بهذا الرابط والتحقق من حالة طلبك في أي وقت باستخدام الأداة أعلاه."
-            }
-        },
-        "profile": {
-            "cardTitle": "حذف الحساب والبيانات",
-            "cardDesc": "حذف حسابك في سيموري وجميع معلوماتك الشخصية نهائياً. هذا الإجراء لا يمكن التراجع عنه.",
-            "warningHeader": "تنبيه هام: هذا الإجراء لا يمكن التراجع عنه",
-            "warningPoints": [
-                "سيتم حذف ملفك الشخصي ووسائطك ومفضلاتك وتعليقاتك أو تعتيمها نهائياً.",
-                "سيتم إنهاء كافة جلسات تسجيل الدخول وإلغاء صلاحيات الرموز والحسابات الاجتماعية المتصلة.",
-                "يجب تسوية أي أرصدة في المحفظة قبل إتمام عملية الحذف النهائي.",
-                "تراخيص الوسائط التي اشتراها مستخدمون آخرون مسبقاً تظل سارية تحت هوية مجهولة."
-            ],
-            "deleteButton": "حذف الحساب والبيانات",
-            "activeRequestNotice": "لديك طلب حذف نشط قيد المعالجة حالياً.",
-            "cancelButton": "إلغاء طلب الحذف",
-            "modalTitle": "تأكيد حذف الحساب والبيانات",
-            "modalDesc": "لتأكيد حذف حسابك وبياناتك الشخصية من سيموري، يُرجى إكمال التحقق أدناه.",
-            "typeDeletePrompt": "اكتب كلمة DELETE للتأكيد:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "أدخل كلمة مرور حسابك:",
-            "passwordPlaceholder": "كلمة المرور الحالية",
-            "codePrompt": "أدخل رمز التحقق المكون من 6 أرقام المرسل لبريدك الإلكتروني:",
-            "codePlaceholder": "123456",
-            "resendCode": "إعادة إرسال الرمز",
-            "confirmDeleteButton": "حذف بياناتي نهائياً",
-            "cancelModalButton": "إلغاء",
-            "processing": "جارٍ المعالجة...",
-            "successToast": "تم حذف الحساب والبيانات بنجاح. تم تسجيل خروجك.",
-            "underReviewToast": "تم تقديم طلب الحذف وهو قيد المراجعة الإدارية لوجود أرصدة مالية.",
-            "cancelSuccessToast": "تم إلغاء طلب الحذف بنجاح."
-        }
+    "live_support": {
+      "title": "دعم مباشر",
+      "description": "تتحدث مع أحد أعضاء فريقنا الآن للحصول على مساعدة فورية",
+      "btn_chat": "بدء محادثة مباشرة",
+      "btn_schedule": "جدولة مكالمة",
+      "available": "متاح الآن: 3 مندوبي دعم"
     }
+  },
+  "contacts": {
+    "badge": "تواصل معنا",
+    "title": "دعنا نتحدث",
+    "description": "لديك سؤال، أو تحتاج إلى الدعم، أو ترغب في خطة مخصصة؟ أرسل لنا رسالة وسيتواصل معك فريقنا.",
+    "form": {
+      "title": "أرسل لنا رسالة",
+      "description": "أكمل النموذج التالي وسنرد عليك في أقرب وقت ممكن.",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "أدخل اسمك الكامل",
+      "emailAddress": "البريد الإلكتروني",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني",
+      "subject": "الموضوع",
+      "generalInquiry": "استفسار عام",
+      "customPlan": "خطة مخصصة",
+      "support": "الدعم الفني",
+      "feedback": "الملاحظات والاقتراحات",
+      "other": "أخرى",
+      "message": "الرسالة",
+      "messagePlaceholder": "أخبرنا كيف يمكننا مساعدتك...",
+      "minimumCharacters": "يرجى كتابة تفاصيل كافية.",
+      "sendMessage": "إرسال الرسالة",
+      "sending": "جارٍ الإرسال...",
+      "successMessage": "تم إرسال رسالتك بنجاح.",
+      "errorMessage": "حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى."
+    },
+    "info": {
+      "getInTouch": "تواصل معنا",
+      "title": "نحن هنا لمساعدتك",
+      "description": "تواصل مع فريقنا للاستفسارات العامة أو الدعم الفني أو الأسعار المخصصة.",
+      "emailUs": "راسلنا عبر البريد الإلكتروني",
+      "available": "سيرد عليك فريقنا في أقرب وقت ممكن.",
+      "customPlans": "الخطط المخصصة",
+      "customPlansDescription": "هل تحتاج إلى حل مخصص لفريقك أو نشاطك التجاري؟ أخبرنا بما تحتاج إليه.",
+      "customerSupport": "دعم العملاء",
+      "supportDescription": "تواصل معنا إذا كنت تحتاج إلى مساعدة بشأن حسابك أو اشتراكك أو الخدمات.",
+      "followJourney": "تابع رحلتنا",
+      "responseTime": "استجابة سريعة",
+      "responseTimeDescription": "نرد عادةً على الرسائل خلال يوم عمل واحد."
+    },
+    "map": {
+      "title": "خريطة العالم لذاكرة المشهد",
+      "description": "تصور آلاف الذكريات عبر أكثر من 140 دولة."
+    }
+  },
+  "faq": {
+    "badge": "الأسئلة الشائعة",
+    "title": "الأسئلة الأكثر شيوعًا",
+    "description": "إجابات سريعة عن بعض الأسئلة الأكثر تكرارًا.",
+    "questions": {
+      "0": {
+        "question": "متى سأحصل على رد؟",
+        "answer": "يرد فريقنا عادةً خلال يوم عمل واحد."
+      },
+      "1": {
+        "question": "هل يمكنني طلب خطة مخصصة؟",
+        "answer": "نعم، اختر خطة مخصصة من حقل الموضوع، ثم اكتب جميع متطلباتك."
+      },
+      "2": {
+        "question": "هل يمكنني التواصل للحصول على دعم فني؟",
+        "answer": "نعم، اختر الدعم الفني وأضف جميع التفاصيل المتعلقة بالمشكلة."
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "إضافة حدث من الإدارة",
+      "trending": "حدث رائج",
+      "trendingHelp": "ضع علامة على هذا الحدث كحدث رائج",
+      "generateTags": "إنشاء وسوم بالذكاء الاصطناعي",
+      "generatingTags": "جارٍ إنشاء الوسوم...",
+      "generateTagsHelp": "اقترح وسومًا للحدث والصور باستخدام خدمة الذكاء الاصطناعي الحالية. يمكنك مراجعتها أو حذفها قبل النشر.",
+      "generateTagsError": "تعذر إنشاء وسوم الذكاء الاصطناعي الآن.",
+      "created": "تم إنشاء الحدث ونشره بنجاح."
+    },
+    "chooseFiles": "اختر صور / فيديوهات",
+    "mediaCount": "عدد الوسائط",
+    "title": "إضافة حدث جديد",
+    "minimumRequirementsHint": "لإنشاء الحدث، يكفي إدخال العنوان والوصف ورفع صورة أو فيديو واحد على الأقل. باقي البيانات اختيارية.",
+    "basicInfo": "المعلومات الأساسية",
+    "locationCategory": "الموقع والتصنيف",
+    "dates": "المواعيد",
+    "images": "صور الحدث",
+    "eventTitle": "عنوان الحدث",
+    "description": "الوصف",
+    "country": "الدولة",
+    "searchCountry": "ابحث عن دولة...",
+    "selectCountry": "اختر الدولة",
+    "city": "المدينة",
+    "selectCity": "اختر المدينة",
+    "selectCityFirst": "اختر الدولة أولاً",
+    "mainCategory": "الفئة الرئيسية",
+    "subCategory": "التصنيف الفرعي",
+    "selectSubFirst": "اختر الفئة أولاً",
+    "selectLocationMap": "اختر الموقع على الخريطة",
+    "selectedCoords": "الإحداثيات المختارة: Lat: {lat} , Lng: {lng}",
+    "lat": "Lat",
+    "lng": "Lng",
+    "pleaseSelectLocation": "من فضلك اختر موقعاً على الخريطة",
+    "startDate": "تاريخ البداية",
+    "endDate": "تاريخ النهاية",
+    "startTime": "وقت البداية",
+    "dragDropHere": "اضغط أو اسحب الصور هنا",
+    "formatsMax": "PNG • JPG • WEBP | max 5MB لكل صورة",
+    "chooseImages": "اختيار صور",
+    "addMore": "إضافة المزيد",
+    "imagesCount": "{count} / 8 صور",
+    "remove": "حذف",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "mediaRequired": "يجب رفع صورة أو فيديو واحد على الأقل.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    }
+  },
+  "commons": {
+    "required": "مطلوب",
+    "cancel": "إلغاء",
+    "saveDraft": "حفظ كمسودة",
+    "create": "إنشاء الحدث",
+    "creating": "جاري الإنشاء...",
+    "choose": "اختر"
+  },
+  "eventss": {
+    "no_title": "فعالية بدون عنوان",
+    "undefined_city": "غير محدد",
+    "from_map": "من الخريطة"
+  },
+  "wishlist": {
+    "title": "قائمة المفضلة",
+    "loading": "جاري التحميل...",
+    "empty": {
+      "main": "لا توجد عناصر في قائمة الرغبات حاليًا",
+      "hint": "ابدأ بإضافة مناسباتك المفضلة!"
+    },
+    "fallback_image_alt": "صورة افتراضية للمناسبة",
+    "uncategorized": "غير مصنف",
+    "no_title": "بدون عنوان",
+    "city_label": "المدينة:",
+    "date_label": "التاريخ:",
+    "time_label": "الوقت:",
+    "not_specified": "غير محدد",
+    "view_details": "عرض التفاصيل",
+    "remove": "إزالة من المفضلة",
+    "deleting": "جاري الحذف...",
+    "added_at": "أُضيف في",
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي",
+      "page_info": "صفحة {current} من {total}"
+    },
+    "confirmRemove": "هل أنت متأكد من إزالة هذا العنصر من المفضلة؟",
+    "errors": {
+      "deleteFailed": "حدث خطأ أثناء الحذف. يرجى المحاولة مرة أخرى.",
+      "connectionFailed": "تعذر الاتصال بالخادم. تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
+    }
+  },
+  "terms": {
+    "title": "شروط الاستخدام",
+    "last_updated": "آخر تحديث: 2026",
+    "acceptance_title": "الموافقة على الشروط",
+    "acceptance_text": "باستخدام هذه المنصة فإنك توافق على الالتزام بشروط الاستخدام وجميع القوانين واللوائح المعمول بها.",
+    "accounts_title": "حسابات المستخدمين",
+    "accounts_text": "المستخدم مسؤول عن الحفاظ على سرية معلومات حسابه وعن جميع الأنشطة التي تتم من خلال حسابه.",
+    "content_title": "ملكية المحتوى",
+    "content_text": "جميع المحتويات الموجودة على المنصة بما في ذلك النصوص والصور والبيانات محمية بقوانين حقوق الملكية الفكرية.",
+    "ai_title": "قيود الذكاء الاصطناعي",
+    "ai_text": "يُمنع استخدام محتوى المنصة لتدريب نماذج الذكاء الاصطناعي أو أنظمة التعلم الآلي أو استخراج البيانات دون الحصول على ترخيص رسمي.",
+    "prohibited_title": "الاستخدامات المحظورة",
+    "prohibited_text": "لا يجوز للمستخدم إساءة استخدام المنصة أو محاولة الوصول غير المصرح به أو استخراج البيانات أو تعطيل عمل المنصة.",
+    "liability_title": "تحديد المسؤولية",
+    "liability_text": "لن تكون المنصة مسؤولة عن أي أضرار غير مباشرة أو عرضية أو تبعية ناتجة عن استخدام الخدمة.",
+    "changes_title": "تعديل الشروط",
+    "changes_text": "نحتفظ بالحق في تعديل أو تحديث شروط الاستخدام في أي وقت.",
+    "contact_title": "التواصل",
+    "contact_text": "إذا كان لديك أي استفسار حول هذه الشروط يرجى التواصل مع إدارة المنصة."
+  },
+  "plans": {
+    "customPrice": "تواصل معنا",
+    "customPricingDescription": "تسعير مصمم حسب احتياجاتك",
+    "contactUs": "تواصل معنا",
+    "chooseYourPlan": "اختر باقتك",
+    "noFeatures": "لا توجد ميزات بعد",
+    "mostPopular": "الأكثر شيوعًا",
+    "getStarted": "ابدأ الآن",
+    "subscribe": "اشترك الآن",
+    "free": "مجانا",
+    "ourPlans": "باقاتنا",
+    "noCreditCard": "لا حاجة إلى بطاقة ائتمان",
+    "description": "ابدأ مجانًا أو اختر الباقة الأنسب لك.",
+    "price": "السعر",
+    "features": "الميزات",
+    "cancelAnytime": "يمكنك الإلغاء في أي وقت",
+    "Monthly": "شهري",
+    "Yearly": "سنوي",
+    "unlimitedEvents": "احداث غير محدودة",
+    "addEvents": "اضافة احداث",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "الباقة",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "تعذر تحميل الباقات. يرجى المحاولة مرة أخرى."
+    },
+    "customPlanNote": "مصممة حول متطلباتك",
+    "basicAccessIncluded": "الوصول الأساسي مشمول",
+    "moneyBack": "ضمان 30 يومًا",
+    "perMonth": "شهريًا",
+    "securePayments": "مدفوعات آمنة",
+    "support247": "دعم على مدار الساعة",
+    "usd": "دولار أمريكي",
+    "prioritySupport": "دعم ذو أولوية"
+  },
+  "free": "مجانا",
+  "basic": "اساسي",
+  "professional": "مهني",
+  "premium": "مميز",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "متصفحك لا يدعم وسم الفيديو.",
+      "badge": "أرشيف فعاليات Scemory",
+      "title": "استكشف الفعاليات الموثقة",
+      "titleHighlight": "عبر الخريطة",
+      "description": "اكتشف وسائط الفعاليات التي يرفعها الصحفيون وفرق الإعلام والمساهمون شهود العيان من حول العالم.",
+      "searchEvents": "ابحث عن الفعاليات",
+      "uploadStory": "ارفع قصتك",
+      "bottomText": "اكتشف القصص والأماكن واللحظات من حول العالم.",
+      "searchPlaceholder": "ابحث عن الفعاليات أو الوسوم أو المدن"
+    },
+    "profileToast": {
+      "title": "الملف الشخصي غير مكتمل",
+      "message": "ملفك الشخصي غير مكتمل. يرجى تحديث:",
+      "complete": "اضغط للإكمال",
+      "fields": {
+        "phone": "الهاتف",
+        "country": "الدولة",
+        "position": "المنصب",
+        "dateOfBirth": "تاريخ الميلاد"
+      }
+    },
+    "trending": {
+      "loadError": "تعذر تحميل الفعاليات الرائجة الآن.",
+      "kicker": "الرائج",
+      "title": "الفعاليات الرائجة",
+      "description": "فعاليات تحظى باهتمام متزايد في الأرشيف.",
+      "emptyTitle": "لا توجد فعاليات رائجة بعد",
+      "emptyDescription": "تحقق لاحقًا لمشاهدة الفعاليات المميزة.",
+      "views": "مشاهدات",
+      "likes": "إعجابات",
+      "slidesLabel": "شرائح الفعاليات الرائجة",
+      "untitledEvent": "فعالية بلا عنوان",
+      "showSlide": "عرض الفعالية الرائجة {number}"
+    },
+    "map": {
+      "tilesSlow": "تستغرق مربعات الخريطة وقتًا طويلاً للظهور.",
+      "loadError": "تعذر تحميل الخريطة الآن.",
+      "loadMap": "تحميل الخريطة",
+      "loading": "جارٍ تحميل الخريطة...",
+      "retry": "إعادة تحميل الخريطة",
+      "openFullscreen": "فتح الخريطة بملء الشاشة",
+      "closeFullscreen": "إغلاق وضع ملء الشاشة"
+    },
+    "about": {
+      "imageAlt": "منصة توثيق Scemory",
+      "kicker": "ذاكرة فعاليات موثوقة",
+      "title": "عن Scemory",
+      "description": "صُمم Scemory للصحفيين وفرق الإعلام والمساهمين شهود العيان الذين يحتاجون إلى مكان موثوق لتوثيق الفعاليات فور وقوعها. تربط المنصة الوسائط المرفوعة وبيانات الفعاليات وسياق الموقع ليتمكن الناس من اكتشاف القصص العامة بوضوح.",
+      "features": {
+        "upload": "ارفع الصور والفيديوهات وبيانات الميدان",
+        "explore": "استكشف الفعاليات عبر خريطة تفاعلية",
+        "preserve": "احفظ القصص الموثقة في أرشيف رقمي"
+      }
+    },
+    "events": {
+      "showing": "عرض",
+      "of": "من",
+      "events": "فعاليات",
+      "seeMore": "عرض المزيد",
+      "badge": "فعاليات"
+    },
+    "tags": {
+      "loading": "جارٍ تحميل الوسوم...",
+      "showingFirst": "عرض أول",
+      "searchToFindMore": "وسوم. ابحث للعثور على المزيد.",
+      "none": "لا توجد وسوم",
+      "helper": "اختر وسمًا واحدًا أو أكثر لتصفية فعاليات الخريطة.",
+      "clearSelected": "مسح الوسوم المحددة",
+      "searchMore": "ابحث عن وسوم إضافية"
+    },
+    "search": {
+      "clearText": "مسح",
+      "clearTags": "مسح"
+    },
+    "specialCoverage": {
+      "badge": "تغطية خاصة",
+      "title": "هل لديك حدث يستحق التغطية؟",
+      "description": "أخبر Scemory عن حدث يستحق تغطية مخصصة، وساعد في إيصال قصته إلى جمهور أوسع.",
+      "contactUs": "راسلنا",
+      "modal": {
+        "title": "تغطية خاصة",
+        "eventName": "اسم الحدث",
+        "eventNamePlaceholder": "أدخل اسم الحدث",
+        "description": "وصف الحدث",
+        "descriptionPlaceholder": "أخبرنا عن الحدث ولماذا يستحق التغطية",
+        "cancel": "إلغاء",
+        "send": "إرسال",
+        "sending": "جاري الإرسال...",
+        "close": "إغلاق",
+        "country": "الدولة",
+        "city": "المدينة",
+        "searchCity": "ابحث عن مدينة",
+        "addNewCity": "إضافة مدينة جديدة",
+        "createCity": "إنشاء مدينة",
+        "startDate": "تاريخ البدء",
+        "coverageTime": "وقت التغطية",
+        "eventType": "نوع الحدث",
+        "personalEvent": "حدث شخصي",
+        "publicEvent": "حدث عام",
+        "selectCountry": "اختر الدولة",
+        "selectCity": "اختر المدينة",
+        "noCitiesFound": "لم يتم العثور على مدن",
+        "noCountriesFound": "لم يتم العثور على دول",
+        "countryRequired": "يرجى اختيار الدولة.",
+        "cityRequired": "يرجى اختيار المدينة.",
+        "startDateRequired": "يرجى اختيار تاريخ البدء.",
+        "eventTypeRequired": "يرجى اختيار نوع الحدث.",
+        "cityCreateFailed": "تعذر إنشاء المدينة. يرجى المحاولة مرة أخرى.",
+        "eventNameRequired": "يرجى إدخال اسم الحدث.",
+        "descriptionRequired": "يرجى إدخال وصف الحدث.",
+        "success": "تم إرسال طلب التغطية الخاصة بنجاح."
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "رفع الوسائط *",
+    "description": "ارفع صورة أو فيديو واحدًا على الأقل. الوصف والوسوم والسعر اختيارية.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "اختر صورًا أو فيديوهات",
+    "fileHint": "صور (JPG وPNG وWEBP وGIF وBMP وAVIF وHEIC وTIFF) أو فيديو (MP4 وWEBM وOGG وMOV)، حتى 20 ميجابايت.",
+    "checking": "Checking...",
+    "choosePhotos": "اختيار الوسائط",
+    "photosCount": "{count} / {max} ملفات وسائط",
+    "empty": "لم تتم إضافة وسائط بعد.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "وصف الوسائط (اختياري)",
+    "photoDescriptionPlaceholder": "اكتب وصفًا للوسائط (اختياري)",
+    "photoTags": "وسوم الوسائط (اختيارية)",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "السعر (اختياري)",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "ارفع صورة مدعومة (JPG وPNG وWEBP وGIF وBMP وAVIF وHEIC وTIFF) أو فيديو (MP4 وWEBM وOGG وMOV).",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "videoReady": "الفيديو جاهز للرفع.",
+    "qualityWarning": "فحوص الجودة إرشادية ولا تمنع إنشاء الحدث.",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "تنبيه جودة"
+    }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "تعذرت إضافة المجموعة إلى السلة.",
+      "itemNotIdentified": "تعذر تحديد هذا العنصر.",
+      "addFailed": "حدث خطأ أثناء الإضافة إلى السلة."
+    },
+    "messages": {
+      "collectionAddedDiscount": "تمت إضافة {count} صورة إلى السلة بخصم 10٪!",
+      "added": "تمت الإضافة إلى السلة بنجاح."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "لا توجد تنزيلات",
+    "emptyHint": "ستظهر الملفات التي تشتريها هنا"
+  },
+  "experience": {
+    "kicker": "تجربة SCEMORY",
+    "title": "منصة واحدة. كل جانب من القصة.",
+    "pathsLabel": "مسارات تجربة Scemory",
+    "highlightsLabel": "أبرز نقاط القسم",
+    "tabs": {
+      "explore": {
+        "label": "استكشف الفعاليات",
+        "eyebrow": "اكتشف العالم عبر الفعاليات",
+        "heading": "استكشف القصص والفعاليات والأماكن حول العالم",
+        "description": "انتقل من الخريطة إلى فعاليات عامة موثقة وذكريات شخصية وقصص بصرية تشكلها المواقع الحقيقية وسياق المساهمين.",
+        "cta": "استكشف الفعاليات",
+        "imageAlt": "واجهة اكتشاف فعاليات Scemory مع لوحات وسائط موثقة",
+        "features": {
+          "browse": "تصفح وسائط الفعاليات حسب المكان والخط الزمني",
+          "discover": "اكتشف القصص القريبة عبر أرشيف بصري",
+          "move": "انتقل من النظرة العامة إلى تفاصيل الفعالية الموثقة"
+        },
+        "visual": {
+          "kicker": "اكتشاف مباشر",
+          "title": "قصص فعاليات مرتبطة بالخريطة",
+          "stat": "أرشيف عالمي",
+          "note": "الأماكن والتواريخ والوسائط في عرض واحد"
+        }
+      },
+      "share": {
+        "label": "شارك قصتك",
+        "eyebrow": "حوّل اللحظات إلى قصص موثقة",
+        "heading": "وثّق اللحظات المهمة",
+        "description": "أنشئ فعالية وارفع الصور والوسائط وأضف تفاصيل الموقع وساهم بمنظورك في أرشيف Scemory.",
+        "cta": "ارفع قصتك",
+        "imageAlt": "مساحة مساهمي Scemory لتوثيق وسائط الفعاليات",
+        "features": {
+          "add": "أضف الوسائط والأوصاف وسياق الموقع",
+          "build": "ابنِ ذاكرة منظمة من لحظات خام",
+          "keep": "أبقِ قصص المساهمين مرتبطة بالأرشيف"
+        },
+        "visual": {
+          "kicker": "مسار المساهم",
+          "title": "وسائط وسياق وموقع",
+          "stat": "منشئ القصص",
+          "note": "ارفع اللحظات بتفاصيل ذات معنى"
+        }
+      },
+      "license": {
+        "label": "ترخيص الوسائط",
+        "eyebrow": "اكتشف وسائط جاهزة للاستخدام",
+        "heading": "اعثر على وسائط الفعاليات ورخّصها بثقة",
+        "description": "تصفح المحتوى المرئي وعاين وسائط الفعاليات المتاحة وانتقل إلى خيارات الترخيص مباشرة عبر تجربة الاكتشاف الحالية في Scemory.",
+        "cta": "اكتشف الوسائط",
+        "imageAlt": "لوحات اكتشاف وسائط Scemory لتصفح محتوى فعاليات قابل للترخيص",
+        "features": {
+          "preview": "عاين مرئيات الفعاليات قبل فتح التفاصيل",
+          "use": "استخدم صفحات الفعاليات كمسار إلى خيارات الوسائط",
+          "keep": "حافظ على ارتباط الاكتشاف بنية الترخيص"
+        },
+        "visual": {
+          "kicker": "وصول إلى الوسائط",
+          "title": "مرئيات فعاليات جاهزة للمراجعة",
+          "stat": "مسار الترخيص",
+          "note": "من الاكتشاف إلى صفحات التفاصيل"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "تعذر تحميل الفعاليات. يرجى المحاولة مرة أخرى."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "حاول مرة أخرى",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "أدخل مبلغًا صالحًا (أكثر من دولار واحد)"
+    }
+  },
+  "gate": {
+    "media": "الوسائط",
+    "locationShort": "الموقع",
+    "dateShort": "التاريخ",
+    "searchCountry": "ابحث عن بلد...",
+    "featuredEvents": "أحداث مميزة"
+  },
+  "country": {
+    "discoverFeaturedIn": "اكتشف الأحداث المميزة في",
+    "cities": "المدن",
+    "availableCity": "مدينة متاحة",
+    "currentEvent": "حدث حالي",
+    "eventMarkers": "علامات الأحداث",
+    "clickableMarker": "علامة قابلة للنقر",
+    "differentCategory": "فئة مختلفة",
+    "availableCities": "المدن المتاحة",
+    "noEvents": "لا توجد أحداث متاحة حاليًا",
+    "checkBack": "تحقق مرة أخرى قريبًا",
+    "noImage": "لا توجد صورة",
+    "viewEvent": "عرض الحدث",
+    "noCategory": "بلا فئة",
+    "countryFallback": "بلد",
+    "cityFallback": "مدينة",
+    "eventFallback": "حدث",
+    "clickMarkerToOpen": "انقر على العلامة للفتح",
+    "errors": {
+      "unauthorized": "غير مصرح لك. يرجى تسجيل الدخول.",
+      "notFound": "لم يتم العثور على البلد.",
+      "loadFailed": "حدث خطأ أثناء تحميل البيانات.",
+      "mapLibraryFailed": "فشل تحميل مكتبة الخريطة.",
+      "bordersFailed": "فشل تحميل حدود البلد",
+      "invalidBorders": "ملف حدود البلد غير صالح.",
+      "countryBordersNotFound": "تعذر العثور على حدود البلد",
+      "countryBoundsFailed": "تعذر حساب نطاق البلد.",
+      "mapLoadFailed": "حدث خطأ أثناء تحميل الخريطة."
+    }
+  },
+  "cancel": "إلغاء",
+  "login": "تسجيل الدخول",
+  "sending": "جاري الإرسال...",
+  "send_reply": "إرسال الرد",
+  "report": {
+    "action": "إبلاغ",
+    "commentTitle": "الإبلاغ عن هذا التعليق",
+    "modalTitle": "الإبلاغ عن محتوى",
+    "reasonPrompt": "اختر سبب الإبلاغ عن هذا المحتوى:",
+    "submit": "إرسال البلاغ",
+    "submitting": "جاري الإرسال...",
+    "successTitle": "تم إرسال البلاغ",
+    "successMessage": "شكرًا لك، تم إرسال البلاغ بنجاح.",
+    "errors": {
+      "selectReason": "يرجى اختيار سبب البلاغ.",
+      "submitFailed": "حدث خطأ أثناء إرسال البلاغ. يرجى المحاولة مرة أخرى."
+    },
+    "reasons": {
+      "spam": "محتوى مزعج",
+      "offensive": "محتوى مسيء",
+      "inappropriate": "محتوى غير مناسب",
+      "illegal": "محتوى غير قانوني",
+      "untrue": "معلومات غير صحيحة",
+      "falseInformation": "معلومات مضللة",
+      "other": "أخرى"
+    }
+  },
+  "commentsPage": {
+    "title": "التعليقات",
+    "emptyLabel": "لا توجد تعليقات",
+    "emptyMessage": "لا توجد تعليقات هنا بعد. كن أول من يعلق!",
+    "attachmentAlt": "مرفق التعليق",
+    "pageInfo": "صفحة {current} من {total}",
+    "confirmDelete": "هل أنت متأكد من حذف هذا التعليق؟",
+    "errors": {
+      "loadFailed": "حدث خطأ أثناء تحميل التعليقات."
+    },
+    "reactions": {
+      "support": "داعم",
+      "neutral": "محايد",
+      "oppose": "معارض"
+    },
+    "you": "أنت"
+  },
+  "profilePage": {
+    "title": "الملف الشخصي",
+    "subtitle": "إدارة معلومات حسابك وبياناتك الشخصية",
+    "noPlan": "لا توجد باقة",
+    "lastLogin": "آخر تسجيل دخول",
+    "accountInfo": "معلومات الحساب",
+    "systemInfo": "معلومات النظام",
+    "currentPlan": "الباقة الحالية",
+    "planType": "نوع الباقة",
+    "editAccount": "تعديل الحساب",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "tabs": {
+      "userInfo": "معلومات المستخدم",
+      "editData": "تعديل البيانات",
+      "password": "كلمة المرور",
+      "wallet": "المحفظة",
+      "privacy": "الحساب والخصوصية"
+    },
+    "fields": {
+      "name": "الاسم",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "phoneNumber": "رقم الهاتف",
+      "country": "الدولة",
+      "position": "المنصب",
+      "positionJob": "المنصب / الوظيفة",
+      "birthDate": "تاريخ الميلاد",
+      "role": "الدور",
+      "status": "الحالة",
+      "points": "النقاط",
+      "rank": "الترتيب",
+      "price": "السعر"
+    },
+    "placeholders": {
+      "fullName": "أدخل الاسم الكامل",
+      "countrySearch": "ابحث عن الدولة",
+      "position": "أدخل المنصب"
+    },
+    "status": {
+      "active": "نشط"
+    },
+    "password": {
+      "title": "تحديث كلمة المرور",
+      "current": "كلمة المرور الحالية",
+      "new": "كلمة المرور الجديدة",
+      "confirm": "تأكيد كلمة المرور",
+      "updating": "جارٍ تحديث كلمة المرور...",
+      "update": "تحديث كلمة المرور"
+    },
+    "messages": {
+      "fillAllFields": "يرجى ملء جميع الحقول.",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+      "passwordUpdated": "تم تحديث كلمة المرور بنجاح.",
+      "passwordUpdateFailed": "فشل تحديث كلمة المرور.",
+      "chooseCountry": "يرجى اختيار دولة صحيحة.",
+      "noChanges": "لم يتم إجراء أي تغييرات.",
+      "profileUpdated": "تم تحديث الملف الشخصي بنجاح.",
+      "profileUpdateFailed": "حدث خطأ أثناء تحديث الملف الشخصي."
+    },
+    "wallet": {
+      "title": "المحفظة",
+      "availableBalance": "الرصيد المتاح",
+      "deposit": "إيداع",
+      "recentTransactions": "آخر المعاملات",
+      "depositType": "إيداع",
+      "withdrawType": "سحب",
+      "noTransactions": "لا توجد معاملات حتى الآن",
+      "withdrawComingSoon": "خاصية السحب ستكون متاحة قريبًا."
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "الحد الأقصى لحجم الملف: 100 ميجابايت",
+    "dragFiles": "اسحب الملفات هنا",
+    "clickToChoose": "اضغط لاختيار الملفات",
+    "supportedFiles": "الأنواع المدعومة (100 ميجابايت كحد أقصى لكل ملف)",
+    "selectedFiles": "الملفات المحددة ({count})",
+    "uploading": "جارٍ الرفع...",
+    "uploadFiles": "رفع الملفات",
+    "success": "تم رفع الملفات بنجاح!",
+    "errors": {
+      "fileTooLarge": "الملف \"{name}\" أكبر من 100 ميجابايت.",
+      "unsupportedType": "نوع الملف \"{name}\" غير مدعوم."
+    }
+  },
+  "discovery": {
+    "title": "نتائج البحث",
+    "description": "اكتشف الفعاليات والصور ومقاطع الفيديو عبر Scemory.",
+    "showing": "عرض",
+    "of": "من",
+    "results": "نتيجة",
+    "details": "عرض التفاصيل",
+    "noResultsTitle": "لم يتم العثور على نتائج",
+    "noResultsDescription": "جرّب تغيير البحث أو عوامل التصفية.",
+    "filters": {
+      "allCities": "كل المدن",
+      "allCountries": "كل الدول"
+    },
+    "tabs": {
+      "all": "الكل",
+      "event": "الفعاليات",
+      "image": "الصور",
+      "video": "مقاطع الفيديو"
+    },
+    "resultLabels": {
+      "event": "فعالية",
+      "image": "صورة",
+      "video": "فيديو"
+    },
+    "media": {
+      "price": "السعر",
+      "addToCart": "إضافة إلى السلة",
+      "added": "تمت الإضافة",
+      "adding": "جارٍ الإضافة...",
+      "playVideo": "تشغيل الفيديو",
+      "pauseVideo": "إيقاف الفيديو مؤقتًا"
+    }
+  },
+  "timeline": {
+    "title": "سجل نشاطك",
+    "subtitle": "راجع فعالياتك وتفاعلاتك وتعليقاتك وعناصرك المحفوظة في مكان واحد.",
+    "totalActivity": "إجمالي النشاط",
+    "latestActivity": "أحدث نشاط",
+    "noLatestActivity": "لا يوجد نشاط بعد",
+    "loading": "جارٍ تحميل النشاط...",
+    "loadError": "تعذر تحميل نشاطك.",
+    "retry": "حاول مرة أخرى",
+    "viewAll": "عرض الكل",
+    "empty": "لا يوجد نشاط في هذا القسم.",
+    "previous": "السابق",
+    "next": "التالي",
+    "pageOf": "صفحة {current} من {last}",
+    "unknownEvent": "فعالية غير معروفة",
+    "parentComment": "ردًا على: {comment}",
+    "reactionTo": "تفاعل مع: {comment}",
+    "onEvent": "في {event}",
+    "tabs": {
+      "all": "كل النشاط",
+      "events": "الفعاليات",
+      "likes": "الإعجابات",
+      "comments": "التعليقات",
+      "replies": "الردود",
+      "comment_images": "صور التعليقات",
+      "comment_interactions": "تفاعلات التعليقات",
+      "wishlists": "المفضلة"
+    },
+    "filters": {
+      "label": "الفترة",
+      "all": "كل الوقت",
+      "today": "اليوم",
+      "this_week": "هذا الأسبوع",
+      "this_month": "هذا الشهر",
+      "custom": "نطاق مخصص",
+      "from": "من",
+      "to": "إلى",
+      "apply": "تطبيق",
+      "invalidRange": "اختر نطاقًا زمنيًا صحيحًا."
+    },
+    "reactions": {
+      "support": "داعم",
+      "neutral": "محايد",
+      "exhibitions": "معارض"
+    },
+    "status": {
+      "pending": "قيد الانتظار",
+      "approved": "مقبول",
+      "rejected": "مرفوض",
+      "active": "نشط",
+      "inactive": "غير نشط"
+    }
+  },
+  "security": {
+    "denied": "لا تملك صلاحية الوصول إلى هذا المورد.",
+    "notFound": "لم يتم العثور على المورد المطلوب.",
+    "disabled": "هذا الحساب معطّل. تواصل مع الدعم.",
+    "invalidMedia": "ملف الوسائط غير صالح أو غير مدعوم أو يتجاوز حدود المعالجة الآمنة.",
+    "unavailable": "هذه الوسائط غير متاحة حاليًا.",
+    "currencyMismatch": "عملة المحفظة لا تطابق عملة هذه المعاملة.",
+    "insufficientBalance": "رصيد المحفظة المتاح غير كافٍ.",
+    "invalidWithdrawal": "لا يمكن تغيير طلب السحب في حالته الحالية. تواصل مع الدعم.",
+    "paymentRequired": "تتطلب هذه الخطة دفعًا متحققًا منه. تواصل مع الدعم.",
+    "invalidCode": "رمز التحقق غير صحيح أو منتهي الصلاحية.",
+    "requestFailed": "تعذر إتمام الطلب. حاول مجددًا.",
+    "rateLimit": "طلبات كثيرة جدًا. حاول لاحقًا."
+  },
+  "googleAuth": {
+    "continue": "المتابعة باستخدام Google",
+    "signup": "إنشاء حساب باستخدام Google",
+    "or": "أو",
+    "signingIn": "جارٍ تسجيل الدخول…",
+    "cancelled": "تم إلغاء المصادقة.",
+    "expired_state": "انتهت صلاحية محاولة تسجيل الدخول. يرجى البدء من جديد.",
+    "invalid_state": "طلب تسجيل الدخول غير صالح أو استُخدم سابقًا. يرجى البدء من جديد.",
+    "oauth_failed": "تعذّر على Google إكمال المصادقة. يرجى المحاولة مجددًا.",
+    "callback_failed": "فشلت المصادقة. يرجى المحاولة مجددًا.",
+    "identity_invalid": "تعذّر على Google التحقق من هويتك وبريدك الإلكتروني. يرجى استخدام طريقة أخرى لتسجيل الدخول.",
+    "disabled": "هذا الحساب غير متاح. تواصل مع الدعم للمساعدة.",
+    "linking_required": "يرجى تسجيل الدخول بالطريقة الحالية لحسابك. يتطلب ربط Google تسجيل الدخول إلى الحساب أولًا؛ الربط غير متاح حاليًا. تواصل مع الدعم عند الحاجة.",
+    "unavailable": "المصادقة باستخدام Google غير متاحة حاليًا. استخدم البريد الإلكتروني وكلمة المرور أو حاول لاحقًا.",
+    "busy": "جارٍ إكمال تسجيل الدخول بالفعل. يرجى المحاولة مجددًا.",
+    "alreadyLinked": "حساب Google هذا مرتبط بالفعل.",
+    "completeProfile": "أكمل حسابك",
+    "profileRequired": "أدخل البيانات المطلوبة لإكمال إنشاء حسابك.",
+    "country": "الدولة",
+    "dateOfBirth": "تاريخ الميلاد",
+    "finishSignup": "إنشاء حساب",
+    "profileInvalid": "أدخل دولة وتاريخ ميلاد صالحًا لا يقع في المستقبل.",
+    "retry": "إعادة المحاولة",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "linkAccountTitle": "ربط حساب Google الخاص بك",
+    "linkAccountDesc": "يوجد حساب مسجل بهذا البريد الإلكتروني بالفعل. أدخل كلمة المرور لربط حساب Google بأمان.",
+    "accountPassword": "كلمة مرور الحساب",
+    "confirmLink": "تأكيد وربط الحساب",
+    "invalidCredentials": "كلمة المرور غير صحيحة. يرجى التحقق من بياناتك والمحاولة مجددًا.",
+    "linkSuccess": "تم ربط حساب Google بنجاح.",
+    "unlinkSuccess": "تم إلغاء ربط حساب Google بنجاح.",
+    "identity_conflict": "هذا البريد مرتبط بهوية Google مختلفة. سجّل الدخول بالطريقة الحالية للحساب أو تواصل مع الدعم.",
+    "account_login_required": "سجّل الدخول بالطريقة الحالية لحسابك، ثم اربط Google من ملفك الشخصي.",
+    "recovery_required": "يلزم استرداد الحساب لمرة واحدة لإعادة ربط Google.",
+    "recovery_web_required": "أكمل استرداد الحساب لمرة واحدة على موقع Scemory. ستكون عمليات الدخول التالية عبر Google تلقائية.",
+    "invalid_recovery_code": "رمز الاسترداد غير صحيح. تحقّق من الرمز وحاول مجددًا.",
+    "recovery_expired": "انتهت صلاحية طلب الاسترداد. ابدأ تسجيل الدخول عبر Google مجددًا.",
+    "recovery_attempts_exceeded": "محاولات غير صحيحة كثيرة. ابدأ تسجيل الدخول عبر Google مجددًا.",
+    "recovery_rate_limited": "تم إرسال رمز استرداد مؤخرًا. انتظر قليلًا قبل المحاولة مجددًا.",
+    "recovery_unavailable": "تعذّر إرسال رمز الاسترداد. حاول لاحقًا.",
+    "recoveryTitle": "إعادة ربط حساب Google",
+    "recoverySent": "أدخل الرمز المرسل إلى {email}. يلزم ذلك لمرة واحدة فقط.",
+    "recoveryCode": "رمز الاسترداد",
+    "confirmRecovery": "تحقق وتابع"
+  },
+  "facebookAuth": {
+    "continue": "المتابعة باستخدام Facebook",
+    "signup": "إنشاء حساب باستخدام Facebook",
+    "signingIn": "جارٍ تسجيل الدخول…",
+    "unavailable": "المصادقة باستخدام Facebook غير متاحة حاليًا. استخدم البريد الإلكتروني وكلمة المرور أو حاول لاحقًا.",
+    "cancelled": "تم إلغاء المصادقة.",
+    "invalid_state": "طلب تسجيل الدخول غير صالح أو استُخدم سابقًا. يرجى البدء من جديد.",
+    "expired": "انتهت صلاحية محاولة تسجيل الدخول. يرجى البدء من جديد.",
+    "callback_failed": "فشلت المصادقة. يرجى المحاولة مجددًا.",
+    "disabled": "هذا الحساب غير متاح. تواصل مع الدعم للمساعدة.",
+    "linking_required": "يرجى تسجيل الدخول بالطريقة الحالية لحسابك. يتطلب ربط Facebook تسجيل الدخول إلى الحساب أولًا؛ الربط غير متاح حاليًا. تواصل مع الدعم عند الحاجة.",
+    "busy": "جارٍ إكمال تسجيل الدخول بالفعل. يرجى المحاولة مجددًا.",
+    "completeProfile": "أكمل حسابك",
+    "profileRequired": "أدخل البيانات المطلوبة لإكمال إنشاء حسابك.",
+    "country": "الدولة",
+    "dateOfBirth": "تاريخ الميلاد",
+    "finishSignup": "إنشاء حساب",
+    "retry": "إعادة المحاولة",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "identity_invalid": "تعذّر على Facebook التحقق من هويتك. يرجى المحاولة مجددًا.",
+    "verification_required": "يرجى تأكيد البريد الإلكتروني لحسابك الحالي باستخدام طريقة تسجيل الدخول الأصلية.",
+    "email_unavailable": "تعذّر إرسال رسالة التحقق. يرجى المحاولة لاحقًا.",
+    "otp_expired": "انتهت صلاحية رمز التحقق. اطلب رمزًا جديدًا.",
+    "otp_invalid": "رمز التحقق غير صحيح.",
+    "otp_attempts": "محاولات التحقق كثيرة جدًا. اطلب رمزًا جديدًا بعد انتهاء فترة الانتظار.",
+    "otp_cooldown": "يرجى الانتظار قبل طلب رمز تحقق آخر.",
+    "native_unavailable": "تسجيل الدخول باستخدام Facebook متاح على موقع Scemory. يرجى استخدام المتصفح.",
+    "email": "البريد الإلكتروني",
+    "sendCode": "إرسال رمز التحقق",
+    "verifyEmail": "تأكيد بريدك الإلكتروني",
+    "codeSent": "أدخل الرمز المرسل إلى {email}.",
+    "verificationCode": "رمز التحقق",
+    "resendIn": "إعادة الإرسال بعد {seconds} ثانية",
+    "resend": "إعادة إرسال الرمز",
+    "profileInvalid": "أدخل بريدًا إلكترونيًا ودولة وتاريخ ميلاد صالحًا لا يقع في المستقبل."
+  },
+  "mediaCredits": {
+    "myCredits": "أرصدتي للوسائط",
+    "photosAvailable": "الصور المتاحة",
+    "videosAvailable": "الفيديوهات المتاحة",
+    "photos": "صور",
+    "videos": "فيديوهات",
+    "photoQuotaDesc": "حصة استرداد دائمة للصور بدون تاريخ انتهاء",
+    "videoQuotaDesc": "حصة استرداد دائمة للفيديوهات بدون تاريخ انتهاء",
+    "activeTier": "فئة الوصول الحالية",
+    "breakdownByTier": "التوزيع حسب الفئة",
+    "viewDashboard": "لوحة الأرصدة",
+    "getMoreCredits": "شراء المزيد من الأرصدة",
+    "browseMarketplace": "تصفح المتجر",
+    "noTier": "لا توجد باقة نشطة",
+    "getWithPlan": "احصل عليها من باقتك",
+    "redeemed": "تم الاسترداد",
+    "redeemSuccess": "تم استرداد الوسائط بنجاح من رصيد باقتك!",
+    "redeemFailed": "فشل استرداد الوسائط من الباقة.",
+    "activeGrants": "حصص الباقات النشطة",
+    "redemptionHistory": "سجل الاستردادات",
+    "noGrants": "لا توجد حصص وسائط نشطة. اشترك في باقة للحصول على أرصدة صور وفيديوهات.",
+    "noRedemptions": "لا توجد استردادات بعد. تصفح المتجر لاستخدام أرصدتك.",
+    "tier": "الفئة",
+    "plan": "الباقة",
+    "tierRank": "رتبة الفئة",
+    "grantedOn": "تاريخ الشراء",
+    "payoutCap": "سقف مستحقات المنشئ",
+    "payWithWallet": "الدفع من المحفظة",
+    "payWithPaypal": "الدفع بواسطة باي بال",
+    "insufficientCredits": "الرصيد غير كافٍ أو فئة الباقة غير مؤهلة لهذه الوسائط.",
+    "includedQuotas": "حصص الوسائط المشمولة",
+    "permanentQuotas": "حصص وسائط دائمة بدون انتهاء صلاحية"
+  },
+  "dataDeletion": {
+    "title": "تعليمات حذف حساب المستخدم والبيانات",
+    "subtitle": "إرشادات شاملة لحذف حسابك وبياناتك الشخصية من منصة سيموري (Scemory).",
+    "metaInstructionsCompliance": "متوافق مع سياسة تعليمات حذف بيانات منصة Meta / Facebook",
+    "effectiveDate": "تاريخ السريان: أكتوبر 2026",
+    "checkStatusTitle": "التحقق من حالة طلب الحذف",
+    "checkStatusDesc": "أدخل الرمز المرجعي لطلب الحذف أدناه (مثل الرمز المستلم من ملفك الشخصي أو إزالة التطبيق عبر فيسبوك) للاطلاع على حالة الحذف في الوقت الفعلي.",
+    "referencePlaceholder": "مثال: DEL-XXXXXX-XXXX",
+    "checkButton": "تحقق من الحالة",
+    "checking": "جارٍ التحقق...",
+    "statusNotFound": "لم يتم العثور على طلب حذف لهذا الرمز المرجعي.",
+    "statusResult": {
+      "reference": "الرمز المرجعي",
+      "status": "الحالة الحالية",
+      "type": "نوع الطلب",
+      "maskedEmail": "الحساب المرتبط",
+      "financialNotice": "يتطلب مراجعة إدارية بسبب وجود رصيد معلق في المحفظة أو طلب سحب قيد المعالجة.",
+      "statuses": {
+        "pending_confirmation": "بانتظار التأكيد",
+        "pending": "قيد المعالجة",
+        "under_review": "قيد المراجعة الإدارية",
+        "processing": "جارٍ الحذف",
+        "completed": "تم الحذف ومحو البيانات",
+        "cancelled": "ملغي",
+        "failed": "فشل"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "أ. كيفية حذف حسابك وبياناتك من داخل سيموري",
+        "p1": "يمكنك حذف حسابك في سيموري وبياناتك الشخصية نهائياً مباشرة من إعدادات حسابك في أي وقت دون الحاجة للتواصل مع الدعم:",
+        "steps": [
+          "سجّل الدخول إلى حسابك في سيموري عبر الموقع dev.scemory.com أو عبر التطبيق.",
+          "انتقل إلى ملفك الشخصي بالنقر على صورتك أو اختيار الملف الشخصي من القائمة.",
+          "اختر تبويب 'الحساب والخصوصية'.",
+          "انقر على زر 'حذف الحساب والبيانات' باللون الأحمر في منطقة الخطر.",
+          "اكتب كلمة التأكيد DELETE في الحقل المخصص.",
+          "أكّد هويتك: أدخل كلمة مرور حسابك، أو إذا كنت مسجلاً عبر جوجل أو فيسبوك، أدخل رمز التحقق المكون من 6 أرقام المرسل إلى بريدك الإلكتروني.",
+          "بمجرد التأكيد، يتم إنهاء جميع الجلسات النشطة وإلغاء صلاحيات الرموز، ومحو بياناتك الشخصية وإخفاء هويتك فوراً."
+        ]
+      },
+      "sectionB": {
+        "title": "ب. تقديم طلب بديل في حال تعذر الوصول إلى الحساب",
+        "p1": "إذا لم تتمكن من تسجيل الدخول إلى حسابك (مثلاً عند فقدان الوصول إلى حساب التواصل الاجتماعي أو بيانات الدخول)، يمكنك طلب حذف البيانات يدوياً عبر إرسال بريد إلكتروني من عنوانك المسجل إلى فريق الدعم والخصوصية:",
+        "p2": "يرجى كتابة 'طلب حذف البيانات' في عنوان الرسالة مع ذكر اسم المستخدم أو البريد المسجل. سيتحقق فريق الأمان من ملكيتك ويعالج الطلب خلال 30 يوماً."
+      },
+      "sectionC": {
+        "title": "ج. فصل سيموري من إعدادات فيسبوك (التطبيقات والمواقع)",
+        "p1": "عند إزالة تطبيق سيموري من حسابك في فيسبوك عبر إعدادات فيسبوك > التطبيقات ومواقع الويب، يقوم فيسبوك بقطع مشاركة البيانات المستقبلية مع سيموري وإعلامنا بإزالة التطبيق.",
+        "p2": "إزالة التطبيق من فيسبوك تلغي صلاحية الدخول عبر فيسبوك فقط. ولضمان حذف ملفك الشخصي ووسائطك المخزنة مسبقاً على خوادم سيموري، استخدم خيار الحذف الذاتي في ملفك الشخصي بسيموري أو أرسل طلباً عبر بريدك المسجل.",
+        "p3": "إذا زوّدك فيسبوك برمز تأكيد عند الإزالة، يمكنك إدخاله في أداة التحقق المرجعية أعلاه لمتابعة حالة فصل وحذف بياناتك."
+      },
+      "sectionD": {
+        "title": "د. أنواع البيانات الشخصية التي يتم حذفها",
+        "p1": "عند معالجة طلب الحذف، يتم حذف أو تعتيم الفئات التالية من البيانات الشخصية بشكل دائم:",
+        "items": [
+          "بيانات الملف الشخصي: الاسم الحقيقي، البريد الإلكتروني، رقم الهاتف، البلد، النبذة وتاريخ الميلاد.",
+          "صور الملف الشخصي والوسائط الشخصية المخزنة في وسائط التخزين العامة والخاصة.",
+          "روابط الهوية الاجتماعية: معرّف Google ومعرّف Facebook والروابط المرتبطة بهما.",
+          "الجلسات النشطة، رموز مصادقة Sanctum، ورموز الأجهزة المخزنة.",
+          "عناصر سلة المشتريات، المفضلة، ورموز التحقق المؤقتة.",
+          "وسائط الفعاليات غير المشتراة والفعاليات الشخصية غير النشطة."
+        ]
+      },
+      "sectionE": {
+        "title": "هـ. البيانات المحتفظ بها للامتثال القانوني والضريبي",
+        "p1": "وفقاً للمادة 17(3)(b) من اللائحة العامة لحماية البيانات (GDPR) والقوانين التجارية والمحاسبية، هناك سجلات مالية لا يمكن محوها فوراً:",
+        "items": [
+          "سجلات المعاملات المالية: معرفات طلبات PayPal، إيصالات الودائع، وسندات صرف المسحوبات يجب الاحتفاظ بها للمدد القانونية المحددة للضرائب والمحاسبة.",
+          "سجلات أرباح وعمولات المنشئين المطلوبة للامتثال الضريبي السنوي.",
+          "تراخيص الوسائط التي تم شراؤها مسبقاً من قِبل مستخدمين آخرين: يحتفظ المشترون بحقوق الترخيص التجاري أو الشخصي للوسائط، مع استبدال هوية المنشئ برمز مجهول."
+        ],
+        "p2": "تُفصل جميع السجلات المحتفظ بها عن هويتك الشخصية نهائياً: يتم استبدال الاسم والبريد بمعرّف مجهول (مثل 'Deleted User #1234') بحيث لا يمكن ربط أي سجل مالي بهويتك الحقيقية."
+      },
+      "sectionF": {
+        "title": "و. الجدول الزمني للمعالجة وضمانات المراجعة",
+        "p1": "بالنسبة للحسابات العادية الخالية من الالتزامات المالية المعلقة، يتم تنفيذ الحذف ومحو البيانات فوراً بعد التأكيد بخطوتين.",
+        "p2": "إذا كان الحساب يحتوي على رصيد محفظة نشط أو طلبات سحب معلقة، يتم وضع الطلب 'قيد المراجعة الإدارية' وسيتواصل فريقنا لتسوية المستحقات قبل إتمام الحذف خلال 30 يوم عمل.",
+        "p3": "بمجرد اكتمال المعالجة، ستظهر الحالة 'مكتمل' ولن يكون بالإمكان تسجيل الدخول مجدداً أو استعادة أي بيانات."
+      },
+      "sectionG": {
+        "title": "ز. تتبع الرمز المرجعي والتحقق من الحالة",
+        "p1": "ينشئ كل طلب حذف رمزاً مرجعياً فريداً (مثال: DEL-XXXXXX-XXXX). يمكنك الاحتفاظ بهذا الرابط والتحقق من حالة طلبك في أي وقت باستخدام الأداة أعلاه."
+      }
+    },
+    "profile": {
+      "cardTitle": "حذف الحساب والبيانات",
+      "cardDesc": "حذف حسابك في سيموري وجميع معلوماتك الشخصية نهائياً. هذا الإجراء لا يمكن التراجع عنه.",
+      "warningHeader": "تنبيه هام: هذا الإجراء لا يمكن التراجع عنه",
+      "warningPoints": [
+        "سيتم حذف ملفك الشخصي ووسائطك ومفضلاتك وتعليقاتك أو تعتيمها نهائياً.",
+        "سيتم إنهاء كافة جلسات تسجيل الدخول وإلغاء صلاحيات الرموز والحسابات الاجتماعية المتصلة.",
+        "يجب تسوية أي أرصدة في المحفظة قبل إتمام عملية الحذف النهائي.",
+        "تراخيص الوسائط التي اشتراها مستخدمون آخرون مسبقاً تظل سارية تحت هوية مجهولة."
+      ],
+      "deleteButton": "حذف الحساب والبيانات",
+      "activeRequestNotice": "لديك طلب حذف نشط قيد المعالجة حالياً.",
+      "cancelButton": "إلغاء طلب الحذف",
+      "modalTitle": "تأكيد حذف الحساب والبيانات",
+      "modalDesc": "لتأكيد حذف حسابك وبياناتك الشخصية من سيموري، يُرجى إكمال التحقق أدناه.",
+      "typeDeletePrompt": "اكتب كلمة DELETE للتأكيد:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "أدخل كلمة مرور حسابك:",
+      "passwordPlaceholder": "كلمة المرور الحالية",
+      "codePrompt": "أدخل رمز التحقق المكون من 6 أرقام المرسل لبريدك الإلكتروني:",
+      "codePlaceholder": "123456",
+      "resendCode": "إعادة إرسال الرمز",
+      "confirmDeleteButton": "حذف بياناتي نهائياً",
+      "cancelModalButton": "إلغاء",
+      "processing": "جارٍ المعالجة...",
+      "successToast": "تم حذف الحساب والبيانات بنجاح. تم تسجيل خروجك.",
+      "underReviewToast": "تم تقديم طلب الحذف وهو قيد المراجعة الإدارية لوجود أرصدة مالية.",
+      "cancelSuccessToast": "تم إلغاء طلب الحذف بنجاح."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "المقارنات",
+    "links": {
+      "historypin": "سيموري مقارنةً بـ Historypin",
+      "pastvu": "سيموري مقارنةً بـ PastVu",
+      "theClio": "سيموري مقارنةً بـ The Clio"
+    },
+    "common": {
+      "exploreScemory": "استكشف سيموري",
+      "visitOfficialWebsite": "زيارة الموقع الرسمي",
+      "createAccount": "إنشاء حساب",
+      "feature": "الميزة والإمكانية",
+      "scemory": "سيموري",
+      "verifiedDate": "تم التحقق: 24 أكتوبر 2026",
+      "disclaimer": "سيموري منصة مستقلة ولا تتبع أو ترتبط بأي من الكيانات أو المنصات المقارنة هنا. جميع العلامات التجارية والشعارات وحقوق الأسماء ملك لأصحابها الشرعيين. تستند نقاط المقارنة إلى المعلومات المتاحة والموثقة علناً حتى تاريخ 24 أكتوبر 2026.",
+      "methodologyTitle": "المصادر ومنهجية التحقق",
+      "methodologyDesc": "أُعدت هذه المقارنة بموضوعية استناداً إلى الوثائق الرسمية والمواقع المعتمدة للمنصات وواجهات الاستخدام العامة والميزات التقنية القابلة للتحقق المباشر. نحرص على التمييز الدقيق بين الميزات المدعومة بالكامل، والإمكانيات الجزئية، والوظائف غير المتاحة، والمواصفات غير الموثقة علناً.",
+      "whyChooseTitle": "لماذا تختار سيموري؟",
+      "ctaTitle": "وثّق اللحظات والأحداث.. وساهم في بناء ذاكرة مشتركة",
+      "ctaSubtitle": "انضم إلى منصة عالمية حديثة تجمع بين توثيق الأحداث المعاصرة، وحفظ الذاكرة التاريخية، وسوق وسائط عادل ومجزٍ للمبدعين.",
+      "beyondTitle": "ما الذي تقدمه سيموري إضافةً إلى {competitor}؟",
+      "whoShouldUseTitle": "لمن تناسب كل منصة؟",
+      "overviewTitle": "نظرة عامة على المنصتين",
+      "tableTitle": "مقارنة تفصيلية للإمكانيات والوظائف",
+      "vs": "مقابل",
+      "keyHighlights": "أبرز الخصائص",
+      "organizationType": "طبيعة المؤسسة",
+      "founded": "سنة التأسيس / الإطلاق",
+      "headquarters": "المقر / النطاق",
+      "coreMission": "الرسالة الأساسية",
+      "officialWebsite": "الموقع الرسمي",
+      "independentNotice": "مقارنة موضوعية مستقلة مستندة إلى وثائق المنصات العامة والموثقة.",
+      "audienceScemoryHeading": "الفئات التي بُنيت سيموري لأجلها",
+      "audienceCompetitorHeading": "الفئات التي بُنيت {competitor} لأجلها"
+    },
+    "status": {
+      "supported": "متاح ومدعوم بالكامل",
+      "partial": "مدعوم جزئياً",
+      "not_offered": "غير متاح",
+      "not_documented": "غير موثق علناً"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "توثيق الأحداث التاريخية",
+        "desc": "توثيق المحطات التاريخية والمناسبات المجتمعية والذكريات السابقة بتفاصيل سياقية متكاملة."
+      },
+      "locationMemories": {
+        "name": "ربط الذكريات بالمواقع الجغرافية",
+        "desc": "تحديد مواقع الذكريات والصور والقصص بدقة على خرائط تفاعلية بإحداثيات مكانية واضحة."
+      },
+      "photoArchives": {
+        "name": "أرشيف الصور التاريخية",
+        "desc": "حفظ وعرض الصور الفوتوغرافية مع بيانات التوثيق والوسوم ونسب الحقوق لأصحابها."
+      },
+      "videoDocumentation": {
+        "name": "توثيق مقاطع الفيديو وتشغيلها",
+        "desc": "رفع الفيديو بدقة عالية ومعالجته مع علامات مائية للحماية وعرضه بسلاسة داخل المنصة."
+      },
+      "userContributions": {
+        "name": "مساهمات المجتمع والمستخدمين",
+        "desc": "إتاحة الفرصة للأعضاء المسجلين لرفع الصور والفيديوهات وتوثيق الذكريات والأحداث بحرية."
+      },
+      "communityParticipation": {
+        "name": "التفاعل المجتمعي والتعليقات",
+        "desc": "نقاشات تفاعلية عبر التعليقات، والردود المتسلسلة، والتفاعلات، وقوائم المفضلة، ولوحة المتصدرين."
+      },
+      "chronologicalBrowsing": {
+        "name": "التصفح الزمني والتسلسل التاريخي",
+        "desc": "استكشاف المحتوى عبر خط زمني فتراتي ونطاقات السنوات والترتيب الزمني الدقيق للأحداث."
+      },
+      "eventCentricOrg": {
+        "name": "تنظيم المحتوى المتمحور حول الحدث",
+        "desc": "هيكلة متقدمة تجعل الحدث كياناً مستقلاً يجمع وسائط متعددة ومساهمين ووجهات نظر متعددة."
+      },
+      "contributorProfiles": {
+        "name": "ملفات شخصية ومعارض للمساهمين",
+        "desc": "صفحات مخصصة للمستخدمين تبرز معارض وسائطهم، ورخصهم، وإحصاءاتهم، ونقاط تفاعلهم."
+      },
+      "discoveryMap": {
+        "name": "خريطة استكشاف تفاعلية وبحث متقدم",
+        "desc": "تصفح مكاني بالخريطة التفاعلية مع تجميع ذكي للنقاط، وفلاتر للتصنيفات والتواريخ والبحث النصي."
+      },
+      "mediaMarketplace": {
+        "name": "متجر تجاري للصور ومقاطع الفيديو",
+        "desc": "سوق رقمي مدمج يتيح للمصورين وصناع المحتوى عرض أعمالهم المرئية للبيع والترخيص."
+      },
+      "mediaPurchases": {
+        "name": "شراء وتنزيل مباشر للوسائط الأصلية",
+        "desc": "تجربة شراء رقمية آمنة تمنح المشتري فوراً حق تنزيل الملف الأصلي الخالي من العلامات المائية."
+      },
+      "commercialLicensing": {
+        "name": "تراخيص الاستخدام التجاري والإعلامي",
+        "desc": "شروط ترخيص قانونية واضحة تحكم إعادة الاستخدام التجاري والإعلامي للمصنفات المشتراة."
+      },
+      "creatorMonetization": {
+        "name": "تحقيق الدخل ومشاركة الأرباح للمبدعين",
+        "desc": "عوائد مالية مجزية للمصورين، تشمل 85% من قيمة المبيعات المباشرة للمبدع."
+      },
+      "payoutSystem": {
+        "name": "نظام سحب الأرباح والمدفوعات",
+        "desc": "سجل مالي شفاف للأرباح يتيح تقديم طلبات السحب عبر PayPal والتحويلات المصرفية."
+      },
+      "subscriptionPlans": {
+        "name": "باقات اشتراك شهرية متدرجة",
+        "desc": "عضويات مجانية ومدفوعة تقدم رصيداً دورياً من الصور والفيديوهات وميزات حصرية."
+      },
+      "mediaCredits": {
+        "name": "رصيد الوسائط الدائم",
+        "desc": "أرصدة مدفوعة مسبقاً غير منتهية الصلاحية تتيح شراء وتنزيل الوسائط المرئية بسهولة."
+      },
+      "multilingual": {
+        "name": "منصة متعددة اللغات (13 لغة مع دعم RTL)",
+        "desc": "ترجمة كاملة وأصلية لواجهة وتجربة الاستخدام بـ 13 لغة عالمية مع دعم كامل لاتجاه اليمين لليسار."
+      },
+      "institutionalUse": {
+        "name": "التعاون المؤسسي والبحثي والتعليمي",
+        "desc": "أدوات مخصصة لتنسيق المبادرات الأرشيفية والتاريخية والتعاون مع المتاحف والجامعات."
+      }
+    },
+    "historypin": {
+      "heroTitle": "سيموري وHistorypin.. مقارنة بين توثيق الذكريات والأحداث",
+      "heroSubtitle": "مقارنة واقعية توضح الفوارق الأساسية بين أرشيف التراث المجتمعي في Historypin، والتوثيق المتمحور حول الأحداث وسوق الوسائط المتاح في سيموري.",
+      "primaryFocus": "تاريخ المجتمع، والذاكرة الجماعية، والصور والقصص التاريخية، وتوثيق الأماكن التراثية محلياً.",
+      "logoAlt": "شعار Historypin الرسمي",
+      "seoTitle": "سيموري في مواجهة Historypin: مقارنة شاملة بين المنصتين",
+      "seoDescription": "تعرف على الفروق الموثقة بين سيموري وHistorypin في مجالات أرشفة الصور التاريخية، وتوثيق مقاطع الفيديو، وتحقيق الدخل للمبدعين، وتعدد اللغات.",
+      "aboutScemory": "سيموري هي منصة عصرية لتوثيق الأحداث وسوق رقمي للوسائط يجمع بين حفظ الذاكرة التاريخية والتغطية المعاصرة للأحداث الجارية. صُممت المنصة وفق معمارية متمحورة حول الحدث، مما يتيح للمصورين، والصحفيين، والباحثين، وأفراد المجتمع نشر صور وفيديوهات فائقة الدقة، والتفاعل معها، وتحقيق دخل عادل عبر تراخيص الاستخدام التجاري.",
+      "aboutCompetitor": "تأسست منصة Historypin عام 2010 بواسطة مؤسسة Shift غير الربحية بالتعاون مع Google. تتيح للمجتمعات المحلية، والمكتبات، والمتاحف تثبيت الصور التاريخية والروايات الشفهية على خريطة تفاعلية، مع ميزة مقارنة الصور القديمة بمشاهد Google Street View لإظهار التحولات العمرانية والاجتماعية عبر الزمن.",
+      "scemoryAdvantages": [
+        {
+          "title": "معمارية متمحورة حول الحدث ككيان مستقل",
+          "desc": "بخلاف الخرائط القائمة على تثبيت النقاط الفردية، تنظم سيموري المحتوى في كيانات أحداث متكاملة وقابلة للبحث، تجمع مساهمات ومصادر وزوايا توثيق متعددة في سجل واحد."
+        },
+        {
+          "title": "دعم أصيل وشامل لمقاطع الفيديو عالية الدقة",
+          "desc": "بينما تركز Historypin أساساً على الصور الثابتة والروابط الخارجية، توفر سيموري معالجة كاملة لرفع مقاطع الفيديو وحمايتها بعلامات مائية وتشغيلها بسلاسة."
+        },
+        {
+          "title": "اقتصاد متكامل للمبدعين وسوق رقمي للوسائط",
+          "desc": "تمكّن سيموري المبدعين من نيل 85% من عائدات بيع أعمالهم مع عقود ترخيص قانونية وأنظمة سحب مالي، وهو ما لا تتيحه الأرشيفات غير التجارية."
+        },
+        {
+          "title": "انتشار عالمي بـ 13 لغة مع دعم كامل للاتجاه RTL",
+          "desc": "توفر سيموري تجربة محلية متقنة بـ 13 لغة مع دعم اتجاه اليمين إلى اليسار في العربية والفارسية والأردية بكفاءة وتناسق كامل."
+        }
+      ],
+      "audienceScemory": "المصورون، وصناع الفيديو، والصحفيون، ومنظمو الفعاليات، والمهتمون بحفظ الذاكرة الذين ينشدون منصة وسائط مرئية متقدمة تجمع بين التوثيق التاريخي والمعاصر مع إمكانية تحقيق دخل وترخيص الأعمال.",
+      "audienceCompetitor": "جمعيات التاريخ المحلي، والمكتبات العامة، والمدارس، والباحثون المتطوعون الباحثون عن منصة مجتمعية غير ربحية لإسقاط الصور التاريخية على إحداثيات خرائط التجول الافتراضي.",
+      "whyChooseSummary": "تعد Historypin منصة عريقة ورائدة في إشراك المجتمعات في توثيق التراث المحلي. بينما تبرز سيموري كخيار مثالي عندما تتطلب مشاريعك معمارية متمحورة حول الأحداث، ودعماً للفيديو عالي الجودة، ونظاماً لمشاركة الأرباح والترخيص، وحضوراً دولياً بـ 13 لغة."
+    },
+    "pastvu": {
+      "heroTitle": "سيموري وPastVu.. مقارنة بين خرائط الصور القديمة وتوثيق الأحداث المتعدد الوسائط",
+      "heroSubtitle": "مقارنة موضوعية تفصل الفروق بين أرشيف PastVu العالمي للصور التاريخية المحددة بالزوايا، ومنصة سيموري الحديثة المتعددة الوسائط والمزودة بسوق للمبدعين.",
+      "primaryFocus": "أرشيف فوتوغرافي تاريخي (1826–2000) محدد بالإحداثيات الجغرافية واتجاه زاوية التقاط العدسة.",
+      "logoAlt": "شعار PastVu الرسمي",
+      "seoTitle": "سيموري في مواجهة PastVu: مقارنة تفصيلية للإمكانيات والميزات",
+      "seoDescription": "اكتشف أوجه الاختلاف بين سيموري وPastVu في توثيق الصور واللقطات التاريخية، وتحديد زوايا التصوير، ودعم الفيديو، وتراخيص المتجر الرقمي، واللغات.",
+      "aboutScemory": "تدمج سيموري توثيق الأحداث المعاصرة مع حفظ الذاكرة التاريخية في بيئة تفاعلية واحدة. وإلى جانب استضافة الصور والفيديوهات عالية الدقة والاستكشاف المكاني عبر الخرائط، تقدم المنصة سوقاً رقمياً يمكّن المبدعين والمؤسسات من ترخيص أصولهم المرئية ونيل عوائد عادلة.",
+      "aboutCompetitor": "PastVu هو مشروع أرشيفي تطوعي أُطلق عام 2009 لجمع الصور التاريخية للموئل البشري المأخوذة بين 1826 و2000 وتحديد إحداثياتها الجغرافية وزمنها بدقة. ويشتهر بسهم تحديد زاوية واتجاه التصوير، ومجتمعه النشط في التحقق التاريخي والتدقيق الجغرافي.",
+      "scemoryAdvantages": [
+        {
+          "title": "تغطية للأحداث المعاصرة والتاريخية معاً",
+          "desc": "تقتصر مساهمات PastVu على الصور الملتقطة حتى عام 2000 فقط. أما سيموري فتربط الماضي بالحاضر من خلال توثيق المحطات التاريخية إلى جانب الفعاليات الثقافية والاجتماعية والرياضية الجارية اليوم."
+        },
+        {
+          "title": "منصة متكاملة لرفع وبث مقاطع الفيديو",
+          "desc": "تختص PastVu بالصور الفوتوغرافية الثابتة حصراً، بينما تقدم سيموري دعماً كاملاً لمعالجة ملفات الفيديو، والعلامات المائية الوقائية، والبث المباشر للأحداث والأرشيفات."
+        },
+        {
+          "title": "متجر رقمي وتراخيص للاستخدام التجاري",
+          "desc": "تضم سيموري محرك تجارة رقمياً مدمجاً يتيح شراء وتنزيل الملفات الأصلية مع رخص استخدام تجارية واضحة ونسبة أرباح 85% للمبدعين، وهو ما لا توفره المشاريع التطوعية."
+        },
+        {
+          "title": "تعريب ودعم شامل لـ 13 لغة مع محاذاة RTL",
+          "desc": "بينما تقتصر واجهة PastVu على الإنجليزية والروسية، توفر سيموري ترجمة دقيقة ومتكاملة بـ 13 لغة رئيسية مع محاذاة تامة للغات اليمين كالعربية والفارسية والأردية."
+        }
+      ],
+      "audienceScemory": "المصورون، وموثقو الفعاليات، والمحررون، والجهات الإعلامية، وجمهور المهتمين بالتاريخ المعاصر الذين يحتاجون إلى توثيق شامل للصور والفيديو، مع قنوات لترخيص الوسائط وتحقيق العائد.",
+      "audienceCompetitor": "مؤرخو العمارة والمدن، وهواة الصور الفوتوغرافية القديمة، والباحثون المتخصصون في دراسة التحولات الجغرافية للمدن بين 1826 و2000 استناداً إلى زوايا التصوير الدقيقة.",
+      "whyChooseSummary": "تعد PastVu مرجعاً استثنائياً لا يضاهى في مجال تحديد اتجاه وزاوية الصور القديمة. وتعتبر سيموري الخيار الأمثل للباحثين عن منصة وسائط متعددة شاملة تجمع بين الأحداث الحية والأرشيفات، وتدعم الفيديو، وتمكّن المبدعين من بيع أعمالهم لجمهور عالمي بـ 13 لغة."
+    },
+    "theClio": {
+      "heroTitle": "سيموري وThe Clio.. استكشاف معالم التراث وتوثيق الأحداث الحية",
+      "heroSubtitle": "مقارنة واقعية توضح الفوارق بين دليل The Clio التعليمي للمعالم والمواقع التاريخية، ومنصة سيموري التفاعلية لتوثيق الأحداث وسوق الوسائط المرئية.",
+      "primaryFocus": "دليل تعليمي للمعالم التاريخية، والنصب التذكارية، والمتاحف، والمواقع التراثية، وجولات المشي الاستكشافية.",
+      "logoAlt": "شعار The Clio الرسمي",
+      "seoTitle": "سيموري في مواجهة The Clio: دراسة مقارنة للقدرات والوظائف",
+      "seoDescription": "قارن بين سيموري وThe Clio. تعرف على الفروق الجوهرية بين جولات المعالم التاريخية التراثية في The Clio، وتوثيق الأحداث المتعدد الوسائط واقتصاد المبدعين في سيموري.",
+      "aboutScemory": "سيموري هي منصة متمحورة حول توثيق الأحداث تمكّن الأفراد والجهات وصناع المحتوى من تسجيل وحفظ اللحظات عبر الزمن. تجمع المنصة بين استضافة الصور والفيديوهات عالية الجودة، والاستكشاف الجغرافي التفاعلي، والتفاعل المجتمعي، وتراخيص الوسائط التجارية في تجربة مستخدم عصرية وسلسة.",
+      "aboutCompetitor": "The Clio هو موقع وتطبيق تعليمي مجاني طورته مؤسسة The Clio Foundation الخيرية (501c3) بقيادة أستاذ التاريخ د. ديفيد تروبريدج. يعمل كدليل افتراضي للمعالم والنصب والمتاحف والمواقع التاريخية في أمريكا الشمالية، ويتميز بجولات مشي وقيادة يحررها أساتذة وطلاب وباحثو التاريخ المحلي.",
+      "scemoryAdvantages": [
+        {
+          "title": "توثيق ديناميكي للأحداث يتجاوز المعالم الثابتة",
+          "desc": "تركز The Clio على الشواهد الحجرية والمعالم المادية القائمة، بينما توثق سيموري الأحداث الحية والمؤتمرات والاحتفالات واللحظات المجتمعية بغض النظر عن وجود أثر مادي في المكان."
+        },
+        {
+          "title": "تراخيص تجارية واقتصاد حقيقي للمبدعين",
+          "desc": "بصفتها جهة خيرية تعليمية غير ربحية، لا تحتوي The Clio على أي سوق تجاري. في المقابل، تتيح سيموري بيع وترخيص الوسائط المرئية باحترافية وتضمن أرباحاً مجزية لصناع المحتوى."
+        },
+        {
+          "title": "مستودع مباشر لحفظ وتنزيل الوسائط عالية الدقة",
+          "desc": "تعمل سيموري كمستودع متكامل للوسائط مع علامات مائية وقنوات شراء للملفات الأصلية، بينما تكتفي The Clio بتضمين روابط ومصادر وسائط خارجية لأغراض تعليمية وإرشادية."
+        },
+        {
+          "title": "حضور دولي عبر 13 لغة مع محاذاة RTL",
+          "desc": "تقتصر The Clio أساساً على اللغة الإنجليزية وتراث أمريكا الشمالية، بينما صُممت سيموري لتلائم مختلف شعوب العالم بـ 13 لغة مع اتجاه RTL أصيل ومريح للعين."
+        }
+      ],
+      "audienceScemory": "المصورون، والصحفيون، والمؤسسات الإعلامية، ومنظمو المهرجانات والمؤتمرات، والمجتمعات العالمية الراغبة في توثيق الأحداث بالصوت والصورة، مع دعم الترخيص وحقوق الملكية الفكرية.",
+      "audienceCompetitor": "الطلاب الجامعيون، وأساتذة التاريخ، وأمناء المتاحف، وسياح التراث الباحثون عن جولات مشي ميدانية موثقة ومقالات تعليمية محكمة حول المعالم والنصب التذكارية في أمريكا الشمالية.",
+      "whyChooseSummary": "The Clio مبادرة تعليمية رائدة وغير ربحية لا غنى عنها في استكشاف المعالم والجولات التاريخية. وتبرز سيموري كحل عصري متكامل حينما تحتاج إلى منصة وسائط متعددة تغطي نبض الأحداث الحية وتدعم الفيديو وتتيح للمصورين تسويق وترخيص إنتاجهم على نطاق عالمي."
+    }
+  }
 }

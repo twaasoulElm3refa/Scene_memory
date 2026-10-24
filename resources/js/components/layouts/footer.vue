@@ -17,6 +17,14 @@
             <li v-for="(audience, index) in tm('policies.audiences')" :key="index">{{ rt(audience) }}</li>
           </ul>
         </section>
+        <nav aria-labelledby="footer-comparisons-title">
+          <h2 id="footer-comparisons-title">{{ t('comparisons.footerTitle') }}</h2>
+          <ul class="footer-list">
+            <li><RouterLink :to="path('/compare/historypin')">{{ t('comparisons.links.historypin') }}</RouterLink></li>
+            <li><RouterLink :to="path('/compare/pastvu')">{{ t('comparisons.links.pastvu') }}</RouterLink></li>
+            <li><RouterLink :to="path('/compare/the-clio')">{{ t('comparisons.links.theClio') }}</RouterLink></li>
+          </ul>
+        </nav>
         <nav aria-labelledby="footer-support-title">
           <h2 id="footer-support-title">{{ t('footer.supportContact') }}</h2>
           <ul class="footer-list">
@@ -75,7 +83,8 @@ const route = useRoute();
 const currentYear = new Date().getFullYear();
 const direction = computed(() => ['ar', 'fa', 'ur'].includes(locale.value) ? 'rtl' : 'ltr');
 const path = suffix => '/' + locale.value + suffix;
-const supportPaths = new Set(['/who', '/contact', '/data-deletion', ...policies.map(policy => policy.path)]);
+const comparisonPaths = ['/compare/historypin', '/compare/pastvu', '/compare/the-clio'];
+const supportPaths = new Set(['/who', '/contact', '/data-deletion', ...policies.map(policy => policy.path), ...comparisonPaths]);
 const quickLinks = computed(() => footerNavigation(navigationSession).filter(link => !supportPaths.has(link.path)));
 const destination = link => link.action === 'specialCoverage'
   ? specialCoverageDestination(locale.value, Boolean(getAuthToken()), route.path === path('/home') ? route.query : {})
@@ -98,7 +107,7 @@ onMounted(async () => {
 
 <style scoped>
 .scemory-footer { border-block-start: 1px solid var(--scemory-border, #C9DDEF); background: radial-gradient(circle at 90% 15%, rgba(48,168,255,.08), transparent 28rem), linear-gradient(145deg, var(--scemory-surface-soft, #EDF4FA), var(--scemory-surface, #F7FAFD)); color: var(--scemory-text, #334A62); padding-block: 48px 20px; }
-.footer-grid { display: grid; grid-template-columns: 1fr 1.25fr 1.25fr 1.1fr; gap: clamp(24px, 3vw, 44px); align-items: start; }
+.footer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.15fr); gap: clamp(20px, 2.5vw, 36px); align-items: start; }
 .footer-grid > * { min-width: 0; }
 h2 { color: var(--scemory-heading, #06142A); font-size: 1rem; font-weight: 750; line-height: 1.6; margin-block: 0 22px; }
 nav h2::after, section:not(.footer-brand) h2::after { content: ''; display: block; width: 32px; height: 3px; border-radius: 10px; background: var(--scemory-blue, #1677FF); margin-block-start: 10px; }
@@ -126,6 +135,7 @@ a:focus-visible { outline: 3px solid var(--scemory-primary, #0D4D97); outline-of
 .footer-store strong { font-size: .95rem; }
 .footer-bottom { margin-block-start: 36px; padding-block-start: 20px; border-block-start: 1px solid var(--scemory-border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: .8rem; line-height: 1.8; }
 .footer-bottom p { margin: 0; }
-@media (max-width: 1100px) { .footer-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 36px; } }
+@media (max-width: 1200px) { .footer-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 32px; } }
+@media (max-width: 800px) { .footer-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 28px; } }
 @media (max-width: 575px) { .scemory-footer { padding-block-start: 32px; } .footer-grid { grid-template-columns: minmax(0,1fr); gap: 32px; } .quick-links { grid-template-columns: repeat(2, minmax(0,1fr)); column-gap: 16px; } .footer-stores { display: flex; flex-wrap: wrap; } .footer-logo { width: 96px; height: 96px; } .footer-bottom { margin-block-start: 28px; } }
 </style>

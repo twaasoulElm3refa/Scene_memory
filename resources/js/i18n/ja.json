@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "イベントを検索..."
+  "search": {
+    "placeholder": "イベントを検索..."
+  },
+  "filters": {
+    "title": "フィルター",
+    "allCategories": "すべてのカテゴリ",
+    "country": "国",
+    "category": "カテゴリ",
+    "subCategory": "サブカテゴリ",
+    "from": "開始",
+    "to": "終了",
+    "city": "都市",
+    "allSubCategories": "すべてのサブカテゴリ"
+  },
+  "upload_media": "メディアをアップロード",
+  "view_all_comments": "すべてのコメントを見る",
+  "nav": {
+    "timeline": "タイムライン",
+    "favourites": "お気に入り",
+    "plans": "プラン",
+    "specialCoverage": "特別取材",
+    "more": "その他",
+    "terms": "規約",
+    "historical": "履歴",
+    "events": "イベント",
+    "dashboard": "ダッシュボード",
+    "home": "ホーム",
+    "about": "概要",
+    "allEvents": "すべてのイベント",
+    "contact": "お問い合わせ",
+    "addEvent": "イベントを追加",
+    "scemoryGate": "Scemoryゲート",
+    "wishlist": "お気に入り",
+    "profile": "プロフィール",
+    "downloads": "ダウンロード",
+    "logout": "ログアウト",
+    "login": "ログイン",
+    "cart": "カート",
+    "scemoryHome": "Scemoryホーム",
+    "toggleMenu": "メニューを切り替え",
+    "mediaCredits": "メディアクレジット"
+  },
+  "login_to_comment": "コメントを残すにはログインしてください",
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "DE": "Deutsch",
+    "TR": "Turkish",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "event": {
+    "reply": "返信",
+    "delete": "削除",
+    "no_media_yet": "メディアがありません",
+    "reply_placeholder": "ここに返信を入力...",
+    "loading": "イベントを読み込み中...",
+    "not_found": "イベントが存在しないか削除されました。",
+    "city_default": "未指定",
+    "visitor": "訪問者",
+    "media_gallery_title": "イベントメディア",
+    "no_media": "メディアがありません",
+    "about_event_title": "イベントについて",
+    "comments_title": "コメント",
+    "add_comment_title": "コメントを追加",
+    "comment_placeholder": "ここにコメントを入力...",
+    "submit_comment": "送信",
+    "sending_comment": "送信中...",
+    "comment_login_required": "まずログインしてください",
+    "comment_added_success": "コメントが正常に追加されました！",
+    "delete_comment_title": "コメントを削除",
+    "event_info_title": "イベント情報",
+    "from_date": "から",
+    "to_date": "まで",
+    "time_label": "時間",
+    "time_default": "未指定",
+    "location": "場所",
+    "organizer": "イベント主催者",
+    "add_to_wishlist": "お気に入りに追加",
+    "already_in_wishlist": "既にお気に入りに入っています",
+    "adding_to_wishlist": "追加中...",
+    "wishlist_success": "お気に入りに正常に追加されました!",
+    "buy_collection_title": "完全なコレクションを購入",
+    "total_images": "Total Images",
+    "save_discount": "10%割引",
+    "you_save": "節約できます",
+    "add_collection_to_cart": "🎁 完全なコレクションをカートに追加",
+    "collection_benefit_1": "✓ すべての画像を一度に購入",
+    "collection_benefit_2": "自動10%割引",
+    "collection_benefit_3": "✓ 時間とお金を節約",
+    "collection_benefit_4": "✓ すべてのイベントの思い出を即座に取得",
+    "upload_media_to_event": "イベントにメディアをアップロード",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "画像を追加（{count}/{max}）",
+    "comment_image_limit": "画像は最大2枚、各5 MBまで",
+    "selected_comment_image_alt": "選択した画像 {number}",
+    "remove_selected_comment_image": "選択した画像 {number} を削除"
+  },
+  "common": {
+    "search": "検索",
+    "placeholder": "イベントを検索...",
+    "searching": "検索中...",
+    "details": "詳細",
+    "notSpecified": "指定なし",
+    "loadingEvents": "イベントを読み込み中...",
+    "loading": "読み込み中...",
+    "close": "閉じる",
+    "tryAgain": "もう一度試す",
+    "back": "戻る",
+    "remove": "削除",
+    "clear": "クリア",
+    "previous": "前へ",
+    "next": "次へ",
+    "noResults": "結果がありません",
+    "unknownError": "不明なエラー",
+    "learnMore": "詳しく見る",
+    "cancel": "キャンセル",
+    "sending": "送信中...",
+    "show": "表示",
+    "hide": "非表示"
+  },
+  "events": {
+    "add_historical_event": "イベントを追加",
+    "brand_footer": "世界中のイベントを見る",
+    "cities": "都市",
+    "no_title": "無題のイベント",
+    "undefined_city": "未定義",
+    "from_map": "地図から",
+    "categories": "カテゴリ",
+    "all_memories": "すべてのイベントの思い出",
+    "showing_snapshots": "世界中からの歴史的なスナップショット {total} 件を表示",
+    "sort_by": "並べ替え",
+    "sort": {
+      "newest": "新しい順",
+      "oldest": "古い順",
+      "title": "タイトル"
     },
-    "filters": {
-        "title": "フィルター",
-        "allCategories": "すべてのカテゴリ",
-        "country": "国",
-        "category": "カテゴリ",
-        "subCategory": "サブカテゴリ",
-        "from": "開始",
-        "to": "終了",
-        "city": "都市",
-        "allSubCategories": "すべてのサブカテゴリ"
+    "loading": "イベントを読み込み中...",
+    "retry": "再試行",
+    "page_info": "ページ {current} / {last}",
+    "active_memories": "アクティブなイベント",
+    "latestEvents": "最新のイベント",
+    "recentMemories": "最近のイベント",
+    "discoverAroundYou": "あなたの周りで起こっていることを発見し、最も美しい瞬間を迎える準備をしましょう",
+    "noEventsFound": "イベントが見つかりません",
+    "noMatchingEvents": "検索条件または場所に一致するイベントはありません",
+    "event": "イベント",
+    "startDate": "開始日",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "メディアをアップロード",
-    "view_all_comments": "すべてのコメントを見る",
-    "nav": {
-        "timeline": "タイムライン",
-        "favourites": "お気に入り",
-        "plans": "プラン",
-        "specialCoverage": "特別取材",
-        "more": "その他",
-        "terms": "規約",
-        "historical": "履歴",
-        "events": "イベント",
-        "dashboard": "ダッシュボード",
-        "home": "ホーム",
-        "about": "概要",
-        "allEvents": "すべてのイベント",
-        "contact": "お問い合わせ",
-        "addEvent": "イベントを追加",
-        "scemoryGate": "Scemoryゲート",
-        "wishlist": "お気に入り",
-        "profile": "プロフィール",
-        "downloads": "ダウンロード",
-        "logout": "ログアウト",
-        "login": "ログイン",
-        "cart": "カート",
-        "scemoryHome": "Scemoryホーム",
-        "toggleMenu": "メニューを切り替え",
-        "mediaCredits": "メディアクレジット"
+    "emptyAvailable": "No events are currently available.",
+    "directory": {
+      "eyebrow": "Scemory を探索",
+      "eventsTitle": "イベント",
+      "eventsDescription": "世界中の開催中および開催予定のイベントを見つけましょう。",
+      "historicalTitle": "歴史的イベント",
+      "historicalDescription": "過去に記録されたイベントと保存された思い出を探索しましょう。",
+      "events": "件のイベント",
+      "historicalEvents": "件の歴史的イベント",
+      "collection": "イベント一覧",
+      "filters": "フィルター",
+      "refine": "結果を絞り込む",
+      "closeFilters": "フィルターを閉じる",
+      "searchLabel": "検索",
+      "searchPlaceholder": "イベントを検索...",
+      "eventType": "イベントの種類",
+      "types": {
+        "all": "すべてのイベント",
+        "real": "実際のイベント",
+        "general": "一般イベント"
+      },
+      "country": "国",
+      "allCountries": "すべての国",
+      "category": "カテゴリー",
+      "allCategories": "すべてのカテゴリー",
+      "city": "都市",
+      "allCities": "すべての都市",
+      "subcategory": "サブカテゴリー",
+      "allSubcategories": "すべてのサブカテゴリー",
+      "fromDate": "開始日",
+      "toDate": "終了日",
+      "clearFilters": "フィルターをクリア",
+      "createEvent": "イベントを作成",
+      "createHistorical": "歴史的イベントを追加",
+      "results": "{count} 件のイベント",
+      "showing": "{total} 件中 {from}～{to} 件を表示",
+      "errorTitle": "イベントを読み込めません",
+      "errorDescription": "イベントの読み込み中にエラーが発生しました。もう一度お試しください。",
+      "emptyTitle": "イベントが見つかりません",
+      "historicalEmptyTitle": "歴史的イベントが見つかりません",
+      "emptyDescription": "フィルターを変更またはクリアしてみてください。",
+      "eventBadge": "イベント",
+      "historicalBadge": "歴史",
+      "unknownLocation": "場所不明",
+      "uncategorized": "未分類",
+      "viewEvent": "イベントを見る",
+      "pagination": "イベントのページ送り",
+      "previous": "前へ",
+      "next": "次へ"
+    }
+  },
+  "pagination": {
+    "previous": "前へ",
+    "next": "次へ"
+  },
+  "about": {
+    "title": "私たちについて - Scene Memory",
+    "subtitle": "最も大切な瞬間を、一幕一幕大切に保存します",
+    "text1": "Scene Memoryでは、人生で最も美しい瞬間は鮮明かつ感情豊かに保存されるべきだと信じています。私たちは単なるストレージプラットフォームではなく、あなたの人生の旅のデジタル思い出アルバムです。",
+    "features": {
+      "immersiveAlbums": "写真、ビデオ、音声メモを含む没入型思い出アルバムの作成",
+      "aiOrganize": "AIによる自動分類とタグ付けで思い出を整理",
+      "privacy": "完全なプライバシーとセキュリティ - 思い出は暗号化され、あなただけがアクセス可能"
     },
-    "login_to_comment": "コメントを残すにはログインしてください",
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "DE": "Deutsch",
-        "TR": "Turkish",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
-    },
-    "event": {
-        "reply": "返信",
-        "delete": "削除",
-        "no_media_yet": "メディアがありません",
-        "reply_placeholder": "ここに返信を入力...",
-        "loading": "イベントを読み込み中...",
-        "not_found": "イベントが存在しないか削除されました。",
-        "city_default": "未指定",
-        "visitor": "訪問者",
-        "media_gallery_title": "イベントメディア",
-        "no_media": "メディアがありません",
-        "about_event_title": "イベントについて",
-        "comments_title": "コメント",
-        "add_comment_title": "コメントを追加",
-        "comment_placeholder": "ここにコメントを入力...",
-        "submit_comment": "送信",
-        "sending_comment": "送信中...",
-        "comment_login_required": "まずログインしてください",
-        "comment_added_success": "コメントが正常に追加されました！",
-        "delete_comment_title": "コメントを削除",
-        "event_info_title": "イベント情報",
-        "from_date": "から",
-        "to_date": "まで",
-        "time_label": "時間",
-        "time_default": "未指定",
-        "location": "場所",
-        "organizer": "イベント主催者",
-        "add_to_wishlist": "お気に入りに追加",
-        "already_in_wishlist": "既にお気に入りに入っています",
-        "adding_to_wishlist": "追加中...",
-        "wishlist_success": "お気に入りに正常に追加されました!",
-        "buy_collection_title": "完全なコレクションを購入",
-        "total_images": "Total Images",
-        "save_discount": "10%割引",
-        "you_save": "節約できます",
-        "add_collection_to_cart": "🎁 完全なコレクションをカートに追加",
-        "collection_benefit_1": "✓ すべての画像を一度に購入",
-        "collection_benefit_2": "自動10%割引",
-        "collection_benefit_3": "✓ 時間とお金を節約",
-        "collection_benefit_4": "✓ すべてのイベントの思い出を即座に取得",
-        "upload_media_to_event": "イベントにメディアをアップロード",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "画像を追加（{count}/{max}）",
-        "comment_image_limit": "画像は最大2枚、各5 MBまで",
-        "selected_comment_image_alt": "選択した画像 {number}",
-        "remove_selected_comment_image": "選択した画像 {number} を削除"
-    },
-    "common": {
-        "search": "検索",
-        "placeholder": "イベントを検索...",
-        "searching": "検索中...",
-        "details": "詳細",
-        "notSpecified": "指定なし",
-        "loadingEvents": "イベントを読み込み中...",
-        "loading": "読み込み中...",
-        "close": "閉じる",
-        "tryAgain": "もう一度試す",
-        "back": "戻る",
-        "remove": "削除",
-        "clear": "クリア",
-        "previous": "前へ",
-        "next": "次へ",
-        "noResults": "結果がありません",
-        "unknownError": "不明なエラー",
-        "learnMore": "詳しく見る",
-        "cancel": "キャンセル",
-        "sending": "送信中...",
-        "show": "表示",
-        "hide": "非表示"
-    },
-    "events": {
-        "add_historical_event": "イベントを追加",
-        "brand_footer": "世界中のイベントを見る",
-        "cities": "都市",
-        "no_title": "無題のイベント",
-        "undefined_city": "未定義",
-        "from_map": "地図から",
-        "categories": "カテゴリ",
-        "all_memories": "すべてのイベントの思い出",
-        "showing_snapshots": "世界中からの歴史的なスナップショット {total} 件を表示",
-        "sort_by": "並べ替え",
-        "sort": {
-            "newest": "新しい順",
-            "oldest": "古い順",
-            "title": "タイトル"
-        },
-        "loading": "イベントを読み込み中...",
-        "retry": "再試行",
-        "page_info": "ページ {current} / {last}",
-        "active_memories": "アクティブなイベント",
-        "latestEvents": "最新のイベント",
-        "recentMemories": "最近のイベント",
-        "discoverAroundYou": "あなたの周りで起こっていることを発見し、最も美しい瞬間を迎える準備をしましょう",
-        "noEventsFound": "イベントが見つかりません",
-        "noMatchingEvents": "検索条件または場所に一致するイベントはありません",
-        "event": "イベント",
-        "startDate": "開始日",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "directory": {
-            "eyebrow": "Scemory を探索",
-            "eventsTitle": "イベント",
-            "eventsDescription": "世界中の開催中および開催予定のイベントを見つけましょう。",
-            "historicalTitle": "歴史的イベント",
-            "historicalDescription": "過去に記録されたイベントと保存された思い出を探索しましょう。",
-            "events": "件のイベント",
-            "historicalEvents": "件の歴史的イベント",
-            "collection": "イベント一覧",
-            "filters": "フィルター",
-            "refine": "結果を絞り込む",
-            "closeFilters": "フィルターを閉じる",
-            "searchLabel": "検索",
-            "searchPlaceholder": "イベントを検索...",
-            "eventType": "イベントの種類",
-            "types": {
-                "all": "すべてのイベント",
-                "real": "実際のイベント",
-                "general": "一般イベント"
-            },
-            "country": "国",
-            "allCountries": "すべての国",
-            "category": "カテゴリー",
-            "allCategories": "すべてのカテゴリー",
-            "city": "都市",
-            "allCities": "すべての都市",
-            "subcategory": "サブカテゴリー",
-            "allSubcategories": "すべてのサブカテゴリー",
-            "fromDate": "開始日",
-            "toDate": "終了日",
-            "clearFilters": "フィルターをクリア",
-            "createEvent": "イベントを作成",
-            "createHistorical": "歴史的イベントを追加",
-            "results": "{count} 件のイベント",
-            "showing": "{total} 件中 {from}～{to} 件を表示",
-            "errorTitle": "イベントを読み込めません",
-            "errorDescription": "イベントの読み込み中にエラーが発生しました。もう一度お試しください。",
-            "emptyTitle": "イベントが見つかりません",
-            "historicalEmptyTitle": "歴史的イベントが見つかりません",
-            "emptyDescription": "フィルターを変更またはクリアしてみてください。",
-            "eventBadge": "イベント",
-            "historicalBadge": "歴史",
-            "unknownLocation": "場所不明",
-            "uncategorized": "未分類",
-            "viewEvent": "イベントを見る",
-            "pagination": "イベントのページ送り",
-            "previous": "前へ",
-            "next": "次へ"
-        }
-    },
-    "pagination": {
-        "previous": "前へ",
-        "next": "次へ"
-    },
-    "about": {
-        "title": "私たちについて - Scene Memory",
-        "subtitle": "最も大切な瞬間を、一幕一幕大切に保存します",
-        "text1": "Scene Memoryでは、人生で最も美しい瞬間は鮮明かつ感情豊かに保存されるべきだと信じています。私たちは単なるストレージプラットフォームではなく、あなたの人生の旅のデジタル思い出アルバムです。",
-        "features": {
-            "immersiveAlbums": "写真、ビデオ、音声メモを含む没入型思い出アルバムの作成",
-            "aiOrganize": "AIによる自動分類とタグ付けで思い出を整理",
-            "privacy": "完全なプライバシーとセキュリティ - 思い出は暗号化され、あなただけがアクセス可能"
-        },
-        "startJourney": "今すぐ思い出の旅を始めましょう",
-        "highlightMoments": "人生のハイライト瞬間を強調",
-        "organizedBy": "シーン、人、場所ごとに整理",
-        "stats": {
-            "memories": "保存された思い出",
-            "users": "満足したユーザー",
-            "backup": "安全なバックアップ"
-        }
-    },
-    "newsletter": {
-        "title": "思い出とつながり続けましょう",
-        "description": "思い出のヒント、機能アップデート、感動的なストーリーを毎週メールでお届け",
-        "firstName": "名",
-        "firstNamePlaceholder": "あなたの名前",
-        "email": "メール",
-        "emailPlaceholder": "you@example.com",
-        "consent": "Scene Memoryからの思い出アドバイス、アップデート、プロモーションを時折受け取ることに同意します。いつでも購読を解除できます。",
-        "subscribe": "思い出アップデートを購読",
-        "community": "私たちの5,000人以上の思い出を守るコミュニティに参加しましょう",
-        "kicker": "ニュースレター",
-        "verifiedTitle": "検証済みイベントストーリーの最新情報を受け取る",
-        "verifiedDescription": "トレンドイベント、新しいメディアアーカイブ、世界中の投稿者が記録した重要なストーリーの厳選アップデートを受け取れます。",
-        "subscribeShort": "購読",
-        "pendingApiMessage": "ご購読ありがとうございます。ニュースレターAPIは近日中に接続されます。",
-        "errors": {
-            "emailRequired": "メールアドレスを入力してください。",
-            "emailInvalid": "有効なメールアドレスを入力してください。"
-        }
-    },
-    "map": {
-        "exploreMap": "マップを探索"
-    },
-    "hero": {
-        "title_main": "私たちはあなたの思い出を保存します",
-        "title_highlight": "永遠に生き続けるために",
-        "description": "Scene Memoryでは、すべての瞬間が残る価値があると信じています。私たちはあなたの人生の重要なイベントを保存、整理、思い出すお手伝いをします。",
-        "cta_start": "私たちとの旅を始める",
-        "cta_watch": "紹介ビデオを見る",
-        "feature_organized": "整理された思い出",
-        "feature_organized_desc": "すべての瞬間が適切な場所に",
-        "feature_private": "保証されたプライバシー",
-        "feature_private_desc": "思い出は完全に安全",
-        "feature_reminders": "スマートリマインダー",
-        "feature_reminders_desc": "重要な機会を絶対に逃さない",
-        "feature_evolving": "継続的な進化",
-        "feature_evolving_desc": "常にあなたの体験を向上させています"
-    },
-    "our_story": {
-        "badge": "私たちの物語",
-        "title": "私たちの旅の始まり",
-        "intro": "私たちの物語はシンプルなアイデアから始まりました：人々が人生を形作る貴重な思い出をどうやって保存できるか？",
-        "stage1_title": "始まり",
-        "stage1_desc": "2020年、創業者たちは多くの大切な瞬間が時間とともに失われることに気づきました。彼らはこれらの思い出を保存するシンプルかつ強力なツールを作ることを決意しました。",
-        "stage2_title": "成長",
-        "stage2_desc": "ユーザーが増えるにつれ、スマートリマインダー、高度な分類、愛する人との安全な共有などの新機能を追加しました。",
-        "stage3_title": "ビジョン",
-        "stage3_desc": "今日、私たちはプライバシーとスムーズな体験に重点を置き、世界最高の思い出保存・整理プラットフォームになることを目指しています。"
-    },
-    "mission_vision": {
-        "mission_badge": "私たちの使命",
-        "mission_title": "私たちが信じること",
-        "mission_text": "私たちの使命は、誰もが簡単、安全、整理された方法で貴重な思い出を保存できるようにすることです。私たちは人生のすべての瞬間が保存され、記憶される価値があると信じています。",
-        "value_people_first": "人を第一に",
-        "value_people_first_desc": "ユーザー体験がすべての決定の中心",
-        "value_privacy": "プライバシーは神聖",
-        "value_privacy_desc": "あなたの思い出はあなただけのもの、私たちは誰とも共有しません",
-        "value_growth": "継続的な成長",
-        "value_growth_desc": "ユーザーのニーズに応えるために常に進化",
-        "vision_badge": "私たちのビジョン",
-        "vision_title": "私たちの目指す方向",
-        "vision_text": "私たちは世界一の思い出保存・整理プラットフォームになることを目指します。どこにいる誰でも簡単に安全に大切な瞬間を保存できる場所です。",
-        "goals_2025": "2025年の目標",
-        "goal_users": "100万ユーザーの達成",
-        "goal_languages": "10言語の追加",
-        "goal_ai": "AI機能のリリース"
-    },
-    "team": {
-        "badge": "私たちのチーム",
-        "title": "Scene Memoryを支える頭脳",
-        "description": "多様な開発者、デザイナー、UX専門家からなるチームが、一緒に忘れられない思い出保存体験を作り上げています。"
-    },
-    "values": {
-        "badge": "私たちの価値観",
-        "title": "私たちを特別にするもの"
-    },
+    "startJourney": "今すぐ思い出の旅を始めましょう",
+    "highlightMoments": "人生のハイライト瞬間を強調",
+    "organizedBy": "シーン、人、場所ごとに整理",
     "stats": {
-        "title": "数字が物語る",
-        "description": "設立以来、何千人もの人々が何百万もの貴重な思い出を保存する手助けをしてきました"
+      "memories": "保存された思い出",
+      "users": "満足したユーザー",
+      "backup": "安全なバックアップ"
+    }
+  },
+  "newsletter": {
+    "title": "思い出とつながり続けましょう",
+    "description": "思い出のヒント、機能アップデート、感動的なストーリーを毎週メールでお届け",
+    "firstName": "名",
+    "firstNamePlaceholder": "あなたの名前",
+    "email": "メール",
+    "emailPlaceholder": "you@example.com",
+    "consent": "Scene Memoryからの思い出アドバイス、アップデート、プロモーションを時折受け取ることに同意します。いつでも購読を解除できます。",
+    "subscribe": "思い出アップデートを購読",
+    "community": "私たちの5,000人以上の思い出を守るコミュニティに参加しましょう",
+    "kicker": "ニュースレター",
+    "verifiedTitle": "検証済みイベントストーリーの最新情報を受け取る",
+    "verifiedDescription": "トレンドイベント、新しいメディアアーカイブ、世界中の投稿者が記録した重要なストーリーの厳選アップデートを受け取れます。",
+    "subscribeShort": "購読",
+    "pendingApiMessage": "ご購読ありがとうございます。ニュースレターAPIは近日中に接続されます。",
+    "errors": {
+      "emailRequired": "メールアドレスを入力してください。",
+      "emailInvalid": "有効なメールアドレスを入力してください。"
+    }
+  },
+  "map": {
+    "exploreMap": "マップを探索"
+  },
+  "hero": {
+    "title_main": "私たちはあなたの思い出を保存します",
+    "title_highlight": "永遠に生き続けるために",
+    "description": "Scene Memoryでは、すべての瞬間が残る価値があると信じています。私たちはあなたの人生の重要なイベントを保存、整理、思い出すお手伝いをします。",
+    "cta_start": "私たちとの旅を始める",
+    "cta_watch": "紹介ビデオを見る",
+    "feature_organized": "整理された思い出",
+    "feature_organized_desc": "すべての瞬間が適切な場所に",
+    "feature_private": "保証されたプライバシー",
+    "feature_private_desc": "思い出は完全に安全",
+    "feature_reminders": "スマートリマインダー",
+    "feature_reminders_desc": "重要な機会を絶対に逃さない",
+    "feature_evolving": "継続的な進化",
+    "feature_evolving_desc": "常にあなたの体験を向上させています"
+  },
+  "our_story": {
+    "badge": "私たちの物語",
+    "title": "私たちの旅の始まり",
+    "intro": "私たちの物語はシンプルなアイデアから始まりました：人々が人生を形作る貴重な思い出をどうやって保存できるか？",
+    "stage1_title": "始まり",
+    "stage1_desc": "2020年、創業者たちは多くの大切な瞬間が時間とともに失われることに気づきました。彼らはこれらの思い出を保存するシンプルかつ強力なツールを作ることを決意しました。",
+    "stage2_title": "成長",
+    "stage2_desc": "ユーザーが増えるにつれ、スマートリマインダー、高度な分類、愛する人との安全な共有などの新機能を追加しました。",
+    "stage3_title": "ビジョン",
+    "stage3_desc": "今日、私たちはプライバシーとスムーズな体験に重点を置き、世界最高の思い出保存・整理プラットフォームになることを目指しています。"
+  },
+  "mission_vision": {
+    "mission_badge": "私たちの使命",
+    "mission_title": "私たちが信じること",
+    "mission_text": "私たちの使命は、誰もが簡単、安全、整理された方法で貴重な思い出を保存できるようにすることです。私たちは人生のすべての瞬間が保存され、記憶される価値があると信じています。",
+    "value_people_first": "人を第一に",
+    "value_people_first_desc": "ユーザー体験がすべての決定の中心",
+    "value_privacy": "プライバシーは神聖",
+    "value_privacy_desc": "あなたの思い出はあなただけのもの、私たちは誰とも共有しません",
+    "value_growth": "継続的な成長",
+    "value_growth_desc": "ユーザーのニーズに応えるために常に進化",
+    "vision_badge": "私たちのビジョン",
+    "vision_title": "私たちの目指す方向",
+    "vision_text": "私たちは世界一の思い出保存・整理プラットフォームになることを目指します。どこにいる誰でも簡単に安全に大切な瞬間を保存できる場所です。",
+    "goals_2025": "2025年の目標",
+    "goal_users": "100万ユーザーの達成",
+    "goal_languages": "10言語の追加",
+    "goal_ai": "AI機能のリリース"
+  },
+  "team": {
+    "badge": "私たちのチーム",
+    "title": "Scene Memoryを支える頭脳",
+    "description": "多様な開発者、デザイナー、UX専門家からなるチームが、一緒に忘れられない思い出保存体験を作り上げています。"
+  },
+  "values": {
+    "badge": "私たちの価値観",
+    "title": "私たちを特別にするもの"
+  },
+  "stats": {
+    "title": "数字が物語る",
+    "description": "設立以来、何千人もの人々が何百万もの貴重な思い出を保存する手助けをしてきました"
+  },
+  "cta": {
+    "title": "Scene Memoryファミリーに参加しよう",
+    "description": "今日から思い出保存の旅を始めましょう。無料、安全、あなたのために設計されています。",
+    "btn_signup": "無料アカウント登録",
+    "btn_features": "機能を知る",
+    "trust": "50,000人以上が私たちを信頼して思い出を保存しています"
+  },
+  "footer": {
+    "slogan": "思い出を保存し、永遠に生き続けさせる",
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "contact": "お問い合わせ",
+    "copyright": "© 2024 Scene Memory. All Rights Reserved.",
+    "made_with": "愛を込めて、あなたの思い出のために作られました",
+    "quickLinks": "クイックリンク",
+    "supportContact": "サポート・お問い合わせ",
+    "logoAlt": "ロゴ",
+    "googlePlayAlt": "Google Play でダウンロード",
+    "appStoreAlt": "App Store でダウンロード",
+    "copyright2025": "© 2025 Scene Memory. All rights reserved.",
+    "services": "サービス",
+    "copyrightLink": "著作権",
+    "termsOfService": "利用規約",
+    "privacyPolicy": "プライバシーポリシー",
+    "dataProtection": "データ保護",
+    "dataDeletion": "データ削除手順"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "私たちはここにいます",
+      "title_highlight": "あなたを助けるために",
+      "description": "Scene Memoryチームはあなたのすべての質問に答え、いつでもサポートします",
+      "stat_24_7": "24時間サポート",
+      "stat_response_time": "平均応答時間",
+      "stat_satisfaction": "顧客満足度",
+      "stat_happy_users": "満足ユーザー"
     },
-    "cta": {
-        "title": "Scene Memoryファミリーに参加しよう",
-        "description": "今日から思い出保存の旅を始めましょう。無料、安全、あなたのために設計されています。",
-        "btn_signup": "無料アカウント登録",
-        "btn_features": "機能を知る",
-        "trust": "50,000人以上が私たちを信頼して思い出を保存しています"
+    "tabs": {
+      "form": "メッセージを送信",
+      "info": "連絡先情報"
     },
-    "footer": {
-        "slogan": "思い出を保存し、永遠に生き続けさせる",
-        "terms": "利用規約",
-        "privacy": "プライバシーポリシー",
-        "contact": "お問い合わせ",
-        "copyright": "© 2024 Scene Memory. All Rights Reserved.",
-        "made_with": "愛を込めて、あなたの思い出のために作られました",
-        "quickLinks": "クイックリンク",
-        "supportContact": "サポート・お問い合わせ",
-        "logoAlt": "ロゴ",
-        "googlePlayAlt": "Google Play でダウンロード",
-        "appStoreAlt": "App Store でダウンロード",
-        "copyright2025": "© 2025 Scene Memory. All rights reserved.",
-        "services": "サービス",
-        "copyrightLink": "著作権",
-        "termsOfService": "利用規約",
-        "privacyPolicy": "プライバシーポリシー",
-        "dataProtection": "データ保護",
-        "dataDeletion": "データ削除手順"
+    "form": {
+      "fullName": "フルネーム",
+      "fullNamePlaceholder": "名前をここに",
+      "emailAddress": "メールアドレス",
+      "messagePlaceholder": "メッセージをここに書いてください...",
+      "emailPlaceholder": "あなたのメール",
+      "title": "私たちにメッセージを送る",
+      "subtitle": "できるだけ早く返信します。私たちはあなたをサポートするためにここにいます！",
+      "full_name": "フルネーム",
+      "email": "メールアドレス",
+      "subject": "件名",
+      "message": "メッセージ",
+      "message_placeholder": "メッセージをここに書いてください...",
+      "newsletter": "Scene Memoryのニュースレターとオファーを受け取りたい",
+      "submit": "メッセージを送信",
+      "submitting": "送信中...",
+      "success_title": "送信成功！",
+      "success_message": "ご連絡ありがとうございます。できるだけ早く返信いたします。"
     },
-    "contact": {
-        "hero": {
-            "title_main": "私たちはここにいます",
-            "title_highlight": "あなたを助けるために",
-            "description": "Scene Memoryチームはあなたのすべての質問に答え、いつでもサポートします",
-            "stat_24_7": "24時間サポート",
-            "stat_response_time": "平均応答時間",
-            "stat_satisfaction": "顧客満足度",
-            "stat_happy_users": "満足ユーザー"
-        },
-        "tabs": {
-            "form": "メッセージを送信",
-            "info": "連絡先情報"
-        },
-        "form": {
-            "fullName": "フルネーム",
-            "fullNamePlaceholder": "名前をここに",
-            "emailAddress": "メールアドレス",
-            "messagePlaceholder": "メッセージをここに書いてください...",
-            "emailPlaceholder": "あなたのメール",
-            "title": "私たちにメッセージを送る",
-            "subtitle": "できるだけ早く返信します。私たちはあなたをサポートするためにここにいます！",
-            "full_name": "フルネーム",
-            "email": "メールアドレス",
-            "subject": "件名",
-            "message": "メッセージ",
-            "message_placeholder": "メッセージをここに書いてください...",
-            "newsletter": "Scene Memoryのニュースレターとオファーを受け取りたい",
-            "submit": "メッセージを送信",
-            "submitting": "送信中...",
-            "success_title": "送信成功！",
-            "success_message": "ご連絡ありがとうございます。できるだけ早く返信いたします。"
-        },
-        "info": {
-            "title": "連絡先情報",
-            "address_title": "本社",
-            "address": "ナイル通り、カイロ、エジプト",
-            "view_map": "マップで表示",
-            "phone_title": "電話",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "午前9時～午後9時まで対応",
-            "email_title": "メール",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "24時間以内に返信",
-            "follow_us": "フォローする",
-            "map_title": "マップ上の私たちの場所",
-            "map_location": "カイロ、エジプト",
-            "open_map": "マップを開く"
-        },
-        "faq": {
-            "title": "よくある質問",
-            "subtitle": "最もよくある質問への回答"
-        },
-        "live_support": {
-            "title": "ライブサポート",
-            "description": "今すぐチームメンバーと話して即座のサポートを受けましょう",
-            "btn_chat": "ライブチャットを始める",
-            "btn_schedule": "通話をスケジュール",
-            "available": "現在対応可能：3名のサポート担当者"
-        }
-    },
-    "contacts": {
-        "badge": "お問い合わせ",
-        "title": "まずはご相談ください",
-        "description": "ご質問、サポートのご依頼、カスタムプランのご相談がありましたら、メッセージをお送りください。チームより折り返しご連絡します。",
-        "form": {
-            "title": "メッセージを送信",
-            "description": "下のフォームにご記入ください。できるだけ早く返信いたします。",
-            "fullName": "氏名",
-            "fullNamePlaceholder": "氏名を入力してください",
-            "emailAddress": "メールアドレス",
-            "emailPlaceholder": "メールアドレスを入力してください",
-            "subject": "件名",
-            "generalInquiry": "一般的なお問い合わせ",
-            "customPlan": "カスタムプラン",
-            "support": "技術サポート",
-            "feedback": "フィードバック",
-            "other": "その他",
-            "message": "メッセージ",
-            "messagePlaceholder": "どのようにお手伝いできるかお聞かせください...",
-            "minimumCharacters": "十分な詳細をご記入ください。",
-            "sendMessage": "メッセージを送信",
-            "sending": "送信中...",
-            "successMessage": "メッセージが正常に送信されました。",
-            "errorMessage": "メッセージの送信中に問題が発生しました。もう一度お試しください。"
-        },
-        "info": {
-            "getInTouch": "お問い合わせ",
-            "title": "私たちがお手伝いします",
-            "description": "一般的なご質問、技術サポート、カスタム料金についてチームまでお問い合わせください。",
-            "emailUs": "メールで連絡",
-            "available": "チームよりできるだけ早く返信いたします。",
-            "customPlans": "カスタムプラン",
-            "customPlansDescription": "チームやビジネスに合わせたソリューションが必要ですか？ご要望をお聞かせください。",
-            "customerSupport": "カスタマーサポート",
-            "supportDescription": "アカウント、サブスクリプション、サービスについてサポートが必要な場合はお問い合わせください。",
-            "followJourney": "最新情報をフォロー",
-            "responseTime": "迅速な返信",
-            "responseTimeDescription": "通常、1営業日以内にメッセージへ返信します。"
-        },
-        "map": {
-            "title": "Scene Memory世界マップ",
-            "description": "140カ国以上にある何千もの思い出を想像してください。"
-        }
+    "info": {
+      "title": "連絡先情報",
+      "address_title": "本社",
+      "address": "ナイル通り、カイロ、エジプト",
+      "view_map": "マップで表示",
+      "phone_title": "電話",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "午前9時～午後9時まで対応",
+      "email_title": "メール",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "24時間以内に返信",
+      "follow_us": "フォローする",
+      "map_title": "マップ上の私たちの場所",
+      "map_location": "カイロ、エジプト",
+      "open_map": "マップを開く"
     },
     "faq": {
-        "badge": "FAQ",
-        "title": "よくある質問",
-        "description": "よく寄せられる質問への簡単な回答です。",
-        "questions": {
-            "0": {
-                "question": "どのくらいで返信を受け取れますか？",
-                "answer": "通常、チームより1営業日以内に返信します。"
-            },
-            "1": {
-                "question": "カスタムプランを依頼できますか？",
-                "answer": "はい。件名欄でカスタムプランを選択し、ご要件をご記入ください。"
-            },
-            "2": {
-                "question": "技術サポートについて問い合わせできますか？",
-                "answer": "はい。技術サポートを選択し、問題に関する詳細をすべてご記入ください。"
-            }
-        }
+      "title": "よくある質問",
+      "subtitle": "最もよくある質問への回答"
     },
-    "eventForm": {
-        "admin": {
-            "title": "管理者としてイベントを追加",
-            "trending": "トレンドイベント",
-            "trendingHelp": "このイベントをトレンドに設定します",
-            "generateTags": "AIタグを生成",
-            "generatingTags": "タグを生成中...",
-            "generateTagsHelp": "既存のAIサービスでイベントと写真のタグを提案します。公開前に確認または削除できます。",
-            "generateTagsError": "現在AIタグを生成できません。",
-            "created": "イベントを作成し、公開しました。"
-        },
-        "chooseFiles": "ファイルを選択",
-        "mediaCount": "メディア数",
-        "title": "新しいイベントを追加",
-        "basicInfo": "基本情報",
-        "locationCategory": "場所とカテゴリ",
-        "dates": "日付",
-        "images": "イベント画像",
-        "eventTitle": "イベントタイトル",
-        "description": "説明",
-        "country": "国",
-        "searchCountry": "国を検索...",
-        "selectCountry": "国を選択",
-        "city": "都市",
-        "selectCity": "都市を選択",
-        "selectCityFirst": "まず国を選択してください",
-        "mainCategory": "メインデテゴリ",
-        "subCategory": "サブカテゴリ",
-        "selectSubFirst": "まずカテゴリを選択してください",
-        "selectLocationMap": "マップ上で場所を選択",
-        "selectedCoords": "選択した座標：緯度 {lat} , 経度 {lng}",
-        "lat": "緯度",
-        "lng": "経度",
-        "pleaseSelectLocation": "マップ上で場所を選択してください",
-        "startDate": "開始日",
-        "endDate": "終了日",
-        "startTime": "開始時間",
-        "dragDropHere": "クリックまたは画像をここにドラッグ＆ドロップ",
-        "formatsMax": "PNG • JPG • WEBP | 画像1枚あたり最大5MB",
-        "chooseImages": "画像を選択",
-        "addMore": "さらに追加",
-        "imagesCount": "{count} / 8 枚",
-        "remove": "削除",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
-            "mediaRequired": "画像または動画を1つ以上アップロードしてください。"
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        },
-        "minimumRequirementsHint": "イベントを作成するには、タイトル、説明、1つ以上の画像または動画があれば十分です。その他の項目は任意です。"
-    },
-    "commons": {
-        "required": "必須",
-        "cancel": "キャンセル",
-        "saveDraft": "下書きとして保存",
-        "create": "イベントを作成",
-        "creating": "作成中...",
-        "choose": "選択"
-    },
-    "eventss": {
-        "no_title": "タイトルなしイベント",
-        "undefined_city": "未定義",
-        "from_map": "地図から"
-    },
-    "wishlist": {
-        "title": "お気に入りリスト",
-        "loading": "読み込み中...",
-        "empty": {
-            "main": "現在、ウィッシュリストにアイテムはありません",
-            "hint": "お気に入りのイベントを追加しましょう！"
-        },
-        "fallback_image_alt": "イベントのデフォルト画像",
-        "uncategorized": "未分類",
-        "no_title": "タイトルなし",
-        "city_label": "都市：",
-        "date_label": "日付：",
-        "time_label": "時間：",
-        "not_specified": "未指定",
-        "view_details": "詳細を見る",
-        "remove": "お気に入りから削除",
-        "deleting": "削除中...",
-        "added_at": "追加日",
-        "pagination": {
-            "previous": "前へ",
-            "next": "次へ",
-            "page_info": "ページ {current} / {total}"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "利用規約",
-        "last_updated": "最終更新: 2026",
-        "acceptance_title": "規約への同意",
-        "acceptance_text": "本プラットフォームにアクセスまたは使用することで、これらの利用規約および適用されるすべての法律に同意したものとみなされます。",
-        "accounts_title": "ユーザーアカウント",
-        "accounts_text": "ユーザーはアカウント情報の機密性を維持し、アカウントで行われるすべての活動に責任を負います。",
-        "content_title": "コンテンツの所有権",
-        "content_text": "プラットフォーム上のすべてのコンテンツ（テキスト、画像、データなど）は著作権および知的財産法によって保護されています。",
-        "ai_title": "人工知能の制限",
-        "ai_text": "公式ライセンスを取得せずに、プラットフォームのコンテンツをAIモデルや機械学習のトレーニングに使用することは禁止されています。",
-        "prohibited_title": "禁止事項",
-        "prohibited_text": "ユーザーはプラットフォームの不正利用、不正アクセス、データスクレイピング、またはサービスの妨害を行ってはなりません。",
-        "liability_title": "責任の制限",
-        "liability_text": "サービスの使用によって生じる間接的または結果的損害について、当プラットフォームは責任を負いません。",
-        "changes_title": "規約の変更",
-        "changes_text": "当社はこれらの利用規約をいつでも更新または変更する権利を有します。",
-        "contact_title": "お問い合わせ",
-        "contact_text": "これらの規約について質問がある場合は、プラットフォーム管理者までお問い合わせください。"
-    },
-    "plans": {
-        "customPrice": "お問い合わせ",
-        "customPricingDescription": "ニーズに合わせた料金",
-        "contactUs": "お問い合わせ",
-        "chooseYourPlan": "プランを選択",
-        "getStarted": "始める",
-        "subscribe": "今すぐ購読",
-        "free": "無料",
-        "perMonth": "月額",
-        "prioritySupport": "優先サポート",
-        "noCreditCard": "クレジットカード不要",
-        "noFeatures": "まだ機能はありません",
-        "mostPopular": "最も人気",
-        "securePayments": "安全な支払い",
-        "moneyBack": "30日保証",
-        "cancelAnytime": "いつでもキャンセル可能",
-        "support247": "24時間年中無休サポート",
-        "ourPlans": "プラン一覧",
-        "description": "無料で始めるか、最適なプランを選択してください。",
-        "price": "価格",
-        "features": "機能",
-        "Monthly": "月額",
-        "Yearly": "年額",
-        "unlimitedEvents": "無制限のイベント",
-        "addEvents": "イベントを追加",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "プラン",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "プランを読み込めませんでした。もう一度お試しください。"
-        },
-        "customPlanNote": "要件に合わせて構築",
-        "basicAccessIncluded": "基本アクセスを含む",
-        "usd": "USD"
-    },
-    "free": "無料",
-    "basic": "ベーシック",
-    "professional": "プロフェッショナル",
-    "premium": "プレミアム",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "お使いのブラウザはvideoタグに対応していません。",
-            "badge": "Scemoryイベントアーカイブ",
-            "title": "記録されたイベントを探す",
-            "titleHighlight": "地図から",
-            "description": "世界中のジャーナリスト、メディアチーム、目撃者の投稿者がアップロードしたイベントメディアを発見できます。",
-            "searchEvents": "イベントを検索",
-            "uploadStory": "あなたのストーリーを投稿",
-            "bottomText": "世界中の物語、場所、瞬間を発見しましょう。",
-            "searchPlaceholder": "  イベント名、場所、タグで検索..."
-        },
-        "profileToast": {
-            "title": "プロフィールが未完成です",
-            "message": "プロフィールが未完成です。更新してください:",
-            "complete": "クリックして完了",
-            "fields": {
-                "phone": "電話",
-                "country": "国",
-                "position": "役職",
-                "dateOfBirth": "生年月日"
-            }
-        },
-        "trending": {
-            "loadError": "トレンドイベントを現在読み込めません。",
-            "kicker": "トレンド",
-            "title": "トレンドイベント",
-            "description": "アーカイブ内で注目を集めているイベント。",
-            "emptyTitle": "まだトレンドイベントはありません",
-            "emptyDescription": "注目イベントは近日中にご確認ください。",
-            "views": "閲覧",
-            "likes": "いいね",
-            "slidesLabel": "トレンドイベントのスライド",
-            "untitledEvent": "無題のイベント",
-            "showSlide": "トレンドイベント {number} を表示"
-        },
-        "map": {
-            "tilesSlow": "地図タイルの表示に時間がかかりすぎています。",
-            "loadError": "地図を現在読み込めません。",
-            "loadMap": "地図を読み込む",
-            "loading": "地図を読み込み中...",
-            "retry": "地図を再読み込み",
-            "openFullscreen": "地図を全画面で開く",
-            "closeFullscreen": "全画面地図を閉じる"
-        },
-        "about": {
-            "imageAlt": "Scemoryドキュメンテーションプラットフォーム",
-            "kicker": "信頼できるイベントメモリー",
-            "title": "Scemoryについて",
-            "description": "Scemoryは、出来事が起きているその時に記録する信頼できる場所を必要とするジャーナリスト、メディアチーム、目撃者の投稿者のために作られています。アップロードされたメディア、イベントメタデータ、位置情報の文脈を結びつけ、公共のストーリーを明確に発見できるようにします。",
-            "features": {
-                "upload": "写真、動画、現地データをアップロード",
-                "explore": "インタラクティブな地図でイベントを探索",
-                "preserve": "検証済みのストーリーをデジタルアーカイブに保存"
-            }
-        },
-        "events": {
-            "showing": "表示",
-            "of": "中",
-            "events": "イベント",
-            "seeMore": "もっと見る",
-            "badge": "イベント"
-        },
-        "tags": {
-            "loading": "タグを読み込み中...",
-            "showingFirst": "最初の",
-            "searchToFindMore": "件のタグを表示中。検索してさらに探せます。",
-            "none": "タグが見つかりません",
-            "helper": "地図イベントを絞り込むタグを1つ以上選択してください。",
-            "clearSelected": "選択したタグをクリア",
-            "searchMore": "さらにタグを検索"
-        },
-        "search": {
-            "clearText": "クリア",
-            "clearTags": "クリア"
-        },
-        "specialCoverage": {
-            "badge": "特別取材",
-            "title": "取材する価値のあるイベントはありますか？",
-            "description": "特別な取材に値するイベントをScemoryにお知らせいただき、そのストーリーをより多くの人に届けるお手伝いをしてください。",
-            "contactUs": "お問い合わせ",
-            "modal": {
-                "title": "特別取材",
-                "eventName": "イベント名",
-                "eventNamePlaceholder": "イベント名を入力してください",
-                "description": "イベントの説明",
-                "descriptionPlaceholder": "イベントの内容と取材に値する理由をお聞かせください",
-                "cancel": "キャンセル",
-                "send": "送信",
-                "close": "閉じる",
-                "country": "国",
-                "city": "都市",
-                "searchCity": "都市を検索",
-                "addNewCity": "新しい都市を追加",
-                "createCity": "都市を作成",
-                "startDate": "開始日",
-                "coverageTime": "取材時刻",
-                "eventType": "イベントの種類",
-                "personalEvent": "個人イベント",
-                "publicEvent": "公開イベント",
-                "selectCountry": "国を選択",
-                "selectCity": "都市を選択",
-                "noCitiesFound": "都市が見つかりません",
-                "noCountriesFound": "国が見つかりません",
-                "countryRequired": "国を選択してください。",
-                "cityRequired": "都市を選択してください。",
-                "startDateRequired": "開始日を選択してください。",
-                "eventTypeRequired": "イベントの種類を選択してください。",
-                "cityCreateFailed": "都市を作成できませんでした。もう一度お試しください。",
-                "sending": "送信中...",
-                "eventNameRequired": "イベント名を入力してください。",
-                "descriptionRequired": "イベントの説明を入力してください。",
-                "success": "特別取材のリクエストを送信しました。"
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "品質に関する警告"
-        },
-        "videoReady": "動画をアップロードできます。",
-        "qualityWarning": "品質チェックは参考情報であり、イベントの作成を妨げるものではありません。"
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "購入したファイルはここに表示されます"
-    },
-    "experience": {
-        "kicker": "SCEMORY体験",
-        "title": "ひとつのプラットフォームで、物語のすべての側面を。",
-        "pathsLabel": "Scemory体験パス",
-        "highlightsLabel": "セクションのハイライト",
-        "tabs": {
-            "explore": {
-                "label": "イベントを探す",
-                "eyebrow": "イベントを通して世界を発見",
-                "heading": "世界中の物語、イベント、場所を探す",
-                "description": "地図から、記録された公開イベント、個人の記憶、実際の場所と投稿者の文脈によって形づくられたビジュアルストーリーへ移動できます。",
-                "cta": "イベントを探す",
-                "imageAlt": "記録済みメディアパネルを備えたScemoryイベント発見インターフェース",
-                "features": {
-                    "browse": "場所と時系列でイベントメディアを閲覧",
-                    "discover": "ビジュアルアーカイブで近くのストーリーを発見",
-                    "move": "概要から記録されたイベント詳細へ移動"
-                },
-                "visual": {
-                    "kicker": "ライブ発見",
-                    "title": "地図に紐づくイベントストーリー",
-                    "stat": "グローバルアーカイブ",
-                    "note": "場所、日付、メディアをひとつの画面で"
-                }
-            },
-            "share": {
-                "label": "あなたのストーリーを共有",
-                "eyebrow": "瞬間を記録されたストーリーへ",
-                "heading": "大切な瞬間を記録する",
-                "description": "イベントを作成し、写真やメディアをアップロードし、場所の詳細を追加して、Scemoryアーカイブにあなたの視点を加えましょう。",
-                "cta": "あなたのストーリーを投稿",
-                "imageAlt": "イベントメディアを記録するScemory投稿者ワークスペース",
-                "features": {
-                    "add": "メディア、説明、場所の文脈を追加",
-                    "build": "生の瞬間から構造化された記憶を作成",
-                    "keep": "投稿者のストーリーをアーカイブにつなげる"
-                },
-                "visual": {
-                    "kicker": "投稿フロー",
-                    "title": "メディア、文脈、場所",
-                    "stat": "ストーリービルダー",
-                    "note": "意味のある詳細とともに瞬間をアップロード"
-                }
-            },
-            "license": {
-                "label": "メディアをライセンス",
-                "eyebrow": "利用可能なメディアを発見",
-                "heading": "イベントメディアを安心して見つけ、ライセンス",
-                "description": "ビジュアルコンテンツを閲覧し、利用可能なイベントメディアをプレビューし、Scemoryの既存の発見体験からライセンスオプションへ進めます。",
-                "cta": "メディアを発見",
-                "imageAlt": "ライセンス可能なイベントコンテンツを閲覧するScemoryメディアパネル",
-                "features": {
-                    "preview": "詳細を開く前にイベントビジュアルをプレビュー",
-                    "use": "メディアオプションへの経路としてイベントページを使用",
-                    "keep": "発見とライセンス意図をつなげる"
-                },
-                "visual": {
-                    "kicker": "メディアアクセス",
-                    "title": "確認準備のできたイベントビジュアル",
-                    "stat": "ライセンス経路",
-                    "note": "発見から詳細ページへ"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "もう一度試す",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "メディア",
-        "locationShort": "場所",
-        "dateShort": "日付",
-        "searchCountry": "国を検索...",
-        "featuredEvents": "注目のイベント"
-    },
-    "country": {
-        "discoverFeaturedIn": "注目のイベントを見る",
-        "cities": "都市",
-        "availableCity": "利用可能な都市",
-        "currentEvent": "現在のイベント",
-        "eventMarkers": "イベントマーカー",
-        "clickableMarker": "クリック可能なマーカー",
-        "differentCategory": "別のカテゴリ",
-        "availableCities": "利用可能な都市",
-        "noEvents": "現在利用できるイベントはありません",
-        "checkBack": "また近いうちにご確認ください",
-        "noImage": "画像なし",
-        "viewEvent": "イベントを表示",
-        "noCategory": "カテゴリなし",
-        "countryFallback": "国",
-        "cityFallback": "都市",
-        "eventFallback": "イベント",
-        "clickMarkerToOpen": "開くにはマーカーをクリック",
-        "errors": {
-            "unauthorized": "認証されていません。サインインしてください。",
-            "notFound": "国が見つかりません。",
-            "loadFailed": "データの読み込み中にエラーが発生しました。",
-            "mapLibraryFailed": "地図ライブラリを読み込めませんでした。",
-            "bordersFailed": "国境データを読み込めませんでした",
-            "invalidBorders": "国境ファイルが無効です。",
-            "countryBordersNotFound": "国境を見つけられませんでした",
-            "countryBoundsFailed": "国の範囲を計算できませんでした。",
-            "mapLoadFailed": "地図の読み込み中にエラーが発生しました。"
-        }
-    },
-    "cancel": "キャンセル",
-    "login": "ログイン",
-    "sending": "送信中...",
-    "send_reply": "返信を送信",
-    "report": {
-        "action": "通報",
-        "commentTitle": "このコメントを通報",
-        "modalTitle": "コメントを通報",
-        "reasonPrompt": "このコメントを通報する理由を選択してください:",
-        "submit": "通報を送信",
-        "submitting": "送信中...",
-        "successTitle": "通報が送信されました",
-        "successMessage": "ありがとうございます。こちらのコメントは近日中に確認いたします。",
-        "errors": {
-            "selectReason": "通報理由を選択してください。",
-            "submitFailed": "通報の送信中にエラーが発生しました。もう一度お試しください。"
-        },
-        "reasons": {
-            "spam": "スパム",
-            "offensive": "攻撃的な内容",
-            "inappropriate": "不適切",
-            "illegal": "違法な内容",
-            "untrue": "偽の内容",
-            "falseInformation": "誤解を招く情報",
-            "other": "その他の理由"
-        }
-    },
-    "commentsPage": {
-        "title": "コメント",
-        "emptyLabel": "コメント",
-        "emptyMessage": "まだコメントはありません。最初にコメントしてください。",
-        "attachmentAlt": "コメントの添付",
-        "pageInfo": "ページ {current} / {total}",
-        "confirmDelete": "本当にこのコメントを削除してもよろしいですか?",
-        "errors": {
-            "loadFailed": "コメントの読み込み中にエラーが発生しました。"
-        },
-        "reactions": {
-            "support": "同意する",
-            "neutral": "中立",
-            "oppose": "同意しない"
-        },
-        "you": "あなた"
-    },
-    "profilePage": {
-        "title": "マイプロフィール",
-        "subtitle": "アカウント情報の管理とパスワードの更新",
-        "noPlan": "プランなし",
-        "lastLogin": "最終ログイン",
-        "accountInfo": "アカウント情報",
-        "systemInfo": "システム情報",
-        "currentPlan": "現在のプラン",
-        "planType": "プランタイプ",
-        "editAccount": "アカウント詳細の編集",
-        "saving": "保存中...",
-        "saveChanges": "変更を保存",
-        "tabs": {
-            "userInfo": "ユーザー情報",
-            "editData": "データを編集",
-            "password": "パスワードを更新",
-            "wallet": "ウォレット",
-            "privacy": "アカウントとプライバシー"
-        },
-        "fields": {
-            "name": "名前",
-            "fullName": "フルネーム",
-            "email": "メール",
-            "phone": "電話",
-            "phoneNumber": "電話番号",
-            "country": "国",
-            "position": "役職",
-            "positionJob": "役職 / 職業",
-            "birthDate": "生年月日",
-            "role": "役割",
-            "status": "ステータス",
-            "points": "ポイント",
-            "rank": "順位",
-            "price": "価格"
-        },
-        "placeholders": {
-            "fullName": "フルネームを入力してください",
-            "countrySearch": "国を検索",
-            "position": "ソフトウェアエンジニア"
-        },
-        "status": {
-            "active": "アクティブ"
-        },
-        "password": {
-            "title": "パスワードを更新",
-            "current": "現在のパスワード",
-            "new": "新しいパスワード",
-            "confirm": "パスワードを確認",
-            "updating": "更新中...",
-            "update": "パスワードを更新"
-        },
-        "messages": {
-            "fillAllFields": "すべての項目を入力してください。",
-            "passwordMismatch": "パスワードが一致しません。",
-            "passwordUpdated": "パスワードが正常に更新されました。",
-            "passwordUpdateFailed": "パスワードの更新中にエラーが発生しました。",
-            "chooseCountry": "リストから国を選択してください。",
-            "noChanges": "変更がありません。",
-            "profileUpdated": "プロフィールが正常に更新されました。",
-            "profileUpdateFailed": "プロフィールの更新中にエラーが発生しました。"
-        },
-        "wallet": {
-            "title": "ウォレット",
-            "availableBalance": "利用可能残高",
-            "deposit": "入金する",
-            "recentTransactions": "最近の取引",
-            "depositType": "預金",
-            "withdrawType": "出金",
-            "noTransactions": "まだ取引はありません",
-            "withdrawComingSoon": "出金機能は近日中に利用可能になります。"
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "1ファイルあたりの最大: 100 MB",
-        "dragFiles": "ここにファイルをドラッグするか",
-        "clickToChoose": "クリックして選択",
-        "supportedFiles": "画像および動画（1ファイルあたり最大100 MB）",
-        "selectedFiles": "選択されたファイル ({count})",
-        "uploading": "アップロード中...",
-        "uploadFiles": "ファイルをアップロード",
-        "success": "ファイルが正常にアップロードされました！",
-        "errors": {
-            "fileTooLarge": "ファイル「{name}」は100 MBを超えています。",
-            "unsupportedType": "ファイルタイプ「{name}」はサポートされていません。"
-        }
-    },
-    "discovery": {
-        "title": "検索結果",
-        "description": "Scemory 内のイベント、画像、動画を見つけましょう。",
-        "showing": "表示中",
-        "of": "/",
-        "results": "件",
-        "details": "詳細を見る",
-        "noResultsTitle": "結果が見つかりません",
-        "noResultsDescription": "検索内容またはフィルターを変更してみてください。",
-        "filters": {
-            "allCities": "すべての都市",
-            "allCountries": "すべての国"
-        },
-        "tabs": {
-            "all": "すべて",
-            "event": "イベント",
-            "image": "画像",
-            "video": "動画"
-        },
-        "resultLabels": {
-            "event": "イベント",
-            "image": "画像",
-            "video": "動画"
-        },
-        "media": {
-            "price": "価格",
-            "addToCart": "カートに追加",
-            "added": "追加済み",
-            "adding": "追加中...",
-            "playVideo": "動画を再生",
-            "pauseVideo": "動画を一時停止"
-        }
-    },
-    "timeline": {
-        "title": "アクティビティ履歴",
-        "subtitle": "イベント、リアクション、コメント、保存した項目をまとめて確認できます。",
-        "totalActivity": "アクティビティ合計",
-        "latestActivity": "最新のアクティビティ",
-        "noLatestActivity": "まだアクティビティはありません",
-        "loading": "アクティビティを読み込み中...",
-        "loadError": "アクティビティを読み込めませんでした。",
-        "retry": "もう一度試す",
-        "viewAll": "すべて表示",
-        "empty": "このセクションにはアクティビティがありません。",
-        "previous": "前へ",
-        "next": "次へ",
-        "pageOf": "{last} ページ中 {current} ページ",
-        "unknownEvent": "不明なイベント",
-        "parentComment": "返信先：{comment}",
-        "reactionTo": "リアクション先：{comment}",
-        "onEvent": "{event} で",
-        "tabs": {
-            "all": "すべてのアクティビティ",
-            "events": "イベント",
-            "likes": "いいね",
-            "comments": "コメント",
-            "replies": "返信",
-            "comment_images": "コメント画像",
-            "comment_interactions": "コメントへのリアクション",
-            "wishlists": "お気に入り"
-        },
-        "filters": {
-            "label": "期間",
-            "all": "全期間",
-            "today": "今日",
-            "this_week": "今週",
-            "this_month": "今月",
-            "custom": "期間を指定",
-            "from": "開始",
-            "to": "終了",
-            "apply": "適用",
-            "invalidRange": "有効な日付範囲を選択してください。"
-        },
-        "reactions": {
-            "support": "支持",
-            "neutral": "中立",
-            "exhibitions": "反対"
-        },
-        "status": {
-            "pending": "保留中",
-            "approved": "承認済み",
-            "rejected": "却下済み",
-            "active": "有効",
-            "inactive": "無効"
-        }
-    },
-    "security": {
-        "denied": "このリソースへのアクセス権限がありません。",
-        "notFound": "指定されたリソースが見つかりません。",
-        "disabled": "アカウントは停止されています。サポートに連絡してください。",
-        "invalidMedia": "メディアが無効、未対応、または安全な処理上限を超えています。",
-        "unavailable": "このメディアは現在利用できません。",
-        "currencyMismatch": "ウォレットの通貨が取引と一致しません。",
-        "insufficientBalance": "利用可能な残高が不足しています。",
-        "invalidWithdrawal": "現在の状態では出金を変更できません。サポートに連絡してください。",
-        "paymentRequired": "このプランには確認済みの支払いが必要です。サポートに連絡してください。",
-        "invalidCode": "認証コードが無効または期限切れです。",
-        "requestFailed": "リクエストを完了できませんでした。再試行してください。",
-        "rateLimit": "リクエストが多すぎます。後で再試行してください。"
-    },
-    "googleAuth": {
-        "continue": "Google で続行",
-        "signup": "Google で登録",
-        "or": "または",
-        "signingIn": "ログイン中…",
-        "cancelled": "認証がキャンセルされました。",
-        "expired_state": "このログイン試行は期限切れです。最初からやり直してください。",
-        "invalid_state": "このリクエストは無効か使用済みです。最初からやり直してください。",
-        "oauth_failed": "Google で認証を完了できませんでした。もう一度お試しください。",
-        "callback_failed": "認証に失敗しました。もう一度お試しください。",
-        "identity_invalid": "Google で本人情報とメールを確認できませんでした。別の方法でログインしてください。",
-        "disabled": "このアカウントは利用できません。サポートにお問い合わせください。",
-        "linking_required": "既存のアカウントの方法でログインしてください。Google の連携には先にそのアカウントへのログインが必要です。連携機能はまだ利用できません。必要に応じてサポートにお問い合わせください。",
-        "unavailable": "Google 認証は現在利用できません。メールとパスワードを使うか、後でお試しください。",
-        "busy": "ログイン処理はすでに進行中です。もう一度お試しください。",
-        "alreadyLinked": "この Google アカウントはすでに連携されています。",
-        "completeProfile": "アカウント情報を入力",
-        "profileRequired": "アカウントの作成を完了するには、必須情報を入力してください。",
-        "country": "国",
-        "dateOfBirth": "生年月日",
-        "finishSignup": "アカウントを作成",
-        "profileInvalid": "国と、未来の日付ではない有効な生年月日を入力してください。",
-        "retry": "再試行",
-        "backToLogin": "ログインに戻る",
-        "linkAccountTitle": "Google アカウントを連携",
-        "linkAccountDesc": "このメールアドレスのアカウントが既に存在します。Google アカウントを安全に連携するにはパスワードを入力してください。",
-        "accountPassword": "アカウントのパスワード",
-        "confirmLink": "確認してアカウントを連携",
-        "invalidCredentials": "無効なパスワードです。認証情報を確認してやり直してください。",
-        "linkSuccess": "Google アカウントが正常に連携されました。",
-        "unlinkSuccess": "Google アカウントの連携を解除しました。",
-        "identity_conflict": "このメールは別の Google ID に連携されています。既存の方法でログインするか、サポートへお問い合わせください。",
-        "account_login_required": "既存の方法でアカウントにログインし、プロフィールから Google を連携してください。",
-        "recovery_required": "Google の再連携には一度限りのアカウント復旧が必要です。",
-        "recovery_web_required": "Scemory のウェブサイトで一度限りの復旧を完了してください。以後の Google ログインは自動になります。",
-        "invalid_recovery_code": "復旧コードが正しくありません。確認してもう一度お試しください。",
-        "recovery_expired": "復旧リクエストの期限が切れました。Google ログインをやり直してください。",
-        "recovery_attempts_exceeded": "誤入力が多すぎます。Google ログインをやり直してください。",
-        "recovery_rate_limited": "復旧コードは最近送信済みです。しばらく待ってからお試しください。",
-        "recovery_unavailable": "復旧コードを送信できませんでした。後でもう一度お試しください。",
-        "recoveryTitle": "Google アカウントを再連携",
-        "recoverySent": "{email} に送信された一度限りのコードを入力してください。この手順は一度だけ必要です。",
-        "recoveryCode": "復旧コード",
-        "confirmRecovery": "確認して続行"
-    },
-    "facebookAuth": {
-        "continue": "Facebook で続行",
-        "signup": "Facebook で登録",
-        "signingIn": "ログイン中…",
-        "unavailable": "Facebook 認証は現在利用できません。メールとパスワードを使うか、後でお試しください。",
-        "cancelled": "認証がキャンセルされました。",
-        "invalid_state": "このリクエストは無効か使用済みです。最初からやり直してください。",
-        "expired": "このログイン試行は期限切れです。最初からやり直してください。",
-        "callback_failed": "認証に失敗しました。もう一度お試しください。",
-        "disabled": "このアカウントは利用できません。サポートにお問い合わせください。",
-        "linking_required": "既存のアカウントの方法でログインしてください。Facebook の連携には先にそのアカウントへのログインが必要です。連携機能はまだ利用できません。必要に応じてサポートにお問い合わせください。",
-        "busy": "ログイン処理はすでに進行中です。もう一度お試しください。",
-        "completeProfile": "アカウント情報を入力",
-        "profileRequired": "アカウントの作成を完了するには、必須情報を入力してください。",
-        "country": "国",
-        "dateOfBirth": "生年月日",
-        "finishSignup": "アカウントを作成",
-        "retry": "再試行",
-        "backToLogin": "ログインに戻る",
-        "identity_invalid": "Facebook で本人情報を確認できませんでした。再試行してください。",
-        "verification_required": "既存のアカウントのログイン方法でメールアドレスを確認してください。",
-        "email_unavailable": "確認メールを送信できませんでした。後でもう一度お試しください。",
-        "otp_expired": "このコードは期限切れです。新しいコードをリクエストしてください。",
-        "otp_invalid": "確認コードが正しくありません。",
-        "otp_attempts": "試行回数が多すぎます。待機時間後に新しいコードをリクエストしてください。",
-        "otp_cooldown": "別のコードをリクエストする前にお待ちください。",
-        "native_unavailable": "Facebook ログインは Scemory のウェブサイトで利用できます。ブラウザをお使いください。",
-        "email": "メールアドレス",
-        "sendCode": "確認コードを送信",
-        "verifyEmail": "メールを確認",
-        "codeSent": "{email} に送信されたコードを入力してください。",
-        "verificationCode": "確認コード",
-        "resendIn": "{seconds} 秒後に再送信",
-        "resend": "コードを再送信",
-        "profileInvalid": "有効なメールアドレス、国、および未来の日付ではない生年月日を入力してください。"
-    },
-    "mediaCredits": {
-        "myCredits": "保有メディアクレジット",
-        "photosAvailable": "利用可能写真数",
-        "videosAvailable": "利用可能動画数",
-        "photos": "写真",
-        "videos": "動画",
-        "photoQuotaDesc": "無期限の写真引き換え枠",
-        "videoQuotaDesc": "無期限の動画引き換え枠",
-        "activeTier": "有効なアクセスティア",
-        "breakdownByTier": "ティア別内訳",
-        "viewDashboard": "クレジット管理",
-        "getMoreCredits": "クレジットを追加",
-        "browseMarketplace": "マーケットを見る",
-        "noTier": "有効なプランがありません",
-        "getWithPlan": "プランで取得",
-        "redeemed": "取得済み",
-        "redeemSuccess": "プランのクレジットでメディアを取得しました！",
-        "redeemFailed": "メディアの取得に失敗しました。",
-        "activeGrants": "有効な付与枠",
-        "redemptionHistory": "取得履歴",
-        "noGrants": "有効なメディア枠がありません。プランに加入してクレジットを取得してください。",
-        "noRedemptions": "取得履歴はありません。",
-        "tier": "ティア",
-        "plan": "プラン",
-        "tierRank": "ティアランク",
-        "grantedOn": "付与日",
-        "payoutCap": "クリエイター報酬上限",
-        "payWithWallet": "ウォレットで支払う",
-        "payWithPaypal": "PayPalで支払う",
-        "insufficientCredits": "クレジット不足、またはプランのティアが不足しています。",
-        "includedQuotas": "含まれるメディア枠",
-        "permanentQuotas": "期限切れのない無期限メディア枠"
-    },
-    "dataDeletion": {
-        "title": "データ削除手順",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "データ削除手順",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "データ削除手順",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "ライブサポート",
+      "description": "今すぐチームメンバーと話して即座のサポートを受けましょう",
+      "btn_chat": "ライブチャットを始める",
+      "btn_schedule": "通話をスケジュール",
+      "available": "現在対応可能：3名のサポート担当者"
     }
+  },
+  "contacts": {
+    "badge": "お問い合わせ",
+    "title": "まずはご相談ください",
+    "description": "ご質問、サポートのご依頼、カスタムプランのご相談がありましたら、メッセージをお送りください。チームより折り返しご連絡します。",
+    "form": {
+      "title": "メッセージを送信",
+      "description": "下のフォームにご記入ください。できるだけ早く返信いたします。",
+      "fullName": "氏名",
+      "fullNamePlaceholder": "氏名を入力してください",
+      "emailAddress": "メールアドレス",
+      "emailPlaceholder": "メールアドレスを入力してください",
+      "subject": "件名",
+      "generalInquiry": "一般的なお問い合わせ",
+      "customPlan": "カスタムプラン",
+      "support": "技術サポート",
+      "feedback": "フィードバック",
+      "other": "その他",
+      "message": "メッセージ",
+      "messagePlaceholder": "どのようにお手伝いできるかお聞かせください...",
+      "minimumCharacters": "十分な詳細をご記入ください。",
+      "sendMessage": "メッセージを送信",
+      "sending": "送信中...",
+      "successMessage": "メッセージが正常に送信されました。",
+      "errorMessage": "メッセージの送信中に問題が発生しました。もう一度お試しください。"
+    },
+    "info": {
+      "getInTouch": "お問い合わせ",
+      "title": "私たちがお手伝いします",
+      "description": "一般的なご質問、技術サポート、カスタム料金についてチームまでお問い合わせください。",
+      "emailUs": "メールで連絡",
+      "available": "チームよりできるだけ早く返信いたします。",
+      "customPlans": "カスタムプラン",
+      "customPlansDescription": "チームやビジネスに合わせたソリューションが必要ですか？ご要望をお聞かせください。",
+      "customerSupport": "カスタマーサポート",
+      "supportDescription": "アカウント、サブスクリプション、サービスについてサポートが必要な場合はお問い合わせください。",
+      "followJourney": "最新情報をフォロー",
+      "responseTime": "迅速な返信",
+      "responseTimeDescription": "通常、1営業日以内にメッセージへ返信します。"
+    },
+    "map": {
+      "title": "Scene Memory世界マップ",
+      "description": "140カ国以上にある何千もの思い出を想像してください。"
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "よくある質問",
+    "description": "よく寄せられる質問への簡単な回答です。",
+    "questions": {
+      "0": {
+        "question": "どのくらいで返信を受け取れますか？",
+        "answer": "通常、チームより1営業日以内に返信します。"
+      },
+      "1": {
+        "question": "カスタムプランを依頼できますか？",
+        "answer": "はい。件名欄でカスタムプランを選択し、ご要件をご記入ください。"
+      },
+      "2": {
+        "question": "技術サポートについて問い合わせできますか？",
+        "answer": "はい。技術サポートを選択し、問題に関する詳細をすべてご記入ください。"
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "管理者としてイベントを追加",
+      "trending": "トレンドイベント",
+      "trendingHelp": "このイベントをトレンドに設定します",
+      "generateTags": "AIタグを生成",
+      "generatingTags": "タグを生成中...",
+      "generateTagsHelp": "既存のAIサービスでイベントと写真のタグを提案します。公開前に確認または削除できます。",
+      "generateTagsError": "現在AIタグを生成できません。",
+      "created": "イベントを作成し、公開しました。"
+    },
+    "chooseFiles": "ファイルを選択",
+    "mediaCount": "メディア数",
+    "title": "新しいイベントを追加",
+    "basicInfo": "基本情報",
+    "locationCategory": "場所とカテゴリ",
+    "dates": "日付",
+    "images": "イベント画像",
+    "eventTitle": "イベントタイトル",
+    "description": "説明",
+    "country": "国",
+    "searchCountry": "国を検索...",
+    "selectCountry": "国を選択",
+    "city": "都市",
+    "selectCity": "都市を選択",
+    "selectCityFirst": "まず国を選択してください",
+    "mainCategory": "メインデテゴリ",
+    "subCategory": "サブカテゴリ",
+    "selectSubFirst": "まずカテゴリを選択してください",
+    "selectLocationMap": "マップ上で場所を選択",
+    "selectedCoords": "選択した座標：緯度 {lat} , 経度 {lng}",
+    "lat": "緯度",
+    "lng": "経度",
+    "pleaseSelectLocation": "マップ上で場所を選択してください",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "startTime": "開始時間",
+    "dragDropHere": "クリックまたは画像をここにドラッグ＆ドロップ",
+    "formatsMax": "PNG • JPG • WEBP | 画像1枚あたり最大5MB",
+    "chooseImages": "画像を選択",
+    "addMore": "さらに追加",
+    "imagesCount": "{count} / 8 枚",
+    "remove": "削除",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+      "mediaRequired": "画像または動画を1つ以上アップロードしてください。"
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    },
+    "minimumRequirementsHint": "イベントを作成するには、タイトル、説明、1つ以上の画像または動画があれば十分です。その他の項目は任意です。"
+  },
+  "commons": {
+    "required": "必須",
+    "cancel": "キャンセル",
+    "saveDraft": "下書きとして保存",
+    "create": "イベントを作成",
+    "creating": "作成中...",
+    "choose": "選択"
+  },
+  "eventss": {
+    "no_title": "タイトルなしイベント",
+    "undefined_city": "未定義",
+    "from_map": "地図から"
+  },
+  "wishlist": {
+    "title": "お気に入りリスト",
+    "loading": "読み込み中...",
+    "empty": {
+      "main": "現在、ウィッシュリストにアイテムはありません",
+      "hint": "お気に入りのイベントを追加しましょう！"
+    },
+    "fallback_image_alt": "イベントのデフォルト画像",
+    "uncategorized": "未分類",
+    "no_title": "タイトルなし",
+    "city_label": "都市：",
+    "date_label": "日付：",
+    "time_label": "時間：",
+    "not_specified": "未指定",
+    "view_details": "詳細を見る",
+    "remove": "お気に入りから削除",
+    "deleting": "削除中...",
+    "added_at": "追加日",
+    "pagination": {
+      "previous": "前へ",
+      "next": "次へ",
+      "page_info": "ページ {current} / {total}"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "利用規約",
+    "last_updated": "最終更新: 2026",
+    "acceptance_title": "規約への同意",
+    "acceptance_text": "本プラットフォームにアクセスまたは使用することで、これらの利用規約および適用されるすべての法律に同意したものとみなされます。",
+    "accounts_title": "ユーザーアカウント",
+    "accounts_text": "ユーザーはアカウント情報の機密性を維持し、アカウントで行われるすべての活動に責任を負います。",
+    "content_title": "コンテンツの所有権",
+    "content_text": "プラットフォーム上のすべてのコンテンツ（テキスト、画像、データなど）は著作権および知的財産法によって保護されています。",
+    "ai_title": "人工知能の制限",
+    "ai_text": "公式ライセンスを取得せずに、プラットフォームのコンテンツをAIモデルや機械学習のトレーニングに使用することは禁止されています。",
+    "prohibited_title": "禁止事項",
+    "prohibited_text": "ユーザーはプラットフォームの不正利用、不正アクセス、データスクレイピング、またはサービスの妨害を行ってはなりません。",
+    "liability_title": "責任の制限",
+    "liability_text": "サービスの使用によって生じる間接的または結果的損害について、当プラットフォームは責任を負いません。",
+    "changes_title": "規約の変更",
+    "changes_text": "当社はこれらの利用規約をいつでも更新または変更する権利を有します。",
+    "contact_title": "お問い合わせ",
+    "contact_text": "これらの規約について質問がある場合は、プラットフォーム管理者までお問い合わせください。"
+  },
+  "plans": {
+    "customPrice": "お問い合わせ",
+    "customPricingDescription": "ニーズに合わせた料金",
+    "contactUs": "お問い合わせ",
+    "chooseYourPlan": "プランを選択",
+    "getStarted": "始める",
+    "subscribe": "今すぐ購読",
+    "free": "無料",
+    "perMonth": "月額",
+    "prioritySupport": "優先サポート",
+    "noCreditCard": "クレジットカード不要",
+    "noFeatures": "まだ機能はありません",
+    "mostPopular": "最も人気",
+    "securePayments": "安全な支払い",
+    "moneyBack": "30日保証",
+    "cancelAnytime": "いつでもキャンセル可能",
+    "support247": "24時間年中無休サポート",
+    "ourPlans": "プラン一覧",
+    "description": "無料で始めるか、最適なプランを選択してください。",
+    "price": "価格",
+    "features": "機能",
+    "Monthly": "月額",
+    "Yearly": "年額",
+    "unlimitedEvents": "無制限のイベント",
+    "addEvents": "イベントを追加",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "プラン",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "プランを読み込めませんでした。もう一度お試しください。"
+    },
+    "customPlanNote": "要件に合わせて構築",
+    "basicAccessIncluded": "基本アクセスを含む",
+    "usd": "USD"
+  },
+  "free": "無料",
+  "basic": "ベーシック",
+  "professional": "プロフェッショナル",
+  "premium": "プレミアム",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "お使いのブラウザはvideoタグに対応していません。",
+      "badge": "Scemoryイベントアーカイブ",
+      "title": "記録されたイベントを探す",
+      "titleHighlight": "地図から",
+      "description": "世界中のジャーナリスト、メディアチーム、目撃者の投稿者がアップロードしたイベントメディアを発見できます。",
+      "searchEvents": "イベントを検索",
+      "uploadStory": "あなたのストーリーを投稿",
+      "bottomText": "世界中の物語、場所、瞬間を発見しましょう。",
+      "searchPlaceholder": "  イベント名、場所、タグで検索..."
+    },
+    "profileToast": {
+      "title": "プロフィールが未完成です",
+      "message": "プロフィールが未完成です。更新してください:",
+      "complete": "クリックして完了",
+      "fields": {
+        "phone": "電話",
+        "country": "国",
+        "position": "役職",
+        "dateOfBirth": "生年月日"
+      }
+    },
+    "trending": {
+      "loadError": "トレンドイベントを現在読み込めません。",
+      "kicker": "トレンド",
+      "title": "トレンドイベント",
+      "description": "アーカイブ内で注目を集めているイベント。",
+      "emptyTitle": "まだトレンドイベントはありません",
+      "emptyDescription": "注目イベントは近日中にご確認ください。",
+      "views": "閲覧",
+      "likes": "いいね",
+      "slidesLabel": "トレンドイベントのスライド",
+      "untitledEvent": "無題のイベント",
+      "showSlide": "トレンドイベント {number} を表示"
+    },
+    "map": {
+      "tilesSlow": "地図タイルの表示に時間がかかりすぎています。",
+      "loadError": "地図を現在読み込めません。",
+      "loadMap": "地図を読み込む",
+      "loading": "地図を読み込み中...",
+      "retry": "地図を再読み込み",
+      "openFullscreen": "地図を全画面で開く",
+      "closeFullscreen": "全画面地図を閉じる"
+    },
+    "about": {
+      "imageAlt": "Scemoryドキュメンテーションプラットフォーム",
+      "kicker": "信頼できるイベントメモリー",
+      "title": "Scemoryについて",
+      "description": "Scemoryは、出来事が起きているその時に記録する信頼できる場所を必要とするジャーナリスト、メディアチーム、目撃者の投稿者のために作られています。アップロードされたメディア、イベントメタデータ、位置情報の文脈を結びつけ、公共のストーリーを明確に発見できるようにします。",
+      "features": {
+        "upload": "写真、動画、現地データをアップロード",
+        "explore": "インタラクティブな地図でイベントを探索",
+        "preserve": "検証済みのストーリーをデジタルアーカイブに保存"
+      }
+    },
+    "events": {
+      "showing": "表示",
+      "of": "中",
+      "events": "イベント",
+      "seeMore": "もっと見る",
+      "badge": "イベント"
+    },
+    "tags": {
+      "loading": "タグを読み込み中...",
+      "showingFirst": "最初の",
+      "searchToFindMore": "件のタグを表示中。検索してさらに探せます。",
+      "none": "タグが見つかりません",
+      "helper": "地図イベントを絞り込むタグを1つ以上選択してください。",
+      "clearSelected": "選択したタグをクリア",
+      "searchMore": "さらにタグを検索"
+    },
+    "search": {
+      "clearText": "クリア",
+      "clearTags": "クリア"
+    },
+    "specialCoverage": {
+      "badge": "特別取材",
+      "title": "取材する価値のあるイベントはありますか？",
+      "description": "特別な取材に値するイベントをScemoryにお知らせいただき、そのストーリーをより多くの人に届けるお手伝いをしてください。",
+      "contactUs": "お問い合わせ",
+      "modal": {
+        "title": "特別取材",
+        "eventName": "イベント名",
+        "eventNamePlaceholder": "イベント名を入力してください",
+        "description": "イベントの説明",
+        "descriptionPlaceholder": "イベントの内容と取材に値する理由をお聞かせください",
+        "cancel": "キャンセル",
+        "send": "送信",
+        "close": "閉じる",
+        "country": "国",
+        "city": "都市",
+        "searchCity": "都市を検索",
+        "addNewCity": "新しい都市を追加",
+        "createCity": "都市を作成",
+        "startDate": "開始日",
+        "coverageTime": "取材時刻",
+        "eventType": "イベントの種類",
+        "personalEvent": "個人イベント",
+        "publicEvent": "公開イベント",
+        "selectCountry": "国を選択",
+        "selectCity": "都市を選択",
+        "noCitiesFound": "都市が見つかりません",
+        "noCountriesFound": "国が見つかりません",
+        "countryRequired": "国を選択してください。",
+        "cityRequired": "都市を選択してください。",
+        "startDateRequired": "開始日を選択してください。",
+        "eventTypeRequired": "イベントの種類を選択してください。",
+        "cityCreateFailed": "都市を作成できませんでした。もう一度お試しください。",
+        "sending": "送信中...",
+        "eventNameRequired": "イベント名を入力してください。",
+        "descriptionRequired": "イベントの説明を入力してください。",
+        "success": "特別取材のリクエストを送信しました。"
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "品質に関する警告"
+    },
+    "videoReady": "動画をアップロードできます。",
+    "qualityWarning": "品質チェックは参考情報であり、イベントの作成を妨げるものではありません。"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "購入したファイルはここに表示されます"
+  },
+  "experience": {
+    "kicker": "SCEMORY体験",
+    "title": "ひとつのプラットフォームで、物語のすべての側面を。",
+    "pathsLabel": "Scemory体験パス",
+    "highlightsLabel": "セクションのハイライト",
+    "tabs": {
+      "explore": {
+        "label": "イベントを探す",
+        "eyebrow": "イベントを通して世界を発見",
+        "heading": "世界中の物語、イベント、場所を探す",
+        "description": "地図から、記録された公開イベント、個人の記憶、実際の場所と投稿者の文脈によって形づくられたビジュアルストーリーへ移動できます。",
+        "cta": "イベントを探す",
+        "imageAlt": "記録済みメディアパネルを備えたScemoryイベント発見インターフェース",
+        "features": {
+          "browse": "場所と時系列でイベントメディアを閲覧",
+          "discover": "ビジュアルアーカイブで近くのストーリーを発見",
+          "move": "概要から記録されたイベント詳細へ移動"
+        },
+        "visual": {
+          "kicker": "ライブ発見",
+          "title": "地図に紐づくイベントストーリー",
+          "stat": "グローバルアーカイブ",
+          "note": "場所、日付、メディアをひとつの画面で"
+        }
+      },
+      "share": {
+        "label": "あなたのストーリーを共有",
+        "eyebrow": "瞬間を記録されたストーリーへ",
+        "heading": "大切な瞬間を記録する",
+        "description": "イベントを作成し、写真やメディアをアップロードし、場所の詳細を追加して、Scemoryアーカイブにあなたの視点を加えましょう。",
+        "cta": "あなたのストーリーを投稿",
+        "imageAlt": "イベントメディアを記録するScemory投稿者ワークスペース",
+        "features": {
+          "add": "メディア、説明、場所の文脈を追加",
+          "build": "生の瞬間から構造化された記憶を作成",
+          "keep": "投稿者のストーリーをアーカイブにつなげる"
+        },
+        "visual": {
+          "kicker": "投稿フロー",
+          "title": "メディア、文脈、場所",
+          "stat": "ストーリービルダー",
+          "note": "意味のある詳細とともに瞬間をアップロード"
+        }
+      },
+      "license": {
+        "label": "メディアをライセンス",
+        "eyebrow": "利用可能なメディアを発見",
+        "heading": "イベントメディアを安心して見つけ、ライセンス",
+        "description": "ビジュアルコンテンツを閲覧し、利用可能なイベントメディアをプレビューし、Scemoryの既存の発見体験からライセンスオプションへ進めます。",
+        "cta": "メディアを発見",
+        "imageAlt": "ライセンス可能なイベントコンテンツを閲覧するScemoryメディアパネル",
+        "features": {
+          "preview": "詳細を開く前にイベントビジュアルをプレビュー",
+          "use": "メディアオプションへの経路としてイベントページを使用",
+          "keep": "発見とライセンス意図をつなげる"
+        },
+        "visual": {
+          "kicker": "メディアアクセス",
+          "title": "確認準備のできたイベントビジュアル",
+          "stat": "ライセンス経路",
+          "note": "発見から詳細ページへ"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "もう一度試す",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "メディア",
+    "locationShort": "場所",
+    "dateShort": "日付",
+    "searchCountry": "国を検索...",
+    "featuredEvents": "注目のイベント"
+  },
+  "country": {
+    "discoverFeaturedIn": "注目のイベントを見る",
+    "cities": "都市",
+    "availableCity": "利用可能な都市",
+    "currentEvent": "現在のイベント",
+    "eventMarkers": "イベントマーカー",
+    "clickableMarker": "クリック可能なマーカー",
+    "differentCategory": "別のカテゴリ",
+    "availableCities": "利用可能な都市",
+    "noEvents": "現在利用できるイベントはありません",
+    "checkBack": "また近いうちにご確認ください",
+    "noImage": "画像なし",
+    "viewEvent": "イベントを表示",
+    "noCategory": "カテゴリなし",
+    "countryFallback": "国",
+    "cityFallback": "都市",
+    "eventFallback": "イベント",
+    "clickMarkerToOpen": "開くにはマーカーをクリック",
+    "errors": {
+      "unauthorized": "認証されていません。サインインしてください。",
+      "notFound": "国が見つかりません。",
+      "loadFailed": "データの読み込み中にエラーが発生しました。",
+      "mapLibraryFailed": "地図ライブラリを読み込めませんでした。",
+      "bordersFailed": "国境データを読み込めませんでした",
+      "invalidBorders": "国境ファイルが無効です。",
+      "countryBordersNotFound": "国境を見つけられませんでした",
+      "countryBoundsFailed": "国の範囲を計算できませんでした。",
+      "mapLoadFailed": "地図の読み込み中にエラーが発生しました。"
+    }
+  },
+  "cancel": "キャンセル",
+  "login": "ログイン",
+  "sending": "送信中...",
+  "send_reply": "返信を送信",
+  "report": {
+    "action": "通報",
+    "commentTitle": "このコメントを通報",
+    "modalTitle": "コメントを通報",
+    "reasonPrompt": "このコメントを通報する理由を選択してください:",
+    "submit": "通報を送信",
+    "submitting": "送信中...",
+    "successTitle": "通報が送信されました",
+    "successMessage": "ありがとうございます。こちらのコメントは近日中に確認いたします。",
+    "errors": {
+      "selectReason": "通報理由を選択してください。",
+      "submitFailed": "通報の送信中にエラーが発生しました。もう一度お試しください。"
+    },
+    "reasons": {
+      "spam": "スパム",
+      "offensive": "攻撃的な内容",
+      "inappropriate": "不適切",
+      "illegal": "違法な内容",
+      "untrue": "偽の内容",
+      "falseInformation": "誤解を招く情報",
+      "other": "その他の理由"
+    }
+  },
+  "commentsPage": {
+    "title": "コメント",
+    "emptyLabel": "コメント",
+    "emptyMessage": "まだコメントはありません。最初にコメントしてください。",
+    "attachmentAlt": "コメントの添付",
+    "pageInfo": "ページ {current} / {total}",
+    "confirmDelete": "本当にこのコメントを削除してもよろしいですか?",
+    "errors": {
+      "loadFailed": "コメントの読み込み中にエラーが発生しました。"
+    },
+    "reactions": {
+      "support": "同意する",
+      "neutral": "中立",
+      "oppose": "同意しない"
+    },
+    "you": "あなた"
+  },
+  "profilePage": {
+    "title": "マイプロフィール",
+    "subtitle": "アカウント情報の管理とパスワードの更新",
+    "noPlan": "プランなし",
+    "lastLogin": "最終ログイン",
+    "accountInfo": "アカウント情報",
+    "systemInfo": "システム情報",
+    "currentPlan": "現在のプラン",
+    "planType": "プランタイプ",
+    "editAccount": "アカウント詳細の編集",
+    "saving": "保存中...",
+    "saveChanges": "変更を保存",
+    "tabs": {
+      "userInfo": "ユーザー情報",
+      "editData": "データを編集",
+      "password": "パスワードを更新",
+      "wallet": "ウォレット",
+      "privacy": "アカウントとプライバシー"
+    },
+    "fields": {
+      "name": "名前",
+      "fullName": "フルネーム",
+      "email": "メール",
+      "phone": "電話",
+      "phoneNumber": "電話番号",
+      "country": "国",
+      "position": "役職",
+      "positionJob": "役職 / 職業",
+      "birthDate": "生年月日",
+      "role": "役割",
+      "status": "ステータス",
+      "points": "ポイント",
+      "rank": "順位",
+      "price": "価格"
+    },
+    "placeholders": {
+      "fullName": "フルネームを入力してください",
+      "countrySearch": "国を検索",
+      "position": "ソフトウェアエンジニア"
+    },
+    "status": {
+      "active": "アクティブ"
+    },
+    "password": {
+      "title": "パスワードを更新",
+      "current": "現在のパスワード",
+      "new": "新しいパスワード",
+      "confirm": "パスワードを確認",
+      "updating": "更新中...",
+      "update": "パスワードを更新"
+    },
+    "messages": {
+      "fillAllFields": "すべての項目を入力してください。",
+      "passwordMismatch": "パスワードが一致しません。",
+      "passwordUpdated": "パスワードが正常に更新されました。",
+      "passwordUpdateFailed": "パスワードの更新中にエラーが発生しました。",
+      "chooseCountry": "リストから国を選択してください。",
+      "noChanges": "変更がありません。",
+      "profileUpdated": "プロフィールが正常に更新されました。",
+      "profileUpdateFailed": "プロフィールの更新中にエラーが発生しました。"
+    },
+    "wallet": {
+      "title": "ウォレット",
+      "availableBalance": "利用可能残高",
+      "deposit": "入金する",
+      "recentTransactions": "最近の取引",
+      "depositType": "預金",
+      "withdrawType": "出金",
+      "noTransactions": "まだ取引はありません",
+      "withdrawComingSoon": "出金機能は近日中に利用可能になります。"
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "1ファイルあたりの最大: 100 MB",
+    "dragFiles": "ここにファイルをドラッグするか",
+    "clickToChoose": "クリックして選択",
+    "supportedFiles": "画像および動画（1ファイルあたり最大100 MB）",
+    "selectedFiles": "選択されたファイル ({count})",
+    "uploading": "アップロード中...",
+    "uploadFiles": "ファイルをアップロード",
+    "success": "ファイルが正常にアップロードされました！",
+    "errors": {
+      "fileTooLarge": "ファイル「{name}」は100 MBを超えています。",
+      "unsupportedType": "ファイルタイプ「{name}」はサポートされていません。"
+    }
+  },
+  "discovery": {
+    "title": "検索結果",
+    "description": "Scemory 内のイベント、画像、動画を見つけましょう。",
+    "showing": "表示中",
+    "of": "/",
+    "results": "件",
+    "details": "詳細を見る",
+    "noResultsTitle": "結果が見つかりません",
+    "noResultsDescription": "検索内容またはフィルターを変更してみてください。",
+    "filters": {
+      "allCities": "すべての都市",
+      "allCountries": "すべての国"
+    },
+    "tabs": {
+      "all": "すべて",
+      "event": "イベント",
+      "image": "画像",
+      "video": "動画"
+    },
+    "resultLabels": {
+      "event": "イベント",
+      "image": "画像",
+      "video": "動画"
+    },
+    "media": {
+      "price": "価格",
+      "addToCart": "カートに追加",
+      "added": "追加済み",
+      "adding": "追加中...",
+      "playVideo": "動画を再生",
+      "pauseVideo": "動画を一時停止"
+    }
+  },
+  "timeline": {
+    "title": "アクティビティ履歴",
+    "subtitle": "イベント、リアクション、コメント、保存した項目をまとめて確認できます。",
+    "totalActivity": "アクティビティ合計",
+    "latestActivity": "最新のアクティビティ",
+    "noLatestActivity": "まだアクティビティはありません",
+    "loading": "アクティビティを読み込み中...",
+    "loadError": "アクティビティを読み込めませんでした。",
+    "retry": "もう一度試す",
+    "viewAll": "すべて表示",
+    "empty": "このセクションにはアクティビティがありません。",
+    "previous": "前へ",
+    "next": "次へ",
+    "pageOf": "{last} ページ中 {current} ページ",
+    "unknownEvent": "不明なイベント",
+    "parentComment": "返信先：{comment}",
+    "reactionTo": "リアクション先：{comment}",
+    "onEvent": "{event} で",
+    "tabs": {
+      "all": "すべてのアクティビティ",
+      "events": "イベント",
+      "likes": "いいね",
+      "comments": "コメント",
+      "replies": "返信",
+      "comment_images": "コメント画像",
+      "comment_interactions": "コメントへのリアクション",
+      "wishlists": "お気に入り"
+    },
+    "filters": {
+      "label": "期間",
+      "all": "全期間",
+      "today": "今日",
+      "this_week": "今週",
+      "this_month": "今月",
+      "custom": "期間を指定",
+      "from": "開始",
+      "to": "終了",
+      "apply": "適用",
+      "invalidRange": "有効な日付範囲を選択してください。"
+    },
+    "reactions": {
+      "support": "支持",
+      "neutral": "中立",
+      "exhibitions": "反対"
+    },
+    "status": {
+      "pending": "保留中",
+      "approved": "承認済み",
+      "rejected": "却下済み",
+      "active": "有効",
+      "inactive": "無効"
+    }
+  },
+  "security": {
+    "denied": "このリソースへのアクセス権限がありません。",
+    "notFound": "指定されたリソースが見つかりません。",
+    "disabled": "アカウントは停止されています。サポートに連絡してください。",
+    "invalidMedia": "メディアが無効、未対応、または安全な処理上限を超えています。",
+    "unavailable": "このメディアは現在利用できません。",
+    "currencyMismatch": "ウォレットの通貨が取引と一致しません。",
+    "insufficientBalance": "利用可能な残高が不足しています。",
+    "invalidWithdrawal": "現在の状態では出金を変更できません。サポートに連絡してください。",
+    "paymentRequired": "このプランには確認済みの支払いが必要です。サポートに連絡してください。",
+    "invalidCode": "認証コードが無効または期限切れです。",
+    "requestFailed": "リクエストを完了できませんでした。再試行してください。",
+    "rateLimit": "リクエストが多すぎます。後で再試行してください。"
+  },
+  "googleAuth": {
+    "continue": "Google で続行",
+    "signup": "Google で登録",
+    "or": "または",
+    "signingIn": "ログイン中…",
+    "cancelled": "認証がキャンセルされました。",
+    "expired_state": "このログイン試行は期限切れです。最初からやり直してください。",
+    "invalid_state": "このリクエストは無効か使用済みです。最初からやり直してください。",
+    "oauth_failed": "Google で認証を完了できませんでした。もう一度お試しください。",
+    "callback_failed": "認証に失敗しました。もう一度お試しください。",
+    "identity_invalid": "Google で本人情報とメールを確認できませんでした。別の方法でログインしてください。",
+    "disabled": "このアカウントは利用できません。サポートにお問い合わせください。",
+    "linking_required": "既存のアカウントの方法でログインしてください。Google の連携には先にそのアカウントへのログインが必要です。連携機能はまだ利用できません。必要に応じてサポートにお問い合わせください。",
+    "unavailable": "Google 認証は現在利用できません。メールとパスワードを使うか、後でお試しください。",
+    "busy": "ログイン処理はすでに進行中です。もう一度お試しください。",
+    "alreadyLinked": "この Google アカウントはすでに連携されています。",
+    "completeProfile": "アカウント情報を入力",
+    "profileRequired": "アカウントの作成を完了するには、必須情報を入力してください。",
+    "country": "国",
+    "dateOfBirth": "生年月日",
+    "finishSignup": "アカウントを作成",
+    "profileInvalid": "国と、未来の日付ではない有効な生年月日を入力してください。",
+    "retry": "再試行",
+    "backToLogin": "ログインに戻る",
+    "linkAccountTitle": "Google アカウントを連携",
+    "linkAccountDesc": "このメールアドレスのアカウントが既に存在します。Google アカウントを安全に連携するにはパスワードを入力してください。",
+    "accountPassword": "アカウントのパスワード",
+    "confirmLink": "確認してアカウントを連携",
+    "invalidCredentials": "無効なパスワードです。認証情報を確認してやり直してください。",
+    "linkSuccess": "Google アカウントが正常に連携されました。",
+    "unlinkSuccess": "Google アカウントの連携を解除しました。",
+    "identity_conflict": "このメールは別の Google ID に連携されています。既存の方法でログインするか、サポートへお問い合わせください。",
+    "account_login_required": "既存の方法でアカウントにログインし、プロフィールから Google を連携してください。",
+    "recovery_required": "Google の再連携には一度限りのアカウント復旧が必要です。",
+    "recovery_web_required": "Scemory のウェブサイトで一度限りの復旧を完了してください。以後の Google ログインは自動になります。",
+    "invalid_recovery_code": "復旧コードが正しくありません。確認してもう一度お試しください。",
+    "recovery_expired": "復旧リクエストの期限が切れました。Google ログインをやり直してください。",
+    "recovery_attempts_exceeded": "誤入力が多すぎます。Google ログインをやり直してください。",
+    "recovery_rate_limited": "復旧コードは最近送信済みです。しばらく待ってからお試しください。",
+    "recovery_unavailable": "復旧コードを送信できませんでした。後でもう一度お試しください。",
+    "recoveryTitle": "Google アカウントを再連携",
+    "recoverySent": "{email} に送信された一度限りのコードを入力してください。この手順は一度だけ必要です。",
+    "recoveryCode": "復旧コード",
+    "confirmRecovery": "確認して続行"
+  },
+  "facebookAuth": {
+    "continue": "Facebook で続行",
+    "signup": "Facebook で登録",
+    "signingIn": "ログイン中…",
+    "unavailable": "Facebook 認証は現在利用できません。メールとパスワードを使うか、後でお試しください。",
+    "cancelled": "認証がキャンセルされました。",
+    "invalid_state": "このリクエストは無効か使用済みです。最初からやり直してください。",
+    "expired": "このログイン試行は期限切れです。最初からやり直してください。",
+    "callback_failed": "認証に失敗しました。もう一度お試しください。",
+    "disabled": "このアカウントは利用できません。サポートにお問い合わせください。",
+    "linking_required": "既存のアカウントの方法でログインしてください。Facebook の連携には先にそのアカウントへのログインが必要です。連携機能はまだ利用できません。必要に応じてサポートにお問い合わせください。",
+    "busy": "ログイン処理はすでに進行中です。もう一度お試しください。",
+    "completeProfile": "アカウント情報を入力",
+    "profileRequired": "アカウントの作成を完了するには、必須情報を入力してください。",
+    "country": "国",
+    "dateOfBirth": "生年月日",
+    "finishSignup": "アカウントを作成",
+    "retry": "再試行",
+    "backToLogin": "ログインに戻る",
+    "identity_invalid": "Facebook で本人情報を確認できませんでした。再試行してください。",
+    "verification_required": "既存のアカウントのログイン方法でメールアドレスを確認してください。",
+    "email_unavailable": "確認メールを送信できませんでした。後でもう一度お試しください。",
+    "otp_expired": "このコードは期限切れです。新しいコードをリクエストしてください。",
+    "otp_invalid": "確認コードが正しくありません。",
+    "otp_attempts": "試行回数が多すぎます。待機時間後に新しいコードをリクエストしてください。",
+    "otp_cooldown": "別のコードをリクエストする前にお待ちください。",
+    "native_unavailable": "Facebook ログインは Scemory のウェブサイトで利用できます。ブラウザをお使いください。",
+    "email": "メールアドレス",
+    "sendCode": "確認コードを送信",
+    "verifyEmail": "メールを確認",
+    "codeSent": "{email} に送信されたコードを入力してください。",
+    "verificationCode": "確認コード",
+    "resendIn": "{seconds} 秒後に再送信",
+    "resend": "コードを再送信",
+    "profileInvalid": "有効なメールアドレス、国、および未来の日付ではない生年月日を入力してください。"
+  },
+  "mediaCredits": {
+    "myCredits": "保有メディアクレジット",
+    "photosAvailable": "利用可能写真数",
+    "videosAvailable": "利用可能動画数",
+    "photos": "写真",
+    "videos": "動画",
+    "photoQuotaDesc": "無期限の写真引き換え枠",
+    "videoQuotaDesc": "無期限の動画引き換え枠",
+    "activeTier": "有効なアクセスティア",
+    "breakdownByTier": "ティア別内訳",
+    "viewDashboard": "クレジット管理",
+    "getMoreCredits": "クレジットを追加",
+    "browseMarketplace": "マーケットを見る",
+    "noTier": "有効なプランがありません",
+    "getWithPlan": "プランで取得",
+    "redeemed": "取得済み",
+    "redeemSuccess": "プランのクレジットでメディアを取得しました！",
+    "redeemFailed": "メディアの取得に失敗しました。",
+    "activeGrants": "有効な付与枠",
+    "redemptionHistory": "取得履歴",
+    "noGrants": "有効なメディア枠がありません。プランに加入してクレジットを取得してください。",
+    "noRedemptions": "取得履歴はありません。",
+    "tier": "ティア",
+    "plan": "プラン",
+    "tierRank": "ティアランク",
+    "grantedOn": "付与日",
+    "payoutCap": "クリエイター報酬上限",
+    "payWithWallet": "ウォレットで支払う",
+    "payWithPaypal": "PayPalで支払う",
+    "insufficientCredits": "クレジット不足、またはプランのティアが不足しています。",
+    "includedQuotas": "含まれるメディア枠",
+    "permanentQuotas": "期限切れのない無期限メディア枠"
+  },
+  "dataDeletion": {
+    "title": "データ削除手順",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "データ削除手順",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "データ削除手順",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "比較一覧",
+    "links": {
+      "historypin": "Scemory 対 Historypin",
+      "pastvu": "Scemory 対 PastVu",
+      "theClio": "Scemory 対 The Clio"
+    },
+    "common": {
+      "exploreScemory": "Scemoryを体験する",
+      "visitOfficialWebsite": "公式サイトを見る",
+      "createAccount": "アカウントを作成",
+      "feature": "機能と機能仕様",
+      "scemory": "Scemory",
+      "verifiedDate": "検証日: 2026年10月24日",
+      "disclaimer": "Scemoryは独立したプラットフォームであり、本ページで比較対象とされている各組織との提携、後援、推奨関係はありません。すべての商標、登録ロゴ、サービスマークは各所有者に帰属します。比較内容は2026年10月24日時点で公開されている検証済み情報に基づいています。",
+      "methodologyTitle": "情報源と検証方針",
+      "methodologyDesc": "本比較は、公式ドキュメント、プラットフォームの公式サイト、公開プロダクトのインターフェース、および直接確認可能な技術機能に基づき作成されています。完全に提供されている機能、部分提供または開発中の機能、未対応のワークフロー、および公開文書が存在しない仕様を明確に区別して記載しています。",
+      "whyChooseTitle": "なぜScemoryを選ぶのか？",
+      "ctaTitle": "瞬間を保存し、出来事を記録し、共有される記憶を紡ぐ。",
+      "ctaSubtitle": "現代の出来事の記録、歴史的記憶の保存、そして公正なクリエイター向けメディアマーケットプレイスを統合した最新のグローバルプラットフォームに参加しましょう。",
+      "beyondTitle": "Scemoryが{competitor}を超えて提供する価値",
+      "whoShouldUseTitle": "各プラットフォームに適した利用者層",
+      "overviewTitle": "プラットフォーム概要",
+      "tableTitle": "詳細機能比較表",
+      "vs": "対",
+      "keyHighlights": "主な特長",
+      "organizationType": "組織形態",
+      "founded": "設立 / 公開年",
+      "headquarters": "拠点 / 所在地",
+      "coreMission": "中核となるミッション",
+      "officialWebsite": "公式サイト",
+      "independentNotice": "公開検証可能なプラットフォーム情報に基づく客観的な比較です。",
+      "audienceScemoryHeading": "Scemoryが適している方",
+      "audienceCompetitorHeading": "{competitor}が適している方"
+    },
+    "status": {
+      "supported": "対応済み・利用可能",
+      "partial": "一部対応",
+      "not_offered": "未提供",
+      "not_documented": "公式文書なし"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "歴史的出来事の記録",
+        "desc": "歴史的出来事、文化の節目、過去の地域の情景を詳細な背景とともに記録。"
+      },
+      "locationMemories": {
+        "name": "位置情報に基づく記憶とジオコーディング",
+        "desc": "正確な経緯度座標により、記憶、写真、物語を地図上に配置。"
+      },
+      "photoArchives": {
+        "name": "歴史写真アーカイブ",
+        "desc": "メタデータ、タグ、出典情報を付与して歴史的写真を保存・表示。"
+      },
+      "videoDocumentation": {
+        "name": "動画の投稿と再生",
+        "desc": "高解像度動画のネイティブアップロード、処理、透かし付きプレビュー、ストリーミング。"
+      },
+      "userContributions": {
+        "name": "ユーザーによるコンテンツ投稿",
+        "desc": "登録コミュニティメンバーによる記憶、写真、出来事のアップロードと記録。"
+      },
+      "communityParticipation": {
+        "name": "コミュニティ参加と対話",
+        "desc": "コメント、返信、リアクション、ウィッシュリストによる活発な交流。"
+      },
+      "chronologicalBrowsing": {
+        "name": "時系列タイムライン探索",
+        "desc": "日付範囲、タイムラインスライダー、年代順による記憶の閲覧。"
+      },
+      "eventCentricOrg": {
+        "name": "イベント中心のコンテンツ構造",
+        "desc": "複数のメディア、寄稿者、視点を一つのイベント単位に統合。"
+      },
+      "contributorProfiles": {
+        "name": "寄稿者プロフィールとポートフォリオ",
+        "desc": "投稿したイベント、メディアギャラリー、活動統計を表示する専用プロフィール。"
+      },
+      "discoveryMap": {
+        "name": "インタラクティブ地図探索と検索",
+        "desc": "動的クラスタリング、カテゴリフィルター、日付フィルター、テキスト検索を備えた地図。"
+      },
+      "mediaMarketplace": {
+        "name": "画像・動画マーケットプレイス",
+        "desc": "寄稿者が高解像度写真や動画を有料提供できる統合デジタル市場。"
+      },
+      "mediaPurchases": {
+        "name": "直接メディア購入とダウンロード",
+        "desc": "透かしのない原画アセットを即座に安全ダウンロードできる購入フロー。"
+      },
+      "commercialLicensing": {
+        "name": "商用ライセンス権",
+        "desc": "購入メディアの商用および報道利用を明確に規定する法的一次ライセンス。"
+      },
+      "creatorMonetization": {
+        "name": "クリエイター収益化と分配",
+        "desc": "直接メディア販売における85%のクリエイター還元を含む正当な経済的報酬。"
+      },
+      "payoutSystem": {
+        "name": "寄稿者出金システム",
+        "desc": "PayPalおよび銀行振込による収益残高の正式な出金管理。"
+      },
+      "subscriptionPlans": {
+        "name": "段階別メンバーシッププラン",
+        "desc": "毎月の写真・動画利用枠やプラットフォーム特典を提供する有料プラン。"
+      },
+      "mediaCredits": {
+        "name": "永久メディアクレジット",
+        "desc": "視覚メディアの購入やライセンスにいつでも使える有効期限のないプリペイドクレジット。"
+      },
+      "multilingual": {
+        "name": "多言語プラットフォーム（13言語＋RTL）",
+        "desc": "右横書き（RTL）言語を含む主要13言語への完全なUIとコンテンツのローカライズ。"
+      },
+      "institutionalUse": {
+        "name": "教育・学術機関向け連携",
+        "desc": "博物館、大学、公共アーカイブ向けの専用機能、アーカイブ連携ツール。"
+      }
+    },
+    "historypin": {
+      "heroTitle": "Scemory 対 Historypin: 記憶の保存と出来事の記録における二つのアプローチ",
+      "heroSubtitle": "Historypinの地域社会遺産アーカイブと、Scemoryのマルチモーダルなイベント記録・クリエイター市場の客観的比較。",
+      "primaryFocus": "地域社会の歴史、集団的記憶、クラウドソースされた歴史写真、物語、および地域の遺産史跡。",
+      "logoAlt": "Historypin 公式ロゴ",
+      "seoTitle": "Scemory 対 Historypin: 包括的プラットフォーム比較",
+      "seoDescription": "ScemoryとHistorypinを比較。歴史写真アーカイブ、現代の出来事の記録、動画対応、クリエイター収益化、多言語アクセスの違いを詳しく解説します。",
+      "aboutScemory": "Scemoryは、歴史的記憶の保存と現代の出来事の記録を統合した最新のマルチメディアプラットフォームです。構造化されたイベント中心の設計により、写真家、ジャーナリスト、研究者、市民が写真や動画を公開し、対話に参加し、ライセンス販売や収益出金を通じて視覚作品を公正に収益化できます。",
+      "aboutCompetitor": "Historypinは、非営利団体ShiftがGoogleと提携して2010年に立ち上げたコミュニティ主導のデジタルアーカイブです。個人、郷土史団体、図書館、博物館が歴史写真やオーディオを世界地図上にピン留めし、Googleストリートビューと歴史写真を重ね合わせることで景観の変遷を辿ることができます。",
+      "scemoryAdvantages": [
+        {
+          "title": "イベント中心の構造化エンティティ設計",
+          "desc": "単なるピンの配置にとどまらず、Scemoryは明確で検索可能なイベント単位でコンテンツを整理。複数の寄稿者、検証済みの日時、カテゴリ、メディアギャラリーを一つの統合記録としてまとめます。"
+        },
+        {
+          "title": "ネイティブ高解像度動画の完全サポート",
+          "desc": "Historypinが主に静止画写真や外部リンクを中心としているのに対し、Scemoryは動画のアップロード、処理、透かし付きプレビュー、滑らかな再生を一貫して提供します。"
+        },
+        {
+          "title": "統合されたクリエイターエコノミーと市場",
+          "desc": "Scemoryは、メディア販売における85%のクリエイター還元、商用ライセンス、ウォレット出金、クレジット制度を備え、非営利アーカイブにはない持続可能な創作支援を提供します。"
+        },
+        {
+          "title": "13言語への完全対応とネイティブRTLサポート",
+          "desc": "アラビア語、ペルシャ語、ウルドゥー語などの右横書き（RTL）言語を含む主要13言語に完全対応し、真のグローバルなユーザーコミュニティを支援します。"
+        }
+      ],
+      "audienceScemory": "歴史的アーカイブと現代のリアルタイムな出来事の双方を記録し、高画質写真や動画の保存・配信、さらには作品のライセンス販売を行いたいプロ・アマチュア写真家、ジャーナリスト、イベント主催者、記録者。",
+      "audienceCompetitor": "地域の古い写真コレクションや集団的記憶を地図上に公開し、歴史的なストリートビュー座標と結びつけたい郷土史団体、公共図書館、学校、地域アーカイブ、ボランティア研究者。",
+      "whyChooseSummary": "Historypinは、クラウドソーシングによる地域社会の遺産保存における偉大なパイオニアです。現代のイベント中心の記録、高解像度動画ホスティング、クリエイター収益還元、デジタルライセンス、13言語展開が必要な場合は、Scemoryが最適な選択肢です。"
+    },
+    "pastvu": {
+      "heroTitle": "Scemory 対 PastVu: 歴史写真マッピングと現代マルチメディアイベント保存の比較",
+      "heroSubtitle": "PastVuの世界規模の位置情報付きレトロ写真アーカイブと、Scemoryの現代イベント駆動型マルチメディア・マーケットプレイスの客観的比較。",
+      "primaryFocus": "1826年から2000年までの位置座標およびカメラ撮影角度インジケーター付き歴史写真アーカイブ。",
+      "logoAlt": "PastVu 公式ロゴ",
+      "seoTitle": "Scemory 対 PastVu: 詳細プラットフォーム比較",
+      "seoDescription": "ScemoryとPastVuを比較。歴史写真アーカイブ、撮影方向の位置情報、動画サポート、マーケットプレイスライセンス、多言語対応の違いを解説します。",
+      "aboutScemory": "Scemoryは、現代の生起する出来事の記録と歴史的記憶の保存を一つのプラットフォームで統合。高解像度写真と動画のホスティング、地図探索、コミュニティ対話に加え、クリエイターや機関がデジタル資産をライセンス販売し正当な収益を得られるマーケットプレイスを提供します。",
+      "aboutCompetitor": "PastVuは、2009年に設立された独立系コミュニティ主導の写真アーカイブで、1826年から2000年までに撮影された世界中の歴史写真を収集・位置特定することに特化しています。正確な地理座標、カメラの撮影方向を示す矢印、ボランティアによる厳格な歴史検証で知られています。",
+      "scemoryAdvantages": [
+        {
+          "title": "現代の出来事と歴史のシームレスな網羅",
+          "desc": "PastVuは2000年以前の写真のみに厳格に限定していますが、Scemoryは歴史的な節目から現代の文化的・社会的・日常的な出来事まで、過去と現在を切れ目なく結びつけます。"
+        },
+        {
+          "title": "ネイティブ動画のアップロードとストリーミング",
+          "desc": "PastVuは静止画写真のみを対象としています。Scemoryは動画のエンドツーエンド処理、透かし付きプレビュー、レスポンシブな再生を提供し、貴重な映像記録を鮮明に保存します。"
+        },
+        {
+          "title": "デジタルマーケットプレイスとメディアライセンス",
+          "desc": "Scemoryは商用ライセンス権、デジタル資産の購入、85%のクリエイター還元を備えた商取引機能を内蔵し、記録者が自身のアーカイブから正当な対価を得ることを可能にします。"
+        },
+        {
+          "title": "包括的な13言語ローカリゼーション",
+          "desc": "PastVuが主に英語とロシア語のインターフェースであるのに対し、Scemoryはアラビア語、ペルシャ語、ウルドゥー語等のRTL言語を含む13言語で完全に利用可能です。"
+        }
+      ],
+      "audienceScemory": "現代および歴史の出来事の両方を記録し、動画の活用や商用ライセンス、公正な収益化を求める写真家、映像制作者、ドキュメンタリスト、メディアバイヤー、出版関係者、歴史記録者。",
+      "audienceCompetitor": "1826年から2000年までの歴史写真を正確なカメラアングルや位置情報とともに探索・考証したい都市史家、ヴィンテージ写真愛好家、地図学者、郷土史研究者。",
+      "whyChooseSummary": "PastVuは、撮影方向を明示した歴史写真の収集において卓越した専門的アーカイブです。現代の出来事の記録、動画の活用、クリエイターの収益化、そして13言語の世界的なユーザー層を求める場合は、Scemoryが理想的です。"
+    },
+    "theClio": {
+      "heroTitle": "Scemory 対 The Clio: 記憶の場所の発見と生起する出来事の記録",
+      "heroSubtitle": "The Clioの教育的歴史ランドマークガイドと、Scemoryのインタラクティブなイベント記録・マルチメディア市場の客観的比較。",
+      "primaryFocus": "歴史的ランドマーク、記念碑、博物館、史跡、および教育的ウォーキングツアーのガイド。",
+      "logoAlt": "The Clio 公式ロゴ",
+      "seoTitle": "Scemory 対 The Clio: 詳細プラットフォーム比較",
+      "seoDescription": "ScemoryとThe Clioを比較。The Clioの教育的ランドマークウォーキングツアーと、Scemoryのイベント中心マルチメディア記録およびクリエイター市場を詳細に対比します。",
+      "aboutScemory": "Scemoryは、個人、組織、クリエイターが時間の中の瞬間を保存・発見できるようにするイベント中心のプラットフォームです。高解像度写真と動画の記録、インタラクティブ地図での空間探索、コミュニティ対話、商用メディアライセンスを統合しています。",
+      "aboutCompetitor": "The Clioは、歴史学者David Trowbridge教授によって設立された教育非営利団体（The Clio Foundation 501(c)(3)）が運営するウェブおよびアプリです。北米全土の歴史的建造物、記念碑、史跡のバーチャルガイドとして機能し、学者や学生が作成したウォーキングツアーを提供しています。",
+      "scemoryAdvantages": [
+        {
+          "title": "固定されたランドマークを超えた動的なイベント記録",
+          "desc": "The Clioは固定された物理的建造物や史跡碑に焦点を当てていますが、Scemoryは物理的な記念碑の有無にかかわらず、時間に縛られた動的な出来事、祝祭、集会、式典を記録します。"
+        },
+        {
+          "title": "商用メディアライセンスとクリエイターエコノミー",
+          "desc": "教育的慈善団体であるThe Clioには市場機能がありません。Scemoryは透明性のある商用ライセンス、メディア購入、クリエイター収益分配を備え、プロの記録者を支援します。"
+        },
+        {
+          "title": "直接的なマルチメディアアーカイブと高画質保存",
+          "desc": "Scemoryは透かし付きプレビューやダウンロード権限を備えた直接のリポジトリとして機能しますが、The Clioは二次的な教育資料としてメディアを主に参照します。"
+        },
+        {
+          "title": "RTLを含む13言語によるグローバルリーチ",
+          "desc": "The Clioは北米の歴史を中心とした英語主体のプラットフォームですが、Scemoryは主要13言語（RTL含む）に対応し、世界中の多文化コミュニティを歓迎します。"
+        }
+      ],
+      "audienceScemory": "現代および歴史の瞬間を記録し、動画ホスティング、ライセンス取引、国際的な発信力を必要とする独立クリエイター、ジャーナリスト、イベント主催者、メディアバイヤー、国際コミュニティ。",
+      "audienceCompetitor": "北米の指定史跡に関する精査された解説やウォーキングツアーを求めている学生、大学教員、博物館学芸員、遺産観光客、郷土史愛好家。",
+      "whyChooseSummary": "The Clioは、物理的な歴史ランドマークやウォーキングツアーを学ぶための素晴らしい教育用非営利リソースです。生きた出来事を捉え、高解像度の写真や動画を保管し、世界に向けて作品をライセンス販売したい場合は、Scemoryをお選びください。"
+    }
+  }
 }

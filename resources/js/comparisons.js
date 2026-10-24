@@ -1,0 +1,170 @@
+/**
+ * Scemory Competitor Comparisons Configuration
+ * Verified: October 24, 2026
+ * Primary Sources:
+ * - Historypin: https://www.historypin.org
+ * - PastVu: https://pastvu.com and https://docs.pastvu.com
+ * - The Clio: https://theclio.com and The Clio Foundation (Apple App Store bundle com.theclio.clio)
+ */
+
+export const COMPARISON_VERIFICATION_DATE = '2026-10-24';
+
+export const comparisonFeatures = [
+  'historicalEvents',
+  'locationMemories',
+  'photoArchives',
+  'videoDocumentation',
+  'userContributions',
+  'communityParticipation',
+  'chronologicalBrowsing',
+  'eventCentricOrg',
+  'contributorProfiles',
+  'discoveryMap',
+  'mediaMarketplace',
+  'mediaPurchases',
+  'commercialLicensing',
+  'creatorMonetization',
+  'payoutSystem',
+  'subscriptionPlans',
+  'mediaCredits',
+  'multilingual',
+  'institutionalUse',
+];
+
+export const scemoryFeatureStatuses = {
+  historicalEvents: 'supported',
+  locationMemories: 'supported',
+  photoArchives: 'supported',
+  videoDocumentation: 'supported',
+  userContributions: 'supported',
+  communityParticipation: 'supported',
+  chronologicalBrowsing: 'supported',
+  eventCentricOrg: 'supported',
+  contributorProfiles: 'supported',
+  discoveryMap: 'supported',
+  mediaMarketplace: 'supported',
+  mediaPurchases: 'supported',
+  commercialLicensing: 'supported',
+  creatorMonetization: 'supported',
+  payoutSystem: 'supported',
+  subscriptionPlans: 'supported',
+  mediaCredits: 'supported',
+  multilingual: 'supported',
+  institutionalUse: 'partial',
+};
+
+export const competitors = {
+  'historypin': {
+    id: 'historypin',
+    slug: 'historypin',
+    name: 'Historypin',
+    website: 'https://www.historypin.org/',
+    logo: '/images/comparisons/historypin-logo.svg',
+    logoAltKey: 'comparisons.historypin.logoAlt',
+    yearFounded: 2010,
+    headquarters: 'London, United Kingdom / Global',
+    organizationType: 'Non-Profit Project / Shift Foundation',
+    primaryFocusKey: 'comparisons.historypin.primaryFocus',
+    sourceUrl: 'https://www.historypin.org/',
+    sourceName: 'Historypin Official Platform',
+    featureStatuses: {
+      historicalEvents: 'supported',
+      locationMemories: 'supported',
+      photoArchives: 'supported',
+      videoDocumentation: 'partial',
+      userContributions: 'supported',
+      communityParticipation: 'supported',
+      chronologicalBrowsing: 'supported',
+      eventCentricOrg: 'partial',
+      contributorProfiles: 'supported',
+      discoveryMap: 'supported',
+      mediaMarketplace: 'not_offered',
+      mediaPurchases: 'not_offered',
+      commercialLicensing: 'not_offered',
+      creatorMonetization: 'not_offered',
+      payoutSystem: 'not_offered',
+      subscriptionPlans: 'not_offered',
+      mediaCredits: 'not_offered',
+      multilingual: 'partial',
+      institutionalUse: 'supported',
+    },
+  },
+  'pastvu': {
+    id: 'pastvu',
+    slug: 'pastvu',
+    name: 'PastVu',
+    website: 'https://pastvu.com/',
+    logo: '/images/comparisons/pastvu-logo.png',
+    logoAltKey: 'comparisons.pastvu.logoAlt',
+    yearFounded: 2009,
+    headquarters: 'Global Community Archive',
+    organizationType: 'Independent Volunteer Archive',
+    primaryFocusKey: 'comparisons.pastvu.primaryFocus',
+    sourceUrl: 'https://pastvu.com/',
+    sourceName: 'PastVu Official Platform & Documentation (docs.pastvu.com)',
+    featureStatuses: {
+      historicalEvents: 'partial',
+      locationMemories: 'supported',
+      photoArchives: 'supported',
+      videoDocumentation: 'not_offered',
+      userContributions: 'supported',
+      communityParticipation: 'supported',
+      chronologicalBrowsing: 'supported',
+      eventCentricOrg: 'not_offered',
+      contributorProfiles: 'supported',
+      discoveryMap: 'supported',
+      mediaMarketplace: 'not_offered',
+      mediaPurchases: 'not_offered',
+      commercialLicensing: 'not_offered',
+      creatorMonetization: 'not_offered',
+      payoutSystem: 'not_offered',
+      subscriptionPlans: 'not_offered',
+      mediaCredits: 'not_offered',
+      multilingual: 'partial',
+      institutionalUse: 'partial',
+    },
+  },
+  'the-clio': {
+    id: 'the-clio',
+    slug: 'the-clio',
+    name: 'The Clio',
+    website: 'https://theclio.com/',
+    logo: '/images/comparisons/the-clio-logo.png',
+    logoAltKey: 'comparisons.theClio.logoAlt',
+    yearFounded: 2014,
+    headquarters: 'Huntington, West Virginia, USA',
+    organizationType: 'The Clio Foundation (501(c)(3) Public Charity)',
+    primaryFocusKey: 'comparisons.theClio.primaryFocus',
+    sourceUrl: 'https://theclio.com/',
+    sourceName: 'The Clio Official Website & The Clio Foundation',
+    featureStatuses: {
+      historicalEvents: 'supported',
+      locationMemories: 'supported',
+      photoArchives: 'partial',
+      videoDocumentation: 'partial',
+      userContributions: 'supported',
+      communityParticipation: 'supported',
+      chronologicalBrowsing: 'partial',
+      eventCentricOrg: 'partial',
+      contributorProfiles: 'supported',
+      discoveryMap: 'supported',
+      mediaMarketplace: 'not_offered',
+      mediaPurchases: 'not_offered',
+      commercialLicensing: 'not_offered',
+      creatorMonetization: 'not_offered',
+      payoutSystem: 'not_offered',
+      subscriptionPlans: 'not_offered',
+      mediaCredits: 'not_offered',
+      multilingual: 'not_documented',
+      institutionalUse: 'supported',
+    },
+  },
+};
+
+export const competitorList = Object.values(competitors);
+
+export function getCompetitor(slug) {
+  if (!slug) return null;
+  const normalized = String(slug).toLowerCase().trim();
+  return competitors[normalized] || null;
+}

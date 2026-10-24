@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "搜索活动..."
+  "search": {
+    "placeholder": "搜索活动..."
+  },
+  "filters": {
+    "title": "筛选",
+    "allCategories": "所有类别",
+    "country": "国家",
+    "category": "类别",
+    "subCategory": "子类别",
+    "from": "从",
+    "to": "到",
+    "city": "城市",
+    "allSubCategories": "所有子类别"
+  },
+  "upload_media": "上传媒体",
+  "view_all_comments": "查看所有评论",
+  "nav": {
+    "timeline": "我的时间线",
+    "favourites": "收藏",
+    "plans": "方案",
+    "specialCoverage": "特别报道",
+    "more": "更多",
+    "terms": "条款",
+    "dashboard": "仪表板",
+    "historical": "历史",
+    "scemoryGate": "Scemory 入口",
+    "events": "活动",
+    "home": "首页",
+    "about": "关于",
+    "allEvents": "所有活动",
+    "downloads": "下载",
+    "contact": "联系",
+    "addEvent": "添加活动",
+    "wishlist": "收藏夹",
+    "profile": "个人资料",
+    "logout": "退出登录",
+    "login": "登录",
+    "cart": "购物车",
+    "scemoryHome": "Scemory 首页",
+    "toggleMenu": "切换菜单",
+    "mediaCredits": "媒体额度"
+  },
+  "login_to_comment": "请登录以发表评论",
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "TR": "Turkish",
+    "DE": "Deutsch",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "event": {
+    "reply": "回复",
+    "delete": " 删除",
+    "no_media_yet": "没有媒体",
+    "reply_placeholder": "在这里写您的回复...",
+    "loading": "正在加载事件...",
+    "not_found": "事件不存在或已被删除。",
+    "city_default": "未指定",
+    "visitor": "访客",
+    "media_gallery_title": "事件媒体",
+    "no_media": "没有媒体",
+    "about_event_title": "关于事件",
+    "comments_title": "评论",
+    "add_comment_title": "添加您的评论",
+    "comment_placeholder": "在这里写您的评论...",
+    "submit_comment": "提交",
+    "sending_comment": "正在发送...",
+    "comment_login_required": "请先登录",
+    "comment_added_success": "您的评论已成功添加！",
+    "delete_comment_title": "删除评论",
+    "event_info_title": "事件信息",
+    "from_date": "从",
+    "to_date": "到",
+    "time_label": "时间",
+    "time_default": "未指定",
+    "location": "地点",
+    "organizer": "事件组织者",
+    "add_to_wishlist": "添加到收藏夹",
+    "already_in_wishlist": "已在收藏夹中",
+    "adding_to_wishlist": "正在添加...",
+    "wishlist_success": "已成功添加到收藏夹!",
+    "buy_collection_title": "购买完整收藏",
+    "total_images": "Total Images",
+    "save_discount": "10%折扣",
+    "you_save": "您省钱",
+    "add_collection_to_cart": "🎁 将完整收藏添加到购物车",
+    "collection_benefit_1": "✓ 一次购买所有图像",
+    "collection_benefit_2": "自动10%折扣",
+    "collection_benefit_3": "✓ 节省时间和金钱",
+    "collection_benefit_4": "✓ 立即获取所有活动回忆",
+    "upload_media_to_event": "向活动上传媒体",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "添加图片（{count}/{max}）",
+    "comment_image_limit": "最多 2 张图片，每张不超过 5 MB",
+    "selected_comment_image_alt": "已选图片 {number}",
+    "remove_selected_comment_image": "移除已选图片 {number}"
+  },
+  "common": {
+    "search": "搜索",
+    "placeholder": "搜索活动...",
+    "searching": "正在搜索...",
+    "details": "详情",
+    "notSpecified": "未指定",
+    "loadingEvents": "正在加载事件...",
+    "loading": "正在加载...",
+    "close": "关闭",
+    "tryAgain": "重试",
+    "back": "返回",
+    "remove": "移除",
+    "clear": "清除",
+    "previous": "上一页",
+    "next": "下一页",
+    "noResults": "没有结果",
+    "unknownError": "未知错误",
+    "learnMore": "了解更多",
+    "cancel": "取消",
+    "sending": "正在发送...",
+    "show": "显示",
+    "hide": "隐藏"
+  },
+  "events": {
+    "add_historical_event": "添加历史活动",
+    "brand_footer": "世界上所有活动",
+    "no_title": "无标题活动",
+    "undefined_city": "未定义",
+    "from_map": "来自地图",
+    "cities": "城市",
+    "categories": "类别",
+    "all_memories": "所有事件回忆",
+    "showing_snapshots": "显示来自世界各地的 {total} 个历史快照",
+    "sort_by": "排序方式",
+    "sort": {
+      "newest": "最新优先",
+      "oldest": "最旧优先",
+      "title": "标题"
     },
-    "filters": {
-        "title": "筛选",
-        "allCategories": "所有类别",
-        "country": "国家",
-        "category": "类别",
-        "subCategory": "子类别",
-        "from": "从",
-        "to": "到",
-        "city": "城市",
-        "allSubCategories": "所有子类别"
+    "loading": "正在加载事件...",
+    "retry": "重试",
+    "page_info": "第 {current} 页，共 {last} 页",
+    "active_memories": "活跃事件",
+    "latestEvents": "最新活动",
+    "recentMemories": "最近事件",
+    "discoverAroundYou": "发现您周围正在发生的事情，准备好迎接最美好的时刻",
+    "noEventsFound": "未找到活动",
+    "noMatchingEvents": "没有活动符合你的搜索条件或位置",
+    "event": "活动",
+    "startDate": "开始日期",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "上传媒体",
-    "view_all_comments": "查看所有评论",
-    "nav": {
-        "timeline": "我的时间线",
-        "favourites": "收藏",
-        "plans": "方案",
-        "specialCoverage": "特别报道",
-        "more": "更多",
-        "terms": "条款",
-        "dashboard": "仪表板",
-        "historical": "历史",
-        "scemoryGate": "Scemory 入口",
-        "events": "活动",
-        "home": "首页",
-        "about": "关于",
-        "allEvents": "所有活动",
-        "downloads": "下载",
-        "contact": "联系",
-        "addEvent": "添加活动",
-        "wishlist": "收藏夹",
-        "profile": "个人资料",
-        "logout": "退出登录",
-        "login": "登录",
-        "cart": "购物车",
-        "scemoryHome": "Scemory 首页",
-        "toggleMenu": "切换菜单",
-        "mediaCredits": "媒体额度"
+    "emptyAvailable": "No events are currently available.",
+    "directory": {
+      "eyebrow": "探索 Scemory",
+      "eventsTitle": "活动",
+      "eventsDescription": "发现来自世界各地正在进行和即将举行的活动。",
+      "historicalTitle": "历史活动",
+      "historicalDescription": "探索过去记录下来的活动和保存的回忆。",
+      "events": "个活动",
+      "historicalEvents": "个历史活动",
+      "collection": "活动集合",
+      "filters": "筛选条件",
+      "refine": "优化结果",
+      "closeFilters": "关闭筛选条件",
+      "searchLabel": "搜索",
+      "searchPlaceholder": "搜索活动...",
+      "eventType": "活动类型",
+      "types": {
+        "all": "所有活动",
+        "real": "真实活动",
+        "general": "一般活动"
+      },
+      "country": "国家",
+      "allCountries": "所有国家",
+      "category": "类别",
+      "allCategories": "所有类别",
+      "city": "城市",
+      "allCities": "所有城市",
+      "subcategory": "子类别",
+      "allSubcategories": "所有子类别",
+      "fromDate": "开始日期",
+      "toDate": "结束日期",
+      "clearFilters": "清除筛选条件",
+      "createEvent": "创建活动",
+      "createHistorical": "添加历史活动",
+      "results": "{count} 个活动",
+      "showing": "显示第 {from}–{to} 条，共 {total} 条",
+      "errorTitle": "无法加载活动",
+      "errorDescription": "加载活动时出错，请重试。",
+      "emptyTitle": "未找到活动",
+      "historicalEmptyTitle": "未找到历史活动",
+      "emptyDescription": "请尝试更改或清除筛选条件。",
+      "eventBadge": "活动",
+      "historicalBadge": "历史",
+      "unknownLocation": "未知地点",
+      "uncategorized": "未分类",
+      "viewEvent": "查看活动",
+      "pagination": "活动分页",
+      "previous": "上一页",
+      "next": "下一页"
+    }
+  },
+  "pagination": {
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "about": {
+    "title": "关于我们 - Scene Memory",
+    "subtitle": "我们保存您最珍贵的时刻，一幕接一幕",
+    "text1": "在 Scene Memory，我们相信人生中最美好的时刻值得被清晰而充满感情地保存。我们不仅仅是一个存储平台——我们是您人生旅程的数字回忆相册。",
+    "features": {
+      "immersiveAlbums": "创建包含照片、视频和语音笔记的沉浸式回忆相册",
+      "aiOrganize": "人工智能支持的组织功能，自动分类和标记您的回忆",
+      "privacy": "完全隐私和安全 – 您的回忆经过加密，只有您能访问"
     },
-    "login_to_comment": "请登录以发表评论",
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "TR": "Turkish",
-        "DE": "Deutsch",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
-    },
-    "event": {
-        "reply": "回复",
-        "delete": " 删除",
-        "no_media_yet": "没有媒体",
-        "reply_placeholder": "在这里写您的回复...",
-        "loading": "正在加载事件...",
-        "not_found": "事件不存在或已被删除。",
-        "city_default": "未指定",
-        "visitor": "访客",
-        "media_gallery_title": "事件媒体",
-        "no_media": "没有媒体",
-        "about_event_title": "关于事件",
-        "comments_title": "评论",
-        "add_comment_title": "添加您的评论",
-        "comment_placeholder": "在这里写您的评论...",
-        "submit_comment": "提交",
-        "sending_comment": "正在发送...",
-        "comment_login_required": "请先登录",
-        "comment_added_success": "您的评论已成功添加！",
-        "delete_comment_title": "删除评论",
-        "event_info_title": "事件信息",
-        "from_date": "从",
-        "to_date": "到",
-        "time_label": "时间",
-        "time_default": "未指定",
-        "location": "地点",
-        "organizer": "事件组织者",
-        "add_to_wishlist": "添加到收藏夹",
-        "already_in_wishlist": "已在收藏夹中",
-        "adding_to_wishlist": "正在添加...",
-        "wishlist_success": "已成功添加到收藏夹!",
-        "buy_collection_title": "购买完整收藏",
-        "total_images": "Total Images",
-        "save_discount": "10%折扣",
-        "you_save": "您省钱",
-        "add_collection_to_cart": "🎁 将完整收藏添加到购物车",
-        "collection_benefit_1": "✓ 一次购买所有图像",
-        "collection_benefit_2": "自动10%折扣",
-        "collection_benefit_3": "✓ 节省时间和金钱",
-        "collection_benefit_4": "✓ 立即获取所有活动回忆",
-        "upload_media_to_event": "向活动上传媒体",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "添加图片（{count}/{max}）",
-        "comment_image_limit": "最多 2 张图片，每张不超过 5 MB",
-        "selected_comment_image_alt": "已选图片 {number}",
-        "remove_selected_comment_image": "移除已选图片 {number}"
-    },
-    "common": {
-        "search": "搜索",
-        "placeholder": "搜索活动...",
-        "searching": "正在搜索...",
-        "details": "详情",
-        "notSpecified": "未指定",
-        "loadingEvents": "正在加载事件...",
-        "loading": "正在加载...",
-        "close": "关闭",
-        "tryAgain": "重试",
-        "back": "返回",
-        "remove": "移除",
-        "clear": "清除",
-        "previous": "上一页",
-        "next": "下一页",
-        "noResults": "没有结果",
-        "unknownError": "未知错误",
-        "learnMore": "了解更多",
-        "cancel": "取消",
-        "sending": "正在发送...",
-        "show": "显示",
-        "hide": "隐藏"
-    },
-    "events": {
-        "add_historical_event": "添加历史活动",
-        "brand_footer": "世界上所有活动",
-        "no_title": "无标题活动",
-        "undefined_city": "未定义",
-        "from_map": "来自地图",
-        "cities": "城市",
-        "categories": "类别",
-        "all_memories": "所有事件回忆",
-        "showing_snapshots": "显示来自世界各地的 {total} 个历史快照",
-        "sort_by": "排序方式",
-        "sort": {
-            "newest": "最新优先",
-            "oldest": "最旧优先",
-            "title": "标题"
-        },
-        "loading": "正在加载事件...",
-        "retry": "重试",
-        "page_info": "第 {current} 页，共 {last} 页",
-        "active_memories": "活跃事件",
-        "latestEvents": "最新活动",
-        "recentMemories": "最近事件",
-        "discoverAroundYou": "发现您周围正在发生的事情，准备好迎接最美好的时刻",
-        "noEventsFound": "未找到活动",
-        "noMatchingEvents": "没有活动符合你的搜索条件或位置",
-        "event": "活动",
-        "startDate": "开始日期",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "directory": {
-            "eyebrow": "探索 Scemory",
-            "eventsTitle": "活动",
-            "eventsDescription": "发现来自世界各地正在进行和即将举行的活动。",
-            "historicalTitle": "历史活动",
-            "historicalDescription": "探索过去记录下来的活动和保存的回忆。",
-            "events": "个活动",
-            "historicalEvents": "个历史活动",
-            "collection": "活动集合",
-            "filters": "筛选条件",
-            "refine": "优化结果",
-            "closeFilters": "关闭筛选条件",
-            "searchLabel": "搜索",
-            "searchPlaceholder": "搜索活动...",
-            "eventType": "活动类型",
-            "types": {
-                "all": "所有活动",
-                "real": "真实活动",
-                "general": "一般活动"
-            },
-            "country": "国家",
-            "allCountries": "所有国家",
-            "category": "类别",
-            "allCategories": "所有类别",
-            "city": "城市",
-            "allCities": "所有城市",
-            "subcategory": "子类别",
-            "allSubcategories": "所有子类别",
-            "fromDate": "开始日期",
-            "toDate": "结束日期",
-            "clearFilters": "清除筛选条件",
-            "createEvent": "创建活动",
-            "createHistorical": "添加历史活动",
-            "results": "{count} 个活动",
-            "showing": "显示第 {from}–{to} 条，共 {total} 条",
-            "errorTitle": "无法加载活动",
-            "errorDescription": "加载活动时出错，请重试。",
-            "emptyTitle": "未找到活动",
-            "historicalEmptyTitle": "未找到历史活动",
-            "emptyDescription": "请尝试更改或清除筛选条件。",
-            "eventBadge": "活动",
-            "historicalBadge": "历史",
-            "unknownLocation": "未知地点",
-            "uncategorized": "未分类",
-            "viewEvent": "查看活动",
-            "pagination": "活动分页",
-            "previous": "上一页",
-            "next": "下一页"
-        }
-    },
-    "pagination": {
-        "previous": "上一页",
-        "next": "下一页"
-    },
-    "about": {
-        "title": "关于我们 - Scene Memory",
-        "subtitle": "我们保存您最珍贵的时刻，一幕接一幕",
-        "text1": "在 Scene Memory，我们相信人生中最美好的时刻值得被清晰而充满感情地保存。我们不仅仅是一个存储平台——我们是您人生旅程的数字回忆相册。",
-        "features": {
-            "immersiveAlbums": "创建包含照片、视频和语音笔记的沉浸式回忆相册",
-            "aiOrganize": "人工智能支持的组织功能，自动分类和标记您的回忆",
-            "privacy": "完全隐私和安全 – 您的回忆经过加密，只有您能访问"
-        },
-        "startJourney": "现在开始您的回忆之旅",
-        "highlightMoments": "突出您人生中的重要时刻",
-        "organizedBy": "按场景、人物和地点组织",
-        "stats": {
-            "memories": "已保存的回忆",
-            "users": "满意用户",
-            "backup": "安全备份"
-        }
-    },
-    "newsletter": {
-        "title": "与您的回忆保持联系",
-        "description": "每周通过电子邮件接收回忆技巧、功能更新和鼓舞人心的故事",
-        "firstName": "名字",
-        "firstNamePlaceholder": "您的名字",
-        "email": "电子邮件",
-        "emailPlaceholder": "you@example.com",
-        "consent": "我同意偶尔接收 Scene Memory 的回忆建议、更新和促销信息。我可以随时取消订阅。",
-        "subscribe": "订阅回忆更新",
-        "community": "加入我们超过 5,000 名回忆守护者的社区",
-        "kicker": "通讯",
-        "verifiedTitle": "及时了解已验证的活动故事",
-        "verifiedDescription": "获取有关热门活动、新媒体档案以及世界各地贡献者记录的重要故事的精选更新。",
-        "subscribeShort": "订阅",
-        "pendingApiMessage": "感谢订阅。通讯 API 将很快连接。",
-        "errors": {
-            "emailRequired": "请输入电子邮件。",
-            "emailInvalid": "请输入有效的电子邮件地址。"
-        }
-    },
-    "map": {
-        "exploreMap": "探索地图"
-    },
-    "hero": {
-        "title_main": "我们保存您的回忆",
-        "title_highlight": "让它们永远鲜活",
-        "description": "在 Scene Memory，我们相信每一刻都值得留存。我们在这里帮助您保存、组织和回忆人生中重要的事件。",
-        "cta_start": "开始与我们一起的旅程",
-        "cta_watch": "观看介绍视频",
-        "feature_organized": "有组织的回忆",
-        "feature_organized_desc": "每一刻都在合适的位置",
-        "feature_private": "保证隐私",
-        "feature_private_desc": "您的回忆完全安全",
-        "feature_reminders": "智能提醒",
-        "feature_reminders_desc": "永不错过任何重要场合",
-        "feature_evolving": "持续进化",
-        "feature_evolving_desc": "我们始终在改善您的体验"
-    },
-    "our_story": {
-        "badge": "我们的故事",
-        "title": "我们的旅程如何开始",
-        "intro": "我们的故事始于一个简单的想法：如何帮助人们保存塑造他们人生的珍贵回忆？",
-        "stage1_title": "起点",
-        "stage1_desc": "2020 年，我们的创始人注意到许多重要时刻会随着时间流逝而消失。他们决定构建一个简单却强大的工具来保存这些回忆。",
-        "stage2_title": "成长",
-        "stage2_desc": "随着用户增加，我们添加了新功能，如智能提醒、高级分类，以及与亲人安全分享回忆。",
-        "stage3_title": "愿景",
-        "stage3_desc": "今天，我们致力于成为全球最佳的回忆保存与组织平台，专注于隐私和流畅体验。"
-    },
-    "mission_vision": {
-        "mission_badge": "我们的使命",
-        "mission_title": "我们的信念",
-        "mission_text": "我们的使命是让每个人都能以简单、安全、有组织的方式保存珍贵回忆。我们相信人生中的每一刻都值得被保存和铭记。",
-        "value_people_first": "以人为本",
-        "value_people_first_desc": "用户体验是我们每个决策的核心",
-        "value_privacy": "隐私神圣",
-        "value_privacy_desc": "您的回忆只属于您，我们绝不与任何人分享",
-        "value_growth": "持续成长",
-        "value_growth_desc": "我们不断进化以满足用户需求",
-        "vision_badge": "我们的愿景",
-        "vision_title": "我们的方向",
-        "vision_text": "我们立志成为全球首屈一指的回忆保存与组织平台，让任何地方的任何人都能轻松安全地保存重要时刻。",
-        "goals_2025": "2025 年目标",
-        "goal_users": "达到一百万用户",
-        "goal_languages": "新增 10 种语言",
-        "goal_ai": "推出人工智能功能"
-    },
-    "team": {
-        "badge": "我们的团队",
-        "title": "Scene Memory 背后的头脑",
-        "description": "我们多元化的开发者、设计师和用户体验专家团队共同打造难忘的回忆保存体验。"
-    },
-    "values": {
-        "badge": "我们的价值观",
-        "title": "我们的独特之处"
-    },
+    "startJourney": "现在开始您的回忆之旅",
+    "highlightMoments": "突出您人生中的重要时刻",
+    "organizedBy": "按场景、人物和地点组织",
     "stats": {
-        "title": "数字说明一切",
-        "description": "自成立以来，我们已帮助成千上万人保存数百万珍贵回忆"
+      "memories": "已保存的回忆",
+      "users": "满意用户",
+      "backup": "安全备份"
+    }
+  },
+  "newsletter": {
+    "title": "与您的回忆保持联系",
+    "description": "每周通过电子邮件接收回忆技巧、功能更新和鼓舞人心的故事",
+    "firstName": "名字",
+    "firstNamePlaceholder": "您的名字",
+    "email": "电子邮件",
+    "emailPlaceholder": "you@example.com",
+    "consent": "我同意偶尔接收 Scene Memory 的回忆建议、更新和促销信息。我可以随时取消订阅。",
+    "subscribe": "订阅回忆更新",
+    "community": "加入我们超过 5,000 名回忆守护者的社区",
+    "kicker": "通讯",
+    "verifiedTitle": "及时了解已验证的活动故事",
+    "verifiedDescription": "获取有关热门活动、新媒体档案以及世界各地贡献者记录的重要故事的精选更新。",
+    "subscribeShort": "订阅",
+    "pendingApiMessage": "感谢订阅。通讯 API 将很快连接。",
+    "errors": {
+      "emailRequired": "请输入电子邮件。",
+      "emailInvalid": "请输入有效的电子邮件地址。"
+    }
+  },
+  "map": {
+    "exploreMap": "探索地图"
+  },
+  "hero": {
+    "title_main": "我们保存您的回忆",
+    "title_highlight": "让它们永远鲜活",
+    "description": "在 Scene Memory，我们相信每一刻都值得留存。我们在这里帮助您保存、组织和回忆人生中重要的事件。",
+    "cta_start": "开始与我们一起的旅程",
+    "cta_watch": "观看介绍视频",
+    "feature_organized": "有组织的回忆",
+    "feature_organized_desc": "每一刻都在合适的位置",
+    "feature_private": "保证隐私",
+    "feature_private_desc": "您的回忆完全安全",
+    "feature_reminders": "智能提醒",
+    "feature_reminders_desc": "永不错过任何重要场合",
+    "feature_evolving": "持续进化",
+    "feature_evolving_desc": "我们始终在改善您的体验"
+  },
+  "our_story": {
+    "badge": "我们的故事",
+    "title": "我们的旅程如何开始",
+    "intro": "我们的故事始于一个简单的想法：如何帮助人们保存塑造他们人生的珍贵回忆？",
+    "stage1_title": "起点",
+    "stage1_desc": "2020 年，我们的创始人注意到许多重要时刻会随着时间流逝而消失。他们决定构建一个简单却强大的工具来保存这些回忆。",
+    "stage2_title": "成长",
+    "stage2_desc": "随着用户增加，我们添加了新功能，如智能提醒、高级分类，以及与亲人安全分享回忆。",
+    "stage3_title": "愿景",
+    "stage3_desc": "今天，我们致力于成为全球最佳的回忆保存与组织平台，专注于隐私和流畅体验。"
+  },
+  "mission_vision": {
+    "mission_badge": "我们的使命",
+    "mission_title": "我们的信念",
+    "mission_text": "我们的使命是让每个人都能以简单、安全、有组织的方式保存珍贵回忆。我们相信人生中的每一刻都值得被保存和铭记。",
+    "value_people_first": "以人为本",
+    "value_people_first_desc": "用户体验是我们每个决策的核心",
+    "value_privacy": "隐私神圣",
+    "value_privacy_desc": "您的回忆只属于您，我们绝不与任何人分享",
+    "value_growth": "持续成长",
+    "value_growth_desc": "我们不断进化以满足用户需求",
+    "vision_badge": "我们的愿景",
+    "vision_title": "我们的方向",
+    "vision_text": "我们立志成为全球首屈一指的回忆保存与组织平台，让任何地方的任何人都能轻松安全地保存重要时刻。",
+    "goals_2025": "2025 年目标",
+    "goal_users": "达到一百万用户",
+    "goal_languages": "新增 10 种语言",
+    "goal_ai": "推出人工智能功能"
+  },
+  "team": {
+    "badge": "我们的团队",
+    "title": "Scene Memory 背后的头脑",
+    "description": "我们多元化的开发者、设计师和用户体验专家团队共同打造难忘的回忆保存体验。"
+  },
+  "values": {
+    "badge": "我们的价值观",
+    "title": "我们的独特之处"
+  },
+  "stats": {
+    "title": "数字说明一切",
+    "description": "自成立以来，我们已帮助成千上万人保存数百万珍贵回忆"
+  },
+  "cta": {
+    "title": "加入 Scene Memory 大家庭",
+    "description": "今天就开始您的回忆保存之旅。免费、安全、专为您设计。",
+    "btn_signup": "免费注册账号",
+    "btn_features": "了解功能",
+    "trust": "加入超过 50,000 名信任我们保存回忆的人"
+  },
+  "footer": {
+    "slogan": "保存您的回忆，让它们永远鲜活",
+    "terms": "条款和条件",
+    "privacy": "隐私政策",
+    "contact": "联系我们",
+    "copyright": "© 2024 Scene Memory. 保留所有权利。",
+    "made_with": "用心打造，为保存您的回忆",
+    "quickLinks": "快速链接",
+    "supportContact": "支持与联系",
+    "logoAlt": "徽标",
+    "googlePlayAlt": "在 Google Play 下载",
+    "appStoreAlt": "在 App Store 下载",
+    "copyright2025": "© 2025 Scene Memory。版权所有。",
+    "services": "服务",
+    "copyrightLink": "版权",
+    "termsOfService": "服务条款",
+    "privacyPolicy": "隐私政策",
+    "dataProtection": "数据保护",
+    "dataDeletion": "数据删除说明"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "我们在这里",
+      "title_highlight": "为您提供帮助",
+      "description": "Scene Memory 团队随时为您解答所有疑问并提供帮助",
+      "stat_24_7": "全天候支持",
+      "stat_response_time": "平均响应时间",
+      "stat_satisfaction": "客户满意度",
+      "stat_happy_users": "满意用户"
     },
-    "cta": {
-        "title": "加入 Scene Memory 大家庭",
-        "description": "今天就开始您的回忆保存之旅。免费、安全、专为您设计。",
-        "btn_signup": "免费注册账号",
-        "btn_features": "了解功能",
-        "trust": "加入超过 50,000 名信任我们保存回忆的人"
+    "tabs": {
+      "form": "发送消息",
+      "info": "联系信息"
     },
-    "footer": {
-        "slogan": "保存您的回忆，让它们永远鲜活",
-        "terms": "条款和条件",
-        "privacy": "隐私政策",
-        "contact": "联系我们",
-        "copyright": "© 2024 Scene Memory. 保留所有权利。",
-        "made_with": "用心打造，为保存您的回忆",
-        "quickLinks": "快速链接",
-        "supportContact": "支持与联系",
-        "logoAlt": "徽标",
-        "googlePlayAlt": "在 Google Play 下载",
-        "appStoreAlt": "在 App Store 下载",
-        "copyright2025": "© 2025 Scene Memory。版权所有。",
-        "services": "服务",
-        "copyrightLink": "版权",
-        "termsOfService": "服务条款",
-        "privacyPolicy": "隐私政策",
-        "dataProtection": "数据保护",
-        "dataDeletion": "数据删除说明"
+    "form": {
+      "fullName": "全名",
+      "fullNamePlaceholder": "姓名在此",
+      "emailAddress": "电子邮件",
+      "messagePlaceholder": "在此写下您的消息...",
+      "emailPlaceholder": "您的邮箱",
+      "title": "给我们发消息",
+      "subtitle": "我们会尽快回复您。我们在这里为您服务！",
+      "full_name": "全名",
+      "email": "电子邮件",
+      "subject": "主题",
+      "message": "消息",
+      "message_placeholder": "在此写下您的消息...",
+      "newsletter": "我希望接收 Scene Memory 的新闻简讯和优惠",
+      "submit": "发送消息",
+      "submitting": "正在发送...",
+      "success_title": "发送成功！",
+      "success_message": "感谢您的联系，我们会尽快回复您。"
     },
-    "contact": {
-        "hero": {
-            "title_main": "我们在这里",
-            "title_highlight": "为您提供帮助",
-            "description": "Scene Memory 团队随时为您解答所有疑问并提供帮助",
-            "stat_24_7": "全天候支持",
-            "stat_response_time": "平均响应时间",
-            "stat_satisfaction": "客户满意度",
-            "stat_happy_users": "满意用户"
-        },
-        "tabs": {
-            "form": "发送消息",
-            "info": "联系信息"
-        },
-        "form": {
-            "fullName": "全名",
-            "fullNamePlaceholder": "姓名在此",
-            "emailAddress": "电子邮件",
-            "messagePlaceholder": "在此写下您的消息...",
-            "emailPlaceholder": "您的邮箱",
-            "title": "给我们发消息",
-            "subtitle": "我们会尽快回复您。我们在这里为您服务！",
-            "full_name": "全名",
-            "email": "电子邮件",
-            "subject": "主题",
-            "message": "消息",
-            "message_placeholder": "在此写下您的消息...",
-            "newsletter": "我希望接收 Scene Memory 的新闻简讯和优惠",
-            "submit": "发送消息",
-            "submitting": "正在发送...",
-            "success_title": "发送成功！",
-            "success_message": "感谢您的联系，我们会尽快回复您。"
-        },
-        "info": {
-            "title": "联系信息",
-            "address_title": "总部",
-            "address": "尼罗河街，开罗，埃及",
-            "view_map": "在地图上查看",
-            "phone_title": "电话",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "上午 9 点至晚上 9 点可用",
-            "email_title": "电子邮件",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "24 小时内回复",
-            "follow_us": "关注我们",
-            "map_title": "我们在地图上的位置",
-            "map_location": "开罗，埃及",
-            "open_map": "打开地图"
-        },
-        "faq": {
-            "title": "常见问题",
-            "subtitle": "回答最常见的问题"
-        },
-        "live_support": {
-            "title": "实时支持",
-            "description": "现在与我们的团队成员交谈以获得即时帮助",
-            "btn_chat": "开始实时聊天",
-            "btn_schedule": "安排通话",
-            "available": "目前可用：3 名支持人员"
-        }
-    },
-    "contacts": {
-        "badge": "联系我们",
-        "title": "一起聊聊",
-        "description": "有问题、需要支持，或想了解定制方案？给我们留言，我们的团队会尽快回复你。",
-        "form": {
-            "title": "给我们留言",
-            "description": "填写下方表单，我们会尽快回复。",
-            "fullName": "姓名",
-            "fullNamePlaceholder": "请输入你的姓名",
-            "emailAddress": "电子邮箱",
-            "emailPlaceholder": "请输入你的电子邮箱",
-            "subject": "主题",
-            "generalInquiry": "一般咨询",
-            "customPlan": "定制方案",
-            "support": "技术支持",
-            "feedback": "反馈",
-            "other": "其他",
-            "message": "留言内容",
-            "messagePlaceholder": "告诉我们可以如何帮助你...",
-            "minimumCharacters": "请提供足够的详细信息。",
-            "sendMessage": "发送消息",
-            "sending": "正在发送...",
-            "successMessage": "你的消息已成功发送。",
-            "errorMessage": "发送消息时出现问题，请重试。"
-        },
-        "info": {
-            "getInTouch": "保持联系",
-            "title": "我们随时为你提供帮助",
-            "description": "无论是一般问题、技术支持还是定制价格，都可以联系我们的团队。",
-            "emailUs": "给我们发邮件",
-            "available": "我们的团队会尽快回复。",
-            "customPlans": "定制方案",
-            "customPlansDescription": "需要适合团队或业务的专属解决方案？告诉我们你的需求。",
-            "customerSupport": "客户支持",
-            "supportDescription": "如果你在账户、订阅或服务方面需要帮助，请联系我们。",
-            "followJourney": "关注我们的旅程",
-            "responseTime": "快速回复",
-            "responseTimeDescription": "我们通常会在一个工作日内回复消息。"
-        },
-        "map": {
-            "title": "Scene Memory 世界地图",
-            "description": "想象遍布超过 140 个国家的数千个回忆。"
-        }
+    "info": {
+      "title": "联系信息",
+      "address_title": "总部",
+      "address": "尼罗河街，开罗，埃及",
+      "view_map": "在地图上查看",
+      "phone_title": "电话",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "上午 9 点至晚上 9 点可用",
+      "email_title": "电子邮件",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "24 小时内回复",
+      "follow_us": "关注我们",
+      "map_title": "我们在地图上的位置",
+      "map_location": "开罗，埃及",
+      "open_map": "打开地图"
     },
     "faq": {
-        "badge": "常见问题",
-        "title": "常见问题",
-        "description": "快速解答一些最常见的问题。",
-        "questions": {
-            "0": {
-                "question": "我多久能收到回复？",
-                "answer": "我们的团队通常会在一个工作日内回复。"
-            },
-            "1": {
-                "question": "我可以申请定制方案吗？",
-                "answer": "可以。请在主题字段中选择定制方案，并描述你的需求。"
-            },
-            "2": {
-                "question": "我可以联系你们获取技术支持吗？",
-                "answer": "可以。请选择技术支持，并提供与问题相关的所有详细信息。"
-            }
-        }
+      "title": "常见问题",
+      "subtitle": "回答最常见的问题"
     },
-    "eventForm": {
-        "admin": {
-            "title": "管理员添加活动",
-            "trending": "热门活动",
-            "trendingHelp": "将此活动标记为热门活动",
-            "generateTags": "生成 AI 标签",
-            "generatingTags": "正在生成标签...",
-            "generateTagsHelp": "使用现有 AI 服务为活动和照片推荐标签。发布前可检查或删除这些标签。",
-            "generateTagsError": "目前无法生成 AI 标签。",
-            "created": "活动已成功创建并发布。"
-        },
-        "chooseFiles": "选择文件",
-        "mediaCount": "媒体数量",
-        "title": "添加新事件",
-        "basicInfo": "基本信息",
-        "locationCategory": "位置和分类",
-        "dates": "日期",
-        "images": "事件图片",
-        "eventTitle": "事件标题",
-        "description": "描述",
-        "country": "国家",
-        "searchCountry": "搜索国家...",
-        "selectCountry": "选择国家",
-        "city": "城市",
-        "selectCity": "选择城市",
-        "selectCityFirst": "请先选择国家",
-        "mainCategory": "主要类别",
-        "subCategory": "子类别",
-        "selectSubFirst": "请先选择类别",
-        "selectLocationMap": "在地图上选择位置",
-        "selectedCoords": "所选坐标：纬度 {lat} , 经度 {lng}",
-        "lat": "纬度",
-        "lng": "经度",
-        "pleaseSelectLocation": "请选择地图上的位置",
-        "startDate": "开始日期",
-        "endDate": "结束日期",
-        "startTime": "开始时间",
-        "dragDropHere": "点击或拖放图片到此处",
-        "formatsMax": "PNG • JPG • WEBP | 每张图片最大 5MB",
-        "chooseImages": "选择图片",
-        "addMore": "添加更多",
-        "imagesCount": "{count} / 8 张图片",
-        "remove": "删除",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
-            "mediaRequired": "请至少上传一张图片或一个视频。"
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        },
-        "minimumRequirementsHint": "要创建活动，只需填写标题和描述，并至少上传一张图片或一个视频。其他字段均为选填项。"
-    },
-    "commons": {
-        "required": "必填",
-        "cancel": "取消",
-        "saveDraft": "保存为草稿",
-        "create": "创建事件",
-        "creating": "正在创建...",
-        "choose": "选择"
-    },
-    "eventss": {
-        "no_title": "无标题活动",
-        "undefined_city": "未定义",
-        "from_map": "来自地图"
-    },
-    "wishlist": {
-        "title": "收藏夹",
-        "loading": "加载中...",
-        "empty": {
-            "main": "您的愿望清单中暂无项目",
-            "hint": "开始添加您喜爱的事件吧！"
-        },
-        "fallback_image_alt": "活动默认图片",
-        "uncategorized": "未分类",
-        "no_title": "无标题",
-        "city_label": "城市：",
-        "date_label": "日期：",
-        "time_label": "时间：",
-        "not_specified": "未指定",
-        "view_details": "查看详情",
-        "remove": "从收藏中移除",
-        "deleting": "正在移除...",
-        "added_at": "添加于",
-        "pagination": {
-            "previous": "上一页",
-            "next": "下一页",
-            "page_info": "第 {current} 页 / 共 {total} 页"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "服务条款",
-        "last_updated": "最后更新：2026",
-        "acceptance_title": "条款的接受",
-        "acceptance_text": "访问或使用本平台即表示您同意遵守这些服务条款以及所有适用的法律法规。",
-        "accounts_title": "用户账户",
-        "accounts_text": "用户有责任保护其账户信息的机密性，并对其账户下发生的所有活动负责。",
-        "content_title": "内容所有权",
-        "content_text": "平台上的所有内容，包括文本、图像和数据，均受版权和知识产权法律保护。",
-        "ai_title": "人工智能限制",
-        "ai_text": "未经官方许可，严禁使用平台内容训练人工智能模型、机器学习系统或进行数据挖掘。",
-        "prohibited_title": "禁止的使用",
-        "prohibited_text": "用户不得滥用平台、尝试未经授权访问、抓取数据或干扰平台运行。",
-        "liability_title": "责任限制",
-        "liability_text": "对于因使用服务而产生的任何间接、附带或后果性损害，本平台不承担责任。",
-        "changes_title": "条款变更",
-        "changes_text": "我们保留随时更新或修改这些服务条款的权利。",
-        "contact_title": "联系方式",
-        "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
-    },
-    "plans": {
-        "customPrice": "联系我们",
-        "customPricingDescription": "根据你的需求定价",
-        "contactUs": "联系我们",
-        "chooseYourPlan": "选择你的方案",
-        "getStarted": "开始",
-        "subscribe": "立即订阅",
-        "noFeatures": "暂无功能",
-        "mostPopular": "最受欢迎",
-        "perMonth": "每月",
-        "prioritySupport": "优先支持",
-        "noCreditCard": "无需信用卡",
-        "securePayments": "安全支付",
-        "moneyBack": "30 天保证",
-        "support247": "24/7 支持",
-        "free": "免费",
-        "ourPlans": "我们的方案",
-        "description": "免费开始，或选择最适合你的方案。",
-        "price": "价格",
-        "features": "功能",
-        "cancelAnytime": "可随时取消",
-        "Monthly": "每月",
-        "Yearly": "每年",
-        "unlimitedEvents": "无限事件",
-        "addEvents": "添加事件",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "方案",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "无法加载套餐，请重试。"
-        },
-        "customPlanNote": "围绕你的需求构建",
-        "basicAccessIncluded": "包含基本访问权限",
-        "usd": "USD"
-    },
-    "free": "免费",
-    "basic": "基础版",
-    "professional": "专业版",
-    "premium": "高级版",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "你的浏览器不支持 video 标签。",
-            "badge": "Scemory 活动档案",
-            "title": "探索已记录的活动",
-            "titleHighlight": "通过地图",
-            "description": "发现由世界各地的记者、媒体团队和目击者贡献者上传的活动媒体。",
-            "searchEvents": "搜索活动",
-            "uploadStory": "上传你的故事",
-            "bottomText": "发现来自世界各地的故事、地点与瞬间。",
-            "searchPlaceholder": "  搜索活动、地点或标签..."
-        },
-        "profileToast": {
-            "title": "个人资料未完成",
-            "message": "你的个人资料未完成。请更新：",
-            "complete": "点击完成",
-            "fields": {
-                "phone": "电话",
-                "country": "国家",
-                "position": "职位",
-                "dateOfBirth": "出生日期"
-            }
-        },
-        "trending": {
-            "loadError": "当前无法加载热门活动。",
-            "kicker": "趋势",
-            "title": "热门活动",
-            "description": "正在档案中获得关注的活动。",
-            "emptyTitle": "暂无热门活动",
-            "emptyDescription": "请稍后回来查看精选活动。",
-            "views": "浏览",
-            "likes": "点赞",
-            "slidesLabel": "热门活动幻灯片",
-            "untitledEvent": "无标题活动",
-            "showSlide": "显示热门活动 {number}"
-        },
-        "map": {
-            "tilesSlow": "地图瓦片渲染时间过长。",
-            "loadError": "当前无法加载地图。",
-            "loadMap": "加载地图",
-            "loading": "正在加载地图...",
-            "retry": "重新加载地图",
-            "openFullscreen": "全屏打开地图",
-            "closeFullscreen": "关闭全屏地图"
-        },
-        "about": {
-            "imageAlt": "Scemory 文档平台",
-            "kicker": "可信的活动记忆",
-            "title": "关于 Scemory",
-            "description": "Scemory 面向记者、媒体团队和目击者贡献者，他们需要一个可信空间来记录正在发生的活动。平台连接上传的媒体、活动元数据和地点背景，让人们能够清晰地发现公共故事。",
-            "features": {
-                "upload": "上传照片、视频和现场数据",
-                "explore": "通过互动地图探索活动",
-                "preserve": "在数字档案中保存已验证的故事"
-            }
-        },
-        "events": {
-            "showing": "显示",
-            "of": "共",
-            "events": "活动",
-            "seeMore": "查看更多",
-            "badge": "活动"
-        },
-        "tags": {
-            "loading": "正在加载标签...",
-            "showingFirst": "显示前",
-            "searchToFindMore": "个标签。搜索以查找更多。",
-            "none": "未找到标签",
-            "helper": "选择一个或多个标签来筛选地图活动。",
-            "clearSelected": "清除已选标签",
-            "searchMore": "搜索更多标签"
-        },
-        "search": {
-            "clearText": "清除",
-            "clearTags": "清除"
-        },
-        "specialCoverage": {
-            "badge": "特别报道",
-            "title": "您有值得报道的活动吗？",
-            "description": "向 Scemory 告知值得特别报道的活动，帮助它的故事触达更广泛的受众。",
-            "contactUs": "联系我们",
-            "modal": {
-                "title": "特别报道",
-                "eventName": "活动名称",
-                "eventNamePlaceholder": "请输入活动名称",
-                "description": "活动描述",
-                "descriptionPlaceholder": "请告诉我们活动详情以及它值得报道的原因",
-                "cancel": "取消",
-                "send": "发送",
-                "close": "关闭",
-                "country": "国家",
-                "city": "城市",
-                "searchCity": "搜索城市",
-                "addNewCity": "添加新城市",
-                "createCity": "创建城市",
-                "startDate": "开始日期",
-                "coverageTime": "报道时间",
-                "eventType": "活动类型",
-                "personalEvent": "个人活动",
-                "publicEvent": "公开活动",
-                "selectCountry": "选择国家",
-                "selectCity": "选择城市",
-                "noCitiesFound": "未找到城市",
-                "noCountriesFound": "未找到国家",
-                "countryRequired": "请选择国家。",
-                "cityRequired": "请选择城市。",
-                "startDateRequired": "请选择开始日期。",
-                "eventTypeRequired": "请选择活动类型。",
-                "cityCreateFailed": "无法创建城市，请重试。",
-                "sending": "正在发送...",
-                "eventNameRequired": "请输入活动名称。",
-                "descriptionRequired": "请输入活动描述。",
-                "success": "您的特别报道申请已成功提交。"
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "质量警告"
-        },
-        "videoReady": "视频已准备好上传。",
-        "qualityWarning": "质量检查仅供参考，不会阻止创建活动。"
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "你购买的文件将显示在这里"
-    },
-    "experience": {
-        "kicker": "SCEMORY 体验",
-        "title": "一个平台。故事的每一面。",
-        "pathsLabel": "Scemory 体验路径",
-        "highlightsLabel": "板块亮点",
-        "tabs": {
-            "explore": {
-                "label": "探索活动",
-                "eyebrow": "通过活动发现世界",
-                "heading": "探索世界各地的故事、活动和地点",
-                "description": "从地图进入已记录的公共活动、个人记忆，以及由真实地点和贡献者背景塑造的视觉故事。",
-                "cta": "探索活动",
-                "imageAlt": "带有已记录媒体面板的 Scemory 活动发现界面",
-                "features": {
-                    "browse": "按地点和时间线浏览活动媒体",
-                    "discover": "通过视觉档案发现附近故事",
-                    "move": "从概览进入已记录的活动详情"
-                },
-                "visual": {
-                    "kicker": "实时发现",
-                    "title": "与地图关联的活动故事",
-                    "stat": "全球档案",
-                    "note": "地点、日期和媒体一屏呈现"
-                }
-            },
-            "share": {
-                "label": "分享你的故事",
-                "eyebrow": "把瞬间变成已记录的故事",
-                "heading": "记录重要瞬间",
-                "description": "创建活动，上传照片和媒体，添加地点详情，并把你的视角贡献到 Scemory 档案。",
-                "cta": "上传你的故事",
-                "imageAlt": "用于记录活动媒体的 Scemory 贡献者工作区",
-                "features": {
-                    "add": "添加媒体、描述和地点背景",
-                    "build": "从原始瞬间构建结构化记忆",
-                    "keep": "让贡献者故事与档案保持连接"
-                },
-                "visual": {
-                    "kicker": "贡献流程",
-                    "title": "媒体、背景和地点",
-                    "stat": "故事构建器",
-                    "note": "上传带有有意义细节的瞬间"
-                }
-            },
-            "license": {
-                "label": "许可媒体",
-                "eyebrow": "发现可使用的媒体",
-                "heading": "放心查找并许可活动媒体",
-                "description": "浏览视觉内容，预览可用的活动媒体，并通过 Scemory 现有发现体验进入许可选项。",
-                "cta": "发现媒体",
-                "imageAlt": "用于浏览可许可活动内容的 Scemory 媒体面板",
-                "features": {
-                    "preview": "打开详情前预览活动视觉内容",
-                    "use": "将活动页面作为进入媒体选项的路径",
-                    "keep": "保持发现与许可意图连接"
-                },
-                "visual": {
-                    "kicker": "媒体访问",
-                    "title": "可供审阅的活动视觉内容",
-                    "stat": "许可路径",
-                    "note": "从发现到详情页面"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "重试",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "媒体",
-        "locationShort": "地点",
-        "dateShort": "日期",
-        "searchCountry": "搜索国家...",
-        "featuredEvents": "精选事件"
-    },
-    "country": {
-        "discoverFeaturedIn": "发现精选事件：",
-        "cities": "城市",
-        "availableCity": "可用城市",
-        "currentEvent": "当前事件",
-        "eventMarkers": "事件标记",
-        "clickableMarker": "可点击标记",
-        "differentCategory": "不同类别",
-        "availableCities": "可用城市",
-        "noEvents": "目前没有可用事件",
-        "checkBack": "请稍后再查看",
-        "noImage": "无图片",
-        "viewEvent": "查看事件",
-        "noCategory": "无类别",
-        "countryFallback": "国家",
-        "cityFallback": "城市",
-        "eventFallback": "事件",
-        "clickMarkerToOpen": "点击标记打开",
-        "errors": {
-            "unauthorized": "未授权。请登录。",
-            "notFound": "未找到国家。",
-            "loadFailed": "加载数据时出错。",
-            "mapLibraryFailed": "无法加载地图库。",
-            "bordersFailed": "无法加载国家边界",
-            "invalidBorders": "国家边界文件无效。",
-            "countryBordersNotFound": "无法找到该国边界",
-            "countryBoundsFailed": "无法计算国家范围。",
-            "mapLoadFailed": "加载地图时出错。"
-        }
-    },
-    "cancel": "取消",
-    "login": "登录",
-    "sending": "发送中...",
-    "send_reply": "发送回复",
-    "report": {
-        "action": "举报",
-        "commentTitle": "举报此评论",
-        "modalTitle": "举报评论",
-        "reasonPrompt": "请选择举报此评论的原因：",
-        "submit": "提交举报",
-        "submitting": "提交中...",
-        "successTitle": "举报已提交",
-        "successMessage": "谢谢。我们会尽快审核此评论。",
-        "errors": {
-            "selectReason": "请选择举报原因。",
-            "submitFailed": "提交举报时发生错误。请重试。"
-        },
-        "reasons": {
-            "spam": "垃圾信息",
-            "offensive": "冒犯内容",
-            "inappropriate": "不当内容",
-            "illegal": "违法内容",
-            "untrue": "虚假内容",
-            "falseInformation": "误导信息",
-            "other": "其他原因"
-        }
-    },
-    "commentsPage": {
-        "title": "评论",
-        "emptyLabel": "评论",
-        "emptyMessage": "尚无评论。成为第一个评论的人。",
-        "attachmentAlt": "评论附件",
-        "pageInfo": "第 {current} 页，共 {total} 页",
-        "confirmDelete": "您确定要删除此评论吗？",
-        "errors": {
-            "loadFailed": "加载评论时发生错误。"
-        },
-        "reactions": {
-            "support": "同意",
-            "neutral": "中立",
-            "oppose": "不同意"
-        },
-        "you": "你"
-    },
-    "profilePage": {
-        "title": "我的资料",
-        "subtitle": "管理您的账户信息并更新密码",
-        "noPlan": "无计划",
-        "lastLogin": "上次登录",
-        "accountInfo": "账户信息",
-        "systemInfo": "系统信息",
-        "currentPlan": "当前计划",
-        "planType": "计划类型",
-        "editAccount": "编辑账户详情",
-        "saving": "保存中...",
-        "saveChanges": "保存更改",
-        "tabs": {
-            "userInfo": "用户信息",
-            "editData": "编辑数据",
-            "password": "更新密码",
-            "wallet": "钱包",
-            "privacy": "账户与隐私"
-        },
-        "fields": {
-            "name": "姓名",
-            "fullName": "全名",
-            "email": "邮箱",
-            "phone": "电话",
-            "phoneNumber": "电话号码",
-            "country": "国家",
-            "position": "职位",
-            "positionJob": "职位 / 工作",
-            "birthDate": "出生日期",
-            "role": "角色",
-            "status": "状态",
-            "points": "积分",
-            "rank": "排名",
-            "price": "价格"
-        },
-        "placeholders": {
-            "fullName": "输入您的全名",
-            "countrySearch": "搜索国家",
-            "position": "软件工程师"
-        },
-        "status": {
-            "active": "活跃"
-        },
-        "password": {
-            "title": "更新密码",
-            "current": "当前密码",
-            "new": "新密码",
-            "confirm": "确认密码",
-            "updating": "正在更新...",
-            "update": "更新密码"
-        },
-        "messages": {
-            "fillAllFields": "请填写所有字段。",
-            "passwordMismatch": "密码不匹配。",
-            "passwordUpdated": "密码更新成功。",
-            "passwordUpdateFailed": "更新密码时发生错误。",
-            "chooseCountry": "请从列表中选择一个国家。",
-            "noChanges": "您未做任何更改。",
-            "profileUpdated": "您的个人资料已成功更新。",
-            "profileUpdateFailed": "更新个人资料时发生错误。"
-        },
-        "wallet": {
-            "title": "钱包",
-            "availableBalance": "可用余额",
-            "deposit": "充值",
-            "recentTransactions": "最近交易",
-            "depositType": "存款",
-            "withdrawType": "提现",
-            "noTransactions": "暂无交易",
-            "withdrawComingSoon": "提现功能即将上线。"
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "每个文件最大：100 MB",
-        "dragFiles": "将文件拖到此处或",
-        "clickToChoose": "点击选择",
-        "supportedFiles": "图片和视频（每个文件最大 100 MB）",
-        "selectedFiles": "已选择文件（{count}）",
-        "uploading": "正在上传...",
-        "uploadFiles": "上传文件",
-        "success": "文件上传成功！",
-        "errors": {
-            "fileTooLarge": "文件 \"{name}\" 大于100 MB。",
-            "unsupportedType": "文件类型 \"{name}\" 不受支持。"
-        }
-    },
-    "discovery": {
-        "title": "搜索结果",
-        "description": "在 Scemory 中发现活动、图片和视频。",
-        "showing": "显示",
-        "of": "共",
-        "results": "条结果",
-        "details": "查看详情",
-        "noResultsTitle": "未找到结果",
-        "noResultsDescription": "请尝试更改搜索内容或筛选条件。",
-        "filters": {
-            "allCities": "所有城市",
-            "allCountries": "所有国家"
-        },
-        "tabs": {
-            "all": "全部",
-            "event": "活动",
-            "image": "图片",
-            "video": "视频"
-        },
-        "resultLabels": {
-            "event": "活动",
-            "image": "图片",
-            "video": "视频"
-        },
-        "media": {
-            "price": "价格",
-            "addToCart": "加入购物车",
-            "added": "已添加",
-            "adding": "正在添加...",
-            "playVideo": "播放视频",
-            "pauseVideo": "暂停视频"
-        }
-    },
-    "timeline": {
-        "title": "你的活动记录",
-        "subtitle": "在一个位置查看你的活动、回应、评论和收藏内容。",
-        "totalActivity": "活动总数",
-        "latestActivity": "最近活动",
-        "noLatestActivity": "暂无活动",
-        "loading": "正在加载活动...",
-        "loadError": "无法加载你的活动。",
-        "retry": "重试",
-        "viewAll": "查看全部",
-        "empty": "此部分暂无活动。",
-        "previous": "上一页",
-        "next": "下一页",
-        "pageOf": "第 {current} 页，共 {last} 页",
-        "unknownEvent": "未知活动",
-        "parentComment": "回复：{comment}",
-        "reactionTo": "回应：{comment}",
-        "onEvent": "在 {event}",
-        "tabs": {
-            "all": "全部活动",
-            "events": "活动",
-            "likes": "点赞",
-            "comments": "评论",
-            "replies": "回复",
-            "comment_images": "评论图片",
-            "comment_interactions": "评论回应",
-            "wishlists": "收藏"
-        },
-        "filters": {
-            "label": "时间段",
-            "all": "全部时间",
-            "today": "今天",
-            "this_week": "本周",
-            "this_month": "本月",
-            "custom": "自定义范围",
-            "from": "从",
-            "to": "至",
-            "apply": "应用",
-            "invalidRange": "请选择有效的日期范围。"
-        },
-        "reactions": {
-            "support": "支持",
-            "neutral": "中立",
-            "exhibitions": "反对"
-        },
-        "status": {
-            "pending": "待处理",
-            "approved": "已批准",
-            "rejected": "已拒绝",
-            "active": "有效",
-            "inactive": "无效"
-        }
-    },
-    "security": {
-        "denied": "您无权访问此资源。",
-        "notFound": "未找到请求的资源。",
-        "disabled": "此账户已停用，请联系支持。",
-        "invalidMedia": "媒体文件无效、不受支持或超出安全处理限制。",
-        "unavailable": "此媒体暂时不可用。",
-        "currencyMismatch": "钱包币种与此交易不符。",
-        "insufficientBalance": "可用余额不足。",
-        "invalidWithdrawal": "当前状态下无法修改提现，请联系支持。",
-        "paymentRequired": "此套餐需要经过验证的付款，请联系支持。",
-        "invalidCode": "验证码无效或已过期。",
-        "requestFailed": "无法完成请求，请重试。",
-        "rateLimit": "请求过多，请稍后重试。"
-    },
-    "googleAuth": {
-        "continue": "使用 Google 继续",
-        "signup": "使用 Google 注册",
-        "or": "或",
-        "signingIn": "正在登录…",
-        "cancelled": "身份验证已取消。",
-        "expired_state": "本次登录已过期，请重新开始。",
-        "invalid_state": "此请求无效或已被使用，请重新开始。",
-        "oauth_failed": "Google 无法完成身份验证，请重试。",
-        "callback_failed": "身份验证失败，请重试。",
-        "identity_invalid": "Google 无法验证您的身份和电子邮箱，请使用其他登录方式。",
-        "disabled": "此账户不可用，请联系支持团队。",
-        "linking_required": "请使用现有账户的登录方式。关联 Google 前需要先登录该账户；关联功能暂未开放。如有需要，请联系支持团队。",
-        "unavailable": "Google 身份验证暂不可用，请使用邮箱和密码或稍后重试。",
-        "busy": "登录已在进行中，请重试。",
-        "alreadyLinked": "此 Google 账户已关联。",
-        "completeProfile": "完善账户信息",
-        "profileRequired": "请输入必填信息以完成账户创建。",
-        "country": "国家或地区",
-        "dateOfBirth": "出生日期",
-        "finishSignup": "创建账户",
-        "profileInvalid": "请输入国家或地区以及不晚于今天的有效出生日期。",
-        "retry": "重试",
-        "backToLogin": "返回登录",
-        "linkAccountTitle": "关联您的 Google 账户",
-        "linkAccountDesc": "已存在使用此邮箱的账户。请输入密码以安全关联您的 Google 账户。",
-        "accountPassword": "账户密码",
-        "confirmLink": "确认并关联账户",
-        "invalidCredentials": "密码无效。请检查您的凭据后重试。",
-        "linkSuccess": "Google 账户已成功关联。",
-        "unlinkSuccess": "Google 账户已成功解绑。",
-        "identity_conflict": "此邮箱已关联其他 Google 身份。请使用账户现有方式登录或联系支持团队。",
-        "account_login_required": "请使用账户现有方式登录，然后在个人资料中关联 Google。",
-        "recovery_required": "重新关联 Google 需要进行一次性账户恢复。",
-        "recovery_web_required": "请在 Scemory 网站完成一次性恢复。今后使用 Google 登录将自动完成。",
-        "invalid_recovery_code": "恢复代码不正确。请检查后重试。",
-        "recovery_expired": "恢复请求已过期。请重新开始 Google 登录。",
-        "recovery_attempts_exceeded": "错误尝试次数过多。请重新开始 Google 登录。",
-        "recovery_rate_limited": "恢复代码刚刚已发送。请稍候再试。",
-        "recovery_unavailable": "无法发送恢复代码。请稍后再试。",
-        "recoveryTitle": "重新关联 Google 账户",
-        "recoverySent": "请输入发送至 {email} 的一次性代码。此步骤只需完成一次。",
-        "recoveryCode": "恢复代码",
-        "confirmRecovery": "验证并继续"
-    },
-    "facebookAuth": {
-        "continue": "使用 Facebook 继续",
-        "signup": "使用 Facebook 注册",
-        "signingIn": "正在登录…",
-        "unavailable": "Facebook 身份验证暂不可用，请使用邮箱和密码或稍后重试。",
-        "cancelled": "身份验证已取消。",
-        "invalid_state": "此请求无效或已被使用，请重新开始。",
-        "expired": "本次登录已过期，请重新开始。",
-        "callback_failed": "身份验证失败，请重试。",
-        "disabled": "此账户不可用，请联系支持团队。",
-        "linking_required": "请使用现有账户的登录方式。关联 Facebook 前需要先登录该账户；关联功能暂未开放。如有需要，请联系支持团队。",
-        "busy": "登录已在进行中，请重试。",
-        "completeProfile": "完善账户信息",
-        "profileRequired": "请输入必填信息以完成账户创建。",
-        "country": "国家或地区",
-        "dateOfBirth": "出生日期",
-        "finishSignup": "创建账户",
-        "retry": "重试",
-        "backToLogin": "返回登录",
-        "identity_invalid": "Facebook 无法验证您的身份，请重试。",
-        "verification_required": "请使用现有账户的原登录方式验证邮箱。",
-        "email_unavailable": "无法发送验证邮件，请稍后重试。",
-        "otp_expired": "此验证码已过期，请获取新验证码。",
-        "otp_invalid": "验证码不正确。",
-        "otp_attempts": "尝试次数过多，请在等待时间结束后获取新验证码。",
-        "otp_cooldown": "请稍候再获取验证码。",
-        "native_unavailable": "Facebook 登录可在 Scemory 网站使用，请使用浏览器。",
-        "email": "电子邮箱",
-        "sendCode": "发送验证码",
-        "verifyEmail": "验证邮箱",
-        "codeSent": "请输入发送至 {email} 的验证码。",
-        "verificationCode": "验证码",
-        "resendIn": "{seconds} 秒后重新发送",
-        "resend": "重新发送验证码",
-        "profileInvalid": "请输入有效邮箱、国家或地区以及不晚于今天的出生日期。"
-    },
-    "mediaCredits": {
-        "myCredits": "我的媒体额度",
-        "photosAvailable": "可用照片数",
-        "videosAvailable": "可用视频数",
-        "photos": "照片",
-        "videos": "视频",
-        "photoQuotaDesc": "永久照片兑换配额",
-        "videoQuotaDesc": "永久视频兑换配额",
-        "activeTier": "当前访问层级",
-        "breakdownByTier": "按层级明细",
-        "viewDashboard": "额度仪表板",
-        "getMoreCredits": "获取更多额度",
-        "browseMarketplace": "浏览市场",
-        "noTier": "无有效套餐",
-        "getWithPlan": "使用套餐兑换",
-        "redeemed": "已兑换",
-        "redeemSuccess": "已成功使用套餐额度兑换该媒体！",
-        "redeemFailed": "兑换媒体失败。",
-        "activeGrants": "有效套餐配额",
-        "redemptionHistory": "兑换历史",
-        "noGrants": "暂无有效媒体配额。订阅套餐即可获取照片和视频兑换额度。",
-        "noRedemptions": "暂无兑换记录。",
-        "tier": "层级",
-        "plan": "套餐",
-        "tierRank": "层级排序",
-        "grantedOn": "获得日期",
-        "payoutCap": "创作者收益上限",
-        "payWithWallet": "钱包支付",
-        "payWithPaypal": "PayPal 支付",
-        "insufficientCredits": "额度不足或套餐层级不满足该媒体要求。",
-        "includedQuotas": "包含的媒体配额",
-        "permanentQuotas": "永久有效不失效媒体配额"
-    },
-    "dataDeletion": {
-        "title": "数据删除说明",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "数据删除说明",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "数据删除说明",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "实时支持",
+      "description": "现在与我们的团队成员交谈以获得即时帮助",
+      "btn_chat": "开始实时聊天",
+      "btn_schedule": "安排通话",
+      "available": "目前可用：3 名支持人员"
     }
+  },
+  "contacts": {
+    "badge": "联系我们",
+    "title": "一起聊聊",
+    "description": "有问题、需要支持，或想了解定制方案？给我们留言，我们的团队会尽快回复你。",
+    "form": {
+      "title": "给我们留言",
+      "description": "填写下方表单，我们会尽快回复。",
+      "fullName": "姓名",
+      "fullNamePlaceholder": "请输入你的姓名",
+      "emailAddress": "电子邮箱",
+      "emailPlaceholder": "请输入你的电子邮箱",
+      "subject": "主题",
+      "generalInquiry": "一般咨询",
+      "customPlan": "定制方案",
+      "support": "技术支持",
+      "feedback": "反馈",
+      "other": "其他",
+      "message": "留言内容",
+      "messagePlaceholder": "告诉我们可以如何帮助你...",
+      "minimumCharacters": "请提供足够的详细信息。",
+      "sendMessage": "发送消息",
+      "sending": "正在发送...",
+      "successMessage": "你的消息已成功发送。",
+      "errorMessage": "发送消息时出现问题，请重试。"
+    },
+    "info": {
+      "getInTouch": "保持联系",
+      "title": "我们随时为你提供帮助",
+      "description": "无论是一般问题、技术支持还是定制价格，都可以联系我们的团队。",
+      "emailUs": "给我们发邮件",
+      "available": "我们的团队会尽快回复。",
+      "customPlans": "定制方案",
+      "customPlansDescription": "需要适合团队或业务的专属解决方案？告诉我们你的需求。",
+      "customerSupport": "客户支持",
+      "supportDescription": "如果你在账户、订阅或服务方面需要帮助，请联系我们。",
+      "followJourney": "关注我们的旅程",
+      "responseTime": "快速回复",
+      "responseTimeDescription": "我们通常会在一个工作日内回复消息。"
+    },
+    "map": {
+      "title": "Scene Memory 世界地图",
+      "description": "想象遍布超过 140 个国家的数千个回忆。"
+    }
+  },
+  "faq": {
+    "badge": "常见问题",
+    "title": "常见问题",
+    "description": "快速解答一些最常见的问题。",
+    "questions": {
+      "0": {
+        "question": "我多久能收到回复？",
+        "answer": "我们的团队通常会在一个工作日内回复。"
+      },
+      "1": {
+        "question": "我可以申请定制方案吗？",
+        "answer": "可以。请在主题字段中选择定制方案，并描述你的需求。"
+      },
+      "2": {
+        "question": "我可以联系你们获取技术支持吗？",
+        "answer": "可以。请选择技术支持，并提供与问题相关的所有详细信息。"
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "管理员添加活动",
+      "trending": "热门活动",
+      "trendingHelp": "将此活动标记为热门活动",
+      "generateTags": "生成 AI 标签",
+      "generatingTags": "正在生成标签...",
+      "generateTagsHelp": "使用现有 AI 服务为活动和照片推荐标签。发布前可检查或删除这些标签。",
+      "generateTagsError": "目前无法生成 AI 标签。",
+      "created": "活动已成功创建并发布。"
+    },
+    "chooseFiles": "选择文件",
+    "mediaCount": "媒体数量",
+    "title": "添加新事件",
+    "basicInfo": "基本信息",
+    "locationCategory": "位置和分类",
+    "dates": "日期",
+    "images": "事件图片",
+    "eventTitle": "事件标题",
+    "description": "描述",
+    "country": "国家",
+    "searchCountry": "搜索国家...",
+    "selectCountry": "选择国家",
+    "city": "城市",
+    "selectCity": "选择城市",
+    "selectCityFirst": "请先选择国家",
+    "mainCategory": "主要类别",
+    "subCategory": "子类别",
+    "selectSubFirst": "请先选择类别",
+    "selectLocationMap": "在地图上选择位置",
+    "selectedCoords": "所选坐标：纬度 {lat} , 经度 {lng}",
+    "lat": "纬度",
+    "lng": "经度",
+    "pleaseSelectLocation": "请选择地图上的位置",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "startTime": "开始时间",
+    "dragDropHere": "点击或拖放图片到此处",
+    "formatsMax": "PNG • JPG • WEBP | 每张图片最大 5MB",
+    "chooseImages": "选择图片",
+    "addMore": "添加更多",
+    "imagesCount": "{count} / 8 张图片",
+    "remove": "删除",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+      "mediaRequired": "请至少上传一张图片或一个视频。"
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    },
+    "minimumRequirementsHint": "要创建活动，只需填写标题和描述，并至少上传一张图片或一个视频。其他字段均为选填项。"
+  },
+  "commons": {
+    "required": "必填",
+    "cancel": "取消",
+    "saveDraft": "保存为草稿",
+    "create": "创建事件",
+    "creating": "正在创建...",
+    "choose": "选择"
+  },
+  "eventss": {
+    "no_title": "无标题活动",
+    "undefined_city": "未定义",
+    "from_map": "来自地图"
+  },
+  "wishlist": {
+    "title": "收藏夹",
+    "loading": "加载中...",
+    "empty": {
+      "main": "您的愿望清单中暂无项目",
+      "hint": "开始添加您喜爱的事件吧！"
+    },
+    "fallback_image_alt": "活动默认图片",
+    "uncategorized": "未分类",
+    "no_title": "无标题",
+    "city_label": "城市：",
+    "date_label": "日期：",
+    "time_label": "时间：",
+    "not_specified": "未指定",
+    "view_details": "查看详情",
+    "remove": "从收藏中移除",
+    "deleting": "正在移除...",
+    "added_at": "添加于",
+    "pagination": {
+      "previous": "上一页",
+      "next": "下一页",
+      "page_info": "第 {current} 页 / 共 {total} 页"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "服务条款",
+    "last_updated": "最后更新：2026",
+    "acceptance_title": "条款的接受",
+    "acceptance_text": "访问或使用本平台即表示您同意遵守这些服务条款以及所有适用的法律法规。",
+    "accounts_title": "用户账户",
+    "accounts_text": "用户有责任保护其账户信息的机密性，并对其账户下发生的所有活动负责。",
+    "content_title": "内容所有权",
+    "content_text": "平台上的所有内容，包括文本、图像和数据，均受版权和知识产权法律保护。",
+    "ai_title": "人工智能限制",
+    "ai_text": "未经官方许可，严禁使用平台内容训练人工智能模型、机器学习系统或进行数据挖掘。",
+    "prohibited_title": "禁止的使用",
+    "prohibited_text": "用户不得滥用平台、尝试未经授权访问、抓取数据或干扰平台运行。",
+    "liability_title": "责任限制",
+    "liability_text": "对于因使用服务而产生的任何间接、附带或后果性损害，本平台不承担责任。",
+    "changes_title": "条款变更",
+    "changes_text": "我们保留随时更新或修改这些服务条款的权利。",
+    "contact_title": "联系方式",
+    "contact_text": "如果您对这些条款有任何疑问，请联系平台管理方。"
+  },
+  "plans": {
+    "customPrice": "联系我们",
+    "customPricingDescription": "根据你的需求定价",
+    "contactUs": "联系我们",
+    "chooseYourPlan": "选择你的方案",
+    "getStarted": "开始",
+    "subscribe": "立即订阅",
+    "noFeatures": "暂无功能",
+    "mostPopular": "最受欢迎",
+    "perMonth": "每月",
+    "prioritySupport": "优先支持",
+    "noCreditCard": "无需信用卡",
+    "securePayments": "安全支付",
+    "moneyBack": "30 天保证",
+    "support247": "24/7 支持",
+    "free": "免费",
+    "ourPlans": "我们的方案",
+    "description": "免费开始，或选择最适合你的方案。",
+    "price": "价格",
+    "features": "功能",
+    "cancelAnytime": "可随时取消",
+    "Monthly": "每月",
+    "Yearly": "每年",
+    "unlimitedEvents": "无限事件",
+    "addEvents": "添加事件",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "方案",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "无法加载套餐，请重试。"
+    },
+    "customPlanNote": "围绕你的需求构建",
+    "basicAccessIncluded": "包含基本访问权限",
+    "usd": "USD"
+  },
+  "free": "免费",
+  "basic": "基础版",
+  "professional": "专业版",
+  "premium": "高级版",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "你的浏览器不支持 video 标签。",
+      "badge": "Scemory 活动档案",
+      "title": "探索已记录的活动",
+      "titleHighlight": "通过地图",
+      "description": "发现由世界各地的记者、媒体团队和目击者贡献者上传的活动媒体。",
+      "searchEvents": "搜索活动",
+      "uploadStory": "上传你的故事",
+      "bottomText": "发现来自世界各地的故事、地点与瞬间。",
+      "searchPlaceholder": "  搜索活动、地点或标签..."
+    },
+    "profileToast": {
+      "title": "个人资料未完成",
+      "message": "你的个人资料未完成。请更新：",
+      "complete": "点击完成",
+      "fields": {
+        "phone": "电话",
+        "country": "国家",
+        "position": "职位",
+        "dateOfBirth": "出生日期"
+      }
+    },
+    "trending": {
+      "loadError": "当前无法加载热门活动。",
+      "kicker": "趋势",
+      "title": "热门活动",
+      "description": "正在档案中获得关注的活动。",
+      "emptyTitle": "暂无热门活动",
+      "emptyDescription": "请稍后回来查看精选活动。",
+      "views": "浏览",
+      "likes": "点赞",
+      "slidesLabel": "热门活动幻灯片",
+      "untitledEvent": "无标题活动",
+      "showSlide": "显示热门活动 {number}"
+    },
+    "map": {
+      "tilesSlow": "地图瓦片渲染时间过长。",
+      "loadError": "当前无法加载地图。",
+      "loadMap": "加载地图",
+      "loading": "正在加载地图...",
+      "retry": "重新加载地图",
+      "openFullscreen": "全屏打开地图",
+      "closeFullscreen": "关闭全屏地图"
+    },
+    "about": {
+      "imageAlt": "Scemory 文档平台",
+      "kicker": "可信的活动记忆",
+      "title": "关于 Scemory",
+      "description": "Scemory 面向记者、媒体团队和目击者贡献者，他们需要一个可信空间来记录正在发生的活动。平台连接上传的媒体、活动元数据和地点背景，让人们能够清晰地发现公共故事。",
+      "features": {
+        "upload": "上传照片、视频和现场数据",
+        "explore": "通过互动地图探索活动",
+        "preserve": "在数字档案中保存已验证的故事"
+      }
+    },
+    "events": {
+      "showing": "显示",
+      "of": "共",
+      "events": "活动",
+      "seeMore": "查看更多",
+      "badge": "活动"
+    },
+    "tags": {
+      "loading": "正在加载标签...",
+      "showingFirst": "显示前",
+      "searchToFindMore": "个标签。搜索以查找更多。",
+      "none": "未找到标签",
+      "helper": "选择一个或多个标签来筛选地图活动。",
+      "clearSelected": "清除已选标签",
+      "searchMore": "搜索更多标签"
+    },
+    "search": {
+      "clearText": "清除",
+      "clearTags": "清除"
+    },
+    "specialCoverage": {
+      "badge": "特别报道",
+      "title": "您有值得报道的活动吗？",
+      "description": "向 Scemory 告知值得特别报道的活动，帮助它的故事触达更广泛的受众。",
+      "contactUs": "联系我们",
+      "modal": {
+        "title": "特别报道",
+        "eventName": "活动名称",
+        "eventNamePlaceholder": "请输入活动名称",
+        "description": "活动描述",
+        "descriptionPlaceholder": "请告诉我们活动详情以及它值得报道的原因",
+        "cancel": "取消",
+        "send": "发送",
+        "close": "关闭",
+        "country": "国家",
+        "city": "城市",
+        "searchCity": "搜索城市",
+        "addNewCity": "添加新城市",
+        "createCity": "创建城市",
+        "startDate": "开始日期",
+        "coverageTime": "报道时间",
+        "eventType": "活动类型",
+        "personalEvent": "个人活动",
+        "publicEvent": "公开活动",
+        "selectCountry": "选择国家",
+        "selectCity": "选择城市",
+        "noCitiesFound": "未找到城市",
+        "noCountriesFound": "未找到国家",
+        "countryRequired": "请选择国家。",
+        "cityRequired": "请选择城市。",
+        "startDateRequired": "请选择开始日期。",
+        "eventTypeRequired": "请选择活动类型。",
+        "cityCreateFailed": "无法创建城市，请重试。",
+        "sending": "正在发送...",
+        "eventNameRequired": "请输入活动名称。",
+        "descriptionRequired": "请输入活动描述。",
+        "success": "您的特别报道申请已成功提交。"
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "质量警告"
+    },
+    "videoReady": "视频已准备好上传。",
+    "qualityWarning": "质量检查仅供参考，不会阻止创建活动。"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "你购买的文件将显示在这里"
+  },
+  "experience": {
+    "kicker": "SCEMORY 体验",
+    "title": "一个平台。故事的每一面。",
+    "pathsLabel": "Scemory 体验路径",
+    "highlightsLabel": "板块亮点",
+    "tabs": {
+      "explore": {
+        "label": "探索活动",
+        "eyebrow": "通过活动发现世界",
+        "heading": "探索世界各地的故事、活动和地点",
+        "description": "从地图进入已记录的公共活动、个人记忆，以及由真实地点和贡献者背景塑造的视觉故事。",
+        "cta": "探索活动",
+        "imageAlt": "带有已记录媒体面板的 Scemory 活动发现界面",
+        "features": {
+          "browse": "按地点和时间线浏览活动媒体",
+          "discover": "通过视觉档案发现附近故事",
+          "move": "从概览进入已记录的活动详情"
+        },
+        "visual": {
+          "kicker": "实时发现",
+          "title": "与地图关联的活动故事",
+          "stat": "全球档案",
+          "note": "地点、日期和媒体一屏呈现"
+        }
+      },
+      "share": {
+        "label": "分享你的故事",
+        "eyebrow": "把瞬间变成已记录的故事",
+        "heading": "记录重要瞬间",
+        "description": "创建活动，上传照片和媒体，添加地点详情，并把你的视角贡献到 Scemory 档案。",
+        "cta": "上传你的故事",
+        "imageAlt": "用于记录活动媒体的 Scemory 贡献者工作区",
+        "features": {
+          "add": "添加媒体、描述和地点背景",
+          "build": "从原始瞬间构建结构化记忆",
+          "keep": "让贡献者故事与档案保持连接"
+        },
+        "visual": {
+          "kicker": "贡献流程",
+          "title": "媒体、背景和地点",
+          "stat": "故事构建器",
+          "note": "上传带有有意义细节的瞬间"
+        }
+      },
+      "license": {
+        "label": "许可媒体",
+        "eyebrow": "发现可使用的媒体",
+        "heading": "放心查找并许可活动媒体",
+        "description": "浏览视觉内容，预览可用的活动媒体，并通过 Scemory 现有发现体验进入许可选项。",
+        "cta": "发现媒体",
+        "imageAlt": "用于浏览可许可活动内容的 Scemory 媒体面板",
+        "features": {
+          "preview": "打开详情前预览活动视觉内容",
+          "use": "将活动页面作为进入媒体选项的路径",
+          "keep": "保持发现与许可意图连接"
+        },
+        "visual": {
+          "kicker": "媒体访问",
+          "title": "可供审阅的活动视觉内容",
+          "stat": "许可路径",
+          "note": "从发现到详情页面"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "重试",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "媒体",
+    "locationShort": "地点",
+    "dateShort": "日期",
+    "searchCountry": "搜索国家...",
+    "featuredEvents": "精选事件"
+  },
+  "country": {
+    "discoverFeaturedIn": "发现精选事件：",
+    "cities": "城市",
+    "availableCity": "可用城市",
+    "currentEvent": "当前事件",
+    "eventMarkers": "事件标记",
+    "clickableMarker": "可点击标记",
+    "differentCategory": "不同类别",
+    "availableCities": "可用城市",
+    "noEvents": "目前没有可用事件",
+    "checkBack": "请稍后再查看",
+    "noImage": "无图片",
+    "viewEvent": "查看事件",
+    "noCategory": "无类别",
+    "countryFallback": "国家",
+    "cityFallback": "城市",
+    "eventFallback": "事件",
+    "clickMarkerToOpen": "点击标记打开",
+    "errors": {
+      "unauthorized": "未授权。请登录。",
+      "notFound": "未找到国家。",
+      "loadFailed": "加载数据时出错。",
+      "mapLibraryFailed": "无法加载地图库。",
+      "bordersFailed": "无法加载国家边界",
+      "invalidBorders": "国家边界文件无效。",
+      "countryBordersNotFound": "无法找到该国边界",
+      "countryBoundsFailed": "无法计算国家范围。",
+      "mapLoadFailed": "加载地图时出错。"
+    }
+  },
+  "cancel": "取消",
+  "login": "登录",
+  "sending": "发送中...",
+  "send_reply": "发送回复",
+  "report": {
+    "action": "举报",
+    "commentTitle": "举报此评论",
+    "modalTitle": "举报评论",
+    "reasonPrompt": "请选择举报此评论的原因：",
+    "submit": "提交举报",
+    "submitting": "提交中...",
+    "successTitle": "举报已提交",
+    "successMessage": "谢谢。我们会尽快审核此评论。",
+    "errors": {
+      "selectReason": "请选择举报原因。",
+      "submitFailed": "提交举报时发生错误。请重试。"
+    },
+    "reasons": {
+      "spam": "垃圾信息",
+      "offensive": "冒犯内容",
+      "inappropriate": "不当内容",
+      "illegal": "违法内容",
+      "untrue": "虚假内容",
+      "falseInformation": "误导信息",
+      "other": "其他原因"
+    }
+  },
+  "commentsPage": {
+    "title": "评论",
+    "emptyLabel": "评论",
+    "emptyMessage": "尚无评论。成为第一个评论的人。",
+    "attachmentAlt": "评论附件",
+    "pageInfo": "第 {current} 页，共 {total} 页",
+    "confirmDelete": "您确定要删除此评论吗？",
+    "errors": {
+      "loadFailed": "加载评论时发生错误。"
+    },
+    "reactions": {
+      "support": "同意",
+      "neutral": "中立",
+      "oppose": "不同意"
+    },
+    "you": "你"
+  },
+  "profilePage": {
+    "title": "我的资料",
+    "subtitle": "管理您的账户信息并更新密码",
+    "noPlan": "无计划",
+    "lastLogin": "上次登录",
+    "accountInfo": "账户信息",
+    "systemInfo": "系统信息",
+    "currentPlan": "当前计划",
+    "planType": "计划类型",
+    "editAccount": "编辑账户详情",
+    "saving": "保存中...",
+    "saveChanges": "保存更改",
+    "tabs": {
+      "userInfo": "用户信息",
+      "editData": "编辑数据",
+      "password": "更新密码",
+      "wallet": "钱包",
+      "privacy": "账户与隐私"
+    },
+    "fields": {
+      "name": "姓名",
+      "fullName": "全名",
+      "email": "邮箱",
+      "phone": "电话",
+      "phoneNumber": "电话号码",
+      "country": "国家",
+      "position": "职位",
+      "positionJob": "职位 / 工作",
+      "birthDate": "出生日期",
+      "role": "角色",
+      "status": "状态",
+      "points": "积分",
+      "rank": "排名",
+      "price": "价格"
+    },
+    "placeholders": {
+      "fullName": "输入您的全名",
+      "countrySearch": "搜索国家",
+      "position": "软件工程师"
+    },
+    "status": {
+      "active": "活跃"
+    },
+    "password": {
+      "title": "更新密码",
+      "current": "当前密码",
+      "new": "新密码",
+      "confirm": "确认密码",
+      "updating": "正在更新...",
+      "update": "更新密码"
+    },
+    "messages": {
+      "fillAllFields": "请填写所有字段。",
+      "passwordMismatch": "密码不匹配。",
+      "passwordUpdated": "密码更新成功。",
+      "passwordUpdateFailed": "更新密码时发生错误。",
+      "chooseCountry": "请从列表中选择一个国家。",
+      "noChanges": "您未做任何更改。",
+      "profileUpdated": "您的个人资料已成功更新。",
+      "profileUpdateFailed": "更新个人资料时发生错误。"
+    },
+    "wallet": {
+      "title": "钱包",
+      "availableBalance": "可用余额",
+      "deposit": "充值",
+      "recentTransactions": "最近交易",
+      "depositType": "存款",
+      "withdrawType": "提现",
+      "noTransactions": "暂无交易",
+      "withdrawComingSoon": "提现功能即将上线。"
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "每个文件最大：100 MB",
+    "dragFiles": "将文件拖到此处或",
+    "clickToChoose": "点击选择",
+    "supportedFiles": "图片和视频（每个文件最大 100 MB）",
+    "selectedFiles": "已选择文件（{count}）",
+    "uploading": "正在上传...",
+    "uploadFiles": "上传文件",
+    "success": "文件上传成功！",
+    "errors": {
+      "fileTooLarge": "文件 \"{name}\" 大于100 MB。",
+      "unsupportedType": "文件类型 \"{name}\" 不受支持。"
+    }
+  },
+  "discovery": {
+    "title": "搜索结果",
+    "description": "在 Scemory 中发现活动、图片和视频。",
+    "showing": "显示",
+    "of": "共",
+    "results": "条结果",
+    "details": "查看详情",
+    "noResultsTitle": "未找到结果",
+    "noResultsDescription": "请尝试更改搜索内容或筛选条件。",
+    "filters": {
+      "allCities": "所有城市",
+      "allCountries": "所有国家"
+    },
+    "tabs": {
+      "all": "全部",
+      "event": "活动",
+      "image": "图片",
+      "video": "视频"
+    },
+    "resultLabels": {
+      "event": "活动",
+      "image": "图片",
+      "video": "视频"
+    },
+    "media": {
+      "price": "价格",
+      "addToCart": "加入购物车",
+      "added": "已添加",
+      "adding": "正在添加...",
+      "playVideo": "播放视频",
+      "pauseVideo": "暂停视频"
+    }
+  },
+  "timeline": {
+    "title": "你的活动记录",
+    "subtitle": "在一个位置查看你的活动、回应、评论和收藏内容。",
+    "totalActivity": "活动总数",
+    "latestActivity": "最近活动",
+    "noLatestActivity": "暂无活动",
+    "loading": "正在加载活动...",
+    "loadError": "无法加载你的活动。",
+    "retry": "重试",
+    "viewAll": "查看全部",
+    "empty": "此部分暂无活动。",
+    "previous": "上一页",
+    "next": "下一页",
+    "pageOf": "第 {current} 页，共 {last} 页",
+    "unknownEvent": "未知活动",
+    "parentComment": "回复：{comment}",
+    "reactionTo": "回应：{comment}",
+    "onEvent": "在 {event}",
+    "tabs": {
+      "all": "全部活动",
+      "events": "活动",
+      "likes": "点赞",
+      "comments": "评论",
+      "replies": "回复",
+      "comment_images": "评论图片",
+      "comment_interactions": "评论回应",
+      "wishlists": "收藏"
+    },
+    "filters": {
+      "label": "时间段",
+      "all": "全部时间",
+      "today": "今天",
+      "this_week": "本周",
+      "this_month": "本月",
+      "custom": "自定义范围",
+      "from": "从",
+      "to": "至",
+      "apply": "应用",
+      "invalidRange": "请选择有效的日期范围。"
+    },
+    "reactions": {
+      "support": "支持",
+      "neutral": "中立",
+      "exhibitions": "反对"
+    },
+    "status": {
+      "pending": "待处理",
+      "approved": "已批准",
+      "rejected": "已拒绝",
+      "active": "有效",
+      "inactive": "无效"
+    }
+  },
+  "security": {
+    "denied": "您无权访问此资源。",
+    "notFound": "未找到请求的资源。",
+    "disabled": "此账户已停用，请联系支持。",
+    "invalidMedia": "媒体文件无效、不受支持或超出安全处理限制。",
+    "unavailable": "此媒体暂时不可用。",
+    "currencyMismatch": "钱包币种与此交易不符。",
+    "insufficientBalance": "可用余额不足。",
+    "invalidWithdrawal": "当前状态下无法修改提现，请联系支持。",
+    "paymentRequired": "此套餐需要经过验证的付款，请联系支持。",
+    "invalidCode": "验证码无效或已过期。",
+    "requestFailed": "无法完成请求，请重试。",
+    "rateLimit": "请求过多，请稍后重试。"
+  },
+  "googleAuth": {
+    "continue": "使用 Google 继续",
+    "signup": "使用 Google 注册",
+    "or": "或",
+    "signingIn": "正在登录…",
+    "cancelled": "身份验证已取消。",
+    "expired_state": "本次登录已过期，请重新开始。",
+    "invalid_state": "此请求无效或已被使用，请重新开始。",
+    "oauth_failed": "Google 无法完成身份验证，请重试。",
+    "callback_failed": "身份验证失败，请重试。",
+    "identity_invalid": "Google 无法验证您的身份和电子邮箱，请使用其他登录方式。",
+    "disabled": "此账户不可用，请联系支持团队。",
+    "linking_required": "请使用现有账户的登录方式。关联 Google 前需要先登录该账户；关联功能暂未开放。如有需要，请联系支持团队。",
+    "unavailable": "Google 身份验证暂不可用，请使用邮箱和密码或稍后重试。",
+    "busy": "登录已在进行中，请重试。",
+    "alreadyLinked": "此 Google 账户已关联。",
+    "completeProfile": "完善账户信息",
+    "profileRequired": "请输入必填信息以完成账户创建。",
+    "country": "国家或地区",
+    "dateOfBirth": "出生日期",
+    "finishSignup": "创建账户",
+    "profileInvalid": "请输入国家或地区以及不晚于今天的有效出生日期。",
+    "retry": "重试",
+    "backToLogin": "返回登录",
+    "linkAccountTitle": "关联您的 Google 账户",
+    "linkAccountDesc": "已存在使用此邮箱的账户。请输入密码以安全关联您的 Google 账户。",
+    "accountPassword": "账户密码",
+    "confirmLink": "确认并关联账户",
+    "invalidCredentials": "密码无效。请检查您的凭据后重试。",
+    "linkSuccess": "Google 账户已成功关联。",
+    "unlinkSuccess": "Google 账户已成功解绑。",
+    "identity_conflict": "此邮箱已关联其他 Google 身份。请使用账户现有方式登录或联系支持团队。",
+    "account_login_required": "请使用账户现有方式登录，然后在个人资料中关联 Google。",
+    "recovery_required": "重新关联 Google 需要进行一次性账户恢复。",
+    "recovery_web_required": "请在 Scemory 网站完成一次性恢复。今后使用 Google 登录将自动完成。",
+    "invalid_recovery_code": "恢复代码不正确。请检查后重试。",
+    "recovery_expired": "恢复请求已过期。请重新开始 Google 登录。",
+    "recovery_attempts_exceeded": "错误尝试次数过多。请重新开始 Google 登录。",
+    "recovery_rate_limited": "恢复代码刚刚已发送。请稍候再试。",
+    "recovery_unavailable": "无法发送恢复代码。请稍后再试。",
+    "recoveryTitle": "重新关联 Google 账户",
+    "recoverySent": "请输入发送至 {email} 的一次性代码。此步骤只需完成一次。",
+    "recoveryCode": "恢复代码",
+    "confirmRecovery": "验证并继续"
+  },
+  "facebookAuth": {
+    "continue": "使用 Facebook 继续",
+    "signup": "使用 Facebook 注册",
+    "signingIn": "正在登录…",
+    "unavailable": "Facebook 身份验证暂不可用，请使用邮箱和密码或稍后重试。",
+    "cancelled": "身份验证已取消。",
+    "invalid_state": "此请求无效或已被使用，请重新开始。",
+    "expired": "本次登录已过期，请重新开始。",
+    "callback_failed": "身份验证失败，请重试。",
+    "disabled": "此账户不可用，请联系支持团队。",
+    "linking_required": "请使用现有账户的登录方式。关联 Facebook 前需要先登录该账户；关联功能暂未开放。如有需要，请联系支持团队。",
+    "busy": "登录已在进行中，请重试。",
+    "completeProfile": "完善账户信息",
+    "profileRequired": "请输入必填信息以完成账户创建。",
+    "country": "国家或地区",
+    "dateOfBirth": "出生日期",
+    "finishSignup": "创建账户",
+    "retry": "重试",
+    "backToLogin": "返回登录",
+    "identity_invalid": "Facebook 无法验证您的身份，请重试。",
+    "verification_required": "请使用现有账户的原登录方式验证邮箱。",
+    "email_unavailable": "无法发送验证邮件，请稍后重试。",
+    "otp_expired": "此验证码已过期，请获取新验证码。",
+    "otp_invalid": "验证码不正确。",
+    "otp_attempts": "尝试次数过多，请在等待时间结束后获取新验证码。",
+    "otp_cooldown": "请稍候再获取验证码。",
+    "native_unavailable": "Facebook 登录可在 Scemory 网站使用，请使用浏览器。",
+    "email": "电子邮箱",
+    "sendCode": "发送验证码",
+    "verifyEmail": "验证邮箱",
+    "codeSent": "请输入发送至 {email} 的验证码。",
+    "verificationCode": "验证码",
+    "resendIn": "{seconds} 秒后重新发送",
+    "resend": "重新发送验证码",
+    "profileInvalid": "请输入有效邮箱、国家或地区以及不晚于今天的出生日期。"
+  },
+  "mediaCredits": {
+    "myCredits": "我的媒体额度",
+    "photosAvailable": "可用照片数",
+    "videosAvailable": "可用视频数",
+    "photos": "照片",
+    "videos": "视频",
+    "photoQuotaDesc": "永久照片兑换配额",
+    "videoQuotaDesc": "永久视频兑换配额",
+    "activeTier": "当前访问层级",
+    "breakdownByTier": "按层级明细",
+    "viewDashboard": "额度仪表板",
+    "getMoreCredits": "获取更多额度",
+    "browseMarketplace": "浏览市场",
+    "noTier": "无有效套餐",
+    "getWithPlan": "使用套餐兑换",
+    "redeemed": "已兑换",
+    "redeemSuccess": "已成功使用套餐额度兑换该媒体！",
+    "redeemFailed": "兑换媒体失败。",
+    "activeGrants": "有效套餐配额",
+    "redemptionHistory": "兑换历史",
+    "noGrants": "暂无有效媒体配额。订阅套餐即可获取照片和视频兑换额度。",
+    "noRedemptions": "暂无兑换记录。",
+    "tier": "层级",
+    "plan": "套餐",
+    "tierRank": "层级排序",
+    "grantedOn": "获得日期",
+    "payoutCap": "创作者收益上限",
+    "payWithWallet": "钱包支付",
+    "payWithPaypal": "PayPal 支付",
+    "insufficientCredits": "额度不足或套餐层级不满足该媒体要求。",
+    "includedQuotas": "包含的媒体配额",
+    "permanentQuotas": "永久有效不失效媒体配额"
+  },
+  "dataDeletion": {
+    "title": "数据删除说明",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "数据删除说明",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "数据删除说明",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "平台对比",
+    "links": {
+      "historypin": "Scemory 对比 Historypin",
+      "pastvu": "Scemory 对比 PastVu",
+      "theClio": "Scemory 对比 The Clio"
+    },
+    "common": {
+      "exploreScemory": "探索 Scemory",
+      "visitOfficialWebsite": "访问官方网站",
+      "createAccount": "创建账户",
+      "feature": "功能与特性",
+      "scemory": "Scemory",
+      "verifiedDate": "验证日期：2026年10月24日",
+      "disclaimer": "Scemory 是一个独立平台，与此处对比的任何机构均无隶属、赞助或背书关系。所有商标、注册徽标和服务标志均归其各自所有者所有。对比内容基于截至2026年10月24日的公开验证信息。",
+      "methodologyTitle": "信息来源与验证方法",
+      "methodologyDesc": "本对比严格依据官方公开文档、平台官网、公开产品界面以及可直接验证的技术功能编写。我们明确区分全面支持的功能、部分或演进中的功能、不支持的工作流以及未公开文档说明的规格。",
+      "whyChooseTitle": "为什么选择 Scemory？",
+      "ctaTitle": "定格珍贵瞬间，记录当代事件，构建共同记忆。",
+      "ctaSubtitle": "加入将当代事件报道、历史记忆珍藏与公平创作者媒体交易融为一体的现代化全球平台。",
+      "beyondTitle": "Scemory 相比 {competitor} 的独特优势",
+      "whoShouldUseTitle": "各平台适用人群分析",
+      "overviewTitle": "平台概览",
+      "tableTitle": "全方位功能对比表",
+      "vs": "对比",
+      "keyHighlights": "核心亮点",
+      "organizationType": "机构类型",
+      "founded": "创立 / 上线年份",
+      "headquarters": "总部 / 所在地",
+      "coreMission": "核心使命",
+      "officialWebsite": "官方网站",
+      "independentNotice": "基于公开可验证平台文档的客观独立对比。",
+      "audienceScemoryHeading": "谁最适合使用 Scemory",
+      "audienceCompetitorHeading": "谁最适合使用 {competitor}"
+    },
+    "status": {
+      "supported": "已支持且完全可用",
+      "partial": "部分支持",
+      "not_offered": "未提供",
+      "not_documented": "未公开说明"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "历史事件详细记录",
+        "desc": "结合丰富历史背景与上下文，系统记录历史大事件、文化里程碑与过往社区风貌。"
+      },
+      "locationMemories": {
+        "name": "地理位置标记与经纬度解析",
+        "desc": "为珍贵记忆、历史照片与故事绑定精准的经纬度地图坐标。"
+      },
+      "photoArchives": {
+        "name": "历史照片与图像档案",
+        "desc": "完整保存并展示历史摄影作品，包含权威档案元数据、标签与原始出处署名。"
+      },
+      "videoDocumentation": {
+        "name": "原生视频上传与流媒体播放",
+        "desc": "支持高清视频的原生上传、转码处理、水印保护预览及极速自适应流媒体播放。"
+      },
+      "userContributions": {
+        "name": "社区用户创作与投稿",
+        "desc": "允许注册社区成员自主上传和记录个人回忆、现场照片与公共事件。"
+      },
+      "communityParticipation": {
+        "name": "社区互动、讨论与批注",
+        "desc": "通过评论回复、动态点赞、收藏愿望单以及排行榜开展活跃互动。"
+      },
+      "chronologicalBrowsing": {
+        "name": "编年史与时间轴探索",
+        "desc": "通过历史日期跨度、时间轴滑动条与编年顺序直观探索历史记忆。"
+      },
+      "eventCentricOrg": {
+        "name": "以事件为核心的实体组织架构",
+        "desc": "围绕独立的事件实体汇聚多方视角、多位创作者与多媒体素材画廊。"
+      },
+      "contributorProfiles": {
+        "name": "创作者专属主页与作品集",
+        "desc": "集中展示创作者所记录的事件、媒体画廊、互动数据与社区声誉。"
+      },
+      "discoveryMap": {
+        "name": "交互式地图探索与多维筛选",
+        "desc": "具备动态聚类、分类筛选、年代范围及文本全文检索的现代地图。"
+      },
+      "mediaMarketplace": {
+        "name": "图像与视频数字版权市场",
+        "desc": "内置专业版权交易平台，创作者可上架高清晰度图片与视频供买家购买。"
+      },
+      "mediaPurchases": {
+        "name": "直接媒体购买与原图下载",
+        "desc": "顺畅的购买结算流程，买家购买后可即刻安全下载无水印高清原图/视频。"
+      },
+      "commercialLicensing": {
+        "name": "商业与编辑用途授权许可",
+        "desc": "具备清晰合规的法律授权协议，明确界定购买媒体的商业推广与编辑转载权限。"
+      },
+      "creatorMonetization": {
+        "name": "创作者变现与收益分成",
+        "desc": "透明公平的报酬体系，创作者在媒体直接销售中享有高达85%的现金分成。"
+      },
+      "payoutSystem": {
+        "name": "创作者余额提现系统",
+        "desc": "清晰的收益余额账本，支持创作者通过 PayPal 或银行转账发起合规提现申请。"
+      },
+      "subscriptionPlans": {
+        "name": "多层级会员权益方案",
+        "desc": "免费与高级会员方案，提供每月定额媒体额度、更大云存储及平台专属特权。"
+      },
+      "mediaCredits": {
+        "name": "永久有效媒体点数",
+        "desc": "预付费且永不过期的媒体点数，随时快捷结算并授权下载视觉素材。"
+      },
+      "multilingual": {
+        "name": "全球13种语言支持（含RTL）",
+        "desc": "全平台界面与内容全面本地化，涵盖阿拉伯语、波斯语、乌尔都语等从右至左语言。"
+      },
+      "institutionalUse": {
+        "name": "教育机构与文博档案合作",
+        "desc": "为博物馆、高校与公共档案馆提供专有归档流程、合作工具与大批量导入支持。"
+      }
+    },
+    "historypin": {
+      "heroTitle": "Scemory 对比 Historypin：珍藏记忆与记录事件的两种路径",
+      "heroSubtitle": "Historypin 社区历史遗产档案与 Scemory 多模态事件记录及创作者媒体交易市场的客观对比。",
+      "primaryFocus": "社区历史、集体记忆、众包历史照片、口述故事与本地文化遗产地点。",
+      "logoAlt": "Historypin 官方徽标",
+      "seoTitle": "Scemory 对比 Historypin：全方位平台特性深度对比",
+      "seoDescription": "深入客观对比 Scemory 与 Historypin。详细解析两者在历史照片归档、当代事件记录、原生视频支持、创作者收益变现及13国多语言本地化方面的差异。",
+      "aboutScemory": "Scemory 是一个现代化事件记录平台与多媒体交易市场，旨在兼顾历史记忆保护与当代事件报道。平台基于结构化的事件实体架构，允许摄影师、记者、研究人员与公众发布高分辨率照片与视频，参与互动交流，并通过商业授权与创作者提现实现作品价值回报。",
+      "aboutCompetitor": "Historypin 是由非营利组织 Shift 与谷歌于2010年合作创立的社区驱动型数字档案平台。它使个人、地方历史团体、图书馆和博物馆能够将历史照片和音频故事标注在谷歌地图上，并通过历史照片与现代街景重叠滑块直观展示城市社区的变迁。",
+      "scemoryAdvantages": [
+        {
+          "title": "以事件为核心的实体结构架构",
+          "desc": "与单纯的照片打点地图不同，Scemory 围绕清晰可检索的独立事件组织内容，将多位贡献者、经核实的日期、分类标签和媒体画廊聚合为统一完整的记录。"
+        },
+        {
+          "title": "原生高质量视频的完整支持",
+          "desc": "Historypin 主要侧重于静态照片与外部链接，而 Scemory 提供从视频上传、转码处理、水印预览到流畅播放的一体化原生视频支持。"
+        },
+        {
+          "title": "内置创作者经济与版权交易市场",
+          "desc": "Scemory 提供高达85%的创作者媒体销售分成、商业授权支持、钱包提现和点数订阅体系，为持续创作提供非商业档案库无法具备的经济支撑。"
+        },
+        {
+          "title": "覆盖全球13种语言与原生从右至左（RTL）支持",
+          "desc": "提供包含阿拉伯语、波斯语、乌尔都语等在内的13种主流语言的深度地道本地化支持，真正服务全球多文化社群。"
+        }
+      ],
+      "audienceScemory": "希望在一个平台上同时记录历史与当代事件、托管高清图片与视频，并通过媒体授权获得合理收益的专业及业余摄影师、独立记者、活动主办方和记忆记录者。",
+      "audienceCompetitor": "希望将历史照片与集体记忆标记在特定地理坐标上、利用历史街景滑动条对比建筑变迁的地方历史学会、公共图书馆、学校及志愿研究群体。",
+      "whyChooseSummary": "Historypin 是众包社区遗产保护领域广受尊敬的先锋。而当您的项目需要现代事件驱动架构、高分辨率音视频直接托管、创作者收益分成、数字媒体授权以及13种语言的全球影响力时，Scemory 则是更理想的选择。"
+    },
+    "pastvu": {
+      "heroTitle": "Scemory 对比 PastVu：历史照片地理测绘与现代多模态事件珍藏的对比",
+      "heroSubtitle": "PastVu 全球带朝向历史老照片档案库与 Scemory 现代事件驱动多媒体及交易市场的客观对比。",
+      "primaryFocus": "带有经纬度坐标与相机镜头拍摄朝向角度指示的1826-2000年历史老照片档案库。",
+      "logoAlt": "PastVu 官方徽标",
+      "seoTitle": "Scemory 对比 PastVu：详细平台特性对比",
+      "seoDescription": "对比 Scemory 与 PastVu。探索两者在老照片归档、镜头朝向指示、视频支持、商业交易市场及多语言国际化方面的核心差异。",
+      "aboutScemory": "Scemory 在统一平台中将当代重大事件记录与历史记忆珍藏完美结合。除支持高分辨率照片与原生视频托管、交互式空间探索与社区交流外，Scemory 还提供集成的版权市场，支持创作者与机构合法授权数字作品并获得公正回报。",
+      "aboutCompetitor": "PastVu 是一个创立于2009年的独立社区众包视觉档案项目，致力于系统收集、定位并标注拍摄于1826年至2000年间的人类生活历史摄影作品。该项目以精确的地理坐标、独特的镜头指向箭头以及严格的社区历史考证著称。",
+      "scemoryAdvantages": [
+        {
+          "title": "突破年代局限：历史与当代无缝涵盖",
+          "desc": "PastVu 严格限制只收录2000年之前拍摄的照片。Scemory 打通历史与当下，既能妥善保管历史里程碑，又能实时记录正在发生的文化、社会与公共大事件。"
+        },
+        {
+          "title": "原生高质量视频上传与流式播放",
+          "desc": "PastVu 仅支持静态图片展示。Scemory 提供端到端视频处理、水印保护预览及自适应流式播放，让珍贵的动态影像与历史现场原声得以鲜活留存。"
+        },
+        {
+          "title": "数字版权市场与创作者提现收益",
+          "desc": "Scemory 内置商业授权引擎、数字作品购买以及85%创作者收益分成体系，让摄影师与历史档案工作者能够实现持续性的创作变现。"
+        },
+        {
+          "title": "全平台13种国际语言深度本地化",
+          "desc": "PastVu 仅提供俄英双语界面，而 Scemory 提供包含阿拉伯语、波斯语、乌尔都语等在内的13种国际语言支持，满足全球不同国家用户的无障碍访问。"
+        }
+      ],
+      "audienceScemory": "需要完整记录现代与历史事件、需要视频支持与版权交易渠道，并希望实现作品商业变现的摄影记者、纪录片创作者、活动记录者、媒体采购商和文史工作者。",
+      "audienceCompetitor": "专注于探索和考据1826年至2000年全球老旧街景建筑照片、需要精确分析摄影师拍摄朝向与经纬度的城市历史学者、老照片发烧友与历史地理研究者。",
+      "whyChooseSummary": "PastVu 是一个专注于带有拍摄朝向指示的历史老照片专业档案库。当您需要一个更广阔的多媒体平台来记录当代与历史事件、存储高质量视频、实现创作者变现并面向全球13国受众时，Scemory 是更全面的选择。"
+    },
+    "theClio": {
+      "heroTitle": "Scemory 对比 The Clio：发现记忆地标与记录鲜活事件",
+      "heroSubtitle": "The Clio 教育性历史地标导览与 Scemory 交互式事件记录及多媒体交易市场的客观对比。",
+      "primaryFocus": "历史地标、纪念碑、博物馆、文化遗址以及教育性主题徒步导览的权威指南。",
+      "logoAlt": "The Clio 官方徽标",
+      "seoTitle": "Scemory 对比 The Clio：深度平台特性对比",
+      "seoDescription": "客观对比 Scemory 与 The Clio。分析 The Clio 面向高校的地标导览功能与 Scemory 以事件为核心的多媒体记录及创作者市场之间的本质区别。",
+      "aboutScemory": "Scemory 是一个以事件为核心的平台，赋能个人、机构与创作者珍藏和探索岁月长河中的每一个时刻。平台将高分辨率摄影与视频记录、交互式地图探索、社区互动与商业版权交易融合为一体，提供流畅直观的现代化体验。",
+      "aboutCompetitor": "The Clio 是由历史学教授 David Trowbridge 博士创立的教育非营利组织（The Clio Foundation 501(c)(3)）运营的公共人文平台。它作为北美历史地标、博物馆、纪念碑和文化景点的虚拟导游，提供由学者、大学生及文博机构编写的深度导览词条与徒步路线。",
+      "scemoryAdvantages": [
+        {
+          "title": "超越固定地标的动态事件记录",
+          "desc": "The Clio 主要聚焦于永久性实体建筑或纪念碑，而 Scemory 能够记录发生在任何地点的动态事件、文化节庆、时代聚会与历史集会，不受是否有物理地标的限制。"
+        },
+        {
+          "title": "商业媒体版权交易与创作者经济",
+          "desc": "作为教育公益组织，The Clio 不提供商业交易功能。Scemory 拥有规范的商业授权、数字媒体购买和创作者收益分配体系，切实支持专业记录者。"
+        },
+        {
+          "title": "直接的多媒体存储与高解析度珍藏",
+          "desc": "Scemory 本身作为原生音视频存储库，提供水印保护与原图下载权益；而 The Clio 主要是将外部多媒体作为辅助学术参考资料引用展示。"
+        },
+        {
+          "title": "面向全球的13国语言与RTL支持",
+          "desc": "The Clio 主要是面向北美地区英语用户的导览工具，Scemory 则针对全球国际化受众设计，原生支持中东、亚洲和欧洲等13种主流语言及从右至左阅读习惯。"
+        }
+      ],
+      "audienceScemory": "希望记录当代鲜活事件与历史瞬间、需要直接托管高清音视频、需要版权交易授权流程并希望触达全球多语言受众的独立创作者、摄影记者、活动组织者与机构。",
+      "audienceCompetitor": "希望规划历史文化主题徒步导览路线、撰写经过同行评审的学术条目，或探访北美实体历史文化地标的高校师生、博物馆研究员、文化游客和地方史爱好者。",
+      "whyChooseSummary": "The Clio 是探索北美实体历史地标与学术徒步导览的杰出公益教育资源。如果您需要一个能够捕捉鲜活事件、托管高清音视频档案、并支持创作者全球版权授权的多模态平台，Scemory 是您的最佳选择。"
+    }
+  }
 }

@@ -1,1585 +1,1798 @@
 {
-    "search": {
-        "placeholder": "इवेंट्स खोजें..."
+  "search": {
+    "placeholder": "इवेंट्स खोजें..."
+  },
+  "filters": {
+    "title": "फ़िल्टर",
+    "allCategories": "सभी श्रेणियां",
+    "country": "देश",
+    "category": "श्रेणी",
+    "subCategory": "उपश्रेणी",
+    "from": "से",
+    "to": "तक",
+    "city": "शहर",
+    "allSubCategories": "सभी उपश्रेणियां"
+  },
+  "upload_media": "मीडिया अपलोड करें",
+  "view_all_comments": "सभी टिप्पणियाँ देखें",
+  "nav": {
+    "timeline": "मेरा टाइमलाइन",
+    "favourites": "पसंदीदा",
+    "plans": "प्लान",
+    "specialCoverage": "विशेष कवरेज",
+    "downloads": "डाउनलोड",
+    "events": "इवेंट",
+    "more": "अधिक",
+    "terms": "शर्तें",
+    "dashboard": "डैशबोर्ड",
+    "historical": "ऐतिहासिक",
+    "home": "होम",
+    "about": "परिचय",
+    "allEvents": "सभी इवेंट",
+    "scemoryGate": "Scemory द्वार",
+    "contact": "संपर्क",
+    "addEvent": "इवेंट जोड़ें",
+    "wishlist": "पसंदीदा",
+    "profile": "प्रोफ़ाइल",
+    "logout": "लॉग आउट",
+    "login": "लॉग इन",
+    "cart": "कार्ट",
+    "scemoryHome": "Scemory होम",
+    "toggleMenu": "मेनू टॉगल करें",
+    "mediaCredits": "मीडिया क्रेडिट"
+  },
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "TR": "Turkish",
+    "DE": "Deutsch",
+    "RU": "Русский",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिन्दी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "login_to_comment": "कृपया लॉग इन करें, ताकि आप टिप्पण कर सकें",
+  "event": {
+    "reply": "उत्तर",
+    "delete": " हटा दें",
+    "no_media_yet": "कोई मीडिया नहीं",
+    "reply_placeholder": "अपनी उत्तर लिखें...",
+    "loading": "इवेंट लोड हो रहा है...",
+    "not_found": "इवेंट मौजूद नहीं है या हटा दिया गया है।",
+    "city_default": "निर्दिष्ट नहीं",
+    "visitor": "आगंतुक",
+    "media_gallery_title": "इवेंट मीडिया",
+    "no_media": "कोई मीडिया नहीं",
+    "about_event_title": "इवेंट के बारे में",
+    "comments_title": "टिप्पणियाँ",
+    "add_comment_title": "अपनी टिप्पणी जोड़ें",
+    "comment_placeholder": "यहाँ अपनी टिप्पणी लिखें...",
+    "submit_comment": "भेजें",
+    "sending_comment": "भेजा जा रहा है...",
+    "comment_login_required": "कृपया पहले लॉग इन करें",
+    "comment_added_success": "आपकी टिप्पणी सफलतापूर्वक जोड़ी गई!",
+    "delete_comment_title": "टिप्पणी हटाएँ",
+    "event_info_title": "इवेंट की जानकारी",
+    "from_date": "से",
+    "to_date": "तक",
+    "time_label": "समय",
+    "time_default": "निर्दिष्ट नहीं",
+    "location": "स्थान",
+    "organizer": "आयोजक",
+    "add_to_wishlist": "पसंदीदा में जोड़ें",
+    "already_in_wishlist": "पहले से पसंदीदा में",
+    "adding_to_wishlist": "जोड़ रहा है...",
+    "wishlist_success": "पसंदीदा में सफलतापूर्वक जोड़ा गया!",
+    "buy_collection_title": "पूरा संग्रह खरीदें",
+    "total_images": "कुल चित्र",
+    "save_discount": "10% छूट",
+    "you_save": "आप बचाते हैं",
+    "add_collection_to_cart": "🎁 पूरा संग्रह कार्ट में जोड़ें",
+    "collection_benefit_1": "✓ एक बार में सभी चित्र खरीदें",
+    "collection_benefit_2": "स्वचालित 10% छूट",
+    "collection_benefit_3": "✓ समय और पैसे बचाएं",
+    "collection_benefit_4": "✓ तुरंत सभी इवेंट यादें प्राप्त करें",
+    "upload_media_to_event": "इवेंट में मीडिया अपलोड करें",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "चित्र जोड़ें ({count}/{max})",
+    "comment_image_limit": "अधिकतम 2 चित्र, प्रत्येक 5 MB",
+    "selected_comment_image_alt": "चुना गया चित्र {number}",
+    "remove_selected_comment_image": "चुना गया चित्र {number} हटाएँ"
+  },
+  "common": {
+    "search": "खोजें",
+    "placeholder": "इवेंट खोजें...",
+    "searching": "खोज रहे हैं...",
+    "details": "विवरण",
+    "notSpecified": "निर्दिष्ट नहीं",
+    "loadingEvents": "इवेंट्स लोड हो रहे हैं...",
+    "loading": "लोड हो रहा है...",
+    "close": "बंद करें",
+    "tryAgain": "फिर से प्रयास करें",
+    "back": "वापस",
+    "remove": "हटाएँ",
+    "clear": "साफ़ करें",
+    "previous": "पिछला",
+    "next": "अगला",
+    "noResults": "कोई परिणाम नहीं",
+    "unknownError": "अज्ञात त्रुटि",
+    "learnMore": "और जानें",
+    "cancel": "रद्द करें",
+    "sending": "भेजा जा रहा है...",
+    "show": "दिखाएँ",
+    "hide": "छिपाएँ"
+  },
+  "events": {
+    "add_historical_event": "इवेंट जोड़ें",
+    "brand_footer": "दुनिया में सभी इवेंट्स",
+    "no_title": "शीर्षक रहित इवेंट",
+    "undefined_city": "अपरिभाषित",
+    "from_map": "मानचित्र से",
+    "cities": "शहर",
+    "categories": "श्रेणी",
+    "all_memories": "सभी इवेंट यादें",
+    "showing_snapshots": "दुनिया भर से {total} ऐतिहासिक स्नैपशॉट दिखा रहे हैं",
+    "sort_by": "इसके अनुसार क्रमबद्ध करें",
+    "sort": {
+      "newest": "सबसे नए पहले",
+      "oldest": "सबसे पुराने पहले",
+      "title": "शीर्षक"
     },
-    "filters": {
-        "title": "फ़िल्टर",
-        "allCategories": "सभी श्रेणियां",
-        "country": "देश",
-        "category": "श्रेणी",
-        "subCategory": "उपश्रेणी",
-        "from": "से",
-        "to": "तक",
-        "city": "शहर",
-        "allSubCategories": "सभी उपश्रेणियां"
+    "loading": "इवेंट्स लोड हो रहे हैं...",
+    "retry": "पुनः प्रयास करें",
+    "page_info": "पेज {current} कुल {last} में से",
+    "active_memories": "सक्रिय इवेंट्स",
+    "latestEvents": "नवीनतम इवेंट्स",
+    "recentMemories": "हाल की यादें",
+    "discoverAroundYou": "अपने आसपास क्या हो रहा है जानें और सबसे खूबसूरत पलों के लिए तैयार रहें",
+    "noEventsFound": "कोई इवेंट नहीं मिला",
+    "noMatchingEvents": "आपकी खोज या स्थान से मेल खाने वाला कोई इवेंट नहीं है",
+    "event": "इवेंट",
+    "startDate": "आरंभ तिथि",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "मीडिया अपलोड करें",
-    "view_all_comments": "सभी टिप्पणियाँ देखें",
-    "nav": {
-        "timeline": "मेरा टाइमलाइन",
-        "favourites": "पसंदीदा",
-        "plans": "प्लान",
-        "specialCoverage": "विशेष कवरेज",
-        "downloads": "डाउनलोड",
-        "events": "इवेंट",
-        "more": "अधिक",
-        "terms": "शर्तें",
-        "dashboard": "डैशबोर्ड",
-        "historical": "ऐतिहासिक",
-        "home": "होम",
-        "about": "परिचय",
-        "allEvents": "सभी इवेंट",
-        "scemoryGate": "Scemory द्वार",
-        "contact": "संपर्क",
-        "addEvent": "इवेंट जोड़ें",
-        "wishlist": "पसंदीदा",
-        "profile": "प्रोफ़ाइल",
-        "logout": "लॉग आउट",
-        "login": "लॉग इन",
-        "cart": "कार्ट",
-        "scemoryHome": "Scemory होम",
-        "toggleMenu": "मेनू टॉगल करें",
-        "mediaCredits": "मीडिया क्रेडिट"
+    "emptyAvailable": "No events are currently available.",
+    "directory": {
+      "eyebrow": "Scemory देखें",
+      "eventsTitle": "इवेंट",
+      "eventsDescription": "दुनिया भर के वर्तमान और आगामी इवेंट खोजें।",
+      "historicalTitle": "ऐतिहासिक इवेंट",
+      "historicalDescription": "अतीत के दस्तावेज़ीकृत इवेंट और सुरक्षित यादें देखें।",
+      "events": "इवेंट",
+      "historicalEvents": "ऐतिहासिक इवेंट",
+      "collection": "इवेंट संग्रह",
+      "filters": "फ़िल्टर",
+      "refine": "परिणाम सीमित करें",
+      "closeFilters": "फ़िल्टर बंद करें",
+      "searchLabel": "खोजें",
+      "searchPlaceholder": "इवेंट खोजें...",
+      "eventType": "इवेंट का प्रकार",
+      "types": {
+        "all": "सभी इवेंट",
+        "real": "वास्तविक इवेंट",
+        "general": "सामान्य इवेंट"
+      },
+      "country": "देश",
+      "allCountries": "सभी देश",
+      "category": "श्रेणी",
+      "allCategories": "सभी श्रेणियाँ",
+      "city": "शहर",
+      "allCities": "सभी शहर",
+      "subcategory": "उपश्रेणी",
+      "allSubcategories": "सभी उपश्रेणियाँ",
+      "fromDate": "आरंभ तिथि",
+      "toDate": "समाप्ति तिथि",
+      "clearFilters": "फ़िल्टर हटाएँ",
+      "createEvent": "इवेंट बनाएँ",
+      "createHistorical": "ऐतिहासिक इवेंट जोड़ें",
+      "results": "{count} इवेंट",
+      "showing": "{total} में से {from}–{to} दिखाए जा रहे हैं",
+      "errorTitle": "इवेंट लोड नहीं हो सके",
+      "errorDescription": "इवेंट लोड करते समय कुछ गलत हुआ। फिर से प्रयास करें।",
+      "emptyTitle": "कोई इवेंट नहीं मिला",
+      "historicalEmptyTitle": "कोई ऐतिहासिक इवेंट नहीं मिला",
+      "emptyDescription": "फ़िल्टर बदलकर या हटाकर देखें।",
+      "eventBadge": "इवेंट",
+      "historicalBadge": "ऐतिहासिक",
+      "unknownLocation": "अज्ञात स्थान",
+      "uncategorized": "अवर्गीकृत",
+      "viewEvent": "इवेंट देखें",
+      "pagination": "इवेंट पृष्ठांकन",
+      "previous": "पिछला",
+      "next": "अगला"
+    }
+  },
+  "pagination": {
+    "previous": "पिछला",
+    "next": "अगला"
+  },
+  "about": {
+    "title": "हमारे बारे में - Scene Memory",
+    "subtitle": "हम आपके सबसे कीमती पलों को संरक्षित करते हैं, दृश्य दर दृश्य",
+    "text1": "Scene Memory में हम मानते हैं कि जीवन के सबसे सुंदर पल स्पष्टता और भावना के साथ संरक्षित होने लायक हैं। हम सिर्फ़ एक स्टोरेज प्लेटफ़ॉर्म से कहीं अधिक हैं – हम आपकी जीवन यात्रा के लिए एक डिजिटल मेमोरी एलबम हैं।",
+    "features": {
+      "immersiveAlbums": "फ़ोटो, वीडियो और वॉयस नोट्स के साथ immersive मेमोरी एलबम बनाएँ",
+      "aiOrganize": "AI-सहायता से आपके यादों को स्वचालित रूप से वर्गीकृत और टैग करें",
+      "privacy": "पूर्ण गोपनीयता और सुरक्षा – आपकी यादें एन्क्रिप्टेड हैं और केवल आपके लिए सुलभ हैं"
     },
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "TR": "Turkish",
-        "DE": "Deutsch",
-        "RU": "Русский",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिन्दी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
-    },
-    "login_to_comment": "कृपया लॉग इन करें, ताकि आप टिप्पण कर सकें",
-    "event": {
-        "reply": "उत्तर",
-        "delete": " हटा दें",
-        "no_media_yet": "कोई मीडिया नहीं",
-        "reply_placeholder": "अपनी उत्तर लिखें...",
-        "loading": "इवेंट लोड हो रहा है...",
-        "not_found": "इवेंट मौजूद नहीं है या हटा दिया गया है।",
-        "city_default": "निर्दिष्ट नहीं",
-        "visitor": "आगंतुक",
-        "media_gallery_title": "इवेंट मीडिया",
-        "no_media": "कोई मीडिया नहीं",
-        "about_event_title": "इवेंट के बारे में",
-        "comments_title": "टिप्पणियाँ",
-        "add_comment_title": "अपनी टिप्पणी जोड़ें",
-        "comment_placeholder": "यहाँ अपनी टिप्पणी लिखें...",
-        "submit_comment": "भेजें",
-        "sending_comment": "भेजा जा रहा है...",
-        "comment_login_required": "कृपया पहले लॉग इन करें",
-        "comment_added_success": "आपकी टिप्पणी सफलतापूर्वक जोड़ी गई!",
-        "delete_comment_title": "टिप्पणी हटाएँ",
-        "event_info_title": "इवेंट की जानकारी",
-        "from_date": "से",
-        "to_date": "तक",
-        "time_label": "समय",
-        "time_default": "निर्दिष्ट नहीं",
-        "location": "स्थान",
-        "organizer": "आयोजक",
-        "add_to_wishlist": "पसंदीदा में जोड़ें",
-        "already_in_wishlist": "पहले से पसंदीदा में",
-        "adding_to_wishlist": "जोड़ रहा है...",
-        "wishlist_success": "पसंदीदा में सफलतापूर्वक जोड़ा गया!",
-        "buy_collection_title": "पूरा संग्रह खरीदें",
-        "total_images": "कुल चित्र",
-        "save_discount": "10% छूट",
-        "you_save": "आप बचाते हैं",
-        "add_collection_to_cart": "🎁 पूरा संग्रह कार्ट में जोड़ें",
-        "collection_benefit_1": "✓ एक बार में सभी चित्र खरीदें",
-        "collection_benefit_2": "स्वचालित 10% छूट",
-        "collection_benefit_3": "✓ समय और पैसे बचाएं",
-        "collection_benefit_4": "✓ तुरंत सभी इवेंट यादें प्राप्त करें",
-        "upload_media_to_event": "इवेंट में मीडिया अपलोड करें",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "चित्र जोड़ें ({count}/{max})",
-        "comment_image_limit": "अधिकतम 2 चित्र, प्रत्येक 5 MB",
-        "selected_comment_image_alt": "चुना गया चित्र {number}",
-        "remove_selected_comment_image": "चुना गया चित्र {number} हटाएँ"
-    },
-    "common": {
-        "search": "खोजें",
-        "placeholder": "इवेंट खोजें...",
-        "searching": "खोज रहे हैं...",
-        "details": "विवरण",
-        "notSpecified": "निर्दिष्ट नहीं",
-        "loadingEvents": "इवेंट्स लोड हो रहे हैं...",
-        "loading": "लोड हो रहा है...",
-        "close": "बंद करें",
-        "tryAgain": "फिर से प्रयास करें",
-        "back": "वापस",
-        "remove": "हटाएँ",
-        "clear": "साफ़ करें",
-        "previous": "पिछला",
-        "next": "अगला",
-        "noResults": "कोई परिणाम नहीं",
-        "unknownError": "अज्ञात त्रुटि",
-        "learnMore": "और जानें",
-        "cancel": "रद्द करें",
-        "sending": "भेजा जा रहा है...",
-        "show": "दिखाएँ",
-        "hide": "छिपाएँ"
-    },
-    "events": {
-        "add_historical_event": "इवेंट जोड़ें",
-        "brand_footer": "दुनिया में सभी इवेंट्स",
-        "no_title": "शीर्षक रहित इवेंट",
-        "undefined_city": "अपरिभाषित",
-        "from_map": "मानचित्र से",
-        "cities": "शहर",
-        "categories": "श्रेणी",
-        "all_memories": "सभी इवेंट यादें",
-        "showing_snapshots": "दुनिया भर से {total} ऐतिहासिक स्नैपशॉट दिखा रहे हैं",
-        "sort_by": "इसके अनुसार क्रमबद्ध करें",
-        "sort": {
-            "newest": "सबसे नए पहले",
-            "oldest": "सबसे पुराने पहले",
-            "title": "शीर्षक"
-        },
-        "loading": "इवेंट्स लोड हो रहे हैं...",
-        "retry": "पुनः प्रयास करें",
-        "page_info": "पेज {current} कुल {last} में से",
-        "active_memories": "सक्रिय इवेंट्स",
-        "latestEvents": "नवीनतम इवेंट्स",
-        "recentMemories": "हाल की यादें",
-        "discoverAroundYou": "अपने आसपास क्या हो रहा है जानें और सबसे खूबसूरत पलों के लिए तैयार रहें",
-        "noEventsFound": "कोई इवेंट नहीं मिला",
-        "noMatchingEvents": "आपकी खोज या स्थान से मेल खाने वाला कोई इवेंट नहीं है",
-        "event": "इवेंट",
-        "startDate": "आरंभ तिथि",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available.",
-        "directory": {
-            "eyebrow": "Scemory देखें",
-            "eventsTitle": "इवेंट",
-            "eventsDescription": "दुनिया भर के वर्तमान और आगामी इवेंट खोजें।",
-            "historicalTitle": "ऐतिहासिक इवेंट",
-            "historicalDescription": "अतीत के दस्तावेज़ीकृत इवेंट और सुरक्षित यादें देखें।",
-            "events": "इवेंट",
-            "historicalEvents": "ऐतिहासिक इवेंट",
-            "collection": "इवेंट संग्रह",
-            "filters": "फ़िल्टर",
-            "refine": "परिणाम सीमित करें",
-            "closeFilters": "फ़िल्टर बंद करें",
-            "searchLabel": "खोजें",
-            "searchPlaceholder": "इवेंट खोजें...",
-            "eventType": "इवेंट का प्रकार",
-            "types": {
-                "all": "सभी इवेंट",
-                "real": "वास्तविक इवेंट",
-                "general": "सामान्य इवेंट"
-            },
-            "country": "देश",
-            "allCountries": "सभी देश",
-            "category": "श्रेणी",
-            "allCategories": "सभी श्रेणियाँ",
-            "city": "शहर",
-            "allCities": "सभी शहर",
-            "subcategory": "उपश्रेणी",
-            "allSubcategories": "सभी उपश्रेणियाँ",
-            "fromDate": "आरंभ तिथि",
-            "toDate": "समाप्ति तिथि",
-            "clearFilters": "फ़िल्टर हटाएँ",
-            "createEvent": "इवेंट बनाएँ",
-            "createHistorical": "ऐतिहासिक इवेंट जोड़ें",
-            "results": "{count} इवेंट",
-            "showing": "{total} में से {from}–{to} दिखाए जा रहे हैं",
-            "errorTitle": "इवेंट लोड नहीं हो सके",
-            "errorDescription": "इवेंट लोड करते समय कुछ गलत हुआ। फिर से प्रयास करें।",
-            "emptyTitle": "कोई इवेंट नहीं मिला",
-            "historicalEmptyTitle": "कोई ऐतिहासिक इवेंट नहीं मिला",
-            "emptyDescription": "फ़िल्टर बदलकर या हटाकर देखें।",
-            "eventBadge": "इवेंट",
-            "historicalBadge": "ऐतिहासिक",
-            "unknownLocation": "अज्ञात स्थान",
-            "uncategorized": "अवर्गीकृत",
-            "viewEvent": "इवेंट देखें",
-            "pagination": "इवेंट पृष्ठांकन",
-            "previous": "पिछला",
-            "next": "अगला"
-        }
-    },
-    "pagination": {
-        "previous": "पिछला",
-        "next": "अगला"
-    },
-    "about": {
-        "title": "हमारे बारे में - Scene Memory",
-        "subtitle": "हम आपके सबसे कीमती पलों को संरक्षित करते हैं, दृश्य दर दृश्य",
-        "text1": "Scene Memory में हम मानते हैं कि जीवन के सबसे सुंदर पल स्पष्टता और भावना के साथ संरक्षित होने लायक हैं। हम सिर्फ़ एक स्टोरेज प्लेटफ़ॉर्म से कहीं अधिक हैं – हम आपकी जीवन यात्रा के लिए एक डिजिटल मेमोरी एलबम हैं।",
-        "features": {
-            "immersiveAlbums": "फ़ोटो, वीडियो और वॉयस नोट्स के साथ immersive मेमोरी एलबम बनाएँ",
-            "aiOrganize": "AI-सहायता से आपके यादों को स्वचालित रूप से वर्गीकृत और टैग करें",
-            "privacy": "पूर्ण गोपनीयता और सुरक्षा – आपकी यादें एन्क्रिप्टेड हैं और केवल आपके लिए सुलभ हैं"
-        },
-        "startJourney": "अब अपनी यादों की यात्रा शुरू करें",
-        "highlightMoments": "अपने जीवन के पलों को हाइलाइट करें",
-        "organizedBy": "दृश्यों, लोगों और स्थानों के अनुसार व्यवस्थित",
-        "stats": {
-            "memories": "याद संरक्षित",
-            "users": "खुश उपयोगकर्ता",
-            "backup": "सुरक्षित बैकअप"
-        }
-    },
-    "newsletter": {
-        "title": "अपनी यादों से जुड़े रहें",
-        "description": "हर हफ़्ते यादों के टिप्स, फीचर अपडेट और प्रेरणादायक कहानियाँ अपनी ईमेल में प्राप्त करें",
-        "firstName": "पहला नाम",
-        "firstNamePlaceholder": "आपका पहला नाम",
-        "email": "ईमेल",
-        "emailPlaceholder": "you@example.com",
-        "consent": "मैं Scene Memory से कभी-कभी यादों के टिप्स, अपडेट और प्रचार ऑफ़र प्राप्त करने के लिए सहमत हूँ। मैं किसी भी समय सदस्यता समाप्त कर सकता हूँ।",
-        "subscribe": "याद अपडेट के लिए सदस्यता लें",
-        "community": "हमारे समुदाय में 5,000 से अधिक यादों के संरक्षकों में शामिल हों",
-        "kicker": "न्यूज़लेटर",
-        "verifiedTitle": "सत्यापित इवेंट कहानियों से अपडेट रहें",
-        "verifiedDescription": "ट्रेंडिंग इवेंट, नए मीडिया आर्काइव और दुनिया भर के योगदानकर्ताओं द्वारा दस्तावेज़ की गई प्रमुख कहानियों के क्यूरेटेड अपडेट पाएं.",
-        "subscribeShort": "सदस्यता लें",
-        "pendingApiMessage": "सदस्यता के लिए धन्यवाद. न्यूज़लेटर API जल्द जोड़ी जाएगी.",
-        "errors": {
-            "emailRequired": "कृपया अपना ईमेल दर्ज करें.",
-            "emailInvalid": "कृपया मान्य ईमेल पता दर्ज करें."
-        }
-    },
-    "map": {
-        "exploreMap": "मानचित्र एक्सप्लोर करें"
-    },
-    "hero": {
-        "title_main": "हम आपकी यादों को संरक्षित करते हैं",
-        "title_highlight": "ताकि वे हमेशा जीवित रहें",
-        "description": "Scene Memory में हम मानते हैं कि हर पल स्थायी होने लायक है। हम यहाँ हैं ताकि आप अपनी जीवन की महत्वपूर्ण घटनाओं को संरक्षित करें, व्यवस्थित करें और याद रखें।",
-        "cta_start": "हमारे साथ अपनी यात्रा शुरू करें",
-        "cta_watch": "परिचय वीडियो देखें",
-        "feature_organized": "व्यवस्थित यादें",
-        "feature_organized_desc": "हर पल अपनी सही जगह पर",
-        "feature_private": "गोपनीयता की गारंटी",
-        "feature_private_desc": "आपकी यादें पूरी तरह सुरक्षित",
-        "feature_reminders": "स्मार्ट रिमाइंडर",
-        "feature_reminders_desc": "कभी भी महत्वपूर्ण अवसर न भूलें",
-        "feature_evolving": "निरंतर विकास",
-        "feature_evolving_desc": "हम हमेशा आपकी अनुभव को बेहतर बना रहे हैं"
-    },
-    "our_story": {
-        "badge": "हमारी कहानी",
-        "title": "हमारी यात्रा कैसे शुरू हुई",
-        "intro": "हमारी कहानी एक साधारण विचार से शुरू हुई: हम लोगों को उनकी जीवन को आकार देने वाली कीमती यादों को कैसे संरक्षित करने में मदद कर सकते हैं?",
-        "stage1_title": "शुरुआत",
-        "stage1_desc": "2020 में हमारे संस्थापकों ने देखा कि समय के साथ कई महत्वपूर्ण पल कैसे फीके पड़ जाते हैं। उन्होंने उन्हें संरक्षित करने के लिए एक साधारण लेकिन शक्तिशाली उपकरण बनाने का फैसला किया।",
-        "stage2_title": "विकास",
-        "stage2_desc": "उपयोगकर्ताओं की संख्या बढ़ने के साथ हमने स्मार्ट रिमाइंडर, उन्नत वर्गीकरण और प्रियजनों के साथ सुरक्षित साझाकरण जोड़ा।",
-        "stage3_title": "दृष्टिकोण",
-        "stage3_desc": "आज हम दुनिया की सर्वश्रेष्ठ याद संरक्षण और व्यवस्थापन प्लेटफ़ॉर्म बनने का प्रयास कर रहे हैं, जिसमें गोपनीयता और सुगम अनुभव पर विशेष ध्यान है।"
-    },
-    "mission_vision": {
-        "mission_badge": "हमारा मिशन",
-        "mission_title": "हम किस पर विश्वास करते हैं",
-        "mission_text": "हमारा मिशन हर व्यक्ति को उनकी कीमती यादों को आसानी से, सुरक्षित और व्यवस्थित तरीके से संरक्षित करने की शक्ति देना है। हम मानते हैं कि हमारे जीवन का हर पल संरक्षित और याद किया जाने लायक है।",
-        "value_people_first": "लोग पहले",
-        "value_people_first_desc": "उपयोगकर्ता अनुभव हर निर्णय का केंद्र है",
-        "value_privacy": "गोपनीयता पवित्र है",
-        "value_privacy_desc": "आपकी यादें केवल आपकी हैं – हम उन्हें किसी के साथ साझा नहीं करते",
-        "value_growth": "निरंतर विकास",
-        "value_growth_desc": "हम उपयोगकर्ताओं की ज़रूरतों को पूरा करने के लिए लगातार विकसित हो रहे हैं",
-        "vision_badge": "हमारा दृष्टिकोण",
-        "vision_title": "हम कहाँ जा रहे हैं",
-        "vision_text": "हम दुनिया की अग्रणी याद संरक्षण और व्यवस्थापन प्लेटफ़ॉर्म बनना चाहते हैं, जहाँ कोई भी व्यक्ति कहीं भी आसानी से और सुरक्षित रूप से अपने महत्वपूर्ण पलों को संरक्षित कर सके।",
-        "goals_2025": "2025 के हमारे लक्ष्य",
-        "goal_users": "दस लाख उपयोगकर्ता तक पहुँचना",
-        "goal_languages": "10 नई भाषाएँ जोड़ना",
-        "goal_ai": "उन्नत AI फीचर्स लॉन्च करना"
-    },
-    "team": {
-        "badge": "हमारी टीम",
-        "title": "Scene Memory के पीछे की प्रतिभाएँ",
-        "description": "हमारी विविध टीम डेवलपर्स, डिज़ाइनर्स और UX विशेषज्ञों की मिलकर याद संरक्षण का एक अविस्मरणीय अनुभव बना रही है।"
-    },
-    "values": {
-        "badge": "हमारे मूल्य",
-        "title": "जो हमें अलग बनाता है"
-    },
+    "startJourney": "अब अपनी यादों की यात्रा शुरू करें",
+    "highlightMoments": "अपने जीवन के पलों को हाइलाइट करें",
+    "organizedBy": "दृश्यों, लोगों और स्थानों के अनुसार व्यवस्थित",
     "stats": {
-        "title": "हमारे आँकड़े खुद बोलते हैं",
-        "description": "लॉन्च के बाद से हमने हज़ारों लोगों को लाखों कीमती यादें संरक्षित करने में मदद की है"
+      "memories": "याद संरक्षित",
+      "users": "खुश उपयोगकर्ता",
+      "backup": "सुरक्षित बैकअप"
+    }
+  },
+  "newsletter": {
+    "title": "अपनी यादों से जुड़े रहें",
+    "description": "हर हफ़्ते यादों के टिप्स, फीचर अपडेट और प्रेरणादायक कहानियाँ अपनी ईमेल में प्राप्त करें",
+    "firstName": "पहला नाम",
+    "firstNamePlaceholder": "आपका पहला नाम",
+    "email": "ईमेल",
+    "emailPlaceholder": "you@example.com",
+    "consent": "मैं Scene Memory से कभी-कभी यादों के टिप्स, अपडेट और प्रचार ऑफ़र प्राप्त करने के लिए सहमत हूँ। मैं किसी भी समय सदस्यता समाप्त कर सकता हूँ।",
+    "subscribe": "याद अपडेट के लिए सदस्यता लें",
+    "community": "हमारे समुदाय में 5,000 से अधिक यादों के संरक्षकों में शामिल हों",
+    "kicker": "न्यूज़लेटर",
+    "verifiedTitle": "सत्यापित इवेंट कहानियों से अपडेट रहें",
+    "verifiedDescription": "ट्रेंडिंग इवेंट, नए मीडिया आर्काइव और दुनिया भर के योगदानकर्ताओं द्वारा दस्तावेज़ की गई प्रमुख कहानियों के क्यूरेटेड अपडेट पाएं.",
+    "subscribeShort": "सदस्यता लें",
+    "pendingApiMessage": "सदस्यता के लिए धन्यवाद. न्यूज़लेटर API जल्द जोड़ी जाएगी.",
+    "errors": {
+      "emailRequired": "कृपया अपना ईमेल दर्ज करें.",
+      "emailInvalid": "कृपया मान्य ईमेल पता दर्ज करें."
+    }
+  },
+  "map": {
+    "exploreMap": "मानचित्र एक्सप्लोर करें"
+  },
+  "hero": {
+    "title_main": "हम आपकी यादों को संरक्षित करते हैं",
+    "title_highlight": "ताकि वे हमेशा जीवित रहें",
+    "description": "Scene Memory में हम मानते हैं कि हर पल स्थायी होने लायक है। हम यहाँ हैं ताकि आप अपनी जीवन की महत्वपूर्ण घटनाओं को संरक्षित करें, व्यवस्थित करें और याद रखें।",
+    "cta_start": "हमारे साथ अपनी यात्रा शुरू करें",
+    "cta_watch": "परिचय वीडियो देखें",
+    "feature_organized": "व्यवस्थित यादें",
+    "feature_organized_desc": "हर पल अपनी सही जगह पर",
+    "feature_private": "गोपनीयता की गारंटी",
+    "feature_private_desc": "आपकी यादें पूरी तरह सुरक्षित",
+    "feature_reminders": "स्मार्ट रिमाइंडर",
+    "feature_reminders_desc": "कभी भी महत्वपूर्ण अवसर न भूलें",
+    "feature_evolving": "निरंतर विकास",
+    "feature_evolving_desc": "हम हमेशा आपकी अनुभव को बेहतर बना रहे हैं"
+  },
+  "our_story": {
+    "badge": "हमारी कहानी",
+    "title": "हमारी यात्रा कैसे शुरू हुई",
+    "intro": "हमारी कहानी एक साधारण विचार से शुरू हुई: हम लोगों को उनकी जीवन को आकार देने वाली कीमती यादों को कैसे संरक्षित करने में मदद कर सकते हैं?",
+    "stage1_title": "शुरुआत",
+    "stage1_desc": "2020 में हमारे संस्थापकों ने देखा कि समय के साथ कई महत्वपूर्ण पल कैसे फीके पड़ जाते हैं। उन्होंने उन्हें संरक्षित करने के लिए एक साधारण लेकिन शक्तिशाली उपकरण बनाने का फैसला किया।",
+    "stage2_title": "विकास",
+    "stage2_desc": "उपयोगकर्ताओं की संख्या बढ़ने के साथ हमने स्मार्ट रिमाइंडर, उन्नत वर्गीकरण और प्रियजनों के साथ सुरक्षित साझाकरण जोड़ा।",
+    "stage3_title": "दृष्टिकोण",
+    "stage3_desc": "आज हम दुनिया की सर्वश्रेष्ठ याद संरक्षण और व्यवस्थापन प्लेटफ़ॉर्म बनने का प्रयास कर रहे हैं, जिसमें गोपनीयता और सुगम अनुभव पर विशेष ध्यान है।"
+  },
+  "mission_vision": {
+    "mission_badge": "हमारा मिशन",
+    "mission_title": "हम किस पर विश्वास करते हैं",
+    "mission_text": "हमारा मिशन हर व्यक्ति को उनकी कीमती यादों को आसानी से, सुरक्षित और व्यवस्थित तरीके से संरक्षित करने की शक्ति देना है। हम मानते हैं कि हमारे जीवन का हर पल संरक्षित और याद किया जाने लायक है।",
+    "value_people_first": "लोग पहले",
+    "value_people_first_desc": "उपयोगकर्ता अनुभव हर निर्णय का केंद्र है",
+    "value_privacy": "गोपनीयता पवित्र है",
+    "value_privacy_desc": "आपकी यादें केवल आपकी हैं – हम उन्हें किसी के साथ साझा नहीं करते",
+    "value_growth": "निरंतर विकास",
+    "value_growth_desc": "हम उपयोगकर्ताओं की ज़रूरतों को पूरा करने के लिए लगातार विकसित हो रहे हैं",
+    "vision_badge": "हमारा दृष्टिकोण",
+    "vision_title": "हम कहाँ जा रहे हैं",
+    "vision_text": "हम दुनिया की अग्रणी याद संरक्षण और व्यवस्थापन प्लेटफ़ॉर्म बनना चाहते हैं, जहाँ कोई भी व्यक्ति कहीं भी आसानी से और सुरक्षित रूप से अपने महत्वपूर्ण पलों को संरक्षित कर सके।",
+    "goals_2025": "2025 के हमारे लक्ष्य",
+    "goal_users": "दस लाख उपयोगकर्ता तक पहुँचना",
+    "goal_languages": "10 नई भाषाएँ जोड़ना",
+    "goal_ai": "उन्नत AI फीचर्स लॉन्च करना"
+  },
+  "team": {
+    "badge": "हमारी टीम",
+    "title": "Scene Memory के पीछे की प्रतिभाएँ",
+    "description": "हमारी विविध टीम डेवलपर्स, डिज़ाइनर्स और UX विशेषज्ञों की मिलकर याद संरक्षण का एक अविस्मरणीय अनुभव बना रही है।"
+  },
+  "values": {
+    "badge": "हमारे मूल्य",
+    "title": "जो हमें अलग बनाता है"
+  },
+  "stats": {
+    "title": "हमारे आँकड़े खुद बोलते हैं",
+    "description": "लॉन्च के बाद से हमने हज़ारों लोगों को लाखों कीमती यादें संरक्षित करने में मदद की है"
+  },
+  "cta": {
+    "title": "Scene Memory परिवार में शामिल हों",
+    "description": "आज से अपनी यादों को संरक्षित करना शुरू करें। मुफ़्त, सुरक्षित और आपके लिए खास।",
+    "btn_signup": "मुफ़्त में साइन अप करें",
+    "btn_features": "फीचर्स जानें",
+    "trust": "50,000 से अधिक लोगों के साथ जुड़ें जो हमें अपनी यादें सौंपते हैं"
+  },
+  "footer": {
+    "slogan": "अपनी यादों को संरक्षित करें ताकि वे हमेशा जीवित रहें",
+    "terms": "नियम और शर्तें",
+    "privacy": "गोपनीयता नीति",
+    "contact": "संपर्क करें",
+    "copyright": "© 2024 Scene Memory। सर्वाधिकार सुरक्षित।",
+    "made_with": "आपकी यादों को संरक्षित करने के लिए ♥ के साथ बनाया गया",
+    "quickLinks": "त्वरित लिंक",
+    "supportContact": "सहायता और संपर्क",
+    "logoAlt": "लोगो",
+    "googlePlayAlt": "Google Play से डाउनलोड करें",
+    "appStoreAlt": "App Store से डाउनलोड करें",
+    "copyright2025": "© 2025 Scene Memory. सर्वाधिकार सुरक्षित।",
+    "services": "सेवाएँ",
+    "copyrightLink": "कॉपीराइट",
+    "termsOfService": "सेवा की शर्तें",
+    "privacyPolicy": "गोपनीयता नीति",
+    "dataProtection": "डेटा संरक्षण",
+    "dataDeletion": "डेटा हटाने के निर्देश"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "हम यहाँ हैं",
+      "title_highlight": "आपकी मदद के लिए",
+      "description": "Scene Memory टीम आपकी सभी पूछताछ का जवाब देने और किसी भी समय आपकी सहायता करने के लिए तैयार है",
+      "stat_24_7": "24/7 सहायता",
+      "stat_response_time": "औसत प्रतिक्रिया समय",
+      "stat_satisfaction": "ग्राहक संतुष्टि",
+      "stat_happy_users": "खुश उपयोगकर्ता"
     },
-    "cta": {
-        "title": "Scene Memory परिवार में शामिल हों",
-        "description": "आज से अपनी यादों को संरक्षित करना शुरू करें। मुफ़्त, सुरक्षित और आपके लिए खास।",
-        "btn_signup": "मुफ़्त में साइन अप करें",
-        "btn_features": "फीचर्स जानें",
-        "trust": "50,000 से अधिक लोगों के साथ जुड़ें जो हमें अपनी यादें सौंपते हैं"
+    "tabs": {
+      "form": "संदेश भेजें",
+      "info": "संपर्क जानकारी"
     },
-    "footer": {
-        "slogan": "अपनी यादों को संरक्षित करें ताकि वे हमेशा जीवित रहें",
-        "terms": "नियम और शर्तें",
-        "privacy": "गोपनीयता नीति",
-        "contact": "संपर्क करें",
-        "copyright": "© 2024 Scene Memory। सर्वाधिकार सुरक्षित।",
-        "made_with": "आपकी यादों को संरक्षित करने के लिए ♥ के साथ बनाया गया",
-        "quickLinks": "त्वरित लिंक",
-        "supportContact": "सहायता और संपर्क",
-        "logoAlt": "लोगो",
-        "googlePlayAlt": "Google Play से डाउनलोड करें",
-        "appStoreAlt": "App Store से डाउनलोड करें",
-        "copyright2025": "© 2025 Scene Memory. सर्वाधिकार सुरक्षित।",
-        "services": "सेवाएँ",
-        "copyrightLink": "कॉपीराइट",
-        "termsOfService": "सेवा की शर्तें",
-        "privacyPolicy": "गोपनीयता नीति",
-        "dataProtection": "डेटा संरक्षण",
-        "dataDeletion": "डेटा हटाने के निर्देश"
+    "form": {
+      "fullName": "पूरा नाम",
+      "fullNamePlaceholder": "यहाँ आपका नाम",
+      "emailAddress": "ईमेल पता",
+      "messagePlaceholder": "यहाँ अपना संदेश लिखें...",
+      "emailPlaceholder": "आपका@email.com",
+      "title": "हमें संदेश भेजें",
+      "subtitle": "हम जल्द से जल्द जवाब देंगे। हम आपकी मदद के लिए यहाँ हैं!",
+      "full_name": "पूरा नाम",
+      "email": "ईमेल",
+      "subject": "विषय",
+      "message": "संदेश",
+      "message_placeholder": "यहाँ अपना संदेश लिखें...",
+      "newsletter": "मैं Scene Memory न्यूज़लेटर और ऑफ़र प्राप्त करना चाहता हूँ",
+      "submit": "संदेश भेजें",
+      "submitting": "भेजा जा रहा है...",
+      "success_title": "सफलतापूर्वक भेजा गया!",
+      "success_message": "हमसे संपर्क करने के लिए धन्यवाद – हम जल्द जवाब देंगे।"
     },
-    "contact": {
-        "hero": {
-            "title_main": "हम यहाँ हैं",
-            "title_highlight": "आपकी मदद के लिए",
-            "description": "Scene Memory टीम आपकी सभी पूछताछ का जवाब देने और किसी भी समय आपकी सहायता करने के लिए तैयार है",
-            "stat_24_7": "24/7 सहायता",
-            "stat_response_time": "औसत प्रतिक्रिया समय",
-            "stat_satisfaction": "ग्राहक संतुष्टि",
-            "stat_happy_users": "खुश उपयोगकर्ता"
-        },
-        "tabs": {
-            "form": "संदेश भेजें",
-            "info": "संपर्क जानकारी"
-        },
-        "form": {
-            "fullName": "पूरा नाम",
-            "fullNamePlaceholder": "यहाँ आपका नाम",
-            "emailAddress": "ईमेल पता",
-            "messagePlaceholder": "यहाँ अपना संदेश लिखें...",
-            "emailPlaceholder": "आपका@email.com",
-            "title": "हमें संदेश भेजें",
-            "subtitle": "हम जल्द से जल्द जवाब देंगे। हम आपकी मदद के लिए यहाँ हैं!",
-            "full_name": "पूरा नाम",
-            "email": "ईमेल",
-            "subject": "विषय",
-            "message": "संदेश",
-            "message_placeholder": "यहाँ अपना संदेश लिखें...",
-            "newsletter": "मैं Scene Memory न्यूज़लेटर और ऑफ़र प्राप्त करना चाहता हूँ",
-            "submit": "संदेश भेजें",
-            "submitting": "भेजा जा रहा है...",
-            "success_title": "सफलतापूर्वक भेजा गया!",
-            "success_message": "हमसे संपर्क करने के लिए धन्यवाद – हम जल्द जवाब देंगे।"
-        },
-        "info": {
-            "title": "संपर्क जानकारी",
-            "address_title": "मुख्यालय",
-            "address": "नील स्ट्रीट, काहिरा, मिस्र",
-            "view_map": "मानचित्र पर देखें",
-            "phone_title": "फ़ोन",
-            "phone1": "+20 123 456 789",
-            "phone2": "+20 987 654 321",
-            "phone_hours": "सुबह 9 बजे से रात 9 बजे तक उपलब्ध",
-            "email_title": "ईमेल",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "24 घंटे के अंदर जवाब",
-            "follow_us": "हमें फ़ॉलो करें",
-            "map_title": "मानचित्र पर हमारी स्थिति",
-            "map_location": "काहिरा, मिस्र",
-            "open_map": "मानचित्र खोलें"
-        },
-        "faq": {
-            "title": "अक्सर पूछे जाने वाले प्रश्न",
-            "subtitle": "सबसे आम सवालों के जवाब"
-        },
-        "live_support": {
-            "title": "लाइव सहायता",
-            "description": "तत्काल मदद के लिए अभी टीम के सदस्य से बात करें",
-            "btn_chat": "लाइव चैट शुरू करें",
-            "btn_schedule": "कॉल शेड्यूल करें",
-            "available": "अभी उपलब्ध: 3 सहायता एजेंट"
-        }
-    },
-    "contacts": {
-        "badge": "संपर्क करें",
-        "title": "आइए बात करें",
-        "description": "कोई सवाल है, सहायता चाहिए, या कस्टम प्लान चाहते हैं? हमें संदेश भेजें और हमारी टीम आपसे संपर्क करेगी।",
-        "form": {
-            "title": "हमें संदेश भेजें",
-            "description": "नीचे दिया गया फ़ॉर्म पूरा करें और हम जल्द से जल्द जवाब देंगे।",
-            "fullName": "पूरा नाम",
-            "fullNamePlaceholder": "अपना पूरा नाम दर्ज करें",
-            "emailAddress": "ईमेल पता",
-            "emailPlaceholder": "अपना ईमेल पता दर्ज करें",
-            "subject": "विषय",
-            "generalInquiry": "सामान्य पूछताछ",
-            "customPlan": "कस्टम प्लान",
-            "support": "तकनीकी सहायता",
-            "feedback": "प्रतिक्रिया",
-            "other": "अन्य",
-            "message": "संदेश",
-            "messagePlaceholder": "बताएं हम आपकी कैसे मदद कर सकते हैं...",
-            "minimumCharacters": "कृपया पर्याप्त विवरण दें।",
-            "sendMessage": "संदेश भेजें",
-            "sending": "भेजा जा रहा है...",
-            "successMessage": "आपका संदेश सफलतापूर्वक भेज दिया गया है।",
-            "errorMessage": "आपका संदेश भेजते समय कुछ गलत हुआ। कृपया फिर से प्रयास करें।"
-        },
-        "info": {
-            "getInTouch": "संपर्क में रहें",
-            "title": "हम मदद के लिए यहां हैं",
-            "description": "सामान्य सवालों, तकनीकी सहायता या कस्टम प्राइसिंग के लिए हमारी टीम से संपर्क करें।",
-            "emailUs": "हमें ईमेल करें",
-            "available": "हमारी टीम जल्द से जल्द जवाब देगी।",
-            "customPlans": "कस्टम प्लान",
-            "customPlansDescription": "अपनी टीम या व्यवसाय के लिए अनुकूल समाधान चाहिए? हमें बताएं आपको क्या चाहिए।",
-            "customerSupport": "ग्राहक सहायता",
-            "supportDescription": "यदि आपको अपने खाते, सदस्यता या सेवाओं में मदद चाहिए, तो हमसे संपर्क करें।",
-            "followJourney": "हमारी यात्रा का अनुसरण करें",
-            "responseTime": "तेज़ प्रतिक्रिया",
-            "responseTimeDescription": "हम आमतौर पर एक कार्य दिवस के भीतर संदेशों का जवाब देते हैं।"
-        },
-        "map": {
-            "title": "Scene Memory विश्व मानचित्र",
-            "description": "140+ देशों में हज़ारों यादों को देखें।"
-        }
+    "info": {
+      "title": "संपर्क जानकारी",
+      "address_title": "मुख्यालय",
+      "address": "नील स्ट्रीट, काहिरा, मिस्र",
+      "view_map": "मानचित्र पर देखें",
+      "phone_title": "फ़ोन",
+      "phone1": "+20 123 456 789",
+      "phone2": "+20 987 654 321",
+      "phone_hours": "सुबह 9 बजे से रात 9 बजे तक उपलब्ध",
+      "email_title": "ईमेल",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "24 घंटे के अंदर जवाब",
+      "follow_us": "हमें फ़ॉलो करें",
+      "map_title": "मानचित्र पर हमारी स्थिति",
+      "map_location": "काहिरा, मिस्र",
+      "open_map": "मानचित्र खोलें"
     },
     "faq": {
-        "badge": "FAQ",
-        "title": "अक्सर पूछे जाने वाले प्रश्न",
-        "description": "कुछ सबसे आम सवालों के त्वरित जवाब।",
-        "questions": {
-            "0": {
-                "question": "मुझे कितनी जल्दी जवाब मिलेगा?",
-                "answer": "हमारी टीम आमतौर पर एक कार्य दिवस के भीतर जवाब देती है।"
-            },
-            "1": {
-                "question": "क्या मैं कस्टम प्लान का अनुरोध कर सकता हूं?",
-                "answer": "हां। विषय फ़ील्ड में कस्टम प्लान चुनें और अपनी आवश्यकताएं लिखें।"
-            },
-            "2": {
-                "question": "क्या मैं तकनीकी सहायता के लिए संपर्क कर सकता हूं?",
-                "answer": "हां। तकनीकी सहायता चुनें और समस्या से जुड़ी सभी जरूरी जानकारी शामिल करें।"
-            }
-        }
+      "title": "अक्सर पूछे जाने वाले प्रश्न",
+      "subtitle": "सबसे आम सवालों के जवाब"
     },
-    "eventForm": {
-        "admin": {
-            "title": "एडमिन द्वारा इवेंट जोड़ें",
-            "trending": "ट्रेंडिंग इवेंट",
-            "trendingHelp": "इस इवेंट को ट्रेंडिंग के रूप में चिह्नित करें",
-            "generateTags": "AI टैग बनाएं",
-            "generatingTags": "टैग बनाए जा रहे हैं...",
-            "generateTagsHelp": "मौजूदा AI सेवा से इवेंट और तस्वीरों के टैग सुझाएं। प्रकाशित करने से पहले आप उनकी समीक्षा कर सकते हैं या उन्हें हटा सकते हैं।",
-            "generateTagsError": "अभी AI टैग नहीं बनाए जा सके।",
-            "created": "इवेंट सफलतापूर्वक बनाया और प्रकाशित किया गया।"
-        },
-        "chooseFiles": "फ़ाइल चुनें",
-        "mediaCount": "मीडिया संख्या",
-        "title": "नया इवेंट जोड़ें",
-        "basicInfo": "मूल जानकारी",
-        "locationCategory": "स्थान और श्रेणी",
-        "dates": "तिथियाँ",
-        "images": "इवेंट की तस्वीरें",
-        "eventTitle": "इवेंट का शीर्षक",
-        "description": "विवरण",
-        "country": "देश",
-        "searchCountry": "देश खोजें...",
-        "selectCountry": "देश चुनें",
-        "city": "शहर",
-        "selectCity": "शहर चुनें",
-        "selectCityFirst": "पहले देश चुनें",
-        "mainCategory": "मुख्य श्रेणी",
-        "subCategory": "उप-श्रेणी",
-        "selectSubFirst": "पहले मुख्य श्रेणी चुनें",
-        "selectLocationMap": "मानचित्र पर स्थान चुनें",
-        "selectedCoords": "चुने गए निर्देशांक: अक्षांश: {lat} , देशांतर: {lng}",
-        "lat": "अक्षांश",
-        "lng": "देशांतर",
-        "pleaseSelectLocation": "कृपया मानचित्र पर एक स्थान चुनें",
-        "startDate": "प्रारंभ तिथि",
-        "endDate": "समाप्ति तिथि",
-        "startTime": "प्रारंभ समय",
-        "dragDropHere": "यहाँ क्लिक करें या इमेज खींचकर छोड़ें",
-        "formatsMax": "PNG • JPG • WEBP | अधिकतम 5MB प्रति इमेज",
-        "chooseImages": "इमेज चुनें",
-        "addMore": "और जोड़ें",
-        "imagesCount": "{count} / 8 तस्वीरें",
-        "remove": "हटाएं",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
-            "mediaRequired": "कम से कम एक चित्र या वीडियो अपलोड करें।"
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        },
-        "minimumRequirementsHint": "इवेंट बनाने के लिए केवल शीर्षक, विवरण और कम से कम एक चित्र या वीडियो चाहिए। अन्य सभी फ़ील्ड वैकल्पिक हैं।"
-    },
-    "commons": {
-        "required": "आवश्यक",
-        "cancel": "रद्द करें",
-        "saveDraft": "ड्राफ्ट के रूप में सहेजें",
-        "create": "इवेंट बनाएं",
-        "creating": "बन रहा है...",
-        "choose": "चुनें"
-    },
-    "eventss": {
-        "no_title": "शीर्षक रहित इवेंट",
-        "undefined_city": "अपरिभाषित",
-        "from_map": "मानचित्र से"
-    },
-    "wishlist": {
-        "title": "पसंदीदा सूची",
-        "loading": "लोड हो रहा है...",
-        "empty": {
-            "main": "आपकी इच्छा सूची में अभी कोई आइटम नहीं है",
-            "hint": "अपने पसंदीदा इवेंट जोड़ना शुरू करें!"
-        },
-        "fallback_image_alt": "इवेंट की डिफ़ॉल्ट छवि",
-        "uncategorized": "अवर्गीकृत",
-        "no_title": "शीर्षक नहीं",
-        "city_label": "शहर:",
-        "date_label": "तारीख:",
-        "time_label": "समय:",
-        "not_specified": "निर्दिष्ट नहीं",
-        "view_details": "विवरण देखें",
-        "remove": "पसंदीदा से हटाएं",
-        "deleting": "हटा रहा है...",
-        "added_at": "जोड़ा गया",
-        "pagination": {
-            "previous": "पिछला",
-            "next": "अगला",
-            "page_info": "पेज {current} का {total}"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "सेवा की शर्तें",
-        "last_updated": "अंतिम अपडेट: 2026",
-        "acceptance_title": "शर्तों की स्वीकृति",
-        "acceptance_text": "इस प्लेटफ़ॉर्म का उपयोग करके आप इन सेवा शर्तों से सहमत होते हैं।",
-        "accounts_title": "उपयोगकर्ता खाते",
-        "accounts_text": "उपयोगकर्ता अपने खाते की गोपनीयता बनाए रखने के लिए जिम्मेदार हैं।",
-        "content_title": "सामग्री का स्वामित्व",
-        "content_text": "प्लेटफ़ॉर्म की सभी सामग्री कॉपीराइट और बौद्धिक संपदा कानूनों द्वारा संरक्षित है।",
-        "ai_title": "एआई प्रतिबंध",
-        "ai_text": "बिना आधिकारिक लाइसेंस के प्लेटफ़ॉर्म की सामग्री का उपयोग एआई मॉडल प्रशिक्षण के लिए प्रतिबंधित है।",
-        "prohibited_title": "प्रतिबंधित उपयोग",
-        "prohibited_text": "उपयोगकर्ता प्लेटफ़ॉर्म का दुरुपयोग या अनधिकृत पहुँच का प्रयास नहीं कर सकते।",
-        "liability_title": "उत्तरदायित्व सीमा",
-        "liability_text": "सेवा के उपयोग से होने वाले अप्रत्यक्ष नुकसान के लिए प्लेटफ़ॉर्म जिम्मेदार नहीं होगा।",
-        "changes_title": "शर्तों में परिवर्तन",
-        "changes_text": "हम इन शर्तों को कभी भी बदल सकते हैं।",
-        "contact_title": "संपर्क",
-        "contact_text": "इन शर्तों के बारे में प्रश्नों के लिए प्रशासन से संपर्क करें।"
-    },
-    "plans": {
-        "customPrice": "हमसे संपर्क करें",
-        "customPricingDescription": "आपकी ज़रूरतों के अनुसार कीमत",
-        "contactUs": "हमसे संपर्क करें",
-        "chooseYourPlan": "अपना प्लान चुनें",
-        "getStarted": "शुरू करें",
-        "perMonth": "प्रति माह",
-        "prioritySupport": "प्राथमिक सहायता",
-        "securePayments": "सुरक्षित भुगतान",
-        "moneyBack": "30 दिन की गारंटी",
-        "support247": "24/7 सहायता",
-        "subscribe": "अभी सदस्यता लें",
-        "noCreditCard": "क्रेडिट कार्ड आवश्यक नहीं",
-        "noFeatures": "अभी कोई सुविधा नहीं",
-        "mostPopular": "सबसे लोकप्रिय",
-        "free": "मुफ्त",
-        "ourPlans": "हमारे प्लान",
-        "description": "मुफ़्त शुरू करें या अपने लिए सही प्लान चुनें.",
-        "price": "कीमत",
-        "features": "विशेषताएँ",
-        "cancelAnytime": "कभी भी रद्द करें",
-        "Monthly": "मासिक",
-        "Yearly": "वार्षिक",
-        "unlimitedEvents": "असीमित इवेंट",
-        "addEvents": "इवेंट जोड़ें",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "प्लान",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "प्लान लोड नहीं हो सके। फिर से प्रयास करें।"
-        },
-        "customPlanNote": "आपकी आवश्यकताओं के अनुसार बनाया गया",
-        "basicAccessIncluded": "बुनियादी एक्सेस शामिल है",
-        "usd": "USD"
-    },
-    "free": "मुफ़्त",
-    "basic": "बेसिक",
-    "professional": "प्रोफेशनल",
-    "premium": "प्रीमियम",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता।",
-            "badge": "Scemory इवेंट आर्काइव",
-            "title": "दस्तावेज़ित इवेंट खोजें",
-            "titleHighlight": "मानचित्र के माध्यम से",
-            "description": "दुनिया भर के पत्रकारों, मीडिया टीमों और प्रत्यक्षदर्शी योगदानकर्ताओं द्वारा अपलोड की गई इवेंट मीडिया खोजें.",
-            "searchEvents": "इवेंट खोजें",
-            "uploadStory": "अपनी कहानी अपलोड करें",
-            "bottomText": "दुनिया भर की कहानियां, स्थान और क्षण खोजें.",
-            "searchPlaceholder": "  इवेंट खोजें, स्थान या टैग..."
-        },
-        "profileToast": {
-            "title": "प्रोफ़ाइल अधूरी है",
-            "message": "आपकी प्रोफ़ाइल अधूरी है. कृपया अपडेट करें:",
-            "complete": "पूरा करने के लिए क्लिक करें",
-            "fields": {
-                "phone": "फ़ोन",
-                "country": "देश",
-                "position": "पद",
-                "dateOfBirth": "जन्म तिथि"
-            }
-        },
-        "trending": {
-            "loadError": "ट्रेंडिंग इवेंट अभी लोड नहीं हो सके.",
-            "kicker": "ट्रेंडिंग",
-            "title": "ट्रेंडिंग इवेंट",
-            "description": "आर्काइव में ध्यान आकर्षित कर रहे इवेंट.",
-            "emptyTitle": "अभी कोई ट्रेंडिंग इवेंट नहीं",
-            "emptyDescription": "हाइलाइट किए गए इवेंट के लिए जल्द वापस देखें.",
-            "views": "दृश्य",
-            "likes": "लाइक",
-            "slidesLabel": "ट्रेंडिंग इवेंट स्लाइड",
-            "untitledEvent": "शीर्षक रहित इवेंट",
-            "showSlide": "ट्रेंडिंग इवेंट {number} दिखाएं"
-        },
-        "map": {
-            "tilesSlow": "मानचित्र टाइलें रेंडर होने में बहुत समय ले रही हैं.",
-            "loadError": "मानचित्र अभी लोड नहीं हो सका.",
-            "loadMap": "मानचित्र लोड करें",
-            "loading": "मानचित्र लोड हो रहा है...",
-            "retry": "मानचित्र फिर से लोड करें",
-            "openFullscreen": "मानचित्र पूर्ण स्क्रीन में खोलें",
-            "closeFullscreen": "पूर्ण स्क्रीन मानचित्र बंद करें"
-        },
-        "about": {
-            "imageAlt": "Scemory दस्तावेज़ीकरण प्लेटफ़ॉर्म",
-            "kicker": "विश्वसनीय इवेंट मेमोरी",
-            "title": "Scemory के बारे में",
-            "description": "Scemory पत्रकारों, मीडिया टीमों और प्रत्यक्षदर्शी योगदानकर्ताओं के लिए बनाया गया है जिन्हें घटनाओं को उसी समय दस्तावेज़ करने के लिए भरोसेमंद जगह चाहिए. प्लेटफ़ॉर्म अपलोडेड मीडिया, इवेंट मेटाडेटा और स्थान संदर्भ को जोड़ता है ताकि लोग सार्वजनिक कहानियां स्पष्टता से खोज सकें.",
-            "features": {
-                "upload": "फ़ोटो, वीडियो और फ़ील्ड डेटा अपलोड करें",
-                "explore": "इंटरैक्टिव मानचित्र से इवेंट खोजें",
-                "preserve": "सत्यापित कहानियों को डिजिटल आर्काइव में सुरक्षित रखें"
-            }
-        },
-        "events": {
-            "showing": "दिखा रहा है",
-            "of": "में से",
-            "events": "इवेंट",
-            "seeMore": "और देखें",
-            "badge": "इवेंट"
-        },
-        "tags": {
-            "loading": "टैग लोड हो रहे हैं...",
-            "showingFirst": "पहले दिखा रहे हैं",
-            "searchToFindMore": "टैग. और खोजने के लिए खोजें.",
-            "none": "कोई टैग नहीं मिला",
-            "helper": "मानचित्र इवेंट फ़िल्टर करने के लिए एक या अधिक टैग चुनें.",
-            "clearSelected": "चुने गए टैग साफ़ करें",
-            "searchMore": "और टैग खोजें"
-        },
-        "search": {
-            "clearText": "साफ़ करें",
-            "clearTags": "साफ़ करें"
-        },
-        "specialCoverage": {
-            "badge": "विशेष कवरेज",
-            "title": "क्या आपके पास कोई ऐसा इवेंट है जिसे कवर किया जाना चाहिए?",
-            "description": "Scemory को उस इवेंट के बारे में बताएं जो विशेष कवरेज का हकदार है और उसकी कहानी को अधिक लोगों तक पहुँचाने में मदद करें।",
-            "contactUs": "संपर्क करें",
-            "modal": {
-                "title": "विशेष कवरेज",
-                "eventName": "इवेंट का नाम",
-                "eventNamePlaceholder": "इवेंट का नाम दर्ज करें",
-                "description": "इवेंट का विवरण",
-                "descriptionPlaceholder": "हमें इवेंट के बारे में और यह क्यों कवरेज के योग्य है, बताएं",
-                "cancel": "रद्द करें",
-                "send": "भेजें",
-                "close": "बंद करें",
-                "country": "देश",
-                "city": "शहर",
-                "searchCity": "शहर खोजें",
-                "addNewCity": "नया शहर जोड़ें",
-                "createCity": "शहर बनाएँ",
-                "startDate": "आरंभ तिथि",
-                "coverageTime": "कवरेज का समय",
-                "eventType": "इवेंट का प्रकार",
-                "personalEvent": "व्यक्तिगत इवेंट",
-                "publicEvent": "सार्वजनिक इवेंट",
-                "selectCountry": "देश चुनें",
-                "selectCity": "शहर चुनें",
-                "noCitiesFound": "कोई शहर नहीं मिला",
-                "noCountriesFound": "कोई देश नहीं मिला",
-                "countryRequired": "कृपया एक देश चुनें।",
-                "cityRequired": "कृपया एक शहर चुनें।",
-                "startDateRequired": "कृपया आरंभ तिथि चुनें।",
-                "eventTypeRequired": "कृपया इवेंट का प्रकार चुनें।",
-                "cityCreateFailed": "शहर नहीं बनाया जा सका। कृपया फिर से प्रयास करें।",
-                "sending": "भेजा जा रहा है...",
-                "eventNameRequired": "इवेंट का नाम दर्ज करें।",
-                "descriptionRequired": "इवेंट का विवरण दर्ज करें।",
-                "success": "विशेष कवरेज का अनुरोध सफलतापूर्वक भेज दिया गया है।"
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle",
-            "warning": "गुणवत्ता चेतावनी"
-        },
-        "videoReady": "वीडियो अपलोड के लिए तैयार है।",
-        "qualityWarning": "गुणवत्ता जाँच केवल सलाह के लिए है और इवेंट बनाने से नहीं रोकती।"
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal — ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "आपकी खरीदी हुई फ़ाइलें यहाँ दिखाई देंगी"
-    },
-    "experience": {
-        "kicker": "SCEMORY अनुभव",
-        "title": "एक प्लेटफ़ॉर्म. कहानी का हर पक्ष.",
-        "pathsLabel": "Scemory अनुभव पथ",
-        "highlightsLabel": "सेक्शन हाइलाइट",
-        "tabs": {
-            "explore": {
-                "label": "इवेंट खोजें",
-                "eyebrow": "इवेंट के माध्यम से दुनिया खोजें",
-                "heading": "दुनिया भर की कहानियां, इवेंट और स्थान खोजें",
-                "description": "मानचित्र से दस्तावेज़ित सार्वजनिक इवेंट, निजी यादों और वास्तविक स्थानों व योगदानकर्ता संदर्भ से बनी दृश्य कहानियों तक जाएं.",
-                "cta": "इवेंट खोजें",
-                "imageAlt": "दस्तावेज़ित मीडिया पैनलों वाला Scemory इवेंट खोज इंटरफ़ेस",
-                "features": {
-                    "browse": "स्थान और टाइमलाइन के अनुसार इवेंट मीडिया ब्राउज़ करें",
-                    "discover": "दृश्य आर्काइव से आसपास की कहानियां खोजें",
-                    "move": "ओवरव्यू से दस्तावेज़ित इवेंट विवरण तक जाएं"
-                },
-                "visual": {
-                    "kicker": "लाइव खोज",
-                    "title": "मानचित्र से जुड़ी इवेंट कहानियां",
-                    "stat": "वैश्विक आर्काइव",
-                    "note": "स्थान, तिथियां और मीडिया एक दृश्य में"
-                }
-            },
-            "share": {
-                "label": "अपनी कहानी साझा करें",
-                "eyebrow": "क्षणों को दस्तावेज़ित कहानियों में बदलें",
-                "heading": "महत्वपूर्ण क्षणों को दस्तावेज़ करें",
-                "description": "इवेंट बनाएं, फ़ोटो और मीडिया अपलोड करें, स्थान विवरण जोड़ें और Scemory आर्काइव में अपना दृष्टिकोण दें.",
-                "cta": "अपनी कहानी अपलोड करें",
-                "imageAlt": "इवेंट मीडिया दस्तावेज़ करने के लिए Scemory योगदानकर्ता कार्यक्षेत्र",
-                "features": {
-                    "add": "मीडिया, विवरण और स्थान संदर्भ जोड़ें",
-                    "build": "कच्चे क्षणों से संरचित स्मृति बनाएं",
-                    "keep": "योगदानकर्ता कहानियों को आर्काइव से जोड़े रखें"
-                },
-                "visual": {
-                    "kicker": "योगदान प्रवाह",
-                    "title": "मीडिया, संदर्भ और स्थान",
-                    "stat": "कहानी निर्माता",
-                    "note": "क्षणों को अर्थपूर्ण विवरण के साथ अपलोड करें"
-                }
-            },
-            "license": {
-                "label": "मीडिया लाइसेंस करें",
-                "eyebrow": "उपयोग के लिए तैयार मीडिया खोजें",
-                "heading": "इवेंट मीडिया को आत्मविश्वास से खोजें और लाइसेंस करें",
-                "description": "दृश्य सामग्री ब्राउज़ करें, उपलब्ध इवेंट मीडिया का पूर्वावलोकन करें और Scemory के मौजूदा खोज अनुभव से लाइसेंस विकल्पों की ओर बढ़ें.",
-                "cta": "मीडिया खोजें",
-                "imageAlt": "लाइसेंस योग्य इवेंट सामग्री ब्राउज़ करने के लिए Scemory मीडिया पैनल",
-                "features": {
-                    "preview": "विवरण खोलने से पहले इवेंट विजुअल देखें",
-                    "use": "मीडिया विकल्पों के रास्ते के रूप में इवेंट पेज इस्तेमाल करें",
-                    "keep": "खोज और लाइसेंसिंग इरादे को जोड़े रखें"
-                },
-                "visual": {
-                    "kicker": "मीडिया पहुंच",
-                    "title": "समीक्षा के लिए तैयार इवेंट विजुअल",
-                    "stat": "लाइसेंसिंग पथ",
-                    "note": "खोज से विवरण पेज तक"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "फिर से प्रयास करें",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "मीडिया",
-        "locationShort": "स्थान",
-        "dateShort": "तारीख",
-        "searchCountry": "किसी देश को खोजें...",
-        "featuredEvents": "चयनित इवेंट"
-    },
-    "country": {
-        "discoverFeaturedIn": "चयनित इवेंट देखें",
-        "cities": "शहर",
-        "availableCity": "उपलब्ध शहर",
-        "currentEvent": "वर्तमान इवेंट",
-        "eventMarkers": "इवेंट मार्कर",
-        "clickableMarker": "क्लिक करने योग्य मार्कर",
-        "differentCategory": "अलग श्रेणी",
-        "availableCities": "उपलब्ध शहर",
-        "noEvents": "अभी कोई इवेंट उपलब्ध नहीं है",
-        "checkBack": "कृपया जल्द फिर देखें",
-        "noImage": "कोई छवि नहीं",
-        "viewEvent": "इवेंट देखें",
-        "noCategory": "कोई श्रेणी नहीं",
-        "countryFallback": "देश",
-        "cityFallback": "शहर",
-        "eventFallback": "इवेंट",
-        "clickMarkerToOpen": "खोलने के लिए मार्कर पर क्लिक करें",
-        "errors": {
-            "unauthorized": "अनधिकृत. कृपया साइन इन करें.",
-            "notFound": "देश नहीं मिला.",
-            "loadFailed": "डेटा लोड करते समय एक त्रुटि हुई.",
-            "mapLibraryFailed": "मैप लाइब्रेरी लोड नहीं हो सकी.",
-            "bordersFailed": "देश की सीमाएँ लोड नहीं हो सकीं",
-            "invalidBorders": "देश सीमा फ़ाइल अमान्य है.",
-            "countryBordersNotFound": "देश की सीमाएँ नहीं मिलीं",
-            "countryBoundsFailed": "देश की सीमा क्षेत्र की गणना नहीं हो सकी.",
-            "mapLoadFailed": "मैप लोड करते समय एक त्रुटि हुई."
-        }
-    },
-    "cancel": "रद्द करें",
-    "login": "लॉग इन",
-    "sending": "भेजा जा रहा है...",
-    "send_reply": "उत्तर भेजें",
-    "report": {
-        "action": "रिपोर्ट करें",
-        "commentTitle": "इस टिप्पणी की रिपोर्ट करें",
-        "modalTitle": "टिप्पणी की रिपोर्ट करें",
-        "reasonPrompt": "इस टिप्पणी की रिपोर्ट करने का कारण चुनें:",
-        "submit": "रिपोर्ट सबमिट करें",
-        "submitting": "सबमिट हो रहा है...",
-        "successTitle": "रिपोर्ट सबमिट की गई",
-        "successMessage": "धन्यवाद। हम शीघ्र ही इस टिप्पणी की समीक्षा करेंगे।",
-        "errors": {
-            "selectReason": "कृपया रिपोर्ट का कारण चुनें।",
-            "submitFailed": "रिपोर्ट सबमिट करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।"
-        },
-        "reasons": {
-            "spam": "स्पैम",
-            "offensive": "आपत्तिजनक सामग्री",
-            "inappropriate": "अनुपयुक्त",
-            "illegal": "अवैध सामग्री",
-            "untrue": "गलत सामग्री",
-            "falseInformation": "भ्रामक जानकारी",
-            "other": "अन्य कारण"
-        }
-    },
-    "commentsPage": {
-        "title": "टिप्पणियाँ",
-        "emptyLabel": "टिप्पणियाँ",
-        "emptyMessage": "अभी तक कोई टिप्पणी नहीं। पहले टिप्पणी करने वाले बनें।",
-        "attachmentAlt": "टिप्पणी संलग्नक",
-        "pageInfo": "पृष्ठ {current} का {total}",
-        "confirmDelete": "क्या आप वाकई इस टिप्पणी को हटाना चाहते हैं?",
-        "errors": {
-            "loadFailed": "टिप्पणियाँ लोड करते समय एक त्रुटि हुई।"
-        },
-        "reactions": {
-            "support": "सहमत",
-            "neutral": "तटस्थ",
-            "oppose": "असहमत"
-        },
-        "you": "आप"
-    },
-    "profilePage": {
-        "title": "मेरी प्रोफ़ाइल",
-        "subtitle": "अपने खाता जानकारी प्रबंधित करें और पासवर्ड अपडेट करें",
-        "noPlan": "कोई योजना नहीं",
-        "lastLogin": "अंतिम लॉगिन",
-        "accountInfo": "खाता जानकारी",
-        "systemInfo": "सिस्टम जानकारी",
-        "currentPlan": "वर्तमान योजना",
-        "planType": "योजना प्रकार",
-        "editAccount": "खाता विवरण संपादित करें",
-        "saving": "सहेजा जा रहा है...",
-        "saveChanges": "परिवर्तन सहेजें",
-        "tabs": {
-            "userInfo": "उपयोगकर्ता जानकारी",
-            "editData": "डेटा संपादित करें",
-            "password": "पासवर्ड अपडेट करें",
-            "wallet": "वॉलेट",
-            "privacy": "खाता और गोपनीयता"
-        },
-        "fields": {
-            "name": "नाम",
-            "fullName": "पूरा नाम",
-            "email": "ईमेल",
-            "phone": "फ़ोन",
-            "phoneNumber": "फ़ोन नंबर",
-            "country": "देश",
-            "position": "पद",
-            "positionJob": "पद / नौकरी",
-            "birthDate": "जन्म तिथि",
-            "role": "भूमिका",
-            "status": "स्थिति",
-            "points": "अंक",
-            "rank": "रैंक",
-            "price": "मूल्य"
-        },
-        "placeholders": {
-            "fullName": "अपना पूरा नाम दर्ज करें",
-            "countrySearch": "किसी देश की तलाश करें",
-            "position": "सॉफ़्टवेयर इंजीनियर"
-        },
-        "status": {
-            "active": "सक्रिय"
-        },
-        "password": {
-            "title": "पासवर्ड अपडेट करें",
-            "current": "वर्तमान पासवर्ड",
-            "new": "नया पासवर्ड",
-            "confirm": "पासवर्ड की पुष्टि करें",
-            "updating": "अपडेट हो रहा है...",
-            "update": "पासवर्ड अपडेट करें"
-        },
-        "messages": {
-            "fillAllFields": "कृपया सभी फील्ड भरें।",
-            "passwordMismatch": "पासवर्ड मेल नहीं खाते।",
-            "passwordUpdated": "पासवर्ड सफलतापूर्वक अपडेट हो गया।",
-            "passwordUpdateFailed": "पासवर्ड अपडेट करते समय त्रुटि हुई।",
-            "chooseCountry": "कृपया सूची से एक देश चुनें।",
-            "noChanges": "आपने कोई बदलाव नहीं किया है।",
-            "profileUpdated": "आपका प्रोफ़ाइल सफलतापूर्वक अपडेट हो गया।",
-            "profileUpdateFailed": "आपका प्रोफ़ाइल अपडेट करते समय त्रुटि हुई।"
-        },
-        "wallet": {
-            "title": "वॉलेट",
-            "availableBalance": "उपलब्ध शेष राशि",
-            "deposit": "फंड जोड़ें",
-            "recentTransactions": "हालिया लेनदेन",
-            "depositType": "जमा",
-            "withdrawType": "निकासी",
-            "noTransactions": "अभी तक कोई लेनदेन नहीं",
-            "withdrawComingSoon": "निकासी की सुविधा जल्द उपलब्ध होगी।"
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "प्रति फ़ाइल अधिकतम: 100 MB",
-        "dragFiles": "फ़ाइलें यहाँ खींचें या",
-        "clickToChoose": "चुनने के लिए क्लिक करें",
-        "supportedFiles": "छवियाँ और वीडियो (प्रति फ़ाइल अधिकतम 100 MB)",
-        "selectedFiles": "चयनित फ़ाइलें ({count})",
-        "uploading": "अपलोड हो रहा है...",
-        "uploadFiles": "फाइलें अपलोड करें",
-        "success": "फाइलें सफलतापूर्वक अपलोड हो गईं!",
-        "errors": {
-            "fileTooLarge": "फाइल \"{name}\" 100 MB से बड़ी है।",
-            "unsupportedType": "फाइल प्रकार \"{name}\" समर्थित नहीं है।"
-        }
-    },
-    "discovery": {
-        "title": "खोज परिणाम",
-        "description": "Scemory पर इवेंट, चित्र और वीडियो खोजें।",
-        "showing": "दिखाए जा रहे हैं",
-        "of": "में से",
-        "results": "परिणाम",
-        "details": "विवरण देखें",
-        "noResultsTitle": "कोई परिणाम नहीं मिला",
-        "noResultsDescription": "अपनी खोज या फ़िल्टर बदलकर देखें।",
-        "filters": {
-            "allCities": "सभी शहर",
-            "allCountries": "सभी देश"
-        },
-        "tabs": {
-            "all": "सभी",
-            "event": "इवेंट",
-            "image": "चित्र",
-            "video": "वीडियो"
-        },
-        "resultLabels": {
-            "event": "इवेंट",
-            "image": "चित्र",
-            "video": "वीडियो"
-        },
-        "media": {
-            "price": "कीमत",
-            "addToCart": "कार्ट में जोड़ें",
-            "added": "जोड़ा गया",
-            "adding": "जोड़ा जा रहा है...",
-            "playVideo": "वीडियो चलाएँ",
-            "pauseVideo": "वीडियो रोकें"
-        }
-    },
-    "timeline": {
-        "title": "आपकी गतिविधि समयरेखा",
-        "subtitle": "अपने इवेंट, प्रतिक्रियाएँ, टिप्पणियाँ और सुरक्षित आइटम एक ही स्थान पर देखें।",
-        "totalActivity": "कुल गतिविधि",
-        "latestActivity": "नवीनतम गतिविधि",
-        "noLatestActivity": "अभी कोई गतिविधि नहीं",
-        "loading": "गतिविधि लोड हो रही है...",
-        "loadError": "आपकी गतिविधि लोड नहीं हो सकी।",
-        "retry": "फिर से प्रयास करें",
-        "viewAll": "सभी देखें",
-        "empty": "इस अनुभाग में कोई गतिविधि नहीं है।",
-        "previous": "पिछला",
-        "next": "अगला",
-        "pageOf": "पृष्ठ {current}, कुल {last}",
-        "unknownEvent": "अज्ञात इवेंट",
-        "parentComment": "इसके जवाब में: {comment}",
-        "reactionTo": "इस पर प्रतिक्रिया: {comment}",
-        "onEvent": "{event} पर",
-        "tabs": {
-            "all": "सभी गतिविधि",
-            "events": "इवेंट",
-            "likes": "पसंद",
-            "comments": "टिप्पणियाँ",
-            "replies": "जवाब",
-            "comment_images": "टिप्पणी चित्र",
-            "comment_interactions": "टिप्पणी प्रतिक्रियाएँ",
-            "wishlists": "पसंदीदा"
-        },
-        "filters": {
-            "label": "अवधि",
-            "all": "सभी समय",
-            "today": "आज",
-            "this_week": "इस सप्ताह",
-            "this_month": "इस महीने",
-            "custom": "मनचाही अवधि",
-            "from": "से",
-            "to": "तक",
-            "apply": "लागू करें",
-            "invalidRange": "मान्य तिथि सीमा चुनें।"
-        },
-        "reactions": {
-            "support": "समर्थन",
-            "neutral": "तटस्थ",
-            "exhibitions": "विरोध"
-        },
-        "status": {
-            "pending": "लंबित",
-            "approved": "स्वीकृत",
-            "rejected": "अस्वीकृत",
-            "active": "सक्रिय",
-            "inactive": "निष्क्रिय"
-        }
-    },
-    "security": {
-        "denied": "आपको इस संसाधन तक पहुँच की अनुमति नहीं है।",
-        "notFound": "माँगा गया संसाधन नहीं मिला।",
-        "disabled": "यह खाता अक्षम है। सहायता से संपर्क करें।",
-        "invalidMedia": "मीडिया फ़ाइल अमान्य, असमर्थित या सुरक्षित प्रसंस्करण सीमा से अधिक है।",
-        "unavailable": "यह मीडिया अभी उपलब्ध नहीं है।",
-        "currencyMismatch": "वॉलेट की मुद्रा इस लेनदेन से मेल नहीं खाती।",
-        "insufficientBalance": "उपलब्ध शेष राशि अपर्याप्त है।",
-        "invalidWithdrawal": "वर्तमान स्थिति में निकासी नहीं बदली जा सकती। सहायता से संपर्क करें।",
-        "paymentRequired": "इस योजना के लिए सत्यापित भुगतान चाहिए। सहायता से संपर्क करें।",
-        "invalidCode": "सत्यापन कोड अमान्य या समाप्त हो गया है।",
-        "requestFailed": "अनुरोध पूरा नहीं हुआ। फिर प्रयास करें।",
-        "rateLimit": "बहुत अधिक अनुरोध। बाद में प्रयास करें।"
-    },
-    "googleAuth": {
-        "continue": "Google से जारी रखें",
-        "signup": "Google से साइन अप करें",
-        "or": "या",
-        "signingIn": "साइन इन हो रहा है…",
-        "cancelled": "प्रमाणीकरण रद्द कर दिया गया।",
-        "expired_state": "इस साइन इन प्रयास की अवधि समाप्त हो गई। फिर से शुरू करें।",
-        "invalid_state": "यह अनुरोध अमान्य है या पहले इस्तेमाल हो चुका है। फिर से शुरू करें।",
-        "oauth_failed": "Google प्रमाणीकरण पूरा नहीं कर सका। फिर कोशिश करें।",
-        "callback_failed": "प्रमाणीकरण विफल हुआ। फिर कोशिश करें।",
-        "identity_invalid": "Google आपकी पहचान और ईमेल की पुष्टि नहीं कर सका। साइन इन का दूसरा तरीका चुनें।",
-        "disabled": "यह खाता उपलब्ध नहीं है। सहायता टीम से संपर्क करें।",
-        "linking_required": "अपने खाते के मौजूदा तरीके से साइन इन करें। Google जोड़ने के लिए पहले उस खाते में साइन इन करना होगा; जोड़ने की सुविधा अभी उपलब्ध नहीं है। ज़रूरत होने पर सहायता टीम से संपर्क करें।",
-        "unavailable": "Google प्रमाणीकरण अभी उपलब्ध नहीं है। ईमेल और पासवर्ड इस्तेमाल करें या बाद में कोशिश करें।",
-        "busy": "साइन इन पहले से पूरा किया जा रहा है। फिर कोशिश करें।",
-        "alreadyLinked": "यह Google खाता पहले से जुड़ा है।",
-        "completeProfile": "अपना खाता पूरा करें",
-        "profileRequired": "खाता बनाना पूरा करने के लिए आवश्यक जानकारी भरें।",
-        "country": "देश",
-        "dateOfBirth": "जन्म तिथि",
-        "finishSignup": "खाता बनाएँ",
-        "profileInvalid": "देश और एक मान्य जन्म तिथि दर्ज करें जो भविष्य की न हो।",
-        "retry": "फिर कोशिश करें",
-        "backToLogin": "साइन इन पर वापस जाएँ",
-        "linkAccountTitle": "अपना Google खाता जोड़ें",
-        "linkAccountDesc": "इस ईमेल से एक खाता पहले से मौजूद है। अपने Google खाते को सुरक्षित रूप से जोड़ने के लिए अपना पासवर्ड दर्ज करें।",
-        "accountPassword": "खाता पासवर्ड",
-        "confirmLink": "पुष्टि करें और खाता जोड़ें",
-        "invalidCredentials": "अमान्य पासवर्ड। कृपया अपने विवरण जांचें और पुनः प्रयास करें।",
-        "linkSuccess": "Google खाता सफलतापूर्वक जोड़ दिया गया।",
-        "unlinkSuccess": "Google खाता सफलतापूर्वक अलग कर दिया गया।",
-        "identity_conflict": "यह ईमेल किसी दूसरी Google पहचान से जुड़ा है। खाते के मौजूदा तरीके से साइन इन करें या सहायता से संपर्क करें।",
-        "account_login_required": "अपने खाते के मौजूदा तरीके से साइन इन करें, फिर प्रोफ़ाइल से Google जोड़ें।",
-        "recovery_required": "Google को फिर जोड़ने के लिए एक बार खाता पुनर्प्राप्ति आवश्यक है।",
-        "recovery_web_required": "Scemory वेबसाइट पर एक बार की पुनर्प्राप्ति पूरी करें। आगे Google साइन इन अपने आप होंगे।",
-        "invalid_recovery_code": "पुनर्प्राप्ति कोड गलत है। कोड जाँचकर फिर कोशिश करें।",
-        "recovery_expired": "यह पुनर्प्राप्ति अनुरोध समाप्त हो गया। Google साइन इन फिर शुरू करें।",
-        "recovery_attempts_exceeded": "बहुत अधिक गलत प्रयास। Google साइन इन फिर शुरू करें।",
-        "recovery_rate_limited": "हाल ही में कोड भेजा गया है। दोबारा कोशिश करने से पहले थोड़ी देर प्रतीक्षा करें।",
-        "recovery_unavailable": "पुनर्प्राप्ति कोड नहीं भेजा जा सका। बाद में कोशिश करें।",
-        "recoveryTitle": "अपना Google खाता फिर जोड़ें",
-        "recoverySent": "{email} पर भेजा गया एक बार उपयोग वाला कोड दर्ज करें। यह केवल एक बार आवश्यक है।",
-        "recoveryCode": "पुनर्प्राप्ति कोड",
-        "confirmRecovery": "सत्यापित करें और जारी रखें"
-    },
-    "facebookAuth": {
-        "continue": "Facebook से जारी रखें",
-        "signup": "Facebook से साइन अप करें",
-        "signingIn": "साइन इन हो रहा है…",
-        "unavailable": "Facebook प्रमाणीकरण अभी उपलब्ध नहीं है। ईमेल और पासवर्ड इस्तेमाल करें या बाद में कोशिश करें।",
-        "cancelled": "प्रमाणीकरण रद्द कर दिया गया।",
-        "invalid_state": "यह अनुरोध अमान्य है या पहले इस्तेमाल हो चुका है। फिर से शुरू करें।",
-        "expired": "इस साइन इन प्रयास की अवधि समाप्त हो गई। फिर से शुरू करें।",
-        "callback_failed": "प्रमाणीकरण विफल हुआ। फिर कोशिश करें।",
-        "disabled": "यह खाता उपलब्ध नहीं है। सहायता टीम से संपर्क करें।",
-        "linking_required": "अपने खाते के मौजूदा तरीके से साइन इन करें। Facebook जोड़ने के लिए पहले उस खाते में साइन इन करना होगा; जोड़ने की सुविधा अभी उपलब्ध नहीं है। ज़रूरत होने पर सहायता टीम से संपर्क करें।",
-        "busy": "साइन इन पहले से पूरा किया जा रहा है। फिर कोशिश करें।",
-        "completeProfile": "अपना खाता पूरा करें",
-        "profileRequired": "खाता बनाना पूरा करने के लिए आवश्यक जानकारी भरें।",
-        "country": "देश",
-        "dateOfBirth": "जन्म तिथि",
-        "finishSignup": "खाता बनाएँ",
-        "retry": "फिर कोशिश करें",
-        "backToLogin": "साइन इन पर वापस जाएँ",
-        "identity_invalid": "Facebook आपकी पहचान की पुष्टि नहीं कर सका। फिर कोशिश करें।",
-        "verification_required": "अपने मौजूदा खाते के ईमेल की पुष्टि उसके मूल साइन इन तरीके से करें।",
-        "email_unavailable": "पुष्टि ईमेल नहीं भेज सके। बाद में फिर कोशिश करें।",
-        "otp_expired": "इस कोड की अवधि समाप्त हो गई। नया कोड माँगें।",
-        "otp_invalid": "पुष्टि कोड गलत है।",
-        "otp_attempts": "बहुत अधिक प्रयास हुए। प्रतीक्षा अवधि के बाद नया कोड माँगें।",
-        "otp_cooldown": "दूसरा कोड माँगने से पहले प्रतीक्षा करें।",
-        "native_unavailable": "Facebook साइन इन Scemory वेबसाइट पर उपलब्ध है। ब्राउज़र इस्तेमाल करें।",
-        "email": "ईमेल पता",
-        "sendCode": "पुष्टि कोड भेजें",
-        "verifyEmail": "अपने ईमेल की पुष्टि करें",
-        "codeSent": "{email} पर भेजा गया कोड दर्ज करें।",
-        "verificationCode": "पुष्टि कोड",
-        "resendIn": "{seconds} सेकंड में फिर भेजें",
-        "resend": "कोड फिर भेजें",
-        "profileInvalid": "मान्य ईमेल, देश और ऐसी जन्म तिथि दर्ज करें जो भविष्य की न हो।"
-    },
-    "mediaCredits": {
-        "myCredits": "मेरे मीडिया क्रेडिट",
-        "photosAvailable": "उपलब्ध तस्वीरें",
-        "videosAvailable": "उपलब्ध वीडियो",
-        "photos": "तस्वीरें",
-        "videos": "वीडियो",
-        "photoQuotaDesc": "स्थायी फ़ोटो रिडेम्पशन कोटा",
-        "videoQuotaDesc": "स्थायी वीडियो रिडेम्पशन कोटा",
-        "activeTier": "सक्रिय एक्सेस टियर",
-        "breakdownByTier": "टियर के अनुसार विवरण",
-        "viewDashboard": "क्रेडिट डैशबोर्ड",
-        "getMoreCredits": "अधिक क्रेडिट प्राप्त करें",
-        "browseMarketplace": "मार्केटप्लेस देखें",
-        "noTier": "कोई सक्रिय प्लान नहीं",
-        "getWithPlan": "प्लान के साथ प्राप्त करें",
-        "redeemed": "रिडीम किया गया",
-        "redeemSuccess": "आपके प्लान क्रेडिट के साथ मीडिया सफलतापूर्वक रिडीम किया गया!",
-        "redeemFailed": "प्लान के साथ मीडिया रिडीम करने में विफल।",
-        "activeGrants": "सक्रिय कोटा अनुदान",
-        "redemptionHistory": "रिडेम्पशन इतिहास",
-        "noGrants": "कोई सक्रिय मीडिया कोटा नहीं है। क्रेडिट प्राप्त करने के लिए प्लान सब्सक्राइब करें।",
-        "noRedemptions": "अभी तक कोई रिडेम्पशन नहीं हुआ है।",
-        "tier": "टियर",
-        "plan": "प्लान",
-        "tierRank": "टियर रैंक",
-        "grantedOn": "प्रदान किया गया",
-        "payoutCap": "निर्माता भुगतान सीमा",
-        "payWithWallet": "वॉलेट से भुगतान करें",
-        "payWithPaypal": "पेपाल से भुगतान करें",
-        "insufficientCredits": "अपर्याप्त क्रेडिट या इस मीडिया के लिए टियर रैंक कम है।",
-        "includedQuotas": "शामिल मीडिया कोटा",
-        "permanentQuotas": "स्थायी गैर-समाप्ति मीडिया कोटा"
-    },
-    "dataDeletion": {
-        "title": "डेटा हटाने के निर्देश",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "डेटा हटाने के निर्देश",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "डेटा हटाने के निर्देश",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "लाइव सहायता",
+      "description": "तत्काल मदद के लिए अभी टीम के सदस्य से बात करें",
+      "btn_chat": "लाइव चैट शुरू करें",
+      "btn_schedule": "कॉल शेड्यूल करें",
+      "available": "अभी उपलब्ध: 3 सहायता एजेंट"
     }
+  },
+  "contacts": {
+    "badge": "संपर्क करें",
+    "title": "आइए बात करें",
+    "description": "कोई सवाल है, सहायता चाहिए, या कस्टम प्लान चाहते हैं? हमें संदेश भेजें और हमारी टीम आपसे संपर्क करेगी।",
+    "form": {
+      "title": "हमें संदेश भेजें",
+      "description": "नीचे दिया गया फ़ॉर्म पूरा करें और हम जल्द से जल्द जवाब देंगे।",
+      "fullName": "पूरा नाम",
+      "fullNamePlaceholder": "अपना पूरा नाम दर्ज करें",
+      "emailAddress": "ईमेल पता",
+      "emailPlaceholder": "अपना ईमेल पता दर्ज करें",
+      "subject": "विषय",
+      "generalInquiry": "सामान्य पूछताछ",
+      "customPlan": "कस्टम प्लान",
+      "support": "तकनीकी सहायता",
+      "feedback": "प्रतिक्रिया",
+      "other": "अन्य",
+      "message": "संदेश",
+      "messagePlaceholder": "बताएं हम आपकी कैसे मदद कर सकते हैं...",
+      "minimumCharacters": "कृपया पर्याप्त विवरण दें।",
+      "sendMessage": "संदेश भेजें",
+      "sending": "भेजा जा रहा है...",
+      "successMessage": "आपका संदेश सफलतापूर्वक भेज दिया गया है।",
+      "errorMessage": "आपका संदेश भेजते समय कुछ गलत हुआ। कृपया फिर से प्रयास करें।"
+    },
+    "info": {
+      "getInTouch": "संपर्क में रहें",
+      "title": "हम मदद के लिए यहां हैं",
+      "description": "सामान्य सवालों, तकनीकी सहायता या कस्टम प्राइसिंग के लिए हमारी टीम से संपर्क करें।",
+      "emailUs": "हमें ईमेल करें",
+      "available": "हमारी टीम जल्द से जल्द जवाब देगी।",
+      "customPlans": "कस्टम प्लान",
+      "customPlansDescription": "अपनी टीम या व्यवसाय के लिए अनुकूल समाधान चाहिए? हमें बताएं आपको क्या चाहिए।",
+      "customerSupport": "ग्राहक सहायता",
+      "supportDescription": "यदि आपको अपने खाते, सदस्यता या सेवाओं में मदद चाहिए, तो हमसे संपर्क करें।",
+      "followJourney": "हमारी यात्रा का अनुसरण करें",
+      "responseTime": "तेज़ प्रतिक्रिया",
+      "responseTimeDescription": "हम आमतौर पर एक कार्य दिवस के भीतर संदेशों का जवाब देते हैं।"
+    },
+    "map": {
+      "title": "Scene Memory विश्व मानचित्र",
+      "description": "140+ देशों में हज़ारों यादों को देखें।"
+    }
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "अक्सर पूछे जाने वाले प्रश्न",
+    "description": "कुछ सबसे आम सवालों के त्वरित जवाब।",
+    "questions": {
+      "0": {
+        "question": "मुझे कितनी जल्दी जवाब मिलेगा?",
+        "answer": "हमारी टीम आमतौर पर एक कार्य दिवस के भीतर जवाब देती है।"
+      },
+      "1": {
+        "question": "क्या मैं कस्टम प्लान का अनुरोध कर सकता हूं?",
+        "answer": "हां। विषय फ़ील्ड में कस्टम प्लान चुनें और अपनी आवश्यकताएं लिखें।"
+      },
+      "2": {
+        "question": "क्या मैं तकनीकी सहायता के लिए संपर्क कर सकता हूं?",
+        "answer": "हां। तकनीकी सहायता चुनें और समस्या से जुड़ी सभी जरूरी जानकारी शामिल करें।"
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "एडमिन द्वारा इवेंट जोड़ें",
+      "trending": "ट्रेंडिंग इवेंट",
+      "trendingHelp": "इस इवेंट को ट्रेंडिंग के रूप में चिह्नित करें",
+      "generateTags": "AI टैग बनाएं",
+      "generatingTags": "टैग बनाए जा रहे हैं...",
+      "generateTagsHelp": "मौजूदा AI सेवा से इवेंट और तस्वीरों के टैग सुझाएं। प्रकाशित करने से पहले आप उनकी समीक्षा कर सकते हैं या उन्हें हटा सकते हैं।",
+      "generateTagsError": "अभी AI टैग नहीं बनाए जा सके।",
+      "created": "इवेंट सफलतापूर्वक बनाया और प्रकाशित किया गया।"
+    },
+    "chooseFiles": "फ़ाइल चुनें",
+    "mediaCount": "मीडिया संख्या",
+    "title": "नया इवेंट जोड़ें",
+    "basicInfo": "मूल जानकारी",
+    "locationCategory": "स्थान और श्रेणी",
+    "dates": "तिथियाँ",
+    "images": "इवेंट की तस्वीरें",
+    "eventTitle": "इवेंट का शीर्षक",
+    "description": "विवरण",
+    "country": "देश",
+    "searchCountry": "देश खोजें...",
+    "selectCountry": "देश चुनें",
+    "city": "शहर",
+    "selectCity": "शहर चुनें",
+    "selectCityFirst": "पहले देश चुनें",
+    "mainCategory": "मुख्य श्रेणी",
+    "subCategory": "उप-श्रेणी",
+    "selectSubFirst": "पहले मुख्य श्रेणी चुनें",
+    "selectLocationMap": "मानचित्र पर स्थान चुनें",
+    "selectedCoords": "चुने गए निर्देशांक: अक्षांश: {lat} , देशांतर: {lng}",
+    "lat": "अक्षांश",
+    "lng": "देशांतर",
+    "pleaseSelectLocation": "कृपया मानचित्र पर एक स्थान चुनें",
+    "startDate": "प्रारंभ तिथि",
+    "endDate": "समाप्ति तिथि",
+    "startTime": "प्रारंभ समय",
+    "dragDropHere": "यहाँ क्लिक करें या इमेज खींचकर छोड़ें",
+    "formatsMax": "PNG • JPG • WEBP | अधिकतम 5MB प्रति इमेज",
+    "chooseImages": "इमेज चुनें",
+    "addMore": "और जोड़ें",
+    "imagesCount": "{count} / 8 तस्वीरें",
+    "remove": "हटाएं",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map.",
+      "mediaRequired": "कम से कम एक चित्र या वीडियो अपलोड करें।"
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    },
+    "minimumRequirementsHint": "इवेंट बनाने के लिए केवल शीर्षक, विवरण और कम से कम एक चित्र या वीडियो चाहिए। अन्य सभी फ़ील्ड वैकल्पिक हैं।"
+  },
+  "commons": {
+    "required": "आवश्यक",
+    "cancel": "रद्द करें",
+    "saveDraft": "ड्राफ्ट के रूप में सहेजें",
+    "create": "इवेंट बनाएं",
+    "creating": "बन रहा है...",
+    "choose": "चुनें"
+  },
+  "eventss": {
+    "no_title": "शीर्षक रहित इवेंट",
+    "undefined_city": "अपरिभाषित",
+    "from_map": "मानचित्र से"
+  },
+  "wishlist": {
+    "title": "पसंदीदा सूची",
+    "loading": "लोड हो रहा है...",
+    "empty": {
+      "main": "आपकी इच्छा सूची में अभी कोई आइटम नहीं है",
+      "hint": "अपने पसंदीदा इवेंट जोड़ना शुरू करें!"
+    },
+    "fallback_image_alt": "इवेंट की डिफ़ॉल्ट छवि",
+    "uncategorized": "अवर्गीकृत",
+    "no_title": "शीर्षक नहीं",
+    "city_label": "शहर:",
+    "date_label": "तारीख:",
+    "time_label": "समय:",
+    "not_specified": "निर्दिष्ट नहीं",
+    "view_details": "विवरण देखें",
+    "remove": "पसंदीदा से हटाएं",
+    "deleting": "हटा रहा है...",
+    "added_at": "जोड़ा गया",
+    "pagination": {
+      "previous": "पिछला",
+      "next": "अगला",
+      "page_info": "पेज {current} का {total}"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "सेवा की शर्तें",
+    "last_updated": "अंतिम अपडेट: 2026",
+    "acceptance_title": "शर्तों की स्वीकृति",
+    "acceptance_text": "इस प्लेटफ़ॉर्म का उपयोग करके आप इन सेवा शर्तों से सहमत होते हैं।",
+    "accounts_title": "उपयोगकर्ता खाते",
+    "accounts_text": "उपयोगकर्ता अपने खाते की गोपनीयता बनाए रखने के लिए जिम्मेदार हैं।",
+    "content_title": "सामग्री का स्वामित्व",
+    "content_text": "प्लेटफ़ॉर्म की सभी सामग्री कॉपीराइट और बौद्धिक संपदा कानूनों द्वारा संरक्षित है।",
+    "ai_title": "एआई प्रतिबंध",
+    "ai_text": "बिना आधिकारिक लाइसेंस के प्लेटफ़ॉर्म की सामग्री का उपयोग एआई मॉडल प्रशिक्षण के लिए प्रतिबंधित है।",
+    "prohibited_title": "प्रतिबंधित उपयोग",
+    "prohibited_text": "उपयोगकर्ता प्लेटफ़ॉर्म का दुरुपयोग या अनधिकृत पहुँच का प्रयास नहीं कर सकते।",
+    "liability_title": "उत्तरदायित्व सीमा",
+    "liability_text": "सेवा के उपयोग से होने वाले अप्रत्यक्ष नुकसान के लिए प्लेटफ़ॉर्म जिम्मेदार नहीं होगा।",
+    "changes_title": "शर्तों में परिवर्तन",
+    "changes_text": "हम इन शर्तों को कभी भी बदल सकते हैं।",
+    "contact_title": "संपर्क",
+    "contact_text": "इन शर्तों के बारे में प्रश्नों के लिए प्रशासन से संपर्क करें।"
+  },
+  "plans": {
+    "customPrice": "हमसे संपर्क करें",
+    "customPricingDescription": "आपकी ज़रूरतों के अनुसार कीमत",
+    "contactUs": "हमसे संपर्क करें",
+    "chooseYourPlan": "अपना प्लान चुनें",
+    "getStarted": "शुरू करें",
+    "perMonth": "प्रति माह",
+    "prioritySupport": "प्राथमिक सहायता",
+    "securePayments": "सुरक्षित भुगतान",
+    "moneyBack": "30 दिन की गारंटी",
+    "support247": "24/7 सहायता",
+    "subscribe": "अभी सदस्यता लें",
+    "noCreditCard": "क्रेडिट कार्ड आवश्यक नहीं",
+    "noFeatures": "अभी कोई सुविधा नहीं",
+    "mostPopular": "सबसे लोकप्रिय",
+    "free": "मुफ्त",
+    "ourPlans": "हमारे प्लान",
+    "description": "मुफ़्त शुरू करें या अपने लिए सही प्लान चुनें.",
+    "price": "कीमत",
+    "features": "विशेषताएँ",
+    "cancelAnytime": "कभी भी रद्द करें",
+    "Monthly": "मासिक",
+    "Yearly": "वार्षिक",
+    "unlimitedEvents": "असीमित इवेंट",
+    "addEvents": "इवेंट जोड़ें",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises — just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "प्लान",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "प्लान लोड नहीं हो सके। फिर से प्रयास करें।"
+    },
+    "customPlanNote": "आपकी आवश्यकताओं के अनुसार बनाया गया",
+    "basicAccessIncluded": "बुनियादी एक्सेस शामिल है",
+    "usd": "USD"
+  },
+  "free": "मुफ़्त",
+  "basic": "बेसिक",
+  "professional": "प्रोफेशनल",
+  "premium": "प्रीमियम",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता।",
+      "badge": "Scemory इवेंट आर्काइव",
+      "title": "दस्तावेज़ित इवेंट खोजें",
+      "titleHighlight": "मानचित्र के माध्यम से",
+      "description": "दुनिया भर के पत्रकारों, मीडिया टीमों और प्रत्यक्षदर्शी योगदानकर्ताओं द्वारा अपलोड की गई इवेंट मीडिया खोजें.",
+      "searchEvents": "इवेंट खोजें",
+      "uploadStory": "अपनी कहानी अपलोड करें",
+      "bottomText": "दुनिया भर की कहानियां, स्थान और क्षण खोजें.",
+      "searchPlaceholder": "  इवेंट खोजें, स्थान या टैग..."
+    },
+    "profileToast": {
+      "title": "प्रोफ़ाइल अधूरी है",
+      "message": "आपकी प्रोफ़ाइल अधूरी है. कृपया अपडेट करें:",
+      "complete": "पूरा करने के लिए क्लिक करें",
+      "fields": {
+        "phone": "फ़ोन",
+        "country": "देश",
+        "position": "पद",
+        "dateOfBirth": "जन्म तिथि"
+      }
+    },
+    "trending": {
+      "loadError": "ट्रेंडिंग इवेंट अभी लोड नहीं हो सके.",
+      "kicker": "ट्रेंडिंग",
+      "title": "ट्रेंडिंग इवेंट",
+      "description": "आर्काइव में ध्यान आकर्षित कर रहे इवेंट.",
+      "emptyTitle": "अभी कोई ट्रेंडिंग इवेंट नहीं",
+      "emptyDescription": "हाइलाइट किए गए इवेंट के लिए जल्द वापस देखें.",
+      "views": "दृश्य",
+      "likes": "लाइक",
+      "slidesLabel": "ट्रेंडिंग इवेंट स्लाइड",
+      "untitledEvent": "शीर्षक रहित इवेंट",
+      "showSlide": "ट्रेंडिंग इवेंट {number} दिखाएं"
+    },
+    "map": {
+      "tilesSlow": "मानचित्र टाइलें रेंडर होने में बहुत समय ले रही हैं.",
+      "loadError": "मानचित्र अभी लोड नहीं हो सका.",
+      "loadMap": "मानचित्र लोड करें",
+      "loading": "मानचित्र लोड हो रहा है...",
+      "retry": "मानचित्र फिर से लोड करें",
+      "openFullscreen": "मानचित्र पूर्ण स्क्रीन में खोलें",
+      "closeFullscreen": "पूर्ण स्क्रीन मानचित्र बंद करें"
+    },
+    "about": {
+      "imageAlt": "Scemory दस्तावेज़ीकरण प्लेटफ़ॉर्म",
+      "kicker": "विश्वसनीय इवेंट मेमोरी",
+      "title": "Scemory के बारे में",
+      "description": "Scemory पत्रकारों, मीडिया टीमों और प्रत्यक्षदर्शी योगदानकर्ताओं के लिए बनाया गया है जिन्हें घटनाओं को उसी समय दस्तावेज़ करने के लिए भरोसेमंद जगह चाहिए. प्लेटफ़ॉर्म अपलोडेड मीडिया, इवेंट मेटाडेटा और स्थान संदर्भ को जोड़ता है ताकि लोग सार्वजनिक कहानियां स्पष्टता से खोज सकें.",
+      "features": {
+        "upload": "फ़ोटो, वीडियो और फ़ील्ड डेटा अपलोड करें",
+        "explore": "इंटरैक्टिव मानचित्र से इवेंट खोजें",
+        "preserve": "सत्यापित कहानियों को डिजिटल आर्काइव में सुरक्षित रखें"
+      }
+    },
+    "events": {
+      "showing": "दिखा रहा है",
+      "of": "में से",
+      "events": "इवेंट",
+      "seeMore": "और देखें",
+      "badge": "इवेंट"
+    },
+    "tags": {
+      "loading": "टैग लोड हो रहे हैं...",
+      "showingFirst": "पहले दिखा रहे हैं",
+      "searchToFindMore": "टैग. और खोजने के लिए खोजें.",
+      "none": "कोई टैग नहीं मिला",
+      "helper": "मानचित्र इवेंट फ़िल्टर करने के लिए एक या अधिक टैग चुनें.",
+      "clearSelected": "चुने गए टैग साफ़ करें",
+      "searchMore": "और टैग खोजें"
+    },
+    "search": {
+      "clearText": "साफ़ करें",
+      "clearTags": "साफ़ करें"
+    },
+    "specialCoverage": {
+      "badge": "विशेष कवरेज",
+      "title": "क्या आपके पास कोई ऐसा इवेंट है जिसे कवर किया जाना चाहिए?",
+      "description": "Scemory को उस इवेंट के बारे में बताएं जो विशेष कवरेज का हकदार है और उसकी कहानी को अधिक लोगों तक पहुँचाने में मदद करें।",
+      "contactUs": "संपर्क करें",
+      "modal": {
+        "title": "विशेष कवरेज",
+        "eventName": "इवेंट का नाम",
+        "eventNamePlaceholder": "इवेंट का नाम दर्ज करें",
+        "description": "इवेंट का विवरण",
+        "descriptionPlaceholder": "हमें इवेंट के बारे में और यह क्यों कवरेज के योग्य है, बताएं",
+        "cancel": "रद्द करें",
+        "send": "भेजें",
+        "close": "बंद करें",
+        "country": "देश",
+        "city": "शहर",
+        "searchCity": "शहर खोजें",
+        "addNewCity": "नया शहर जोड़ें",
+        "createCity": "शहर बनाएँ",
+        "startDate": "आरंभ तिथि",
+        "coverageTime": "कवरेज का समय",
+        "eventType": "इवेंट का प्रकार",
+        "personalEvent": "व्यक्तिगत इवेंट",
+        "publicEvent": "सार्वजनिक इवेंट",
+        "selectCountry": "देश चुनें",
+        "selectCity": "शहर चुनें",
+        "noCitiesFound": "कोई शहर नहीं मिला",
+        "noCountriesFound": "कोई देश नहीं मिला",
+        "countryRequired": "कृपया एक देश चुनें।",
+        "cityRequired": "कृपया एक शहर चुनें।",
+        "startDateRequired": "कृपया आरंभ तिथि चुनें।",
+        "eventTypeRequired": "कृपया इवेंट का प्रकार चुनें।",
+        "cityCreateFailed": "शहर नहीं बनाया जा सका। कृपया फिर से प्रयास करें।",
+        "sending": "भेजा जा रहा है...",
+        "eventNameRequired": "इवेंट का नाम दर्ज करें।",
+        "descriptionRequired": "इवेंट का विवरण दर्ज करें।",
+        "success": "विशेष कवरेज का अनुरोध सफलतापूर्वक भेज दिया गया है।"
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle",
+      "warning": "गुणवत्ता चेतावनी"
+    },
+    "videoReady": "वीडियो अपलोड के लिए तैयार है।",
+    "qualityWarning": "गुणवत्ता जाँच केवल सलाह के लिए है और इवेंट बनाने से नहीं रोकती।"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal — ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "आपकी खरीदी हुई फ़ाइलें यहाँ दिखाई देंगी"
+  },
+  "experience": {
+    "kicker": "SCEMORY अनुभव",
+    "title": "एक प्लेटफ़ॉर्म. कहानी का हर पक्ष.",
+    "pathsLabel": "Scemory अनुभव पथ",
+    "highlightsLabel": "सेक्शन हाइलाइट",
+    "tabs": {
+      "explore": {
+        "label": "इवेंट खोजें",
+        "eyebrow": "इवेंट के माध्यम से दुनिया खोजें",
+        "heading": "दुनिया भर की कहानियां, इवेंट और स्थान खोजें",
+        "description": "मानचित्र से दस्तावेज़ित सार्वजनिक इवेंट, निजी यादों और वास्तविक स्थानों व योगदानकर्ता संदर्भ से बनी दृश्य कहानियों तक जाएं.",
+        "cta": "इवेंट खोजें",
+        "imageAlt": "दस्तावेज़ित मीडिया पैनलों वाला Scemory इवेंट खोज इंटरफ़ेस",
+        "features": {
+          "browse": "स्थान और टाइमलाइन के अनुसार इवेंट मीडिया ब्राउज़ करें",
+          "discover": "दृश्य आर्काइव से आसपास की कहानियां खोजें",
+          "move": "ओवरव्यू से दस्तावेज़ित इवेंट विवरण तक जाएं"
+        },
+        "visual": {
+          "kicker": "लाइव खोज",
+          "title": "मानचित्र से जुड़ी इवेंट कहानियां",
+          "stat": "वैश्विक आर्काइव",
+          "note": "स्थान, तिथियां और मीडिया एक दृश्य में"
+        }
+      },
+      "share": {
+        "label": "अपनी कहानी साझा करें",
+        "eyebrow": "क्षणों को दस्तावेज़ित कहानियों में बदलें",
+        "heading": "महत्वपूर्ण क्षणों को दस्तावेज़ करें",
+        "description": "इवेंट बनाएं, फ़ोटो और मीडिया अपलोड करें, स्थान विवरण जोड़ें और Scemory आर्काइव में अपना दृष्टिकोण दें.",
+        "cta": "अपनी कहानी अपलोड करें",
+        "imageAlt": "इवेंट मीडिया दस्तावेज़ करने के लिए Scemory योगदानकर्ता कार्यक्षेत्र",
+        "features": {
+          "add": "मीडिया, विवरण और स्थान संदर्भ जोड़ें",
+          "build": "कच्चे क्षणों से संरचित स्मृति बनाएं",
+          "keep": "योगदानकर्ता कहानियों को आर्काइव से जोड़े रखें"
+        },
+        "visual": {
+          "kicker": "योगदान प्रवाह",
+          "title": "मीडिया, संदर्भ और स्थान",
+          "stat": "कहानी निर्माता",
+          "note": "क्षणों को अर्थपूर्ण विवरण के साथ अपलोड करें"
+        }
+      },
+      "license": {
+        "label": "मीडिया लाइसेंस करें",
+        "eyebrow": "उपयोग के लिए तैयार मीडिया खोजें",
+        "heading": "इवेंट मीडिया को आत्मविश्वास से खोजें और लाइसेंस करें",
+        "description": "दृश्य सामग्री ब्राउज़ करें, उपलब्ध इवेंट मीडिया का पूर्वावलोकन करें और Scemory के मौजूदा खोज अनुभव से लाइसेंस विकल्पों की ओर बढ़ें.",
+        "cta": "मीडिया खोजें",
+        "imageAlt": "लाइसेंस योग्य इवेंट सामग्री ब्राउज़ करने के लिए Scemory मीडिया पैनल",
+        "features": {
+          "preview": "विवरण खोलने से पहले इवेंट विजुअल देखें",
+          "use": "मीडिया विकल्पों के रास्ते के रूप में इवेंट पेज इस्तेमाल करें",
+          "keep": "खोज और लाइसेंसिंग इरादे को जोड़े रखें"
+        },
+        "visual": {
+          "kicker": "मीडिया पहुंच",
+          "title": "समीक्षा के लिए तैयार इवेंट विजुअल",
+          "stat": "लाइसेंसिंग पथ",
+          "note": "खोज से विवरण पेज तक"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "फिर से प्रयास करें",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "मीडिया",
+    "locationShort": "स्थान",
+    "dateShort": "तारीख",
+    "searchCountry": "किसी देश को खोजें...",
+    "featuredEvents": "चयनित इवेंट"
+  },
+  "country": {
+    "discoverFeaturedIn": "चयनित इवेंट देखें",
+    "cities": "शहर",
+    "availableCity": "उपलब्ध शहर",
+    "currentEvent": "वर्तमान इवेंट",
+    "eventMarkers": "इवेंट मार्कर",
+    "clickableMarker": "क्लिक करने योग्य मार्कर",
+    "differentCategory": "अलग श्रेणी",
+    "availableCities": "उपलब्ध शहर",
+    "noEvents": "अभी कोई इवेंट उपलब्ध नहीं है",
+    "checkBack": "कृपया जल्द फिर देखें",
+    "noImage": "कोई छवि नहीं",
+    "viewEvent": "इवेंट देखें",
+    "noCategory": "कोई श्रेणी नहीं",
+    "countryFallback": "देश",
+    "cityFallback": "शहर",
+    "eventFallback": "इवेंट",
+    "clickMarkerToOpen": "खोलने के लिए मार्कर पर क्लिक करें",
+    "errors": {
+      "unauthorized": "अनधिकृत. कृपया साइन इन करें.",
+      "notFound": "देश नहीं मिला.",
+      "loadFailed": "डेटा लोड करते समय एक त्रुटि हुई.",
+      "mapLibraryFailed": "मैप लाइब्रेरी लोड नहीं हो सकी.",
+      "bordersFailed": "देश की सीमाएँ लोड नहीं हो सकीं",
+      "invalidBorders": "देश सीमा फ़ाइल अमान्य है.",
+      "countryBordersNotFound": "देश की सीमाएँ नहीं मिलीं",
+      "countryBoundsFailed": "देश की सीमा क्षेत्र की गणना नहीं हो सकी.",
+      "mapLoadFailed": "मैप लोड करते समय एक त्रुटि हुई."
+    }
+  },
+  "cancel": "रद्द करें",
+  "login": "लॉग इन",
+  "sending": "भेजा जा रहा है...",
+  "send_reply": "उत्तर भेजें",
+  "report": {
+    "action": "रिपोर्ट करें",
+    "commentTitle": "इस टिप्पणी की रिपोर्ट करें",
+    "modalTitle": "टिप्पणी की रिपोर्ट करें",
+    "reasonPrompt": "इस टिप्पणी की रिपोर्ट करने का कारण चुनें:",
+    "submit": "रिपोर्ट सबमिट करें",
+    "submitting": "सबमिट हो रहा है...",
+    "successTitle": "रिपोर्ट सबमिट की गई",
+    "successMessage": "धन्यवाद। हम शीघ्र ही इस टिप्पणी की समीक्षा करेंगे।",
+    "errors": {
+      "selectReason": "कृपया रिपोर्ट का कारण चुनें।",
+      "submitFailed": "रिपोर्ट सबमिट करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।"
+    },
+    "reasons": {
+      "spam": "स्पैम",
+      "offensive": "आपत्तिजनक सामग्री",
+      "inappropriate": "अनुपयुक्त",
+      "illegal": "अवैध सामग्री",
+      "untrue": "गलत सामग्री",
+      "falseInformation": "भ्रामक जानकारी",
+      "other": "अन्य कारण"
+    }
+  },
+  "commentsPage": {
+    "title": "टिप्पणियाँ",
+    "emptyLabel": "टिप्पणियाँ",
+    "emptyMessage": "अभी तक कोई टिप्पणी नहीं। पहले टिप्पणी करने वाले बनें।",
+    "attachmentAlt": "टिप्पणी संलग्नक",
+    "pageInfo": "पृष्ठ {current} का {total}",
+    "confirmDelete": "क्या आप वाकई इस टिप्पणी को हटाना चाहते हैं?",
+    "errors": {
+      "loadFailed": "टिप्पणियाँ लोड करते समय एक त्रुटि हुई।"
+    },
+    "reactions": {
+      "support": "सहमत",
+      "neutral": "तटस्थ",
+      "oppose": "असहमत"
+    },
+    "you": "आप"
+  },
+  "profilePage": {
+    "title": "मेरी प्रोफ़ाइल",
+    "subtitle": "अपने खाता जानकारी प्रबंधित करें और पासवर्ड अपडेट करें",
+    "noPlan": "कोई योजना नहीं",
+    "lastLogin": "अंतिम लॉगिन",
+    "accountInfo": "खाता जानकारी",
+    "systemInfo": "सिस्टम जानकारी",
+    "currentPlan": "वर्तमान योजना",
+    "planType": "योजना प्रकार",
+    "editAccount": "खाता विवरण संपादित करें",
+    "saving": "सहेजा जा रहा है...",
+    "saveChanges": "परिवर्तन सहेजें",
+    "tabs": {
+      "userInfo": "उपयोगकर्ता जानकारी",
+      "editData": "डेटा संपादित करें",
+      "password": "पासवर्ड अपडेट करें",
+      "wallet": "वॉलेट",
+      "privacy": "खाता और गोपनीयता"
+    },
+    "fields": {
+      "name": "नाम",
+      "fullName": "पूरा नाम",
+      "email": "ईमेल",
+      "phone": "फ़ोन",
+      "phoneNumber": "फ़ोन नंबर",
+      "country": "देश",
+      "position": "पद",
+      "positionJob": "पद / नौकरी",
+      "birthDate": "जन्म तिथि",
+      "role": "भूमिका",
+      "status": "स्थिति",
+      "points": "अंक",
+      "rank": "रैंक",
+      "price": "मूल्य"
+    },
+    "placeholders": {
+      "fullName": "अपना पूरा नाम दर्ज करें",
+      "countrySearch": "किसी देश की तलाश करें",
+      "position": "सॉफ़्टवेयर इंजीनियर"
+    },
+    "status": {
+      "active": "सक्रिय"
+    },
+    "password": {
+      "title": "पासवर्ड अपडेट करें",
+      "current": "वर्तमान पासवर्ड",
+      "new": "नया पासवर्ड",
+      "confirm": "पासवर्ड की पुष्टि करें",
+      "updating": "अपडेट हो रहा है...",
+      "update": "पासवर्ड अपडेट करें"
+    },
+    "messages": {
+      "fillAllFields": "कृपया सभी फील्ड भरें।",
+      "passwordMismatch": "पासवर्ड मेल नहीं खाते।",
+      "passwordUpdated": "पासवर्ड सफलतापूर्वक अपडेट हो गया।",
+      "passwordUpdateFailed": "पासवर्ड अपडेट करते समय त्रुटि हुई।",
+      "chooseCountry": "कृपया सूची से एक देश चुनें।",
+      "noChanges": "आपने कोई बदलाव नहीं किया है।",
+      "profileUpdated": "आपका प्रोफ़ाइल सफलतापूर्वक अपडेट हो गया।",
+      "profileUpdateFailed": "आपका प्रोफ़ाइल अपडेट करते समय त्रुटि हुई।"
+    },
+    "wallet": {
+      "title": "वॉलेट",
+      "availableBalance": "उपलब्ध शेष राशि",
+      "deposit": "फंड जोड़ें",
+      "recentTransactions": "हालिया लेनदेन",
+      "depositType": "जमा",
+      "withdrawType": "निकासी",
+      "noTransactions": "अभी तक कोई लेनदेन नहीं",
+      "withdrawComingSoon": "निकासी की सुविधा जल्द उपलब्ध होगी।"
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "प्रति फ़ाइल अधिकतम: 100 MB",
+    "dragFiles": "फ़ाइलें यहाँ खींचें या",
+    "clickToChoose": "चुनने के लिए क्लिक करें",
+    "supportedFiles": "छवियाँ और वीडियो (प्रति फ़ाइल अधिकतम 100 MB)",
+    "selectedFiles": "चयनित फ़ाइलें ({count})",
+    "uploading": "अपलोड हो रहा है...",
+    "uploadFiles": "फाइलें अपलोड करें",
+    "success": "फाइलें सफलतापूर्वक अपलोड हो गईं!",
+    "errors": {
+      "fileTooLarge": "फाइल \"{name}\" 100 MB से बड़ी है।",
+      "unsupportedType": "फाइल प्रकार \"{name}\" समर्थित नहीं है।"
+    }
+  },
+  "discovery": {
+    "title": "खोज परिणाम",
+    "description": "Scemory पर इवेंट, चित्र और वीडियो खोजें।",
+    "showing": "दिखाए जा रहे हैं",
+    "of": "में से",
+    "results": "परिणाम",
+    "details": "विवरण देखें",
+    "noResultsTitle": "कोई परिणाम नहीं मिला",
+    "noResultsDescription": "अपनी खोज या फ़िल्टर बदलकर देखें।",
+    "filters": {
+      "allCities": "सभी शहर",
+      "allCountries": "सभी देश"
+    },
+    "tabs": {
+      "all": "सभी",
+      "event": "इवेंट",
+      "image": "चित्र",
+      "video": "वीडियो"
+    },
+    "resultLabels": {
+      "event": "इवेंट",
+      "image": "चित्र",
+      "video": "वीडियो"
+    },
+    "media": {
+      "price": "कीमत",
+      "addToCart": "कार्ट में जोड़ें",
+      "added": "जोड़ा गया",
+      "adding": "जोड़ा जा रहा है...",
+      "playVideo": "वीडियो चलाएँ",
+      "pauseVideo": "वीडियो रोकें"
+    }
+  },
+  "timeline": {
+    "title": "आपकी गतिविधि समयरेखा",
+    "subtitle": "अपने इवेंट, प्रतिक्रियाएँ, टिप्पणियाँ और सुरक्षित आइटम एक ही स्थान पर देखें।",
+    "totalActivity": "कुल गतिविधि",
+    "latestActivity": "नवीनतम गतिविधि",
+    "noLatestActivity": "अभी कोई गतिविधि नहीं",
+    "loading": "गतिविधि लोड हो रही है...",
+    "loadError": "आपकी गतिविधि लोड नहीं हो सकी।",
+    "retry": "फिर से प्रयास करें",
+    "viewAll": "सभी देखें",
+    "empty": "इस अनुभाग में कोई गतिविधि नहीं है।",
+    "previous": "पिछला",
+    "next": "अगला",
+    "pageOf": "पृष्ठ {current}, कुल {last}",
+    "unknownEvent": "अज्ञात इवेंट",
+    "parentComment": "इसके जवाब में: {comment}",
+    "reactionTo": "इस पर प्रतिक्रिया: {comment}",
+    "onEvent": "{event} पर",
+    "tabs": {
+      "all": "सभी गतिविधि",
+      "events": "इवेंट",
+      "likes": "पसंद",
+      "comments": "टिप्पणियाँ",
+      "replies": "जवाब",
+      "comment_images": "टिप्पणी चित्र",
+      "comment_interactions": "टिप्पणी प्रतिक्रियाएँ",
+      "wishlists": "पसंदीदा"
+    },
+    "filters": {
+      "label": "अवधि",
+      "all": "सभी समय",
+      "today": "आज",
+      "this_week": "इस सप्ताह",
+      "this_month": "इस महीने",
+      "custom": "मनचाही अवधि",
+      "from": "से",
+      "to": "तक",
+      "apply": "लागू करें",
+      "invalidRange": "मान्य तिथि सीमा चुनें।"
+    },
+    "reactions": {
+      "support": "समर्थन",
+      "neutral": "तटस्थ",
+      "exhibitions": "विरोध"
+    },
+    "status": {
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत",
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय"
+    }
+  },
+  "security": {
+    "denied": "आपको इस संसाधन तक पहुँच की अनुमति नहीं है।",
+    "notFound": "माँगा गया संसाधन नहीं मिला।",
+    "disabled": "यह खाता अक्षम है। सहायता से संपर्क करें।",
+    "invalidMedia": "मीडिया फ़ाइल अमान्य, असमर्थित या सुरक्षित प्रसंस्करण सीमा से अधिक है।",
+    "unavailable": "यह मीडिया अभी उपलब्ध नहीं है।",
+    "currencyMismatch": "वॉलेट की मुद्रा इस लेनदेन से मेल नहीं खाती।",
+    "insufficientBalance": "उपलब्ध शेष राशि अपर्याप्त है।",
+    "invalidWithdrawal": "वर्तमान स्थिति में निकासी नहीं बदली जा सकती। सहायता से संपर्क करें।",
+    "paymentRequired": "इस योजना के लिए सत्यापित भुगतान चाहिए। सहायता से संपर्क करें।",
+    "invalidCode": "सत्यापन कोड अमान्य या समाप्त हो गया है।",
+    "requestFailed": "अनुरोध पूरा नहीं हुआ। फिर प्रयास करें।",
+    "rateLimit": "बहुत अधिक अनुरोध। बाद में प्रयास करें।"
+  },
+  "googleAuth": {
+    "continue": "Google से जारी रखें",
+    "signup": "Google से साइन अप करें",
+    "or": "या",
+    "signingIn": "साइन इन हो रहा है…",
+    "cancelled": "प्रमाणीकरण रद्द कर दिया गया।",
+    "expired_state": "इस साइन इन प्रयास की अवधि समाप्त हो गई। फिर से शुरू करें।",
+    "invalid_state": "यह अनुरोध अमान्य है या पहले इस्तेमाल हो चुका है। फिर से शुरू करें।",
+    "oauth_failed": "Google प्रमाणीकरण पूरा नहीं कर सका। फिर कोशिश करें।",
+    "callback_failed": "प्रमाणीकरण विफल हुआ। फिर कोशिश करें।",
+    "identity_invalid": "Google आपकी पहचान और ईमेल की पुष्टि नहीं कर सका। साइन इन का दूसरा तरीका चुनें।",
+    "disabled": "यह खाता उपलब्ध नहीं है। सहायता टीम से संपर्क करें।",
+    "linking_required": "अपने खाते के मौजूदा तरीके से साइन इन करें। Google जोड़ने के लिए पहले उस खाते में साइन इन करना होगा; जोड़ने की सुविधा अभी उपलब्ध नहीं है। ज़रूरत होने पर सहायता टीम से संपर्क करें।",
+    "unavailable": "Google प्रमाणीकरण अभी उपलब्ध नहीं है। ईमेल और पासवर्ड इस्तेमाल करें या बाद में कोशिश करें।",
+    "busy": "साइन इन पहले से पूरा किया जा रहा है। फिर कोशिश करें।",
+    "alreadyLinked": "यह Google खाता पहले से जुड़ा है।",
+    "completeProfile": "अपना खाता पूरा करें",
+    "profileRequired": "खाता बनाना पूरा करने के लिए आवश्यक जानकारी भरें।",
+    "country": "देश",
+    "dateOfBirth": "जन्म तिथि",
+    "finishSignup": "खाता बनाएँ",
+    "profileInvalid": "देश और एक मान्य जन्म तिथि दर्ज करें जो भविष्य की न हो।",
+    "retry": "फिर कोशिश करें",
+    "backToLogin": "साइन इन पर वापस जाएँ",
+    "linkAccountTitle": "अपना Google खाता जोड़ें",
+    "linkAccountDesc": "इस ईमेल से एक खाता पहले से मौजूद है। अपने Google खाते को सुरक्षित रूप से जोड़ने के लिए अपना पासवर्ड दर्ज करें।",
+    "accountPassword": "खाता पासवर्ड",
+    "confirmLink": "पुष्टि करें और खाता जोड़ें",
+    "invalidCredentials": "अमान्य पासवर्ड। कृपया अपने विवरण जांचें और पुनः प्रयास करें।",
+    "linkSuccess": "Google खाता सफलतापूर्वक जोड़ दिया गया।",
+    "unlinkSuccess": "Google खाता सफलतापूर्वक अलग कर दिया गया।",
+    "identity_conflict": "यह ईमेल किसी दूसरी Google पहचान से जुड़ा है। खाते के मौजूदा तरीके से साइन इन करें या सहायता से संपर्क करें।",
+    "account_login_required": "अपने खाते के मौजूदा तरीके से साइन इन करें, फिर प्रोफ़ाइल से Google जोड़ें।",
+    "recovery_required": "Google को फिर जोड़ने के लिए एक बार खाता पुनर्प्राप्ति आवश्यक है।",
+    "recovery_web_required": "Scemory वेबसाइट पर एक बार की पुनर्प्राप्ति पूरी करें। आगे Google साइन इन अपने आप होंगे।",
+    "invalid_recovery_code": "पुनर्प्राप्ति कोड गलत है। कोड जाँचकर फिर कोशिश करें।",
+    "recovery_expired": "यह पुनर्प्राप्ति अनुरोध समाप्त हो गया। Google साइन इन फिर शुरू करें।",
+    "recovery_attempts_exceeded": "बहुत अधिक गलत प्रयास। Google साइन इन फिर शुरू करें।",
+    "recovery_rate_limited": "हाल ही में कोड भेजा गया है। दोबारा कोशिश करने से पहले थोड़ी देर प्रतीक्षा करें।",
+    "recovery_unavailable": "पुनर्प्राप्ति कोड नहीं भेजा जा सका। बाद में कोशिश करें।",
+    "recoveryTitle": "अपना Google खाता फिर जोड़ें",
+    "recoverySent": "{email} पर भेजा गया एक बार उपयोग वाला कोड दर्ज करें। यह केवल एक बार आवश्यक है।",
+    "recoveryCode": "पुनर्प्राप्ति कोड",
+    "confirmRecovery": "सत्यापित करें और जारी रखें"
+  },
+  "facebookAuth": {
+    "continue": "Facebook से जारी रखें",
+    "signup": "Facebook से साइन अप करें",
+    "signingIn": "साइन इन हो रहा है…",
+    "unavailable": "Facebook प्रमाणीकरण अभी उपलब्ध नहीं है। ईमेल और पासवर्ड इस्तेमाल करें या बाद में कोशिश करें।",
+    "cancelled": "प्रमाणीकरण रद्द कर दिया गया।",
+    "invalid_state": "यह अनुरोध अमान्य है या पहले इस्तेमाल हो चुका है। फिर से शुरू करें।",
+    "expired": "इस साइन इन प्रयास की अवधि समाप्त हो गई। फिर से शुरू करें।",
+    "callback_failed": "प्रमाणीकरण विफल हुआ। फिर कोशिश करें।",
+    "disabled": "यह खाता उपलब्ध नहीं है। सहायता टीम से संपर्क करें।",
+    "linking_required": "अपने खाते के मौजूदा तरीके से साइन इन करें। Facebook जोड़ने के लिए पहले उस खाते में साइन इन करना होगा; जोड़ने की सुविधा अभी उपलब्ध नहीं है। ज़रूरत होने पर सहायता टीम से संपर्क करें।",
+    "busy": "साइन इन पहले से पूरा किया जा रहा है। फिर कोशिश करें।",
+    "completeProfile": "अपना खाता पूरा करें",
+    "profileRequired": "खाता बनाना पूरा करने के लिए आवश्यक जानकारी भरें।",
+    "country": "देश",
+    "dateOfBirth": "जन्म तिथि",
+    "finishSignup": "खाता बनाएँ",
+    "retry": "फिर कोशिश करें",
+    "backToLogin": "साइन इन पर वापस जाएँ",
+    "identity_invalid": "Facebook आपकी पहचान की पुष्टि नहीं कर सका। फिर कोशिश करें।",
+    "verification_required": "अपने मौजूदा खाते के ईमेल की पुष्टि उसके मूल साइन इन तरीके से करें।",
+    "email_unavailable": "पुष्टि ईमेल नहीं भेज सके। बाद में फिर कोशिश करें।",
+    "otp_expired": "इस कोड की अवधि समाप्त हो गई। नया कोड माँगें।",
+    "otp_invalid": "पुष्टि कोड गलत है।",
+    "otp_attempts": "बहुत अधिक प्रयास हुए। प्रतीक्षा अवधि के बाद नया कोड माँगें।",
+    "otp_cooldown": "दूसरा कोड माँगने से पहले प्रतीक्षा करें।",
+    "native_unavailable": "Facebook साइन इन Scemory वेबसाइट पर उपलब्ध है। ब्राउज़र इस्तेमाल करें।",
+    "email": "ईमेल पता",
+    "sendCode": "पुष्टि कोड भेजें",
+    "verifyEmail": "अपने ईमेल की पुष्टि करें",
+    "codeSent": "{email} पर भेजा गया कोड दर्ज करें।",
+    "verificationCode": "पुष्टि कोड",
+    "resendIn": "{seconds} सेकंड में फिर भेजें",
+    "resend": "कोड फिर भेजें",
+    "profileInvalid": "मान्य ईमेल, देश और ऐसी जन्म तिथि दर्ज करें जो भविष्य की न हो।"
+  },
+  "mediaCredits": {
+    "myCredits": "मेरे मीडिया क्रेडिट",
+    "photosAvailable": "उपलब्ध तस्वीरें",
+    "videosAvailable": "उपलब्ध वीडियो",
+    "photos": "तस्वीरें",
+    "videos": "वीडियो",
+    "photoQuotaDesc": "स्थायी फ़ोटो रिडेम्पशन कोटा",
+    "videoQuotaDesc": "स्थायी वीडियो रिडेम्पशन कोटा",
+    "activeTier": "सक्रिय एक्सेस टियर",
+    "breakdownByTier": "टियर के अनुसार विवरण",
+    "viewDashboard": "क्रेडिट डैशबोर्ड",
+    "getMoreCredits": "अधिक क्रेडिट प्राप्त करें",
+    "browseMarketplace": "मार्केटप्लेस देखें",
+    "noTier": "कोई सक्रिय प्लान नहीं",
+    "getWithPlan": "प्लान के साथ प्राप्त करें",
+    "redeemed": "रिडीम किया गया",
+    "redeemSuccess": "आपके प्लान क्रेडिट के साथ मीडिया सफलतापूर्वक रिडीम किया गया!",
+    "redeemFailed": "प्लान के साथ मीडिया रिडीम करने में विफल।",
+    "activeGrants": "सक्रिय कोटा अनुदान",
+    "redemptionHistory": "रिडेम्पशन इतिहास",
+    "noGrants": "कोई सक्रिय मीडिया कोटा नहीं है। क्रेडिट प्राप्त करने के लिए प्लान सब्सक्राइब करें।",
+    "noRedemptions": "अभी तक कोई रिडेम्पशन नहीं हुआ है।",
+    "tier": "टियर",
+    "plan": "प्लान",
+    "tierRank": "टियर रैंक",
+    "grantedOn": "प्रदान किया गया",
+    "payoutCap": "निर्माता भुगतान सीमा",
+    "payWithWallet": "वॉलेट से भुगतान करें",
+    "payWithPaypal": "पेपाल से भुगतान करें",
+    "insufficientCredits": "अपर्याप्त क्रेडिट या इस मीडिया के लिए टियर रैंक कम है।",
+    "includedQuotas": "शामिल मीडिया कोटा",
+    "permanentQuotas": "स्थायी गैर-समाप्ति मीडिया कोटा"
+  },
+  "dataDeletion": {
+    "title": "डेटा हटाने के निर्देश",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "डेटा हटाने के निर्देश",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "डेटा हटाने के निर्देश",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "तुलना",
+    "links": {
+      "historypin": "Scemory बनाम Historypin",
+      "pastvu": "Scemory बनाम PastVu",
+      "theClio": "Scemory बनाम The Clio"
+    },
+    "common": {
+      "exploreScemory": "Scemory देखें",
+      "visitOfficialWebsite": "आधिकारिक वेबसाइट पर जाएं",
+      "createAccount": "खाता बनाएं",
+      "feature": "सुविधा और क्षमता",
+      "scemory": "Scemory",
+      "verifiedDate": "सत्यापित: 24 अक्टूबर 2026",
+      "disclaimer": "Scemory एक स्वतंत्र मंच है और यहां तुलना किए गए किसी भी संगठन के साथ इसका कोई आधिकारिक संबंध, प्रायोजन या समर्थन नहीं है। सभी ट्रेडमार्क और आधिकारिक लोगो उनके संबंधित स्वामियों के हैं। तुलनात्मक बिंदु 24 अक्टूबर 2026 तक सार्वजनिक रूप से उपलब्ध सत्यापित जानकारी पर आधारित हैं।",
+      "methodologyTitle": "स्रोत एवं सत्यापन पद्धति",
+      "methodologyDesc": "यह तथ्यात्मक तुलना प्लेटफॉर्म के आधिकारिक दस्तावेज़ों, सार्वजनिक वेबसाइटों और सीधे देखे जाने योग्य तकनीकी क्षमताओं के आधार पर तैयार की गई है। हम पूरी तरह से उपलब्ध सुविधाओं, आंशिक क्षमताओं, अनुपलब्ध वर्कफ़्लो और अनिर्दिष्ट विनिर्देशों के बीच स्पष्ट अंतर करते हैं।",
+      "whyChooseTitle": "Scemory क्यों चुनें?",
+      "ctaTitle": "पलों को संजोएं। घटनाओं का दस्तावेजीकरण करें। एक साझा स्मृति बनाएं।",
+      "ctaSubtitle": "एक आधुनिक वैश्विक प्लेटफॉर्म से जुड़ें जो समकालीन घटना कवरेज, ऐतिहासिक स्मृति संरक्षण और रचनाकारों के लिए एक निष्पक्ष मीडिया मार्केटप्लेस को एकजुट करता है।",
+      "beyondTitle": "Scemory, {competitor} से आगे क्या प्रदान करता है?",
+      "whoShouldUseTitle": "प्रत्येक प्लेटफॉर्म किसके लिए उपयुक्त है?",
+      "overviewTitle": "प्लेटफॉर्म अवलोकन",
+      "tableTitle": "विस्तृत क्षमता तुलना",
+      "vs": "बनाम",
+      "keyHighlights": "मुख्य विशेषताएं",
+      "organizationType": "संगठन का प्रकार",
+      "founded": "स्थापना वर्ष / लॉन्च",
+      "headquarters": "मुख्यालय / कार्यक्षेत्र",
+      "coreMission": "मुख्य उद्देश्य",
+      "officialWebsite": "आधिकारिक वेबसाइट",
+      "independentNotice": "सत्यापन योग्य सार्वजनिक दस्तावेज़ों पर आधारित स्वतंत्र तुलना।",
+      "audienceScemoryHeading": "Scemory किसके लिए बनाया गया है",
+      "audienceCompetitorHeading": "{competitor} किसके लिए बनाया गया है"
+    },
+    "status": {
+      "supported": "उपलब्ध और कार्यात्मक",
+      "partial": "आंशिक रूप से समर्थित",
+      "not_offered": "उपलब्ध नहीं है",
+      "not_documented": "सार्वजनिक रूप से प्रलेखित नहीं"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "ऐतिहासिक घटनाओं का दस्तावेजीकरण",
+        "desc": "ऐतिहासिक पड़ावों, सांस्कृतिक अवसरों और पिछली सामुदायिक यादों का व्यापक संदर्भ के साथ दस्तावेजीकरण।"
+      },
+      "locationMemories": {
+        "name": "स्थान-आधारित यादें और मानचित्रण",
+        "desc": "सटीक भौगोलिक निर्देशांकों के साथ इंटरैक्टिव मानचित्रों पर यादों, तस्वीरों और कहानियों का सटीक स्थान।"
+      },
+      "photoArchives": {
+        "name": "ऐतिहासिक फोटो अभिलेखागार",
+        "desc": "अभिलेखीय मेटाडेटा, टैग और स्रोत संदर्भों के साथ ऐतिहासिक तस्वीरों का संरक्षण और प्रदर्शन।"
+      },
+      "videoDocumentation": {
+        "name": "वीडियो योगदान और प्लेबैक",
+        "desc": "उच्च रिज़ॉल्यूशन वाले वीडियो फुटेज का मूल अपलोड, प्रसंस्करण, सुरक्षात्मक वॉटरमार्क और सुचारू प्लेबैक।"
+      },
+      "userContributions": {
+        "name": "उपयोगकर्ता द्वारा सामग्री प्रस्तुतिकरण",
+        "desc": "पंजीकृत समुदाय के सदस्यों को घटनाओं, तस्वीरों और यादों को स्वतंत्र रूप से अपलोड करने की सुविधा।"
+      },
+      "communityParticipation": {
+        "name": "सामुदायिक सहभागिता और टिप्पणियाँ",
+        "desc": "टिप्पणियों, थ्रेडेड उत्तरों, प्रतिक्रियाओं, पसंदीदा सूचियों और साप्ताहिक लीडरबोर्ड के माध्यम से परस्पर संवाद।"
+      },
+      "chronologicalBrowsing": {
+        "name": "कालानुक्रमिक अन्वेषण और समयरेखा",
+        "desc": "ऐतिहासिक वर्ष श्रेणियों, टाइमलाइन स्लाइडर्स और कालानुक्रमिक घटना क्रमों के आधार पर सामग्री खोजना।"
+      },
+      "eventCentricOrg": {
+        "name": "घटना-केंद्रित सामग्री संरचना",
+        "desc": "उन्नत संरचना जहां घटना एक स्वतंत्र इकाई होती है जो कई मीडिया और योगदानकर्ताओं को एक साथ जोड़ती है।"
+      },
+      "contributorProfiles": {
+        "name": "योगदानकर्ता प्रोफाइल और पोर्टफोलियो",
+        "desc": "उपयोगकर्ताओं के लिए समर्पित पृष्ठ जहां उनके द्वारा योगदान की गई घटनाएं, मीडिया गैलरी और आंकड़े प्रदर्शित होते हैं।"
+      },
+      "discoveryMap": {
+        "name": "इंटरैक्टिव मानचित्र खोज और अन्वेषण",
+        "desc": "गतिशील क्लस्टरिंग, श्रेणी फिल्टर, तिथि फिल्टर और टेक्स्ट खोज के साथ भौगोलिक मानचित्र अन्वेषण।"
+      },
+      "mediaMarketplace": {
+        "name": "तस्वीरों और वीडियो का मार्केटप्लेस",
+        "desc": "एकीकृत डिजिटल बाज़ार जहां रचनाकार अपनी उच्च रिज़ॉल्यूशन वाली तस्वीरों और वीडियो को बिक्री और लाइसेंस के लिए प्रस्तुत कर सकते हैं।"
+      },
+      "mediaPurchases": {
+        "name": "प्रत्यक्ष मीडिया खरीद और डाउनलोड",
+        "desc": "सुरक्षित डिजिटल खरीद प्रक्रिया जो खरीदार को वॉटरमार्क रहित मूल फाइलों के तत्काल डाउनलोड का अधिकार देती है।"
+      },
+      "commercialLicensing": {
+        "name": "वाणिज्यिक लाइसेंसिंग अधिकार",
+        "desc": "खरीदी गई मीडिया संपत्तियों के वाणिज्यिक और संपादकीय पुन: उपयोग को नियंत्रित करने वाले स्पष्ट कानूनी नियम।"
+      },
+      "creatorMonetization": {
+        "name": "रचनाकार मुद्रीकरण और राजस्व साझाकरण",
+        "desc": "प्रत्यक्ष मीडिया बिक्री पर रचनाकारों को 85% राजस्व भुगतान के साथ पारदर्शी और सम्मानजनक वित्तीय मुआवजा।"
+      },
+      "payoutSystem": {
+        "name": "कमाई निकासी और भुगतान प्रणाली",
+        "desc": "PayPal और बैंक ट्रांसफर के माध्यम से औपचारिक निकासी अनुरोधों के साथ स्पष्ट आय बहीखाता।"
+      },
+      "subscriptionPlans": {
+        "name": "मासिक सदस्यता योजनाएं",
+        "desc": "नियमित फोटो और वीडियो आवंटन तथा विशेष लाभों के साथ निःशुल्क और प्रीमियम सदस्यता विकल्प।"
+      },
+      "mediaCredits": {
+        "name": "स्थायी मीडिया क्रेडिट",
+        "desc": "दृश्य सामग्री की आसान खरीद और लाइसेंसिंग के लिए बिना किसी समाप्ति तिथि वाले प्रीपेड क्रेडिट।"
+      },
+      "multilingual": {
+        "name": "बहुभाषी प्लेटफॉर्म (13 भाषाएं + RTL)",
+        "desc": "दाएं से बाएं (RTL) लिपियों के पूर्ण समर्थन के साथ 13 वैश्विक भाषाओं में व्यापक स्थानीय अनुभव।"
+      },
+      "institutionalUse": {
+        "name": "संस्थागत, शैक्षिक और शोध सहयोग",
+        "desc": "संग्रहालयों, विश्वविद्यालयों, पुस्तकालयों और सार्वजनिक अभिलेखागारों के साथ सहयोग के लिए विशेष उपकरण।"
+      }
+    },
+    "historypin": {
+      "heroTitle": "Scemory बनाम Historypin: यादों को संजोने और घटनाओं के दस्तावेजीकरण के दो दृष्टिकोण",
+      "heroSubtitle": "Historypin के सामुदायिक विरासत संग्रह और Scemory के घटना-केंद्रित मल्टीमीडिया व बाज़ार प्लेटफॉर्म का एक तथ्यात्मक तुलनात्मक अध्ययन।",
+      "primaryFocus": "सामुदायिक इतिहास, सामूहिक स्मृति, ऐतिहासिक तस्वीरें, कहानियां और स्थानीय विरासत स्थल।",
+      "logoAlt": "आधिकारिक Historypin लोगो",
+      "seoTitle": "Scemory बनाम Historypin: व्यापक प्लेटफॉर्म तुलना",
+      "seoDescription": "Scemory और Historypin की तुलना करें। ऐतिहासिक फोटो संरक्षण, वीडियो समर्थन, रचनाकार मुद्रीकरण और बहुभाषी पहुंच के अंतर जानें।",
+      "aboutScemory": "Scemory एक आधुनिक घटना दस्तावेजीकरण प्लेटफॉर्म और मल्टीमीडिया बाज़ार है जो ऐतिहासिक स्मृति संरक्षण को समकालीन घटना कवरेज के साथ जोड़ता है। इसकी घटना-केंद्रित संरचना के माध्यम से फोटोग्राफर, पत्रकार और शोधकर्ता उच्च-रिज़ॉल्यूशन मीडिया साझा कर सकते हैं और व्यावसायिक लाइसेंसिंग के माध्यम से कमाई कर सकते हैं।",
+      "aboutCompetitor": "Historypin की स्थापना 2010 में गैर-लाभकारी संस्था Shift द्वारा Google के सहयोग से की गई थी। यह स्थानीय समुदायों, पुस्तकालयों और संग्रहालयों को ऐतिहासिक तस्वीरों और मौखिक इतिहास को विश्व मानचित्र पर पिन करने और Google Street View के साथ पुरानी तस्वीरों की तुलना करने में सक्षम बनाता है।",
+      "scemoryAdvantages": [
+        {
+          "title": "घटना-केंद्रित स्वतंत्र इकाई संरचना",
+          "desc": "मानचित्र पर केवल पिन लगाने के विपरीत, Scemory सामग्री को विशिष्ट घटनाओं के इर्द-गिर्द व्यवस्थित करता है जिसमें कई योगदानकर्ता और मीडिया एल्बम एक साथ जुड़ते हैं।"
+        },
+        {
+          "title": "मूल हाई-रिज़ॉल्यूशन वीडियो समर्थन",
+          "desc": "जबकि Historypin मुख्य रूप से स्थिर तस्वीरों तक सीमित है, Scemory वीडियो फुटेज के लिए पूर्ण अपलोडिंग, सुरक्षात्मक वॉटरमार्क और सुचारू प्लेबैक प्रदान करता है।"
+        },
+        {
+          "title": "रचनाकार अर्थव्यवस्था और एकीकृत मार्केटप्लेस",
+          "desc": "Scemory रचनाकारों को बिक्री पर 85% आय और कानूनी लाइसेंसिंग प्रदान करता है, जो गैर-व्यावसायिक अभिलेखागारों में उपलब्ध नहीं है।"
+        },
+        {
+          "title": "13 भाषाओं में वैश्विक पहुंच और पूर्ण RTL समर्थन",
+          "desc": "Scemory अरबी, फारसी और उर्दू जैसी भाषाओं के लिए पूर्ण दाएं-से-बाएं समर्थन सहित 13 प्रमुख भाषाओं में अनुवाद प्रदान करता है।"
+        }
+      ],
+      "audienceScemory": "फोटोग्राफर, वीडियोग्राफर, पत्रकार, कार्यक्रम आयोजक और इतिहास प्रेमी जो ऐतिहासिक और समकालीन घटनाओं को संरक्षित करने के साथ-साथ अपने काम को लाइसेंस और मुद्रीकृत करना चाहते हैं।",
+      "audienceCompetitor": "स्थानीय इतिहास समितियां, सार्वजनिक पुस्तकालय, स्कूल और शोधकर्ता जो गैर-व्यावसायिक रूप से पुरानी तस्वीरों को सड़कों के मानचित्र पर प्रदर्शित करना चाहते हैं।",
+      "whyChooseSummary": "Historypin सामुदायिक विरासत के क्षेत्र में एक प्रेरणादायक और अग्रदूत प्लेटफॉर्म है। यदि आपको घटना-केंद्रित संरचना, उच्च गुणवत्ता वाले वीडियो, रचनाकार राजस्व साझाकरण और 13 भाषाओं में वैश्विक पहुंच की आवश्यकता है, तो Scemory एक उत्कृष्ट विकल्प है।"
+    },
+    "pastvu": {
+      "heroTitle": "Scemory बनाम PastVu: ऐतिहासिक फोटो मानचित्रण और मल्टीमीडिया घटना दस्तावेजीकरण",
+      "heroSubtitle": "PastVu के कोण-आधारित ऐतिहासिक फोटो संग्रह और Scemory के आधुनिक मल्टीमीडिया व मार्केटप्लेस प्लेटफॉर्म का तुलनात्मक विश्लेषण।",
+      "primaryFocus": "शूटिंग कोण की दिशाओं और भौगोलिक निर्देशांकों के साथ ऐतिहासिक फोटो संग्रह (1826–2000)।",
+      "logoAlt": "आधिकारिक PastVu लोगो",
+      "seoTitle": "Scemory बनाम PastVu: विस्तृत तकनीकी तुलना",
+      "seoDescription": "Scemory और PastVu में अंतर समझें: कैमरा शूटिंग कोण भू-स्थान, वीडियो समर्थन, व्यावसायिक लाइसेंसिंग और अंतर्राष्ट्रीय भाषाएं।",
+      "aboutScemory": "Scemory समकालीन घटनाओं के दस्तावेजीकरण को ऐतिहासिक स्मृति के संरक्षण के साथ एकीकृत करता है। मानचित्र अन्वेषण और सामुदायिक सहभागिता के अलावा, यह एक बाज़ार भी प्रदान करता है जहां रचनाकार और संस्थान अपनी दृश्य संपत्तियों को लाइसेंस दे सकते हैं और उचित आय अर्जित कर सकते हैं।",
+      "aboutCompetitor": "PastVu 2009 में शुरू किया गया एक स्वतंत्र स्वयंसेवी संग्रह है जो 1826 से 2000 के बीच मानव बस्तियों की तस्वीरों को इकट्ठा करने और उनके भौगोलिक निर्देशांक और कैमरे के कोण को निर्धारित करने के लिए समर्पित है। कैमरे की दिशा बताने वाले तीर इसकी खास पहचान हैं।",
+      "scemoryAdvantages": [
+        {
+          "title": "ऐतिहासिक और वर्तमान दोनों घटनाओं का समावेश",
+          "desc": "PastVu केवल वर्ष 2000 तक की तस्वीरों को स्वीकार करता है। Scemory अतीत और वर्तमान को जोड़ता है और आज के सांस्कृतिक, सामाजिक और खेल आयोजनों को भी स्थान देता है।"
+        },
+        {
+          "title": "मूल वीडियो अपलोड और स्ट्रीमिंग",
+          "desc": "PastVu केवल स्थिर तस्वीरों तक सीमित है। Scemory ऐतिहासिक और आधुनिक वीडियो के लिए प्रोसेसिंग, वॉटरमार्क और प्लेबैक की पूरी सुविधा देता है।"
+        },
+        {
+          "title": "डिजिटल मार्केटप्लेस और व्यावसायिक अधिकार",
+          "desc": "Scemory में 85% रचनाकार भुगतान के साथ लाइसेंस बिक्री की प्रणाली है, जिससे तस्वीरों को आर्थिक रूप से उपयोगी बनाया जा सकता है।"
+        },
+        {
+          "title": "13 भाषाओं में व्यापक अनुवाद",
+          "desc": "PastVu केवल अंग्रेजी और रूसी तक सीमित है, जबकि Scemory 13 वैश्विक भाषाओं में पूर्ण रूप से उपलब्ध है।"
+        }
+      ],
+      "audienceScemory": "दृश्य रचनाकार, वीडियो पत्रकार, प्रकाशक और कार्यक्रम आयोजक जिन्हें आधुनिक और ऐतिहासिक दोनों घटनाओं के दस्तावेजीकरण, वीडियो स्ट्रीमिंग और लाइसेंसिंग की आवश्यकता है।",
+      "audienceCompetitor": "वास्तु इतिहासकार, पुरानी तस्वीरों के संग्रहकर्ता और शोधकर्ता जो 1826 से 2000 तक के शहरी बदलावों को कैमरे के सटीक कोण के आधार पर देखना चाहते हैं।",
+      "whyChooseSummary": "PastVu पुरानी तस्वीरों को कैमरे के कोण से देखने का एक अद्वितीय अभिलेखागार है। लेकिन जब आपको एक व्यापक मीडिया प्लेटफॉर्म की आवश्यकता हो जिसमें समकालीन घटनाएं, वीडियो, रचनाकारों की आय और बहुभाषी दर्शक शामिल हों, तो Scemory सर्वश्रेष्ठ विकल्प है।"
+    },
+    "theClio": {
+      "heroTitle": "Scemory बनाम The Clio: ऐतिहासिक स्मारकों की खोज और सजीव घटनाओं का दस्तावेजीकरण",
+      "heroSubtitle": "The Clio की शैक्षिक स्मारक मार्गदर्शिका और Scemory के इंटरैक्टिव मल्टीमीडिया घटना प्लेटफॉर्म का एक तथ्यात्मक तुलनात्मक विवरण।",
+      "primaryFocus": "ऐतिहासिक स्थलों, स्मारकों, संग्रहालयों और पैदल पर्यटन यात्राओं के लिए शैक्षिक मार्गदर्शिका।",
+      "logoAlt": "आधिकारिक The Clio लोगो",
+      "seoTitle": "Scemory बनाम The Clio: प्लेटफॉर्म क्षमताओं का अध्ययन",
+      "seoDescription": "The Clio और Scemory की तुलना करें: ऐतिहासिक स्मारक पैदल यात्राओं और Scemory के घटना-केंद्रित मल्टीमीडिया मार्केटप्लेस के बीच अंतर जानें।",
+      "aboutScemory": "Scemory एक घटना-केंद्रित प्लेटफॉर्म है जो व्यक्तियों और संगठनों को महत्वपूर्ण पलों को संजोने और खोजने की शक्ति देता है। यह उच्च गुणवत्ता वाले फोटो और वीडियो, मानचित्र खोज, सामुदायिक सहभागिता और व्यावसायिक लाइसेंसिंग को एक आधुनिक अनुभव में पिरोता है।",
+      "aboutCompetitor": "The Clio एक गैर-लाभकारी शैक्षिक प्लेटफॉर्म (501c3 चैरिटी) है जिसकी स्थापना इतिहास के प्रोफेसर डॉ. डेविड ट्रोब्रिज ने की थी। यह उत्तरी अमेरिका के ऐतिहासिक स्थलों और संग्रहालयों के लिए एक आभासी गाइड है जिसमें विद्वानों और छात्रों द्वारा तैयार किए गए ऑडियो वॉकिंग टूर शामिल हैं।",
+      "scemoryAdvantages": [
+        {
+          "title": "स्थिर स्मारकों से आगे सजीव घटनाओं का दस्तावेजीकरण",
+          "desc": "The Clio स्थायी स्मारकों और पट्टिकाओं पर केंद्रित है। Scemory किसी भी स्थायी स्मारक के बिना भी त्योहारों, सम्मेलनों और सामाजिक आंदोलनों जैसे क्षणिक आयोजनों को दर्ज करता है।"
+        },
+        {
+          "title": "व्यावसायिक लाइसेंसिंग और रचनाकारों के लिए आय",
+          "desc": "The Clio में कोई वित्तीय गतिविधि नहीं होती है। Scemory फोटोग्राफरों को 85% आय के साथ कानूनी लाइसेंस बिक्री की सुविधा प्रदान करती है।"
+        },
+        {
+          "title": "प्रत्यक्ष मीडिया रिपॉजिटरी और मूल फाइल डाउनलोड",
+          "desc": "Scemory खरीदारों के लिए मूल फाइलों के डाउनलोड की सुविधा प्रदान करती है, जबकि The Clio केवल संदर्भ के रूप में बाहरी मीडिया का उपयोग करती है।"
+        },
+        {
+          "title": "13 भाषाओं में अंतरराष्ट्रीय स्तर पर उपलब्धता",
+          "desc": "The Clio मुख्य रूप से अंग्रेजी और उत्तरी अमेरिका तक सीमित है। Scemory को पूरी दुनिया के लिए 13 भाषाओं में निर्मित किया गया है।"
+        }
+      ],
+      "audienceScemory": "स्वतंत्र रचनाकार, पत्रकार, सांस्कृतिक संगठन और वैश्विक समुदाय जो वर्तमान और अतीत की घटनाओं को वीडियो और तस्वीरों के माध्यम से दर्ज करना चाहते हैं।",
+      "audienceCompetitor": "छात्र, इतिहास के प्राध्यापक, संग्रहालय क्यूरेटर और सांस्कृतिक पर्यटक जो उत्तरी अमेरिका के स्मारकों के बारे में शोध-आधारित लेख और पैदल यात्राएं चाहते हैं।",
+      "whyChooseSummary": "The Clio ऐतिहासिक स्मारकों को जानने के लिए एक उत्कृष्ट गैर-लाभकारी पहल है। यदि आपको जीवंत घटनाओं को रिकॉर्ड करने, वीडियो साझा करने और रचनाकारों को व्यावसायिक मुद्रीकरण के अवसर देने के लिए एक अंतरराष्ट्रीय प्लेटफॉर्म की आवश्यकता है, तो Scemory सर्वोत्तम समाधान है।"
+    }
+  }
 }

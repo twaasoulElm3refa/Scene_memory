@@ -1,1441 +1,1654 @@
 {
-    "search": {
-        "placeholder": "جستجوی رویدادها..."
+  "search": {
+    "placeholder": "جستجوی رویدادها..."
+  },
+  "filters": {
+    "title": "فیلترها",
+    "allCategories": "همه دسته‌ها",
+    "country": "کشور",
+    "category": "دسته",
+    "subCategory": "زیر‌دسته",
+    "from": "از",
+    "to": "تا",
+    "city": "شهر",
+    "allSubCategories": "همه زیر‌دسته‌ها"
+  },
+  "upload_media": "بارگذاری مدیا",
+  "view_all_comments": "مشاهده همه نظرات",
+  "nav": {
+    "timeline": "خط زمانی من",
+    "favourites": "علاقه‌مندی‌ها",
+    "plans": "طرح‌ها",
+    "specialCoverage": "پوشش ویژه",
+    "downloads": "دانلودها",
+    "more": "بیشتر",
+    "events": "رویدادها",
+    "terms": "شرایط",
+    "dashboard": "داشبورد",
+    "historical": "تاریخی",
+    "home": "خانه",
+    "about": "درباره",
+    "scemoryGate": "دروازه Scemory",
+    "allEvents": "همه رویدادها",
+    "contact": "تماس",
+    "addEvent": "افزودن رویداد",
+    "wishlist": "علاقه‌مندی‌ها",
+    "profile": "نمایه",
+    "logout": "خروج",
+    "login": "ورود",
+    "cart": "سبد خرید",
+    "scemoryHome": "خانه Scemory",
+    "toggleMenu": "تغییر منو",
+    "mediaCredits": "اعتبارهای رسانه"
+  },
+  "languages": {
+    "AR": "العربية",
+    "EN": "English",
+    "FR": "Français",
+    "DE": "Deutsch",
+    "RU": "Русский",
+    "TR": "Turkish",
+    "ES": "Español",
+    "IT": "Italiano",
+    "HI": "हिंदी",
+    "ZH": "中文",
+    "FA": "فارسى",
+    "JA": "日本語",
+    "UR": "اردو"
+  },
+  "login_to_comment": "لطفا وارد شوید تا نظر خود را بنویسید",
+  "event": {
+    "reply": "پاسخ دادن",
+    "delete": " حذف",
+    "no_media_yet": "رسانه‌ای وجود ندارد",
+    "reply_placeholder": "پاسخ خود را اینجا بنویسید...",
+    "loading": "در حال بارگذاری رویداد...",
+    "not_found": "رویداد وجود ندارد یا حذف شده است.",
+    "city_default": "مشخص نشده",
+    "visitor": "بازدیدکننده",
+    "media_gallery_title": "رسانه‌های رویداد",
+    "no_media": "رسانه‌ای وجود ندارد",
+    "about_event_title": "درباره رویداد",
+    "comments_title": "نظرات",
+    "add_comment_title": "نظر خود را اضافه کنید",
+    "comment_placeholder": "نظر خود را اینجا بنویسید...",
+    "submit_comment": "ارسال",
+    "sending_comment": "در حال ارسال...",
+    "comment_login_required": "لطفاً ابتدا وارد شوید",
+    "comment_added_success": "نظر شما با موفقیت اضافه شد!",
+    "delete_comment_title": "حذف نظر",
+    "event_info_title": "اطلاعات رویداد",
+    "from_date": "از",
+    "to_date": "تا",
+    "time_label": "زمان",
+    "time_default": "مشخص نشده",
+    "location": "مکان",
+    "organizer": "برگزارکننده رویداد",
+    "add_to_wishlist": "افزودن به علاقه‌مندی‌ها",
+    "already_in_wishlist": "در علاقه‌مندی‌ها موجود است",
+    "adding_to_wishlist": "در حال افزودن...",
+    "wishlist_success": "با موفقیت به علاقه‌مندی‌ها اضافه شد!",
+    "buy_collection_title": "خرید مجموعه کامل",
+    "total_images": "کل تصاویر",
+    "save_discount": "تخفیف 10%",
+    "you_save": "شما صرفه‌جویی می‌کنید",
+    "add_collection_to_cart": "🎁 افزودن مجموعه کامل به سبد",
+    "collection_benefit_1": "✓ خرید تمام تصاویر یکجا",
+    "collection_benefit_2": "تخفیف خودکار 10%",
+    "collection_benefit_3": "✓ صرفه‌جویی در وقت و پول",
+    "collection_benefit_4": "✓ دریافت فوری تمام خاطرات رویداد",
+    "upload_media_to_event": "???????? ????? ???? ??????",
+    "media_alt": "Event media",
+    "send_reply": "Send reply",
+    "comment_add_images": "?????? ?????? ({count}/{max})",
+    "comment_image_limit": "?????? ? ?????? ?????? ? ???????",
+    "selected_comment_image_alt": "????? ?????????? {number}",
+    "remove_selected_comment_image": "??? ????? ?????????? {number}"
+  },
+  "common": {
+    "search": "جستجو",
+    "placeholder": "جستجوی رویدادها...",
+    "searching": "در حال جستجو...",
+    "details": "جزئیات",
+    "notSpecified": "مشخص نشده",
+    "loadingEvents": "در حال بارگذاری رویدادها...",
+    "loading": "?? ??? ????????...",
+    "close": "بستن",
+    "tryAgain": "?????? ???? ????",
+    "back": "??????",
+    "remove": "???",
+    "clear": "پاک کردن",
+    "previous": "????",
+    "next": "????",
+    "noResults": "???????? ???? ???",
+    "unknownError": "???? ????????",
+    "learnMore": "بیشتر بدانید",
+    "cancel": "???",
+    "sending": "?? ??? ?????...",
+    "show": "?????",
+    "hide": "?????"
+  },
+  "events": {
+    "add_historical_event": "افزودن رویداد تاریخی",
+    "brand_footer": "تمام رویدادهای مورد علاقه شما در جهان",
+    "no_title": "رویداد بدون عنوان",
+    "undefined_city": "نامشخص",
+    "from_map": "از نقشه",
+    "cities": "شهر",
+    "categories": "دسته",
+    "all_memories": "همه خاطرات رویدادها",
+    "showing_snapshots": "نمایش {total} لحظه تاریخی از سراسر جهان",
+    "sort_by": "مرتب‌سازی بر اساس",
+    "sort": {
+      "newest": "جدیدترین ابتدا",
+      "oldest": "قدیمی‌ترین ابتدا",
+      "title": "عنوان"
     },
-    "filters": {
-        "title": "فیلترها",
-        "allCategories": "همه دسته‌ها",
-        "country": "کشور",
-        "category": "دسته",
-        "subCategory": "زیر‌دسته",
-        "from": "از",
-        "to": "تا",
-        "city": "شهر",
-        "allSubCategories": "همه زیر‌دسته‌ها"
+    "loading": "در حال بارگذاری رویدادها...",
+    "retry": "تلاش مجدد",
+    "page_info": "صفحه {current} از {last}",
+    "active_memories": "رویدادهای فعال",
+    "latestEvents": "جدیدترین رویدادها",
+    "recentMemories": "رویدادهای اخیر",
+    "discoverAroundYou": "کشف کنید چه چیزی در اطراف شما در جریان است و برای زیباترین لحظات آماده شوید",
+    "noEventsFound": "رویدادی یافت نشد",
+    "noMatchingEvents": "هیچ رویدادی با معیارهای جستجو یا موقعیت شما مطابقت ندارد",
+    "event": "رویداد",
+    "startDate": "تاریخ شروع",
+    "eventType": "Event Type",
+    "types": {
+      "all": "All Events",
+      "real": "Real Events",
+      "general": "General Events"
     },
-    "upload_media": "بارگذاری مدیا",
-    "view_all_comments": "مشاهده همه نظرات",
-    "nav": {
-        "timeline": "خط زمانی من",
-        "favourites": "علاقه‌مندی‌ها",
-        "plans": "طرح‌ها",
-        "specialCoverage": "پوشش ویژه",
-        "downloads": "دانلودها",
-        "more": "بیشتر",
-        "events": "رویدادها",
-        "terms": "شرایط",
-        "dashboard": "داشبورد",
-        "historical": "تاریخی",
-        "home": "خانه",
-        "about": "درباره",
-        "scemoryGate": "دروازه Scemory",
-        "allEvents": "همه رویدادها",
-        "contact": "تماس",
-        "addEvent": "افزودن رویداد",
-        "wishlist": "علاقه‌مندی‌ها",
-        "profile": "نمایه",
-        "logout": "خروج",
-        "login": "ورود",
-        "cart": "سبد خرید",
-        "scemoryHome": "خانه Scemory",
-        "toggleMenu": "تغییر منو",
-        "mediaCredits": "اعتبارهای رسانه"
+    "emptyAvailable": "No events are currently available."
+  },
+  "pagination": {
+    "previous": "قبلی",
+    "next": "بعدی"
+  },
+  "about": {
+    "title": "درباره ما - Scene Memory",
+    "subtitle": "ما لحظات گرانبهای شما را حفظ می‌کنیم، صحنه به صحنه",
+    "text1": "در Scene Memory، ما باور داریم که زیباترین لحظات زندگی شایسته حفظ شدن با وضوح و احساس هستند. ما بیش از یک پلتفرم ذخیره‌سازی هستیم – ما آلبوم خاطرات دیجیتال سفر زندگی شما هستیم.",
+    "features": {
+      "immersiveAlbums": "ایجاد آلبوم‌های خاطرات فراگیر حاوی عکس‌ها، ویدیوها و یادداشت‌های صوتی",
+      "aiOrganize": "سازماندهی مبتنی بر هوش مصنوعی که خاطرات شما را به طور خودکار دسته‌بندی و برچسب‌گذاری می‌کند",
+      "privacy": "حریم خصوصی و امنیت کامل – خاطرات شما رمزنگاری شده و فقط شما به آنها دسترسی دارید"
     },
-    "languages": {
-        "AR": "العربية",
-        "EN": "English",
-        "FR": "Français",
-        "DE": "Deutsch",
-        "RU": "Русский",
-        "TR": "Turkish",
-        "ES": "Español",
-        "IT": "Italiano",
-        "HI": "हिंदी",
-        "ZH": "中文",
-        "FA": "فارسى",
-        "JA": "日本語",
-        "UR": "اردو"
-    },
-    "login_to_comment": "لطفا وارد شوید تا نظر خود را بنویسید",
-    "event": {
-        "reply": "پاسخ دادن",
-        "delete": " حذف",
-        "no_media_yet": "رسانه‌ای وجود ندارد",
-        "reply_placeholder": "پاسخ خود را اینجا بنویسید...",
-        "loading": "در حال بارگذاری رویداد...",
-        "not_found": "رویداد وجود ندارد یا حذف شده است.",
-        "city_default": "مشخص نشده",
-        "visitor": "بازدیدکننده",
-        "media_gallery_title": "رسانه‌های رویداد",
-        "no_media": "رسانه‌ای وجود ندارد",
-        "about_event_title": "درباره رویداد",
-        "comments_title": "نظرات",
-        "add_comment_title": "نظر خود را اضافه کنید",
-        "comment_placeholder": "نظر خود را اینجا بنویسید...",
-        "submit_comment": "ارسال",
-        "sending_comment": "در حال ارسال...",
-        "comment_login_required": "لطفاً ابتدا وارد شوید",
-        "comment_added_success": "نظر شما با موفقیت اضافه شد!",
-        "delete_comment_title": "حذف نظر",
-        "event_info_title": "اطلاعات رویداد",
-        "from_date": "از",
-        "to_date": "تا",
-        "time_label": "زمان",
-        "time_default": "مشخص نشده",
-        "location": "مکان",
-        "organizer": "برگزارکننده رویداد",
-        "add_to_wishlist": "افزودن به علاقه‌مندی‌ها",
-        "already_in_wishlist": "در علاقه‌مندی‌ها موجود است",
-        "adding_to_wishlist": "در حال افزودن...",
-        "wishlist_success": "با موفقیت به علاقه‌مندی‌ها اضافه شد!",
-        "buy_collection_title": "خرید مجموعه کامل",
-        "total_images": "کل تصاویر",
-        "save_discount": "تخفیف 10%",
-        "you_save": "شما صرفه‌جویی می‌کنید",
-        "add_collection_to_cart": "🎁 افزودن مجموعه کامل به سبد",
-        "collection_benefit_1": "✓ خرید تمام تصاویر یکجا",
-        "collection_benefit_2": "تخفیف خودکار 10%",
-        "collection_benefit_3": "✓ صرفه‌جویی در وقت و پول",
-        "collection_benefit_4": "✓ دریافت فوری تمام خاطرات رویداد",
-        "upload_media_to_event": "???????? ????? ???? ??????",
-        "media_alt": "Event media",
-        "send_reply": "Send reply",
-        "comment_add_images": "?????? ?????? ({count}/{max})",
-        "comment_image_limit": "?????? ? ?????? ?????? ? ???????",
-        "selected_comment_image_alt": "????? ?????????? {number}",
-        "remove_selected_comment_image": "??? ????? ?????????? {number}"
-    },
-    "common": {
-        "search": "جستجو",
-        "placeholder": "جستجوی رویدادها...",
-        "searching": "در حال جستجو...",
-        "details": "جزئیات",
-        "notSpecified": "مشخص نشده",
-        "loadingEvents": "در حال بارگذاری رویدادها...",
-        "loading": "?? ??? ????????...",
-        "close": "بستن",
-        "tryAgain": "?????? ???? ????",
-        "back": "??????",
-        "remove": "???",
-        "clear": "پاک کردن",
-        "previous": "????",
-        "next": "????",
-        "noResults": "???????? ???? ???",
-        "unknownError": "???? ????????",
-        "learnMore": "بیشتر بدانید",
-        "cancel": "???",
-        "sending": "?? ??? ?????...",
-        "show": "?????",
-        "hide": "?????"
-    },
-    "events": {
-        "add_historical_event": "افزودن رویداد تاریخی",
-        "brand_footer": "تمام رویدادهای مورد علاقه شما در جهان",
-        "no_title": "رویداد بدون عنوان",
-        "undefined_city": "نامشخص",
-        "from_map": "از نقشه",
-        "cities": "شهر",
-        "categories": "دسته",
-        "all_memories": "همه خاطرات رویدادها",
-        "showing_snapshots": "نمایش {total} لحظه تاریخی از سراسر جهان",
-        "sort_by": "مرتب‌سازی بر اساس",
-        "sort": {
-            "newest": "جدیدترین ابتدا",
-            "oldest": "قدیمی‌ترین ابتدا",
-            "title": "عنوان"
-        },
-        "loading": "در حال بارگذاری رویدادها...",
-        "retry": "تلاش مجدد",
-        "page_info": "صفحه {current} از {last}",
-        "active_memories": "رویدادهای فعال",
-        "latestEvents": "جدیدترین رویدادها",
-        "recentMemories": "رویدادهای اخیر",
-        "discoverAroundYou": "کشف کنید چه چیزی در اطراف شما در جریان است و برای زیباترین لحظات آماده شوید",
-        "noEventsFound": "رویدادی یافت نشد",
-        "noMatchingEvents": "هیچ رویدادی با معیارهای جستجو یا موقعیت شما مطابقت ندارد",
-        "event": "رویداد",
-        "startDate": "تاریخ شروع",
-        "eventType": "Event Type",
-        "types": {
-            "all": "All Events",
-            "real": "Real Events",
-            "general": "General Events"
-        },
-        "emptyAvailable": "No events are currently available."
-    },
-    "pagination": {
-        "previous": "قبلی",
-        "next": "بعدی"
-    },
-    "about": {
-        "title": "درباره ما - Scene Memory",
-        "subtitle": "ما لحظات گرانبهای شما را حفظ می‌کنیم، صحنه به صحنه",
-        "text1": "در Scene Memory، ما باور داریم که زیباترین لحظات زندگی شایسته حفظ شدن با وضوح و احساس هستند. ما بیش از یک پلتفرم ذخیره‌سازی هستیم – ما آلبوم خاطرات دیجیتال سفر زندگی شما هستیم.",
-        "features": {
-            "immersiveAlbums": "ایجاد آلبوم‌های خاطرات فراگیر حاوی عکس‌ها، ویدیوها و یادداشت‌های صوتی",
-            "aiOrganize": "سازماندهی مبتنی بر هوش مصنوعی که خاطرات شما را به طور خودکار دسته‌بندی و برچسب‌گذاری می‌کند",
-            "privacy": "حریم خصوصی و امنیت کامل – خاطرات شما رمزنگاری شده و فقط شما به آنها دسترسی دارید"
-        },
-        "startJourney": "اکنون سفر خاطرات خود را آغاز کنید",
-        "highlightMoments": "برجسته کردن لحظات مهم زندگی شما",
-        "organizedBy": "سازماندهی شده بر اساس صحنه‌ها، افراد و مکان‌ها",
-        "stats": {
-            "memories": "خاطره ذخیره‌شده",
-            "users": "کاربر راضی",
-            "backup": "پشتیبان‌گیری امن"
-        }
-    },
-    "newsletter": {
-        "title": "با خاطرات خود در ارتباط بمانید",
-        "description": "هفتگی نکات خاطرات، به‌روزرسانی ویژگی‌ها و داستان‌های الهام‌بخش را در ایمیل خود دریافت کنید",
-        "firstName": "نام کوچک",
-        "firstNamePlaceholder": "نام شما",
-        "email": "ایمیل",
-        "emailPlaceholder": "you@example.com",
-        "consent": "من موافقم که گاه‌به‌گاه نکات خاطرات، به‌روزرسانی‌ها و پیشنهادهای Scene Memory را دریافت کنم. می‌توانم در هر زمان اشتراک را لغو کنم.",
-        "subscribe": "اشتراک در به‌روزرسانی‌های خاطرات",
-        "community": "به بیش از ۵,۰۰۰ نگهدارنده خاطرات در جامعه ما بپیوندید",
-        "kicker": "خبرنامه",
-        "verifiedTitle": "با داستان‌های رویداد تأییدشده به‌روز بمانید",
-        "verifiedDescription": "به‌روزرسانی‌های گزینش‌شده درباره رویدادهای پرطرفدار، آرشیوهای رسانه‌ای جدید و داستان‌های مهم مستندشده توسط مشارکت‌کنندگان سراسر جهان دریافت کنید.",
-        "subscribeShort": "اشتراک",
-        "pendingApiMessage": "از اشتراک شما سپاسگزاریم. API خبرنامه به‌زودی متصل می‌شود.",
-        "errors": {
-            "emailRequired": "لطفاً ایمیل خود را وارد کنید.",
-            "emailInvalid": "لطفاً یک آدرس ایمیل معتبر وارد کنید."
-        }
-    },
-    "map": {
-        "exploreMap": "کاوش نقشه"
-    },
-    "hero": {
-        "title_main": "ما خاطرات شما را حفظ می‌کنیم",
-        "title_highlight": "تا برای همیشه زنده بمانند",
-        "description": "در Scene Memory، ما باور داریم که هر لحظه شایسته ماندن است. ما اینجا هستیم تا به شما در حفظ، سازماندهی و به خاطر آوردن رویدادهای مهم زندگی‌تان کمک کنیم.",
-        "cta_start": "سفر خود را با ما آغاز کنید",
-        "cta_watch": "تماشای ویدیوی معرفی",
-        "feature_organized": "خاطرات سازمان‌یافته",
-        "feature_organized_desc": "هر لحظه در جای مناسب خود",
-        "feature_private": "حریم خصوصی تضمین‌شده",
-        "feature_private_desc": "خاطرات شما کاملاً ایمن",
-        "feature_reminders": "یادآوری‌های هوشمند",
-        "feature_reminders_desc": "هیچ مناسبت مهمی را از دست ندهید",
-        "feature_evolving": "تکامل مداوم",
-        "feature_evolving_desc": "همیشه در حال بهبود تجربه شما هستیم"
-    },
-    "our_story": {
-        "badge": "داستان ما",
-        "title": "چگونه سفر خود را آغاز کردیم",
-        "intro": "داستان ما با یک ایده ساده آغاز شد: چگونه می‌توانیم به مردم کمک کنیم تا خاطرات گرانبهایی که زندگی‌شان را شکل می‌دهند حفظ کنند؟",
-        "stage1_title": "آغاز",
-        "stage1_desc": "در سال ۲۰۲۰، بنیان‌گذاران ما متوجه شدند که بسیاری از لحظات مهم با گذشت زمان از بین می‌روند. آنها تصمیم گرفتند ابزاری ساده اما قدرتمند برای حفظ این خاطرات بسازند.",
-        "stage2_title": "رشد",
-        "stage2_desc": "با افزایش کاربران، ویژگی‌های جدیدی مانند یادآوری‌های هوشمند، دسته‌بندی پیشرفته و به اشتراک گذاشتن امن خاطرات با عزیزان اضافه کردیم.",
-        "stage3_title": "چشم‌انداز",
-        "stage3_desc": "امروز، ما در تلاش هستیم تا بهترین پلتفرم جهانی برای حفظ و سازماندهی خاطرات باشیم، با تمرکز بر حریم خصوصی و تجربه روان."
-    },
-    "mission_vision": {
-        "mission_badge": "ماموریت ما",
-        "mission_title": "آنچه به آن باور داریم",
-        "mission_text": "ماموریت ما توانمندسازی هر فرد برای حفظ خاطرات گرانبهای خود به شیوه‌ای آسان، امن و سازمان‌یافته است. ما باور داریم که هر لحظه از زندگی ما شایسته حفظ و به خاطر سپردن است.",
-        "value_people_first": "انسان در اولویت",
-        "value_people_first_desc": "تجربه کاربر محور هر تصمیمی است که می‌گیریم",
-        "value_privacy": "حریم خصوصی مقدس است",
-        "value_privacy_desc": "خاطرات شما فقط متعلق به شماست و ما آنها را با هیچ‌کس به اشتراک نمی‌گذاریم",
-        "value_growth": "رشد مداوم",
-        "value_growth_desc": "ما به طور مداوم برای پاسخگویی به نیازهای کاربرانمان تکامل می‌یابیم",
-        "vision_badge": "چشم‌انداز ما",
-        "vision_title": "به کجا می‌رویم",
-        "vision_text": "ما آرزو داریم که اولین پلتفرم جهانی برای حفظ و سازماندهی خاطرات باشیم، جایی که هر فرد در هر مکانی بتواند لحظات مهم خود را به راحتی و با امنیت حفظ کند.",
-        "goals_2025": "اهداف ما برای سال ۲۰۲۵",
-        "goal_users": "رسیدن به یک میلیون کاربر",
-        "goal_languages": "افزودن ۱۰ زبان جدید",
-        "goal_ai": "راه‌اندازی ویژگی‌های هوش مصنوعی"
-    },
-    "team": {
-        "badge": "تیم ما",
-        "title": "ذهن‌های پشت Scene Memory",
-        "description": "تیم متنوع ما از توسعه‌دهندگان، طراحان و کارشناسان تجربه کاربر با هم کار می‌کنند تا تجربه‌ای فراموش‌نشدنی برای حفظ خاطرات ایجاد کنند."
-    },
-    "values": {
-        "badge": "ارزش‌های ما",
-        "title": "آنچه ما را متمایز می‌کند"
-    },
+    "startJourney": "اکنون سفر خاطرات خود را آغاز کنید",
+    "highlightMoments": "برجسته کردن لحظات مهم زندگی شما",
+    "organizedBy": "سازماندهی شده بر اساس صحنه‌ها، افراد و مکان‌ها",
     "stats": {
-        "title": "اعداد ما سخن می‌گویند",
-        "description": "از زمان راه‌اندازی، به هزاران نفر کمک کردیم تا میلیون‌ها خاطره گرانبها را حفظ کنند"
+      "memories": "خاطره ذخیره‌شده",
+      "users": "کاربر راضی",
+      "backup": "پشتیبان‌گیری امن"
+    }
+  },
+  "newsletter": {
+    "title": "با خاطرات خود در ارتباط بمانید",
+    "description": "هفتگی نکات خاطرات، به‌روزرسانی ویژگی‌ها و داستان‌های الهام‌بخش را در ایمیل خود دریافت کنید",
+    "firstName": "نام کوچک",
+    "firstNamePlaceholder": "نام شما",
+    "email": "ایمیل",
+    "emailPlaceholder": "you@example.com",
+    "consent": "من موافقم که گاه‌به‌گاه نکات خاطرات، به‌روزرسانی‌ها و پیشنهادهای Scene Memory را دریافت کنم. می‌توانم در هر زمان اشتراک را لغو کنم.",
+    "subscribe": "اشتراک در به‌روزرسانی‌های خاطرات",
+    "community": "به بیش از ۵,۰۰۰ نگهدارنده خاطرات در جامعه ما بپیوندید",
+    "kicker": "خبرنامه",
+    "verifiedTitle": "با داستان‌های رویداد تأییدشده به‌روز بمانید",
+    "verifiedDescription": "به‌روزرسانی‌های گزینش‌شده درباره رویدادهای پرطرفدار، آرشیوهای رسانه‌ای جدید و داستان‌های مهم مستندشده توسط مشارکت‌کنندگان سراسر جهان دریافت کنید.",
+    "subscribeShort": "اشتراک",
+    "pendingApiMessage": "از اشتراک شما سپاسگزاریم. API خبرنامه به‌زودی متصل می‌شود.",
+    "errors": {
+      "emailRequired": "لطفاً ایمیل خود را وارد کنید.",
+      "emailInvalid": "لطفاً یک آدرس ایمیل معتبر وارد کنید."
+    }
+  },
+  "map": {
+    "exploreMap": "کاوش نقشه"
+  },
+  "hero": {
+    "title_main": "ما خاطرات شما را حفظ می‌کنیم",
+    "title_highlight": "تا برای همیشه زنده بمانند",
+    "description": "در Scene Memory، ما باور داریم که هر لحظه شایسته ماندن است. ما اینجا هستیم تا به شما در حفظ، سازماندهی و به خاطر آوردن رویدادهای مهم زندگی‌تان کمک کنیم.",
+    "cta_start": "سفر خود را با ما آغاز کنید",
+    "cta_watch": "تماشای ویدیوی معرفی",
+    "feature_organized": "خاطرات سازمان‌یافته",
+    "feature_organized_desc": "هر لحظه در جای مناسب خود",
+    "feature_private": "حریم خصوصی تضمین‌شده",
+    "feature_private_desc": "خاطرات شما کاملاً ایمن",
+    "feature_reminders": "یادآوری‌های هوشمند",
+    "feature_reminders_desc": "هیچ مناسبت مهمی را از دست ندهید",
+    "feature_evolving": "تکامل مداوم",
+    "feature_evolving_desc": "همیشه در حال بهبود تجربه شما هستیم"
+  },
+  "our_story": {
+    "badge": "داستان ما",
+    "title": "چگونه سفر خود را آغاز کردیم",
+    "intro": "داستان ما با یک ایده ساده آغاز شد: چگونه می‌توانیم به مردم کمک کنیم تا خاطرات گرانبهایی که زندگی‌شان را شکل می‌دهند حفظ کنند؟",
+    "stage1_title": "آغاز",
+    "stage1_desc": "در سال ۲۰۲۰، بنیان‌گذاران ما متوجه شدند که بسیاری از لحظات مهم با گذشت زمان از بین می‌روند. آنها تصمیم گرفتند ابزاری ساده اما قدرتمند برای حفظ این خاطرات بسازند.",
+    "stage2_title": "رشد",
+    "stage2_desc": "با افزایش کاربران، ویژگی‌های جدیدی مانند یادآوری‌های هوشمند، دسته‌بندی پیشرفته و به اشتراک گذاشتن امن خاطرات با عزیزان اضافه کردیم.",
+    "stage3_title": "چشم‌انداز",
+    "stage3_desc": "امروز، ما در تلاش هستیم تا بهترین پلتفرم جهانی برای حفظ و سازماندهی خاطرات باشیم، با تمرکز بر حریم خصوصی و تجربه روان."
+  },
+  "mission_vision": {
+    "mission_badge": "ماموریت ما",
+    "mission_title": "آنچه به آن باور داریم",
+    "mission_text": "ماموریت ما توانمندسازی هر فرد برای حفظ خاطرات گرانبهای خود به شیوه‌ای آسان، امن و سازمان‌یافته است. ما باور داریم که هر لحظه از زندگی ما شایسته حفظ و به خاطر سپردن است.",
+    "value_people_first": "انسان در اولویت",
+    "value_people_first_desc": "تجربه کاربر محور هر تصمیمی است که می‌گیریم",
+    "value_privacy": "حریم خصوصی مقدس است",
+    "value_privacy_desc": "خاطرات شما فقط متعلق به شماست و ما آنها را با هیچ‌کس به اشتراک نمی‌گذاریم",
+    "value_growth": "رشد مداوم",
+    "value_growth_desc": "ما به طور مداوم برای پاسخگویی به نیازهای کاربرانمان تکامل می‌یابیم",
+    "vision_badge": "چشم‌انداز ما",
+    "vision_title": "به کجا می‌رویم",
+    "vision_text": "ما آرزو داریم که اولین پلتفرم جهانی برای حفظ و سازماندهی خاطرات باشیم، جایی که هر فرد در هر مکانی بتواند لحظات مهم خود را به راحتی و با امنیت حفظ کند.",
+    "goals_2025": "اهداف ما برای سال ۲۰۲۵",
+    "goal_users": "رسیدن به یک میلیون کاربر",
+    "goal_languages": "افزودن ۱۰ زبان جدید",
+    "goal_ai": "راه‌اندازی ویژگی‌های هوش مصنوعی"
+  },
+  "team": {
+    "badge": "تیم ما",
+    "title": "ذهن‌های پشت Scene Memory",
+    "description": "تیم متنوع ما از توسعه‌دهندگان، طراحان و کارشناسان تجربه کاربر با هم کار می‌کنند تا تجربه‌ای فراموش‌نشدنی برای حفظ خاطرات ایجاد کنند."
+  },
+  "values": {
+    "badge": "ارزش‌های ما",
+    "title": "آنچه ما را متمایز می‌کند"
+  },
+  "stats": {
+    "title": "اعداد ما سخن می‌گویند",
+    "description": "از زمان راه‌اندازی، به هزاران نفر کمک کردیم تا میلیون‌ها خاطره گرانبها را حفظ کنند"
+  },
+  "cta": {
+    "title": "به خانواده Scene Memory بپیوندید",
+    "description": "امروز سفر حفظ خاطرات خود را آغاز کنید. رایگان، امن و مخصوص شما طراحی شده است.",
+    "btn_signup": "ثبت‌نام رایگان",
+    "btn_features": "آشنایی با ویژگی‌ها",
+    "trust": "به بیش از ۵۰,۰۰۰ نفری بپیوندید که به ما برای حفظ خاطراتشان اعتماد دارند"
+  },
+  "footer": {
+    "slogan": "حفظ خاطرات شما تا برای همیشه زنده بمانند",
+    "terms": "شرایط و ضوابط",
+    "privacy": "سیاست حفظ حریم خصوصی",
+    "contact": "تماس با ما",
+    "copyright": "© ۲۰۲۴ Scene Memory. تمامی حقوق محفوظ است.",
+    "made_with": "ساخته شده با عشق برای حفظ خاطرات شما",
+    "quickLinks": "پیوندهای سریع",
+    "supportContact": "پشتیبانی و تماس",
+    "logoAlt": "لوگو",
+    "googlePlayAlt": "دانلود از Google Play",
+    "appStoreAlt": "دانلود از App Store",
+    "copyright2025": "© 2025 Scene Memory. تمامی حقوق محفوظ است.",
+    "services": "خدمات",
+    "copyrightLink": "حق نشر",
+    "termsOfService": "شرایط استفاده از خدمات",
+    "privacyPolicy": "سیاست حفظ حریم خصوصی",
+    "dataProtection": "حفاظت از داده‌ها",
+    "dataDeletion": "دستورالعمل‌های حذف داده‌ها"
+  },
+  "contact": {
+    "hero": {
+      "title_main": "ما اینجا هستیم",
+      "title_highlight": "برای کمک به شما",
+      "description": "تیم Scene Memory برای پاسخ به تمام سوالات شما و کمک در هر زمان آماده است",
+      "stat_24_7": "پشتیبانی ۲۴/۷",
+      "stat_response_time": "میانگین زمان پاسخ",
+      "stat_satisfaction": "رضایت مشتریان",
+      "stat_happy_users": "کاربر خوشحال"
     },
-    "cta": {
-        "title": "به خانواده Scene Memory بپیوندید",
-        "description": "امروز سفر حفظ خاطرات خود را آغاز کنید. رایگان، امن و مخصوص شما طراحی شده است.",
-        "btn_signup": "ثبت‌نام رایگان",
-        "btn_features": "آشنایی با ویژگی‌ها",
-        "trust": "به بیش از ۵۰,۰۰۰ نفری بپیوندید که به ما برای حفظ خاطراتشان اعتماد دارند"
+    "tabs": {
+      "form": "ارسال پیام",
+      "info": "اطلاعات تماس"
     },
-    "footer": {
-        "slogan": "حفظ خاطرات شما تا برای همیشه زنده بمانند",
-        "terms": "شرایط و ضوابط",
-        "privacy": "سیاست حفظ حریم خصوصی",
-        "contact": "تماس با ما",
-        "copyright": "© ۲۰۲۴ Scene Memory. تمامی حقوق محفوظ است.",
-        "made_with": "ساخته شده با عشق برای حفظ خاطرات شما",
-        "quickLinks": "پیوندهای سریع",
-        "supportContact": "پشتیبانی و تماس",
-        "logoAlt": "لوگو",
-        "googlePlayAlt": "دانلود از Google Play",
-        "appStoreAlt": "دانلود از App Store",
-        "copyright2025": "© 2025 Scene Memory. تمامی حقوق محفوظ است.",
-        "services": "خدمات",
-        "copyrightLink": "حق نشر",
-        "termsOfService": "شرایط استفاده از خدمات",
-        "privacyPolicy": "سیاست حفظ حریم خصوصی",
-        "dataProtection": "حفاظت از داده‌ها",
-        "dataDeletion": "دستورالعمل‌های حذف داده‌ها"
+    "form": {
+      "fullName": "نام کامل",
+      "fullNamePlaceholder": "نام اینجا",
+      "emailAddress": "ایمیل",
+      "messagePlaceholder": "پیام خود را اینجا بنویسید...",
+      "emailPlaceholder": "ایمیل شما",
+      "title": "برای ما پیام بفرستید",
+      "subtitle": "ما در اسرع وقت به شما پاسخ خواهیم داد. ما اینجا برای کمک به شما هستیم!",
+      "full_name": "نام کامل",
+      "email": "ایمیل",
+      "subject": "موضوع",
+      "message": "پیام",
+      "message_placeholder": "پیام خود را اینجا بنویسید...",
+      "newsletter": "مایلم خبرنامه و پیشنهادهای Scene Memory را دریافت کنم",
+      "submit": "ارسال پیام",
+      "submitting": "در حال ارسال...",
+      "success_title": "با موفقیت ارسال شد!",
+      "success_message": "از تماس شما سپاسگزاریم، در اسرع وقت پاسخ خواهیم داد."
     },
-    "contact": {
-        "hero": {
-            "title_main": "ما اینجا هستیم",
-            "title_highlight": "برای کمک به شما",
-            "description": "تیم Scene Memory برای پاسخ به تمام سوالات شما و کمک در هر زمان آماده است",
-            "stat_24_7": "پشتیبانی ۲۴/۷",
-            "stat_response_time": "میانگین زمان پاسخ",
-            "stat_satisfaction": "رضایت مشتریان",
-            "stat_happy_users": "کاربر خوشحال"
-        },
-        "tabs": {
-            "form": "ارسال پیام",
-            "info": "اطلاعات تماس"
-        },
-        "form": {
-            "fullName": "نام کامل",
-            "fullNamePlaceholder": "نام اینجا",
-            "emailAddress": "ایمیل",
-            "messagePlaceholder": "پیام خود را اینجا بنویسید...",
-            "emailPlaceholder": "ایمیل شما",
-            "title": "برای ما پیام بفرستید",
-            "subtitle": "ما در اسرع وقت به شما پاسخ خواهیم داد. ما اینجا برای کمک به شما هستیم!",
-            "full_name": "نام کامل",
-            "email": "ایمیل",
-            "subject": "موضوع",
-            "message": "پیام",
-            "message_placeholder": "پیام خود را اینجا بنویسید...",
-            "newsletter": "مایلم خبرنامه و پیشنهادهای Scene Memory را دریافت کنم",
-            "submit": "ارسال پیام",
-            "submitting": "در حال ارسال...",
-            "success_title": "با موفقیت ارسال شد!",
-            "success_message": "از تماس شما سپاسگزاریم، در اسرع وقت پاسخ خواهیم داد."
-        },
-        "info": {
-            "title": "اطلاعات تماس",
-            "address_title": "دفتر مرکزی",
-            "address": "خیابان نیل، قاهره، مصر",
-            "view_map": "نمایش روی نقشه",
-            "phone_title": "تلفن",
-            "phone1": "+۲۰ ۱۲۳ ۴۵۶ ۷۸۹",
-            "phone2": "+۲۰ ۹۸۷ ۶۵۴ ۳۲۱",
-            "phone_hours": "از ۹ صبح تا ۹ شب در دسترس",
-            "email_title": "ایمیل",
-            "email1": "info@scenememory.com",
-            "email2": "support@scenememory.com",
-            "email_response": "پاسخ در ۲۴ ساعت",
-            "follow_us": "ما را دنبال کنید",
-            "map_title": "موقعیت ما روی نقشه",
-            "map_location": "قاهره، مصر",
-            "open_map": "باز کردن نقشه"
-        },
-        "faq": {
-            "title": "سوالات متداول",
-            "subtitle": "پاسخ به رایج‌ترین سوالات"
-        },
-        "live_support": {
-            "title": "پشتیبانی زنده",
-            "description": "اکنون با یکی از اعضای تیم ما صحبت کنید تا کمک فوری دریافت کنید",
-            "btn_chat": "شروع چت زنده",
-            "btn_schedule": "زمان‌بندی تماس",
-            "available": "در حال حاضر در دسترس: ۳ نماینده پشتیبانی"
-        }
-    },
-    "contacts": {
-        "badge": "با ما تماس بگیرید",
-        "title": "بیایید صحبت کنیم",
-        "description": "سوالی دارید، به پشتیبانی نیاز دارید یا یک طرح اختصاصی می‌خواهید؟ برای ما پیام بفرستید تا تیم ما با شما تماس بگیرد.",
-        "form": {
-            "title": "برای ما پیام بفرستید",
-            "description": "فرم زیر را تکمیل کنید تا در اولین فرصت پاسخ دهیم.",
-            "fullName": "نام کامل",
-            "fullNamePlaceholder": "نام کامل خود را وارد کنید",
-            "emailAddress": "آدرس ایمیل",
-            "emailPlaceholder": "آدرس ایمیل خود را وارد کنید",
-            "subject": "موضوع",
-            "generalInquiry": "پرسش عمومی",
-            "customPlan": "طرح اختصاصی",
-            "support": "پشتیبانی فنی",
-            "feedback": "بازخورد",
-            "other": "سایر",
-            "message": "پیام",
-            "messagePlaceholder": "به ما بگویید چگونه می‌توانیم کمک کنیم...",
-            "minimumCharacters": "لطفاً جزئیات کافی ارائه دهید.",
-            "sendMessage": "ارسال پیام",
-            "sending": "در حال ارسال...",
-            "successMessage": "پیام شما با موفقیت ارسال شد.",
-            "errorMessage": "هنگام ارسال پیام خطایی رخ داد. لطفاً دوباره تلاش کنید."
-        },
-        "info": {
-            "getInTouch": "در ارتباط باشید",
-            "title": "ما اینجا هستیم تا کمک کنیم",
-            "description": "برای پرسش‌های عمومی، پشتیبانی فنی یا قیمت‌گذاری اختصاصی با تیم ما تماس بگیرید.",
-            "emailUs": "به ما ایمیل بزنید",
-            "available": "تیم ما در اولین فرصت پاسخ خواهد داد.",
-            "customPlans": "طرح‌های اختصاصی",
-            "customPlansDescription": "به راهکاری متناسب با تیم یا کسب‌وکارتان نیاز دارید؟ به ما بگویید چه می‌خواهید.",
-            "customerSupport": "پشتیبانی مشتریان",
-            "supportDescription": "اگر برای حساب، اشتراک یا خدمات خود به کمک نیاز دارید، با ما تماس بگیرید.",
-            "followJourney": "مسیر ما را دنبال کنید",
-            "responseTime": "پاسخ سریع",
-            "responseTimeDescription": "معمولاً ظرف یک روز کاری به پیام‌ها پاسخ می‌دهیم."
-        },
-        "map": {
-            "title": "نقشه جهانی Scene Memory",
-            "description": "تصور هزاران خاطره در بیش از ۱۴۰ کشور."
-        }
+    "info": {
+      "title": "اطلاعات تماس",
+      "address_title": "دفتر مرکزی",
+      "address": "خیابان نیل، قاهره، مصر",
+      "view_map": "نمایش روی نقشه",
+      "phone_title": "تلفن",
+      "phone1": "+۲۰ ۱۲۳ ۴۵۶ ۷۸۹",
+      "phone2": "+۲۰ ۹۸۷ ۶۵۴ ۳۲۱",
+      "phone_hours": "از ۹ صبح تا ۹ شب در دسترس",
+      "email_title": "ایمیل",
+      "email1": "info@scenememory.com",
+      "email2": "support@scenememory.com",
+      "email_response": "پاسخ در ۲۴ ساعت",
+      "follow_us": "ما را دنبال کنید",
+      "map_title": "موقعیت ما روی نقشه",
+      "map_location": "قاهره، مصر",
+      "open_map": "باز کردن نقشه"
     },
     "faq": {
-        "badge": "سؤالات متداول",
-        "title": "سؤالات متداول",
-        "description": "پاسخ‌های سریع به برخی از پرسش‌های رایج.",
-        "questions": {
-            "0": {
-                "question": "چقدر سریع پاسخ دریافت می‌کنم؟",
-                "answer": "تیم ما معمولاً ظرف یک روز کاری پاسخ می‌دهد."
-            },
-            "1": {
-                "question": "آیا می‌توانم طرح اختصاصی درخواست کنم؟",
-                "answer": "بله. در قسمت موضوع، طرح اختصاصی را انتخاب کنید و نیازهای خود را توضیح دهید."
-            },
-            "2": {
-                "question": "آیا می‌توانم برای پشتیبانی فنی تماس بگیرم؟",
-                "answer": "بله. پشتیبانی فنی را انتخاب کنید و همه جزئیات مرتبط با مشکل را وارد کنید."
-            }
-        }
+      "title": "سوالات متداول",
+      "subtitle": "پاسخ به رایج‌ترین سوالات"
     },
-    "eventForm": {
-        "admin": {
-            "title": "افزودن رویداد توسط مدیر",
-            "trending": "رویداد پرطرفدار",
-            "trendingHelp": "این رویداد را به‌عنوان پرطرفدار علامت‌گذاری کنید",
-            "generateTags": "ساخت برچسب با هوش مصنوعی",
-            "generatingTags": "در حال ساخت برچسب‌ها...",
-            "generateTagsHelp": "با سرویس هوش مصنوعی موجود برای رویداد و تصاویر برچسب پیشنهاد دهید. می‌توانید پیش از انتشار آن‌ها را بررسی یا حذف کنید.",
-            "generateTagsError": "در حال حاضر ساخت برچسب‌های هوش مصنوعی ممکن نیست.",
-            "created": "رویداد با موفقیت ایجاد و منتشر شد."
-        },
-        "chooseFiles": "انتخاب فایل‌ها",
-        "mediaCount": "تعداد مدیا",
-        "title": "افزودن رویداد جدید",
-        "basicInfo": "اطلاعات پایه",
-        "locationCategory": "مکان و دسته‌بندی",
-        "dates": "تاریخ‌ها",
-        "images": "تصاویر رویداد",
-        "eventTitle": "عنوان رویداد",
-        "description": "توضیحات",
-        "country": "کشور",
-        "searchCountry": "جستجوی کشور...",
-        "selectCountry": "انتخاب کشور",
-        "city": "شهر",
-        "selectCity": "انتخاب شهر",
-        "selectCityFirst": "ابتدا کشور را انتخاب کنید",
-        "mainCategory": "دسته اصلی",
-        "subCategory": "زیر دسته",
-        "selectSubFirst": "ابتدا دسته را انتخاب کنید",
-        "selectLocationMap": "مکان را روی نقشه انتخاب کنید",
-        "selectedCoords": "مختصات انتخاب‌شده: عرض جغرافیایی {lat} , طول جغرافیایی {lng}",
-        "lat": "عرض جغرافیایی",
-        "lng": "طول جغرافیایی",
-        "pleaseSelectLocation": "لطفاً مکانی روی نقشه انتخاب کنید",
-        "startDate": "تاریخ شروع",
-        "endDate": "تاریخ پایان",
-        "startTime": "زمان شروع",
-        "dragDropHere": "کلیک کنید یا تصاویر را اینجا بکشید و رها کنید",
-        "formatsMax": "PNG • JPG • WEBP | حداکثر ۵ مگابایت برای هر تصویر",
-        "chooseImages": "انتخاب تصاویر",
-        "addMore": "افزودن بیشتر",
-        "imagesCount": "{count} / ۸ تصویر",
-        "remove": "حذف",
-        "eventType": "Event Type",
-        "publicOfficialEvent": "Public / Official Event",
-        "publicOfficialDescription": "Conference, exhibition, festival or public event.",
-        "personalEvent": "Personal Event / Memory",
-        "personalEventDescription": "Personal occasion, event or memory.",
-        "photographyType": "Photography Type",
-        "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
-        "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
-        "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
-        "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
-        "tags": "Tags",
-        "tagsSelected": "tags selected",
-        "selectOrCreateTags": "Select or create tags",
-        "selectTags": "Select tags",
-        "searchOrTypeTag": "Search or type new tag",
-        "searchTags": "Search tags",
-        "addTag": "Add \"{tag}\"",
-        "tagHelper": "You can select existing tags or create new ones.",
-        "detectingLocation": "Detecting your current location...",
-        "steps": {
-            "photographyPhotos": "Photography & Photos",
-            "chooseModeUpload": "Choose mode and upload",
-            "photographyType": "Photography Type",
-            "chooseMode": "Choose mode",
-            "eventDetails": "Event Details",
-            "details": "Details",
-            "mainFormData": "Main form data",
-            "photos": "Photos",
-            "uploadAndTag": "Upload and tag"
-        },
-        "errors": {
-            "loadCities": "An error occurred while loading cities.",
-            "requiredFields": "Please complete all required fields.",
-            "createFailed": "Failed to create event:",
-            "historicalCreateFailed": "Failed to create historical event:",
-            "maxFourTags": "You can select up to 4 tags only",
-            "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
-            "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
-            "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
-        },
-        "success": {
-            "created": "Event created successfully!",
-            "historicalCreated": "Historical event created successfully!"
-        }
-    },
-    "commons": {
-        "required": "الزامی",
-        "cancel": "لغو",
-        "saveDraft": "ذخیره به عنوان پیش‌نویس",
-        "create": "ایجاد رویداد",
-        "creating": "در حال ایجاد...",
-        "choose": "انتخاب"
-    },
-    "eventss": {
-        "no_title": "رویداد بدون عنوان",
-        "undefined_city": "نامشخص",
-        "from_map": "از نقشه"
-    },
-    "wishlist": {
-        "title": "لیست علاقه‌مندی‌ها",
-        "loading": "در حال بارگذاری...",
-        "empty": {
-            "main": "در حال حاضر هیچ موردی در لیست علاقه‌مندی‌های شما وجود ندارد",
-            "hint": "با اضافه کردن رویدادهای مورد علاقه‌تان شروع کنید!"
-        },
-        "fallback_image_alt": "تصویر پیش‌فرض رویداد",
-        "uncategorized": "دسته‌بندی نشده",
-        "no_title": "بدون عنوان",
-        "city_label": "شهر:",
-        "date_label": "تاریخ:",
-        "time_label": "زمان:",
-        "not_specified": "مشخص نشده",
-        "view_details": "مشاهده جزئیات",
-        "remove": "حذف از علاقه‌مندی‌ها",
-        "deleting": "در حال حذف...",
-        "added_at": "اضافه شده در",
-        "pagination": {
-            "previous": "قبلی",
-            "next": "بعدی",
-            "page_info": "صفحه {current} از {total}"
-        },
-        "confirmRemove": "Are you sure you want to remove this item from favorites?",
-        "errors": {
-            "deleteFailed": "An error occurred while deleting. Please try again.",
-            "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
-        }
-    },
-    "terms": {
-        "title": "شرایط استفاده",
-        "last_updated": "آخرین بروزرسانی: 2026",
-        "acceptance_title": "پذیرش شرایط",
-        "acceptance_text": "با دسترسی یا استفاده از این پلتفرم، شما با این شرایط استفاده موافقت می‌کنید.",
-        "accounts_title": "حساب‌های کاربری",
-        "accounts_text": "کاربران مسئول حفظ محرمانگی اطلاعات حساب خود هستند.",
-        "content_title": "مالکیت محتوا",
-        "content_text": "تمام محتوای موجود در پلتفرم تحت قوانین کپی‌رایت و مالکیت فکری محافظت می‌شود.",
-        "ai_title": "محدودیت‌های هوش مصنوعی",
-        "ai_text": "استفاده از محتوای پلتفرم برای آموزش مدل‌های هوش مصنوعی بدون مجوز رسمی ممنوع است.",
-        "prohibited_title": "استفاده‌های ممنوع",
-        "prohibited_text": "کاربران نباید از پلتفرم سوءاستفاده کنند یا تلاش برای دسترسی غیرمجاز داشته باشند.",
-        "liability_title": "محدودیت مسئولیت",
-        "liability_text": "پلتفرم مسئول خسارات غیرمستقیم ناشی از استفاده از سرویس نخواهد بود.",
-        "changes_title": "تغییرات شرایط",
-        "changes_text": "ما حق داریم این شرایط را در هر زمان تغییر دهیم.",
-        "contact_title": "تماس",
-        "contact_text": "در صورت داشتن هرگونه سوال درباره این شرایط با مدیریت پلتفرم تماس بگیرید."
-    },
-    "plans": {
-        "customPrice": "با ما تماس بگیرید",
-        "customPricingDescription": "قیمت‌گذاری متناسب با نیازهای شما",
-        "contactUs": "با ما تماس بگیرید",
-        "chooseYourPlan": "طرح خود را انتخاب کنید",
-        "getStarted": "شروع کنید",
-        "subscribe": "اکنون مشترک شوید",
-        "noFeatures": "هنوز ویژگی‌ای وجود ندارد",
-        "mostPopular": "محبوب‌ترین",
-        "free": "رایگان",
-        "perMonth": "در ماه",
-        "noCreditCard": "نیازی به کارت اعتباری نیست",
-        "prioritySupport": "پشتیبانی ویژه",
-        "securePayments": "پرداخت‌های امن",
-        "cancelAnytime": "هر زمان لغو کنید",
-        "moneyBack": "ضمانت ۳۰ روزه",
-        "support247": "پشتیبانی ۲۴/۷",
-        "ourPlans": "طرح‌های ما",
-        "description": "رایگان شروع کنید یا طرح مناسب خود را انتخاب کنید.",
-        "price": "قیمت",
-        "features": "ویژگی‌ها",
-        "Monthly": "ماهانه",
-        "Yearly": "سالانه",
-        "unlimitedEvents": "رویدادهای نامحدود",
-        "addEvents": "افزودن رویداد",
-        "transparentPricing": "Simple, transparent pricing for everyone",
-        "custom": "Custom",
-        "contactPricing": "Contact us for pricing",
-        "perMonthShort": "/ mo",
-        "subscription": "Subscription",
-        "loadingPlan": "Loading plan...",
-        "premiumPlan": "Premium Plan",
-        "perMonthSlash": "/ month",
-        "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
-        "whatsIncluded": "What's Included",
-        "readyToStart": "Ready to get started?",
-        "cancelNoQuestions": "Cancel anytime. No questions asked.",
-        "plan": "طرح",
-        "billing": "Billing",
-        "secureSsl": "Secure 256-bit SSL encryption",
-        "users": "Users",
-        "rating": "Rating",
-        "support": "Support",
-        "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
-        "notFound": "Plan Not Found",
-        "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
-        "browseAll": "Browse All Plans",
-        "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
-        "faq": {
-            "cancel": {
-                "question": "Can I cancel my subscription anytime?",
-                "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
-            },
-            "trial": {
-                "question": "Is there a free trial?",
-                "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
-            },
-            "payment": {
-                "question": "What payment methods do you accept?",
-                "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
-            },
-            "switch": {
-                "question": "Can I switch plans later?",
-                "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
-            }
-        },
-        "errors": {
-            "loadPlan": "Failed to load plan. Please try again.",
-            "subscribeFailed": "Subscription failed. Please try again.",
-            "loadPlans": "???????? ?????? ?????? ???. ?????? ???? ????."
-        },
-        "customPlanNote": "بر اساس نیازهای شما ساخته شده است",
-        "basicAccessIncluded": "?????? ???? ???? ???",
-        "usd": "دلار آمریکا"
-    },
-    "free": "رایگان",
-    "basic": "پایه",
-    "professional": "حرفه‌ای",
-    "premium": "پریمیوم",
-    "homeAudit": {
-        "home": {
-            "videoUnsupported": "مرورگر شما از برچسب ویدئو پشتیبانی نمی‌کند.",
-            "badge": "آرشیو رویدادهای Scemory",
-            "title": "رویدادهای مستند را کاوش کنید",
-            "titleHighlight": "از طریق نقشه",
-            "description": "رسانه‌های رویداد را که روزنامه‌نگاران، تیم‌های رسانه‌ای و شاهدان عینی از سراسر جهان بارگذاری کرده‌اند کشف کنید.",
-            "searchEvents": "جستجوی رویدادها",
-            "uploadStory": "داستان خود را بارگذاری کنید",
-            "bottomText": "داستان‌ها، مکان‌ها و لحظه‌هایی از سراسر جهان را کشف کنید.",
-            "searchPlaceholder": "  جستجوی رویدادها، مکان‌ها و برچسب‌ها"
-        },
-        "profileToast": {
-            "title": "نمایه کامل نیست",
-            "message": "نمایه شما کامل نیست. لطفاً به‌روزرسانی کنید:",
-            "complete": "برای تکمیل کلیک کنید",
-            "fields": {
-                "phone": "تلفن",
-                "country": "کشور",
-                "position": "سمت",
-                "dateOfBirth": "تاریخ تولد"
-            }
-        },
-        "trending": {
-            "loadError": "رویدادهای پرطرفدار اکنون بارگذاری نمی‌شوند.",
-            "kicker": "پرطرفدار",
-            "title": "رویدادهای پرطرفدار",
-            "description": "رویدادهایی که در آرشیو توجه بیشتری می‌گیرند.",
-            "emptyTitle": "هنوز رویداد پرطرفداری وجود ندارد",
-            "emptyDescription": "برای رویدادهای برجسته دوباره سر بزنید.",
-            "views": "بازدید",
-            "likes": "پسندیدن",
-            "slidesLabel": "اسلایدهای رویدادهای پرطرفدار",
-            "untitledEvent": "رویداد بدون عنوان",
-            "showSlide": "نمایش رویداد پرطرفدار {number}"
-        },
-        "map": {
-            "tilesSlow": "کاشی‌های نقشه بیش از حد طول می‌کشند.",
-            "loadError": "نقشه اکنون بارگذاری نمی‌شود.",
-            "loadMap": "بارگذاری نقشه",
-            "loading": "در حال بارگذاری نقشه...",
-            "retry": "بارگذاری دوباره نقشه",
-            "openFullscreen": "باز کردن نقشه تمام‌صفحه",
-            "closeFullscreen": "بستن نقشه تمام‌صفحه"
-        },
-        "about": {
-            "imageAlt": "پلتفرم مستندسازی Scemory",
-            "kicker": "حافظه رویداد قابل اعتماد",
-            "title": "درباره Scemory",
-            "description": "Scemory برای روزنامه‌نگاران، تیم‌های رسانه‌ای و شاهدان عینی ساخته شده است که به مکانی قابل اعتماد برای مستندسازی رویدادها در همان لحظه نیاز دارند. این پلتفرم رسانه‌های بارگذاری‌شده، فراداده رویداد و زمینه مکانی را به هم پیوند می‌دهد تا مردم بتوانند داستان‌های عمومی را با وضوح کشف کنند.",
-            "features": {
-                "upload": "عکس‌ها، ویدئوها و داده‌های میدانی را بارگذاری کنید",
-                "explore": "رویدادها را از طریق نقشه تعاملی کاوش کنید",
-                "preserve": "داستان‌های تأییدشده را در آرشیو دیجیتال حفظ کنید"
-            }
-        },
-        "events": {
-            "showing": "نمایش",
-            "of": "از",
-            "events": "رویدادها",
-            "seeMore": "نمایش بیشتر",
-            "badge": "رویدادها"
-        },
-        "tags": {
-            "loading": "در حال بارگذاری برچسب‌ها...",
-            "showingFirst": "نمایش نخستین",
-            "searchToFindMore": "برچسب. برای موارد بیشتر جستجو کنید.",
-            "none": "برچسبی یافت نشد",
-            "helper": "یک یا چند برچسب برای فیلتر کردن رویدادهای نقشه انتخاب کنید.",
-            "clearSelected": "پاک کردن برچسب‌های انتخاب‌شده",
-            "searchMore": "جستجوی برچسب‌های بیشتر"
-        },
-        "search": {
-            "clearText": "پاک کردن",
-            "clearTags": "پاک کردن"
-        },
-        "specialCoverage": {
-            "badge": "پوشش ویژه",
-            "title": "رویدادی دارید که ارزش پوشش خبری دارد؟",
-            "description": "Scemory را از رویدادی که شایسته پوشش اختصاصی است آگاه کنید و به رساندن داستان آن به مخاطبان گسترده‌تر کمک کنید.",
-            "contactUs": "تماس با ما",
-            "modal": {
-                "title": "پوشش ویژه",
-                "eventName": "نام رویداد",
-                "eventNamePlaceholder": "نام رویداد را وارد کنید",
-                "description": "توضیحات رویداد",
-                "descriptionPlaceholder": "درباره رویداد و دلیل شایستگی آن برای پوشش به ما بگویید",
-                "cancel": "لغو",
-                "send": "ارسال",
-                "close": "بستن",
-                "country": "کشور",
-                "city": "شهر",
-                "searchCity": "جستجوی شهر",
-                "addNewCity": "افزودن شهر جدید",
-                "createCity": "ایجاد شهر",
-                "startDate": "تاریخ شروع",
-                "coverageTime": "زمان پوشش",
-                "eventType": "نوع رویداد",
-                "personalEvent": "رویداد شخصی",
-                "publicEvent": "رویداد عمومی",
-                "selectCountry": "کشور را انتخاب کنید",
-                "selectCity": "شهر را انتخاب کنید",
-                "noCitiesFound": "شهری یافت نشد",
-                "noCountriesFound": "کشوری یافت نشد",
-                "countryRequired": "لطفاً یک کشور انتخاب کنید.",
-                "cityRequired": "لطفاً یک شهر انتخاب کنید.",
-                "startDateRequired": "لطفاً تاریخ شروع را انتخاب کنید.",
-                "eventTypeRequired": "لطفاً نوع رویداد را انتخاب کنید.",
-                "cityCreateFailed": "ایجاد شهر ممکن نشد. لطفاً دوباره تلاش کنید."
-            }
-        }
-    },
-    "photoUpload": {
-        "title": "Photos Upload",
-        "description": "Upload one or more images. Each photo needs its own description and tags.",
-        "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
-        "choosePhotosTitle": "Choose photos",
-        "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
-        "checking": "Checking...",
-        "choosePhotos": "Choose Photos",
-        "photosCount": "{count} / {max} photos",
-        "empty": "No photos added yet.",
-        "photoAlt": "Photo {number}",
-        "previewUnavailable": "Preview unavailable",
-        "removePhoto": "Remove photo",
-        "quality": "Quality {score}",
-        "photoDescription": "Photo description",
-        "photoDescriptionPlaceholder": "Describe this photo",
-        "photoTags": "Photo tags",
-        "selectOrCreateTags": "Select or create photo tags",
-        "searchTagPlaceholder": "Search or type new tag",
-        "addTag": "Add \"{tag}\"",
-        "yourPrice": "Your price",
-        "pricePlaceholder": "Enter your price",
-        "suggestedPrice": "Suggested: ${price}",
-        "validationDetails": "Validation details",
-        "waitingValidation": "Waiting for validation",
-        "metrics": "Sharpness {sharpness}, Blur {blur}",
-        "rejectionReasons": "Rejection reasons",
-        "professionalPhotography": "Professional photography",
-        "normalPhotography": "Normal photography",
-        "selectPhotographyFirst": "Please select photography type first.",
-        "maxPhotos": "You can upload up to {max} photos.",
-        "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
-        "photoRejected": "Photo rejected",
-        "unableToValidate": "Unable to read or validate this photo.",
-        "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
-        "maxFileSize": "Maximum file size is 20 MB.",
-        "checkingPhoto": "Checking photo...",
-        "validationFailed": "Photo validation failed. Please try again.",
-        "photoAccepted": "Photo accepted",
-        "maxTags": "Each photo can have up to {max} tags.",
-        "tagAlreadySelected": "This tag is already selected.",
-        "status": {
-            "accepted": "accepted",
-            "rejected": "rejected",
-            "checking": "checking",
-            "idle": "idle"
-        }
-    },
-    "cart": {
-        "title": "Shopping Cart",
-        "clear": "Clear Cart",
-        "walletBalance": "My Wallet Balance",
-        "sufficientBalance": "Sufficient Balance",
-        "insufficientBalance": "Insufficient Balance",
-        "walletCovers": "Wallet covers",
-        "ofOrder": "of order",
-        "badge": "CART",
-        "emptyTitle": "Your cart is empty",
-        "emptyDescription": "Looks like you haven't added anything yet",
-        "startShopping": "Start Shopping",
-        "collectionImageAlt": "Collection image",
-        "more": "more",
-        "noImages": "No images",
-        "collection": "Collection",
-        "inStock": "In Stock",
-        "fullCollection": "Full Collection",
-        "images": "images",
-        "eventId": "Event ID:",
-        "product": "Product",
-        "discount": "Discount:",
-        "orderSummary": "Order Summary",
-        "subtotal": "Subtotal ({count} items)",
-        "total": "Total",
-        "includingVat": "Including VAT",
-        "processing": "Processing...",
-        "payWithWallet": "Pay with Wallet",
-        "needMoreWallet": "You need ${amount} more in your wallet",
-        "or": "OR",
-        "redirectingPayPal": "Redirecting to PayPal...",
-        "payWithPayPal": "Pay with PayPal ? ${amount}",
-        "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
-        "continueShopping": "Continue Shopping",
-        "itemRemoved": "Item removed",
-        "cartCleared": "Cart cleared",
-        "walletPaymentSuccess": "Payment successful! Paid from wallet.",
-        "errors": {
-            "loadCart": "Failed to load cart",
-            "loadWallet": "Failed to load wallet",
-            "removeItem": "Failed to remove item",
-            "clearCart": "Failed to clear cart",
-            "checkout": "Checkout failed. Please try again.",
-            "walletPayment": "Wallet payment failed",
-            "walletPaymentRetry": "Wallet payment failed. Please try again.",
-            "collectionAddFailed": "Failed to add the collection to the cart.",
-            "itemNotIdentified": "This item could not be identified.",
-            "addFailed": "An error occurred while adding to the cart."
-        },
-        "messages": {
-            "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
-            "added": "Added to cart successfully."
-        }
-    },
-    "downloads": {
-        "title": "My Downloads",
-        "fileCount": "{count} files",
-        "loadError": "An error occurred while loading data",
-        "fileAlt": "File {id}",
-        "imageType": "IMG",
-        "videoType": "VID",
-        "preview": "Preview",
-        "downloading": "Downloading...",
-        "downloaded": "Downloaded",
-        "download": "Download",
-        "downloadSuccess": "{filename} downloaded successfully!",
-        "downloadFailed": "Download failed. Please try again.",
-        "empty": "No downloads found",
-        "emptyHint": "????????? ?? ??????? ??????? ????? ????? ???? ???????"
-    },
-    "experience": {
-        "kicker": "تجربه SCEMORY",
-        "title": "یک پلتفرم. هر سوی داستان.",
-        "pathsLabel": "مسیرهای تجربه Scemory",
-        "highlightsLabel": "نکات برجسته بخش",
-        "tabs": {
-            "explore": {
-                "label": "کاوش رویدادها",
-                "eyebrow": "جهان را از طریق رویدادها کشف کنید",
-                "heading": "داستان‌ها، رویدادها و مکان‌های سراسر جهان را کاوش کنید",
-                "description": "از نقشه به رویدادهای عمومی مستند، خاطرات شخصی و داستان‌های تصویری بروید که با مکان‌های واقعی و زمینه مشارکت‌کنندگان شکل گرفته‌اند.",
-                "cta": "کاوش رویدادها",
-                "imageAlt": "رابط کشف رویداد Scemory با پنل‌های رسانه مستند",
-                "features": {
-                    "browse": "رسانه رویداد را بر اساس مکان و زمان مرور کنید",
-                    "discover": "داستان‌های نزدیک را از طریق آرشیو تصویری کشف کنید",
-                    "move": "از نمای کلی به جزئیات مستند رویداد بروید"
-                },
-                "visual": {
-                    "kicker": "کشف زنده",
-                    "title": "داستان‌های رویداد متصل به نقشه",
-                    "stat": "آرشیو جهانی",
-                    "note": "مکان‌ها، تاریخ‌ها و رسانه در یک نما"
-                }
-            },
-            "share": {
-                "label": "داستان خود را به اشتراک بگذارید",
-                "eyebrow": "لحظه‌ها را به داستان‌های مستند تبدیل کنید",
-                "heading": "لحظه‌های مهم را مستند کنید",
-                "description": "یک رویداد بسازید، عکس و رسانه بارگذاری کنید، جزئیات مکان بیفزایید و دیدگاه خود را به آرشیو Scemory اضافه کنید.",
-                "cta": "داستان خود را بارگذاری کنید",
-                "imageAlt": "فضای مشارکت‌کننده Scemory برای مستندسازی رسانه رویداد",
-                "features": {
-                    "add": "رسانه، توضیحات و زمینه مکانی اضافه کنید",
-                    "build": "از لحظه‌های خام یک حافظه ساختاریافته بسازید",
-                    "keep": "داستان‌های مشارکت‌کنندگان را به آرشیو متصل نگه دارید"
-                },
-                "visual": {
-                    "kicker": "جریان مشارکت",
-                    "title": "رسانه، زمینه و مکان",
-                    "stat": "سازنده داستان",
-                    "note": "لحظه‌ها را با جزئیات معنادار بارگذاری کنید"
-                }
-            },
-            "license": {
-                "label": "مجوزدهی رسانه",
-                "eyebrow": "رسانه آماده استفاده را کشف کنید",
-                "heading": "رسانه رویداد را با اطمینان پیدا و مجوزدهی کنید",
-                "description": "محتوای تصویری را مرور کنید، رسانه‌های رویداد موجود را پیش‌نمایش کنید و از طریق تجربه کشف Scemory به گزینه‌های مجوزدهی بروید.",
-                "cta": "کشف رسانه",
-                "imageAlt": "پنل‌های رسانه Scemory برای مرور محتوای رویداد قابل مجوز",
-                "features": {
-                    "preview": "پیش از باز کردن جزئیات، تصاویر رویداد را پیش‌نمایش کنید",
-                    "use": "از صفحات رویداد به عنوان مسیر گزینه‌های رسانه استفاده کنید",
-                    "keep": "کشف و نیت مجوزدهی را متصل نگه دارید"
-                },
-                "visual": {
-                    "kicker": "دسترسی رسانه",
-                    "title": "تصاویر رویداد آماده بررسی",
-                    "stat": "مسیر مجوزدهی",
-                    "note": "از کشف تا صفحات جزئیات"
-                }
-            }
-        }
-    },
-    "searchResults": {
-        "loadError": "Unable to load search results",
-        "errors": {
-            "loadFailed": "Failed to load events. Please try again."
-        }
-    },
-    "payment": {
-        "backHome": "Back to home page",
-        "transactionId": "Transaction ID",
-        "operationStatus": "Operation status",
-        "successful": "Successful",
-        "notification": "Notification",
-        "status": "Status",
-        "info": "Info",
-        "waiting": {
-            "title": "Processing Your Payment",
-            "message": "Please wait while we confirm your payment with PayPal."
-        },
-        "depositWaiting": {
-            "title": "Processing Your Wallet Deposit",
-            "message": "Please wait while we confirm your deposit with PayPal."
-        },
-        "callback": {
-            "confirming": "Confirming payment..."
-        },
-        "success": {
-            "paypalBadge": "Paid via PayPal",
-            "title": "Payment completed!",
-            "subtitleLine1": "Thank you for trusting us",
-            "subtitleLine2": "Your order has been confirmed and is ready to download",
-            "orderStatus": "Order status",
-            "statusValue": "Paid and confirmed",
-            "confirmationLabel": "Payment confirmation",
-            "emailSent": "A confirmation was sent to your email",
-            "goDownloads": "Go to downloads"
-        },
-        "failed": {
-            "paypalBadge": "Payment failed via PayPal",
-            "title": "Payment failed",
-            "subtitleLine1": "Unfortunately, the payment was not completed successfully",
-            "subtitleLine2": "You can try again or contact support",
-            "orderStatus": "Order status",
-            "statusValue": "Rejected / payment failed",
-            "reasonLabel": "Possible reason",
-            "noteLabel": "Note",
-            "noCharge": "No amount was charged to your account",
-            "retry": "?????? ???? ????",
-            "contactSupport": "Contact support",
-            "statusShort": "Payment failed",
-            "noChargeShort": "No amount was charged",
-            "reasons": {
-                "instrumentDeclined": "The payment method was declined",
-                "payerCannotPay": "Insufficient balance in the account",
-                "transactionRefused": "The transaction was refused by PayPal",
-                "default": "Insufficient balance or the operation was cancelled"
-            }
-        },
-        "depositSuccess": {
-            "paypalBadge": "Wallet topped up via PayPal",
-            "title": "Wallet topped up successfully",
-            "subtitleLine1": "The amount was added to your wallet successfully",
-            "subtitleLine2": "You can now use it or download your purchases",
-            "emailSent": "A message was sent to your email",
-            "goProfile": "Go to profile"
-        },
-        "depositFailed": {
-            "subtitleLine1": "The deposit was not completed successfully"
-        }
-    },
-    "walletDeposit": {
-        "currentBalance": "Current balance",
-        "title": "Top up wallet",
-        "customAmount": "Custom amount",
-        "descriptionOptional": "Description (optional)",
-        "descriptionPlaceholder": "For example: top up balance to buy photos",
-        "amount": "Amount",
-        "currency": "Currency",
-        "paymentMethod": "Payment method",
-        "redirecting": "Redirecting...",
-        "payWithPayPal": "Pay with PayPal",
-        "invalidAmount": "Enter a valid amount (more than $1)",
-        "genericError": "Something went wrong. Please try again.",
-        "errors": {
-            "invalidAmount": "Enter a valid amount (more than $1)"
-        }
-    },
-    "gate": {
-        "media": "رسانه‌ها",
-        "locationShort": "مکان",
-        "dateShort": "تاریخ",
-        "searchCountry": "جستجوی کشور...",
-        "featuredEvents": "رویدادهای برجسته"
-    },
-    "country": {
-        "discoverFeaturedIn": "رویدادهای برجسته را کشف کنید در",
-        "cities": "شهرها",
-        "availableCity": "شهر موجود",
-        "currentEvent": "رویداد فعلی",
-        "eventMarkers": "نشانگرهای رویداد",
-        "clickableMarker": "نشانگر قابل کلیک",
-        "differentCategory": "دسته متفاوت",
-        "availableCities": "شهرهای موجود",
-        "noEvents": "در حال حاضر رویدادی موجود نیست",
-        "checkBack": "به‌زودی دوباره بررسی کنید",
-        "noImage": "بدون تصویر",
-        "viewEvent": "مشاهده رویداد",
-        "noCategory": "بدون دسته‌بندی",
-        "countryFallback": "کشور",
-        "cityFallback": "شهر",
-        "eventFallback": "رویداد",
-        "clickMarkerToOpen": "برای باز کردن روی نشانگر کلیک کنید",
-        "errors": {
-            "unauthorized": "مجوز دسترسی ندارید. لطفاً وارد شوید.",
-            "notFound": "کشور پیدا نشد.",
-            "loadFailed": "هنگام بارگذاری داده‌ها خطایی رخ داد.",
-            "mapLibraryFailed": "بارگذاری کتابخانه نقشه ناموفق بود.",
-            "bordersFailed": "بارگذاری مرزهای کشور ناموفق بود",
-            "invalidBorders": "فایل مرزهای کشور نامعتبر است.",
-            "countryBordersNotFound": "مرزهای این کشور پیدا نشد",
-            "countryBoundsFailed": "محاسبه محدوده کشور ممکن نشد.",
-            "mapLoadFailed": "هنگام بارگذاری نقشه خطایی رخ داد."
-        }
-    },
-    "cancel": "???",
-    "login": "????",
-    "sending": "?? ??? ?????...",
-    "send_reply": "????? ????",
-    "report": {
-        "action": "Report",
-        "commentTitle": "Report this comment",
-        "modalTitle": "Report comment",
-        "reasonPrompt": "Choose the reason for reporting this comment:",
-        "submit": "Submit report",
-        "submitting": "Submitting...",
-        "successTitle": "Report submitted",
-        "successMessage": "Thank you. We will review this comment soon.",
-        "errors": {
-            "selectReason": "Please choose a report reason.",
-            "submitFailed": "An error occurred while submitting the report. Please try again."
-        },
-        "reasons": {
-            "spam": "Spam",
-            "offensive": "Offensive content",
-            "inappropriate": "Inappropriate",
-            "illegal": "Illegal content",
-            "untrue": "False content",
-            "falseInformation": "Misleading information",
-            "other": "Other reason"
-        }
-    },
-    "commentsPage": {
-        "title": "Comments",
-        "emptyLabel": "Comments",
-        "emptyMessage": "No comments yet. Be the first to comment.",
-        "attachmentAlt": "Comment attachment",
-        "pageInfo": "Page {current} of {total}",
-        "confirmDelete": "Are you sure you want to delete this comment?",
-        "errors": {
-            "loadFailed": "An error occurred while loading comments."
-        },
-        "reactions": {
-            "support": "Agree",
-            "neutral": "Neutral",
-            "oppose": "Disagree"
-        },
-        "you": "You"
-    },
-    "profilePage": {
-        "title": "My Profile",
-        "subtitle": "Manage your account information and update your password",
-        "noPlan": "No plan",
-        "lastLogin": "Last login",
-        "accountInfo": "Account information",
-        "systemInfo": "System information",
-        "currentPlan": "Current plan",
-        "planType": "Plan type",
-        "editAccount": "Edit account details",
-        "saving": "Saving...",
-        "saveChanges": "Save changes",
-        "tabs": {
-            "userInfo": "User information",
-            "editData": "Edit data",
-            "password": "Update password",
-            "wallet": "Wallet",
-            "privacy": "حساب کاربری و حریم خصوصی"
-        },
-        "fields": {
-            "name": "Name",
-            "fullName": "Full name",
-            "email": "Email",
-            "phone": "Phone",
-            "phoneNumber": "Phone number",
-            "country": "Country",
-            "position": "Position",
-            "positionJob": "Position / Job",
-            "birthDate": "Date of birth",
-            "role": "Role",
-            "status": "Status",
-            "points": "Points",
-            "rank": "رتبه",
-            "price": "Price"
-        },
-        "placeholders": {
-            "fullName": "Enter your full name",
-            "countrySearch": "Search for a country",
-            "position": "Software engineer"
-        },
-        "status": {
-            "active": "Active"
-        },
-        "password": {
-            "title": "Update password",
-            "current": "Current password",
-            "new": "New password",
-            "confirm": "Confirm password",
-            "updating": "Updating...",
-            "update": "Update password"
-        },
-        "messages": {
-            "fillAllFields": "Please fill in all fields.",
-            "passwordMismatch": "Passwords do not match.",
-            "passwordUpdated": "Password updated successfully.",
-            "passwordUpdateFailed": "An error occurred while updating the password.",
-            "chooseCountry": "Please choose a country from the list.",
-            "noChanges": "You have not made any changes.",
-            "profileUpdated": "Your profile has been updated successfully.",
-            "profileUpdateFailed": "An error occurred while updating your profile."
-        },
-        "wallet": {
-            "title": "Wallet",
-            "availableBalance": "Available balance",
-            "deposit": "Add funds",
-            "recentTransactions": "Recent transactions",
-            "depositType": "Deposit",
-            "withdrawType": "Withdrawal",
-            "noTransactions": "No transactions yet",
-            "withdrawComingSoon": "The withdrawal window will open soon."
-        }
-    },
-    "eventUpload": {
-        "maxPerFile": "Maximum per file: 100 MB",
-        "dragFiles": "Drag files here or",
-        "clickToChoose": "click to choose",
-        "supportedFiles": "Images and videos (max 100 MB per file)",
-        "selectedFiles": "Selected files ({count})",
-        "uploading": "Uploading...",
-        "uploadFiles": "Upload files",
-        "success": "Files uploaded successfully!",
-        "errors": {
-            "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
-            "unsupportedType": "File type \"{name}\" is not supported."
-        }
-    },
-    "security": {
-        "denied": "اجازه دسترسی به این منبع را ندارید.",
-        "notFound": "منبع درخواستی یافت نشد.",
-        "disabled": "این حساب غیرفعال است. با پشتیبانی تماس بگیرید.",
-        "invalidMedia": "فایل رسانه نامعتبر، پشتیبانی‌نشده یا فراتر از حدود پردازش امن است.",
-        "unavailable": "این رسانه فعلاً در دسترس نیست.",
-        "currencyMismatch": "ارز کیف پول با این تراکنش مطابقت ندارد.",
-        "insufficientBalance": "موجودی در دسترس کافی نیست.",
-        "invalidWithdrawal": "برداشت در وضعیت فعلی قابل تغییر نیست. با پشتیبانی تماس بگیرید.",
-        "paymentRequired": "این طرح به پرداخت تأییدشده نیاز دارد. با پشتیبانی تماس بگیرید.",
-        "invalidCode": "کد تأیید نامعتبر یا منقضی است.",
-        "requestFailed": "درخواست انجام نشد. دوباره تلاش کنید.",
-        "rateLimit": "درخواست‌ها بیش از حد است. بعداً تلاش کنید."
-    },
-    "googleAuth": {
-        "continue": "ادامه با Google",
-        "signup": "ثبت‌نام با Google",
-        "or": "یا",
-        "signingIn": "در حال ورود…",
-        "cancelled": "احراز هویت لغو شد.",
-        "expired_state": "مهلت این تلاش برای ورود تمام شده است. دوباره شروع کنید.",
-        "invalid_state": "این درخواست نامعتبر است یا قبلاً استفاده شده است. دوباره شروع کنید.",
-        "oauth_failed": "Google نتوانست احراز هویت را کامل کند. دوباره تلاش کنید.",
-        "callback_failed": "احراز هویت ناموفق بود. دوباره تلاش کنید.",
-        "identity_invalid": "Google نتوانست هویت و ایمیل شما را تأیید کند. از روش ورود دیگری استفاده کنید.",
-        "disabled": "این حساب در دسترس نیست. با پشتیبانی تماس بگیرید.",
-        "linking_required": "با روش فعلی حساب خود وارد شوید. اتصال Google نیازمند ورود قبلی به آن حساب است؛ این قابلیت هنوز در دسترس نیست. در صورت نیاز با پشتیبانی تماس بگیرید.",
-        "unavailable": "احراز هویت Google اکنون در دسترس نیست. از ایمیل و رمز عبور استفاده کنید یا بعداً تلاش کنید.",
-        "busy": "ورود از قبل در حال انجام است. دوباره تلاش کنید.",
-        "alreadyLinked": "این حساب Google قبلاً متصل شده است.",
-        "completeProfile": "حساب خود را تکمیل کنید",
-        "profileRequired": "برای تکمیل ساخت حساب، اطلاعات الزامی را وارد کنید.",
-        "country": "کشور",
-        "dateOfBirth": "تاریخ تولد",
-        "finishSignup": "ساخت حساب",
-        "profileInvalid": "کشور و تاریخ تولد معتبری را وارد کنید که در آینده نباشد.",
-        "retry": "تلاش دوباره",
-        "backToLogin": "بازگشت به ورود",
-        "linkAccountTitle": "اتصال حساب Google",
-        "linkAccountDesc": "حسابی با این ایمیل وجود دارد. برای اتصال امن حساب Google، گذرواژه خود را وارد کنید.",
-        "accountPassword": "گذرواژه حساب",
-        "confirmLink": "تأیید و اتصال حساب",
-        "invalidCredentials": "گذرواژه نامعتبر است. لطفاً اطلاعات خود را بررسی کرده و دوباره امتحان کنید.",
-        "linkSuccess": "حساب Google با موفقیت متصل شد.",
-        "unlinkSuccess": "اتصال حساب Google با موفقیت لغو شد.",
-        "identity_conflict": "این ایمیل به هویت Google دیگری متصل است. با روش فعلی حساب وارد شوید یا با پشتیبانی تماس بگیرید.",
-        "account_login_required": "با روش فعلی حساب وارد شوید، سپس Google را از نمایه خود متصل کنید.",
-        "recovery_required": "برای اتصال دوباره Google، بازیابی یک‌باره حساب لازم است.",
-        "recovery_web_required": "بازیابی یک‌باره را در وب‌سایت Scemory کامل کنید. ورودهای بعدی Google خودکار خواهند بود.",
-        "invalid_recovery_code": "کد بازیابی نادرست است. کد را بررسی و دوباره تلاش کنید.",
-        "recovery_expired": "درخواست بازیابی منقضی شده است. ورود Google را دوباره آغاز کنید.",
-        "recovery_attempts_exceeded": "تلاش‌های نادرست بیش از حد است. ورود Google را دوباره آغاز کنید.",
-        "recovery_rate_limited": "به‌تازگی کد بازیابی ارسال شده است. کمی صبر کنید.",
-        "recovery_unavailable": "ارسال کد بازیابی ممکن نشد. بعداً دوباره تلاش کنید.",
-        "recoveryTitle": "اتصال دوباره حساب Google",
-        "recoverySent": "کد یک‌بارمصرف ارسال‌شده به {email} را وارد کنید. این کار فقط یک بار لازم است.",
-        "recoveryCode": "کد بازیابی",
-        "confirmRecovery": "تأیید و ادامه"
-    },
-    "facebookAuth": {
-        "continue": "ادامه با Facebook",
-        "signup": "ثبت‌نام با Facebook",
-        "signingIn": "در حال ورود…",
-        "unavailable": "احراز هویت Facebook اکنون در دسترس نیست. از ایمیل و رمز عبور استفاده کنید یا بعداً تلاش کنید.",
-        "cancelled": "احراز هویت لغو شد.",
-        "invalid_state": "این درخواست نامعتبر است یا قبلاً استفاده شده است. دوباره شروع کنید.",
-        "expired": "مهلت این تلاش برای ورود تمام شده است. دوباره شروع کنید.",
-        "callback_failed": "احراز هویت ناموفق بود. دوباره تلاش کنید.",
-        "disabled": "این حساب در دسترس نیست. با پشتیبانی تماس بگیرید.",
-        "linking_required": "با روش فعلی حساب خود وارد شوید. اتصال Facebook نیازمند ورود قبلی به آن حساب است؛ این قابلیت هنوز در دسترس نیست. در صورت نیاز با پشتیبانی تماس بگیرید.",
-        "busy": "ورود از قبل در حال انجام است. دوباره تلاش کنید.",
-        "completeProfile": "حساب خود را تکمیل کنید",
-        "profileRequired": "برای تکمیل ساخت حساب، اطلاعات الزامی را وارد کنید.",
-        "country": "کشور",
-        "dateOfBirth": "تاریخ تولد",
-        "finishSignup": "ساخت حساب",
-        "retry": "تلاش دوباره",
-        "backToLogin": "بازگشت به ورود",
-        "identity_invalid": "Facebook نتوانست هویت شما را تأیید کند. دوباره تلاش کنید.",
-        "verification_required": "ایمیل حساب فعلی خود را با روش ورود اصلی آن تأیید کنید.",
-        "email_unavailable": "ارسال ایمیل تأیید ممکن نشد. بعداً دوباره تلاش کنید.",
-        "otp_expired": "مهلت این کد تمام شده است. کد جدیدی درخواست کنید.",
-        "otp_invalid": "کد تأیید نادرست است.",
-        "otp_attempts": "تعداد تلاش‌ها بیش از حد است. پس از زمان انتظار کد جدیدی درخواست کنید.",
-        "otp_cooldown": "پیش از درخواست کد دیگر منتظر بمانید.",
-        "native_unavailable": "ورود با Facebook در وب‌سایت Scemory در دسترس است. از مرورگر استفاده کنید.",
-        "email": "نشانی ایمیل",
-        "sendCode": "ارسال کد تأیید",
-        "verifyEmail": "ایمیل خود را تأیید کنید",
-        "codeSent": "کد ارسال‌شده به {email} را وارد کنید.",
-        "verificationCode": "کد تأیید",
-        "resendIn": "ارسال دوباره پس از {seconds} ثانیه",
-        "resend": "ارسال دوباره کد",
-        "profileInvalid": "ایمیل معتبر، کشور و تاریخ تولدی وارد کنید که در آینده نباشد."
-    },
-    "mediaCredits": {
-        "myCredits": "اعتبارهای رسانه من",
-        "photosAvailable": "عکس‌های موجود",
-        "videosAvailable": "ویدیوهای موجود",
-        "photos": "عکس",
-        "videos": "ویدیو",
-        "photoQuotaDesc": "سهمیه دائمی دریافت عکس",
-        "videoQuotaDesc": "سهمیه دائمی دریافت ویدیو",
-        "activeTier": "سطح دسترسی فعال",
-        "breakdownByTier": "تفکیک بر اساس سطح",
-        "viewDashboard": "داشبورد اعتبارها",
-        "getMoreCredits": "خرید اعتبار بیشتر",
-        "browseMarketplace": "مرور فروشگاه",
-        "noTier": "بدون طرح فعال",
-        "getWithPlan": "دریافت با اشتراک",
-        "redeemed": "دریافت شد",
-        "redeemSuccess": "رسانه با موفقیت با اعتبار طرح شما دریافت شد!",
-        "redeemFailed": "دریافت رسانه با طرح ناموفق بود.",
-        "activeGrants": "سهمیه‌های فعال",
-        "redemptionHistory": "تاریخچه دریافت‌ها",
-        "noGrants": "هیچ سهمیه فعالی وجود ندارد. برای دریافت اعتبار مشترک شوید.",
-        "noRedemptions": "هنوز دریافتی ثبت نشده است.",
-        "tier": "سطح",
-        "plan": "طرح",
-        "tierRank": "رتبه سطح",
-        "grantedOn": "تاریخ اعطا",
-        "payoutCap": "سقف پرداخت به سازنده",
-        "payWithWallet": "پرداخت از کیف پول",
-        "payWithPaypal": "پرداخت با پی‌پال",
-        "insufficientCredits": "اعتبار ناکافی یا رتبه طرح برای این رسانه پایین است.",
-        "includedQuotas": "سهمیه‌های رسانه شامل شده",
-        "permanentQuotas": "سهمیه‌های رسانه دائمی بدون انقضا"
-    },
-    "dataDeletion": {
-        "title": "دستورالعمل‌های حذف داده‌ها",
-        "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
-        "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
-        "effectiveDate": "Effective Date: October 2026",
-        "checkStatusTitle": "Check Deletion Request Status",
-        "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
-        "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
-        "checkButton": "Check Status",
-        "checking": "Checking...",
-        "statusNotFound": "No deletion request found for this reference code.",
-        "statusResult": {
-            "reference": "Reference Code",
-            "status": "Current Status",
-            "type": "Request Type",
-            "maskedEmail": "Associated Account",
-            "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
-            "statuses": {
-                "pending_confirmation": "Pending Confirmation",
-                "pending": "Pending Processing",
-                "under_review": "Under Administrative Review",
-                "processing": "Processing Deletion",
-                "completed": "Completed & Scrubbed",
-                "cancelled": "Cancelled",
-                "failed": "Failed"
-            }
-        },
-        "sections": {
-            "sectionA": {
-                "title": "A. How to Delete Your Account and Data from Within Scemory",
-                "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
-                "steps": [
-                    "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
-                    "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
-                    "Select the 'Account & Privacy' tab.",
-                    "Click the red 'Delete Account & Data' button located in the danger zone.",
-                    "Type the required confirmation phrase DELETE into the input box.",
-                    "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
-                    "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
-                ]
-            },
-            "sectionB": {
-                "title": "B. Alternative Request if Unable to Access Your Account",
-                "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
-                "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
-            },
-            "sectionC": {
-                "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
-                "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
-                "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
-                "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
-            },
-            "sectionD": {
-                "title": "D. Types of Personal Data Deleted",
-                "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
-                "items": [
-                    "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
-                    "Profile photos, avatars, and personal media files stored in public and private storage.",
-                    "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
-                    "Active sessions, Sanctum authentication tokens, and stored device tokens.",
-                    "Shopping cart items, wishlist entries, and unverified registration OTPs.",
-                    "Unpurchased event media and inactive personal event listings."
-                ]
-            },
-            "sectionE": {
-                "title": "E. Types of Data Retained for Legal & Statutory Compliance",
-                "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
-                "items": [
-                    "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
-                    "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
-                    "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
-                ],
-                "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
-            },
-            "sectionF": {
-                "title": "F. Processing Timeline & Review Safeguards",
-                "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
-                "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
-                "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
-            },
-            "sectionG": {
-                "title": "G. Reference Tracking & Status Verification",
-                "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
-            }
-        },
-        "profile": {
-            "cardTitle": "دستورالعمل‌های حذف داده‌ها",
-            "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
-            "warningHeader": "Important: This action cannot be undone",
-            "warningPoints": [
-                "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
-                "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
-                "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
-                "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
-            ],
-            "deleteButton": "دستورالعمل‌های حذف داده‌ها",
-            "activeRequestNotice": "You have an active deletion request in progress.",
-            "cancelButton": "Cancel Deletion Request",
-            "modalTitle": "Confirm Account Deletion",
-            "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
-            "typeDeletePrompt": "Type DELETE to confirm:",
-            "typeDeletePlaceholder": "DELETE",
-            "passwordPrompt": "Enter your account password:",
-            "passwordPlaceholder": "Current password",
-            "codePrompt": "Enter the 6-digit verification code sent to your email:",
-            "codePlaceholder": "123456",
-            "resendCode": "Resend Code",
-            "confirmDeleteButton": "Permanently Delete My Data",
-            "cancelModalButton": "Cancel",
-            "processing": "Processing...",
-            "successToast": "Account and data deletion completed. You have been signed out.",
-            "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
-            "cancelSuccessToast": "Deletion request has been successfully cancelled."
-        }
+    "live_support": {
+      "title": "پشتیبانی زنده",
+      "description": "اکنون با یکی از اعضای تیم ما صحبت کنید تا کمک فوری دریافت کنید",
+      "btn_chat": "شروع چت زنده",
+      "btn_schedule": "زمان‌بندی تماس",
+      "available": "در حال حاضر در دسترس: ۳ نماینده پشتیبانی"
     }
+  },
+  "contacts": {
+    "badge": "با ما تماس بگیرید",
+    "title": "بیایید صحبت کنیم",
+    "description": "سوالی دارید، به پشتیبانی نیاز دارید یا یک طرح اختصاصی می‌خواهید؟ برای ما پیام بفرستید تا تیم ما با شما تماس بگیرد.",
+    "form": {
+      "title": "برای ما پیام بفرستید",
+      "description": "فرم زیر را تکمیل کنید تا در اولین فرصت پاسخ دهیم.",
+      "fullName": "نام کامل",
+      "fullNamePlaceholder": "نام کامل خود را وارد کنید",
+      "emailAddress": "آدرس ایمیل",
+      "emailPlaceholder": "آدرس ایمیل خود را وارد کنید",
+      "subject": "موضوع",
+      "generalInquiry": "پرسش عمومی",
+      "customPlan": "طرح اختصاصی",
+      "support": "پشتیبانی فنی",
+      "feedback": "بازخورد",
+      "other": "سایر",
+      "message": "پیام",
+      "messagePlaceholder": "به ما بگویید چگونه می‌توانیم کمک کنیم...",
+      "minimumCharacters": "لطفاً جزئیات کافی ارائه دهید.",
+      "sendMessage": "ارسال پیام",
+      "sending": "در حال ارسال...",
+      "successMessage": "پیام شما با موفقیت ارسال شد.",
+      "errorMessage": "هنگام ارسال پیام خطایی رخ داد. لطفاً دوباره تلاش کنید."
+    },
+    "info": {
+      "getInTouch": "در ارتباط باشید",
+      "title": "ما اینجا هستیم تا کمک کنیم",
+      "description": "برای پرسش‌های عمومی، پشتیبانی فنی یا قیمت‌گذاری اختصاصی با تیم ما تماس بگیرید.",
+      "emailUs": "به ما ایمیل بزنید",
+      "available": "تیم ما در اولین فرصت پاسخ خواهد داد.",
+      "customPlans": "طرح‌های اختصاصی",
+      "customPlansDescription": "به راهکاری متناسب با تیم یا کسب‌وکارتان نیاز دارید؟ به ما بگویید چه می‌خواهید.",
+      "customerSupport": "پشتیبانی مشتریان",
+      "supportDescription": "اگر برای حساب، اشتراک یا خدمات خود به کمک نیاز دارید، با ما تماس بگیرید.",
+      "followJourney": "مسیر ما را دنبال کنید",
+      "responseTime": "پاسخ سریع",
+      "responseTimeDescription": "معمولاً ظرف یک روز کاری به پیام‌ها پاسخ می‌دهیم."
+    },
+    "map": {
+      "title": "نقشه جهانی Scene Memory",
+      "description": "تصور هزاران خاطره در بیش از ۱۴۰ کشور."
+    }
+  },
+  "faq": {
+    "badge": "سؤالات متداول",
+    "title": "سؤالات متداول",
+    "description": "پاسخ‌های سریع به برخی از پرسش‌های رایج.",
+    "questions": {
+      "0": {
+        "question": "چقدر سریع پاسخ دریافت می‌کنم؟",
+        "answer": "تیم ما معمولاً ظرف یک روز کاری پاسخ می‌دهد."
+      },
+      "1": {
+        "question": "آیا می‌توانم طرح اختصاصی درخواست کنم؟",
+        "answer": "بله. در قسمت موضوع، طرح اختصاصی را انتخاب کنید و نیازهای خود را توضیح دهید."
+      },
+      "2": {
+        "question": "آیا می‌توانم برای پشتیبانی فنی تماس بگیرم؟",
+        "answer": "بله. پشتیبانی فنی را انتخاب کنید و همه جزئیات مرتبط با مشکل را وارد کنید."
+      }
+    }
+  },
+  "eventForm": {
+    "admin": {
+      "title": "افزودن رویداد توسط مدیر",
+      "trending": "رویداد پرطرفدار",
+      "trendingHelp": "این رویداد را به‌عنوان پرطرفدار علامت‌گذاری کنید",
+      "generateTags": "ساخت برچسب با هوش مصنوعی",
+      "generatingTags": "در حال ساخت برچسب‌ها...",
+      "generateTagsHelp": "با سرویس هوش مصنوعی موجود برای رویداد و تصاویر برچسب پیشنهاد دهید. می‌توانید پیش از انتشار آن‌ها را بررسی یا حذف کنید.",
+      "generateTagsError": "در حال حاضر ساخت برچسب‌های هوش مصنوعی ممکن نیست.",
+      "created": "رویداد با موفقیت ایجاد و منتشر شد."
+    },
+    "chooseFiles": "انتخاب فایل‌ها",
+    "mediaCount": "تعداد مدیا",
+    "title": "افزودن رویداد جدید",
+    "basicInfo": "اطلاعات پایه",
+    "locationCategory": "مکان و دسته‌بندی",
+    "dates": "تاریخ‌ها",
+    "images": "تصاویر رویداد",
+    "eventTitle": "عنوان رویداد",
+    "description": "توضیحات",
+    "country": "کشور",
+    "searchCountry": "جستجوی کشور...",
+    "selectCountry": "انتخاب کشور",
+    "city": "شهر",
+    "selectCity": "انتخاب شهر",
+    "selectCityFirst": "ابتدا کشور را انتخاب کنید",
+    "mainCategory": "دسته اصلی",
+    "subCategory": "زیر دسته",
+    "selectSubFirst": "ابتدا دسته را انتخاب کنید",
+    "selectLocationMap": "مکان را روی نقشه انتخاب کنید",
+    "selectedCoords": "مختصات انتخاب‌شده: عرض جغرافیایی {lat} , طول جغرافیایی {lng}",
+    "lat": "عرض جغرافیایی",
+    "lng": "طول جغرافیایی",
+    "pleaseSelectLocation": "لطفاً مکانی روی نقشه انتخاب کنید",
+    "startDate": "تاریخ شروع",
+    "endDate": "تاریخ پایان",
+    "startTime": "زمان شروع",
+    "dragDropHere": "کلیک کنید یا تصاویر را اینجا بکشید و رها کنید",
+    "formatsMax": "PNG • JPG • WEBP | حداکثر ۵ مگابایت برای هر تصویر",
+    "chooseImages": "انتخاب تصاویر",
+    "addMore": "افزودن بیشتر",
+    "imagesCount": "{count} / ۸ تصویر",
+    "remove": "حذف",
+    "eventType": "Event Type",
+    "publicOfficialEvent": "Public / Official Event",
+    "publicOfficialDescription": "Conference, exhibition, festival or public event.",
+    "personalEvent": "Personal Event / Memory",
+    "personalEventDescription": "Personal occasion, event or memory.",
+    "photographyType": "Photography Type",
+    "professional720Notice": "Requires backend quality approval, minimum 720px width and height, and sharpness checks.",
+    "professional1080Notice": "Requires backend quality approval, minimum 1080px width and height, and sharpness checks.",
+    "normalPhotoNotice": "Valid images are accepted without professional resolution or sharpness constraints.",
+    "selectPhotographyBeforeContinue": "Please select a photography type before continuing.",
+    "tags": "Tags",
+    "tagsSelected": "tags selected",
+    "selectOrCreateTags": "Select or create tags",
+    "selectTags": "Select tags",
+    "searchOrTypeTag": "Search or type new tag",
+    "searchTags": "Search tags",
+    "addTag": "Add \"{tag}\"",
+    "tagHelper": "You can select existing tags or create new ones.",
+    "detectingLocation": "Detecting your current location...",
+    "steps": {
+      "photographyPhotos": "Photography & Photos",
+      "chooseModeUpload": "Choose mode and upload",
+      "photographyType": "Photography Type",
+      "chooseMode": "Choose mode",
+      "eventDetails": "Event Details",
+      "details": "Details",
+      "mainFormData": "Main form data",
+      "photos": "Photos",
+      "uploadAndTag": "Upload and tag"
+    },
+    "errors": {
+      "loadCities": "An error occurred while loading cities.",
+      "requiredFields": "Please complete all required fields.",
+      "createFailed": "Failed to create event:",
+      "historicalCreateFailed": "Failed to create historical event:",
+      "maxFourTags": "You can select up to 4 tags only",
+      "rejectedPhotosEvent": "Rejected photos must be fixed before creating the event.",
+      "rejectedPhotosHistorical": "Rejected photos must be fixed before creating the historical event.",
+      "locationDetect": "Unable to detect your current location. You can select the location manually on the map."
+    },
+    "success": {
+      "created": "Event created successfully!",
+      "historicalCreated": "Historical event created successfully!"
+    }
+  },
+  "commons": {
+    "required": "الزامی",
+    "cancel": "لغو",
+    "saveDraft": "ذخیره به عنوان پیش‌نویس",
+    "create": "ایجاد رویداد",
+    "creating": "در حال ایجاد...",
+    "choose": "انتخاب"
+  },
+  "eventss": {
+    "no_title": "رویداد بدون عنوان",
+    "undefined_city": "نامشخص",
+    "from_map": "از نقشه"
+  },
+  "wishlist": {
+    "title": "لیست علاقه‌مندی‌ها",
+    "loading": "در حال بارگذاری...",
+    "empty": {
+      "main": "در حال حاضر هیچ موردی در لیست علاقه‌مندی‌های شما وجود ندارد",
+      "hint": "با اضافه کردن رویدادهای مورد علاقه‌تان شروع کنید!"
+    },
+    "fallback_image_alt": "تصویر پیش‌فرض رویداد",
+    "uncategorized": "دسته‌بندی نشده",
+    "no_title": "بدون عنوان",
+    "city_label": "شهر:",
+    "date_label": "تاریخ:",
+    "time_label": "زمان:",
+    "not_specified": "مشخص نشده",
+    "view_details": "مشاهده جزئیات",
+    "remove": "حذف از علاقه‌مندی‌ها",
+    "deleting": "در حال حذف...",
+    "added_at": "اضافه شده در",
+    "pagination": {
+      "previous": "قبلی",
+      "next": "بعدی",
+      "page_info": "صفحه {current} از {total}"
+    },
+    "confirmRemove": "Are you sure you want to remove this item from favorites?",
+    "errors": {
+      "deleteFailed": "An error occurred while deleting. Please try again.",
+      "connectionFailed": "Could not connect to the server. Check your internet connection and try again."
+    }
+  },
+  "terms": {
+    "title": "شرایط استفاده",
+    "last_updated": "آخرین بروزرسانی: 2026",
+    "acceptance_title": "پذیرش شرایط",
+    "acceptance_text": "با دسترسی یا استفاده از این پلتفرم، شما با این شرایط استفاده موافقت می‌کنید.",
+    "accounts_title": "حساب‌های کاربری",
+    "accounts_text": "کاربران مسئول حفظ محرمانگی اطلاعات حساب خود هستند.",
+    "content_title": "مالکیت محتوا",
+    "content_text": "تمام محتوای موجود در پلتفرم تحت قوانین کپی‌رایت و مالکیت فکری محافظت می‌شود.",
+    "ai_title": "محدودیت‌های هوش مصنوعی",
+    "ai_text": "استفاده از محتوای پلتفرم برای آموزش مدل‌های هوش مصنوعی بدون مجوز رسمی ممنوع است.",
+    "prohibited_title": "استفاده‌های ممنوع",
+    "prohibited_text": "کاربران نباید از پلتفرم سوءاستفاده کنند یا تلاش برای دسترسی غیرمجاز داشته باشند.",
+    "liability_title": "محدودیت مسئولیت",
+    "liability_text": "پلتفرم مسئول خسارات غیرمستقیم ناشی از استفاده از سرویس نخواهد بود.",
+    "changes_title": "تغییرات شرایط",
+    "changes_text": "ما حق داریم این شرایط را در هر زمان تغییر دهیم.",
+    "contact_title": "تماس",
+    "contact_text": "در صورت داشتن هرگونه سوال درباره این شرایط با مدیریت پلتفرم تماس بگیرید."
+  },
+  "plans": {
+    "customPrice": "با ما تماس بگیرید",
+    "customPricingDescription": "قیمت‌گذاری متناسب با نیازهای شما",
+    "contactUs": "با ما تماس بگیرید",
+    "chooseYourPlan": "طرح خود را انتخاب کنید",
+    "getStarted": "شروع کنید",
+    "subscribe": "اکنون مشترک شوید",
+    "noFeatures": "هنوز ویژگی‌ای وجود ندارد",
+    "mostPopular": "محبوب‌ترین",
+    "free": "رایگان",
+    "perMonth": "در ماه",
+    "noCreditCard": "نیازی به کارت اعتباری نیست",
+    "prioritySupport": "پشتیبانی ویژه",
+    "securePayments": "پرداخت‌های امن",
+    "cancelAnytime": "هر زمان لغو کنید",
+    "moneyBack": "ضمانت ۳۰ روزه",
+    "support247": "پشتیبانی ۲۴/۷",
+    "ourPlans": "طرح‌های ما",
+    "description": "رایگان شروع کنید یا طرح مناسب خود را انتخاب کنید.",
+    "price": "قیمت",
+    "features": "ویژگی‌ها",
+    "Monthly": "ماهانه",
+    "Yearly": "سالانه",
+    "unlimitedEvents": "رویدادهای نامحدود",
+    "addEvents": "افزودن رویداد",
+    "transparentPricing": "Simple, transparent pricing for everyone",
+    "custom": "Custom",
+    "contactPricing": "Contact us for pricing",
+    "perMonthShort": "/ mo",
+    "subscription": "Subscription",
+    "loadingPlan": "Loading plan...",
+    "premiumPlan": "Premium Plan",
+    "perMonthSlash": "/ month",
+    "instantAccessDescription": "Get instant access to all features included in this plan. No hidden fees, no surprises ? just everything you need to get started right away.",
+    "whatsIncluded": "What's Included",
+    "readyToStart": "Ready to get started?",
+    "cancelNoQuestions": "Cancel anytime. No questions asked.",
+    "plan": "طرح",
+    "billing": "Billing",
+    "secureSsl": "Secure 256-bit SSL encryption",
+    "users": "Users",
+    "rating": "Rating",
+    "support": "Support",
+    "subscriptionAgreement": "By subscribing, you agree to our Terms of Service and Privacy Policy. Subscription renews automatically each month.",
+    "notFound": "Plan Not Found",
+    "notFoundDescription": "The plan you're looking for doesn't exist or has been removed.",
+    "browseAll": "Browse All Plans",
+    "subscribeSuccess": "Successfully subscribed! Welcome aboard.",
+    "faq": {
+      "cancel": {
+        "question": "Can I cancel my subscription anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll still have access until the end of your billing period."
+      },
+      "trial": {
+        "question": "Is there a free trial?",
+        "answer": "We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your full payment."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept major credit cards, PayPal, and bank transfers for annual plans."
+      },
+      "switch": {
+        "question": "Can I switch plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time from your account dashboard."
+      }
+    },
+    "errors": {
+      "loadPlan": "Failed to load plan. Please try again.",
+      "subscribeFailed": "Subscription failed. Please try again.",
+      "loadPlans": "???????? ?????? ?????? ???. ?????? ???? ????."
+    },
+    "customPlanNote": "بر اساس نیازهای شما ساخته شده است",
+    "basicAccessIncluded": "?????? ???? ???? ???",
+    "usd": "دلار آمریکا"
+  },
+  "free": "رایگان",
+  "basic": "پایه",
+  "professional": "حرفه‌ای",
+  "premium": "پریمیوم",
+  "homeAudit": {
+    "home": {
+      "videoUnsupported": "مرورگر شما از برچسب ویدئو پشتیبانی نمی‌کند.",
+      "badge": "آرشیو رویدادهای Scemory",
+      "title": "رویدادهای مستند را کاوش کنید",
+      "titleHighlight": "از طریق نقشه",
+      "description": "رسانه‌های رویداد را که روزنامه‌نگاران، تیم‌های رسانه‌ای و شاهدان عینی از سراسر جهان بارگذاری کرده‌اند کشف کنید.",
+      "searchEvents": "جستجوی رویدادها",
+      "uploadStory": "داستان خود را بارگذاری کنید",
+      "bottomText": "داستان‌ها، مکان‌ها و لحظه‌هایی از سراسر جهان را کشف کنید.",
+      "searchPlaceholder": "  جستجوی رویدادها، مکان‌ها و برچسب‌ها"
+    },
+    "profileToast": {
+      "title": "نمایه کامل نیست",
+      "message": "نمایه شما کامل نیست. لطفاً به‌روزرسانی کنید:",
+      "complete": "برای تکمیل کلیک کنید",
+      "fields": {
+        "phone": "تلفن",
+        "country": "کشور",
+        "position": "سمت",
+        "dateOfBirth": "تاریخ تولد"
+      }
+    },
+    "trending": {
+      "loadError": "رویدادهای پرطرفدار اکنون بارگذاری نمی‌شوند.",
+      "kicker": "پرطرفدار",
+      "title": "رویدادهای پرطرفدار",
+      "description": "رویدادهایی که در آرشیو توجه بیشتری می‌گیرند.",
+      "emptyTitle": "هنوز رویداد پرطرفداری وجود ندارد",
+      "emptyDescription": "برای رویدادهای برجسته دوباره سر بزنید.",
+      "views": "بازدید",
+      "likes": "پسندیدن",
+      "slidesLabel": "اسلایدهای رویدادهای پرطرفدار",
+      "untitledEvent": "رویداد بدون عنوان",
+      "showSlide": "نمایش رویداد پرطرفدار {number}"
+    },
+    "map": {
+      "tilesSlow": "کاشی‌های نقشه بیش از حد طول می‌کشند.",
+      "loadError": "نقشه اکنون بارگذاری نمی‌شود.",
+      "loadMap": "بارگذاری نقشه",
+      "loading": "در حال بارگذاری نقشه...",
+      "retry": "بارگذاری دوباره نقشه",
+      "openFullscreen": "باز کردن نقشه تمام‌صفحه",
+      "closeFullscreen": "بستن نقشه تمام‌صفحه"
+    },
+    "about": {
+      "imageAlt": "پلتفرم مستندسازی Scemory",
+      "kicker": "حافظه رویداد قابل اعتماد",
+      "title": "درباره Scemory",
+      "description": "Scemory برای روزنامه‌نگاران، تیم‌های رسانه‌ای و شاهدان عینی ساخته شده است که به مکانی قابل اعتماد برای مستندسازی رویدادها در همان لحظه نیاز دارند. این پلتفرم رسانه‌های بارگذاری‌شده، فراداده رویداد و زمینه مکانی را به هم پیوند می‌دهد تا مردم بتوانند داستان‌های عمومی را با وضوح کشف کنند.",
+      "features": {
+        "upload": "عکس‌ها، ویدئوها و داده‌های میدانی را بارگذاری کنید",
+        "explore": "رویدادها را از طریق نقشه تعاملی کاوش کنید",
+        "preserve": "داستان‌های تأییدشده را در آرشیو دیجیتال حفظ کنید"
+      }
+    },
+    "events": {
+      "showing": "نمایش",
+      "of": "از",
+      "events": "رویدادها",
+      "seeMore": "نمایش بیشتر",
+      "badge": "رویدادها"
+    },
+    "tags": {
+      "loading": "در حال بارگذاری برچسب‌ها...",
+      "showingFirst": "نمایش نخستین",
+      "searchToFindMore": "برچسب. برای موارد بیشتر جستجو کنید.",
+      "none": "برچسبی یافت نشد",
+      "helper": "یک یا چند برچسب برای فیلتر کردن رویدادهای نقشه انتخاب کنید.",
+      "clearSelected": "پاک کردن برچسب‌های انتخاب‌شده",
+      "searchMore": "جستجوی برچسب‌های بیشتر"
+    },
+    "search": {
+      "clearText": "پاک کردن",
+      "clearTags": "پاک کردن"
+    },
+    "specialCoverage": {
+      "badge": "پوشش ویژه",
+      "title": "رویدادی دارید که ارزش پوشش خبری دارد؟",
+      "description": "Scemory را از رویدادی که شایسته پوشش اختصاصی است آگاه کنید و به رساندن داستان آن به مخاطبان گسترده‌تر کمک کنید.",
+      "contactUs": "تماس با ما",
+      "modal": {
+        "title": "پوشش ویژه",
+        "eventName": "نام رویداد",
+        "eventNamePlaceholder": "نام رویداد را وارد کنید",
+        "description": "توضیحات رویداد",
+        "descriptionPlaceholder": "درباره رویداد و دلیل شایستگی آن برای پوشش به ما بگویید",
+        "cancel": "لغو",
+        "send": "ارسال",
+        "close": "بستن",
+        "country": "کشور",
+        "city": "شهر",
+        "searchCity": "جستجوی شهر",
+        "addNewCity": "افزودن شهر جدید",
+        "createCity": "ایجاد شهر",
+        "startDate": "تاریخ شروع",
+        "coverageTime": "زمان پوشش",
+        "eventType": "نوع رویداد",
+        "personalEvent": "رویداد شخصی",
+        "publicEvent": "رویداد عمومی",
+        "selectCountry": "کشور را انتخاب کنید",
+        "selectCity": "شهر را انتخاب کنید",
+        "noCitiesFound": "شهری یافت نشد",
+        "noCountriesFound": "کشوری یافت نشد",
+        "countryRequired": "لطفاً یک کشور انتخاب کنید.",
+        "cityRequired": "لطفاً یک شهر انتخاب کنید.",
+        "startDateRequired": "لطفاً تاریخ شروع را انتخاب کنید.",
+        "eventTypeRequired": "لطفاً نوع رویداد را انتخاب کنید.",
+        "cityCreateFailed": "ایجاد شهر ممکن نشد. لطفاً دوباره تلاش کنید."
+      }
+    }
+  },
+  "photoUpload": {
+    "title": "Photos Upload",
+    "description": "Upload one or more images. Each photo needs its own description and tags.",
+    "professionalNotice": "Professional photos must be at least 720px by 720px and pass live backend quality validation.",
+    "choosePhotosTitle": "Choose photos",
+    "fileHint": "JPG, PNG, or WEBP. Maximum file size is 20 MB.",
+    "checking": "Checking...",
+    "choosePhotos": "Choose Photos",
+    "photosCount": "{count} / {max} photos",
+    "empty": "No photos added yet.",
+    "photoAlt": "Photo {number}",
+    "previewUnavailable": "Preview unavailable",
+    "removePhoto": "Remove photo",
+    "quality": "Quality {score}",
+    "photoDescription": "Photo description",
+    "photoDescriptionPlaceholder": "Describe this photo",
+    "photoTags": "Photo tags",
+    "selectOrCreateTags": "Select or create photo tags",
+    "searchTagPlaceholder": "Search or type new tag",
+    "addTag": "Add \"{tag}\"",
+    "yourPrice": "Your price",
+    "pricePlaceholder": "Enter your price",
+    "suggestedPrice": "Suggested: ${price}",
+    "validationDetails": "Validation details",
+    "waitingValidation": "Waiting for validation",
+    "metrics": "Sharpness {sharpness}, Blur {blur}",
+    "rejectionReasons": "Rejection reasons",
+    "professionalPhotography": "Professional photography",
+    "normalPhotography": "Normal photography",
+    "selectPhotographyFirst": "Please select photography type first.",
+    "maxPhotos": "You can upload up to {max} photos.",
+    "partialAdded": "Only {added} of {selected} selected photos were added. You can upload up to {max} photos.",
+    "photoRejected": "Photo rejected",
+    "unableToValidate": "Unable to read or validate this photo.",
+    "allowedTypes": "Allowed types are jpg, jpeg, png, and webp.",
+    "maxFileSize": "Maximum file size is 20 MB.",
+    "checkingPhoto": "Checking photo...",
+    "validationFailed": "Photo validation failed. Please try again.",
+    "photoAccepted": "Photo accepted",
+    "maxTags": "Each photo can have up to {max} tags.",
+    "tagAlreadySelected": "This tag is already selected.",
+    "status": {
+      "accepted": "accepted",
+      "rejected": "rejected",
+      "checking": "checking",
+      "idle": "idle"
+    }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "clear": "Clear Cart",
+    "walletBalance": "My Wallet Balance",
+    "sufficientBalance": "Sufficient Balance",
+    "insufficientBalance": "Insufficient Balance",
+    "walletCovers": "Wallet covers",
+    "ofOrder": "of order",
+    "badge": "CART",
+    "emptyTitle": "Your cart is empty",
+    "emptyDescription": "Looks like you haven't added anything yet",
+    "startShopping": "Start Shopping",
+    "collectionImageAlt": "Collection image",
+    "more": "more",
+    "noImages": "No images",
+    "collection": "Collection",
+    "inStock": "In Stock",
+    "fullCollection": "Full Collection",
+    "images": "images",
+    "eventId": "Event ID:",
+    "product": "Product",
+    "discount": "Discount:",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal ({count} items)",
+    "total": "Total",
+    "includingVat": "Including VAT",
+    "processing": "Processing...",
+    "payWithWallet": "Pay with Wallet",
+    "needMoreWallet": "You need ${amount} more in your wallet",
+    "or": "OR",
+    "redirectingPayPal": "Redirecting to PayPal...",
+    "payWithPayPal": "Pay with PayPal ? ${amount}",
+    "secureCheckout": "Secure checkout powered by PayPal. You'll be redirected to complete payment.",
+    "continueShopping": "Continue Shopping",
+    "itemRemoved": "Item removed",
+    "cartCleared": "Cart cleared",
+    "walletPaymentSuccess": "Payment successful! Paid from wallet.",
+    "errors": {
+      "loadCart": "Failed to load cart",
+      "loadWallet": "Failed to load wallet",
+      "removeItem": "Failed to remove item",
+      "clearCart": "Failed to clear cart",
+      "checkout": "Checkout failed. Please try again.",
+      "walletPayment": "Wallet payment failed",
+      "walletPaymentRetry": "Wallet payment failed. Please try again.",
+      "collectionAddFailed": "Failed to add the collection to the cart.",
+      "itemNotIdentified": "This item could not be identified.",
+      "addFailed": "An error occurred while adding to the cart."
+    },
+    "messages": {
+      "collectionAddedDiscount": "Added {count} images to the cart with a 10% discount!",
+      "added": "Added to cart successfully."
+    }
+  },
+  "downloads": {
+    "title": "My Downloads",
+    "fileCount": "{count} files",
+    "loadError": "An error occurred while loading data",
+    "fileAlt": "File {id}",
+    "imageType": "IMG",
+    "videoType": "VID",
+    "preview": "Preview",
+    "downloading": "Downloading...",
+    "downloaded": "Downloaded",
+    "download": "Download",
+    "downloadSuccess": "{filename} downloaded successfully!",
+    "downloadFailed": "Download failed. Please try again.",
+    "empty": "No downloads found",
+    "emptyHint": "????????? ?? ??????? ??????? ????? ????? ???? ???????"
+  },
+  "experience": {
+    "kicker": "تجربه SCEMORY",
+    "title": "یک پلتفرم. هر سوی داستان.",
+    "pathsLabel": "مسیرهای تجربه Scemory",
+    "highlightsLabel": "نکات برجسته بخش",
+    "tabs": {
+      "explore": {
+        "label": "کاوش رویدادها",
+        "eyebrow": "جهان را از طریق رویدادها کشف کنید",
+        "heading": "داستان‌ها، رویدادها و مکان‌های سراسر جهان را کاوش کنید",
+        "description": "از نقشه به رویدادهای عمومی مستند، خاطرات شخصی و داستان‌های تصویری بروید که با مکان‌های واقعی و زمینه مشارکت‌کنندگان شکل گرفته‌اند.",
+        "cta": "کاوش رویدادها",
+        "imageAlt": "رابط کشف رویداد Scemory با پنل‌های رسانه مستند",
+        "features": {
+          "browse": "رسانه رویداد را بر اساس مکان و زمان مرور کنید",
+          "discover": "داستان‌های نزدیک را از طریق آرشیو تصویری کشف کنید",
+          "move": "از نمای کلی به جزئیات مستند رویداد بروید"
+        },
+        "visual": {
+          "kicker": "کشف زنده",
+          "title": "داستان‌های رویداد متصل به نقشه",
+          "stat": "آرشیو جهانی",
+          "note": "مکان‌ها، تاریخ‌ها و رسانه در یک نما"
+        }
+      },
+      "share": {
+        "label": "داستان خود را به اشتراک بگذارید",
+        "eyebrow": "لحظه‌ها را به داستان‌های مستند تبدیل کنید",
+        "heading": "لحظه‌های مهم را مستند کنید",
+        "description": "یک رویداد بسازید، عکس و رسانه بارگذاری کنید، جزئیات مکان بیفزایید و دیدگاه خود را به آرشیو Scemory اضافه کنید.",
+        "cta": "داستان خود را بارگذاری کنید",
+        "imageAlt": "فضای مشارکت‌کننده Scemory برای مستندسازی رسانه رویداد",
+        "features": {
+          "add": "رسانه، توضیحات و زمینه مکانی اضافه کنید",
+          "build": "از لحظه‌های خام یک حافظه ساختاریافته بسازید",
+          "keep": "داستان‌های مشارکت‌کنندگان را به آرشیو متصل نگه دارید"
+        },
+        "visual": {
+          "kicker": "جریان مشارکت",
+          "title": "رسانه، زمینه و مکان",
+          "stat": "سازنده داستان",
+          "note": "لحظه‌ها را با جزئیات معنادار بارگذاری کنید"
+        }
+      },
+      "license": {
+        "label": "مجوزدهی رسانه",
+        "eyebrow": "رسانه آماده استفاده را کشف کنید",
+        "heading": "رسانه رویداد را با اطمینان پیدا و مجوزدهی کنید",
+        "description": "محتوای تصویری را مرور کنید، رسانه‌های رویداد موجود را پیش‌نمایش کنید و از طریق تجربه کشف Scemory به گزینه‌های مجوزدهی بروید.",
+        "cta": "کشف رسانه",
+        "imageAlt": "پنل‌های رسانه Scemory برای مرور محتوای رویداد قابل مجوز",
+        "features": {
+          "preview": "پیش از باز کردن جزئیات، تصاویر رویداد را پیش‌نمایش کنید",
+          "use": "از صفحات رویداد به عنوان مسیر گزینه‌های رسانه استفاده کنید",
+          "keep": "کشف و نیت مجوزدهی را متصل نگه دارید"
+        },
+        "visual": {
+          "kicker": "دسترسی رسانه",
+          "title": "تصاویر رویداد آماده بررسی",
+          "stat": "مسیر مجوزدهی",
+          "note": "از کشف تا صفحات جزئیات"
+        }
+      }
+    }
+  },
+  "searchResults": {
+    "loadError": "Unable to load search results",
+    "errors": {
+      "loadFailed": "Failed to load events. Please try again."
+    }
+  },
+  "payment": {
+    "backHome": "Back to home page",
+    "transactionId": "Transaction ID",
+    "operationStatus": "Operation status",
+    "successful": "Successful",
+    "notification": "Notification",
+    "status": "Status",
+    "info": "Info",
+    "waiting": {
+      "title": "Processing Your Payment",
+      "message": "Please wait while we confirm your payment with PayPal."
+    },
+    "depositWaiting": {
+      "title": "Processing Your Wallet Deposit",
+      "message": "Please wait while we confirm your deposit with PayPal."
+    },
+    "callback": {
+      "confirming": "Confirming payment..."
+    },
+    "success": {
+      "paypalBadge": "Paid via PayPal",
+      "title": "Payment completed!",
+      "subtitleLine1": "Thank you for trusting us",
+      "subtitleLine2": "Your order has been confirmed and is ready to download",
+      "orderStatus": "Order status",
+      "statusValue": "Paid and confirmed",
+      "confirmationLabel": "Payment confirmation",
+      "emailSent": "A confirmation was sent to your email",
+      "goDownloads": "Go to downloads"
+    },
+    "failed": {
+      "paypalBadge": "Payment failed via PayPal",
+      "title": "Payment failed",
+      "subtitleLine1": "Unfortunately, the payment was not completed successfully",
+      "subtitleLine2": "You can try again or contact support",
+      "orderStatus": "Order status",
+      "statusValue": "Rejected / payment failed",
+      "reasonLabel": "Possible reason",
+      "noteLabel": "Note",
+      "noCharge": "No amount was charged to your account",
+      "retry": "?????? ???? ????",
+      "contactSupport": "Contact support",
+      "statusShort": "Payment failed",
+      "noChargeShort": "No amount was charged",
+      "reasons": {
+        "instrumentDeclined": "The payment method was declined",
+        "payerCannotPay": "Insufficient balance in the account",
+        "transactionRefused": "The transaction was refused by PayPal",
+        "default": "Insufficient balance or the operation was cancelled"
+      }
+    },
+    "depositSuccess": {
+      "paypalBadge": "Wallet topped up via PayPal",
+      "title": "Wallet topped up successfully",
+      "subtitleLine1": "The amount was added to your wallet successfully",
+      "subtitleLine2": "You can now use it or download your purchases",
+      "emailSent": "A message was sent to your email",
+      "goProfile": "Go to profile"
+    },
+    "depositFailed": {
+      "subtitleLine1": "The deposit was not completed successfully"
+    }
+  },
+  "walletDeposit": {
+    "currentBalance": "Current balance",
+    "title": "Top up wallet",
+    "customAmount": "Custom amount",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "For example: top up balance to buy photos",
+    "amount": "Amount",
+    "currency": "Currency",
+    "paymentMethod": "Payment method",
+    "redirecting": "Redirecting...",
+    "payWithPayPal": "Pay with PayPal",
+    "invalidAmount": "Enter a valid amount (more than $1)",
+    "genericError": "Something went wrong. Please try again.",
+    "errors": {
+      "invalidAmount": "Enter a valid amount (more than $1)"
+    }
+  },
+  "gate": {
+    "media": "رسانه‌ها",
+    "locationShort": "مکان",
+    "dateShort": "تاریخ",
+    "searchCountry": "جستجوی کشور...",
+    "featuredEvents": "رویدادهای برجسته"
+  },
+  "country": {
+    "discoverFeaturedIn": "رویدادهای برجسته را کشف کنید در",
+    "cities": "شهرها",
+    "availableCity": "شهر موجود",
+    "currentEvent": "رویداد فعلی",
+    "eventMarkers": "نشانگرهای رویداد",
+    "clickableMarker": "نشانگر قابل کلیک",
+    "differentCategory": "دسته متفاوت",
+    "availableCities": "شهرهای موجود",
+    "noEvents": "در حال حاضر رویدادی موجود نیست",
+    "checkBack": "به‌زودی دوباره بررسی کنید",
+    "noImage": "بدون تصویر",
+    "viewEvent": "مشاهده رویداد",
+    "noCategory": "بدون دسته‌بندی",
+    "countryFallback": "کشور",
+    "cityFallback": "شهر",
+    "eventFallback": "رویداد",
+    "clickMarkerToOpen": "برای باز کردن روی نشانگر کلیک کنید",
+    "errors": {
+      "unauthorized": "مجوز دسترسی ندارید. لطفاً وارد شوید.",
+      "notFound": "کشور پیدا نشد.",
+      "loadFailed": "هنگام بارگذاری داده‌ها خطایی رخ داد.",
+      "mapLibraryFailed": "بارگذاری کتابخانه نقشه ناموفق بود.",
+      "bordersFailed": "بارگذاری مرزهای کشور ناموفق بود",
+      "invalidBorders": "فایل مرزهای کشور نامعتبر است.",
+      "countryBordersNotFound": "مرزهای این کشور پیدا نشد",
+      "countryBoundsFailed": "محاسبه محدوده کشور ممکن نشد.",
+      "mapLoadFailed": "هنگام بارگذاری نقشه خطایی رخ داد."
+    }
+  },
+  "cancel": "???",
+  "login": "????",
+  "sending": "?? ??? ?????...",
+  "send_reply": "????? ????",
+  "report": {
+    "action": "Report",
+    "commentTitle": "Report this comment",
+    "modalTitle": "Report comment",
+    "reasonPrompt": "Choose the reason for reporting this comment:",
+    "submit": "Submit report",
+    "submitting": "Submitting...",
+    "successTitle": "Report submitted",
+    "successMessage": "Thank you. We will review this comment soon.",
+    "errors": {
+      "selectReason": "Please choose a report reason.",
+      "submitFailed": "An error occurred while submitting the report. Please try again."
+    },
+    "reasons": {
+      "spam": "Spam",
+      "offensive": "Offensive content",
+      "inappropriate": "Inappropriate",
+      "illegal": "Illegal content",
+      "untrue": "False content",
+      "falseInformation": "Misleading information",
+      "other": "Other reason"
+    }
+  },
+  "commentsPage": {
+    "title": "Comments",
+    "emptyLabel": "Comments",
+    "emptyMessage": "No comments yet. Be the first to comment.",
+    "attachmentAlt": "Comment attachment",
+    "pageInfo": "Page {current} of {total}",
+    "confirmDelete": "Are you sure you want to delete this comment?",
+    "errors": {
+      "loadFailed": "An error occurred while loading comments."
+    },
+    "reactions": {
+      "support": "Agree",
+      "neutral": "Neutral",
+      "oppose": "Disagree"
+    },
+    "you": "You"
+  },
+  "profilePage": {
+    "title": "My Profile",
+    "subtitle": "Manage your account information and update your password",
+    "noPlan": "No plan",
+    "lastLogin": "Last login",
+    "accountInfo": "Account information",
+    "systemInfo": "System information",
+    "currentPlan": "Current plan",
+    "planType": "Plan type",
+    "editAccount": "Edit account details",
+    "saving": "Saving...",
+    "saveChanges": "Save changes",
+    "tabs": {
+      "userInfo": "User information",
+      "editData": "Edit data",
+      "password": "Update password",
+      "wallet": "Wallet",
+      "privacy": "حساب کاربری و حریم خصوصی"
+    },
+    "fields": {
+      "name": "Name",
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "phoneNumber": "Phone number",
+      "country": "Country",
+      "position": "Position",
+      "positionJob": "Position / Job",
+      "birthDate": "Date of birth",
+      "role": "Role",
+      "status": "Status",
+      "points": "Points",
+      "rank": "رتبه",
+      "price": "Price"
+    },
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "countrySearch": "Search for a country",
+      "position": "Software engineer"
+    },
+    "status": {
+      "active": "Active"
+    },
+    "password": {
+      "title": "Update password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm password",
+      "updating": "Updating...",
+      "update": "Update password"
+    },
+    "messages": {
+      "fillAllFields": "Please fill in all fields.",
+      "passwordMismatch": "Passwords do not match.",
+      "passwordUpdated": "Password updated successfully.",
+      "passwordUpdateFailed": "An error occurred while updating the password.",
+      "chooseCountry": "Please choose a country from the list.",
+      "noChanges": "You have not made any changes.",
+      "profileUpdated": "Your profile has been updated successfully.",
+      "profileUpdateFailed": "An error occurred while updating your profile."
+    },
+    "wallet": {
+      "title": "Wallet",
+      "availableBalance": "Available balance",
+      "deposit": "Add funds",
+      "recentTransactions": "Recent transactions",
+      "depositType": "Deposit",
+      "withdrawType": "Withdrawal",
+      "noTransactions": "No transactions yet",
+      "withdrawComingSoon": "The withdrawal window will open soon."
+    }
+  },
+  "eventUpload": {
+    "maxPerFile": "Maximum per file: 100 MB",
+    "dragFiles": "Drag files here or",
+    "clickToChoose": "click to choose",
+    "supportedFiles": "Images and videos (max 100 MB per file)",
+    "selectedFiles": "Selected files ({count})",
+    "uploading": "Uploading...",
+    "uploadFiles": "Upload files",
+    "success": "Files uploaded successfully!",
+    "errors": {
+      "fileTooLarge": "File \"{name}\" is larger than 100 MB.",
+      "unsupportedType": "File type \"{name}\" is not supported."
+    }
+  },
+  "security": {
+    "denied": "اجازه دسترسی به این منبع را ندارید.",
+    "notFound": "منبع درخواستی یافت نشد.",
+    "disabled": "این حساب غیرفعال است. با پشتیبانی تماس بگیرید.",
+    "invalidMedia": "فایل رسانه نامعتبر، پشتیبانی‌نشده یا فراتر از حدود پردازش امن است.",
+    "unavailable": "این رسانه فعلاً در دسترس نیست.",
+    "currencyMismatch": "ارز کیف پول با این تراکنش مطابقت ندارد.",
+    "insufficientBalance": "موجودی در دسترس کافی نیست.",
+    "invalidWithdrawal": "برداشت در وضعیت فعلی قابل تغییر نیست. با پشتیبانی تماس بگیرید.",
+    "paymentRequired": "این طرح به پرداخت تأییدشده نیاز دارد. با پشتیبانی تماس بگیرید.",
+    "invalidCode": "کد تأیید نامعتبر یا منقضی است.",
+    "requestFailed": "درخواست انجام نشد. دوباره تلاش کنید.",
+    "rateLimit": "درخواست‌ها بیش از حد است. بعداً تلاش کنید."
+  },
+  "googleAuth": {
+    "continue": "ادامه با Google",
+    "signup": "ثبت‌نام با Google",
+    "or": "یا",
+    "signingIn": "در حال ورود…",
+    "cancelled": "احراز هویت لغو شد.",
+    "expired_state": "مهلت این تلاش برای ورود تمام شده است. دوباره شروع کنید.",
+    "invalid_state": "این درخواست نامعتبر است یا قبلاً استفاده شده است. دوباره شروع کنید.",
+    "oauth_failed": "Google نتوانست احراز هویت را کامل کند. دوباره تلاش کنید.",
+    "callback_failed": "احراز هویت ناموفق بود. دوباره تلاش کنید.",
+    "identity_invalid": "Google نتوانست هویت و ایمیل شما را تأیید کند. از روش ورود دیگری استفاده کنید.",
+    "disabled": "این حساب در دسترس نیست. با پشتیبانی تماس بگیرید.",
+    "linking_required": "با روش فعلی حساب خود وارد شوید. اتصال Google نیازمند ورود قبلی به آن حساب است؛ این قابلیت هنوز در دسترس نیست. در صورت نیاز با پشتیبانی تماس بگیرید.",
+    "unavailable": "احراز هویت Google اکنون در دسترس نیست. از ایمیل و رمز عبور استفاده کنید یا بعداً تلاش کنید.",
+    "busy": "ورود از قبل در حال انجام است. دوباره تلاش کنید.",
+    "alreadyLinked": "این حساب Google قبلاً متصل شده است.",
+    "completeProfile": "حساب خود را تکمیل کنید",
+    "profileRequired": "برای تکمیل ساخت حساب، اطلاعات الزامی را وارد کنید.",
+    "country": "کشور",
+    "dateOfBirth": "تاریخ تولد",
+    "finishSignup": "ساخت حساب",
+    "profileInvalid": "کشور و تاریخ تولد معتبری را وارد کنید که در آینده نباشد.",
+    "retry": "تلاش دوباره",
+    "backToLogin": "بازگشت به ورود",
+    "linkAccountTitle": "اتصال حساب Google",
+    "linkAccountDesc": "حسابی با این ایمیل وجود دارد. برای اتصال امن حساب Google، گذرواژه خود را وارد کنید.",
+    "accountPassword": "گذرواژه حساب",
+    "confirmLink": "تأیید و اتصال حساب",
+    "invalidCredentials": "گذرواژه نامعتبر است. لطفاً اطلاعات خود را بررسی کرده و دوباره امتحان کنید.",
+    "linkSuccess": "حساب Google با موفقیت متصل شد.",
+    "unlinkSuccess": "اتصال حساب Google با موفقیت لغو شد.",
+    "identity_conflict": "این ایمیل به هویت Google دیگری متصل است. با روش فعلی حساب وارد شوید یا با پشتیبانی تماس بگیرید.",
+    "account_login_required": "با روش فعلی حساب وارد شوید، سپس Google را از نمایه خود متصل کنید.",
+    "recovery_required": "برای اتصال دوباره Google، بازیابی یک‌باره حساب لازم است.",
+    "recovery_web_required": "بازیابی یک‌باره را در وب‌سایت Scemory کامل کنید. ورودهای بعدی Google خودکار خواهند بود.",
+    "invalid_recovery_code": "کد بازیابی نادرست است. کد را بررسی و دوباره تلاش کنید.",
+    "recovery_expired": "درخواست بازیابی منقضی شده است. ورود Google را دوباره آغاز کنید.",
+    "recovery_attempts_exceeded": "تلاش‌های نادرست بیش از حد است. ورود Google را دوباره آغاز کنید.",
+    "recovery_rate_limited": "به‌تازگی کد بازیابی ارسال شده است. کمی صبر کنید.",
+    "recovery_unavailable": "ارسال کد بازیابی ممکن نشد. بعداً دوباره تلاش کنید.",
+    "recoveryTitle": "اتصال دوباره حساب Google",
+    "recoverySent": "کد یک‌بارمصرف ارسال‌شده به {email} را وارد کنید. این کار فقط یک بار لازم است.",
+    "recoveryCode": "کد بازیابی",
+    "confirmRecovery": "تأیید و ادامه"
+  },
+  "facebookAuth": {
+    "continue": "ادامه با Facebook",
+    "signup": "ثبت‌نام با Facebook",
+    "signingIn": "در حال ورود…",
+    "unavailable": "احراز هویت Facebook اکنون در دسترس نیست. از ایمیل و رمز عبور استفاده کنید یا بعداً تلاش کنید.",
+    "cancelled": "احراز هویت لغو شد.",
+    "invalid_state": "این درخواست نامعتبر است یا قبلاً استفاده شده است. دوباره شروع کنید.",
+    "expired": "مهلت این تلاش برای ورود تمام شده است. دوباره شروع کنید.",
+    "callback_failed": "احراز هویت ناموفق بود. دوباره تلاش کنید.",
+    "disabled": "این حساب در دسترس نیست. با پشتیبانی تماس بگیرید.",
+    "linking_required": "با روش فعلی حساب خود وارد شوید. اتصال Facebook نیازمند ورود قبلی به آن حساب است؛ این قابلیت هنوز در دسترس نیست. در صورت نیاز با پشتیبانی تماس بگیرید.",
+    "busy": "ورود از قبل در حال انجام است. دوباره تلاش کنید.",
+    "completeProfile": "حساب خود را تکمیل کنید",
+    "profileRequired": "برای تکمیل ساخت حساب، اطلاعات الزامی را وارد کنید.",
+    "country": "کشور",
+    "dateOfBirth": "تاریخ تولد",
+    "finishSignup": "ساخت حساب",
+    "retry": "تلاش دوباره",
+    "backToLogin": "بازگشت به ورود",
+    "identity_invalid": "Facebook نتوانست هویت شما را تأیید کند. دوباره تلاش کنید.",
+    "verification_required": "ایمیل حساب فعلی خود را با روش ورود اصلی آن تأیید کنید.",
+    "email_unavailable": "ارسال ایمیل تأیید ممکن نشد. بعداً دوباره تلاش کنید.",
+    "otp_expired": "مهلت این کد تمام شده است. کد جدیدی درخواست کنید.",
+    "otp_invalid": "کد تأیید نادرست است.",
+    "otp_attempts": "تعداد تلاش‌ها بیش از حد است. پس از زمان انتظار کد جدیدی درخواست کنید.",
+    "otp_cooldown": "پیش از درخواست کد دیگر منتظر بمانید.",
+    "native_unavailable": "ورود با Facebook در وب‌سایت Scemory در دسترس است. از مرورگر استفاده کنید.",
+    "email": "نشانی ایمیل",
+    "sendCode": "ارسال کد تأیید",
+    "verifyEmail": "ایمیل خود را تأیید کنید",
+    "codeSent": "کد ارسال‌شده به {email} را وارد کنید.",
+    "verificationCode": "کد تأیید",
+    "resendIn": "ارسال دوباره پس از {seconds} ثانیه",
+    "resend": "ارسال دوباره کد",
+    "profileInvalid": "ایمیل معتبر، کشور و تاریخ تولدی وارد کنید که در آینده نباشد."
+  },
+  "mediaCredits": {
+    "myCredits": "اعتبارهای رسانه من",
+    "photosAvailable": "عکس‌های موجود",
+    "videosAvailable": "ویدیوهای موجود",
+    "photos": "عکس",
+    "videos": "ویدیو",
+    "photoQuotaDesc": "سهمیه دائمی دریافت عکس",
+    "videoQuotaDesc": "سهمیه دائمی دریافت ویدیو",
+    "activeTier": "سطح دسترسی فعال",
+    "breakdownByTier": "تفکیک بر اساس سطح",
+    "viewDashboard": "داشبورد اعتبارها",
+    "getMoreCredits": "خرید اعتبار بیشتر",
+    "browseMarketplace": "مرور فروشگاه",
+    "noTier": "بدون طرح فعال",
+    "getWithPlan": "دریافت با اشتراک",
+    "redeemed": "دریافت شد",
+    "redeemSuccess": "رسانه با موفقیت با اعتبار طرح شما دریافت شد!",
+    "redeemFailed": "دریافت رسانه با طرح ناموفق بود.",
+    "activeGrants": "سهمیه‌های فعال",
+    "redemptionHistory": "تاریخچه دریافت‌ها",
+    "noGrants": "هیچ سهمیه فعالی وجود ندارد. برای دریافت اعتبار مشترک شوید.",
+    "noRedemptions": "هنوز دریافتی ثبت نشده است.",
+    "tier": "سطح",
+    "plan": "طرح",
+    "tierRank": "رتبه سطح",
+    "grantedOn": "تاریخ اعطا",
+    "payoutCap": "سقف پرداخت به سازنده",
+    "payWithWallet": "پرداخت از کیف پول",
+    "payWithPaypal": "پرداخت با پی‌پال",
+    "insufficientCredits": "اعتبار ناکافی یا رتبه طرح برای این رسانه پایین است.",
+    "includedQuotas": "سهمیه‌های رسانه شامل شده",
+    "permanentQuotas": "سهمیه‌های رسانه دائمی بدون انقضا"
+  },
+  "dataDeletion": {
+    "title": "دستورالعمل‌های حذف داده‌ها",
+    "subtitle": "Complete instructions for deleting your Scemory account and associated personal data.",
+    "metaInstructionsCompliance": "Complies with Meta / Facebook Platform Data Deletion Instructions Policy",
+    "effectiveDate": "Effective Date: October 2026",
+    "checkStatusTitle": "Check Deletion Request Status",
+    "checkStatusDesc": "Enter your deletion reference code below (e.g. from your profile request or Facebook removal) to view the real-time status of your data deletion.",
+    "referencePlaceholder": "e.g. DEL-XXXXXX-XXXX",
+    "checkButton": "Check Status",
+    "checking": "Checking...",
+    "statusNotFound": "No deletion request found for this reference code.",
+    "statusResult": {
+      "reference": "Reference Code",
+      "status": "Current Status",
+      "type": "Request Type",
+      "maskedEmail": "Associated Account",
+      "financialNotice": "Administrative review required due to unsettled financial ledger or pending withdrawal balance.",
+      "statuses": {
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending Processing",
+        "under_review": "Under Administrative Review",
+        "processing": "Processing Deletion",
+        "completed": "Completed & Scrubbed",
+        "cancelled": "Cancelled",
+        "failed": "Failed"
+      }
+    },
+    "sections": {
+      "sectionA": {
+        "title": "A. How to Delete Your Account and Data from Within Scemory",
+        "p1": "You can permanently delete your Scemory account and associated personal data directly from your account settings at any time without contacting support:",
+        "steps": [
+          "Sign in to your Scemory account at dev.scemory.com or via the Scemory app.",
+          "Open your Profile by clicking your avatar or selecting Profile in the navigation menu.",
+          "Select the 'Account & Privacy' tab.",
+          "Click the red 'Delete Account & Data' button located in the danger zone.",
+          "Type the required confirmation phrase DELETE into the input box.",
+          "Confirm your identity: enter your current password, or if you sign in with Google or Facebook, enter the one-time 6-digit confirmation code sent to your registered email address.",
+          "Upon confirmation, your active sessions and authentication tokens are immediately revoked, and your personal data is scrubbed and anonymized."
+        ]
+      },
+      "sectionB": {
+        "title": "B. Alternative Request if Unable to Access Your Account",
+        "p1": "If you cannot sign in to your Scemory account (for example, if you lost access to your social login provider or email credentials), you can request manual data deletion by sending an email from your registered email address to our official privacy and support channel:",
+        "p2": "Please include 'Data Deletion Request' in the subject line, along with your registered username or email address. Our security team will verify your ownership and process the deletion within 30 days."
+      },
+      "sectionC": {
+        "title": "C. Disconnecting Scemory from Facebook Settings (Apps & Websites)",
+        "p1": "When you remove Scemory from your Facebook account via Facebook Settings > Apps and Websites, Facebook disconnects future data sharing with Scemory and informs us of your app removal.",
+        "p2": "Removing Scemory from Facebook revokes Facebook OAuth access. To ensure that your previously stored Scemory profile, media uploads, and community interactions are also deleted from Scemory servers, use the self-service deletion option in your Scemory Profile or submit a request using your registered email address.",
+        "p3": "If Facebook provides you with a confirmation code upon removal, you can enter that code in the Reference Status tool above to track the status of your data disconnection."
+      },
+      "sectionD": {
+        "title": "D. Types of Personal Data Deleted",
+        "p1": "When your deletion request is processed, the following personal data categories are permanently removed or scrubbed:",
+        "items": [
+          "Personal profile information: real name, email address, phone number, location, biography, and date of birth.",
+          "Profile photos, avatars, and personal media files stored in public and private storage.",
+          "Social identity bindings: Google Subject ID, Facebook User ID, and associated provider profile links.",
+          "Active sessions, Sanctum authentication tokens, and stored device tokens.",
+          "Shopping cart items, wishlist entries, and unverified registration OTPs.",
+          "Unpurchased event media and inactive personal event listings."
+        ]
+      },
+      "sectionE": {
+        "title": "E. Types of Data Retained for Legal & Statutory Compliance",
+        "p1": "In accordance with GDPR Article 17(3)(b), commercial tax regulations, and statutory bookkeeping laws, certain financial records cannot be immediately erased:",
+        "items": [
+          "Financial transaction ledgers: PayPal order IDs, captured deposit records, and withdrawal payment vouchers must be preserved for statutory tax and accounting retention periods.",
+          "Creator revenue and commission accounting ledgers required for annual tax compliance and reporting.",
+          "Licensing entitlements for media already purchased by third-party customers: buyers retain their purchased commercial or personal license rights, but creator personal identification is replaced with an anonymous identifier."
+        ],
+        "p2": "All retained records are decoupled from your personal identity: name and email are permanently replaced with anonymous references (e.g. 'Deleted User #1234') so that financial records cannot be linked back to you."
+      },
+      "sectionF": {
+        "title": "F. Processing Timeline & Review Safeguards",
+        "p1": "For standard accounts without active financial obligations, account deletion and data scrubbing take place immediately upon two-factor confirmation.",
+        "p2": "If your account has an unsettled wallet balance or pending payout withdrawals, the deletion request is placed into 'Under Review' status. Our administrative team will reach out to settle or reconcile your balances before completing the deletion within 30 business days.",
+        "p3": "Once processing is complete, your reference status will reflect 'Completed' and no further sign-in or data recovery will be possible."
+      },
+      "sectionG": {
+        "title": "G. Reference Tracking & Status Verification",
+        "p1": "Every deletion request generates a unique reference code (e.g., DEL-XXXXXX-XXXX). You can bookmark this page and check your status at any time using the tool above."
+      }
+    },
+    "profile": {
+      "cardTitle": "دستورالعمل‌های حذف داده‌ها",
+      "cardDesc": "Permanently delete your Scemory account and all associated personal information. This action is irreversible.",
+      "warningHeader": "Important: This action cannot be undone",
+      "warningPoints": [
+        "Your profile, personal media, wishlists, and comments will be permanently erased or anonymized.",
+        "All active login sessions, mobile access tokens, and connected social accounts will be revoked.",
+        "Any unwithdrawn wallet balances must be settled before full deletion can be finalized.",
+        "Third-party licenses for media previously purchased by other users remain valid under anonymous attribution."
+      ],
+      "deleteButton": "دستورالعمل‌های حذف داده‌ها",
+      "activeRequestNotice": "You have an active deletion request in progress.",
+      "cancelButton": "Cancel Deletion Request",
+      "modalTitle": "Confirm Account Deletion",
+      "modalDesc": "To confirm deletion of your Scemory account and personal data, complete the verification below.",
+      "typeDeletePrompt": "Type DELETE to confirm:",
+      "typeDeletePlaceholder": "DELETE",
+      "passwordPrompt": "Enter your account password:",
+      "passwordPlaceholder": "Current password",
+      "codePrompt": "Enter the 6-digit verification code sent to your email:",
+      "codePlaceholder": "123456",
+      "resendCode": "Resend Code",
+      "confirmDeleteButton": "Permanently Delete My Data",
+      "cancelModalButton": "Cancel",
+      "processing": "Processing...",
+      "successToast": "Account and data deletion completed. You have been signed out.",
+      "underReviewToast": "Your deletion request has been submitted and is under administrative review due to active financial balances.",
+      "cancelSuccessToast": "Deletion request has been successfully cancelled."
+    }
+  },
+  "comparisons": {
+    "footerTitle": "مقایسه‌ها",
+    "links": {
+      "historypin": "سیموری در برابر Historypin",
+      "pastvu": "سیموری در برابر PastVu",
+      "theClio": "سیموری در برابر The Clio"
+    },
+    "common": {
+      "exploreScemory": "کاوش در سیموری",
+      "visitOfficialWebsite": "مشاهده وب‌سایت رسمی",
+      "createAccount": "ایجاد حساب کاربری",
+      "feature": "ویژگی و قابلیت",
+      "scemory": "سیموری",
+      "verifiedDate": "تاریخ راستی‌آزمایی: ۲۴ اکتبر ۲۰۲۶",
+      "disclaimer": "سیموری یک پلتفرم مستقل است و هیچ‌گونه وابستگی، حمایت مالی یا ارتباط سازمانی با پلتفرم‌های مقایسه‌شده در این بخش ندارد. تمامی نشان‌ها و نام‌های تجاری متعلق به دارندگان قانونی آنهاست. نکات مقایسه بر اساس مستندات عمومی و تأییدشده تا ۲۴ اکتبر ۲۰۲۶ تنظیم شده است.",
+      "methodologyTitle": "منابع و روش‌شناسی راستی‌آزمایی",
+      "methodologyDesc": "این مقایسه مستند بر پایه مستندات رسمی پلتفرم‌ها، وب‌سایت‌های اصلی و ارزیابی مستقیم کارکردهای فنی تدوین شده است. ما میان قابلیت‌های کاملاً فعال، کارکردهای جزئی، ویژگی‌های ارائه‌نشده و موارد ثبت‌نشده در مستندات عمومی تفاوت شفاف قائل می‌شویم.",
+      "whyChooseTitle": "چرا سیموری را انتخاب کنیم؟",
+      "ctaTitle": "لحظه‌ها را ماندگار کنید. رویدادها را ثبت کنید. حافظه‌ای مشترک بسازید.",
+      "ctaSubtitle": "به یک پلتفرم جهانی و مدرن بپیوندید که ثبت رویدادهای معاصر، پاسداشت حافظه تاریخی و بازار عادلانه رسانه را برای پدیدآورندگان پیوند می‌زند.",
+      "beyondTitle": "سیموری چه مزایایی نسبت به {competitor} ارائه می‌دهد؟",
+      "whoShouldUseTitle": "کدام پلتفرم برای چه کسانی مناسب‌تر است؟",
+      "overviewTitle": "نگاهی کلی به پلتفرم‌ها",
+      "tableTitle": "مقایسه تفصیلی ویژگی‌ها و قابلیت‌ها",
+      "vs": "در برابر",
+      "keyHighlights": "نکات برجسته",
+      "organizationType": "ماهیت ساختار",
+      "founded": "سال بنیان‌گذاری / راه‌اندازی",
+      "headquarters": "مقر اصلی / حوزه فعالیت",
+      "coreMission": "مأموریت محوری",
+      "officialWebsite": "وب‌سایت رسمی",
+      "independentNotice": "مقایسه‌ای مستقل بر مبنای اطلاعات مستند و در دسترس همگان.",
+      "audienceScemoryHeading": "سیموری برای چه کسانی ساخته شده است",
+      "audienceCompetitorHeading": "{competitor} برای چه کسانی ساخته شده است"
+    },
+    "status": {
+      "supported": "در دسترس و کاملاً فعال",
+      "partial": "پشتیبانی به‌صورت محدود",
+      "not_offered": "ارائه نمی‌شود",
+      "not_documented": "در مستندات عمومی ثبت نشده"
+    },
+    "features": {
+      "historicalEvents": {
+        "name": "ثبت و مستندسازی رویدادهای تاریخی",
+        "desc": "ثبت رویدادهای تاریخی، نقاط عطف فرهنگی و خاطرات جمعی گذشته به همراه جزئیات کامل و زمینه روایی."
+      },
+      "locationMemories": {
+        "name": "خاطرات مکان‌محور و نقشه‌نگاری",
+        "desc": "موقعیت‌یابی دقیق خاطرات، تصاویر و روایت‌ها بر روی نقشه‌های تعاملی با مختصات مشخص."
+      },
+      "photoArchives": {
+        "name": "آرشیو تصاویر تاریخی",
+        "desc": "نگهداری و نمایش عکس‌های تاریخی به همراه متاداده‌های آرشیوی، برچسب‌ها و ارجاع دقیق منبع."
+      },
+      "videoDocumentation": {
+        "name": "پشتیبانی و پخش ویدیوهای باکیفیت",
+        "desc": "بارگذاری مستقیم، پردازش، درج واترمارک محافظتی و پخش روان فایل‌های ویدیویی با وضوح بالا."
+      },
+      "userContributions": {
+        "name": "مشارکت آزاد کاربران و جامعه",
+        "desc": "امکان ثبت رویدادها، آپلود عکس‌ها و اشتراک‌گذاری خاطرات برای تمامی اعضای ثبت‌نام‌شده."
+      },
+      "communityParticipation": {
+        "name": "تعامل اجتماعی و تبادل نظر",
+        "desc": "گفت‌وگوی تعاملی از طریق دیدگاه‌ها، پاسخ‌های زنجیره‌ای، نشان‌های واکنش، فهرست علاقه‌مندی‌ها و رتبه‌بندی هفتگی."
+      },
+      "chronologicalBrowsing": {
+        "name": "مرور زمانی و خط زمانی تاریخ",
+        "desc": "کاوش خاطرات بر پایه بازه‌های تاریخی، نوار زمانی سال‌ها و ترتیب دقیق رویدادها."
+      },
+      "eventCentricOrg": {
+        "name": "ساختار محتوای مبتنی بر رویداد",
+        "desc": "معماری پیشرفته که هر رویداد را به عنوان یک واحد مستقل شامل چند رسانه و مشارکت‌کننده تعریف می‌کند."
+      },
+      "contributorProfiles": {
+        "name": "پروفایل و گالری اختصاصی پدیدآورندگان",
+        "desc": "صفحات ویژه کاربران برای نمایش رویدادها، گالری رسانه‌ها، آمار فعالیت و اعتبار در جامعه."
+      },
+      "discoveryMap": {
+        "name": "نقشه تعاملی کاوش و جست‌وجوی هوشمند",
+        "desc": "جست‌وجوی فضایی با خوشه‌بندی پویای نقاط، فیلترهای موضوعی و تاریخی و جست‌وجوی متنی."
+      },
+      "mediaMarketplace": {
+        "name": "بازار تجاری عکس و فیلم",
+        "desc": "فروشگاه دیجیتال داخلی برای فروش و صدور مجوز استفاده تجاری از تصاویر و ویدیوهای باکیفیت."
+      },
+      "mediaPurchases": {
+        "name": "خرید مستقیم و دانلود فایل‌های اصلی",
+        "desc": "فرایند امن خرید دیجیتال با اعطای فوری مجوز دانلود فایل اصلی بدون واترمارک به خریدار."
+      },
+      "commercialLicensing": {
+        "name": "حقوق و مجوزهای تجاری",
+        "desc": "شرایط حقوقی شفاف برای بهره‌برداری تجاری و رسانه‌ای از آثار خریداری‌شده."
+      },
+      "creatorMonetization": {
+        "name": "کسب درآمد و تسهیم عادلانه سود",
+        "desc": "پاداش مالی منصفانه با تخصیص ۸۵ درصد از بهای فروش مستقیم به عکاسان و تصویربرداران."
+      },
+      "payoutSystem": {
+        "name": "سیستم تسویه حساب و واریز درآمد",
+        "desc": "دفتر مالی شفاف با قابلیت ثبت درخواست برداشت موجودی از طریق پی‌پال و حواله بانکی."
+      },
+      "subscriptionPlans": {
+        "name": "طرح‌های اشتراک ماهانه",
+        "desc": "پلن‌های رایگان و ویژه با سهمیه‌های دوره‌ای دانلود عکس و ویدیو و مزایای کاربری اختصاصی."
+      },
+      "mediaCredits": {
+        "name": "اعتبار دائمی رسانه (Media Credits)",
+        "desc": "اعتبارهای پیش‌خرید بدون تاریخ انقضا برای خرید آسان و سریع آثار بصری."
+      },
+      "multilingual": {
+        "name": "پلتفرم چندزبانه (۱۳ زبان با پشتیبانی کامل RTL)",
+        "desc": "ترجمه بومی و کامل در ۱۳ زبان دنیا با چینش راست‌به‌چپ طبیعی برای فارسی، عربی و اردو."
+      },
+      "institutionalUse": {
+        "name": "همکاری‌های دانشگاهی، موزه‌ای و پژوهشی",
+        "desc": "ابزارهای ویژه برای هماهنگی با موزه‌ها، دانشگاه‌ها، کتابخانه‌ها و پژوهشگران تاریخ."
+      }
+    },
+    "historypin": {
+      "heroTitle": "سیموری در برابر Historypin: دو رویکرد به پاسداشت خاطرات و ثبت رویدادها",
+      "heroSubtitle": "مقایسه‌ای مستند میان آرشیو میراث محلی در Historypin و پلتفرم چندرسانه‌ای رویدادمحور سیموری مجهز به بازار فروش آثار.",
+      "primaryFocus": "تاریخ بومی، حافظه جمعی، عکس‌ها و روایت‌های تاریخی شهروندی و اماکن میراثی.",
+      "logoAlt": "لوگوی رسمی Historypin",
+      "seoTitle": "سیموری در برابر Historypin: مقایسه جامع دو پلتفرم",
+      "seoDescription": "بررسی تفاوت‌های سیموری و Historypin در زمینه بایگانی عکس‌های تاریخی، پشتیبانی از ویدیو، درآمدزایی پدیدآورندگان و پشتیبانی چندزبانه.",
+      "aboutScemory": "سیموری یک پلتفرم نوین برای مستندسازی رویدادها و بازارچه‌ای چندرسانه‌ای است که پاسداری از خاطرات گذشته را با پوشش رخدادهای زنده معاصر پیوند می‌دهد. با بهره‌گیری از ساختار رویدادمحور، عکاسان، خبرنگاران و پژوهشگران می‌توانند عکس‌ها و ویدیوهای باکیفیت را به اشتراک گذاشته و از طریق صدور مجوزهای تجاری کسب درآمد کنند.",
+      "aboutCompetitor": "پلتفرم Historypin در سال ۲۰۱۰ توسط سازمان غیرانتفاعی Shift با همکاری گوگل راه‌اندازی شد. این سامانه به گروه‌های محلی، کتابخانه‌ها و موزه‌ها اجازه می‌دهد تصاویر تاریخی و روایت‌های شفاهی را روی نقشه جهانی قرار داده و عکس‌های قدیمی را با نمای کنونی Google Street View مقایسه کنند.",
+      "scemoryAdvantages": [
+        {
+          "title": "معماری متمرکز بر هویت مستقل رویداد",
+          "desc": "برخلاف نقشه‌های متکی به نشانه‌گذاری ساده، سیموری محتوا را حول رویدادهای مشخص و قابل جست‌وجو سازمان‌دهی می‌کند که چند پدیدآورنده و آلبوم رسانه‌ای را گردهم می‌آورند."
+        },
+        {
+          "title": "پشتیبانی بومی از ویدیوهای با وضوح بالا",
+          "desc": "در حالی که Historypin بر عکس‌های ثابت تمرکز دارد، سیموری امکان بارگذاری، تبدیل، نشانه‌گذاری با واترمارک و پخش روان ویدیوها را فراهم می‌سازد."
+        },
+        {
+          "title": "اقتصاد پدیدآورندگان و بازار تجاری رسانه",
+          "desc": "سیموری با پرداخت ۸۵ درصد از بهای فروش به تولیدکنندگان محتوا و ارائه قراردادهای رسمی، امکان کسب درآمدی را ایجاد کرده که در آرشیوهای داوطلبانه وجود ندارد."
+        },
+        {
+          "title": "گستره جهانی در ۱۳ زبان با پشتیبانی راست‌به‌چپ",
+          "desc": "سیموری با ترجمه اصیل در ۱۳ زبان مطرح دنیا طراحی شده و در زبان‌های راست‌به‌چپ همچون فارسی، عربی و اردو تجربه‌ای روان و طبیعی ارائه می‌دهد."
+        }
+      ],
+      "audienceScemory": "عکاسان، مستندسازان ویدیویی، خبرنگاران، برگزارکنندگان همایش‌ها و پژوهشگرانی که به دنبال فضایی حرفه‌ای برای ذخیره عکس و فیلم همراه با امکان فروش مجوز تجاری هستند.",
+      "audienceCompetitor": "انجمن‌های تاریخ محلی، کتابخانه‌های عمومی، مدارس و پژوهشگران افتخاری که به دنبال بستری رایگان و غیرانتفاعی برای نگاشت عکس‌های کهن بر مختصات خیابانی هستند.",
+      "whyChooseSummary": "Historypin پروژه‌ای پیشرو و شایسته احترام در حفظ میراث مردمی است. اگر به دنبال ثبت رویدادهای زنده، میزبانی ویدیوهای باکیفیت، امکان فروش آثار و ارتباط با مخاطبان ۱۳ زبان هستید، سیموری گزینه‌ای متناسب و کارآمد است."
+    },
+    "pastvu": {
+      "heroTitle": "سیموری در برابر PastVu: نقشه‌نگاری عکس‌های کهن در کنار مستندسازی چندرسانه‌ای رویدادها",
+      "heroSubtitle": "مقایسه‌ای فنی میان آرشیو عکس‌های تاریخی زاویه‌دار در PastVu و پلتفرم چندرسانه‌ای سیموری مجهز به بازار تجاری پدیدآورندگان.",
+      "primaryFocus": "آرشیو تصاویر تاریخی (۱۸۲۶ تا ۲۰۰۰) همراه با موقعیت جغرافیایی و جهت زاویه عکاسی.",
+      "logoAlt": "لوگوی رسمی PastVu",
+      "seoTitle": "سیموری در برابر PastVu: بررسی تفصیلی امکانات",
+      "seoDescription": "تفاوت‌های سیموری و PastVu در حوزه‌های مکان‌یابی زاویه دوربین، پشتیبانی ویدیو، مجوزهای تجاری و پوشش زبانی بین‌المللی را بررسی کنید.",
+      "aboutScemory": "سیموری ثبت رویدادهای معاصر را با نگهداری خاطرات گذشته در سامانه‌ای یکپارچه همراه ساخته است. این پلتفرم در کنار کاوش مکانی و امکان تبادل نظر اعضا، بازاری دیجیتال ارائه می‌دهد که به مالکان آثار اجازه می‌دهد تصاویر خود را با شرایط مالی منصفانه واگذار کنند.",
+      "aboutCompetitor": "PastVu یک پروژه مستقل و غیرانتفاعی است که در سال ۲۰۰۹ برای گردآوری، تاریخ‌گذاری و تعیین موقعیت عکس‌های تاریخی سکونت‌گاه‌های انسانی بین سال‌های ۱۸۲۶ تا ۲۰۰۰ تأسیس شد. پیکان‌های نمایانگر زاویه دید لنز دوربین و بررسی‌های دقیق جامعه کاربران از شاخصه‌های اصلی آن است.",
+      "scemoryAdvantages": [
+        {
+          "title": "پوشش هم‌زمان رویدادهای تاریخی و معاصر",
+          "desc": "PastVu فقط تصاویر تا سال ۲۰۰۰ را می‌پذیرد. سیموری گذشته و حال را به هم پیوند می‌زند و رخدادهای کهن را در کنار جشنواره‌ها و اخبار امروز جا می‌دهد."
+        },
+        {
+          "title": "بارگذاری و پخش اختصاصی ویدیو",
+          "desc": "PastVu منحصراً ویژه عکس‌های ثابت است. سیموری چرخه کامل پردازش ویدیو، واترمارک محافظتی و پخش آنلاین را برای فیلم‌های تاریخی و جدید ارائه می‌کند."
+        },
+        {
+          "title": "بازارچه دیجیتال با حقوق استفاده تجاری",
+          "desc": "سیموری مجهز به سامانه فروش مجوز استفاده با اعطای ۸۵ درصد سود به هنرمند است که به آرشیوهای تصویری ارزش اقتصادی می‌بخشد."
+        },
+        {
+          "title": "ترجمه جامع به ۱۳ زبان با چینش راست‌به‌چپ",
+          "desc": "در حالی که PastVu تنها به انگلیسی و روسی محدود است، سیموری در ۱۳ زبان معتبر جهان همراه با سازگاری کامل راست‌به‌چپ عرضه می‌شود."
+        }
+      ],
+      "audienceScemory": "عکاسان حرفه‌ای، تصویربرداران، خبرگزاری‌ها، پژوهشگران جامعه‌شناسی و مدیران رویدادهایی که به دنبال انتشار و فروش قانونی تصاویر و فیلم‌ها هستند.",
+      "audienceCompetitor": "تاریخ‌نگاران معماری، گردآورندگان عکس‌های قدیمی و نقشه‌نگارانی که مایلند دگرگونی‌های شهری را بین ۱۸۲۶ تا ۲۰۰۰ با زوایای دقیق لنز رصد کنند.",
+      "whyChooseSummary": "PastVu در زمینه مکان‌یابی عکس‌های قدیمی با جهت دید لنز مرجعی یگانه است. سیموری انتخابی فراگیر برای کسانی است که نیازمند محیطی چندرسانه‌ای برای ثبت رویدادهای جاری، اشتراک ویدیو، درآمدزایی و گستره مخاطب بین‌المللی هستند."
+    },
+    "theClio": {
+      "heroTitle": "سیموری در برابر The Clio: کاوش بناهای تاریخی و ثبت رویدادهای زنده",
+      "heroSubtitle": "سنجش واقع‌بینانه تفاوت‌های میان راهنمای آموزشی بناهای تاریخی The Clio و پلتفرم چندرسانه‌ای رویدادمحور سیموری.",
+      "primaryFocus": "راهنمای آموزشی بناهای تاریخی، موزه‌ها، یادمان‌ها و تورهای پیاده‌روی میراث فرهنگی.",
+      "logoAlt": "لوگوی رسمی The Clio",
+      "seoTitle": "سیموری در برابر The Clio: تحلیل تطبیقی قابلیت‌ها",
+      "seoDescription": "مقایسه The Clio و سیموری: تفاوت‌های تورهای آموزشی بناهای تاریخی با پلتفرم چندرسانه‌ای رویدادمحور و بازارچه دیجیتال سیموری.",
+      "aboutScemory": "سیموری پلتفرمی با تمرکز بر مفهوم رویداد است که به اشخاص و نهادها امکان می‌دهد لحظات معنادار را ثبت و ماندگار سازند. این پلتفرم میزبانی عکس و ویدیوی باکیفیت، جست‌وجوی نقشه‌ای، جامعه پویا و مجوزهای تجاری را در محیطی مدرن به کاربران تقدیم می‌کند.",
+      "aboutCompetitor": "The Clio یک وب‌سایت و اپلیکیشن آموزشی عام‌المنفعه (بنیاد خیریه 501c3) است که توسط دکتر دیوید تروبرایج، استاد تاریخ، تأسیس شده است. این ابزار به عنوان راهنمای مجازی بناها، یادبودها و موزه‌های آمریکای شمالی عمل می‌کند و دارای مسیرهای پیاده‌روی با روایت‌های صوتی است.",
+      "scemoryAdvantages": [
+        {
+          "title": "ثبت پویا فراتر از یادمان‌های فیزیکی ثابت",
+          "desc": "The Clio به بناها و تابلوهای فیزیکی محدود است. سیموری جشن‌ها، گردهمایی‌ها، آیین‌ها و رویدادهای گذرای اجتماعی را حتی بدون وجود لوح سنگی یا تندیس ثبت می‌کند."
+        },
+        {
+          "title": "مجوزهای تجاری و درآمدزایی برای پدیدآورندگان",
+          "desc": "The Clio به عنوان یک نهاد خیریه هیچ سازوکار تجاری ندارد. سیموری قراردادی قانونی و شفاف فراهم می‌کند که ۸۵ درصد از فروش را به عکاسان و سازندگان ویدیو اختصاص می‌دهد."
+        },
+        {
+          "title": "مخزن مستقیم رسانه و دانلود فایل‌های اصلی",
+          "desc": "سیموری به عنوان یک انبار رسانه‌ای عمل می‌کند که خریداران می‌توانند فایل اصلی را دریافت کنند، در حالی که The Clio رسانه‌های خارجی را صرفاً برای ارجاع درج می‌کند."
+        },
+        {
+          "title": "رویکرد بین‌المللی در ۱۳ زبان با چینش RTL",
+          "desc": "The Clio عمدتاً به زبان انگلیسی و جغرافیای آمریکای شمالی اختصاص دارد. سیموری برای ارتباط با تمام فرهنگ‌ها به ۱۳ زبان مجهز شده و خطوط راست‌به‌چپ را بی‌نقص پشتیبانی می‌کند."
+        }
+      ],
+      "audienceScemory": "عکاسان مستقل، خبرنگاران رویدادها، نهادهای رسانه‌ای و جوامع محلی که می‌خواهند رویدادها را در قالب عکس و ویدیو ثبت کرده و آن را در مقیاس جهانی به اشتراک بگذارند.",
+      "audienceCompetitor": "دانشجویان، پژوهشگران تاریخ، کارشناسان موزه‌داری و گردشگران فرهنگی که مایل به مطالعه مقالات بازبینی‌شده درباره بناهای تاریخی آمریکای شمالی هستند.",
+      "whyChooseSummary": "The Clio راهنمایی ارزشمند و عام‌المنفعه برای آشنایی با ابنیه تاریخی است. سیموری راکتوری مدرن است برای کسانی که می‌خواهند تپش رویدادهای زنده را ثبت کنند، ویدیو بارگذاری نمایند و دستاوردهای هنری خود را در بازاری منصفانه عرضه دارند."
+    }
+  }
 }
