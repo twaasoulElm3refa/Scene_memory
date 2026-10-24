@@ -1381,7 +1381,20 @@
         "confirmLink": "确认并关联账户",
         "invalidCredentials": "密码无效。请检查您的凭据后重试。",
         "linkSuccess": "Google 账户已成功关联。",
-        "unlinkSuccess": "Google 账户已成功解绑。"
+        "unlinkSuccess": "Google 账户已成功解绑。",
+        "identity_conflict": "此邮箱已关联其他 Google 身份。请使用账户现有方式登录或联系支持团队。",
+        "account_login_required": "请使用账户现有方式登录，然后在个人资料中关联 Google。",
+        "recovery_required": "重新关联 Google 需要进行一次性账户恢复。",
+        "recovery_web_required": "请在 Scemory 网站完成一次性恢复。今后使用 Google 登录将自动完成。",
+        "invalid_recovery_code": "恢复代码不正确。请检查后重试。",
+        "recovery_expired": "恢复请求已过期。请重新开始 Google 登录。",
+        "recovery_attempts_exceeded": "错误尝试次数过多。请重新开始 Google 登录。",
+        "recovery_rate_limited": "恢复代码刚刚已发送。请稍候再试。",
+        "recovery_unavailable": "无法发送恢复代码。请稍后再试。",
+        "recoveryTitle": "重新关联 Google 账户",
+        "recoverySent": "请输入发送至 {email} 的一次性代码。此步骤只需完成一次。",
+        "recoveryCode": "恢复代码",
+        "confirmRecovery": "验证并继续"
     },
     "facebookAuth": {
         "continue": "使用 Facebook 继续",

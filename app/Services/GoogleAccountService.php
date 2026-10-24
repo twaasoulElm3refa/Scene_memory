@@ -83,8 +83,26 @@ class GoogleAccountService
 
         $candidate = User::whereRaw('LOWER(email) = ?', [$identity['email']])->first();
         if ($candidate) {
-            // Email alone is never sufficient evidence to take ownership of an existing account.
-            throw new GoogleAuthException('linking_required', 409);
+            if (! $candidate->is_active || $candidate->deleted_at !== null) {
+                throw new GoogleAuthException('disabled', 403);
+            }
+            if ($candidate->google_id !== null) {
+                throw new GoogleAuthException('identity_conflict', 409);
+            }
+            if ($this->hasUsablePasswordCredential($candidate)) {
+                // Email alone is never sufficient evidence to take ownership of an existing account.
+                throw new GoogleAuthException('linking_required', 409);
+            }
+            if ($candidate->facebook_id !== null) {
+                // An account already controlled through another provider must be linked
+                // from an authenticated profile, never through an unusable password form.
+                throw new GoogleAuthException('account_login_required', 409);
+            }
+
+            // Old Google registrations used a shared placeholder password and did not
+            // persist Google's subject. They require one independent, single-use proof
+            // sent to the address already registered on the account.
+            throw new GoogleAuthException('recovery_required', 409);
         }
 
         return null;

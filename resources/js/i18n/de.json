@@ -1381,7 +1381,20 @@
         "confirmLink": "Bestätigen und Konto verknüpfen",
         "invalidCredentials": "Ungültiges Passwort. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
         "linkSuccess": "Google-Konto erfolgreich verknüpft.",
-        "unlinkSuccess": "Google-Konto erfolgreich getrennt."
+        "unlinkSuccess": "Google-Konto erfolgreich getrennt.",
+        "identity_conflict": "Diese E-Mail ist mit einer anderen Google-Identität verknüpft. Nutzen Sie die bestehende Anmeldemethode oder den Support.",
+        "account_login_required": "Melden Sie sich mit der bestehenden Methode an und verbinden Sie Google anschließend im Profil.",
+        "recovery_required": "Zum erneuten Verbinden von Google ist eine einmalige Kontowiederherstellung erforderlich.",
+        "recovery_web_required": "Schließen Sie die einmalige Wiederherstellung auf der Scemory-Website ab. Künftige Google-Anmeldungen erfolgen automatisch.",
+        "invalid_recovery_code": "Der Wiederherstellungscode ist falsch. Prüfen Sie ihn und versuchen Sie es erneut.",
+        "recovery_expired": "Diese Wiederherstellung ist abgelaufen. Starten Sie die Google-Anmeldung erneut.",
+        "recovery_attempts_exceeded": "Zu viele falsche Versuche. Starten Sie die Google-Anmeldung erneut.",
+        "recovery_rate_limited": "Kürzlich wurde ein Code gesendet. Warten Sie kurz und versuchen Sie es erneut.",
+        "recovery_unavailable": "Der Wiederherstellungscode konnte nicht gesendet werden. Versuchen Sie es später erneut.",
+        "recoveryTitle": "Google-Konto erneut verbinden",
+        "recoverySent": "Geben Sie den einmaligen Code ein, der an {email} gesendet wurde. Dies ist nur einmal nötig.",
+        "recoveryCode": "Wiederherstellungscode",
+        "confirmRecovery": "Prüfen und fortfahren"
     },
     "facebookAuth": {
         "continue": "Weiter mit Facebook",

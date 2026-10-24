@@ -1381,7 +1381,20 @@
         "confirmLink": "Conferma e collega account",
         "invalidCredentials": "Password non valida. Verifica le tue credenziali e riprova.",
         "linkSuccess": "Account Google collegato con successo.",
-        "unlinkSuccess": "Account Google scollegato con successo."
+        "unlinkSuccess": "Account Google scollegato con successo.",
+        "identity_conflict": "Questa email è collegata a un’altra identità Google. Usa il metodo attuale dell’account o contatta l’assistenza.",
+        "account_login_required": "Accedi con il metodo attuale del tuo account, quindi collega Google dal profilo.",
+        "recovery_required": "È necessario un recupero una tantum per ricollegare Google.",
+        "recovery_web_required": "Completa il recupero una tantum sul sito Scemory. I prossimi accessi Google saranno automatici.",
+        "invalid_recovery_code": "Il codice di recupero non è corretto. Controllalo e riprova.",
+        "recovery_expired": "Questa richiesta è scaduta. Avvia di nuovo l’accesso Google.",
+        "recovery_attempts_exceeded": "Troppi tentativi errati. Avvia di nuovo l’accesso Google.",
+        "recovery_rate_limited": "È stato inviato un codice di recente. Attendi prima di riprovare.",
+        "recovery_unavailable": "Impossibile inviare il codice di recupero. Riprova più tardi.",
+        "recoveryTitle": "Ricollega il tuo account Google",
+        "recoverySent": "Inserisci il codice inviato a {email}. È richiesto una sola volta.",
+        "recoveryCode": "Codice di recupero",
+        "confirmRecovery": "Verifica e continua"
     },
     "facebookAuth": {
         "continue": "Continua con Facebook",

@@ -35,4 +35,13 @@ describe('Google authentication API transport', () => {
         await AuthService.unlinkGoogle();
         expect(api.post).toHaveBeenCalledWith('/users/google-unlink');
     });
+    it('initializes CSRF and sends legacy recovery codes only in POST bodies', async () => {
+        api.get.mockResolvedValue({}); api.post.mockResolvedValue({ data: { status: 'success' } });
+        await AuthService.startGoogleRecovery();
+        expect(api.get).toHaveBeenCalledWith('/sanctum/csrf-cookie', { baseURL: '/', suppressGlobalErrorToast: true });
+        expect(api.post).toHaveBeenCalledWith('/users/google-recovery-start', {}, { suppressGlobalErrorToast: true });
+        await AuthService.confirmGoogleRecovery('123456');
+        expect(api.post).toHaveBeenCalledWith('/users/google-recovery-confirm', { code: '123456' }, { suppressGlobalErrorToast: true });
+        expect(api.get.mock.calls.flat().join(' ')).not.toContain('123456');
+    });
 });

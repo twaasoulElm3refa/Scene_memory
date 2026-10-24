@@ -1381,7 +1381,20 @@
         "confirmLink": "Confirmer et associer le compte",
         "invalidCredentials": "Mot de passe incorrect. Veuillez vérifier vos identifiants et réessayer.",
         "linkSuccess": "Compte Google associé avec succès.",
-        "unlinkSuccess": "Compte Google dissocié avec succès."
+        "unlinkSuccess": "Compte Google dissocié avec succès.",
+        "identity_conflict": "Cet e-mail est associé à une autre identité Google. Utilisez la méthode actuelle du compte ou contactez l’assistance.",
+        "account_login_required": "Connectez-vous avec la méthode actuelle de votre compte, puis associez Google depuis votre profil.",
+        "recovery_required": "Une récupération unique est requise pour reconnecter Google.",
+        "recovery_web_required": "Terminez cette récupération unique sur le site Scemory. Les prochaines connexions Google seront automatiques.",
+        "invalid_recovery_code": "Le code de récupération est incorrect. Vérifiez-le et réessayez.",
+        "recovery_expired": "Cette récupération a expiré. Recommencez la connexion Google.",
+        "recovery_attempts_exceeded": "Trop de tentatives incorrectes. Recommencez la connexion Google.",
+        "recovery_rate_limited": "Un code a été envoyé récemment. Patientez avant de réessayer.",
+        "recovery_unavailable": "Le code de récupération n’a pas pu être envoyé. Réessayez plus tard.",
+        "recoveryTitle": "Reconnecter votre compte Google",
+        "recoverySent": "Saisissez le code envoyé à {email}. Cette étape n’est requise qu’une fois.",
+        "recoveryCode": "Code de récupération",
+        "confirmRecovery": "Vérifier et continuer"
     },
     "facebookAuth": {
         "continue": "Continuer avec Facebook",

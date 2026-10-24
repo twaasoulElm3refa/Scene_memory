@@ -20,7 +20,10 @@ export const safePostAuthRedirect = (requested, lang) => {
 
 const ERROR_CODES = new Set([
     'cancelled', 'expired_state', 'invalid_state', 'oauth_failed', 'callback_failed',
-    'identity_invalid', 'disabled', 'linking_required', 'unavailable', 'busy',
+    'identity_invalid', 'disabled', 'identity_conflict', 'linking_required',
+    'account_login_required', 'recovery_required', 'recovery_web_required',
+    'invalid_recovery_code', 'recovery_expired', 'recovery_attempts_exceeded',
+    'recovery_rate_limited', 'recovery_unavailable', 'unavailable', 'busy',
 ]);
 export const googleErrorKey = (code) => `googleAuth.${ERROR_CODES.has(code) ? code : 'callback_failed'}`;
 

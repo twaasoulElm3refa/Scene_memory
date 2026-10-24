@@ -1381,7 +1381,20 @@
         "confirmLink": "تأكيد وربط الحساب",
         "invalidCredentials": "كلمة المرور غير صحيحة. يرجى التحقق من بياناتك والمحاولة مجددًا.",
         "linkSuccess": "تم ربط حساب Google بنجاح.",
-        "unlinkSuccess": "تم إلغاء ربط حساب Google بنجاح."
+        "unlinkSuccess": "تم إلغاء ربط حساب Google بنجاح.",
+        "identity_conflict": "هذا البريد مرتبط بهوية Google مختلفة. سجّل الدخول بالطريقة الحالية للحساب أو تواصل مع الدعم.",
+        "account_login_required": "سجّل الدخول بالطريقة الحالية لحسابك، ثم اربط Google من ملفك الشخصي.",
+        "recovery_required": "يلزم استرداد الحساب لمرة واحدة لإعادة ربط Google.",
+        "recovery_web_required": "أكمل استرداد الحساب لمرة واحدة على موقع Scemory. ستكون عمليات الدخول التالية عبر Google تلقائية.",
+        "invalid_recovery_code": "رمز الاسترداد غير صحيح. تحقّق من الرمز وحاول مجددًا.",
+        "recovery_expired": "انتهت صلاحية طلب الاسترداد. ابدأ تسجيل الدخول عبر Google مجددًا.",
+        "recovery_attempts_exceeded": "محاولات غير صحيحة كثيرة. ابدأ تسجيل الدخول عبر Google مجددًا.",
+        "recovery_rate_limited": "تم إرسال رمز استرداد مؤخرًا. انتظر قليلًا قبل المحاولة مجددًا.",
+        "recovery_unavailable": "تعذّر إرسال رمز الاسترداد. حاول لاحقًا.",
+        "recoveryTitle": "إعادة ربط حساب Google",
+        "recoverySent": "أدخل الرمز المرسل إلى {email}. يلزم ذلك لمرة واحدة فقط.",
+        "recoveryCode": "رمز الاسترداد",
+        "confirmRecovery": "تحقق وتابع"
     },
     "facebookAuth": {
         "continue": "المتابعة باستخدام Facebook",

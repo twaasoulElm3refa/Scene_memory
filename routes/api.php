@@ -112,6 +112,8 @@ Route::prefix('v1')->group(function () {
         Route::post('/google-exchange', [GoogleAuthController::class, 'exchangeWebCode'])->middleware(['web', 'throttle:10,1']);
         Route::post('/google-mobile-exchange', [GoogleAuthController::class, 'exchangeMobileCode'])->middleware('throttle:10,1');
         Route::post('/google-link-confirm', [GoogleAuthController::class, 'confirmLinkWithPassword'])->middleware(['web', 'throttle:10,1']);
+        Route::post('/google-recovery-start', [GoogleAuthController::class, 'startLegacyRecovery'])->middleware(['web', 'throttle:3,1']);
+        Route::post('/google-recovery-confirm', [GoogleAuthController::class, 'confirmLegacyRecovery'])->middleware(['web', 'throttle:6,1']);
         // profile Routes
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/google-link-start', [GoogleAuthController::class, 'linkStart'])->middleware(['web', 'throttle:10,1']);

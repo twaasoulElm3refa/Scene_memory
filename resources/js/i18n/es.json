@@ -1381,7 +1381,20 @@
         "confirmLink": "Confirmar y vincular cuenta",
         "invalidCredentials": "Contraseña incorrecta. Comprueba tus credenciales e inténtalo de nuevo.",
         "linkSuccess": "Cuenta de Google vinculada con éxito.",
-        "unlinkSuccess": "Cuenta de Google desvinculada con éxito."
+        "unlinkSuccess": "Cuenta de Google desvinculada con éxito.",
+        "identity_conflict": "Este correo está vinculado a otra identidad de Google. Usa el método actual de la cuenta o contacta con soporte.",
+        "account_login_required": "Accede con el método actual de tu cuenta y conecta Google desde tu perfil.",
+        "recovery_required": "Se requiere una recuperación única para volver a conectar Google.",
+        "recovery_web_required": "Completa esta recuperación única en el sitio web de Scemory. Los próximos accesos con Google serán automáticos.",
+        "invalid_recovery_code": "El código de recuperación es incorrecto. Compruébalo e inténtalo de nuevo.",
+        "recovery_expired": "Esta recuperación ha caducado. Inicia de nuevo el acceso con Google.",
+        "recovery_attempts_exceeded": "Demasiados intentos incorrectos. Inicia de nuevo el acceso con Google.",
+        "recovery_rate_limited": "Se envió un código recientemente. Espera un momento antes de intentarlo de nuevo.",
+        "recovery_unavailable": "No se pudo enviar el código de recuperación. Inténtalo más tarde.",
+        "recoveryTitle": "Volver a conectar tu cuenta de Google",
+        "recoverySent": "Introduce el código enviado a {email}. Solo se requiere una vez.",
+        "recoveryCode": "Código de recuperación",
+        "confirmRecovery": "Verificar y continuar"
     },
     "facebookAuth": {
         "continue": "Continuar con Facebook",

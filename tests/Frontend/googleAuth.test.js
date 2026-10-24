@@ -14,6 +14,7 @@ import { isMobileRuntime } from '../../resources/js/services/runtimeUrls';
 
 vi.mock('../../resources/js/services/AuthService/AuthService', () => ({ AuthService: {
     googleLogin: vi.fn(), exchangeGoogleCode: vi.fn(), exchangeMobileGoogleCode: vi.fn(),
+    confirmGoogleLink: vi.fn(), startGoogleRecovery: vi.fn(), confirmGoogleRecovery: vi.fn(),
     login: vi.fn(), register: vi.fn(),
 } }));
 vi.mock('../../resources/js/services/authTokenStorage', () => ({
@@ -55,6 +56,8 @@ beforeEach(() => {
     isMobileRuntime.mockReturnValue(false);
     AuthService.exchangeGoogleCode.mockResolvedValue(success());
     AuthService.exchangeMobileGoogleCode.mockResolvedValue(success());
+    AuthService.startGoogleRecovery.mockResolvedValue({ data: { status: 'success', masked_email: 'g*****@example.test' } });
+    AuthService.confirmGoogleRecovery.mockResolvedValue(success());
     getGoogleOAuthVerifier.mockResolvedValue('v'.repeat(43));
     setAuthToken.mockResolvedValue();
 });
@@ -136,6 +139,35 @@ describe('Google authentication UI', () => {
         const { target } = await mount(Callback, {}, 'en', '/en/auth/google-callback?token=hostile&role=admin');
         expect(setAuthToken).not.toHaveBeenCalled();
         expect(target.querySelector('[role=alert]').textContent).toBe(messages.en.googleAuth.invalid_state);
+    });
+
+    it('recovers a passwordless legacy Google account once and establishes normal auth state', async () => {
+        const { target, router } = await mount(Callback, {}, 'en', '/en/auth/google-callback?error=recovery_required');
+        expect(AuthService.startGoogleRecovery).toHaveBeenCalledTimes(1);
+        expect(target.textContent).toContain('g*****@example.test');
+        expect(target.textContent).toContain(messages.en.googleAuth.recoveryTitle);
+        expect(target.querySelector('#link-password')).toBeNull();
+        const input = target.querySelector('#recovery-code');
+        input.value = '123456'; input.dispatchEvent(new Event('input'));
+        target.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true }));
+        await settle();
+        expect(AuthService.confirmGoogleRecovery).toHaveBeenCalledWith('123456');
+        expect(setAuthToken).toHaveBeenCalledWith('post-body-token');
+        expect(router.currentRoute.value.path).toBe('/en/home');
+    });
+
+    it('uses password confirmation only for a real password-account collision', async () => {
+        const { target } = await mount(Callback, {}, 'en', '/en/auth/google-callback?error=linking_required');
+        expect(target.querySelector('#link-password')).not.toBeNull();
+        expect(target.querySelector('#recovery-code')).toBeNull();
+        expect(AuthService.startGoogleRecovery).not.toHaveBeenCalled();
+    });
+
+    it('does not offer password or recovery forms for an account owned by another provider', async () => {
+        const { target } = await mount(Callback, {}, 'en', '/en/auth/google-callback?error=account_login_required');
+        expect(target.querySelector('form')).toBeNull();
+        expect(target.querySelector('[role=alert]').textContent).toBe(messages.en.googleAuth.account_login_required);
+        expect(AuthService.startGoogleRecovery).not.toHaveBeenCalled();
     });
 
     it('renders cancellation and unknown callback errors without exposing untrusted text', async () => {

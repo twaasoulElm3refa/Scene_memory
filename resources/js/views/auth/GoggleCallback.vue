@@ -5,6 +5,15 @@
                 <span class="spinner-border text-primary mb-3" aria-hidden="true"></span>
                 <p>{{ t('googleAuth.signingIn') }}</p>
             </div>
+            <form v-else-if="recoveryRequired" @submit.prevent="confirmRecovery">
+                <h1 class="h4 mb-3">{{ t('googleAuth.recoveryTitle') }}</h1>
+                <p class="text-muted mb-3">{{ t('googleAuth.recoverySent', { email: maskedEmail }) }}</p>
+                <label for="recovery-code" class="form-label">{{ t('googleAuth.recoveryCode') }}</label>
+                <input id="recovery-code" v-model.trim="recoveryCode" type="text" inputmode="numeric"
+                    autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" class="form-control mb-3" required />
+                <p v-if="error" role="alert" class="text-danger">{{ error }}</p>
+                <button type="submit" class="btn btn-primary w-100 mb-2">{{ t('googleAuth.confirmRecovery') }}</button>
+            </form>
             <form v-else-if="linkingRequired" @submit.prevent="confirmLink">
                 <h1 class="h4 mb-3">{{ t('googleAuth.linkAccountTitle') }}</h1>
                 <p class="text-muted mb-3">{{ t('googleAuth.linkAccountDesc') }}</p>
@@ -38,10 +47,31 @@ const loading = ref(true);
 const error = ref('');
 const retryable = ref(false);
 const linkingRequired = ref(false);
+const recoveryRequired = ref(false);
 const linkPassword = ref('');
+const recoveryCode = ref('');
+const maskedEmail = ref('');
 const code = ref('');
 const currentLang = computed(() => String(route.params.lang || 'en').toLowerCase());
 const rtl = computed(() => ['ar', 'fa', 'ur'].includes(currentLang.value));
+
+const completeSignIn = async (response) => {
+    const { token, role, user, is_profile_complete: complete } = response.data;
+    if (!token || !user) throw new Error('callback_failed');
+    await setAuthToken(token);
+    await clearGoogleOAuthVerifier();
+    localStorage.setItem('user_role', role);
+    localStorage.setItem('user_data', JSON.stringify(user));
+    localStorage.setItem('is_profile_complete', String(Boolean(complete)));
+    localStorage.setItem('is_profile_filled', String(Boolean(complete)));
+    localStorage.setItem('lang', currentLang.value);
+    localStorage.setItem('language', currentLang.value);
+    window.dispatchEvent(new Event('login'));
+    const destination = role === 'admin' ? '/admin'
+        : safePostAuthRedirect(sessionStorage.getItem('post_auth_redirect'), currentLang.value);
+    sessionStorage.removeItem('post_auth_redirect');
+    await router.replace(destination);
+};
 
 const exchange = async () => {
     loading.value = true;
@@ -53,29 +83,13 @@ const exchange = async () => {
         const response = isMobileRuntime()
             ? await AuthService.exchangeMobileGoogleCode(code.value, verifier)
             : await AuthService.exchangeGoogleCode(code.value);
-        const { token, role, user, is_profile_complete: complete } = response.data;
-        if (!token || !user) throw new Error('callback_failed');
-        await setAuthToken(token);
-        await clearGoogleOAuthVerifier();
-        localStorage.setItem('user_role', role);
-        localStorage.setItem('user_data', JSON.stringify(user));
-        localStorage.setItem('is_profile_complete', String(Boolean(complete)));
-        localStorage.setItem('is_profile_filled', String(Boolean(complete)));
-        localStorage.setItem('lang', currentLang.value);
-        localStorage.setItem('language', currentLang.value);
-        window.dispatchEvent(new Event('login'));
-        const destination = role === 'admin' ? '/admin'
-            : safePostAuthRedirect(sessionStorage.getItem('post_auth_redirect'), currentLang.value);
-        sessionStorage.removeItem('post_auth_redirect');
-        await router.replace(destination);
+        await completeSignIn(response);
     } catch (err) {
         const status = err.response?.status;
         const errorCode = err.response?.data?.error_code;
         retryable.value = !err.response || status >= 500 || status === 429 || errorCode === 'busy';
         error.value = t(googleErrorKey(errorCode || err.message));
-        if (!retryable.value && errorCode) {
-            await clearGoogleOAuthVerifier();
-        }
+        if (!retryable.value && errorCode) await clearGoogleOAuthVerifier();
     } finally {
         loading.value = false;
     }
@@ -86,25 +100,43 @@ const confirmLink = async () => {
     error.value = '';
     try {
         const response = await AuthService.confirmGoogleLink(linkPassword.value);
-        const { token, role, user, is_profile_complete: complete } = response.data;
-        if (!token || !user) throw new Error('callback_failed');
-        await setAuthToken(token);
-        await clearGoogleOAuthVerifier();
-        localStorage.setItem('user_role', role);
-        localStorage.setItem('user_data', JSON.stringify(user));
-        localStorage.setItem('is_profile_complete', String(Boolean(complete)));
-        localStorage.setItem('is_profile_filled', String(Boolean(complete)));
-        localStorage.setItem('lang', currentLang.value);
-        localStorage.setItem('language', currentLang.value);
-        window.dispatchEvent(new Event('login'));
-        const destination = role === 'admin' ? '/admin'
-            : safePostAuthRedirect(sessionStorage.getItem('post_auth_redirect'), currentLang.value);
-        sessionStorage.removeItem('post_auth_redirect');
-        await router.replace(destination);
+        await completeSignIn(response);
     } catch (err) {
         error.value = err.response?.data?.errors?.password?.[0]
             || err.response?.data?.message
             || t('googleAuth.invalidCredentials');
+    } finally {
+        loading.value = false;
+    }
+};
+
+const beginRecovery = async () => {
+    loading.value = true;
+    error.value = '';
+    try {
+        const response = await AuthService.startGoogleRecovery();
+        maskedEmail.value = response.data.masked_email || '';
+        recoveryRequired.value = true;
+    } catch (err) {
+        const errorCode = err.response?.data?.error_code;
+        error.value = t(googleErrorKey(errorCode || 'recovery_unavailable'));
+    } finally {
+        loading.value = false;
+    }
+};
+
+const confirmRecovery = async () => {
+    if (!/^[0-9]{6}$/.test(recoveryCode.value)) {
+        error.value = t('googleAuth.invalid_recovery_code');
+        return;
+    }
+    loading.value = true;
+    error.value = '';
+    try {
+        await completeSignIn(await AuthService.confirmGoogleRecovery(recoveryCode.value));
+    } catch (err) {
+        const errorCode = err.response?.data?.error_code;
+        error.value = t(googleErrorKey(errorCode || 'invalid_recovery_code'));
     } finally {
         loading.value = false;
     }
@@ -121,6 +153,11 @@ onMounted(async () => {
         linkingRequired.value = true;
         loading.value = false;
         await clearGoogleOAuthVerifier();
+        return;
+    }
+    if (callbackError === 'recovery_required') {
+        await clearGoogleOAuthVerifier();
+        await beginRecovery();
         return;
     }
     if (callbackError || !/^[A-Za-z0-9]{64}$/.test(code.value)) {

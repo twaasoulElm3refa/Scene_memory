@@ -1381,7 +1381,20 @@
         "confirmLink": "確認してアカウントを連携",
         "invalidCredentials": "無効なパスワードです。認証情報を確認してやり直してください。",
         "linkSuccess": "Google アカウントが正常に連携されました。",
-        "unlinkSuccess": "Google アカウントの連携を解除しました。"
+        "unlinkSuccess": "Google アカウントの連携を解除しました。",
+        "identity_conflict": "このメールは別の Google ID に連携されています。既存の方法でログインするか、サポートへお問い合わせください。",
+        "account_login_required": "既存の方法でアカウントにログインし、プロフィールから Google を連携してください。",
+        "recovery_required": "Google の再連携には一度限りのアカウント復旧が必要です。",
+        "recovery_web_required": "Scemory のウェブサイトで一度限りの復旧を完了してください。以後の Google ログインは自動になります。",
+        "invalid_recovery_code": "復旧コードが正しくありません。確認してもう一度お試しください。",
+        "recovery_expired": "復旧リクエストの期限が切れました。Google ログインをやり直してください。",
+        "recovery_attempts_exceeded": "誤入力が多すぎます。Google ログインをやり直してください。",
+        "recovery_rate_limited": "復旧コードは最近送信済みです。しばらく待ってからお試しください。",
+        "recovery_unavailable": "復旧コードを送信できませんでした。後でもう一度お試しください。",
+        "recoveryTitle": "Google アカウントを再連携",
+        "recoverySent": "{email} に送信された一度限りのコードを入力してください。この手順は一度だけ必要です。",
+        "recoveryCode": "復旧コード",
+        "confirmRecovery": "確認して続行"
     },
     "facebookAuth": {
         "continue": "Facebook で続行",

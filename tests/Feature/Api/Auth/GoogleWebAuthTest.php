@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\Auth;
 
+use App\Mail\GoogleRecoveryCodeMail;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -9,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
@@ -142,7 +144,7 @@ class GoogleWebAuthTest extends TestCase
         $query = $this->start();
         $this->provider();
         $this->getJson('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
-            ->assertStatus(409)->assertJsonPath('error_code', 'linking_required');
+            ->assertStatus(409)->assertJsonPath('error_code', 'identity_conflict');
         $this->assertDatabaseCount('users', 1);
     }
 
@@ -372,7 +374,7 @@ class GoogleWebAuthTest extends TestCase
         $query = $this->start();
         $this->provider();
         $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
-            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=linking_required');
+            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=recovery_required');
 
         $this->postJson('/api/v1/users/google-link-confirm', ['password' => $placeholder])
             ->assertUnprocessable();
@@ -380,6 +382,174 @@ class GoogleWebAuthTest extends TestCase
         $this->assertNull($user->fresh()->google_id);
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    #[DataProvider('legacyPasswordProvider')]
+    public function test_legacy_google_only_account_uses_one_time_recovery_and_then_signs_in_directly(?string $legacyPassword): void
+    {
+        $user = User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'facebook_id' => null,
+            'password' => $legacyPassword === null ? null : Hash::make($legacyPassword),
+            'name' => 'Preserved Name',
+            'role' => 'creator',
+            'country' => 'Preserved Country',
+        ]);
+        $user->wallet()->create(['amount' => 321, 'balance_minor' => 32100]);
+        $before = $user->getAttributes();
+
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
+            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=recovery_required');
+
+        $this->postJson('/api/v1/users/google-recovery-start', [])
+            ->assertOk()
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('masked_email', 'g*****@example.test');
+        $code = null;
+        Mail::assertSent(GoogleRecoveryCodeMail::class, function (GoogleRecoveryCodeMail $mail) use (&$code) {
+            $code = $mail->code;
+
+            return true;
+        });
+        $this->assertMatchesRegularExpression('/^[0-9]{6}$/', $code);
+
+        $response = $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => $code])
+            ->assertOk()
+            ->assertJsonPath('user.id', $user->id)
+            ->assertJsonPath('role', 'creator');
+        $this->assertNotEmpty($response->json('token'));
+        $this->assertSame('google-sub-123', $user->fresh()->google_id);
+        foreach (['name', 'email', 'password', 'role', 'country'] as $field) {
+            $this->assertSame($before[$field], $user->fresh()->getRawOriginal($field));
+        }
+        $this->assertSame(32100, $user->fresh()->wallet->balance_minor);
+        $this->assertDatabaseCount('users', 1);
+
+        $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => $code])
+            ->assertUnprocessable()->assertJsonPath('error_code', 'recovery_expired');
+
+        Socialite::forgetDrivers();
+        $deliveryCode = $this->completeCallback(['email' => 'changed@example.test']);
+        $this->postJson('/api/v1/users/google-exchange', ['code' => $deliveryCode])
+            ->assertOk()->assertJsonPath('user.id', $user->id);
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    public static function legacyPasswordProvider(): array
+    {
+        return [
+            'null password' => [null],
+            'shared placeholder' => ['password'],
+            'legacy placeholder' => ['legacy_google_oauth_user_scemory_default'],
+        ];
+    }
+
+    public function test_legacy_recovery_rejects_wrong_and_expired_codes(): void
+    {
+        User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'facebook_id' => null,
+            'password' => null,
+        ]);
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']));
+        $this->postJson('/api/v1/users/google-recovery-start', [])->assertOk();
+        $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => '000000'])
+            ->assertUnprocessable()->assertJsonPath('error_code', 'invalid_recovery_code');
+        $this->assertNull(User::sole()->google_id);
+
+        $this->travel(11)->minutes();
+        $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => '000000'])
+            ->assertUnprocessable()->assertJsonPath('error_code', 'recovery_expired');
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_legacy_recovery_locks_after_five_wrong_codes(): void
+    {
+        $this->withoutMiddleware(ThrottleRequests::class);
+        User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'facebook_id' => null,
+            'password' => null,
+        ]);
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']));
+        $this->postJson('/api/v1/users/google-recovery-start', [])->assertOk();
+
+        for ($attempt = 1; $attempt <= 4; $attempt++) {
+            $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => '000000'])
+                ->assertUnprocessable()->assertJsonPath('error_code', 'invalid_recovery_code');
+        }
+        $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => '000000'])
+            ->assertStatus(429)->assertJsonPath('error_code', 'recovery_attempts_exceeded');
+
+        $code = null;
+        Mail::assertSent(GoogleRecoveryCodeMail::class, function (GoogleRecoveryCodeMail $mail) use (&$code) {
+            $code = $mail->code;
+
+            return true;
+        });
+        $this->postJson('/api/v1/users/google-recovery-confirm', ['code' => $code])
+            ->assertStatus(429)->assertJsonPath('error_code', 'recovery_attempts_exceeded');
+        $this->assertNull(User::sole()->google_id);
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+    }
+
+    public function test_recovery_is_not_available_for_password_or_other_provider_accounts(): void
+    {
+        $passwordUser = User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'password' => Hash::make('real-password'),
+        ]);
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
+            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=linking_required');
+        $this->postJson('/api/v1/users/google-recovery-start', [])
+            ->assertUnprocessable()->assertJsonPath('error_code', 'recovery_expired');
+        $this->assertNull($passwordUser->fresh()->google_id);
+        Mail::assertNotSent(GoogleRecoveryCodeMail::class);
+
+        $passwordUser->delete();
+        User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'facebook_id' => 'existing-provider-id',
+            'password' => null,
+        ]);
+        Socialite::forgetDrivers();
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']))
+            ->assertRedirect('https://scemory.com/en/auth/google-callback?error=account_login_required');
+        $this->assertNull(session('pending_google_link'));
+        Mail::assertNotSent(GoogleRecoveryCodeMail::class);
+    }
+
+    public function test_recovery_code_is_never_sent_through_a_logging_mailer(): void
+    {
+        User::factory()->create([
+            'email' => 'google@example.test',
+            'google_id' => null,
+            'facebook_id' => null,
+            'password' => null,
+        ]);
+        $query = $this->start();
+        $this->provider();
+        $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']));
+        config()->set('mail.default', 'log');
+        $this->postJson('/api/v1/users/google-recovery-start', [])
+            ->assertStatus(503)->assertJsonPath('error_code', 'recovery_unavailable');
+        Mail::assertNotSent(GoogleRecoveryCodeMail::class);
+        $this->assertNull(User::sole()->google_id);
     }
 
     public static function placeholderPasswordProvider(): array

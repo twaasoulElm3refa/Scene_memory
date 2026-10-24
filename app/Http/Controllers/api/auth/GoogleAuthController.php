@@ -6,10 +6,12 @@ use App\Exceptions\GoogleAuthException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\GoogleAccountService;
+use App\Services\GoogleLegacyRecoveryService;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -21,7 +23,10 @@ class GoogleAuthController extends Controller
 {
     private const MOBILE_STATE_PREFIX = 'scemory-mobile-v1.';
 
-    public function __construct(private readonly GoogleAccountService $accounts) {}
+    public function __construct(
+        private readonly GoogleAccountService $accounts,
+        private readonly GoogleLegacyRecoveryService $recovery,
+    ) {}
 
     public function googleLogin(Request $request)
     {
@@ -41,6 +46,7 @@ class GoogleAuthController extends Controller
                 // encrypted, single-use state and delivery verifier bind the flow instead.
                 $provider->stateless()->with(['state' => $this->createMobileOAuthState($lang, $challenge)]);
             } else {
+                $request->session()->forget('pending_google_link');
                 $request->session()->regenerate();
                 $request->session()->put('google_oauth', ['lang' => $lang, 'expires_at' => now()->addMinutes(10)->timestamp]);
                 $provider->enablePKCE();
@@ -109,11 +115,16 @@ class GoogleAuthController extends Controller
             try {
                 $this->accounts->existingAccount($identity);
             } catch (GoogleAuthException $e) {
-                if ($e->errorCode === 'linking_required') {
+                if ($mobile === null && in_array($e->errorCode, ['linking_required', 'recovery_required'], true)) {
+                    $request->session()->regenerate();
                     $request->session()->put('pending_google_link', [
                         'identity' => $identity,
+                        'mode' => $e->errorCode,
                         'expires_at' => now()->addMinutes(10)->timestamp,
                     ]);
+                }
+                if ($mobile !== null && $e->errorCode === 'recovery_required') {
+                    throw new GoogleAuthException('recovery_web_required', 409);
                 }
                 throw $e;
             }
@@ -157,7 +168,8 @@ class GoogleAuthController extends Controller
         ]);
 
         $pending = $request->session()->get('pending_google_link');
-        if (! is_array($pending) || ($pending['expires_at'] ?? 0) <= now()->timestamp || ! isset($pending['identity'])) {
+        if (! is_array($pending) || ($pending['mode'] ?? null) !== 'linking_required'
+            || ($pending['expires_at'] ?? 0) <= now()->timestamp || ! isset($pending['identity'])) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'The linking request has expired. Please sign in with Google again.',
@@ -187,20 +199,88 @@ class GoogleAuthController extends Controller
         $user->forceFill(['last_login_at' => now()])->save();
         $token = $user->createToken('google-auth-token')->plainTextToken;
 
-        return response()->json([
-            'status' => 'success',
-            'token' => $token,
-            'role' => $user->role,
-            'is_profile_complete' => ! empty($user->phone) && ! empty($user->country)
-                && ! empty($user->position) && ! empty($user->date_of_birth),
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'google_avatar_url' => $user->google_avatar_url,
-            ],
-        ])->header('Cache-Control', 'no-store, private');
+        return $this->authenticationResponse($user, $token);
+    }
+
+    public function startLegacyRecovery(Request $request)
+    {
+        $pending = $request->session()->get('pending_google_link');
+        if (! $this->validRecoveryPending($pending)) {
+            $request->session()->forget('pending_google_link');
+
+            return $this->jsonError('recovery_expired', 422);
+        }
+
+        try {
+            $recovery = $this->recovery->start($pending['identity']);
+            $pending['recovery'] = $recovery;
+            $request->session()->put('pending_google_link', $pending);
+
+            return response()->json([
+                'status' => 'success',
+                'masked_email' => $recovery['masked_email'],
+                'expires_in' => GoogleLegacyRecoveryService::EXPIRES_SECONDS,
+            ])->header('Cache-Control', 'no-store, private');
+        } catch (GoogleAuthException $e) {
+            return $this->jsonError($e->errorCode, $e->status);
+        }
+    }
+
+    public function confirmLegacyRecovery(Request $request)
+    {
+        $data = $request->validate([
+            'code' => ['required', 'string', 'size:6', 'regex:/\A[0-9]{6}\z/'],
+        ]);
+        $pending = $request->session()->get('pending_google_link');
+        if (! $this->validRecoveryPending($pending) || ! is_array($pending['recovery'] ?? null)) {
+            $request->session()->forget('pending_google_link');
+
+            return $this->jsonError('recovery_expired', 422);
+        }
+
+        $recovery = $pending['recovery'];
+        if (($recovery['expires_at'] ?? 0) <= now()->timestamp) {
+            $request->session()->forget('pending_google_link');
+
+            return $this->jsonError('recovery_expired', 422);
+        }
+
+        $lockKey = 'google-recovery-confirm:'.hash('sha256', (string) ($recovery['user_id'] ?? ''));
+        try {
+            return Cache::lock($lockKey, 10)->block(3, function () use ($request, $data) {
+                $pending = $request->session()->get('pending_google_link');
+                if (! $this->validRecoveryPending($pending) || ! is_array($pending['recovery'] ?? null)) {
+                    throw new GoogleAuthException('recovery_expired', 422);
+                }
+                $recovery = $pending['recovery'];
+                if (($recovery['expires_at'] ?? 0) <= now()->timestamp) {
+                    $request->session()->forget('pending_google_link');
+                    throw new GoogleAuthException('recovery_expired', 422);
+                }
+                if (($recovery['attempts'] ?? GoogleLegacyRecoveryService::MAX_ATTEMPTS)
+                    >= GoogleLegacyRecoveryService::MAX_ATTEMPTS) {
+                    throw new GoogleAuthException('recovery_attempts_exceeded', 429);
+                }
+                if (! is_string($recovery['code_hash'] ?? null)
+                    || ! Hash::check($data['code'], $recovery['code_hash'])) {
+                    $pending['recovery']['attempts'] = ((int) ($recovery['attempts'] ?? 0)) + 1;
+                    $request->session()->put('pending_google_link', $pending);
+                    $error = $pending['recovery']['attempts'] >= GoogleLegacyRecoveryService::MAX_ATTEMPTS
+                        ? 'recovery_attempts_exceeded' : 'invalid_recovery_code';
+                    throw new GoogleAuthException($error, $error === 'recovery_attempts_exceeded' ? 429 : 422);
+                }
+
+                $user = $this->recovery->complete($pending['identity'], (int) $recovery['user_id']);
+                $request->session()->forget('pending_google_link');
+                $user->forceFill(['last_login_at' => now()])->save();
+
+                return $this->authenticationResponse($user, $user->createToken('google-auth-token')->plainTextToken);
+            });
+        } catch (GoogleAuthException $e) {
+            return $this->jsonError($e->errorCode, $e->status);
+        } catch (LockTimeoutException) {
+            return $this->jsonError('busy', 409);
+        }
     }
 
     public function linkStart(Request $request)
@@ -288,6 +368,32 @@ class GoogleAuthController extends Controller
     private function deliveryKey(string $code, bool $mobile): string
     {
         return ($mobile ? 'google-mobile-delivery:' : 'google-web-delivery:').hash('sha256', $code);
+    }
+
+    private function validRecoveryPending(mixed $pending): bool
+    {
+        return is_array($pending)
+            && ($pending['mode'] ?? null) === 'recovery_required'
+            && ($pending['expires_at'] ?? 0) > now()->timestamp
+            && is_array($pending['identity'] ?? null);
+    }
+
+    private function authenticationResponse(User $user, string $token)
+    {
+        return response()->json([
+            'status' => 'success',
+            'token' => $token,
+            'role' => $user->role,
+            'is_profile_complete' => ! empty($user->phone) && ! empty($user->country)
+                && ! empty($user->position) && ! empty($user->date_of_birth),
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'google_avatar_url' => $user->google_avatar_url,
+            ],
+        ])->header('Cache-Control', 'no-store, private');
     }
 
     private function createMobileOAuthState(string $lang, string $codeChallenge): string

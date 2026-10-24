@@ -50,6 +50,15 @@ export const AuthService = {
     return api.post("/users/google-link-confirm", { password }, { suppressGlobalErrorToast: true });
   },
 
+  async startGoogleRecovery() {
+    await api.get("/sanctum/csrf-cookie", { baseURL: "/", suppressGlobalErrorToast: true });
+    return api.post("/users/google-recovery-start", {}, { suppressGlobalErrorToast: true });
+  },
+
+  confirmGoogleRecovery(code) {
+    return api.post("/users/google-recovery-confirm", { code }, { suppressGlobalErrorToast: true });
+  },
+
   startGoogleLink() {
     return api.get("/users/google-link-start");
   },

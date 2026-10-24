@@ -1381,7 +1381,20 @@
         "confirmLink": "Onayla ve hesabı bağla",
         "invalidCredentials": "Geçersiz şifre. Lütfen bilgilerinizi kontrol edip tekrar deneyin.",
         "linkSuccess": "Google hesabı başarıyla bağlandı.",
-        "unlinkSuccess": "Google hesabı başarıyla kaldırıldı."
+        "unlinkSuccess": "Google hesabı başarıyla kaldırıldı.",
+        "identity_conflict": "Bu e-posta farklı bir Google kimliğine bağlı. Mevcut hesap yöntemini kullanın veya destekle iletişime geçin.",
+        "account_login_required": "Mevcut hesap yönteminizle giriş yapın, ardından profilinizden Google’ı bağlayın.",
+        "recovery_required": "Google’ı yeniden bağlamak için bir defalık hesap kurtarma gereklidir.",
+        "recovery_web_required": "Bir defalık kurtarmayı Scemory web sitesinde tamamlayın. Sonraki Google girişleri otomatik olacaktır.",
+        "invalid_recovery_code": "Kurtarma kodu yanlış. Kodu kontrol edip tekrar deneyin.",
+        "recovery_expired": "Bu kurtarma isteğinin süresi doldu. Google girişini yeniden başlatın.",
+        "recovery_attempts_exceeded": "Çok fazla yanlış deneme. Google girişini yeniden başlatın.",
+        "recovery_rate_limited": "Yakın zamanda bir kod gönderildi. Tekrar denemeden önce bekleyin.",
+        "recovery_unavailable": "Kurtarma kodu gönderilemedi. Daha sonra tekrar deneyin.",
+        "recoveryTitle": "Google hesabınızı yeniden bağlayın",
+        "recoverySent": "{email} adresine gönderilen tek kullanımlık kodu girin. Bu yalnızca bir kez gereklidir.",
+        "recoveryCode": "Kurtarma kodu",
+        "confirmRecovery": "Doğrula ve devam et"
     },
     "facebookAuth": {
         "continue": "Facebook ile devam et",

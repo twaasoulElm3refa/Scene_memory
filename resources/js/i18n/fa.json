@@ -1237,7 +1237,20 @@
         "confirmLink": "تأیید و اتصال حساب",
         "invalidCredentials": "گذرواژه نامعتبر است. لطفاً اطلاعات خود را بررسی کرده و دوباره امتحان کنید.",
         "linkSuccess": "حساب Google با موفقیت متصل شد.",
-        "unlinkSuccess": "اتصال حساب Google با موفقیت لغو شد."
+        "unlinkSuccess": "اتصال حساب Google با موفقیت لغو شد.",
+        "identity_conflict": "این ایمیل به هویت Google دیگری متصل است. با روش فعلی حساب وارد شوید یا با پشتیبانی تماس بگیرید.",
+        "account_login_required": "با روش فعلی حساب وارد شوید، سپس Google را از نمایه خود متصل کنید.",
+        "recovery_required": "برای اتصال دوباره Google، بازیابی یک‌باره حساب لازم است.",
+        "recovery_web_required": "بازیابی یک‌باره را در وب‌سایت Scemory کامل کنید. ورودهای بعدی Google خودکار خواهند بود.",
+        "invalid_recovery_code": "کد بازیابی نادرست است. کد را بررسی و دوباره تلاش کنید.",
+        "recovery_expired": "درخواست بازیابی منقضی شده است. ورود Google را دوباره آغاز کنید.",
+        "recovery_attempts_exceeded": "تلاش‌های نادرست بیش از حد است. ورود Google را دوباره آغاز کنید.",
+        "recovery_rate_limited": "به‌تازگی کد بازیابی ارسال شده است. کمی صبر کنید.",
+        "recovery_unavailable": "ارسال کد بازیابی ممکن نشد. بعداً دوباره تلاش کنید.",
+        "recoveryTitle": "اتصال دوباره حساب Google",
+        "recoverySent": "کد یک‌بارمصرف ارسال‌شده به {email} را وارد کنید. این کار فقط یک بار لازم است.",
+        "recoveryCode": "کد بازیابی",
+        "confirmRecovery": "تأیید و ادامه"
     },
     "facebookAuth": {
         "continue": "ادامه با Facebook",

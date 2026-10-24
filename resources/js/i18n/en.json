@@ -1381,7 +1381,20 @@
         "confirmLink": "Confirm and link account",
         "invalidCredentials": "Invalid password. Please check your credentials and try again.",
         "linkSuccess": "Google account linked successfully.",
-        "unlinkSuccess": "Google account unlinked successfully."
+        "unlinkSuccess": "Google account unlinked successfully.",
+        "identity_conflict": "This email is linked to a different Google identity. Sign in using the account's existing method or contact support.",
+        "account_login_required": "Sign in using your account's existing method, then connect Google from your profile.",
+        "recovery_required": "One-time account recovery is required to reconnect Google.",
+        "recovery_web_required": "Complete this one-time account recovery on the Scemory website. Future Google sign-ins will be automatic.",
+        "invalid_recovery_code": "The recovery code is incorrect. Check the code and try again.",
+        "recovery_expired": "This recovery request has expired. Start Google sign-in again.",
+        "recovery_attempts_exceeded": "Too many incorrect attempts. Start Google sign-in again.",
+        "recovery_rate_limited": "A recovery code was sent recently. Wait a moment before trying again.",
+        "recovery_unavailable": "We could not send the recovery code. Please try again later.",
+        "recoveryTitle": "Reconnect your Google account",
+        "recoverySent": "Enter the one-time code sent to {email}. This is required only once.",
+        "recoveryCode": "Recovery code",
+        "confirmRecovery": "Verify and continue"
     },
     "facebookAuth": {
         "continue": "Continue with Facebook",
