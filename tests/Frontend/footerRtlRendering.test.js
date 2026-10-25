@@ -87,6 +87,7 @@ describe('Scemory Footer RTL Rendering & Anti-Mirroring Verification', () => {
     const { target } = await mountFooter('ar', '/ar/home');
     const footerEl = target.querySelector('.scemory-footer');
     expect(footerEl).not.toBeNull();
+    expect(footerEl.getAttribute('dir')).toBe('rtl');
 
     // Check document dir
     expect(document.documentElement.dir).toBe('rtl');
@@ -144,6 +145,7 @@ describe('Scemory Footer RTL Rendering & Anti-Mirroring Verification', () => {
 
       const footerEl = target.querySelector('.scemory-footer');
       expect(footerEl).not.toBeNull();
+      expect(footerEl.getAttribute('dir')).toBe('rtl');
 
       // Heading exists and is translated
       const title = target.querySelector('#footer-comparisons-title');
@@ -167,6 +169,7 @@ describe('Scemory Footer RTL Rendering & Anti-Mirroring Verification', () => {
 
       const footerEl = target.querySelector('.scemory-footer');
       expect(footerEl).not.toBeNull();
+      expect(footerEl.getAttribute('dir')).toBe('ltr');
 
       const title = target.querySelector('#footer-comparisons-title');
       expect(title?.textContent.trim().length).toBeGreaterThan(0);
@@ -180,6 +183,7 @@ describe('Scemory Footer RTL Rendering & Anti-Mirroring Verification', () => {
   it('immediately updates direction and texts when dynamically switching languages', async () => {
     const { target, router, i18n } = await mountFooter('en', '/en/home');
     expect(document.documentElement.dir).toBe('ltr');
+    expect(target.querySelector('.scemory-footer')?.getAttribute('dir')).toBe('ltr');
     expect(target.querySelector('#footer-comparisons-title')?.textContent.trim()).toBe('Comparisons');
 
     // Switch to Arabic
@@ -190,6 +194,7 @@ describe('Scemory Footer RTL Rendering & Anti-Mirroring Verification', () => {
     await settle();
 
     expect(document.documentElement.dir).toBe('rtl');
+    expect(target.querySelector('.scemory-footer')?.getAttribute('dir')).toBe('rtl');
     expect(target.querySelector('#footer-comparisons-title')?.textContent.trim()).toBe('المقارنات');
 
     // Switch back to English
@@ -200,20 +205,18 @@ describe('Scemory Footer RTL Rendering & Anti-Mirroring Verification', () => {
     await settle();
 
     expect(document.documentElement.dir).toBe('ltr');
+    expect(target.querySelector('.scemory-footer')?.getAttribute('dir')).toBe('ltr');
     expect(target.querySelector('#footer-comparisons-title')?.textContent.trim()).toBe('Comparisons');
   });
 
-  it('contains anti-mirroring safeguards in CSS files', () => {
+  it('keeps direction rules local to the footer without overriding page transforms', () => {
     const appCss = fs.readFileSync(path.resolve(__dirname, '../../resources/css/app.css'), 'utf-8');
     const footerVue = fs.readFileSync(path.resolve(__dirname, '../../resources/js/components/layouts/footer.vue'), 'utf-8');
 
-    // Check app.css includes .scemory-footer in RTL direction and anti-mirroring
-    expect(appCss).toMatch(/html\[dir="rtl"\]\s+\.scemory-footer\s*\{[^}]*direction:\s*rtl/);
-    expect(appCss).toMatch(/html\[dir="rtl"\]\s+\.scemory-footer[^}]*transform:\s*none\s*!important/);
-
-    // Check footer.vue scoped styles enforce direction: inherit and transform: none
-    expect(footerVue).toContain('direction: inherit;');
-    expect(footerVue).toContain('transform: none;');
+    expect(appCss).not.toContain('transform: none !important;');
+    expect(footerVue).toContain('.scemory-footer[dir="rtl"] { direction: rtl; text-align: start; }');
+    expect(footerVue).toContain('.scemory-footer[dir="ltr"] { direction: ltr; text-align: start; }');
+    expect(footerVue).not.toContain('transform: none;');
     expect(footerVue).toContain('margin-inline-start: 0;');
     expect(footerVue).toContain('margin-inline-end: auto;');
   });

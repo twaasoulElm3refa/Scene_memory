@@ -81,7 +81,7 @@ import { policies, verifiedFooterUrl } from '../../policies';
 const { t, tm, rt, locale } = useI18n();
 const route = useRoute();
 const currentYear = new Date().getFullYear();
-const direction = computed(() => ['ar', 'fa', 'ur'].includes(locale.value) ? 'rtl' : 'ltr');
+const direction = computed(() => ['ar', 'fa', 'ur'].includes(locale.value) ? '' : 'ltr');
 const path = suffix => '/' + locale.value + suffix;
 const comparisonPaths = ['/compare/historypin', '/compare/pastvu', '/compare/the-clio'];
 const supportPaths = new Set(['/who', '/contact', '/data-deletion', ...policies.map(policy => policy.path), ...comparisonPaths]);
@@ -111,9 +111,9 @@ onMounted(async () => {
   background: radial-gradient(circle at 90% 15%, rgba(48,168,255,.08), transparent 28rem), linear-gradient(145deg, var(--scemory-surface-soft, #EDF4FA), var(--scemory-surface, #F7FAFD));
   color: var(--scemory-text, #334A62);
   padding-block: 48px 20px;
-  direction: inherit;
-  transform: none;
 }
+.scemory-footer[dir="rtl"] { direction: rtl; text-align: start; }
+.scemory-footer[dir="ltr"] { direction: ltr; text-align: start; }
 .footer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.15fr); gap: clamp(20px, 2.5vw, 36px); align-items: start; }
 .footer-grid > * { min-width: 0; }
 h2 {
@@ -164,7 +164,6 @@ a:focus-visible { outline: 3px solid var(--scemory-primary, #0D4D97); outline-of
   border: 1px solid var(--scemory-border);
   box-shadow: var(--scemory-shadow-sm);
   margin-block-end: 18px;
-  transform: none;
 }
 .footer-brand h2 { margin-block-end: 10px; }
 .footer-brand h2 small { display: block; font-size: .8rem; font-weight: 500; color: var(--scemory-muted); }
@@ -178,7 +177,6 @@ a:focus-visible { outline: 3px solid var(--scemory-primary, #0D4D97); outline-of
   border-radius: 50%;
   color: var(--scemory-primary);
   background: var(--scemory-control);
-  transform: none;
 }
 [aria-disabled="true"] { opacity: .7; }
 .footer-stores { display: grid; gap: 10px; }
@@ -192,11 +190,9 @@ a:focus-visible { outline: 3px solid var(--scemory-primary, #0D4D97); outline-of
   background: var(--scemory-control);
   width: fit-content;
   max-width: 100%;
-  transform: none;
 }
 .footer-store > i {
   font-size: 1.6rem;
-  transform: none;
 }
 .footer-store small, .footer-store strong { display: block; line-height: 1.5; }
 .footer-store small { font-size: .7rem; }
