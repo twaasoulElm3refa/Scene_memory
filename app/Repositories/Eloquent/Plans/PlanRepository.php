@@ -9,12 +9,12 @@ class PlanRepository implements PlanRepositoryInterface
 {
     public function allWithTranslationsAndBenefits()
     {
-        return LicenceType::with('translation', 'advantges.translation', 'mediaTier')->get();
+        return LicenceType::with('translation', 'advantges.translation', 'mediaTier', 'tierLimits.mediaTier')->get();
     }
 
     public function allForAdmin()
     {
-        return LicenceType::with(['translation:id,plan_id,name', 'advantges:id,plan_id,feature', 'mediaTier'])->get();
+        return LicenceType::with(['translation:id,plan_id,name', 'advantges:id,plan_id,feature', 'mediaTier', 'tierLimits.mediaTier'])->get();
     }
 
     public function firstOrCreate(array $data)

@@ -1467,7 +1467,30 @@
     "payWithPaypal": "PayPal ile Öde",
     "insufficientCredits": "Yetersiz kredi veya seviye bu medya için yetersiz.",
     "includedQuotas": "Dahil Olan Medya Kotaları",
-    "permanentQuotas": "Süresi dolmayan kalıcı medya kotaları"
+    "permanentQuotas": "Süresi dolmayan kalıcı medya kotaları",
+    "savings": {
+      "title": "Plan ve Sepet Tasarrufu",
+      "description": "Yalnızca ödediğiniz fiyat ve kullanım anında kaydedilen Sepet fiyatlarına dayanan anlık karşılaştırma.",
+      "purchasedOn": "Satın alma tarihi: {date}",
+      "planPaid": "Ödenen plan fiyatı",
+      "redeemedCartValue": "Kullanılan medyanın Sepet değeri",
+      "tierAllowance": "Uygun seviyeler",
+      "sharedQuota": "yukarıda gösterilen kalan ortak kotayı kullanır",
+      "savedSoFar": "Planınız şimdiye kadar {amount} tasarruf sağladı.",
+      "breakEven": "Plan ile tek tek Sepet alımlarının maliyeti şu ana kadar aynı.",
+      "cartWouldSave": "Bu öğeleri tek tek almak şimdiye kadar {amount} daha ucuz olurdu.",
+      "incompleteHistory": "Bazı geçmiş fiyatlar kaydedilmediğinden doğrulanmış karşılaştırma kullanılamıyor. Tasarruf varsayılmıyor.",
+      "unusedCreditsNote": "Kullanılmamış {count} krediniz var. Sonraki kullanımlar karşılaştırmayı değiştirebilir.",
+      "noPlans": "Karşılaştırılacak satın alınmış plan yok.",
+      "unavailable": "Kullanılamıyor",
+      "estimateTitle": "Sepetinizle karşılaştırma",
+      "planPrice": "Plan fiyatı",
+      "comparableCartValue": "Karşılaştırılabilir Sepet değeri",
+      "cartItemsMatched": "{total} Sepet öğesinden {matched} tanesi bu planın mevcut kotasına ve seviyesine uygun.",
+      "estimatedSavings": "Tahmini tasarruf: {amount}",
+      "estimatedCartSaving": "Mevcut Sepetiniz bu plandan {amount} daha ucuz.",
+      "estimateDisclaimer": "Tahmin mevcut Sepetinize dayanır. Nihai sonuçta her başarılı kullanım anında kaydedilen fiyat kullanılır."
+    }
   },
   "dataDeletion": {
     "title": "Veri Silme Talimatları",

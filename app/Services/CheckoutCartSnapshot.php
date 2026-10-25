@@ -21,6 +21,34 @@ class CheckoutCartSnapshot
     public function __construct(private readonly MinorMoney $money) {}
 
     /**
+     * Quote one media item through the same authoritative pricing rules used by
+     * a direct single-item checkout. The returned minor-unit values are safe to
+     * persist as an immutable historical comparison snapshot.
+     */
+    public function quoteMedia(EventsImges $media): array
+    {
+        $media->loadMissing('events:id,is_active');
+        $totalMinor = $this->assertSaleable($media);
+
+        return [
+            'subtotal_minor' => $totalMinor,
+            'discount_minor' => 0,
+            'tax_minor' => 0,
+            'total_minor' => $totalMinor,
+            'currency' => strtoupper((string) config('paypal.currency', 'USD')),
+            'pricing_mode' => 'single_media',
+        ];
+    }
+
+    /**
+     * Build a read-only quote of the authenticated user's current cart.
+     */
+    public function quoteCart(int $userId): Collection
+    {
+        return $this->snapshotCart($userId);
+    }
+
+    /**
      * @return array{order: Purchases, payment: Payment}
      */
     public function create(array $data, string $method): array

@@ -84,6 +84,15 @@
                         <p class="mt-1 text-xs text-gray-500">Enter the monthly subscription price (e.g., 9.99, 19.99, 49.99)</p>
                     </div>
 
+                    <div class="mb-6 flex flex-wrap gap-2">
+                        <button type="button" @click="calculateRecommendation" :disabled="recommending || !Number(form.price)"
+                            class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold disabled:opacity-50">
+                            {{ recommending ? 'Calculating…' : 'Auto Calculate Safe Quotas' }}
+                        </button>
+                        <button v-if="recommended" type="button" @click="resetRecommended"
+                            class="px-4 py-2 rounded-lg bg-indigo-50 text-indigo-700 text-sm font-semibold">Reset Recommended</button>
+                    </div>
+
                     <!-- Media Tier Selection -->
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">
@@ -99,6 +108,23 @@
                             </option>
                         </select>
                         <p class="mt-1 text-xs text-gray-500">Tier determines the highest priced media eligible for this plan.</p>
+                        <div class="overflow-x-auto border border-gray-200 rounded-lg mt-4">
+                            <table class="min-w-full text-sm">
+                                <thead class="bg-gray-50"><tr>
+                                    <th class="text-start px-3 py-2">Tier ceiling</th>
+                                    <th class="text-start px-3 py-2">Photos</th>
+                                    <th class="text-start px-3 py-2">Videos</th>
+                                </tr></thead>
+                                <tbody>
+                                    <tr v-for="limit in form.tier_limits" :key="limit.media_tier_id" class="border-t border-gray-100">
+                                        <td class="px-3 py-2 font-semibold">{{ tierName(limit.media_tier_id) }}</td>
+                                        <td class="px-3 py-2"><input v-model.number="limit.photo_maximum" @change="validatePricing" type="number" min="0" class="w-28 border rounded px-2 py-1" /></td>
+                                        <td class="px-3 py-2"><input v-model.number="limit.video_maximum" @change="validatePricing" type="number" min="0" class="w-28 border rounded px-2 py-1" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Tier ceilings are constraints inside the shared totals, not additive balances.</p>
                     </div>
 
                     <!-- Photo & Video Quotas -->
@@ -110,6 +136,7 @@
                             <input
                                 type="number"
                                 v-model.number="form.photo_quota"
+                                @change="validatePricing"
                                 min="0"
                                 class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
                                 placeholder="e.g. 50"
@@ -123,6 +150,7 @@
                             <input
                                 type="number"
                                 v-model.number="form.video_quota"
+                                @change="validatePricing"
                                 min="0"
                                 class="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 transition-all duration-200"
                                 placeholder="e.g. 10"
@@ -227,15 +255,22 @@ const form = ref({
     description: '',
     media_tier_id: null,
     photo_quota: 0,
-    video_quota: 0
+    video_quota: 0,
+    tier_limits: []
 });
 
 const tiers = ref([]);
+const financialAnalysis = ref(null);
+const recommended = ref(null);
+const recommending = ref(false);
 
 const fetchTiers = async () => {
     try {
         const res = await PlanService.getMediaTiers();
         tiers.value = res.data || [];
+        form.value.tier_limits = tiers.value
+            .filter((tier) => tier.is_active && tier.is_plan_eligible)
+            .map((tier) => ({ media_tier_id: tier.id, photo_maximum: 0, video_maximum: 0 }));
     } catch (e) {
         console.error('Error fetching tiers:', e);
     }
@@ -249,51 +284,81 @@ const selectedTier = computed(() => {
 });
 
 const maxPotentialCatalogValue = computed(() => {
-    if (!selectedTier.value) return 0;
-    const photoVal = (form.value.photo_quota || 0) * Number(selectedTier.value.max_photo_price || 0);
-    const videoVal = (form.value.video_quota || 0) * Number(selectedTier.value.max_video_price || 0);
-    return photoVal + videoVal;
+    return Number(financialAnalysis.value?.max_potential_value || 0);
 });
 
 const maxCreatorLiability = computed(() => {
-    if (!selectedTier.value) return 0;
-    const photoLiab = (form.value.photo_quota || 0) * Number(selectedTier.value.max_photo_payout_cap || 0);
-    const videoLiab = (form.value.video_quota || 0) * Number(selectedTier.value.max_video_payout_cap || 0);
-    return photoLiab + videoLiab;
+    return Number(financialAnalysis.value?.max_creator_liability || 0);
 });
 
 const catalogPriceHeadroom = computed(() => {
-    const price = Number(form.value.price || 0);
-    return price - maxPotentialCatalogValue.value;
+    return Number(financialAnalysis.value?.catalog_price_headroom || 0);
 });
 
 const creatorLiabilityHeadroom = computed(() => {
-    const price = Number(form.value.price || 0);
-    return price - maxCreatorLiability.value;
+    return Number(financialAnalysis.value?.creator_liability_headroom || 0);
 });
 
 const hasQuota = computed(() => (form.value.photo_quota || 0) > 0 || (form.value.video_quota || 0) > 0);
 const isCatalogValueValid = computed(() => catalogPriceHeadroom.value >= 0);
 const isCreatorLiabilityValid = computed(() => creatorLiabilityHeadroom.value >= 0);
 
-const isFinanciallyValid = computed(() => {
-    if (!hasQuota.value) return true;
-    if (!selectedTier.value) return false;
-    return isCatalogValueValid.value && isCreatorLiabilityValid.value && Number(form.value.price || 0) > 0;
-});
+const isFinanciallyValid = computed(() => financialAnalysis.value?.is_valid === true);
 
 const financialValidationMessage = computed(() => {
-    if (hasQuota.value && !selectedTier.value) {
-        return 'Select a media tier when the plan includes photo or video quotas.';
-    }
-    if (isFinanciallyValid.value) {
-        return `Both checks pass: listing value $${maxPotentialCatalogValue.value.toFixed(2)} and creator payout liability $${maxCreatorLiability.value.toFixed(2)} are within the effective plan price of $${Number(form.value.price || 0).toFixed(2)}.`;
-    }
-    const failures = [];
-    if (!isCatalogValueValid.value) failures.push(`listing value exceeds price by $${Math.abs(catalogPriceHeadroom.value).toFixed(2)}`);
-    if (!isCreatorLiabilityValid.value) failures.push(`creator payout liability exceeds price by $${Math.abs(creatorLiabilityHeadroom.value).toFixed(2)}`);
-    return `Plan cannot be saved: ${failures.join(' and ')}.`;
+    if (!financialAnalysis.value) return 'Use Auto Calculate or validate the edited quotas.';
+    if (isFinanciallyValid.value) return `Safe under financial settings version ${financialAnalysis.value.settings_version}. Worst-case profit: $${Number(financialAnalysis.value.worst_case_profit || 0).toFixed(2)}.`;
+    return financialAnalysis.value.errors?.join(' ') || 'Plan cannot be saved.';
 });
+
+const tierName = (id) => tiers.value.find((tier) => tier.id === id)?.name || `Tier ${id}`;
+
+const validatePricing = async () => {
+    if (!Number(form.value.price)) {
+        financialAnalysis.value = null;
+        return;
+    }
+    try {
+        financialAnalysis.value = await PlanService.validatePricing({
+            price: Number(form.value.price),
+            media_tier_id: form.value.media_tier_id,
+            photo_quota: Number(form.value.photo_quota || 0),
+            video_quota: Number(form.value.video_quota || 0),
+            tier_limits: form.value.tier_limits,
+        });
+    } catch (error) {
+        financialAnalysis.value = null;
+        errorMessage.value = error.data?.message || 'Unable to validate pricing.';
+    }
+};
+
+const applyRecommendation = (result) => {
+    form.value.photo_quota = result.photo_quota;
+    form.value.video_quota = result.video_quota;
+    form.value.media_tier_id = result.media_tier_id;
+    form.value.tier_limits = tiers.value.filter((tier) => tier.is_active && tier.is_plan_eligible).map((tier) => {
+        const limit = result.tier_limits.find((item) => item.media_tier_id === tier.id);
+        return limit || { media_tier_id: tier.id, photo_maximum: 0, video_maximum: 0 };
+    });
+    financialAnalysis.value = result.analysis;
+};
+
+const calculateRecommendation = async () => {
+    recommending.value = true;
+    errorMessage.value = '';
+    try {
+        const result = await PlanService.recommendQuotas(Number(form.value.price));
+        if (!result.is_available) throw { data: { message: result.reason + (result.missing_assumptions?.length ? ` Missing: ${result.missing_assumptions.join(', ')}` : '') } };
+        recommended.value = JSON.parse(JSON.stringify(result));
+        applyRecommendation(result);
+    } catch (error) {
+        errorMessage.value = error.data?.message || 'Unable to calculate a safe recommendation.';
+    } finally {
+        recommending.value = false;
+    }
+};
+
+const resetRecommended = () => recommended.value && applyRecommendation(JSON.parse(JSON.stringify(recommended.value)));
 
 const loading = ref(false);
 const successMessage = ref('');
@@ -350,6 +415,7 @@ const clearError = (field) => {
     }
     if (successMessage.value) successMessage.value = '';
     if (errorMessage.value) errorMessage.value = '';
+    if (field === 'price') financialAnalysis.value = null;
 };
 
 // Reset form
@@ -360,8 +426,12 @@ const resetForm = () => {
         description: '',
         media_tier_id: null,
         photo_quota: 0,
-        video_quota: 0
+        video_quota: 0,
+        tier_limits: tiers.value.filter((tier) => tier.is_active && tier.is_plan_eligible)
+            .map((tier) => ({ media_tier_id: tier.id, photo_maximum: 0, video_maximum: 0 }))
     };
+    financialAnalysis.value = null;
+    recommended.value = null;
     errors.value = { name: '', price: '' };
     successMessage.value = '';
     errorMessage.value = '';
@@ -372,6 +442,8 @@ const handleSubmit = async () => {
     // Clear previous messages
     successMessage.value = '';
     errorMessage.value = '';
+
+    await validatePricing();
 
     // Validate form
     if (!validateForm()) {
@@ -388,6 +460,7 @@ const handleSubmit = async () => {
             media_tier_id: form.value.media_tier_id,
             photo_quota: form.value.photo_quota || 0,
             video_quota: form.value.video_quota || 0,
+            tier_limits: form.value.tier_limits,
             ...(form.value.description && { description: form.value.description.trim() })
         };
 

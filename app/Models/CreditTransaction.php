@@ -13,6 +13,7 @@ class CreditTransaction extends Model
 
     protected $casts = [
         'quantity' => 'integer',
+        'cart_value_minor' => 'integer',
         'snapshot' => 'array',
     ];
 

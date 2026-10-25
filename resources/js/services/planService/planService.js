@@ -21,6 +21,10 @@ export const PlanService = {
         return api.post(`/plans/subscribe/${planId}/paypal`);
     },
 
+    getSavingsEstimate(planId) {
+        return api.get(`/plans/${planId}/savings-estimate`, { suppressGlobalErrorToast: true });
+    },
+
     getUserCredits() {
         return api.get("/media-credits/balance", { suppressGlobalErrorToast: true });
     },

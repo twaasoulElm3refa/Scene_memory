@@ -1467,7 +1467,30 @@
     "payWithPaypal": "Pagar con PayPal",
     "insufficientCredits": "Créditos insuficientes o nivel insuficiente para este medio.",
     "includedQuotas": "Cupos de Medios Incluidos",
-    "permanentQuotas": "Cupos de medios permanentes sin vencimiento"
+    "permanentQuotas": "Cupos de medios permanentes sin vencimiento",
+    "savings": {
+      "title": "Ahorro del plan frente al carrito",
+      "description": "Comparación en tiempo real basada solo en el precio pagado y los precios del carrito registrados al canjear.",
+      "purchasedOn": "Comprado el {date}",
+      "planPaid": "Precio pagado del plan",
+      "redeemedCartValue": "Valor canjeado del carrito",
+      "tierAllowance": "Niveles permitidos",
+      "sharedQuota": "utiliza el cupo compartido restante mostrado arriba",
+      "savedSoFar": "Tu plan te ha ahorrado {amount} hasta ahora.",
+      "breakEven": "El plan y las compras individuales cuestan lo mismo hasta ahora.",
+      "cartWouldSave": "Comprar estos artículos por separado te habría ahorrado {amount} hasta ahora.",
+      "incompleteHistory": "No hay una comparación verificada porque faltan algunos precios históricos. No se presume ningún ahorro.",
+      "unusedCreditsNote": "Aún tienes {count} créditos sin usar. Los próximos canjes pueden cambiar la comparación.",
+      "noPlans": "No hay planes comprados para comparar.",
+      "unavailable": "No disponible",
+      "estimateTitle": "Comparación con tu carrito",
+      "planPrice": "Precio del plan",
+      "comparableCartValue": "Valor comparable del carrito",
+      "cartItemsMatched": "{matched} de {total} artículos cumplen los cupos y el nivel actuales del plan.",
+      "estimatedSavings": "Ahorro estimado: {amount}",
+      "estimatedCartSaving": "Tu carrito actual costaría {amount} menos que este plan.",
+      "estimateDisclaimer": "Estimación basada en tu carrito actual. El resultado final usa los precios registrados al completar cada canje."
+    }
   },
   "dataDeletion": {
     "title": "Instrucciones de eliminación de datos",

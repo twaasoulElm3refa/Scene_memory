@@ -2,16 +2,18 @@
 
 namespace Tests\Feature\Api\Plans;
 
-use App\Models\DownloadEntitlement;
+use App\Models\Cart;
+use App\Models\CartItems;
+use App\Models\CreditTransaction;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Models\LicenceType;
 use App\Models\MediaTier;
 use App\Models\User;
-use App\Models\WalletLedger;
+use App\Models\Wallet;
 use App\Services\MediaTierService;
-use App\Services\WalletLedgerService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class PlanQuotaRedemptionTest extends TestCase
@@ -19,10 +21,15 @@ class PlanQuotaRedemptionTest extends TestCase
     use RefreshDatabase;
 
     protected MediaTier $basicTier;
+
     protected MediaTier $proTier;
+
     protected LicenceType $proPlan;
+
     protected User $buyer;
+
     protected User $creator;
+
     protected Events $event;
 
     protected function setUp(): void
@@ -57,6 +64,8 @@ class PlanQuotaRedemptionTest extends TestCase
             'is_active' => true,
         ]);
 
+        $this->configurePlanFinancialSettings();
+
         $this->proPlan = LicenceType::create([
             'name' => 'Pro Plan',
             'slug' => 'pro-plan',
@@ -70,7 +79,7 @@ class PlanQuotaRedemptionTest extends TestCase
         ]);
 
         $this->buyer = User::factory()->create();
-        \App\Models\Wallet::create([
+        Wallet::create([
             'user_id' => $this->buyer->id,
             'amount' => 200.00,
             'balance_minor' => 20000,
@@ -78,7 +87,7 @@ class PlanQuotaRedemptionTest extends TestCase
         ]);
 
         $this->creator = User::factory()->create();
-        \App\Models\Wallet::create([
+        Wallet::create([
             'user_id' => $this->creator->id,
             'amount' => 0.00,
             'balance_minor' => 0,
@@ -106,7 +115,7 @@ class PlanQuotaRedemptionTest extends TestCase
         ]);
 
         // Assert buyer wallet was debited $99.00
-        $buyerWallet = \App\Models\Wallet::where('user_id', $this->buyer->id)->first();
+        $buyerWallet = Wallet::where('user_id', $this->buyer->id)->first();
         $this->assertEquals(101.00, (float) $buyerWallet->amount);
 
         // Assert UserCreditGrant was created
@@ -133,7 +142,7 @@ class PlanQuotaRedemptionTest extends TestCase
         $this->actingAs($this->buyer, 'sanctum')->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")->assertOk();
 
         // Second purchase: gets 10 photos -> 20 total (limit is 20)
-        \App\Models\Wallet::where('user_id', $this->buyer->id)->update(['amount' => 500.00, 'balance_minor' => 50000]);
+        Wallet::where('user_id', $this->buyer->id)->update(['amount' => 500.00, 'balance_minor' => 50000]);
         $this->actingAs($this->buyer, 'sanctum')->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")->assertOk();
 
         // Third purchase: would be 30 photos -> Exceeds max 20!
@@ -180,7 +189,7 @@ class PlanQuotaRedemptionTest extends TestCase
 
         // Verify creator wallet received MIN(listing_price, payout_cap) = MIN(4.50, 3.50) = $3.50
         // with ZERO extra 15% platform deduction
-        $creatorWallet = \App\Models\Wallet::where('user_id', $this->creator->id)->first();
+        $creatorWallet = Wallet::where('user_id', $this->creator->id)->first();
         $this->assertEquals(3.50, (float) $creatorWallet->amount);
 
         // Verify CreditTransaction redemption audit entry
@@ -222,5 +231,177 @@ class PlanQuotaRedemptionTest extends TestCase
         $response = $this->actingAs($this->buyer, 'sanctum')->postJson("/api/v1/media-credits/redeem/{$proPhoto->id}");
         $response->assertStatus(422);
         $this->assertStringContainsString('tier', strtolower($response->json('message')));
+    }
+
+    public function test_savings_tracker_uses_immutable_redemption_price_and_actual_plan_price(): void
+    {
+        $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")
+            ->assertOk();
+
+        $photo = EventsImges::create([
+            'event_id' => $this->event->id,
+            'preview_url' => 'tracked-photo.jpg',
+            'type' => 'image',
+            'price' => 4.50,
+            'is_active' => true,
+        ]);
+        app(MediaTierService::class)->assignTierToMedia($photo);
+
+        $redemption = $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/media-credits/redeem/{$photo->id}");
+
+        $redemption->assertOk()
+            ->assertJsonPath('plan_comparison.comparison.plan_price_paid_minor', 9900)
+            ->assertJsonPath('plan_comparison.comparison.redeemed_cart_value_minor', 450)
+            ->assertJsonPath('plan_comparison.comparison.difference_minor', -9450)
+            ->assertJsonPath('plan_comparison.comparison.comparison_status', 'extra_spending');
+
+        $photo->update(['price' => 1.00]);
+
+        $this->actingAs($this->buyer, 'sanctum')
+            ->getJson('/api/v1/media-credits/balance')
+            ->assertOk()
+            ->assertJsonPath('data.plan_comparisons.0.comparison.redeemed_cart_value_minor', 450)
+            ->assertJsonPath('data.plan_comparisons.0.comparison.difference_minor', -9450)
+            ->assertJsonPath('data.plan_comparisons.0.comparison.is_complete', true);
+
+        $this->assertDatabaseHas('credit_transactions', [
+            'media_id' => $photo->id,
+            'action' => 'redemption',
+            'cart_value_minor' => 450,
+            'currency' => 'USD',
+        ]);
+    }
+
+    public function test_multiple_plan_purchases_are_compared_separately_without_double_counting(): void
+    {
+        $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")
+            ->assertOk();
+        Wallet::where('user_id', $this->buyer->id)
+            ->update(['amount' => 500.00, 'balance_minor' => 50000]);
+        $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")
+            ->assertOk();
+
+        $photo = EventsImges::create([
+            'event_id' => $this->event->id,
+            'preview_url' => 'one-plan-only.jpg',
+            'type' => 'image',
+            'price' => 4.00,
+            'is_active' => true,
+        ]);
+        app(MediaTierService::class)->assignTierToMedia($photo);
+        $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/media-credits/redeem/{$photo->id}")
+            ->assertOk();
+
+        $plans = collect($this->actingAs($this->buyer, 'sanctum')
+            ->getJson('/api/v1/media-credits/balance')
+            ->assertOk()
+            ->json('data.plan_comparisons'))
+            ->sortBy('id')
+            ->values();
+
+        $this->assertCount(2, $plans);
+        $this->assertSame(400, $plans[0]['comparison']['redeemed_cart_value_minor']);
+        $this->assertSame(0, $plans[1]['comparison']['redeemed_cart_value_minor']);
+        $this->assertSame(9900, $plans[0]['comparison']['plan_price_paid_minor']);
+        $this->assertSame(9900, $plans[1]['comparison']['plan_price_paid_minor']);
+    }
+
+    public function test_pre_purchase_estimate_uses_actual_cart_contents_and_collection_discount(): void
+    {
+        $photo = EventsImges::create([
+            'event_id' => $this->event->id,
+            'preview_url' => 'cart-photo.jpg',
+            'type' => 'image',
+            'price' => 4.50,
+            'is_active' => true,
+        ]);
+        app(MediaTierService::class)->assignTierToMedia($photo);
+        $cart = Cart::create(['user_id' => $this->buyer->id, 'total' => 4.50]);
+        CartItems::create([
+            'cart_id' => $cart->id,
+            'image_id' => null,
+            'event_id' => $this->event->id,
+            'type' => 'collection',
+            'price' => 4.50,
+            'discount' => 0.45,
+        ]);
+
+        $this->actingAs($this->buyer, 'sanctum')
+            ->getJson("/api/v1/plans/{$this->proPlan->id}/savings-estimate")
+            ->assertOk()
+            ->assertJsonPath('data.available', true)
+            ->assertJsonPath('data.plan_price_minor', 9900)
+            ->assertJsonPath('data.comparable_cart_value_minor', 405)
+            ->assertJsonPath('data.difference_minor', -9495)
+            ->assertJsonPath('data.matched_items', 1)
+            ->assertJsonPath('data.cart_items', 1);
+    }
+
+    public function test_missing_legacy_price_snapshots_never_invent_savings(): void
+    {
+        $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")
+            ->assertOk();
+        $grant = $this->buyer->creditGrants()->firstOrFail();
+
+        CreditTransaction::create([
+            'uuid' => (string) Str::uuid(),
+            'user_id' => $this->buyer->id,
+            'grant_id' => $grant->id,
+            'media_id' => null,
+            'media_type' => 'photo',
+            'action' => 'redemption',
+            'quantity' => -1,
+            'snapshot' => ['legacy' => true],
+        ]);
+
+        $this->actingAs($this->buyer, 'sanctum')
+            ->getJson('/api/v1/media-credits/balance')
+            ->assertOk()
+            ->assertJsonPath('data.plan_comparisons.0.comparison.is_complete', false)
+            ->assertJsonPath('data.plan_comparisons.0.comparison.incomplete_reason', 'historical_prices_unavailable')
+            ->assertJsonPath('data.plan_comparisons.0.comparison.comparison_status', 'unavailable')
+            ->assertJsonPath('data.plan_comparisons.0.comparison.difference_minor', null);
+    }
+
+    public function test_tier_ceiling_and_shared_total_are_decremented_without_additive_balances(): void
+    {
+        $this->proPlan->update(['photo_quota' => 3, 'video_quota' => 0]);
+        $this->proPlan->tierLimits()->createMany([
+            ['media_tier_id' => $this->basicTier->id, 'photo_maximum' => 2, 'video_maximum' => 0],
+            ['media_tier_id' => $this->proTier->id, 'photo_maximum' => 1, 'video_maximum' => 0],
+        ]);
+        $this->actingAs($this->buyer, 'sanctum')
+            ->postJson("/api/v1/plans/subscribe/{$this->proPlan->id}/wallet")
+            ->assertOk();
+
+        $firstPro = EventsImges::create([
+            'event_id' => $this->event->id, 'preview_url' => 'tier-pro-1.jpg',
+            'type' => 'image', 'price' => 4.00, 'is_active' => true,
+        ]);
+        $secondPro = EventsImges::create([
+            'event_id' => $this->event->id, 'preview_url' => 'tier-pro-2.jpg',
+            'type' => 'image', 'price' => 4.00, 'is_active' => true,
+        ]);
+        app(MediaTierService::class)->assignTierToMedia($firstPro);
+        app(MediaTierService::class)->assignTierToMedia($secondPro);
+
+        $this->actingAs($this->buyer, 'sanctum')->postJson("/api/v1/media-credits/redeem/{$firstPro->id}")
+            ->assertOk()->assertJsonPath('remaining_photos', 2);
+        $this->actingAs($this->buyer, 'sanctum')->postJson("/api/v1/media-credits/redeem/{$secondPro->id}")
+            ->assertUnprocessable();
+
+        $grant = $this->buyer->creditGrants()->sole();
+        $usage = collect($grant->tier_usage_snapshot)->firstWhere('media_tier_id', $this->proTier->id);
+        $this->assertSame(2, $grant->remaining_photos);
+        $this->assertSame(1, $usage['photos']);
+        $this->actingAs($this->buyer, 'sanctum')->getJson('/api/v1/media-credits/balance')
+            ->assertOk()
+            ->assertJsonPath('data.plan_comparisons.0.eligible_tiers.1.remaining_photos', 0);
     }
 }

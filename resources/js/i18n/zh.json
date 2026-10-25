@@ -1467,7 +1467,30 @@
     "payWithPaypal": "PayPal 支付",
     "insufficientCredits": "额度不足或套餐层级不满足该媒体要求。",
     "includedQuotas": "包含的媒体配额",
-    "permanentQuotas": "永久有效不失效媒体配额"
+    "permanentQuotas": "永久有效不失效媒体配额",
+    "savings": {
+      "title": "套餐与购物车节省对比",
+      "description": "仅依据实付套餐价格和兑换时记录的购物车价格进行实时对比。",
+      "purchasedOn": "购买于 {date}",
+      "planPaid": "套餐实付价格",
+      "redeemedCartValue": "已兑换媒体的购物车价值",
+      "tierAllowance": "适用等级",
+      "sharedQuota": "使用上方显示的剩余共享额度",
+      "savedSoFar": "该套餐目前已为你节省 {amount}。",
+      "breakEven": "目前套餐与逐件购买的花费相同。",
+      "cartWouldSave": "逐件购买这些内容目前可少花 {amount}。",
+      "incompleteHistory": "由于部分历史价格未记录，无法提供经验证的对比，也不会假定存在节省。",
+      "unusedCreditsNote": "你还有 {count} 个未使用额度，后续兑换可能改变对比结果。",
+      "noPlans": "暂无可对比的已购套餐。",
+      "unavailable": "不可用",
+      "estimateTitle": "你的购物车对比",
+      "planPrice": "套餐价格",
+      "comparableCartValue": "可对比购物车价值",
+      "cartItemsMatched": "购物车共 {total} 件，其中 {matched} 件符合本套餐当前额度和等级。",
+      "estimatedSavings": "预计节省：{amount}",
+      "estimatedCartSaving": "当前购物车比本套餐少花 {amount}。",
+      "estimateDisclaimer": "估算基于当前购物车；最终结果采用每次成功兑换时记录的价格。"
+    }
   },
   "dataDeletion": {
     "title": "数据删除说明",

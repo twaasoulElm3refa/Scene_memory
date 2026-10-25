@@ -33,6 +33,7 @@ class PlanFinancialValidationTest extends TestCase
             'is_plan_eligible' => true,
             'is_active' => true,
         ]);
+        $this->configurePlanFinancialSettings();
     }
 
     public function test_financial_validator_approves_solvent_plan(): void
@@ -120,6 +121,7 @@ class PlanFinancialValidationTest extends TestCase
             'media_tier_id' => $this->proTier->id,
             'photo_quota' => 10,
             'video_quota' => 2,
+            'is_active' => true,
         ]);
 
         $response->assertStatus(422);
@@ -159,7 +161,7 @@ class PlanFinancialValidationTest extends TestCase
             'photo_quota' => 1,
             'video_quota' => 0,
         ])->assertUnprocessable()
-            ->assertJsonPath('validation.metrics.is_valid', false);
+            ->assertJsonPath('validation.is_valid', false);
 
         $this->assertDatabaseMissing('licence_types', ['name' => 'Missing Tier']);
     }
@@ -198,21 +200,20 @@ class PlanFinancialValidationTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $response = $this->actingAs($admin, 'sanctum')->getJson('/api/v1/admin/plans/validate?'.http_build_query([
+        $response = $this->actingAs($admin, 'sanctum')->postJson('/api/v1/admin/plans/validate', [
             'price' => 100.00,
             'media_tier_id' => $this->proTier->id,
             'photo_quota' => 10,
             'video_quota' => 2,
-        ]));
+        ]);
 
         $response->assertOk();
         $response->assertJson([
             'is_valid' => true,
             'catalog_value_is_valid' => true,
             'creator_liability_is_valid' => true,
-            'max_potential_catalog_value' => 80.00,
+            'max_potential_value' => 80.00,
             'max_creator_liability' => 55.00,
-            'difference' => 20.00,
             'catalog_price_headroom' => 20.00,
             'creator_liability_headroom' => 45.00,
         ]);

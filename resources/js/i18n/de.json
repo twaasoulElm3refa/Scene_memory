@@ -1467,7 +1467,30 @@
     "payWithPaypal": "Mit PayPal bezahlen",
     "insufficientCredits": "Unzureichendes Guthaben oder zu niedrige Klasse für dieses Medium.",
     "includedQuotas": "Enthaltene Medien-Kontingente",
-    "permanentQuotas": "Dauerhafte Medienkontingente ohne Verfall"
+    "permanentQuotas": "Dauerhafte Medienkontingente ohne Verfall",
+    "savings": {
+      "title": "Tarif-gegen-Warenkorb-Ersparnis",
+      "description": "Echtzeitvergleich ausschließlich anhand des gezahlten Preises und der bei der Einlösung erfassten Warenkorbpreise.",
+      "purchasedOn": "Gekauft am {date}",
+      "planPaid": "Gezahlter Tarifpreis",
+      "redeemedCartValue": "Eingelöster Warenkorbwert",
+      "tierAllowance": "Berechtigte Stufen",
+      "sharedQuota": "nutzt das oben angezeigte verbleibende Gesamtkontingent",
+      "savedSoFar": "Ihr Tarif hat Ihnen bisher {amount} gespart.",
+      "breakEven": "Tarif und Einzelkäufe kosten bisher gleich viel.",
+      "cartWouldSave": "Der Einzelkauf dieser Artikel hätte Ihnen bisher {amount} gespart.",
+      "incompleteHistory": "Ein belegter Vergleich ist nicht verfügbar, da einige historische Preise nicht erfasst wurden. Es wird keine Ersparnis angenommen.",
+      "unusedCreditsNote": "Sie haben noch {count} ungenutzte Credits. Weitere Einlösungen können den Vergleich ändern.",
+      "noPlans": "Keine gekauften Tarife zum Vergleichen vorhanden.",
+      "unavailable": "Nicht verfügbar",
+      "estimateTitle": "Vergleich mit Ihrem Warenkorb",
+      "planPrice": "Tarifpreis",
+      "comparableCartValue": "Vergleichbarer Warenkorbwert",
+      "cartItemsMatched": "{matched} von {total} Warenkorbartikeln passen zu Kontingent und Stufe dieses Tarifs.",
+      "estimatedSavings": "Geschätzte Ersparnis: {amount}",
+      "estimatedCartSaving": "Ihr aktueller Warenkorb wäre {amount} günstiger als dieser Tarif.",
+      "estimateDisclaimer": "Schätzung anhand Ihres aktuellen Warenkorbs. Das Endergebnis verwendet die bei jeder erfolgreichen Einlösung erfassten Preise."
+    }
   },
   "dataDeletion": {
     "title": "Anweisungen zur Datenlöschung",

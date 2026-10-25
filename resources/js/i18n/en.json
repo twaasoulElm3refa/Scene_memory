@@ -1467,7 +1467,30 @@
     "payWithPaypal": "Pay with PayPal",
     "insufficientCredits": "Insufficient credits or tier rank too low for this media.",
     "includedQuotas": "Included Media Quotas",
-    "permanentQuotas": "Permanent non-expiring media quotas"
+    "permanentQuotas": "Permanent non-expiring media quotas",
+    "savings": {
+      "title": "Plan vs Cart Savings",
+      "description": "A real-time comparison based only on the price you paid and recorded Cart prices at redemption.",
+      "purchasedOn": "Purchased on {date}",
+      "planPaid": "Plan price paid",
+      "redeemedCartValue": "Redeemed Cart value",
+      "tierAllowance": "Eligible tiers",
+      "sharedQuota": "uses the remaining shared quota shown above",
+      "savedSoFar": "Your plan has saved you {amount} so far.",
+      "breakEven": "Your plan and individual Cart purchases cost the same so far.",
+      "cartWouldSave": "Buying these items individually would have saved you {amount} so far.",
+      "incompleteHistory": "A verified comparison is unavailable because some historical prices were not recorded. No savings are assumed.",
+      "unusedCreditsNote": "You still have {count} unused credits. Future redemptions can change this comparison.",
+      "noPlans": "No purchased plans are available for comparison.",
+      "unavailable": "Unavailable",
+      "estimateTitle": "Your Cart comparison",
+      "planPrice": "Plan price",
+      "comparableCartValue": "Comparable Cart value",
+      "cartItemsMatched": "{matched} of {total} Cart items fit this plan's current quotas and tier.",
+      "estimatedSavings": "Estimated savings: {amount}",
+      "estimatedCartSaving": "Your current Cart would cost {amount} less than this plan.",
+      "estimateDisclaimer": "Estimate based on your current Cart. Final results use prices recorded when each redemption succeeds."
+    }
   },
   "dataDeletion": {
     "title": "User Account & Data Deletion Instructions",

@@ -440,6 +440,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('/subscribe/{plan}/wallet', [PlanSubscriptionController::class, 'subscribeWallet']);
             Route::post('/subscribe/{plan}/paypal', [PlanSubscriptionController::class, 'subscribePayPal']);
+            Route::get('/{plan}/savings-estimate', [PlanSubscriptionController::class, 'savingsEstimate']);
         });
     });
 
@@ -456,7 +457,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/media-tiers', [AdminPlanController::class, 'allTiers']);
         Route::post('/media-tiers', [AdminPlanController::class, 'saveTier']);
         Route::delete('/media-tiers/{id}', [AdminPlanController::class, 'deleteTier']);
-        Route::get('/plans/validate', [AdminPlanController::class, 'validatePricing']);
+        Route::match(['get', 'post'], '/plans/validate', [AdminPlanController::class, 'validatePricing']);
+        Route::post('/plans/recommend', [AdminPlanController::class, 'recommend']);
+        Route::get('/plan-financial-settings', [AdminPlanController::class, 'financialSettings']);
+        Route::put('/plan-financial-settings', [AdminPlanController::class, 'saveFinancialSettings']);
+        Route::get('/plan-financial-impact', [AdminPlanController::class, 'financialImpact']);
         Route::get('/plan-credit-reports', [AdminPlanController::class, 'creditReports']);
     });
 

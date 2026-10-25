@@ -80,9 +80,36 @@ const PlanService = {
         }
     },
 
-    validatePricing: async (params) => {
+    validatePricing: async (data) => {
         try {
-            const response = await api.get('/admin/plans/validate', { params });
+            const response = await api.post('/admin/plans/validate', data);
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    recommendQuotas: async (price) => {
+        try {
+            const response = await api.post('/admin/plans/recommend', { price });
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    getFinancialSettings: async () => {
+        try {
+            const response = await api.get('/admin/plan-financial-settings');
+            return response.data;
+        } catch (error) {
+            throw error.response || error;
+        }
+    },
+
+    saveFinancialSettings: async (data) => {
+        try {
+            const response = await api.put('/admin/plan-financial-settings', data);
             return response.data;
         } catch (error) {
             throw error.response || error;

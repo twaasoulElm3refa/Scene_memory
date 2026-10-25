@@ -428,6 +428,82 @@
                         </p>
                     </div>
 
+                    <!-- Evidence-backed Plan vs Cart comparison -->
+                    <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                            <i class="bi bi-bar-chart-line text-emerald-600"></i>
+                            {{ $t('mediaCredits.savings.title') }}
+                        </h3>
+                        <p class="text-sm text-gray-500 mb-5">{{ $t('mediaCredits.savings.description') }}</p>
+
+                        <div v-if="creditStats.plan_comparisons?.length" class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                            <article v-for="grant in creditStats.plan_comparisons" :key="`comparison-${grant.id}`"
+                                class="rounded-xl border border-gray-200 bg-white p-5">
+                                <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                                    <div>
+                                        <h4 class="font-bold text-gray-900 mb-1">{{ grant.plan?.name || grant.tier_name }}</h4>
+                                        <p class="text-xs text-gray-500 mb-0">
+                                            {{ $t('mediaCredits.savings.purchasedOn', { date: formatDate(grant.created_at) }) }}
+                                        </p>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                                        {{ grant.payment_method }}
+                                    </span>
+                                </div>
+
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                                    <div class="rounded-lg bg-blue-50 p-3">
+                                        <div class="text-xs text-blue-700">{{ $t('mediaCredits.photos') }}</div>
+                                        <div class="font-extrabold text-blue-900">{{ grant.remaining_photos }} / {{ grant.photo_count }}</div>
+                                    </div>
+                                    <div class="rounded-lg bg-purple-50 p-3">
+                                        <div class="text-xs text-purple-700">{{ $t('mediaCredits.videos') }}</div>
+                                        <div class="font-extrabold text-purple-900">{{ grant.remaining_videos }} / {{ grant.video_count }}</div>
+                                    </div>
+                                    <div class="rounded-lg bg-gray-50 p-3">
+                                        <div class="text-xs text-gray-500">{{ $t('mediaCredits.savings.planPaid') }}</div>
+                                        <div class="font-bold text-gray-900">{{ formatMoney(grant.comparison.plan_price_paid_minor, grant.comparison.currency) }}</div>
+                                    </div>
+                                    <div class="rounded-lg bg-gray-50 p-3">
+                                        <div class="text-xs text-gray-500">{{ $t('mediaCredits.savings.redeemedCartValue') }}</div>
+                                        <div class="font-bold text-gray-900">{{ formatMoney(grant.comparison.redeemed_cart_value_minor, grant.comparison.currency) }}</div>
+                                    </div>
+                                </div>
+
+                        <div class="text-xs text-gray-600 mb-3">
+                            <span class="font-semibold">{{ $t('mediaCredits.savings.tierAllowance') }}:</span>
+                            <span v-for="tier in grant.eligible_tiers" :key="tier.id" class="inline-flex items-center gap-1 mx-1 px-2 py-1 rounded bg-gray-50">
+                                <strong>{{ tier.name }}</strong>
+                                <span v-if="tier.remaining_photos !== undefined">{{ $t('mediaCredits.photos') }}: {{ tier.remaining_photos }}</span>
+                                <span v-if="tier.remaining_videos !== undefined">{{ $t('mediaCredits.videos') }}: {{ tier.remaining_videos }}</span>
+                            </span>
+                            <span class="text-gray-400"> · {{ $t('mediaCredits.savings.sharedQuota') }}</span>
+                                </div>
+
+                                <div v-if="grant.comparison.is_complete" class="rounded-lg p-3"
+                                    :class="grant.comparison.comparison_status === 'savings' ? 'bg-emerald-50 text-emerald-800' : (grant.comparison.comparison_status === 'break_even' ? 'bg-blue-50 text-blue-800' : 'bg-amber-50 text-amber-900')">
+                                    <p v-if="grant.comparison.comparison_status === 'savings'" class="font-bold mb-0">
+                                        {{ $t('mediaCredits.savings.savedSoFar', { amount: formatMoney(grant.comparison.difference_minor, grant.comparison.currency) }) }}
+                                    </p>
+                                    <p v-else-if="grant.comparison.comparison_status === 'break_even'" class="font-bold mb-0">
+                                        {{ $t('mediaCredits.savings.breakEven') }}
+                                    </p>
+                                    <p v-else class="font-bold mb-0">
+                                        {{ $t('mediaCredits.savings.cartWouldSave', { amount: formatMoney(Math.abs(grant.comparison.difference_minor), grant.comparison.currency) }) }}
+                                    </p>
+                                </div>
+                                <div v-else class="rounded-lg bg-gray-100 text-gray-700 p-3 text-sm">
+                                    {{ $t('mediaCredits.savings.incompleteHistory') }}
+                                </div>
+
+                                <p v-if="grant.comparison.has_unused_credits" class="text-xs text-gray-500 mt-3 mb-0">
+                                    {{ $t('mediaCredits.savings.unusedCreditsNote', { count: grant.comparison.unused_credits }) }}
+                                </p>
+                            </article>
+                        </div>
+                        <p v-else class="text-gray-500 text-center py-6 mb-0">{{ $t('mediaCredits.savings.noPlans') }}</p>
+                    </div>
+
                     <!-- Redemption History Ledger -->
                     <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                         <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -967,7 +1043,8 @@ export default {
             total_photos: 0,
             total_videos: 0,
             highest_tier: null,
-            grants: []
+            grants: [],
+            plan_comparisons: []
         });
         const creditHistory = ref([]);
 
@@ -1126,6 +1203,14 @@ export default {
             } catch {
                 return t("common.notSpecified");
             }
+        };
+
+        const formatMoney = (minor, currency = "USD") => {
+            if (minor === null || minor === undefined || !currency) return t("mediaCredits.savings.unavailable");
+            return new Intl.NumberFormat(locale.value || "en", {
+                style: "currency",
+                currency,
+            }).format(Number(minor) / 100);
         };
 
         const updateProfile = async () => {
@@ -1353,6 +1438,7 @@ export default {
             transactions,
             getInitials,
             formatDate,
+            formatMoney,
             selectCountry,
             updateProfile,
             updatePassword,

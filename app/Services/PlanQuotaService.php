@@ -7,6 +7,7 @@ use App\Models\CreditTransaction;
 use App\Models\Entitlement;
 use App\Models\EventsImges;
 use App\Models\LicenceType;
+use App\Models\MediaTier;
 use App\Models\Purchases;
 use App\Models\User;
 use App\Models\UserCreditGrant;
@@ -20,6 +21,8 @@ class PlanQuotaService
         private readonly MediaTierService $tierService,
         private readonly WalletLedgerService $ledger,
         private readonly MinorMoney $money,
+        private readonly CheckoutCartSnapshot $cartPricing,
+        private readonly PlanFinancialEngine $financialEngine,
     ) {}
 
     /**
@@ -40,9 +43,42 @@ class PlanQuotaService
         $totalPhotos = (int) $grants->sum('remaining_photos');
         $totalVideos = (int) $grants->sum('remaining_videos');
 
-        // Group by tier
+        // New grants expose per-tier ceilings. Legacy grants retain their original
+        // single highest-tier aggregation until they are exhausted.
         $byTier = [];
         foreach ($grants as $grant) {
+            if (is_array($grant->tier_limits_snapshot)) {
+                $usage = collect($grant->tier_usage_snapshot ?? [])->keyBy(fn ($row) => (string) ($row['media_tier_id'] ?? ''));
+                foreach ($grant->tier_limits_snapshot as $limit) {
+                    $rank = (int) ($limit['tier_rank'] ?? 0);
+                    $tierId = (int) ($limit['media_tier_id'] ?? 0);
+                    $used = $usage->get((string) $tierId, []);
+                    $photoRemaining = min(
+                        (int) $grant->remaining_photos,
+                        max(0, (int) ($limit['photo_maximum'] ?? 0) - (int) ($used['photos'] ?? 0)),
+                    );
+                    $videoRemaining = min(
+                        (int) $grant->remaining_videos,
+                        max(0, (int) ($limit['video_maximum'] ?? 0) - (int) ($used['videos'] ?? 0)),
+                    );
+                    if (! isset($byTier[$rank])) {
+                        $byTier[$rank] = [
+                            'tier_id' => $tierId,
+                            'tier_name' => $limit['tier_name'] ?? "Tier {$tierId}",
+                            'tier_rank' => $rank,
+                            'remaining_photos' => 0,
+                            'remaining_videos' => 0,
+                            'max_eligible_photo_price' => ((int) ($limit['max_price_photo_minor'] ?? 0)) / 100,
+                            'max_eligible_video_price' => ((int) ($limit['max_price_video_minor'] ?? 0)) / 100,
+                        ];
+                    }
+                    $byTier[$rank]['remaining_photos'] += $photoRemaining;
+                    $byTier[$rank]['remaining_videos'] += $videoRemaining;
+                }
+
+                continue;
+            }
+
             $rank = $grant->tier_rank;
             if (! isset($byTier[$rank])) {
                 $byTier[$rank] = [
@@ -77,14 +113,14 @@ class PlanQuotaService
         $maxPhotos = (int) ($plan->max_accumulated_photos ?: 1000);
         $maxVideos = (int) ($plan->max_accumulated_videos ?: 500);
 
-        if ($current['total_photos'] + (int) $plan->photo_quota > $maxPhotos) {
+        if ($maxPhotos < $current['total_photos'] + (int) $plan->photo_quota) {
             throw new CommerceException(
                 "Purchasing this plan would exceed your maximum allowed photo accumulation limit ({$maxPhotos} photos). Current balance: {$current['total_photos']}.",
                 422
             );
         }
 
-        if ($current['total_videos'] + (int) $plan->video_quota > $maxVideos) {
+        if ($maxVideos < $current['total_videos'] + (int) $plan->video_quota) {
             throw new CommerceException(
                 "Purchasing this plan would exceed your maximum allowed video accumulation limit ({$maxVideos} videos). Current balance: {$current['total_videos']}.",
                 422
@@ -104,21 +140,38 @@ class PlanQuotaService
     ): UserCreditGrant {
         $this->checkAccumulationLimits($user, $plan);
 
-        $tier = $plan->mediaTier;
+        $analysis = $this->financialEngine->analyzePlan($plan);
+        if (! $analysis['is_valid']) {
+            throw new CommerceException(
+                'This plan is not available until its financial assumptions and quotas are validated.',
+                422,
+            );
+        }
+
+        $limits = $analysis['tier_limits'];
+        $highestLimit = collect($limits)->sortByDesc('tier_rank')->first();
+        $tier = $highestLimit ? MediaTier::find($highestLimit['media_tier_id']) : $plan->mediaTier;
         $tierRank = $tier ? (int) $tier->rank : 1;
         $tierName = $tier ? $tier->name : ($plan->name ?: 'basic');
         $photoQuota = (int) $plan->photo_quota;
         $videoQuota = (int) $plan->video_quota;
 
-        $maxPhotoPrice = $tier ? $tier->maxEligiblePhotoPrice() : 0.0;
-        $maxVideoPrice = $tier ? $tier->maxEligibleVideoPrice() : 0.0;
-        $payoutCapPhoto = $tier ? (float) $tier->payout_cap_photo : 0.0;
-        $payoutCapVideo = $tier ? (float) $tier->payout_cap_video : 0.0;
+        $maxPhotoPrice = $highestLimit ? $highestLimit['max_price_photo_minor'] / 100 : ($tier ? $tier->maxEligiblePhotoPrice() : 0.0);
+        $maxVideoPrice = $highestLimit ? $highestLimit['max_price_video_minor'] / 100 : ($tier ? $tier->maxEligibleVideoPrice() : 0.0);
+        $payoutCapPhoto = $highestLimit ? $highestLimit['payout_cap_photo_minor'] / 100 : ($tier ? (float) $tier->payout_cap_photo : 0.0);
+        $payoutCapVideo = $highestLimit ? $highestLimit['payout_cap_video_minor'] / 100 : ($tier ? (float) $tier->payout_cap_video : 0.0);
+        $usage = collect($limits)->map(fn ($limit) => [
+            'media_tier_id' => (int) $limit['media_tier_id'],
+            'photos' => 0,
+            'videos' => 0,
+        ])->values()->all();
+        $financialSnapshot = $this->financialEngine->snapshotForPlan($plan);
 
         return DB::transaction(function () use (
             $user, $plan, $order, $tier, $tierRank, $tierName,
             $photoQuota, $videoQuota, $maxPhotoPrice, $maxVideoPrice,
-            $payoutCapPhoto, $payoutCapVideo, $paymentMethod, $reference
+            $payoutCapPhoto, $payoutCapVideo, $paymentMethod, $reference,
+            $limits, $usage, $financialSnapshot
         ) {
             $grant = UserCreditGrant::create([
                 'user_id' => $user->id,
@@ -137,6 +190,11 @@ class PlanQuotaService
                 'payout_cap_video' => $payoutCapVideo,
                 'payment_method' => $paymentMethod,
                 'payment_reference' => $reference ?: ($order?->idempotency_key ?: (string) Str::uuid()),
+                'plan_price_paid_minor' => $order?->amount_minor,
+                'currency' => $order?->currency ? strtoupper((string) $order->currency) : null,
+                'tier_limits_snapshot' => $limits,
+                'tier_usage_snapshot' => $usage,
+                'financial_assumptions_snapshot' => $financialSnapshot,
             ]);
 
             if ($photoQuota > 0) {
@@ -234,10 +292,9 @@ class PlanQuotaService
             ];
         }
 
-        // Find eligible grant: remaining > 0, tier_rank >= media_tier_rank
+        // Load grants with shared quota, then apply immutable per-tier ceilings.
         $grantQuery = UserCreditGrant::query()
-            ->where('user_id', $user->id)
-            ->where('tier_rank', '>=', $tier->rank);
+            ->where('user_id', $user->id);
 
         if ($isVideo) {
             $grantQuery->where('remaining_videos', '>', 0);
@@ -245,7 +302,8 @@ class PlanQuotaService
             $grantQuery->where('remaining_photos', '>', 0);
         }
 
-        $eligibleGrant = $grantQuery->orderBy('tier_rank', 'asc')->orderBy('id', 'asc')->first();
+        $eligibleGrant = $grantQuery->orderBy('tier_rank', 'asc')->orderBy('id', 'asc')->get()
+            ->first(fn (UserCreditGrant $grant) => $this->grantAllowsTier($grant, $tier, $isVideo));
 
         if (! $eligibleGrant) {
             // Check if user has ANY credits for this media type
@@ -283,27 +341,36 @@ class PlanQuotaService
      */
     public function redeemMedia(User $user, EventsImges $media): array
     {
-        $eligibility = $this->checkRedemptionEligibility($user, $media);
+        $mediaId = (int) $media->id;
 
-        if (! $eligibility['eligible']) {
-            throw new CommerceException($eligibility['reason'], 422);
-        }
+        return DB::transaction(function () use ($user, $mediaId) {
+            // Lock the media row so the historical Cart value and payout use
+            // the same price that was authoritative at redemption time.
+            $media = EventsImges::query()
+                ->with('events.user', 'mediaTier')
+                ->lockForUpdate()
+                ->findOrFail($mediaId);
+            $eligibility = $this->checkRedemptionEligibility($user, $media);
 
-        if (! empty($eligibility['already_owned'])) {
-            return [
-                'status' => 'already_owned',
-                'media_id' => $media->id,
-                'message' => 'You already own this media.',
-                'download_url' => route('media.download', ['media' => $media->id]),
-                'remaining_photos' => $user->remainingPhotos(),
-                'remaining_videos' => $user->remainingVideos(),
-            ];
-        }
+            if (! $eligibility['eligible']) {
+                throw new CommerceException($eligibility['reason'], 422);
+            }
 
-        $isVideo = (bool) $eligibility['is_video'];
-        $listingPrice = (float) $media->price;
+            if (! empty($eligibility['already_owned'])) {
+                return [
+                    'status' => 'already_owned',
+                    'media_id' => $media->id,
+                    'message' => 'You already own this media.',
+                    'download_url' => route('media.download', ['media' => $media->id]),
+                    'remaining_photos' => $user->remainingPhotos(),
+                    'remaining_videos' => $user->remainingVideos(),
+                ];
+            }
 
-        return DB::transaction(function () use ($user, $media, $isVideo, $listingPrice, $eligibility) {
+            $isVideo = (bool) $eligibility['is_video'];
+            $listingPrice = (float) $media->price;
+            $cartQuote = $this->cartPricing->quoteMedia($media);
+
             // Lock the lowest eligible grant for update
             $grant = UserCreditGrant::query()
                 ->where('id', $eligibility['grant_id'])
@@ -315,11 +382,31 @@ class PlanQuotaService
                 throw new CommerceException('Selected credit grant has no remaining quota.', 422);
             }
 
-            // Deduct exactly one unit
-            $grant->decrement($quotaField);
+            $mediaTier = $media->mediaTier ?: $this->tierService->classify($media->type ?: 'image', (float) $media->price);
+            if (! $mediaTier || ! $this->grantAllowsTier($grant, $mediaTier, $isVideo)) {
+                throw new CommerceException('The tier allowance for this media has been exhausted.', 422);
+            }
+
+            // Deduct one shared unit and one unit from the matching tier ceiling.
+            $grant->{$quotaField} = (int) $grant->{$quotaField} - 1;
+            $tierSnapshot = $this->tierSnapshot($grant, (int) $mediaTier->id);
+            if ($tierSnapshot) {
+                $usage = collect($grant->tier_usage_snapshot ?? [])->keyBy(fn ($row) => (string) ($row['media_tier_id'] ?? ''));
+                $row = $usage->get((string) $mediaTier->id, [
+                    'media_tier_id' => (int) $mediaTier->id,
+                    'photos' => 0,
+                    'videos' => 0,
+                ]);
+                $row[$isVideo ? 'videos' : 'photos'] = (int) $row[$isVideo ? 'videos' : 'photos'] + 1;
+                $usage->put((string) $mediaTier->id, $row);
+                $grant->tier_usage_snapshot = $usage->values()->all();
+            }
+            $grant->save();
 
             // Calculate capped creator payout
-            $payoutCap = $isVideo ? (float) $grant->payout_cap_video : (float) $grant->payout_cap_photo;
+            $payoutCap = $tierSnapshot
+                ? ((int) $tierSnapshot[$isVideo ? 'payout_cap_video_minor' : 'payout_cap_photo_minor']) / 100
+                : ($isVideo ? (float) $grant->payout_cap_video : (float) $grant->payout_cap_photo);
             $creatorPayout = round(min($listingPrice, $payoutCap), 2);
             $referencePriceDiff = round(max(0.0, $listingPrice - $creatorPayout), 2);
 
@@ -364,7 +451,7 @@ class PlanQuotaService
                     'amount_minor' => 0,
                     'status' => 'completed',
                     'order_type' => 'plan_redemption',
-                    'idempotency_key' => 'plan-redemption-order:' . $entitlement->id,
+                    'idempotency_key' => 'plan-redemption-order:'.$entitlement->id,
                 ]);
 
                 $payoutMinor = $this->money->fromDecimal((string) $creatorPayout);
@@ -375,8 +462,8 @@ class PlanQuotaService
                     'credit',
                     'plan_media_redemption',
                     $payoutMinor,
-                    'creator-plan-payout:' . $entitlement->id,
-                    'grant:' . $grant->id . ':media:' . $media->id,
+                    'creator-plan-payout:'.$entitlement->id,
+                    'grant:'.$grant->id.':media:'.$media->id,
                     [
                         'media_id' => $media->id,
                         'entitlement_id' => $entitlement->id,
@@ -397,6 +484,8 @@ class PlanQuotaService
                 'media_type' => $isVideo ? 'video' : 'photo',
                 'action' => 'redemption',
                 'quantity' => -1,
+                'cart_value_minor' => $cartQuote['total_minor'],
+                'currency' => $cartQuote['currency'],
                 'snapshot' => [
                     'media_id' => $media->id,
                     'media_title' => $media->events?->title,
@@ -408,6 +497,7 @@ class PlanQuotaService
                     'creator_payout' => $creatorPayout,
                     'reference_price_difference' => $referencePriceDiff,
                     'creator_id' => $seller?->id,
+                    'cart_price' => $cartQuote,
                 ],
             ]);
 
@@ -421,7 +511,32 @@ class PlanQuotaService
                 'creator_payout' => $creatorPayout,
                 'reference_price_difference' => $referencePriceDiff,
                 'transaction_id' => $tx->id,
+                'grant_id' => $grant->id,
             ];
         }, 5);
+    }
+
+    private function grantAllowsTier(UserCreditGrant $grant, MediaTier $tier, bool $isVideo): bool
+    {
+        if (! is_array($grant->tier_limits_snapshot)) {
+            return (int) $grant->tier_rank >= (int) $tier->rank;
+        }
+
+        $limit = $this->tierSnapshot($grant, (int) $tier->id);
+        if (! $limit) {
+            return false;
+        }
+        $usage = collect($grant->tier_usage_snapshot ?? [])->firstWhere('media_tier_id', (int) $tier->id) ?? [];
+        $maximum = (int) $limit[$isVideo ? 'video_maximum' : 'photo_maximum'];
+        $used = (int) ($usage[$isVideo ? 'videos' : 'photos'] ?? 0);
+
+        return $used < $maximum;
+    }
+
+    private function tierSnapshot(UserCreditGrant $grant, int $tierId): ?array
+    {
+        return collect($grant->tier_limits_snapshot ?? [])->first(
+            fn ($limit) => (int) ($limit['media_tier_id'] ?? 0) === $tierId,
+        );
     }
 }

@@ -1467,7 +1467,30 @@
     "payWithPaypal": "Paga con PayPal",
     "insufficientCredits": "Crediti insufficienti o livello non idoneo.",
     "includedQuotas": "Quote Multimediali Incluse",
-    "permanentQuotas": "Quote multimediali permanenti senza scadenza"
+    "permanentQuotas": "Quote multimediali permanenti senza scadenza",
+    "savings": {
+      "title": "Risparmio piano rispetto al carrello",
+      "description": "Confronto in tempo reale basato solo sul prezzo pagato e sui prezzi del carrello registrati al riscatto.",
+      "purchasedOn": "Acquistato il {date}",
+      "planPaid": "Prezzo del piano pagato",
+      "redeemedCartValue": "Valore riscattato del carrello",
+      "tierAllowance": "Livelli idonei",
+      "sharedQuota": "usa la quota condivisa residua mostrata sopra",
+      "savedSoFar": "Finora il piano ti ha fatto risparmiare {amount}.",
+      "breakEven": "Finora il piano e gli acquisti singoli costano lo stesso.",
+      "cartWouldSave": "Acquistare questi elementi singolarmente ti avrebbe fatto risparmiare {amount} finora.",
+      "incompleteHistory": "Il confronto verificato non è disponibile perché alcuni prezzi storici non sono stati registrati. Non viene presunto alcun risparmio.",
+      "unusedCreditsNote": "Hai ancora {count} crediti inutilizzati. I prossimi riscatti possono cambiare il confronto.",
+      "noPlans": "Nessun piano acquistato disponibile per il confronto.",
+      "unavailable": "Non disponibile",
+      "estimateTitle": "Confronto con il tuo carrello",
+      "planPrice": "Prezzo del piano",
+      "comparableCartValue": "Valore comparabile del carrello",
+      "cartItemsMatched": "{matched} di {total} articoli rispettano quota e livello attuali del piano.",
+      "estimatedSavings": "Risparmio stimato: {amount}",
+      "estimatedCartSaving": "Il tuo carrello attuale costerebbe {amount} in meno di questo piano.",
+      "estimateDisclaimer": "Stima basata sul carrello attuale. Il risultato finale usa i prezzi registrati a ogni riscatto riuscito."
+    }
   },
   "dataDeletion": {
     "title": "Istruzioni per l'eliminazione dei dati",

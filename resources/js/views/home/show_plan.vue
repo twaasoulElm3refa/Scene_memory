@@ -138,6 +138,33 @@
                             <div class="text-xs text-gray-500 mt-2 border-t pt-2">
                                 <i class="bi bi-infinity"></i> {{ $t('mediaCredits.permanentQuotas') }}
                             </div>
+
+                            <div v-if="savingsEstimate?.available" class="mt-4 border-t border-gray-300 pt-4">
+                                <h5 class="text-xs tracking-[0.14em] uppercase font-bold text-gray-700 mb-3">
+                                    {{ $t('mediaCredits.savings.estimateTitle') }}
+                                </h5>
+                                <div class="flex justify-between gap-3 text-sm py-1">
+                                    <span class="text-gray-600">{{ $t('mediaCredits.savings.planPrice') }}</span>
+                                    <strong>{{ formatMoney(savingsEstimate.plan_price_minor, savingsEstimate.currency) }}</strong>
+                                </div>
+                                <div class="flex justify-between gap-3 text-sm py-1">
+                                    <span class="text-gray-600">{{ $t('mediaCredits.savings.comparableCartValue') }}</span>
+                                    <strong>{{ formatMoney(savingsEstimate.comparable_cart_value_minor, savingsEstimate.currency) }}</strong>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2 mb-2">
+                                    {{ $t('mediaCredits.savings.cartItemsMatched', { matched: savingsEstimate.matched_items, total: savingsEstimate.cart_items }) }}
+                                </p>
+                                <p v-if="savingsEstimate.comparison_status === 'savings'" class="text-sm font-bold text-emerald-700 mb-0">
+                                    {{ $t('mediaCredits.savings.estimatedSavings', { amount: formatMoney(savingsEstimate.difference_minor, savingsEstimate.currency) }) }}
+                                </p>
+                                <p v-else-if="savingsEstimate.comparison_status === 'break_even'" class="text-sm font-bold text-blue-700 mb-0">
+                                    {{ $t('mediaCredits.savings.breakEven') }}
+                                </p>
+                                <p v-else class="text-sm font-bold text-amber-800 mb-0">
+                                    {{ $t('mediaCredits.savings.estimatedCartSaving', { amount: formatMoney(Math.abs(savingsEstimate.difference_minor), savingsEstimate.currency) }) }}
+                                </p>
+                                <p class="text-xs text-gray-500 mt-2 mb-0">{{ $t('mediaCredits.savings.estimateDisclaimer') }}</p>
+                            </div>
                         </div>
 
                         <!-- Subscribe Buttons (Wallet & PayPal) -->
@@ -285,6 +312,7 @@ const route = useRoute();
 const router = useRouter();
 
 const plan = ref(null);
+const savingsEstimate = ref(null);
 const loading = ref(true);
 const subscribing = ref(false);
 const toast = ref({ show: false, message: '', type: '' });
@@ -325,6 +353,13 @@ const fetchPlan = async () => {
         const slug = route.params.slug;
         const res = await PlanService.getSingle(slug);
         plan.value = res.data.data[0];
+        PlanService.getSavingsEstimate(plan.value.id)
+            .then((estimateResponse) => {
+                savingsEstimate.value = estimateResponse.data?.data || null;
+            })
+            .catch(() => {
+                savingsEstimate.value = null;
+            });
     } catch (error) {
         console.error(error);
         showToast(t('plans.errors.loadPlan'), 'error');
@@ -334,6 +369,14 @@ const fetchPlan = async () => {
 };
 
 const subscribingMethod = ref(null);
+
+const formatMoney = (minor, currency = "USD") => {
+    if (minor === null || minor === undefined) return "—";
+    return new Intl.NumberFormat(route.params.lang || "en", {
+        style: "currency",
+        currency,
+    }).format(Number(minor) / 100);
+};
 
 const subscribeWithWallet = async () => {
     subscribing.value = true;

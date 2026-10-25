@@ -1467,7 +1467,30 @@
     "payWithPaypal": "Payer avec PayPal",
     "insufficientCredits": "Crédits insuffisants ou niveau trop bas pour ce média.",
     "includedQuotas": "Quotas Médias Inclus",
-    "permanentQuotas": "Quotas médias permanents sans expiration"
+    "permanentQuotas": "Quotas médias permanents sans expiration",
+    "savings": {
+      "title": "Économies du forfait par rapport au panier",
+      "description": "Comparaison en temps réel fondée uniquement sur le prix payé et les prix du panier enregistrés lors de chaque utilisation.",
+      "purchasedOn": "Acheté le {date}",
+      "planPaid": "Prix du forfait payé",
+      "redeemedCartValue": "Valeur panier utilisée",
+      "tierAllowance": "Niveaux admissibles",
+      "sharedQuota": "utilise le quota partagé restant affiché ci-dessus",
+      "savedSoFar": "Votre forfait vous a fait économiser {amount} jusqu’ici.",
+      "breakEven": "Le forfait et les achats individuels coûtent autant jusqu’ici.",
+      "cartWouldSave": "Acheter ces articles séparément vous aurait fait économiser {amount} jusqu’ici.",
+      "incompleteHistory": "Comparaison vérifiée indisponible, car certains anciens prix n’ont pas été enregistrés. Aucune économie n’est supposée.",
+      "unusedCreditsNote": "Il vous reste {count} crédits. Les prochaines utilisations peuvent modifier cette comparaison.",
+      "noPlans": "Aucun forfait acheté à comparer.",
+      "unavailable": "Indisponible",
+      "estimateTitle": "Comparaison avec votre panier",
+      "planPrice": "Prix du forfait",
+      "comparableCartValue": "Valeur comparable du panier",
+      "cartItemsMatched": "{matched} article(s) sur {total} correspondent aux quotas et au niveau actuels de ce forfait.",
+      "estimatedSavings": "Économie estimée : {amount}",
+      "estimatedCartSaving": "Votre panier actuel coûterait {amount} de moins que ce forfait.",
+      "estimateDisclaimer": "Estimation basée sur votre panier actuel. Le résultat final utilise le prix enregistré à chaque utilisation réussie."
+    }
   },
   "dataDeletion": {
     "title": "Instructions de suppression des données",

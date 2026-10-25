@@ -1467,7 +1467,30 @@
     "payWithPaypal": "PayPalで支払う",
     "insufficientCredits": "クレジット不足、またはプランのティアが不足しています。",
     "includedQuotas": "含まれるメディア枠",
-    "permanentQuotas": "期限切れのない無期限メディア枠"
+    "permanentQuotas": "期限切れのない無期限メディア枠",
+    "savings": {
+      "title": "プランとカートの節約比較",
+      "description": "実際の支払額と利用時に記録されたカート価格だけに基づくリアルタイム比較です。",
+      "purchasedOn": "購入日：{date}",
+      "planPaid": "プラン支払額",
+      "redeemedCartValue": "利用済みメディアのカート価格",
+      "tierAllowance": "対象ティア",
+      "sharedQuota": "上記の共通残数を使用します",
+      "savedSoFar": "このプランでこれまでに {amount} 節約できました。",
+      "breakEven": "現時点ではプランと個別購入の費用は同じです。",
+      "cartWouldSave": "これらを個別購入した場合、これまでに {amount} 安くなります。",
+      "incompleteHistory": "一部の過去価格が記録されていないため、検証済みの比較は表示できません。節約額は推定しません。",
+      "unusedCreditsNote": "未使用クレジットが {count} 件あります。今後の利用により比較結果は変わります。",
+      "noPlans": "比較できる購入済みプランはありません。",
+      "unavailable": "利用不可",
+      "estimateTitle": "現在のカートとの比較",
+      "planPrice": "プラン価格",
+      "comparableCartValue": "比較対象のカート価格",
+      "cartItemsMatched": "カート内 {total} 件中 {matched} 件が現在の枠とティアの対象です。",
+      "estimatedSavings": "推定節約額：{amount}",
+      "estimatedCartSaving": "現在のカートの方がこのプランより {amount} 安くなります。",
+      "estimateDisclaimer": "現在のカートに基づく見積もりです。最終結果には各利用完了時に記録された価格を使用します。"
+    }
   },
   "dataDeletion": {
     "title": "データ削除手順",

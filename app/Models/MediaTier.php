@@ -132,4 +132,9 @@ class MediaTier extends Model
             ->where('is_active', true)
             ->max('max_price_video');
     }
+
+    public function planLimits(): HasMany
+    {
+        return $this->hasMany(PlanTierLimit::class);
+    }
 }

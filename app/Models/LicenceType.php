@@ -3,23 +3,37 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LicenceType extends Model
 {
-    protected $table ='licence_types';
+    protected $table = 'licence_types';
+
     protected $guarded = [];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'photo_quota' => 'integer',
+        'video_quota' => 'integer',
+        'max_accumulated_photos' => 'integer',
+        'max_accumulated_videos' => 'integer',
+        'is_active' => 'boolean',
+        'financial_settings_version' => 'integer',
+        'financial_analysis' => 'array',
+        'financially_validated_at' => 'datetime',
+    ];
 
     public function user()
     {
-        return $this->hasMany(User::class , 'licence_type_id');
+        return $this->hasMany(User::class, 'licence_type_id');
     }
 
     public function subscription()
     {
-        return $this->hasMany(Subscriptions::class,'licence_id');
+        return $this->hasMany(Subscriptions::class, 'licence_id');
     }
 
-     public function translations()
+    public function translations()
     {
         return $this->hasMany(PlanTranslations::class, 'plan_id');
     }
@@ -38,6 +52,11 @@ class LicenceType extends Model
     public function mediaTier()
     {
         return $this->belongsTo(MediaTier::class, 'media_tier_id');
+    }
+
+    public function tierLimits(): HasMany
+    {
+        return $this->hasMany(PlanTierLimit::class, 'licence_id')->orderBy('media_tier_id');
     }
 
     public function maxEligiblePhotoPrice(): float

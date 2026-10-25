@@ -13,14 +13,15 @@ use App\Models\Subscriptions;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\MinorMoney;
-use App\Services\PayPalServices;
+use App\Services\PayPalGateway;
+use App\Services\PlanFinancialEngine;
 use App\Services\PlanQuotaService;
+use App\Services\PlanSavingsService;
 use App\Services\WalletLedgerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Throwable;
 
 class PlanSubscriptionController extends Controller
@@ -29,6 +30,8 @@ class PlanSubscriptionController extends Controller
         private readonly PlanQuotaService $quotaService,
         private readonly WalletLedgerService $ledger,
         private readonly MinorMoney $money,
+        private readonly PlanSavingsService $savingsService,
+        private readonly PlanFinancialEngine $financialEngine,
     ) {}
 
     /**
@@ -43,6 +46,14 @@ class PlanSubscriptionController extends Controller
 
         if (! $plan->is_active) {
             return response()->json(['message' => 'This plan is not currently available for purchase.'], 422);
+        }
+
+        $financialAnalysis = $this->financialEngine->analyzePlan($plan);
+        if (! $financialAnalysis['is_valid']) {
+            return response()->json([
+                'message' => 'This plan is temporarily unavailable pending financial validation.',
+                'financial_status' => $financialAnalysis['financial_safety_status'],
+            ], 422);
         }
 
         try {
@@ -149,6 +160,14 @@ class PlanSubscriptionController extends Controller
             return response()->json(['message' => 'This plan is not currently available for purchase.'], 422);
         }
 
+        $financialAnalysis = $this->financialEngine->analyzePlan($plan);
+        if (! $financialAnalysis['is_valid']) {
+            return response()->json([
+                'message' => 'This plan is temporarily unavailable pending financial validation.',
+                'financial_status' => $financialAnalysis['financial_safety_status'],
+            ], 422);
+        }
+
         try {
             $this->quotaService->checkAccumulationLimits($user, $plan);
 
@@ -181,7 +200,7 @@ class PlanSubscriptionController extends Controller
                 'reference_id' => (string) $order->id,
             ]);
 
-            $gateway = app(\App\Services\PayPalGateway::class);
+            $gateway = app(PayPalGateway::class);
             $paypalOrder = $gateway->createOrder([
                 'intent' => 'CAPTURE',
                 'application_context' => [
@@ -234,6 +253,11 @@ class PlanSubscriptionController extends Controller
         try {
             $result = $this->quotaService->redeemMedia($user, $media);
 
+            if (($result['status'] ?? null) === 'success' && isset($result['grant_id'])) {
+                $comparisons = collect($this->savingsService->forUser($user)['plans']);
+                $result['plan_comparison'] = $comparisons->firstWhere('id', (int) $result['grant_id']);
+            }
+
             return response()->json($result);
         } catch (CommerceException $e) {
             return response()->json(['message' => $e->getMessage()], $e->status);
@@ -274,13 +298,42 @@ class PlanSubscriptionController extends Controller
         }
 
         $credits = $this->quotaService->getUserCredits($user);
-
-        return response()->json([
-            'status' => 'success',
+        $savings = $this->savingsService->forUser($user);
+        $activeGrants = collect($savings['plans'])
+            ->filter(fn (array $grant) => $grant['remaining_photos'] > 0 || $grant['remaining_videos'] > 0)
+            ->values();
+        $highestTier = collect($credits['by_tier'])->sortByDesc('tier_rank')->first()['tier_name'] ?? null;
+        $data = [
             'total_photos' => $credits['total_photos'],
             'total_videos' => $credits['total_videos'],
             'by_tier' => $credits['by_tier'],
+            'highest_tier' => $highestTier,
             'grants_count' => $credits['grants_count'],
+            'grants' => $activeGrants->all(),
+            'plan_comparisons' => $savings['plans'],
+            'comparisons_complete' => $savings['comparisons_complete'],
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data,
+            ...$data,
+        ]);
+    }
+
+    /**
+     * Estimate this plan against the authenticated user's current cart.
+     */
+    public function savingsEstimate(Request $request, LicenceType $plan): JsonResponse
+    {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json(['message' => 'Unauthorized.'], 401);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $this->savingsService->estimateForCart($user, $plan),
         ]);
     }
 

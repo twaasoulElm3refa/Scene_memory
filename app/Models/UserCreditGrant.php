@@ -22,6 +22,10 @@ class UserCreditGrant extends Model
         'max_eligible_video_price' => 'decimal:2',
         'payout_cap_photo' => 'decimal:2',
         'payout_cap_video' => 'decimal:2',
+        'plan_price_paid_minor' => 'integer',
+        'tier_limits_snapshot' => 'array',
+        'tier_usage_snapshot' => 'array',
+        'financial_assumptions_snapshot' => 'array',
     ];
 
     public function user(): BelongsTo

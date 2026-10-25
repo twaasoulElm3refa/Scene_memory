@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\Payments;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Models\LicenceType;
+use App\Models\MediaTier;
 use App\Models\Payment;
 use App\Models\Purchases;
 use App\Models\User;
@@ -106,7 +107,16 @@ class PayPalPaymentVerificationTest extends TestCase
     public function test_plan_checkout_creates_consistent_provider_metadata_and_verified_capture_grants_once(): void
     {
         $owner = User::factory()->create();
+        $tier = MediaTier::query()->where('is_active', true)->where('is_plan_eligible', true)->orderBy('rank')->first()
+            ?: MediaTier::create([
+                'name' => 'Checkout Basic', 'rank' => 1,
+                'min_price_photo' => 0, 'max_price_photo' => 2, 'payout_cap_photo' => 1,
+                'min_price_video' => 0, 'max_price_video' => 5, 'payout_cap_video' => 3,
+                'is_plan_eligible' => true, 'is_active' => true,
+            ]);
+        $this->configurePlanFinancialSettings();
         $plan = LicenceType::create(['name' => 'Verified Plan', 'slug' => 'verified-plan', 'price' => '10.00',
+            'media_tier_id' => $tier->id,
             'photo_quota' => 2, 'video_quota' => 1, 'max_accumulated_photos' => 10,
             'max_accumulated_videos' => 10, 'is_active' => true]);
         $gateway = Mockery::mock(PayPalGateway::class);
