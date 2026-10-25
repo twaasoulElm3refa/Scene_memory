@@ -1,19 +1,17 @@
 <template>
     <div class="d-flex flex-column min-vh-100">
-        <transition name="layout-fade">
-            <navbar-component
-                v-if="layoutReady && showNavbar"
-            />
-        </transition>
+        <div v-if="layoutReady && showNavbar" class="app-sticky-navbar">
+            <transition name="layout-fade" appear>
+                <navbar-component />
+            </transition>
+        </div>
 
         <main class="flex-fill">
             <router-view />
         </main>
 
         <transition name="layout-fade">
-            <footer-component
-                v-if="layoutReady && !$route.meta.hideFooter"
-            />
+            <footer-component v-if="layoutReady && !$route.meta.hideFooter" />
         </transition>
     </div>
 </template>
@@ -181,7 +179,7 @@ export default {
                     if (
                         error.response &&
                         error.response.status ===
-                            401
+                        401
                     ) {
                         const lang =
                             this.$route.params.lang ||
