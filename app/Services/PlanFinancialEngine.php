@@ -231,6 +231,34 @@ class PlanFinancialEngine
         ];
     }
 
+    /**
+     * The largest worst-case creator liability a plan at this price can carry
+     * while still meeting the configured profit requirement. It uses exactly the
+     * same cost and requirement calculations as analyze().
+     */
+    public function profitBudget(int $priceMinor, PlanFinancialSetting $settings): array
+    {
+        $costs = $this->costsAtPrice($priceMinor, $settings);
+        $requiredProfit = max(
+            (int) $settings->minimum_profit_minor,
+            $this->percentageCost($priceMinor, (int) $settings->minimum_margin_bps),
+        );
+        $netRevenue = $priceMinor - $costs['total_minor'];
+
+        return [
+            'plan_price_minor' => $priceMinor,
+            'payment_processing_cost_minor' => $costs['payment_processing_minor'],
+            'payment_fee_method' => $costs['payment_method'],
+            'tax_cost_minor' => $costs['tax_minor'],
+            'operating_cost_minor' => $costs['operating_minor'],
+            'risk_reserve_minor' => $costs['risk_minor'],
+            'total_non_payout_cost_minor' => $costs['total_minor'],
+            'net_plan_revenue_minor' => $netRevenue,
+            'required_profit_minor' => $requiredProfit,
+            'liability_budget_minor' => $netRevenue - $requiredProfit,
+        ];
+    }
+
     public function legacyTierLimits(?int $tierId, int $photoQuota, int $videoQuota): array
     {
         if (! $tierId) {

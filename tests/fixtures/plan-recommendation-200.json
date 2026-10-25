@@ -1,0 +1,314 @@
+{
+    "about": "Shared by PHPUnit (PlanRecommendationOptimizerTest) and Vitest (planOptimizer.test.js): the API must return exactly these values and the Create Plan page must apply and display them unchanged. Amounts are minor units; tier values are test fixtures, not production prices.",
+    "scenarios": {
+        "seeded_tiers_200": {
+            "description": "Seeded Basic/Pro/Premium tiers (payout caps are 90% of maximum prices), no non-payout costs, 12% minimum margin.",
+            "price": "200.00",
+            "settings": {
+                "minimum_profit_minor": 1,
+                "minimum_margin_bps": 1200
+            },
+            "tiers": [
+                {
+                    "id": 1,
+                    "rank": 1,
+                    "name": "basic",
+                    "max_price_photo": 200,
+                    "payout_cap_photo": 180,
+                    "max_price_video": 500,
+                    "payout_cap_video": 450
+                },
+                {
+                    "id": 2,
+                    "rank": 2,
+                    "name": "pro",
+                    "max_price_photo": 500,
+                    "payout_cap_photo": 450,
+                    "max_price_video": 1500,
+                    "payout_cap_video": 1350
+                },
+                {
+                    "id": 3,
+                    "rank": 3,
+                    "name": "premium",
+                    "max_price_photo": 2000,
+                    "payout_cap_photo": 1800,
+                    "max_price_video": 5000,
+                    "payout_cap_video": 4500
+                }
+            ],
+            "response": {
+                "status": "target_not_met",
+                "is_available": false,
+                "price": "200.00",
+                "currency": "USD",
+                "proof": {
+                    "price_minor": 20000,
+                    "target_minor": 22000,
+                    "payment_processing_cost_minor": 0,
+                    "tax_cost_minor": 0,
+                    "operating_cost_minor": 0,
+                    "risk_reserve_minor": 0,
+                    "total_non_payout_cost_minor": 0,
+                    "minimum_margin_bps": 1200,
+                    "required_profit_minor": 2400,
+                    "liability_budget_minor": 17600,
+                    "best_value_credit": {
+                        "tier_id": 1,
+                        "tier_name": "basic",
+                        "media_type": "photo",
+                        "payout_cap_minor": 180,
+                        "max_price_minor": 200,
+                        "payout_to_value_bps": 9000
+                    },
+                    "value_upper_bound_minor": 19555,
+                    "max_profit_safe_value_minor": 19500,
+                    "max_profit_safe_value_ratio_bps": 9750,
+                    "target_shortfall_minor": 2500,
+                    "target_feasible_at_price": false,
+                    "target_feasible_at_some_price": false,
+                    "variable_cost_bps": 0,
+                    "creator_share_ceiling_bps": 8800,
+                    "asymptotic_value_ratio_bps": 9777,
+                    "required_payout_to_value_bps": 8000,
+                    "guaranteed_target_price_minor": null
+                },
+                "recommendation": null,
+                "closest_safe_configuration": {
+                    "key": "closest_safe",
+                    "price_minor": 20000,
+                    "requires_price_change": false,
+                    "validation_mode": "standard",
+                    "recommendation_value_target_bps": null,
+                    "meets_value_target": false,
+                    "photo_quota": 11,
+                    "video_quota": 7,
+                    "media_tier_id": 3,
+                    "tier_limits": [
+                        {
+                            "media_tier_id": 1,
+                            "photo_maximum": 11,
+                            "video_maximum": 7
+                        },
+                        {
+                            "media_tier_id": 2,
+                            "photo_maximum": 3,
+                            "video_maximum": 3
+                        },
+                        {
+                            "media_tier_id": 3,
+                            "photo_maximum": 3,
+                            "video_maximum": 1
+                        }
+                    ],
+                    "max_creator_liability_minor": 17550,
+                    "worst_case_profit_minor": 2450,
+                    "worst_case_margin_bps": 1225,
+                    "required_profit_minor": 2400,
+                    "potential_cart_value_minor": 19500,
+                    "potential_cart_value_ratio_bps": 9750,
+                    "minimum_customer_value_minor": 22000
+                },
+                "alternatives": [
+                    {
+                        "key": "balanced",
+                        "price_minor": 20000,
+                        "requires_price_change": false,
+                        "validation_mode": "standard",
+                        "recommendation_value_target_bps": null,
+                        "meets_value_target": false,
+                        "photo_quota": 6,
+                        "video_quota": 6,
+                        "media_tier_id": 3,
+                        "tier_limits": [
+                            {
+                                "media_tier_id": 1,
+                                "photo_maximum": 6,
+                                "video_maximum": 6
+                            },
+                            {
+                                "media_tier_id": 2,
+                                "photo_maximum": 2,
+                                "video_maximum": 2
+                            },
+                            {
+                                "media_tier_id": 3,
+                                "photo_maximum": 2,
+                                "video_maximum": 2
+                            }
+                        ],
+                        "max_creator_liability_minor": 17460,
+                        "worst_case_profit_minor": 2540,
+                        "worst_case_margin_bps": 1270,
+                        "required_profit_minor": 2400,
+                        "potential_cart_value_minor": 19400,
+                        "potential_cart_value_ratio_bps": 9700,
+                        "minimum_customer_value_minor": 22000
+                    }
+                ]
+            }
+        },
+        "value_target_met_200": {
+            "description": "Basic pays 100% of its maximum price, Premium pays 50%; 60/40 distribution, 12% minimum margin.",
+            "price": "200.00",
+            "settings": {
+                "minimum_profit_minor": 1,
+                "minimum_margin_bps": 1200,
+                "tier_distribution": {
+                    "1": 6000,
+                    "2": 4000
+                }
+            },
+            "tiers": [
+                {
+                    "id": 1,
+                    "rank": 1,
+                    "name": "Basic",
+                    "max_price_photo": 200,
+                    "payout_cap_photo": 200,
+                    "max_price_video": 500,
+                    "payout_cap_video": 500
+                },
+                {
+                    "id": 2,
+                    "rank": 2,
+                    "name": "Premium",
+                    "max_price_photo": 2000,
+                    "payout_cap_photo": 1000,
+                    "max_price_video": 5000,
+                    "payout_cap_video": 2500
+                }
+            ],
+            "response": {
+                "status": "target_met",
+                "is_available": true,
+                "price": "200.00",
+                "currency": "USD",
+                "proof": {
+                    "price_minor": 20000,
+                    "target_minor": 22000,
+                    "payment_processing_cost_minor": 0,
+                    "tax_cost_minor": 0,
+                    "operating_cost_minor": 0,
+                    "risk_reserve_minor": 0,
+                    "total_non_payout_cost_minor": 0,
+                    "minimum_margin_bps": 1200,
+                    "required_profit_minor": 2400,
+                    "liability_budget_minor": 17600,
+                    "best_value_credit": {
+                        "tier_id": 2,
+                        "tier_name": "Premium",
+                        "media_type": "photo",
+                        "payout_cap_minor": 1000,
+                        "max_price_minor": 2000,
+                        "payout_to_value_bps": 5000
+                    },
+                    "value_upper_bound_minor": 35200,
+                    "max_profit_safe_value_minor": 35000,
+                    "max_profit_safe_value_ratio_bps": 17500,
+                    "target_shortfall_minor": 0,
+                    "target_feasible_at_price": true,
+                    "target_feasible_at_some_price": true,
+                    "variable_cost_bps": 0,
+                    "creator_share_ceiling_bps": 8800,
+                    "asymptotic_value_ratio_bps": 17600,
+                    "required_payout_to_value_bps": 8000,
+                    "guaranteed_target_price_minor": 3050
+                },
+                "recommendation": {
+                    "key": "recommended",
+                    "price_minor": 20000,
+                    "requires_price_change": false,
+                    "validation_mode": "value_target",
+                    "recommendation_value_target_bps": 11000,
+                    "meets_value_target": true,
+                    "photo_quota": 9,
+                    "video_quota": 9,
+                    "media_tier_id": 2,
+                    "tier_limits": [
+                        {
+                            "media_tier_id": 1,
+                            "photo_maximum": 9,
+                            "video_maximum": 9
+                        },
+                        {
+                            "media_tier_id": 2,
+                            "photo_maximum": 4,
+                            "video_maximum": 4
+                        }
+                    ],
+                    "max_creator_liability_minor": 17500,
+                    "worst_case_profit_minor": 2500,
+                    "worst_case_margin_bps": 1250,
+                    "required_profit_minor": 2400,
+                    "potential_cart_value_minor": 31500,
+                    "potential_cart_value_ratio_bps": 15750,
+                    "minimum_customer_value_minor": 22000
+                },
+                "closest_safe_configuration": null,
+                "alternatives": [
+                    {
+                        "key": "max_value",
+                        "price_minor": 20000,
+                        "requires_price_change": false,
+                        "validation_mode": "value_target",
+                        "recommendation_value_target_bps": 11000,
+                        "meets_value_target": true,
+                        "photo_quota": 5,
+                        "video_quota": 5,
+                        "media_tier_id": 2,
+                        "tier_limits": [
+                            {
+                                "media_tier_id": 1,
+                                "photo_maximum": 5,
+                                "video_maximum": 5
+                            },
+                            {
+                                "media_tier_id": 2,
+                                "photo_maximum": 5,
+                                "video_maximum": 5
+                            }
+                        ],
+                        "max_creator_liability_minor": 17500,
+                        "worst_case_profit_minor": 2500,
+                        "worst_case_margin_bps": 1250,
+                        "required_profit_minor": 2400,
+                        "potential_cart_value_minor": 35000,
+                        "potential_cart_value_ratio_bps": 17500,
+                        "minimum_customer_value_minor": 22000
+                    },
+                    {
+                        "key": "max_profit",
+                        "price_minor": 20000,
+                        "requires_price_change": false,
+                        "validation_mode": "value_target",
+                        "recommendation_value_target_bps": 11000,
+                        "meets_value_target": true,
+                        "photo_quota": 6,
+                        "video_quota": 2,
+                        "media_tier_id": 2,
+                        "tier_limits": [
+                            {
+                                "media_tier_id": 1,
+                                "photo_maximum": 6,
+                                "video_maximum": 2
+                            },
+                            {
+                                "media_tier_id": 2,
+                                "photo_maximum": 6,
+                                "video_maximum": 2
+                            }
+                        ],
+                        "max_creator_liability_minor": 11000,
+                        "worst_case_profit_minor": 9000,
+                        "worst_case_margin_bps": 4500,
+                        "required_profit_minor": 2400,
+                        "potential_cart_value_minor": 22000,
+                        "potential_cart_value_ratio_bps": 11000,
+                        "minimum_customer_value_minor": 22000
+                    }
+                ]
+            }
+        }
+    }
+}
