@@ -20,9 +20,9 @@
         <nav aria-labelledby="footer-comparisons-title">
           <h2 id="footer-comparisons-title">{{ t('comparisons.footerTitle') }}</h2>
           <ul class="footer-list">
-            <li><RouterLink :to="path('/compare/historypin')">{{ t('comparisons.links.historypin') }}</RouterLink></li>
-            <li><RouterLink :to="path('/compare/pastvu')">{{ t('comparisons.links.pastvu') }}</RouterLink></li>
-            <li><RouterLink :to="path('/compare/the-clio')">{{ t('comparisons.links.theClio') }}</RouterLink></li>
+            <li><RouterLink :to="path('/compare/historypin')"><bdi>{{ t('comparisons.links.historypin') }}</bdi></RouterLink></li>
+            <li><RouterLink :to="path('/compare/pastvu')"><bdi>{{ t('comparisons.links.pastvu') }}</bdi></RouterLink></li>
+            <li><RouterLink :to="path('/compare/the-clio')"><bdi>{{ t('comparisons.links.theClio') }}</bdi></RouterLink></li>
           </ul>
         </nav>
         <nav aria-labelledby="footer-support-title">
@@ -39,7 +39,7 @@
           <RouterLink :to="path('/home')" :aria-label="t('nav.scemoryHome')">
             <img :src="toAssetUrl('/images/logo.png')" :alt="t('footer.logoAlt')" width="112" height="112" class="footer-logo" loading="lazy" />
           </RouterLink>
-          <h2 id="footer-brand-title">Scemory <small>(Scene Memory)</small></h2>
+          <h2 id="footer-brand-title"><bdi dir="ltr">Scemory</bdi> <small dir="ltr"><bdi>(Scene Memory)</bdi></small></h2>
           <p class="footer-description">{{ t('policies.ui.brandDescription') }}</p>
           <div class="footer-socials">
             <component :is="social.href ? 'a' : 'span'" v-for="social in socials" :key="social.key"
@@ -59,7 +59,7 @@
               :aria-label="store.label + ' — ' + t(store.href ? 'policies.ui.external' : 'policies.ui.unavailable')"
               class="footer-store">
               <i :class="'bi bi-' + store.icon" aria-hidden="true"></i>
-              <span><small>{{ t(store.href ? 'policies.ui.download' : 'policies.ui.unavailable') }}</small><strong>{{ store.label }}</strong></span>
+              <span><small>{{ t(store.href ? 'policies.ui.download' : 'policies.ui.unavailable') }}</small><strong dir="ltr"><bdi>{{ store.label }}</bdi></strong></span>
             </component>
           </div>
         </section>
@@ -106,34 +106,113 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.scemory-footer { border-block-start: 1px solid var(--scemory-border, #C9DDEF); background: radial-gradient(circle at 90% 15%, rgba(48,168,255,.08), transparent 28rem), linear-gradient(145deg, var(--scemory-surface-soft, #EDF4FA), var(--scemory-surface, #F7FAFD)); color: var(--scemory-text, #334A62); padding-block: 48px 20px; }
+.scemory-footer {
+  border-block-start: 1px solid var(--scemory-border, #C9DDEF);
+  background: radial-gradient(circle at 90% 15%, rgba(48,168,255,.08), transparent 28rem), linear-gradient(145deg, var(--scemory-surface-soft, #EDF4FA), var(--scemory-surface, #F7FAFD));
+  color: var(--scemory-text, #334A62);
+  padding-block: 48px 20px;
+  direction: inherit;
+  transform: none;
+}
 .footer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.15fr); gap: clamp(20px, 2.5vw, 36px); align-items: start; }
 .footer-grid > * { min-width: 0; }
-h2 { color: var(--scemory-heading, #06142A); font-size: 1rem; font-weight: 750; line-height: 1.6; margin-block: 0 22px; }
-nav h2::after, section:not(.footer-brand) h2::after { content: ''; display: block; width: 32px; height: 3px; border-radius: 10px; background: var(--scemory-blue, #1677FF); margin-block-start: 10px; }
-.scemory-footer .footer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+h2 {
+  color: var(--scemory-heading, #06142A);
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.6;
+  margin-block: 0 22px;
+  text-align: start;
+}
+nav h2::after, section:not(.footer-brand) h2::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 3px;
+  border-radius: 10px;
+  background: var(--scemory-blue, #1677FF);
+  margin-block-start: 10px;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+.scemory-footer .footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+  text-align: start;
+}
 .footer-list li { font-size: .9rem; line-height: 1.65; overflow-wrap: anywhere; }
 .footer-list a { display: inline-block; padding-block: 3px; }
 a { color: var(--scemory-text, #334A62); text-decoration: none; }
 a:hover { color: var(--scemory-primary, #0D4D97); text-decoration: underline; text-underline-offset: 4px; }
 a:focus-visible { outline: 3px solid var(--scemory-primary, #0D4D97); outline-offset: 4px; border-radius: 4px; }
-.footer-description { color: var(--scemory-muted, #64748B); font-size: .88rem; line-height: 1.8; margin-block: 0 16px; }
+.footer-description {
+  color: var(--scemory-muted, #64748B);
+  font-size: .88rem;
+  line-height: 1.8;
+  margin-block: 0 16px;
+  text-align: start;
+}
 .audience-list li { position: relative; padding-inline-start: 12px; }
 .audience-list li::before { content: ''; position: absolute; inset-inline-start: 0; top: .7em; width: 4px; height: 4px; background: var(--scemory-primary, #0D4D97); border-radius: 50%; }
 .footer-brand { text-align: start; }
-.footer-logo { display: block; border-radius: 50%; border: 1px solid var(--scemory-border); box-shadow: var(--scemory-shadow-sm); margin-block-end: 18px; }
+.footer-logo {
+  display: block;
+  border-radius: 50%;
+  border: 1px solid var(--scemory-border);
+  box-shadow: var(--scemory-shadow-sm);
+  margin-block-end: 18px;
+  transform: none;
+}
 .footer-brand h2 { margin-block-end: 10px; }
 .footer-brand h2 small { display: block; font-size: .8rem; font-weight: 500; color: var(--scemory-muted); }
 .footer-socials { display: flex; gap: 10px; margin-block: 18px; }
-.footer-social { width: 40px; height: 40px; display: inline-grid; place-items: center; border: 1px solid var(--scemory-border); border-radius: 50%; color: var(--scemory-primary); background: var(--scemory-control); }
+.footer-social {
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--scemory-border);
+  border-radius: 50%;
+  color: var(--scemory-primary);
+  background: var(--scemory-control);
+  transform: none;
+}
 [aria-disabled="true"] { opacity: .7; }
 .footer-stores { display: grid; gap: 10px; }
-.footer-store { border: 1px solid var(--scemory-border); border-radius: 12px; padding: 10px 14px; display: flex; gap: 12px; align-items: center; background: var(--scemory-control); width: fit-content; max-width: 100%; }
-.footer-store > i { font-size: 1.6rem; }
+.footer-store {
+  border: 1px solid var(--scemory-border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--scemory-control);
+  width: fit-content;
+  max-width: 100%;
+  transform: none;
+}
+.footer-store > i {
+  font-size: 1.6rem;
+  transform: none;
+}
 .footer-store small, .footer-store strong { display: block; line-height: 1.5; }
 .footer-store small { font-size: .7rem; }
 .footer-store strong { font-size: .95rem; }
-.footer-bottom { margin-block-start: 36px; padding-block-start: 20px; border-block-start: 1px solid var(--scemory-border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: .8rem; line-height: 1.8; }
+.footer-bottom {
+  margin-block-start: 36px;
+  padding-block-start: 20px;
+  border-block-start: 1px solid var(--scemory-border);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: .8rem;
+  line-height: 1.8;
+  text-align: start;
+}
 .footer-bottom p { margin: 0; }
 @media (max-width: 1200px) { .footer-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 32px; } }
 @media (max-width: 800px) { .footer-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 28px; } }
