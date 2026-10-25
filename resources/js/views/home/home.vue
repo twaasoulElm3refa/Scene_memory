@@ -1,179 +1,90 @@
-﻿<template>
+<template>
     <div class="home-page-shell min-h-screen font-sans">
         <main class="relative">
-            <!-- FULL WIDTH HERO -->
-            <section class="relative min-h-screen overflow-hidden">
+            <!-- MAP EXPERIENCE -->
+            <section id="explore-events" class="home-map-experience">
+                <MapSection class="home-map-backdrop" :fullscreen="fullscreen" :is-map-ready="isMapReady"
+                    :is-map-loading="isMapLoading" :map-error="mapError" :can-init-map="canInitMap"
+                    @map-viewport-enter="handleMapViewportEnter" @load-map="handleManualMapLoad"
+                    @open-fullscreen="openFullscreen" @close-fullscreen="closeFullscreen" />
+                <div class="home-map-wash" aria-hidden="true"></div>
 
-                <!-- Background Video -->
-                <video class="absolute inset-0 z-0 h-full w-full object-cover" autoplay muted loop playsinline
-                    preload="auto">
-                    <source :src="heroVideoUrl" type="video/mp4" />
-                    {{ $t('homeAudit.home.videoUnsupported') }}
-                </video>
-
-                <!-- Dark / Blue Overlay -->
-                <div class="absolute inset-0 bg-gradient-to-b
-               from-[#04111D]/70
-               via-[#06233B]/65
-               to-[#071C2D]/80">
-                </div>
-
-                <!-- Soft Blue Center Glow -->
-                <div
-                    class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(13,77,151,0.20),transparent_55%)]">
-                </div>
-
-                <!-- Hero Navbar -->
-                <div class="hero-navbar absolute inset-x-0 top-2 z-30">
+                <div class="hero-navbar">
                     <Navbar />
                 </div>
 
-                <!-- Content -->
-                <div class="relative z-10 mx-auto flex min-h-screen
-               max-w-7xl items-center justify-center
-               px-4 pt-24 sm:px-6 sm:pt-28 lg:px-8">
-                    <div class="mx-auto flex w-full max-w-5xl
-                   flex-col items-center text-center">
-
-                        <!-- Badge -->
-                        <span class="inline-flex items-center gap-2
-                       rounded-full border border-white/20
-                       bg-white/10 px-5 py-2
-                       text-sm font-semibold text-white
-                       shadow-lg backdrop-blur-md">
+                <div class="home-map-layout">
+                    <div class="home-map-copy">
+                        <span class="home-map-badge">
+                            <span class="home-map-live-dot" aria-hidden="true"></span>
                             {{ $t('homeAudit.home.badge') }}
-
-                            <span class="text-[#38AEEA]">
-                                ✦
-                            </span>
                         </span>
 
-                        <!-- Heading -->
-                        <h1 class="mt-6 max-w-5xl
-                       text-4xl font-bold leading-[1.1]
-                       tracking-tight text-white
-                       drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]
-                       sm:text-5xl md:text-6xl lg:text-7xl">
+                        <h1 class="home-map-title">
                             {{ $t('homeAudit.home.title') }}
-
-                            <span class="mt-1 block text-[#38AEEA]">
-                                {{ $t('homeAudit.home.titleHighlight') }}
-                            </span>
+                            <span>{{ $t('homeAudit.home.titleHighlight') }}</span>
                         </h1>
 
-                        <!-- Description -->
-                        <p class="mt-6 max-w-2xl
-                       text-base leading-8
-                       text-white/85
-                       md:text-lg">
-                            {{ $t('homeAudit.home.description') }}
-                        </p>
+                        <p class="home-map-description">{{ $t('homeAudit.home.description') }}</p>
 
-                        <!-- Hero Search -->
-                        <div class="mt-8 w-full max-w-3xl">
-                            <div class="flex items-center gap-3 rounded-full
-        border border-white/20
-        bg-white/10
-        px-5 py-3
-        shadow-xl backdrop-blur-md">
+                        <section id="events-search-section" ref="eventsSearchSectionRef"
+                            class="home-events-search-target home-discovery-search">
+                            <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" prominent :tags="tags"
+                                :selected-tags="selectedTags" :loading="loadingTags" :tag-suggestions="tagSuggestions"
+                                :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
+                                @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
+                        </section>
 
-                                <input v-model="searchQuery" @keyup.enter="handleHeroSearch" type="text"
-                                    class="w-full bg-transparent text-white placeholder-white/60 outline-none"
-                                    :placeholder="$t('homeAudit.home.searchPlaceholder')" />
-
-                                <button type="button" @click="handleHeroSearch"
-                                    class="rounded bg-[#38AEEA] px-6 py-2 font-bold text-white transition hover:scale-105">
-                                    {{ $t('common.search') }}
-                                </button>
-
-                            </div>
-                        </div>
-
-                        <!-- Buttons -->
-                        <div class="mt-8 flex flex-wrap
-                       items-center justify-center gap-3">
-
+                        <div class="home-map-actions">
                             <button type="button" @click="scrollToEventsSearch" class="search-events-btn">
                                 {{ $t('homeAudit.home.searchEvents') }}
+                                <span aria-hidden="true">→</span>
                             </button>
-
-                            <RouterLink :to="`/${lang}/add_event`" class="inline-flex items-center justify-center
-                           rounded-full border border-white/35
-                           bg-white/10
-                           px-8 py-3.5
-                           text-sm font-bold text-white
-                           shadow-lg backdrop-blur-md
-                           transition duration-300
-                           hover:-translate-y-1
-                           hover:bg-white/20">
+                            <RouterLink :to="'/' + lang + '/add_event'" class="home-map-upload">
+                                <span aria-hidden="true">+</span>
                                 {{ $t('homeAudit.home.uploadStory') }}
                             </RouterLink>
-
+                            <button type="button" class="home-filter-toggle"
+                                :aria-expanded="mobileFiltersOpen ? 'true' : 'false'" aria-controls="filters-section"
+                                @click="mobileFiltersOpen = !mobileFiltersOpen">
+                                {{ $t('filters.title') }}
+                                <span aria-hidden="true">{{ mobileFiltersOpen ? '−' : '+' }}</span>
+                            </button>
                         </div>
 
-                        <!-- Small Bottom Text -->
-                        <p class="mt-6 text-sm text-white/60">
-                            {{ $t('homeAudit.home.bottomText') }}
-                        </p>
-
+                        <p class="home-map-caption">{{ $t('homeAudit.home.bottomText') }}</p>
                     </div>
+
+                    <aside class="home-discovery-trending-column">
+                        <TrendingEventsSection :events="trendingEvents" :loading="loadingTrendingEvents"
+                            :error="trendingEventsError" :fallback-image="fallbackImage" :format-date="formatDate"
+                            :lang="lang" />
+                    </aside>
                 </div>
 
-            </section>
-
-            <!-- MAP + TRENDING + FILTERS -->
-            <section id="explore-events" class="home-discovery-section">
-                <div class="home-discovery-container">
-                    <section id="events-search-section" ref="eventsSearchSectionRef"
-                        class="home-events-search-target home-discovery-search">
-                        <UnifiedSearchBar ref="eventsSearchRef" v-model="searchQuery" :tags="tags"
-                            :selected-tags="selectedTags" :loading="loadingTags" :tag-suggestions="tagSuggestions"
-                            :loading-suggestions="loadingTagSuggestions" @update:selected-tags="handleTagsUpdate"
-                            @fetch-tag-suggestions="fetchTagSuggestions" @search="handleSearchClick" />
-                    </section>
-
-                    <button type="button" class="home-mobile-filter-toggle"
-                        :aria-expanded="mobileFiltersOpen ? 'true' : 'false'" aria-controls="filters-section"
-                        @click="mobileFiltersOpen = !mobileFiltersOpen">
+                <div v-if="mobileFiltersOpen" class="home-filter-scrim" @click="mobileFiltersOpen = false"></div>
+                <aside class="home-discovery-filters-column" :class="{ 'is-open': mobileFiltersOpen }">
+                    <div class="home-filter-heading">
                         <span>{{ $t('filters.title') }}</span>
-                        <span aria-hidden="true">{{ mobileFiltersOpen ? '-' : '+' }}</span>
-                    </button>
-
-                    <div class="home-discovery-workspace">
-                        <aside class="home-discovery-filters-column" :class="{ 'is-open': mobileFiltersOpen }">
-                            <section id="filters-section" ref="filtersSectionRef" class="home-discovery-filters">
-                                <FiltersSection :categories="categories" :selected-category="selectedCategory"
-                                    :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
-                                    :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
-                                    :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
-                                    :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
-                                    :from-date="fromDate" :to-date="toDate"
-                                    @update:selected-category="handleCategoryUpdate"
-                                    @update:selected-sub-category="handleSubCategoryUpdate"
-                                    @update:country-search="countrySearch = $event"
-                                    @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
-                                    @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
-                                    @select-country="selectCountry" @category-changed="handleMainCategoryChange"
-                                    @search="handleSearchClick" />
-                            </section>
-                        </aside>
-
-                        <main class="home-discovery-map-column">
-                            <MapSection :fullscreen="fullscreen" :is-map-ready="isMapReady"
-                                :is-map-loading="isMapLoading" :map-error="mapError" :can-init-map="canInitMap"
-                                @map-viewport-enter="handleMapViewportEnter" @load-map="handleManualMapLoad"
-                                @open-fullscreen="openFullscreen" @close-fullscreen="closeFullscreen" />
-                        </main>
-
-                        <aside class="home-discovery-trending-column">
-                            <TrendingEventsSection :events="trendingEvents" :loading="loadingTrendingEvents"
-                                :error="trendingEventsError" :fallback-image="fallbackImage" :format-date="formatDate"
-                                :lang="lang" />
-                        </aside>
+                        <button type="button" :aria-label="$t('common.close')" @click="mobileFiltersOpen = false">×</button>
                     </div>
-                </div>
+                    <section id="filters-section" ref="filtersSectionRef" class="home-discovery-filters">
+                        <FiltersSection :categories="categories" :selected-category="selectedCategory"
+                            :sub-categories="subCategories" :selected-sub-category="selectedSubCategory"
+                            :loading-sub-categories="loadingSubCategories" :country-search="countrySearch"
+                            :show-dropdown="showDropdown" :filtered-countries="filteredCountries"
+                            :selected-country="selectedCountry" :cities="cities" :selected-city="selectedCity"
+                            :from-date="fromDate" :to-date="toDate"
+                            @update:selected-category="handleCategoryUpdate"
+                            @update:selected-sub-category="handleSubCategoryUpdate"
+                            @update:country-search="countrySearch = $event"
+                            @update:selected-city="handleCityUpdate" @update:from-date="handleFromDateUpdate"
+                            @update:to-date="handleToDateUpdate" @country-focus="onCountryFocus"
+                            @select-country="selectCountry" @category-changed="handleMainCategoryChange"
+                            @search="handleSearchClick" />
+                    </section>
+                </aside>
             </section>
-
             <!-- EVENTS RESULTS -->
             <section id="events-results" class="home-results-band">
                 <div class="home-results-container">
@@ -1215,19 +1126,257 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.hero-navbar {
+    position: absolute;
+    z-index: 70;
+    inset-inline: clamp(14px, 7.6vw, 146px);
+    top: clamp(16px, 3.5vh, 38px);
+}
 .hero-navbar :deep(.navbar-wrap) {
     position: relative !important;
     top: auto !important;
 }
-
-.home-discovery-section {
+.home-map-experience {
     position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    min-height: max(820px, 100svh);
     width: 100%;
-    padding: 44px 0 48px;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F4F9FE 100%);
+    overflow: hidden;
+    background: #eaf3fc;
+    color: #0b2140;
 }
-
-.home-discovery-container,
+.home-map-backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.home-map-wash {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(90deg, rgba(249, 252, 255, .99) 0%, rgba(249, 252, 255, .94) 20%, rgba(249, 252, 255, .72) 35%, rgba(249, 252, 255, .17) 55%, transparent 72%),
+        linear-gradient(0deg, rgba(246, 250, 255, .88), transparent 20%);
+}
+.home-map-experience:dir(rtl) .home-map-wash {
+    background:
+        linear-gradient(270deg, rgba(249, 252, 255, .99) 0%, rgba(249, 252, 255, .94) 20%, rgba(249, 252, 255, .72) 35%, rgba(249, 252, 255, .17) 55%, transparent 72%),
+        linear-gradient(0deg, rgba(246, 250, 255, .88), transparent 20%);
+}
+.home-map-layout {
+    position: relative;
+    z-index: 10;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 690px) minmax(270px, 380px);
+    justify-content: space-between;
+    align-items: center;
+    gap: 34px;
+    width: 100%;
+    min-height: max(820px, 100svh);
+    max-width: 1920px;
+    margin-inline: auto;
+    padding-block: 150px 32px;
+    padding-inline: clamp(30px, 9.2vw, 176px) clamp(24px, 2.6vw, 50px);
+    pointer-events: none;
+}
+.home-map-copy,
+.home-discovery-trending-column {
+    position: relative;
+    min-width: 0;
+    pointer-events: auto;
+}
+.home-map-copy {
+    text-align: start;
+}
+.home-map-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #d9e4f0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .88);
+    padding: 8px 14px;
+    color: #0d4d97;
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: 0 8px 22px rgba(16, 49, 85, .08);
+    backdrop-filter: blur(12px);
+}
+.home-map-live-dot {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border-radius: 50%;
+    background: #17b269;
+    box-shadow: 0 0 0 5px rgba(23, 178, 105, .1);
+}
+.home-map-title {
+    max-width: 700px;
+    margin: 26px 0 0;
+    color: #091f3d;
+    font-size: clamp(3.4rem, 4.25vw, 5.25rem);
+    font-weight: 850;
+    line-height: 1.025;
+    letter-spacing: -.055em;
+    text-wrap: balance;
+}
+.home-map-title span {
+    display: block;
+    margin-block-start: 5px;
+    color: #1d8eea;
+    background: linear-gradient(100deg, #166bf1 5%, #2493ee 56%, #46c2e9 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.home-map-description {
+    max-width: 570px;
+    margin: 28px 0 0;
+    color: #3f5065;
+    font-size: clamp(16px, 1.05vw, 20px);
+    line-height: 1.75;
+}
+.home-events-search-target {
+    scroll-margin-top: 110px;
+}
+.home-discovery-search {
+    width: 100%;
+    max-width: 680px;
+    margin-block-start: 32px;
+}
+.home-map-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-block-start: 20px;
+}
+.search-events-btn,
+.home-map-upload,
+.home-filter-toggle {
+    display: inline-flex;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(15, 46, 86, .12);
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+.search-events-btn {
+    border: 1px solid #0b274b;
+    background: #0b274b;
+    color: #fff;
+}
+.home-map-upload,
+.home-filter-toggle {
+    border: 1px solid #cbdbea;
+    background: rgba(255, 255, 255, .92);
+    color: #0d4d97;
+}
+.search-events-btn:hover,
+.home-map-upload:hover,
+.home-filter-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(15, 46, 86, .16);
+}
+.home-map-upload:hover,
+.home-filter-toggle:hover {
+    background: #fff;
+    color: #166bf1;
+}
+.home-map-actions > *:focus-visible,
+.home-filter-heading button:focus-visible {
+    outline: 3px solid #1685eb;
+    outline-offset: 3px;
+}
+.home-map-caption {
+    margin: 24px 0 0;
+    color: #5f7083;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+.home-discovery-trending-column {
+    align-self: end;
+    width: 100%;
+}
+.home-filter-scrim {
+    position: fixed;
+    z-index: 90;
+    inset: 0;
+    background: rgba(9, 31, 61, .28);
+    backdrop-filter: blur(3px);
+}
+.home-discovery-filters-column {
+    position: fixed;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    width: min(660px, calc(100vw - 32px));
+    max-height: min(85vh, 760px);
+    overflow-y: auto;
+    border: 1px solid #dbe7f3;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 28px 80px rgba(6, 20, 42, .2);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, -48%);
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+}
+.home-discovery-filters-column.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+}
+.home-filter-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px 0;
+    color: #0b274b;
+    font-size: 18px;
+    font-weight: 850;
+}
+.home-filter-heading button {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid #dbe7f3;
+    border-radius: 50%;
+    background: #f7fafd;
+    color: #0d4d97;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+.home-discovery-filters :deep(.home-filter-panel) {
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+}
+.home-discovery-filters :deep(.filter-panel-heading) {
+    display: none;
+}
+.home-discovery-filters :deep(.filter-controls-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.home-discovery-filters :deep(.filter-actions) {
+    grid-column: 1 / -1;
+}
 .home-results-container {
     box-sizing: border-box;
     width: 100%;
@@ -1235,198 +1384,112 @@ onUnmounted(() => {
     margin-inline: auto;
     padding-inline: 40px;
 }
-
-.home-events-search-target {
-    scroll-margin-top: 110px;
-}
-
-.home-discovery-search {
-    position: relative;
-    z-index: 30;
-    width: 100%;
-    max-width: 1020px;
-    margin: 0 auto 28px;
-}
-
-.home-discovery-workspace {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-    align-items: start;
-    direction: inherit;
-}
-
-.home-discovery-filters-column,
-.home-discovery-map-column,
-.home-discovery-trending-column {
-    width: 100%;
-    min-width: 0;
-}
-
-.home-discovery-filters-column,
-.home-discovery-trending-column {
-    position: static;
-}
-
-.home-discovery-filters {
-    position: relative;
-    z-index: 30;
-}
-
-.home-mobile-filter-toggle {
-    display: none;
-    width: 100%;
-    min-height: 48px;
-    margin: 0 0 14px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    border: 1px solid var(--scemory-border);
-    border-radius: 16px;
-    background: #FFFFFF;
-    color: var(--scemory-primary);
-    padding: 0 16px;
-    font-size: 14px;
-    font-weight: 800;
-    box-shadow: var(--scemory-shadow-sm);
-}
-
 .home-results-band {
     padding: 48px 0 56px;
     background:
         radial-gradient(circle at 85% 0%, rgba(48, 168, 255, 0.08), transparent 26rem),
         linear-gradient(180deg, #F4F9FE 0%, var(--scemory-surface-soft) 100%);
 }
-
-@media (min-width: 1400px) {
-    .home-discovery-workspace {
-        grid-template-columns: 270px minmax(0, 1fr) 300px;
-        gap: 24px;
+@media (max-width: 1399px) {
+    .home-map-layout {
+        grid-template-columns: minmax(0, 620px) minmax(240px, 330px);
+        padding-inline-start: clamp(26px, 6vw, 84px);
     }
-
-    .home-discovery-filters-column,
-    .home-discovery-trending-column {
-        position: sticky;
-        top: 104px;
-        z-index: 25;
-    }
-
-    .home-discovery-trending-column {
-        display: flex;
+    .home-map-title {
+        font-size: clamp(3.4rem, 5.2vw, 4.75rem);
     }
 }
-
-@media (min-width: 992px) and (max-width: 1399px) {
-
-    .home-discovery-container,
-    .home-results-container {
-        padding-inline: 28px;
-    }
-
-    .home-discovery-workspace {
-        grid-template-columns: 250px minmax(0, 1fr);
-        gap: 22px;
-    }
-
-    .home-discovery-filters-column {
-        position: sticky;
-        top: 104px;
-        z-index: 25;
-    }
-
-    .home-discovery-trending-column {
-        grid-column: 1 / -1;
-    }
-}
-
 @media (max-width: 991px) {
-    .home-discovery-section {
-        padding: 34px 0 34px;
+    .hero-navbar {
+        inset-inline: 20px;
     }
-
-    .home-discovery-container,
+    .home-map-layout {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: max(880px, 100svh);
+        align-items: start;
+        gap: 42px;
+        padding: 150px 28px 30px;
+    }
+    .home-map-copy {
+        max-width: 670px;
+    }
+    .home-discovery-trending-column {
+        width: min(100%, 360px);
+        justify-self: end;
+    }
+    .home-map-wash {
+        background: linear-gradient(90deg, rgba(249, 252, 255, .96), rgba(249, 252, 255, .5) 68%, transparent);
+    }
+    .home-map-experience:dir(rtl) .home-map-wash {
+        background: linear-gradient(270deg, rgba(249, 252, 255, .96), rgba(249, 252, 255, .5) 68%, transparent);
+    }
     .home-results-container {
         padding-inline: 20px;
     }
-
-    .home-discovery-search {
-        margin-bottom: 16px;
-    }
-
-    .home-discovery-workspace {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .home-discovery-filters-column {
-        position: static;
-    }
-
-    .home-discovery-trending-column {
-        position: static;
-    }
 }
-
 @media (max-width: 640px) {
-    .home-mobile-filter-toggle {
-        display: flex;
+    .hero-navbar {
+        inset-inline: 12px;
+        top: 12px;
     }
-
+    .home-map-layout {
+        min-height: max(900px, 100svh);
+        gap: 36px;
+        padding: 130px 16px 24px;
+    }
+    .home-map-title {
+        font-size: clamp(2.7rem, 11vw, 3.6rem);
+        letter-spacing: -.05em;
+    }
+    .home-map-description {
+        margin-block-start: 18px;
+        font-size: 15px;
+        line-height: 1.65;
+    }
+    .home-discovery-search {
+        margin-block-start: 24px;
+    }
+    .home-map-actions {
+        gap: 8px;
+        margin-block-start: 15px;
+    }
+    .search-events-btn,
+    .home-map-upload,
+    .home-filter-toggle {
+        min-height: 44px;
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+    .home-map-caption {
+        margin-block-start: 16px;
+        font-size: 12px;
+    }
+    .home-discovery-trending-column {
+        width: min(100%, 350px);
+    }
     .home-discovery-filters-column {
-        display: none;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-height: 86svh;
+        border-radius: 22px 22px 0 0;
+        transform: translateY(20px);
     }
-
     .home-discovery-filters-column.is-open {
-        display: block;
+        transform: translateY(0);
     }
-}
-
-@media (max-width: 480px) {
-
-    .home-discovery-container,
+    .home-discovery-filters :deep(.filter-controls-grid) {
+        grid-template-columns: minmax(0, 1fr);
+    }
     .home-results-container {
         padding-inline: 14px;
     }
 }
-
-.search-events-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 48px;
-    padding: 0 32px;
-
-    border: 1px solid #1597d4;
-    border-radius: 999px;
-
-    background: #1597d4;
-    color: #ffffff;
-
-    font-size: 14px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    box-shadow: 0 12px 30px rgba(21, 151, 212, 0.3);
-
-    transition:
-        transform 0.3s ease,
-        background-color 0.3s ease,
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-.search-events-btn:hover {
-    background: #28a9e6;
-    border-color: #28a9e6;
-    transform: translateY(-2px);
-
-    box-shadow: 0 14px 34px rgba(21, 151, 212, 0.36);
-}
-
-.search-events-btn:focus-visible {
-    outline: 3px solid rgba(21, 151, 212, 0.25);
-    outline-offset: 3px;
+@media (prefers-reduced-motion: reduce) {
+    .home-map-actions > *,
+    .home-discovery-filters-column {
+        transition: none;
+    }
 }
 </style>

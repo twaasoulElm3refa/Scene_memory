@@ -1,5 +1,5 @@
 <template>
-    <section ref="wrapperRef" class="scemory-search-bar unified-search-control">
+    <section ref="wrapperRef" class="scemory-search-bar unified-search-control" :class="{ 'is-prominent': prominent }">
         <div class="unified-search-main">
             <div
                 class="unified-search-field"
@@ -14,14 +14,19 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
+                    <span class="unified-search-submit-label">{{ $t('common.search') }}</span>
                 </button>
+
+                <svg class="unified-search-leading-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
 
                 <input
                     id="events-search-input"
                     ref="inputRef"
                     :value="modelValue"
                     type="text"
-                    :placeholder="$t('common.placeholder')"
+                    :placeholder="prominent ? $t('homeAudit.home.searchPlaceholder') : $t('common.placeholder')"
                     class="unified-search-input"
                     @input="handleInput"
                     @focus="handleFocus"
@@ -121,6 +126,10 @@ import {
 } from "vue";
 
 const props = defineProps({
+    prominent: {
+        type: Boolean,
+        default: false,
+    },
     modelValue: {
         type: String,
         default: "",
@@ -449,6 +458,40 @@ onUnmounted(() => {
     height: 22px;
     color: #FFFFFF;
 }
+.unified-search-submit-label,
+.unified-search-leading-icon {
+    display: none;
+}
+.unified-search-control.is-prominent .unified-search-field {
+    min-height: 72px;
+    padding: 6px 7px 6px 22px;
+    border-color: #e0eaf4;
+    box-shadow: 0 15px 35px rgba(23, 52, 89, .14);
+}
+.unified-search-control.is-prominent .unified-search-leading-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    color: #8190a1;
+}
+.unified-search-control.is-prominent .unified-search-submit {
+    order: 3;
+    width: auto;
+    min-width: 118px;
+    height: 54px;
+    flex-basis: auto;
+    padding-inline: 22px;
+    background: linear-gradient(110deg, #164eae, #176cf0);
+    font-size: 14px;
+    font-weight: 800;
+}
+.unified-search-control.is-prominent .unified-search-submit svg {
+    display: none;
+}
+.unified-search-control.is-prominent .unified-search-submit-label {
+    display: inline;
+}
 
 .unified-search-input {
     min-width: 0;
@@ -599,6 +642,16 @@ onUnmounted(() => {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+    .unified-search-control.is-prominent .unified-search-field {
+        min-height: 58px;
+        padding-inline-start: 12px;
+    }
+    .unified-search-control.is-prominent .unified-search-submit {
+        min-width: 76px;
+        height: 44px;
+        padding-inline: 12px;
+        font-size: 12px;
     }
 }
 
