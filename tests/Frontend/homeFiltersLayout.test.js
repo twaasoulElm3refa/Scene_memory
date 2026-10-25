@@ -30,21 +30,26 @@ function mediaBlock(maxWidth) {
     throw new Error(`Could not parse ${marker}`);
 }
 
-describe("home filters layout CSS", () => {
-    it("keeps the filters visible in the tablet one-column layout", () => {
-        const tabletBlock = mediaBlock(991);
+describe("home map overlay layout", () => {
+    it("keeps the real map, search, filters, and trending events in one section", () => {
+        const experience = source.slice(source.indexOf('<section id="explore-events"'), source.indexOf('<!-- EVENTS RESULTS -->'));
 
-        expect(tabletBlock).toContain(".home-discovery-filters-column");
-        expect(tabletBlock).not.toMatch(/\.home-mobile-filter-toggle\s*\{/);
-        expect(tabletBlock).not.toMatch(/\.home-discovery-filters-column\s*\{[^}]*display:\s*none/i);
-        expect(tabletBlock).not.toMatch(/\.home-discovery-filters-column\.is-open\s*\{/);
+        expect(experience.match(/<MapSection\b/g)).toHaveLength(1);
+        expect(experience).toContain('<UnifiedSearchBar');
+        expect(experience).toContain('<FiltersSection');
+        expect(experience).toContain('<TrendingEventsSection');
+        expect(experience).toContain('@search="handleSearchClick"');
+        expect(experience).toContain('@select-country="selectCountry"');
+        expect(experience).toContain('@category-changed="handleMainCategoryChange"');
+        expect(experience).toContain('@click="mobileFiltersOpen = !mobileFiltersOpen"');
+        expect(experience).not.toContain('heroVideoUrl');
     });
 
-    it("limits the collapsed filter drawer to phone widths", () => {
+    it("turns the floating filters into a full-width phone sheet", () => {
         const phoneBlock = mediaBlock(640);
 
-        expect(phoneBlock).toMatch(/\.home-mobile-filter-toggle\s*\{[^}]*display:\s*flex/i);
-        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*display:\s*none/i);
-        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\.is-open\s*\{[^}]*display:\s*block/i);
+        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*bottom:\s*0/i);
+        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*width:\s*100%/i);
+        expect(phoneBlock).toMatch(/\.home-discovery-filters\s+:deep\(\.filter-controls-grid\)\s*\{[^}]*minmax\(0, 1fr\)/i);
     });
 });

@@ -160,15 +160,26 @@ onUnmounted(() => {
 }
 
 .home-map-shell {
-  position: relative;
+  position: absolute;
+  inset: 0;
   width: 100%;
   overflow: hidden;
-  border: 1px solid var(--scemory-border);
-  border-radius: 24px;
-  height: 624px;
-  min-height: 624px;
-  background: #FFFFFF;
-  box-shadow: 0 12px 34px rgba(13, 77, 151, 0.08);
+  border: 0;
+  border-radius: 0;
+  height: 100%;
+  min-height: 100%;
+  background: #eaf3fc;
+  box-shadow: none;
+}
+.home-map-shell :deep(.maplibregl-ctrl-top-right) {
+  top: 120px;
+  right: 18px;
+}
+.home-map-shell :deep(.maplibregl-ctrl-group) {
+  overflow: hidden;
+  border: 1px solid #dce7f2;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(13, 49, 86, .14);
 }
 
 .map-canvas,
@@ -283,8 +294,8 @@ onUnmounted(() => {
 
 .map-actions {
   position: absolute;
-  top: 16px;
-  inset-inline-end: 16px;
+  top: 226px;
+  inset-inline-end: 18px;
   z-index: 40;
 }
 
@@ -335,25 +346,14 @@ onUnmounted(() => {
   z-index: 30;
 }
 
-@media (min-width: 992px) and (max-width: 1399px) {
-  .home-map-shell {
-    height: 560px;
-    min-height: 560px;
-  }
-}
-
 @media (max-width: 640px) {
-  .home-map-shell {
-    border-radius: 22px;
-    height: 360px;
-    min-height: 320px;
+  .home-map-shell :deep(.maplibregl-ctrl-top-right) {
+    top: 104px;
+    right: 12px;
   }
-}
-
-@media (min-width: 641px) and (max-width: 991px) {
-  .home-map-shell {
-    height: 440px;
-    min-height: 400px;
+  .map-actions {
+    top: 210px;
+    inset-inline-end: 12px;
   }
 }
 </style>
