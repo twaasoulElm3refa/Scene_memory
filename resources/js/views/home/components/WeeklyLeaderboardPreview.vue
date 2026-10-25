@@ -1,98 +1,116 @@
 <template>
-    <section class="weekly-leaderboard" :class="{ 'weekly-leaderboard--full': full }" aria-labelledby="weekly-leaderboard-title">
+    <section class="weekly-leaderboard" :class="{ 'weekly-leaderboard--full': full }" :dir="isRtl ? 'rtl' : 'ltr'" aria-labelledby="weekly-leaderboard-title">
         <div class="weekly-leaderboard__container">
-            <div class="weekly-leaderboard__panel">
-                <div class="weekly-leaderboard__glow" aria-hidden="true"></div>
-
-                <header class="weekly-leaderboard__header">
-                    <div>
-                        <span class="weekly-leaderboard__eyebrow">
-                            <span aria-hidden="true">🏆</span>
-                            {{ t("weeklyCompetition.title") }}
-                        </span>
-                        <h2 id="weekly-leaderboard-title">{{ t('weeklyCompetition.leaders') }}</h2>
-                        <p>{{ t('weeklyCompetition.subtitle') }}</p>
-                    </div>
-
-                    <div class="weekly-leaderboard__period" aria-live="polite">
-                        <strong>{{ periodLabel }}</strong>
-                        <span>{{ resetLabel }}</span>
-                    </div>
-                </header>
-
-                <div v-if="loading" class="weekly-leaderboard__grid" :aria-label="t('weeklyCompetition.loading')">
-                    <div v-for="index in 6" :key="index" class="leader-card leader-card--skeleton">
-                        <span class="skeleton skeleton--rank"></span>
-                        <span class="skeleton skeleton--avatar"></span>
-                        <span class="leader-card__identity">
-                            <span class="skeleton skeleton--name"></span>
-                            <span class="skeleton skeleton--badge"></span>
-                        </span>
-                        <span class="skeleton skeleton--points"></span>
+            <div class="weekly-leaderboard__layout" :class="{ 'weekly-leaderboard__layout--full': full }">
+                <div v-if="!full" class="weekly-leaderboard__media-column">
+                    <div class="weekly-leaderboard__media-card">
+                        <video
+                            class="weekly-leaderboard__video"
+                            :src="videoUrl"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="auto"
+                            aria-label="Scemory preview"
+                        ></video>
+                        <div class="weekly-leaderboard__video-wash" aria-hidden="true"></div>
                     </div>
                 </div>
 
-                <div v-else-if="error" class="weekly-leaderboard__state" role="alert">
-                    <span class="weekly-leaderboard__state-icon" aria-hidden="true">↻</span>
-                    <strong>{{ t('weeklyCompetition.error') }}</strong>
-                    <p>{{ t('weeklyCompetition.tryLater') }}</p>
-                    <button type="button" @click="loadLeaderboard(page)">{{ t('weeklyCompetition.retry') }}</button>
+                <div class="weekly-leaderboard__panel">
+                    <div class="weekly-leaderboard__glow" aria-hidden="true"></div>
+
+                    <header class="weekly-leaderboard__header">
+                        <div>
+                            <span class="weekly-leaderboard__eyebrow">
+                                <span aria-hidden="true">🏆</span>
+                                {{ t("weeklyCompetition.title") }}
+                            </span>
+                            <h2 id="weekly-leaderboard-title">{{ t('weeklyCompetition.leaders') }}</h2>
+                            <p>{{ t('weeklyCompetition.subtitle') }}</p>
+                        </div>
+
+                        <div class="weekly-leaderboard__period" aria-live="polite">
+                            <strong>{{ periodLabel }}</strong>
+                            <span>{{ resetLabel }}</span>
+                        </div>
+                    </header>
+
+                    <div v-if="loading" class="weekly-leaderboard__grid" :aria-label="t('weeklyCompetition.loading')">
+                        <div v-for="index in 6" :key="index" class="leader-card leader-card--skeleton">
+                            <span class="skeleton skeleton--rank"></span>
+                            <span class="skeleton skeleton--avatar"></span>
+                            <span class="leader-card__identity">
+                                <span class="skeleton skeleton--name"></span>
+                                <span class="skeleton skeleton--badge"></span>
+                            </span>
+                            <span class="skeleton skeleton--points"></span>
+                        </div>
+                    </div>
+
+                    <div v-else-if="error" class="weekly-leaderboard__state" role="alert">
+                        <span class="weekly-leaderboard__state-icon" aria-hidden="true">↻</span>
+                        <strong>{{ t('weeklyCompetition.error') }}</strong>
+                        <p>{{ t('weeklyCompetition.tryLater') }}</p>
+                        <button type="button" @click="loadLeaderboard(page)">{{ t('weeklyCompetition.retry') }}</button>
+                    </div>
+
+                    <div v-else-if="users.length === 0" class="weekly-leaderboard__state">
+                        <span class="weekly-leaderboard__state-icon" aria-hidden="true">✦</span>
+                        <strong>{{ t('weeklyCompetition.empty') }}</strong>
+                        <p>{{ t('weeklyCompetition.emptyHint') }}</p>
+                    </div>
+
+                    <ol v-else class="weekly-leaderboard__grid">
+                        <li
+                            v-for="user in users"
+                            :key="user.id"
+                            class="leader-card"
+                            :class="`leader-card--rank-${user.rank}`"
+                        >
+                            <span class="leader-card__rank" :aria-label="t('weeklyCompetition.rankValue', { rank: user.rank })">
+                                <span v-if="user.rank <= 3" aria-hidden="true">{{ medalFor(user.rank) }}</span>
+                                <span>#{{ user.rank }}</span>
+                            </span>
+
+                            <img
+                                v-if="user.avatar && !failedAvatars[user.id]"
+                                class="leader-card__avatar"
+                                :src="user.avatar"
+                                :alt="user.name"
+                                loading="lazy"
+                                @error="markAvatarFailed(user.id)"
+                            />
+                            <span v-else class="leader-card__avatar leader-card__avatar--fallback" aria-hidden="true">
+                                {{ initialsFor(user.name) }}
+                            </span>
+
+                            <span class="leader-card__identity">
+                                <strong>{{ user.name }}</strong>
+                                <span class="leader-card__badge">{{ badgeLabel(user.badge) }}</span>
+                            </span>
+
+                            <span class="leader-card__points">
+                                <strong>{{ formatPoints(user.points) }}</strong>
+                                <small>{{ t('weeklyCompetition.pts') }}</small>
+                            </span>
+                        </li>
+                    </ol>
+
+                    <footer class="weekly-leaderboard__footer">
+                        <RouterLink v-if="!full" :to="`/${locale}/leaderboard`" class="weekly-leaderboard__link">
+                            <span class="weekly-leaderboard__link-desktop">{{ t('weeklyCompetition.viewFull') }}</span>
+                            <span class="weekly-leaderboard__link-mobile">{{ t('weeklyCompetition.viewAll') }}</span>
+                            <span class="weekly-leaderboard__arrow" aria-hidden="true">→</span>
+                        </RouterLink>
+                        <template v-else>
+                            <button type="button" :disabled="loading || page <= 1" @click="loadLeaderboard(page - 1)">{{ t('weeklyCompetition.previous') }}</button>
+                            <span>{{ page }} / {{ lastPage }}</span>
+                            <button type="button" :disabled="loading || page >= lastPage" @click="loadLeaderboard(page + 1)">{{ t('weeklyCompetition.next') }}</button>
+                        </template>
+                    </footer>
                 </div>
-
-                <div v-else-if="users.length === 0" class="weekly-leaderboard__state">
-                    <span class="weekly-leaderboard__state-icon" aria-hidden="true">✦</span>
-                    <strong>{{ t('weeklyCompetition.empty') }}</strong>
-                    <p>{{ t('weeklyCompetition.emptyHint') }}</p>
-                </div>
-
-                <ol v-else class="weekly-leaderboard__grid">
-                    <li
-                        v-for="user in users"
-                        :key="user.id"
-                        class="leader-card"
-                        :class="`leader-card--rank-${user.rank}`"
-                    >
-                        <span class="leader-card__rank" :aria-label="t('weeklyCompetition.rankValue', { rank: user.rank })">
-                            <span v-if="user.rank <= 3" aria-hidden="true">{{ medalFor(user.rank) }}</span>
-                            <span>#{{ user.rank }}</span>
-                        </span>
-
-                        <img
-                            v-if="user.avatar && !failedAvatars[user.id]"
-                            class="leader-card__avatar"
-                            :src="user.avatar"
-                            :alt="user.name"
-                            loading="lazy"
-                            @error="markAvatarFailed(user.id)"
-                        />
-                        <span v-else class="leader-card__avatar leader-card__avatar--fallback" aria-hidden="true">
-                            {{ initialsFor(user.name) }}
-                        </span>
-
-                        <span class="leader-card__identity">
-                            <strong>{{ user.name }}</strong>
-                            <span class="leader-card__badge">{{ badgeLabel(user.badge) }}</span>
-                        </span>
-
-                        <span class="leader-card__points">
-                            <strong>{{ formatPoints(user.points) }}</strong>
-                            <small>{{ t('weeklyCompetition.pts') }}</small>
-                        </span>
-                    </li>
-                </ol>
-
-                <footer class="weekly-leaderboard__footer">
-                    <RouterLink v-if="!full" :to="`/${locale}/leaderboard`" class="weekly-leaderboard__link">
-                        <span class="weekly-leaderboard__link-desktop">{{ t('weeklyCompetition.viewFull') }}</span>
-                        <span class="weekly-leaderboard__link-mobile">{{ t('weeklyCompetition.viewAll') }}</span>
-                        <span aria-hidden="true">→</span>
-                    </RouterLink>
-                    <template v-else>
-                        <button type="button" :disabled="loading || page <= 1" @click="loadLeaderboard(page - 1)">{{ t('weeklyCompetition.previous') }}</button>
-                        <span>{{ page }} / {{ lastPage }}</span>
-                        <button type="button" :disabled="loading || page >= lastPage" @click="loadLeaderboard(page + 1)">{{ t('weeklyCompetition.next') }}</button>
-                    </template>
-                </footer>
             </div>
         </div>
     </section>
@@ -103,6 +121,7 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { RouterLink } from "vue-router";
 import { getWeeklyLeaderboardPreview, getWeeklyLeaderboard } from "@/services/leaderboardService";
+import { toAssetUrl } from "@/services/runtimeUrls";
 
 const props = defineProps({ full: { type: Boolean, default: false } });
 const { locale, t } = useI18n();
@@ -116,6 +135,9 @@ const page = ref(1);
 const lastPage = ref(1);
 const failedAvatars = ref({});
 let rolloverTimer;
+
+const videoUrl = typeof toAssetUrl === "function" ? toAssetUrl("/video/Final_Scemory.mp4") : "/video/Final_Scemory.mp4";
+const isRtl = computed(() => ["ar", "fa", "ur"].includes(locale.value));
 
 function formatDate(date) {
     if (!date) return "—";
@@ -177,27 +199,86 @@ onUnmounted(() => {
 .weekly-leaderboard {
     position: relative;
     overflow: hidden;
-    padding: 48px 0;
-    background: linear-gradient(180deg, var(--scemory-surface) 0%, var(--scemory-surface-soft) 100%);
+    width: 100%;
+    padding: clamp(56px, 6vw, 88px) 0;
+    background: linear-gradient(180deg, var(--scemory-surface) 0%, #ffffff 50%, var(--scemory-surface-soft) 100%);
 }
 
 .weekly-leaderboard__container {
     box-sizing: border-box;
-    width: min(100%, 1320px);
-    margin-inline: auto;
-    padding-inline: 32px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-inline: clamp(16px, 3.5vw, 48px);
+}
+
+.weekly-leaderboard__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 40px);
+    align-items: stretch;
+    width: 100%;
+}
+
+.weekly-leaderboard__layout--full {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.weekly-leaderboard__media-column {
+    display: flex;
+    min-width: 0;
+    height: 100%;
+}
+
+.weekly-leaderboard__media-card {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: clamp(540px, 60vh, 760px);
+    overflow: hidden;
+    border: 1px solid var(--scemory-border);
+    border-radius: 28px;
+    background: linear-gradient(145deg, #0d2847 0%, #163860 50%, #0b1f36 100%);
+    box-shadow: var(--scemory-shadow);
+    isolation: isolate;
+}
+
+.weekly-leaderboard__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    direction: ltr;
+    transform: none !important;
+}
+
+.weekly-leaderboard__video-wash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(56, 174, 234, 0.18), transparent 22rem),
+        linear-gradient(180deg, rgba(13, 77, 151, 0.08) 0%, rgba(11, 31, 54, 0.28) 100%);
+    border-radius: inherit;
 }
 
 .weekly-leaderboard__panel {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding: clamp(24px, 4vw, 44px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: clamp(540px, 60vh, 760px);
+    padding: clamp(24px, 3.5vw, 40px);
     border: 1px solid var(--scemory-border);
     border-radius: 28px;
     background:
         radial-gradient(circle at 92% 5%, rgba(56, 174, 234, 0.16), transparent 24rem),
-        linear-gradient(145deg, #fff 0%, #f8fbff 55%, #eef7ff 100%);
+        linear-gradient(145deg, #ffffff 0%, #f8fbff 55%, #eef7ff 100%);
     box-shadow: var(--scemory-shadow);
 }
 
@@ -216,15 +297,15 @@ onUnmounted(() => {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 24px;
-    margin-block-end: 28px;
+    gap: 20px;
+    margin-block-end: 24px;
 }
 
 .weekly-leaderboard__eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 13px;
+    padding: 8px 14px;
     border: 1px solid rgba(22, 119, 255, 0.16);
     border-radius: 999px;
     background: rgba(221, 236, 249, 0.72);
@@ -236,17 +317,18 @@ onUnmounted(() => {
 }
 
 .weekly-leaderboard__header h2 {
-    margin: 14px 0 0;
+    margin: 12px 0 0;
     color: var(--scemory-heading);
-    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    font-size: clamp(1.6rem, 2.5vw, 2.35rem);
     font-weight: 850;
     letter-spacing: -0.035em;
-    line-height: 1.08;
+    line-height: 1.1;
 }
 
 .weekly-leaderboard__header p {
-    margin: 8px 0 0;
+    margin: 6px 0 0;
     color: var(--scemory-muted);
+    font-size: 0.92rem;
 }
 
 .weekly-leaderboard__period {
@@ -255,21 +337,21 @@ onUnmounted(() => {
     flex-direction: column;
     align-items: flex-end;
     gap: 4px;
-    padding: 12px 16px;
+    padding: 10px 14px;
     border: 1px solid rgba(22, 119, 255, 0.12);
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.78);
+    background: rgba(255, 255, 255, 0.85);
     box-shadow: 0 8px 24px rgba(17, 75, 125, 0.08);
 }
 
 .weekly-leaderboard__period strong {
     color: var(--scemory-heading);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .weekly-leaderboard__period span {
     color: var(--scemory-muted);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
 }
 
 .weekly-leaderboard__grid {
@@ -281,17 +363,21 @@ onUnmounted(() => {
     list-style: none;
 }
 
+.weekly-leaderboard:not(.weekly-leaderboard--full) .weekly-leaderboard__grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
 .leader-card {
     display: grid;
     grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: 13px;
+    gap: 12px;
     min-width: 0;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border: 1px solid rgba(13, 77, 151, 0.1);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 7px 20px rgba(17, 75, 125, 0.06);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 6px 18px rgba(17, 75, 125, 0.05);
     transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
@@ -318,7 +404,7 @@ onUnmounted(() => {
 
 .leader-card__rank {
     display: flex;
-    width: 42px;
+    width: 38px;
     flex-direction: column;
     align-items: center;
     color: var(--scemory-heading);
@@ -328,13 +414,13 @@ onUnmounted(() => {
 }
 
 .leader-card__rank > span:first-child:not(:last-child) {
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 
 .leader-card__avatar {
     display: grid;
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     place-items: center;
     border: 2px solid rgba(255, 255, 255, 0.92);
     border-radius: 50%;
@@ -354,7 +440,7 @@ onUnmounted(() => {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
 }
 
 .leader-card__identity strong,
@@ -366,13 +452,13 @@ onUnmounted(() => {
 
 .leader-card__identity strong {
     color: var(--scemory-heading);
-    font-size: 0.93rem;
+    font-size: 0.9rem;
     font-weight: 800;
 }
 
 .leader-card__badge {
     color: var(--scemory-muted);
-    font-size: 0.73rem;
+    font-size: 0.72rem;
     font-weight: 600;
 }
 
@@ -385,19 +471,19 @@ onUnmounted(() => {
 }
 
 .leader-card__points strong {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 900;
 }
 
 .leader-card__points small {
     color: var(--scemory-muted);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 700;
 }
 
 .weekly-leaderboard__state {
     display: flex;
-    min-height: 210px;
+    min-height: 240px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -426,19 +512,44 @@ onUnmounted(() => {
 
 .weekly-leaderboard__state button {
     margin-block-start: 14px;
-    padding: 9px 16px;
+    padding: 9px 18px;
     border: 0;
     border-radius: 999px;
     background: var(--scemory-primary);
     color: #fff;
     font-size: 0.82rem;
     font-weight: 800;
+    cursor: pointer;
 }
 
 .weekly-leaderboard__footer {
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin-block-start: 26px;
+    gap: 16px;
+    margin-block-start: 24px;
+}
+
+.weekly-leaderboard__footer button {
+    padding: 9px 18px;
+    border: 1px solid var(--scemory-border);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--scemory-heading);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 180ms ease;
+}
+
+.weekly-leaderboard__footer button:not(:disabled):hover {
+    border-color: var(--scemory-primary);
+    color: var(--scemory-primary);
+}
+
+.weekly-leaderboard__footer button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .weekly-leaderboard__link {
@@ -447,7 +558,7 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 11px 20px;
+    padding: 11px 22px;
     border-radius: 999px;
     background: linear-gradient(135deg, var(--scemory-primary), #1677ff);
     color: #fff;
@@ -468,6 +579,11 @@ onUnmounted(() => {
     display: none;
 }
 
+.weekly-leaderboard__arrow {
+    display: inline-block;
+    transition: transform 180ms ease;
+}
+
 .leader-card--skeleton {
     pointer-events: none;
 }
@@ -481,7 +597,7 @@ onUnmounted(() => {
 }
 
 .skeleton--rank { width: 32px; height: 18px; }
-.skeleton--avatar { width: 46px; height: 46px; }
+.skeleton--avatar { width: 44px; height: 44px; }
 .skeleton--name { width: min(150px, 80%); height: 12px; }
 .skeleton--badge { width: min(105px, 60%); height: 9px; }
 .skeleton--points { width: 52px; height: 16px; }
@@ -490,16 +606,59 @@ onUnmounted(() => {
     to { background-position: -200% 0; }
 }
 
+/* RTL Support */
+.weekly-leaderboard[dir="rtl"] .weekly-leaderboard__video,
+:global([dir="rtl"]) .weekly-leaderboard__video {
+    direction: ltr !important;
+    transform: none !important;
+}
+
+.weekly-leaderboard[dir="rtl"] .weekly-leaderboard__period,
+:global([dir="rtl"]) .weekly-leaderboard__period {
+    align-items: flex-start;
+    text-align: start;
+}
+
+.weekly-leaderboard[dir="rtl"] .weekly-leaderboard__arrow,
+:global([dir="rtl"]) .weekly-leaderboard__arrow {
+    transform: scaleX(-1);
+}
+
+/* Responsive: Tablet and Mobile */
+@media (max-width: 960px) {
+    .weekly-leaderboard {
+        padding: clamp(36px, 5vw, 52px) 0;
+    }
+
+    .weekly-leaderboard__layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .weekly-leaderboard__media-card {
+        min-height: unset;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        border-radius: 22px;
+    }
+
+    .weekly-leaderboard__panel {
+        min-height: unset;
+        border-radius: 22px;
+        padding: 24px 18px;
+    }
+}
+
 @media (max-width: 760px) {
     .weekly-leaderboard { padding: 36px 0; }
-    .weekly-leaderboard__container { padding-inline: 18px; }
-    .weekly-leaderboard__panel { padding: 22px 16px; border-radius: 22px; }
+    .weekly-leaderboard__container { padding-inline: 16px; }
+    .weekly-leaderboard__panel { padding: 20px 14px; border-radius: 20px; }
 
     .weekly-leaderboard__header {
         align-items: flex-start;
         flex-direction: column;
         gap: 16px;
-        margin-block-end: 22px;
+        margin-block-end: 20px;
     }
 
     .weekly-leaderboard__period {
