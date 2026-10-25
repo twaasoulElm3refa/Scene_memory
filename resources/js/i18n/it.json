@@ -701,14 +701,16 @@
   "homeAudit": {
     "home": {
       "videoUnsupported": "Il tuo browser non supporta il tag video.",
-      "badge": "Archivio eventi Scemory",
-      "title": "Esplora eventi documentati",
-      "titleHighlight": "attraverso la mappa",
-      "description": "Scopri i contenuti multimediali degli eventi caricati da giornalisti, team media e testimoni contributori in tutto il mondo.",
+      "badge": "Vendi i tuoi contenuti su Scemory",
+      "title": "Trasforma le tue foto e i tuoi video in guadagni",
+      "titleHighlight": "Vendi i tuoi contenuti. Scopri e acquista di più.",
+      "description": "Carica le tue foto e i tuoi video originali, raggiungi acquirenti in tutto il mondo e guadagna da ogni vendita. Esplora e acquista contenuti unici di altri creatori.",
       "searchEvents": "Cerca eventi",
       "uploadStory": "Carica la tua storia",
-      "bottomText": "Scopri storie, luoghi e momenti da tutto il mondo.",
-      "searchPlaceholder": "  Cerca eventi, città o tag"
+      "startSelling": "Inizia a vendere",
+      "exploreAndBuy": "Esplora e acquista",
+      "bottomText": "Carica le tue opere originali. Guadagna dalle vendite. Scopri contenuti da acquistare.",
+      "searchPlaceholder": "Cerca foto, video o eventi..."
     },
     "profileToast": {
       "title": "Profilo incompleto",

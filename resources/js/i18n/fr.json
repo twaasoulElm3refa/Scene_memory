@@ -701,14 +701,16 @@
   "homeAudit": {
     "home": {
       "videoUnsupported": "Votre navigateur ne prend pas en charge la balise vidéo.",
-      "badge": "Archives d’événements Scemory",
-      "title": "Explorez les événements documentés",
-      "titleHighlight": "à travers la carte",
-      "description": "Découvrez les médias d’événements téléversés par des journalistes, des équipes médias et des témoins contributeurs du monde entier.",
+      "badge": "Vendez vos médias sur Scemory",
+      "title": "Transformez vos photos et vidéos en revenus",
+      "titleHighlight": "Vendez vos médias. Découvrez et achetez-en d’autres.",
+      "description": "Publiez vos photos et vidéos originales, touchez des acheteurs dans le monde entier et gagnez de l’argent à chaque vente. Explorez et achetez des médias uniques d’autres créateurs.",
       "searchEvents": "Rechercher des événements",
       "uploadStory": "Téléversez votre histoire",
-      "bottomText": "Découvrez des histoires, des lieux et des moments du monde entier.",
-      "searchPlaceholder": "  Rechercher des événements par nom, lieu ou date..."
+      "startSelling": "Commencer à vendre",
+      "exploreAndBuy": "Explorer et acheter",
+      "bottomText": "Publiez vos créations. Gagnez à chaque vente. Découvrez des médias à acheter.",
+      "searchPlaceholder": "Rechercher des photos, vidéos ou événements..."
     },
     "profileToast": {
       "title": "Profil incomplet",
