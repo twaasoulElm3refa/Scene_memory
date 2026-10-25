@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div class="home-page-shell min-h-screen font-sans">
         <main class="relative">
             <!-- MAP EXPERIENCE -->
@@ -1228,7 +1228,6 @@ onUnmounted(() => {
     display: block;
     margin-block-start: 5px;
     color: #1d8eea;
-    font-size: 25px;
     background: linear-gradient(100deg, #166bf1 5%, #2493ee 56%, #46c2e9 100%);
     background-clip: text;
     -webkit-text-fill-color: transparent;
