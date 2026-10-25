@@ -22,7 +22,7 @@
 
                         <h1 class="home-map-title">
                             {{ $t('homeAudit.home.title') }}
-                            <span style="font-size: 25px;">{{ $t('homeAudit.home.titleHighlight') }}</span>
+                            <span style="font-size: 35px;">{{ $t('homeAudit.home.titleHighlight') }}</span>
                         </h1>
 
                         <p class="home-map-description">{{ $t('homeAudit.home.description') }}</p>
