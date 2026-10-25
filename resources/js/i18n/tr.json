@@ -701,14 +701,16 @@
   "homeAudit": {
     "home": {
       "videoUnsupported": "Tarayıcınız video etiketini desteklemiyor.",
-      "badge": "Scemory Etkinlik Arşivi",
-      "title": "Belgelenmiş etkinlikleri keşfedin",
-      "titleHighlight": "harita üzerinden",
-      "description": "Dünyanın dört bir yanındaki gazeteciler, medya ekipleri ve görgü tanığı katkıcılar tarafından yüklenen etkinlik medyalarını keşfedin.",
+      "badge": "Medyalarını Scemory'de sat",
+      "title": "Fotoğraf ve videolarını gelire dönüştür",
+      "titleHighlight": "İçeriklerini sat. Daha fazlasını keşfet ve satın al.",
+      "description": "Özgün fotoğraf ve videolarını yükle, dünyanın dört bir yanındaki alıcılara ulaş ve her satıştan gelir elde et. Diğer üreticilerin benzersiz içeriklerini keşfet ve satın al.",
       "searchEvents": "Etkinlik Ara",
       "uploadStory": "Hikayeni Yükle",
-      "bottomText": "Dünyanın dört bir yanından hikayeleri, yerleri ve anları keşfedin.",
-      "searchPlaceholder": "  "
+      "startSelling": "Satışa başla",
+      "exploreAndBuy": "Keşfet ve satın al",
+      "bottomText": "Özgün içeriklerini yükle. Satışlardan kazan. Satın alacak yeni içerikler keşfet.",
+      "searchPlaceholder": "Fotoğraf, video veya etkinlik ara..."
     },
     "profileToast": {
       "title": "Profil tamamlanmadı",

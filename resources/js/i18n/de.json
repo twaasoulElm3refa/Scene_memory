@@ -701,14 +701,16 @@
   "homeAudit": {
     "home": {
       "videoUnsupported": "Ihr Browser unterstützt das Video-Tag nicht.",
-      "badge": "Scemory-Veranstaltungsarchiv",
-      "title": "Dokumentierte Veranstaltungen entdecken",
-      "titleHighlight": "über die Karte",
-      "description": "Entdecken Sie Veranstaltungsmedien, die von Journalistinnen und Journalisten, Medienteams und Augenzeugen aus aller Welt hochgeladen wurden.",
+      "badge": "Medien auf Scemory verkaufen",
+      "title": "Mach deine Fotos und Videos zu einer Einnahmequelle",
+      "titleHighlight": "Verkaufe deine Medien. Entdecke und kaufe mehr.",
+      "description": "Lade deine eigenen Fotos und Videos hoch, erreiche Käufer weltweit und verdiene an jedem Verkauf. Entdecke und kaufe einzigartige Medien anderer Kreativer.",
       "searchEvents": "Veranstaltungen suchen",
       "uploadStory": "Ihre Geschichte hochladen",
-      "bottomText": "Entdecken Sie Geschichten, Orte und Momente aus aller Welt.",
-      "searchPlaceholder": "Nach Veranstaltungen suchen..."
+      "startSelling": "Jetzt verkaufen",
+      "exploreAndBuy": "Entdecken & kaufen",
+      "bottomText": "Originale hochladen. Mit Verkäufen verdienen. Medien entdecken und kaufen.",
+      "searchPlaceholder": "Fotos, Videos oder Events suchen..."
     },
     "profileToast": {
       "title": "Profil unvollständig",

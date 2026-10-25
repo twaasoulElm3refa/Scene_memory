@@ -36,13 +36,13 @@
                         </section>
 
                         <div class="home-map-actions">
-                            <button type="button" @click="scrollToEventsSearch" class="search-events-btn">
-                                {{ $t('homeAudit.home.searchEvents') }}
+                            <RouterLink :to="'/' + lang + '/add_event'" class="search-events-btn">
+                                {{ $t('homeAudit.home.startSelling') }}
                                 <span aria-hidden="true">→</span>
-                            </button>
-                            <RouterLink :to="'/' + lang + '/add_event'" class="home-map-upload">
+                            </RouterLink>
+                            <RouterLink :to="'/' + lang + '/events'" class="home-map-upload">
                                 <span aria-hidden="true">+</span>
-                                {{ $t('homeAudit.home.uploadStory') }}
+                                {{ $t('homeAudit.home.exploreAndBuy') }}
                             </RouterLink>
                             <button type="button" class="home-filter-toggle"
                                 :aria-expanded="mobileFiltersOpen ? 'true' : 'false'" aria-controls="filters-section"

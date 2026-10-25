@@ -701,14 +701,16 @@
   "homeAudit": {
     "home": {
       "videoUnsupported": "你的浏览器不支持 video 标签。",
-      "badge": "Scemory 活动档案",
-      "title": "探索已记录的活动",
-      "titleHighlight": "通过地图",
-      "description": "发现由世界各地的记者、媒体团队和目击者贡献者上传的活动媒体。",
+      "badge": "在 Scemory 出售你的作品",
+      "title": "让照片和视频为你带来收入",
+      "titleHighlight": "出售你的作品，发现并购买更多精彩内容。",
+      "description": "上传原创照片和视频，触达全球买家，每笔销售都能获得收益。探索并购买其他创作者的独特媒体作品。",
       "searchEvents": "搜索活动",
       "uploadStory": "上传你的故事",
-      "bottomText": "发现来自世界各地的故事、地点与瞬间。",
-      "searchPlaceholder": "  搜索活动、地点或标签..."
+      "startSelling": "开始出售",
+      "exploreAndBuy": "探索并购买",
+      "bottomText": "上传原创作品，赚取销售收入，发现值得购买的内容。",
+      "searchPlaceholder": "搜索照片、视频或活动..."
     },
     "profileToast": {
       "title": "个人资料未完成",
