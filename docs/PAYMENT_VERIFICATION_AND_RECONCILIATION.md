@@ -4,7 +4,7 @@
 
 Scemory has one external payment gateway: **PayPal Orders v2**. Its other monetary path is the internal Scemory wallet. The PayPal integration uses `srmklive/paypal` through `PayPalGateway`; server credentials and the merchant identifier come from `config/paypal.php`. There is no Stripe, card processor, or recurring PayPal billing subscription in the inspected application. A “plan subscription” is a one-time PayPal CAPTURE order that grants plan credits and updates the local subscription record.
 
-Webhook delivery and direct verification now converge on the existing settlement code. Authenticated status requests and the reconciliation command query PayPal for the *locally stored* PayPal order ID. The order response must match the local user/order relationship, purpose, reference, amount in integer minor units, currency, and configured merchant where PayPal supplies it. Only a completed capture can grant access, credit a wallet, or activate a plan. Browser return URLs only navigate to waiting pages.
+Webhook delivery and direct verification now converge on the existing settlement code. Authenticated status requests and the reconciliation command query PayPal for the *locally stored* PayPal order ID. The order and completed capture evidence must match the local user/order relationship, purpose, reference where supplied, amount in integer minor units, currency, and configured merchant. Missing required capture evidence remains unresolved for retry; an explicit mismatch requires review. Only a completed capture can grant access, credit a wallet, or activate a plan. Browser return URLs only navigate to waiting pages.
 
 ## Payment flow inventory
 
@@ -36,7 +36,7 @@ Primary entry points: `routes/api.php:437-451,496-518`, `routes/gifts.php:12-28`
 | `PENDING` capture | Remain unresolved; do not grant financial effects. |
 | `REFUNDED`, `PARTIALLY_REFUNDED`, `REVERSED` capture before ordinary settlement | Block fulfillment and flag payment for review. Gifts use their existing documented reversal path. |
 | Unknown or inconsistent state/identity | Block settlement and flag review. |
-| Timeout, rate limit, authentication failure, malformed response without an order identity | Keep unresolved, back off, retry up to the configured hard limit. |
+| Timeout, rate limit, or incomplete provider evidence | Keep unresolved, back off, retry up to the configured hard limit. Provider authentication and local configuration failures require review. |
 
 The lookup uses server-side PayPal credentials and fixed configured API hosts, never a browser-provided URL or token. `PAYPAL_MODE` selects sandbox or live; the corresponding server-side client ID/secret obtain access tokens. TLS validation is configured by `PAYPAL_VALIDATE_SSL`, which must remain enabled in production. API URLs, timeout, and retry settings are in `config/paypal.php:8-46`; no new environment variable was introduced. The only explicit direct REST refund request remains in `PayPalGateway::refundCapture()` (`app/Services/PayPalGateway.php:24-38`).
 
@@ -70,7 +70,7 @@ flowchart TD
 
 1. Checkout snapshots server prices and creates a local `purchases` row and `payments` row before PayPal order creation. The PayPal order ID, custom ID and reference are stored locally (`CheckoutCartSnapshot::create`, `WalletDepositOrderService::create`, `VirtualGiftService::create`, and `PlanSubscriptionController::subscribePayPal`). A user cannot supply a replacement provider transaction ID to verification.
 2. PayPal redirects the browser back to `/paypal/success`, `/wallet/success`, or `/gifts/paypal/return`. These callbacks do not mark payment complete. The ordinary and wallet callbacks redirect to waiting pages. The gift page calls the sender-owned capture endpoint. Ordinary and wallet waiting pages poll their authenticated owner-scoped status route for a bounded 30 attempts over roughly 150 seconds.
-3. Status requests call `PayPalPaymentVerification::verify()` after owner and order-type checks. A short database lease prevents overlapping direct lookups for the same unresolved payment. PayPal order identity, single purchase unit, local order owner, amount, currency, custom/reference IDs, and optional response merchant ID are checked before passing evidence to existing `reconcile()` methods. `PaymentFinancialValidator::assertCompletedCapture()` then requires a matching completed capture ID, amount, currency, purpose, PayPal order, and configured merchant before any financial effect (`app/Services/PaymentFinancialValidator.php:12-69`).
+3. Status requests call `PayPalPaymentVerification::verify()` after owner and order-type checks. A short database lease prevents overlapping direct lookups for the same unresolved payment. PayPal order identity, single purchase unit, local order owner, amount, currency, custom/reference IDs, and merchant evidence are checked before passing evidence to existing `reconcile()` methods. `PaymentFinancialValidator::assertCompletedCapture()` then requires a matching completed capture ID, amount, currency, purpose, PayPal order, and configured merchant before any financial effect (`app/Services/PaymentFinancialValidator.php`).
 4. Webhook processing still verifies the raw-body PayPal signature, records event IDs, and invokes the same finalizers. Direct verification, a late webhook, and a scheduler retry all meet at `PaymentFinalizer` or `VirtualGiftService::finalize`. Neither a browser redirect nor an `APPROVED` order is proof of a paid capture.
 
 Relevant implementation: `app/Services/PayPalPaymentVerification.php:26-206`, `app/Services/PayPalServices.php:99-128,167-229,324-355`, `app/Services/PayPalWalletServices.php:87-104`, `app/Services/PaymentFinalizer.php:37-185`, `app/Services/VirtualGiftService.php:90-169`.
@@ -91,7 +91,7 @@ Owner status routes require Sanctum and a 60/minute throttle. The gift capture r
 
 ## Scheduling, retries, and operational review
 
-`payments:reconcile --limit=100 --age=10` runs every five minutes with `withoutOverlapping(10)` (`routes/console.php:11-13`). It selects at most 100 PayPal payments older than ten minutes, including unresolved purchases, wallet deposits, plans and gifts. It also checks already paid gifts daily for capture fee/refund changes. `PayPalPaymentVerification` stores a 90-second lease, attempt count, last verification time, next due time, error category and review flag. A successful settlement stops ordinary payment polling. Temporary failures and nonterminal order states retry with delays of 30, 60, 120 seconds, doubling to a one-hour cap. The twelfth unsuccessful attempt flags review. Strong identity/financial mismatches flag review immediately. A webhook may still settle a payment after direct verification is exhausted.
+`payments:reconcile --limit=100 --age=10` runs every five minutes with `withoutOverlapping(10)` (`routes/console.php:11-13`). It selects at most 100 PayPal payments older than ten minutes, including unresolved purchases, wallet deposits, plans and gifts. It also checks already paid gifts daily for capture fee/refund changes. `PayPalPaymentVerification` stores a 90-second lease, attempt count, last verification time, next due time, error category and review flag. A successful settlement stops ordinary payment polling. Transient provider failures and incomplete evidence retry with delays of 30, 60, 120 seconds, doubling to a one-hour cap. The sixth unsuccessful attempt flags review. Configuration failures and explicit identity/financial mismatches flag review immediately. A webhook may still settle a payment after direct verification is exhausted.
 
 The new migration only adds nullable/defaulted columns and one due-work index to `payments`: `database/migrations/2026_10_24_000001_add_payment_verification_tracking.php`. It has no data backfill. Its `down()` intentionally preserves financial verification history; rolling it back does not remove columns. Coordinate any schema removal separately rather than dropping audit fields during an emergency rollback.
 
@@ -101,7 +101,7 @@ Operators should review `payments` with `verification_review_required=1`, `verif
 
 ## Verification and test results
 
-- `php artisan test`: **403 passed, 9 skipped, 2991 assertions** on SQLite in-memory test configuration.
+- `php artisan test`: **424 passed, 9 skipped, 3156 assertions** on SQLite in-memory test configuration.
 - Opt-in MySQL concurrency tests verified against isolated disposable MySQL containers:
   - `tests/run-weekly-mysql-concurrency.sh`: **2 passed, 57 assertions**.
   - `tests/run-gifts-mysql-concurrency.sh`: **7 passed, 173 assertions** (including concurrent media finalization, competing media orders, duplicate wallet purchases, release/refund concurrency, verified capture callbacks, and concurrent withdrawals).
@@ -109,8 +109,8 @@ Operators should review `payments` with `verification_review_required=1`, `verif
 - `tests/Feature/Api/Payments/PayPalPaymentVerificationTest.php`: missing-webhook purchase/wallet recovery, plan payment metadata and credits, approved versus captured, identity/financial mismatches, timeout/rate-limit-shaped errors, retry limit, cancellation, repeat verification and ownership checks.
 - `tests/Feature/Api/Payments/VirtualGiftsTest.php`: direct gift verification, refund-before-webhook, voided order and existing gift reversal tests.
 - `tests/Feature/Api/Payments/PayPalWebhookTest.php` and `tests/Unit/PayPalWebhookVerifierTest.php`: signature, replay, capture mismatch, duplicate settlement and reversal-review behavior.
-- `npm run build`: **passed** (built in 25.27s), assets generated into `public/build/assets`, with known Sass deprecation warnings from upstream Bootstrap 5.
-- `npm test -- --reporter=dot`: **23 files, 226 tests passed**; unrelated tests emitted connection-refused noise from an absent local mock API at port 3000 despite passing.
+- `npm run build`: **passed**, with existing Sass deprecation and bundle-size warnings.
+- `npm test -- --silent --reporter=dot`: **26 files, 238 tests passed**.
 - `git diff --check`: passed. No production database records or environment files were changed.
 
 ## Known limits and deployment checklist

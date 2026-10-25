@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "Kuzey Amerika'daki tarihi yapılar ve anıtlar hakkında denetimli makaleler ve yürüyüş turları arayan üniversite öğrencileri, tarihçiler, müze uzmanları ve kültür turistleri.",
       "whyChooseSummary": "The Clio, fiziksel anıtları tanımak için değerli bir eğitim girişimidir. Yaşayan tarihi anları belgelemek, video yüklemek ve üreticilere dünya çapında lisanslama olanakları sunmak istediğinizde Scemory ideal bir çözümdür."
     }
+  },
+  "directPurchase": {
+    "buyNow": "Şimdi Satın Al",
+    "processing": "Ödeme işleniyor...",
+    "redirecting": "Ödeme sayfasına yönlendiriliyor...",
+    "confirming": "Ödeme onaylanıyor...",
+    "success": "Satın alma başarılı",
+    "pending": "Ödeme beklemede",
+    "failed": "Ödeme başarısız oldu",
+    "cancelled": "Ödeme iptal edildi",
+    "alreadyOwned": "Zaten satın alındı",
+    "viewPurchased": "Satın alınan medyayı görüntüle",
+    "retryVerification": "Doğrulamayı yeniden dene",
+    "loginToBuy": "Satın alma işlemini tamamlamak için lütfen giriş yapın."
   }
 }

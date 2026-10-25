@@ -19,6 +19,7 @@ import { useRouter, useRoute } from "vue-router";
 import { PaymentService } from "../../services/PaymentService/PaymentService";
 import { pollOrderStatus } from "../../services/PaymentService/pollOrderStatus";
 import { clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
+import { refreshAccount } from "../../services/accountState";
 
 const router = useRouter();
 const route = useRoute();
@@ -39,6 +40,7 @@ onMounted(async () => {
   });
   if (result.outcome === "completed") {
     clearIdempotencyKey("wallet_deposit:paypal");
+    await refreshAccount({ force: true }).catch(() => {});
     router.replace(`/${lang}/deposit/success`);
   } else if (["failed", "terminal_error"].includes(result.outcome)) {
     router.replace(`/${lang}/deposit/failed`);

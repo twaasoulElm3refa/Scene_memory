@@ -65,7 +65,7 @@ class VirtualGiftsTest extends TestCase
 
     private function captureResource(GiftTransaction $gift, array $overrides = []): array
     {
-        return array_replace_recursive(['id' => 'CAPTURE-GIFT', 'status' => 'COMPLETED', 'custom_id' => $gift->payment->custom_id, 'amount' => ['value' => '1.00', 'currency_code' => 'USD'], 'payee' => ['merchant_id' => 'MERCHANT-TEST'], 'supplementary_data' => ['related_ids' => ['order_id' => 'ORDER-GIFT']], 'seller_receivable_breakdown' => ['paypal_fee' => ['value' => '0.60', 'currency_code' => 'USD']]], $overrides);
+        return array_replace_recursive(['id' => 'CAPTURE-GIFT', 'status' => 'COMPLETED', 'custom_id' => $gift->payment->custom_id, 'reference_id' => $gift->payment->reference_id, 'amount' => ['value' => '1.00', 'currency_code' => 'USD'], 'payee' => ['merchant_id' => 'MERCHANT-TEST'], 'supplementary_data' => ['related_ids' => ['order_id' => 'ORDER-GIFT']], 'seller_receivable_breakdown' => ['paypal_fee' => ['value' => '0.60', 'currency_code' => 'USD']]], $overrides);
     }
 
     private function paypalGift(): GiftTransaction
@@ -445,7 +445,7 @@ class VirtualGiftsTest extends TestCase
         $gift = $this->paypalGift();
         $capture = $this->captureResource($gift, ['status' => 'REFUNDED']);
         $gateway = Mockery::mock(PayPalGateway::class);
-        $gateway->shouldReceive('showOrderDetails')->once()->andReturn(['id' => 'ORDER-GIFT', 'status' => 'COMPLETED', 'purchase_units' => [['custom_id' => $gift->payment->custom_id, 'payee' => ['merchant_id' => 'MERCHANT-TEST'], 'payments' => ['captures' => [$capture]]]]]);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn(['id' => 'ORDER-GIFT', 'status' => 'COMPLETED', 'purchase_units' => [['reference_id' => $gift->payment->reference_id, 'custom_id' => $gift->payment->custom_id, 'amount' => ['value' => '1.00', 'currency_code' => 'USD'], 'payee' => ['merchant_id' => 'MERCHANT-TEST'], 'payments' => ['captures' => [$capture]]]]]);
         $gateway->shouldReceive('showCaptureDetails')->once()->andReturn($capture);
         $this->instance(PayPalGateway::class, $gateway);
         $this->webhook(['id' => 'WH-REFUND-FIRST', 'event_type' => 'PAYMENT.CAPTURE.REFUNDED', 'resource' => ['id' => 'REFUND-FIRST', 'status' => 'COMPLETED', 'amount' => ['value' => '1.00', 'currency_code' => 'USD'], 'supplementary_data' => ['related_ids' => ['order_id' => 'ORDER-GIFT', 'capture_id' => 'CAPTURE-GIFT']]]])->assertOk();

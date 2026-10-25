@@ -7,8 +7,6 @@
       <h1>{{ $t('payment.depositSuccess.title') }}</h1>
       <p class="subtitle">{{ $t('payment.depositSuccess.subtitleLine1') }}<br />{{ $t('payment.depositSuccess.subtitleLine2') }}</p>
       <div class="info-row"><div class="info-icon">WAL</div><div><div class="info-label">{{ $t('payment.operationStatus') }}</div><div class="info-val">{{ $t('payment.successful') }}</div></div></div>
-      <div class="info-row"><div class="info-icon">MAIL</div><div><div class="info-label">{{ $t('payment.notification') }}</div><div class="info-val">{{ $t('payment.depositSuccess.emailSent') }}</div></div></div>
-      <div class="info-row"><div class="info-icon">PAY</div><div><div class="info-label">{{ $t('payment.transactionId') }}</div><div class="info-val">{{ transactionId }}</div></div></div>
       <div class="divider"></div>
       <button @click="goToDownloads" class="btn-downloads"><span class="btn-arrow">?</span>{{ $t('payment.depositSuccess.goProfile') }}</button>
       <button @click="goHome" class="sec-link">{{ $t('payment.backHome') }}</button>
@@ -19,12 +17,6 @@
 <script>
 export default {
   name: "PaymentSuccess",
-
-  computed: {
-    transactionId() {
-      return this.$route.query.token || "PP-" + Date.now();
-    },
-  },
 
   methods: {
     goToDownloads() {

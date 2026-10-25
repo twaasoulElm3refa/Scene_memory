@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "Estudiantes, docentes universitarios, personal de museos y visitantes culturales interesados en itinerarios históricos guiados sobre monumentos patrimoniales en Norteamérica.",
       "whyChooseSummary": "The Clio es un proyecto educativo de enorme valor para el reconocimiento de lugares históricos estáticos. Scemory es la solución indicada cuando se busca reflejar el pulso de los acontecimientos vivos, albergar vídeo y ofrecer a los creadores oportunidades de comercialización internacional."
     }
+  },
+  "directPurchase": {
+    "buyNow": "Comprar ahora",
+    "processing": "Procesando el pago...",
+    "redirecting": "Redirigiendo al pago...",
+    "confirming": "Confirmando el pago...",
+    "success": "Compra exitosa",
+    "pending": "Pago pendiente",
+    "failed": "Error en el pago",
+    "cancelled": "Pago cancelado",
+    "alreadyOwned": "Ya comprado",
+    "viewPurchased": "Ver contenido comprado",
+    "retryVerification": "Reintentar verificación",
+    "loginToBuy": "Inicie sesión para completar su compra."
   }
 }

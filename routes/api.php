@@ -166,6 +166,8 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
         ->middleware(['auth:sanctum', 'throttle:60,1']);
+    Route::get('/media/{media}/purchased-original', [DownloadController::class, 'purchasedOriginal'])
+        ->name('media.purchased-original')->middleware(['signed', 'throttle:120,1']);
     Route::get('/media/{media}/preview', [MediaDeliveryController::class, 'preview'])
         ->name('media.preview')->middleware('throttle:120,1');
     Route::get('/media/{media}/review-original', [MediaDeliveryController::class, 'reviewOriginal'])

@@ -7,8 +7,6 @@
       <h1>{{ $t('payment.success.title') }}</h1>
       <p class="subtitle">{{ $t('payment.success.subtitleLine1') }}<br />{{ $t('payment.success.subtitleLine2') }}</p>
       <div class="info-row"><div class="info-icon green">OK</div><div><div class="info-label">{{ $t('payment.success.orderStatus') }}</div><div class="info-val green">{{ $t('payment.success.statusValue') }}</div></div></div>
-      <div class="info-row"><div class="info-icon blue">MAIL</div><div><div class="info-label">{{ $t('payment.success.confirmationLabel') }}</div><div class="info-val">{{ $t('payment.success.emailSent') }}</div></div></div>
-      <div class="info-row"><div class="info-icon green">PAY</div><div><div class="info-label">{{ $t('payment.transactionId') }}</div><div class="info-val">{{ transactionId }}</div></div></div>
       <div class="divider"></div>
       <router-link :to="`/${$route.params.lang}/downloads`" class="btn-downloads"><span class="btn-arrow">?</span>{{ $t('payment.success.goDownloads') }}</router-link>
       <router-link to="/" class="sec-link">{{ $t('payment.backHome') }}</router-link>
@@ -17,14 +15,7 @@
 </template>
 
 <script>
-export default {
-  name: 'PaymentSuccess',
-  computed: {
-    transactionId() {
-      return this.$route.query.token || '#PP-' + Date.now()
-    }
-  }
-}
+export default { name: 'PaymentSuccess' }
 </script>
 
 <style scoped>

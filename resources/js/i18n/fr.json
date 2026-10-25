@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "Étudiants, universitaires, guides touristiques culturels et passionnés de patrimoine nord-américain explorant des circuits pédestres historiques et des notices d'experts.",
       "whyChooseSummary": "The Clio est un formidable outil philanthropique pour valoriser les monuments physiques. Choisissez Scemory si vous avez besoin d'une plateforme multimédia internationale capturant l'histoire en mouvement, gérant les vidéos et ouvrant des perspectives de monétisation aux créateurs."
     }
+  },
+  "directPurchase": {
+    "buyNow": "Acheter maintenant",
+    "processing": "Traitement du paiement...",
+    "redirecting": "Redirection vers le paiement...",
+    "confirming": "Confirmation du paiement...",
+    "success": "Achat réussi",
+    "pending": "Paiement en attente",
+    "failed": "Échec du paiement",
+    "cancelled": "Paiement annulé",
+    "alreadyOwned": "Déjà acheté",
+    "viewPurchased": "Voir les médias achetés",
+    "retryVerification": "Réessayer la vérification",
+    "loginToBuy": "Veuillez vous connecter pour finaliser votre achat."
   }
 }

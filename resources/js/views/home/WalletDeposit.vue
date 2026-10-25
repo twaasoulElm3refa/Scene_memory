@@ -3,7 +3,7 @@
         <!-- Current Balance -->
         <div class="balance-card">
             <p class="label">{{ $t('walletDeposit.currentBalance') }}</p>
-            <p class="amount">${{ wallet?.amount ?? '0.00' }}</p>
+            <p class="amount">${{ accountState.user?.wallet?.amount ?? wallet?.amount ?? '0.00' }}</p>
             <p class="currency">USD</p>
         </div>
 
@@ -66,10 +66,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { PaymentService } from '../../services/PaymentService/PaymentService'
 import { getOrCreateIdempotencyKey } from '../../services/PaymentService/checkoutSession'
+import { accountState, refreshAccount } from '../../services/accountState'
 
 // Props — تمرر البيانات من الصفحة الأب
 const { t } = useI18n()
@@ -77,6 +78,8 @@ const { t } = useI18n()
 const props = defineProps({
     wallet: { type: Object, default: null },
 })
+
+onMounted(() => { void refreshAccount() })
 
 const presets = [10, 25, 50, 100]
 const selectedPreset = ref(null)

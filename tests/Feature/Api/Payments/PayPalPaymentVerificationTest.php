@@ -13,11 +13,11 @@ use App\Services\PayPalGateway;
 use App\Services\PayPalPaymentVerification;
 use App\Services\PayPalWebhookVerifier;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\Sanctum;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use RuntimeException;
 use Tests\TestCase;
 
 class PayPalPaymentVerificationTest extends TestCase
@@ -205,33 +205,142 @@ class PayPalPaymentVerificationTest extends TestCase
         $this->assertDatabaseMissing('entitlements', ['media_id' => $media->id]);
     }
 
+    public function test_capture_identity_and_merchant_mismatches_require_review(): void
+    {
+        foreach ([
+            'custom_id' => 'purchase:wrong',
+            'reference_id' => 'wrong-reference',
+            'payee.merchant_id' => 'OTHER-MERCHANT',
+        ] as $field => $value) {
+            [, $payment, $media] = $this->purchase();
+            $details = $this->orderDetails($payment, 'COMPLETED');
+            data_set($details, 'purchase_units.0.payments.captures.0.'.$field, $value);
+            $gateway = Mockery::mock(PayPalGateway::class);
+            $gateway->shouldReceive('showOrderDetails')->once()->andReturn($details);
+            $this->app->instance(PayPalGateway::class, $gateway);
+
+            $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+            $this->assertSame('evidence_mismatch', $payment->fresh()->verification_error_category);
+            $this->assertTrue($payment->fresh()->verification_review_required);
+            $this->assertDatabaseMissing('entitlements', ['media_id' => $media->id]);
+        }
+    }
+
     public function test_gateway_timeout_is_retryable_and_backoff_suppresses_immediate_repeat(): void
     {
         [, $payment] = $this->walletDeposit();
         $gateway = Mockery::mock(PayPalGateway::class);
-        $gateway->shouldReceive('showOrderDetails')->once()->andThrow(new RuntimeException('temporary connection failure'));
+        $gateway->shouldReceive('showOrderDetails')->once()->andThrow(new ConnectionException('temporary connection failure'));
         $this->app->instance(PayPalGateway::class, $gateway);
 
         $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
         $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
         $this->assertSame(1, $payment->fresh()->verification_attempts);
         $this->assertFalse($payment->fresh()->verification_review_required);
-        $this->assertSame('provider_lookup_error', $payment->fresh()->verification_error_category);
+        $this->assertSame('provider_network', $payment->fresh()->verification_error_category);
+    }
+
+    public function test_incomplete_completed_order_evidence_is_retryable_but_never_settled(): void
+    {
+        [$owner, $payment, $media] = $this->purchase();
+        $details = $this->orderDetails($payment, 'COMPLETED');
+        unset($details['purchase_units'][0]['payments']['captures'][0]['amount']);
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn($details);
+        $this->app->instance(PayPalGateway::class, $gateway);
+
+        $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+        $this->assertSame('incomplete_evidence', $payment->fresh()->verification_error_category);
+        $this->assertFalse($payment->fresh()->verification_review_required);
+        $this->assertNotNull($payment->fresh()->next_verification_at);
+        $this->assertDatabaseMissing('entitlements', ['user_id' => $owner->id, 'media_id' => $media->id]);
+        $this->assertDatabaseMissing('wallet_transactions', ['payment_id' => $payment->id]);
+    }
+
+    public function test_order_purchase_unit_without_reference_id_is_incomplete_and_not_settled(): void
+    {
+        [, $payment, $media] = $this->purchase();
+        $details = $this->orderDetails($payment, 'COMPLETED');
+        unset($details['purchase_units'][0]['reference_id']);
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn($details);
+        $this->app->instance(PayPalGateway::class, $gateway);
+
+        $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+        $fresh = $payment->fresh();
+        $this->assertSame('incomplete_evidence', $fresh->verification_error_category);
+        $this->assertFalse($fresh->verification_review_required);
+        $this->assertNotNull($fresh->next_verification_at);
+        $this->assertDatabaseMissing('entitlements', ['media_id' => $media->id]);
+    }
+
+    public function test_missing_local_merchant_configuration_requires_review_without_retry(): void
+    {
+        [, $payment, $media] = $this->purchase();
+        config()->set('paypal.merchant_id', '');
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldNotReceive('showOrderDetails');
+        $this->app->instance(PayPalGateway::class, $gateway);
+
+        $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+        $fresh = $payment->fresh();
+        $this->assertSame('configuration_error', $fresh->verification_error_category);
+        $this->assertTrue($fresh->verification_review_required);
+        $this->assertNull($fresh->next_verification_at);
+        $this->assertDatabaseMissing('entitlements', ['media_id' => $media->id]);
+    }
+
+    public function test_provider_server_error_retries_but_authentication_failure_requires_review(): void
+    {
+        [, $payment] = $this->walletDeposit();
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn(['name' => 'INTERNAL_SERVER_ERROR']);
+        $this->app->instance(PayPalGateway::class, $gateway);
+
+        $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+        $this->assertSame('provider_unavailable', $payment->fresh()->verification_error_category);
+        $this->assertFalse($payment->fresh()->verification_review_required);
+        $this->assertNotNull($payment->fresh()->next_verification_at);
+
+        $payment->update(['next_verification_at' => now()->subSecond()]);
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldReceive('showOrderDetails')->once()->andReturn(['http_status' => 401, 'name' => 'AUTHENTICATION_FAILURE']);
+        $this->app->instance(PayPalGateway::class, $gateway);
+
+        $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+        $this->assertSame('provider_authentication', $payment->fresh()->verification_error_category);
+        $this->assertTrue($payment->fresh()->verification_review_required);
+        $this->assertNull($payment->fresh()->next_verification_at);
     }
 
     public function test_retry_exhaustion_flags_review_without_more_provider_calls(): void
     {
         [, $payment] = $this->walletDeposit();
-        $payment->update(['verification_attempts' => 11]);
+        $payment->update(['verification_attempts' => 5]);
         $gateway = Mockery::mock(PayPalGateway::class);
-        $gateway->shouldReceive('showOrderDetails')->once()->andThrow(new RuntimeException('provider unavailable'));
+        $gateway->shouldReceive('showOrderDetails')->once()->andThrow(new ConnectionException('provider unavailable'));
         $this->app->instance(PayPalGateway::class, $gateway);
 
         $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
         $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
-        $this->assertSame(12, $payment->fresh()->verification_attempts);
+        $this->assertSame(6, $payment->fresh()->verification_attempts);
         $this->assertTrue($payment->fresh()->verification_review_required);
         $this->assertNull($payment->fresh()->next_verification_at);
+    }
+
+    public function test_preexisting_exhausted_payment_is_flagged_without_provider_call(): void
+    {
+        [, $payment] = $this->walletDeposit();
+        $payment->update(['verification_attempts' => 6]);
+        $gateway = Mockery::mock(PayPalGateway::class);
+        $gateway->shouldNotReceive('showOrderDetails');
+        $this->app->instance(PayPalGateway::class, $gateway);
+
+        $this->assertSame('pending', app(PayPalPaymentVerification::class)->verify($payment));
+        $fresh = $payment->fresh();
+        $this->assertTrue($fresh->verification_review_required);
+        $this->assertSame('retry_exhausted', $fresh->verification_error_category);
+        $this->assertNull($fresh->next_verification_at);
     }
 
     public function test_provider_error_response_retries_and_voided_order_is_cancelled(): void

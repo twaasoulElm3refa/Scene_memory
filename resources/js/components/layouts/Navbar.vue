@@ -325,6 +325,7 @@ import api from "@/services/ApiClient";
 import { isMobileRuntime } from "@/services/runtimeUrls";
 import { clearAuthToken, getAuthToken } from "@/services/authTokenStorage";
 import { PlanService } from '@/services/planService/planService';
+import { clearAccountState, refreshAccount } from '@/services/accountState';
 
 import { useRouter, useRoute, RouterLink } from "vue-router";
 
@@ -505,6 +506,7 @@ const logout = async () => {
     }
 
     await clearAuthToken();
+    clearAccountState();
 
     localStorage.removeItem("admin_token");
 
@@ -535,20 +537,14 @@ const fetchProfile = async () => {
     if (!token) {
         isLoggedIn.value = false;
         eventCount.value = 0;
+        clearAccountState();
         return;
     }
 
-    if (!isMobileRuntime()) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
     try {
-
-        const res = isMobileRuntime()
-            ? await api.get("/users/profile")
-            : await axios.get("/v1/users/profile");
-
-        if (res.data.status === "success") {
-
-            const userData = res.data.data.user;
+        const data = await refreshAccount();
+        if (data?.user) {
+            const userData = data.user;
 
             count.value = userData.items || 0;
 
@@ -565,22 +561,15 @@ const fetchProfile = async () => {
         }
 
     } catch (err) {
-
-        if (isMobileRuntime()) {
-            if (err.response?.status === 401) {
-                await clearAuthToken();
-                localStorage.removeItem("user_role");
-                localStorage.removeItem("user_data");
-            } else {
-                return;
-            }
-        } else {
-            localStorage.clear();
-        }
+        if (err.response?.status !== 401) return;
+        await clearAuthToken();
+        localStorage.removeItem("user_role");
+        localStorage.removeItem("user_data");
 
         isLoggedIn.value = false;
 
         eventCount.value = 0;
+        clearAccountState();
 
     }
 
@@ -592,6 +581,12 @@ const handleCartUpdated = () => {
 
 };
 
+const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") void fetchProfile();
+};
+
+watch(() => route.fullPath, () => { void fetchProfile(); });
+
 onMounted(() => {
 
     fetchProfile();
@@ -601,6 +596,8 @@ onMounted(() => {
     window.addEventListener("cart-updated", handleCartUpdated);
 
     window.addEventListener("credits-updated", fetchCredits);
+    window.addEventListener("focus", fetchProfile);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
 });
 
@@ -611,6 +608,8 @@ onUnmounted(() => {
     window.removeEventListener("cart-updated", handleCartUpdated);
 
     window.removeEventListener("credits-updated", fetchCredits);
+    window.removeEventListener("focus", fetchProfile);
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
 
 });
 

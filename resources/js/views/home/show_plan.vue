@@ -278,6 +278,7 @@ import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { PlanService } from "@/services/planService/planService";
+import { refreshAccount } from "@/services/accountState";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -340,6 +341,7 @@ const subscribeWithWallet = async () => {
     try {
         const res = await PlanService.subscribeWallet(plan.value.id);
         if (res.data?.status === 'success') {
+            await refreshAccount({ force: true }).catch(() => {});
             showToast(t('plans.subscribeSuccess') || 'Plan purchased successfully with wallet!', 'success');
             window.dispatchEvent(new CustomEvent('credits-updated'));
             const lang = localStorage.getItem('language') || 'en';

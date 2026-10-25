@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "希望规划历史文化主题徒步导览路线、撰写经过同行评审的学术条目，或探访北美实体历史文化地标的高校师生、博物馆研究员、文化游客和地方史爱好者。",
       "whyChooseSummary": "The Clio 是探索北美实体历史地标与学术徒步导览的杰出公益教育资源。如果您需要一个能够捕捉鲜活事件、托管高清音视频档案、并支持创作者全球版权授权的多模态平台，Scemory 是您的最佳选择。"
     }
+  },
+  "directPurchase": {
+    "buyNow": "立即购买",
+    "processing": "正在处理付款...",
+    "redirecting": "正在跳转至支付页面...",
+    "confirming": "正在确认付款...",
+    "success": "购买成功",
+    "pending": "付款待处理",
+    "failed": "付款失败",
+    "cancelled": "付款已取消",
+    "alreadyOwned": "已购买",
+    "viewPurchased": "查看已购媒体",
+    "retryVerification": "重试验证",
+    "loginToBuy": "请登录以完成购买。"
   }
 }

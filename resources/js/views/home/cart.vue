@@ -349,6 +349,7 @@ import { toMediaUrl } from "@/services/EventService/eventSearchHelpers";
 import { isMobileRuntime } from "@/services/runtimeUrls";
 import { PaymentService } from "../../services/PaymentService/PaymentService";
 import { getOrCreateIdempotencyKey, clearIdempotencyKey } from "../../services/PaymentService/checkoutSession";
+import { refreshAccount } from "../../services/accountState";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -682,6 +683,7 @@ const handleWalletCheckout = async () => {
         clearIdempotencyKey("cart:wallet");
         walletAmount.value = data.balance;
         await Promise.all([fetchCart(), fetchWallet()]);
+        await refreshAccount({ force: true }).catch(() => {});
         showToast(t("cart.walletPaymentSuccess"), "success", 5000);
         const lang = localStorage.getItem("lang") || "en";
         router.replace(`/${lang}/downloads`);

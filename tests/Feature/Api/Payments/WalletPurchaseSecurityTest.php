@@ -150,10 +150,11 @@ class WalletPurchaseSecurityTest extends TestCase
 
         Sanctum::actingAs($owner);
         $this->get('/api/v1/download/'.$media->id)->assertOk()->assertDownload('file.jpg');
-        $this->getJson('/api/v1/users/downloads')
+        $listing = $this->getJson('/api/v1/users/downloads')
             ->assertOk()
-            ->assertJsonPath('data.0.id', $media->id)
-            ->assertJsonMissingPath('data.0.full_url');
+            ->assertJsonPath('data.0.id', $media->id);
+        $this->assertStringContainsString('/purchased-original?', $listing->json('data.0.full_url'));
+        $this->assertStringNotContainsString('owned/file.jpg', $listing->json('data.0.full_url'));
     }
 
     private function catalog(): array
