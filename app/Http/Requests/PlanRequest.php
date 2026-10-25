@@ -32,6 +32,7 @@ class PlanRequest extends FormRequest
             'tier_limits.*.media_tier_id' => ['required_with:tier_limits', 'integer', 'distinct', 'exists:media_tiers,id'],
             'tier_limits.*.photo_maximum' => ['required_with:tier_limits', 'integer', 'min:0'],
             'tier_limits.*.video_maximum' => ['required_with:tier_limits', 'integer', 'min:0'],
+            'recommendation_value_target_bps' => ['nullable', 'integer', 'in:11000'],
             'max_accumulated_photos' => ['nullable', 'integer', 'min:0'],
             'max_accumulated_videos' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],

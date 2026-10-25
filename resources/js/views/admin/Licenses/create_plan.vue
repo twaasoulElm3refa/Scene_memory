@@ -172,7 +172,7 @@
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs mt-3">
                             <div>
-                                <span class="text-gray-500 block">Max Catalog Value:</span>
+                                <span class="text-gray-500 block">Maximum potential individual Cart value:</span>
                                 <strong class="text-gray-900 text-sm">${{ maxPotentialCatalogValue.toFixed(2) }}</strong>
                             </div>
                             <div>
@@ -180,16 +180,19 @@
                                 <strong class="text-gray-900 text-sm text-blue-700">${{ maxCreatorLiability.toFixed(2) }}</strong>
                             </div>
                             <div>
-                                <span class="text-gray-500 block">Catalog Headroom:</span>
-                                <strong class="text-sm" :class="catalogPriceHeadroom >= 0 ? 'text-emerald-700' : 'text-red-700'">${{ catalogPriceHeadroom.toFixed(2) }}</strong>
+                                <span class="text-gray-500 block">Potential value vs plan:</span>
+                                <strong class="text-sm" :class="potentialValueDifference >= 0 ? 'text-emerald-700' : 'text-red-700'">${{ potentialValueDifference.toFixed(2) }}</strong>
                             </div>
                             <div>
-                                <span class="text-gray-500 block">Payout Headroom:</span>
-                                <strong class="text-sm" :class="creatorLiabilityHeadroom >= 0 ? 'text-emerald-700' : 'text-red-700'">${{ creatorLiabilityHeadroom.toFixed(2) }}</strong>
+                                <span class="text-gray-500 block">Worst-case platform profit:</span>
+                                <strong class="text-sm" :class="worstCaseProfit >= 0 ? 'text-emerald-700' : 'text-red-700'">${{ worstCaseProfit.toFixed(2) }}</strong>
                             </div>
                         </div>
                         <p class="text-xs text-gray-600 mt-3 mb-0">
                             {{ financialValidationMessage }}
+                        </p>
+                        <p v-if="form.recommendation_value_target_bps" class="text-xs text-gray-500 mt-2 mb-0">
+                            Potential Cart value is an upper-bound estimate based on eligible tier prices. It is not guaranteed savings; actual savings depend on media redeemed.
                         </p>
                     </div>
 
@@ -256,7 +259,8 @@ const form = ref({
     media_tier_id: null,
     photo_quota: 0,
     video_quota: 0,
-    tier_limits: []
+    tier_limits: [],
+    recommendation_value_target_bps: null
 });
 
 const tiers = ref([]);
@@ -298,6 +302,8 @@ const catalogPriceHeadroom = computed(() => {
 const creatorLiabilityHeadroom = computed(() => {
     return Number(financialAnalysis.value?.creator_liability_headroom || 0);
 });
+const potentialValueDifference = computed(() => maxPotentialCatalogValue.value - Number(form.value.price || 0));
+const worstCaseProfit = computed(() => Number(financialAnalysis.value?.worst_case_profit || 0));
 
 const hasQuota = computed(() => (form.value.photo_quota || 0) > 0 || (form.value.video_quota || 0) > 0);
 const isCatalogValueValid = computed(() => catalogPriceHeadroom.value >= 0);
@@ -325,6 +331,7 @@ const validatePricing = async () => {
             photo_quota: Number(form.value.photo_quota || 0),
             video_quota: Number(form.value.video_quota || 0),
             tier_limits: form.value.tier_limits,
+            recommendation_value_target_bps: form.value.recommendation_value_target_bps,
         });
     } catch (error) {
         financialAnalysis.value = null;
@@ -341,6 +348,7 @@ const applyRecommendation = (result) => {
         return limit || { media_tier_id: tier.id, photo_maximum: 0, video_maximum: 0 };
     });
     financialAnalysis.value = result.analysis;
+    form.value.recommendation_value_target_bps = result.analysis.customer_value_target_bps;
 };
 
 const calculateRecommendation = async () => {
@@ -415,7 +423,11 @@ const clearError = (field) => {
     }
     if (successMessage.value) successMessage.value = '';
     if (errorMessage.value) errorMessage.value = '';
-    if (field === 'price') financialAnalysis.value = null;
+    if (field === 'price') {
+        financialAnalysis.value = null;
+        recommended.value = null;
+        form.value.recommendation_value_target_bps = null;
+    }
 };
 
 // Reset form
@@ -428,7 +440,8 @@ const resetForm = () => {
         photo_quota: 0,
         video_quota: 0,
         tier_limits: tiers.value.filter((tier) => tier.is_active && tier.is_plan_eligible)
-            .map((tier) => ({ media_tier_id: tier.id, photo_maximum: 0, video_maximum: 0 }))
+            .map((tier) => ({ media_tier_id: tier.id, photo_maximum: 0, video_maximum: 0 })),
+        recommendation_value_target_bps: null
     };
     financialAnalysis.value = null;
     recommended.value = null;
@@ -461,6 +474,7 @@ const handleSubmit = async () => {
             photo_quota: form.value.photo_quota || 0,
             video_quota: form.value.video_quota || 0,
             tier_limits: form.value.tier_limits,
+            recommendation_value_target_bps: form.value.recommendation_value_target_bps,
             ...(form.value.description && { description: form.value.description.trim() })
         };
 

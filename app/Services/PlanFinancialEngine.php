@@ -105,6 +105,8 @@ class PlanFinancialEngine
         int $videoQuota,
         array $tierLimits,
         ?PlanFinancialSetting $settings = null,
+        ?int $minimumCustomerValueMinor = null,
+        ?int $customerValueTargetBps = null,
     ): array {
         $configuration = $this->configurationStatus($settings);
         $settings = $configuration['settings'];
@@ -155,12 +157,17 @@ class PlanFinancialEngine
                 $this->percentageCost($priceMinor, (int) $settings->minimum_margin_bps),
             )
             : null;
-        $catalogValid = $catalogValue <= $priceMinor;
+        $catalogValid = $minimumCustomerValueMinor === null
+            ? $catalogValue <= $priceMinor
+            : $catalogValue >= $minimumCustomerValueMinor;
         $profitValid = $worstProfit !== null && $requiredProfit !== null && $worstProfit >= $requiredProfit;
 
         if (! $catalogValid) {
-            $errors[] = 'Maximum eligible Cart value exceeds the plan selling price by '
-                .$this->money->toDecimal($catalogValue - $priceMinor).'.';
+            $errors[] = $minimumCustomerValueMinor === null
+                ? 'Maximum eligible Cart value exceeds the plan selling price by '
+                    .$this->money->toDecimal($catalogValue - $priceMinor).'.'
+                : 'Maximum potential individual Cart value is below the recommendation target by '
+                    .$this->money->toDecimal($minimumCustomerValueMinor - $catalogValue).'.';
         }
         if ($configuration['is_complete'] && ! $profitValid) {
             $shortfall = max(0, (int) $requiredProfit - (int) $worstProfit);
@@ -191,6 +198,11 @@ class PlanFinancialEngine
             'video_creator_liability_minor' => $videoLiability,
             'max_creator_liability_minor' => $creatorLiability,
             'max_catalog_value_minor' => $catalogValue,
+            'minimum_customer_value_minor' => $minimumCustomerValueMinor,
+            'customer_value_target_bps' => $customerValueTargetBps,
+            'potential_cart_value_ratio_bps' => $priceMinor > 0
+                ? $this->signedRatioBps($catalogValue, $priceMinor)
+                : null,
             'payment_processing_cost_minor' => $costs['payment_processing_minor'],
             'payment_fee_method' => $costs['payment_method'],
             'tax_cost_minor' => $costs['tax_minor'],
@@ -262,11 +274,18 @@ class PlanFinancialEngine
 
     public function analyzePlan(LicenceType $plan): array
     {
+        $targetBps = (int) data_get($plan->financial_analysis, 'customer_value_target_bps', 0);
+        $minimumCustomerValue = $targetBps > 0
+            ? $this->percentageCost($this->money->fromDecimal((string) $plan->price), $targetBps)
+            : null;
+
         return $this->analyze(
             $this->money->fromDecimal((string) $plan->price),
             (int) $plan->photo_quota,
             (int) $plan->video_quota,
             $this->limitsForPlan($plan),
+            minimumCustomerValueMinor: $minimumCustomerValue,
+            customerValueTargetBps: $targetBps ?: null,
         );
     }
 

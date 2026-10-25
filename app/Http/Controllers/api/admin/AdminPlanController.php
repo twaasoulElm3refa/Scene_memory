@@ -56,11 +56,15 @@ class AdminPlanController extends Controller
         $data = $request->validated();
         try {
             $tierLimits = $this->requestedTierLimits($data);
+            $targetBps = (int) ($data['recommendation_value_target_bps'] ?? 0);
+            $priceMinor = $this->money->fromDecimal((string) $data['price']);
             $val = $this->financialEngine->analyze(
-                $this->money->fromDecimal((string) $data['price']),
+                $priceMinor,
                 (int) ($data['photo_quota'] ?? 0),
                 (int) ($data['video_quota'] ?? 0),
                 $tierLimits,
+                minimumCustomerValueMinor: $this->minimumCustomerValue($priceMinor, $targetBps),
+                customerValueTargetBps: $targetBps ?: null,
             );
             if (! $val['is_valid']) {
                 return response()->json([
@@ -72,7 +76,7 @@ class AdminPlanController extends Controller
             $data['media_tier_id'] = collect($val['tier_limits'])->sortByDesc('tier_rank')->first()['media_tier_id'] ?? null;
 
             $plan = DB::transaction(function () use ($data, $tierLimits, $val) {
-                unset($data['tier_limits']);
+                unset($data['tier_limits'], $data['recommendation_value_target_bps']);
                 $data['slug'] = Str::slug($data['name']).'-'.Str::random(5).'-'.time();
                 $data['financial_status'] = $val['financial_safety_status'];
                 $data['financial_settings_version'] = $val['settings_version'];
@@ -103,6 +107,9 @@ class AdminPlanController extends Controller
             $photoQuota = isset($data['photo_quota']) ? (int) $data['photo_quota'] : (int) $plan->photo_quota;
             $videoQuota = isset($data['video_quota']) ? (int) $data['video_quota'] : (int) $plan->video_quota;
             $price = isset($data['price']) ? (float) $data['price'] : (float) $plan->price;
+            $targetBps = (int) ($data['recommendation_value_target_bps']
+                ?? data_get($plan->financial_analysis, 'customer_value_target_bps', 0));
+            $priceMinor = $this->money->fromDecimal((string) $price);
 
             $tierLimits = array_key_exists('tier_limits', $data)
                 ? $data['tier_limits']
@@ -110,10 +117,12 @@ class AdminPlanController extends Controller
                     ? $this->financialEngine->limitsForPlan($plan)
                     : $this->financialEngine->legacyTierLimits($mediaTierId, $photoQuota, $videoQuota));
             $val = $this->financialEngine->analyze(
-                $this->money->fromDecimal((string) $price),
+                $priceMinor,
                 $photoQuota,
                 $videoQuota,
                 $tierLimits,
+                minimumCustomerValueMinor: $this->minimumCustomerValue($priceMinor, $targetBps),
+                customerValueTargetBps: $targetBps ?: null,
             );
             if (! $val['is_valid']) {
                 return response()->json([
@@ -125,7 +134,7 @@ class AdminPlanController extends Controller
             $data['media_tier_id'] = collect($val['tier_limits'])->sortByDesc('tier_rank')->first()['media_tier_id'] ?? null;
 
             DB::transaction(function () use ($plan, $data, $tierLimits, $val) {
-                unset($data['tier_limits']);
+                unset($data['tier_limits'], $data['recommendation_value_target_bps']);
                 $data['slug'] = Str::slug($data['name']).'-'.Str::random(5).'-'.time();
                 $data['financial_status'] = $val['financial_safety_status'];
                 $data['financial_settings_version'] = $val['settings_version'];
@@ -185,20 +194,25 @@ class AdminPlanController extends Controller
             'tier_limits.*.media_tier_id' => ['required_with:tier_limits', 'integer', 'distinct', 'exists:media_tiers,id'],
             'tier_limits.*.photo_maximum' => ['required_with:tier_limits', 'integer', 'min:0'],
             'tier_limits.*.video_maximum' => ['required_with:tier_limits', 'integer', 'min:0'],
+            'recommendation_value_target_bps' => ['nullable', 'integer', 'in:11000'],
         ]);
 
         $price = (float) $validated['price'];
         $tierId = $validated['media_tier_id'] ?? null;
         $photoQuota = (int) ($validated['photo_quota'] ?? 0);
         $videoQuota = (int) ($validated['video_quota'] ?? 0);
+        $targetBps = (int) ($validated['recommendation_value_target_bps'] ?? 0);
+        $priceMinor = $this->money->fromDecimal((string) $price);
 
         $limits = $validated['tier_limits']
             ?? $this->financialEngine->legacyTierLimits($tierId, $photoQuota, $videoQuota);
         $result = $this->financialEngine->analyze(
-            $this->money->fromDecimal((string) $price),
+            $priceMinor,
             $photoQuota,
             $videoQuota,
             $limits,
+            minimumCustomerValueMinor: $this->minimumCustomerValue($priceMinor, $targetBps),
+            customerValueTargetBps: $targetBps ?: null,
         );
 
         return response()->json($result);
@@ -452,6 +466,13 @@ class AdminPlanController extends Controller
             (int) ($data['photo_quota'] ?? 0),
             (int) ($data['video_quota'] ?? 0),
         );
+    }
+
+    private function minimumCustomerValue(int $priceMinor, int $targetBps): ?int
+    {
+        return $targetBps > 0
+            ? intdiv(($priceMinor * $targetBps) + 9999, 10000)
+            : null;
     }
 
     private function syncTierLimits(LicenceType $plan, array $limits): void

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api\Plans;
 
+use App\Models\LicenceType;
 use App\Models\MediaTier;
 use App\Services\PlanFinancialEngine;
 use App\Services\PlanRecommendationService;
@@ -81,7 +82,7 @@ class PlanFinancialEngineTest extends TestCase
     {
         $this->configurePlanFinancialSettings([
             'minimum_profit_minor' => 500,
-            'minimum_margin_bps' => 1500,
+            'minimum_margin_bps' => 1200,
             'operating_cost_bps' => 200,
             'risk_reserve_bps' => 100,
             'tier_distribution' => [
@@ -101,5 +102,62 @@ class PlanFinancialEngineTest extends TestCase
         $this->assertTrue($first['analysis']['is_valid']);
         $this->assertGreaterThan(0, $first['photo_quota']);
         $this->assertGreaterThan(0, $first['video_quota']);
+        $basicLimit = collect($first['tier_limits'])->firstWhere('media_tier_id', $this->basic->id);
+        $premiumLimit = collect($first['tier_limits'])->firstWhere('media_tier_id', $this->premium->id);
+        $this->assertSame($first['photo_quota'], $basicLimit['photo_maximum']);
+        $this->assertSame($first['video_quota'], $basicLimit['video_maximum']);
+        $this->assertLessThan($first['photo_quota'], $premiumLimit['photo_maximum']);
+        $this->assertLessThan($first['video_quota'], $premiumLimit['video_maximum']);
+        $this->assertGreaterThanOrEqual(22000, $first['potential_cart_value_minor']);
+        $this->assertGreaterThanOrEqual(11000, $first['potential_cart_value_ratio_bps']);
+        $this->assertTrue($first['analysis']['profit_requirement_is_valid']);
+        $this->assertGreaterThanOrEqual(1200, $first['analysis']['worst_case_margin_bps']);
+
+        $recalculated = app(PlanFinancialEngine::class)->analyze(
+            20000,
+            $first['photo_quota'],
+            $first['video_quota'],
+            $first['tier_limits'],
+            minimumCustomerValueMinor: 22000,
+            customerValueTargetBps: 11000,
+        );
+        $this->assertSame($first['analysis']['max_creator_liability_minor'], $recalculated['max_creator_liability_minor']);
+        $this->assertSame($first['analysis']['worst_case_profit_minor'], $recalculated['worst_case_profit_minor']);
+        $this->assertTrue($recalculated['is_valid']);
+
+        $plan = LicenceType::create([
+            'name' => 'Recommended Plan',
+            'slug' => 'recommended-plan',
+            'price' => '200.00',
+            'media_tier_id' => $this->premium->id,
+            'photo_quota' => $first['photo_quota'],
+            'video_quota' => $first['video_quota'],
+            'financial_analysis' => $first['analysis'],
+            'is_active' => true,
+        ]);
+        $plan->tierLimits()->createMany($first['tier_limits']);
+        $this->assertTrue(app(PlanFinancialEngine::class)->analyzePlan($plan)['is_valid']);
+    }
+
+    public function test_recommendation_explains_when_profit_and_customer_value_are_incompatible(): void
+    {
+        $this->basic->update(['payout_cap_photo' => 2, 'payout_cap_video' => 4]);
+        $this->premium->update(['payout_cap_photo' => 6, 'payout_cap_video' => 12]);
+        $this->configurePlanFinancialSettings([
+            'minimum_profit_minor' => 1,
+            'minimum_margin_bps' => 1200,
+            'tier_distribution' => [
+                (string) $this->basic->id => 6000,
+                (string) $this->premium->id => 4000,
+            ],
+        ]);
+
+        $result = app(PlanRecommendationService::class)->recommend('200.00');
+
+        $this->assertFalse($result['is_available']);
+        $this->assertSame('profit_and_customer_value_incompatible', $result['failure_code']);
+        $this->assertStringContainsString('10% customer-value target', $result['reason']);
+        $this->assertLessThan(22000, $result['analysis']['max_catalog_value_minor']);
+        $this->assertTrue($result['analysis']['profit_requirement_is_valid']);
     }
 }
