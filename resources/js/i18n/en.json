@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "Students, university educators, museum curators, heritage tourists, and local history buffs seeking curated walking tours and peer-reviewed educational narratives about physical historic landmarks in North America.",
       "whyChooseSummary": "The Clio is an exceptional educational non-profit resource for discovering physical landmarks and walking tours. Choose Scemory when you need an international multimedia platform that captures living events, hosts high-definition photo and video archives, and enables creators to license their work globally."
     }
+  },
+  "directPurchase": {
+    "buyNow": "Buy Now",
+    "processing": "Processing payment...",
+    "redirecting": "Redirecting to payment...",
+    "confirming": "Confirming payment...",
+    "success": "Purchase successful",
+    "pending": "Payment pending",
+    "failed": "Payment failed",
+    "cancelled": "Payment cancelled",
+    "alreadyOwned": "Already purchased",
+    "viewPurchased": "View purchased media",
+    "retryVerification": "Retry verification",
+    "loginToBuy": "Please sign in to complete your purchase."
   }
 }

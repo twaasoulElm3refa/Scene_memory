@@ -254,6 +254,15 @@
                                             <span>{{ isMediaRedeemed(media?.id) ? $t('mediaCredits.redeemed') : $t('mediaCredits.getWithPlan') }}</span>
                                         </button>
 
+                                        <!-- BUY NOW -->
+                                        <button @click.stop="buyNow(media?.id)"
+                                            :disabled="buyingMediaId === media?.id"
+                                            class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white px-3 py-1 rounded text-xs font-semibold transition flex items-center gap-1 shadow">
+                                            <i v-if="buyingMediaId === media?.id" class="spinner-border spinner-border-sm" style="width: 12px; height: 12px;"></i>
+                                            <i v-else class="bi bi-lightning-charge-fill text-xs"></i>
+                                            <span>{{ buyingMediaId === media?.id ? $t('discovery.media.processing') : $t('discovery.media.buyNow') }}</span>
+                                        </button>
+
                                         <!-- ADD TO CART -->
                                         <button @click.stop="addToCart(media?.id)"
                                             class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-xs font-semibold transition">
@@ -796,12 +805,14 @@
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import GiftSupportButton from "@/components/gifts/GiftSupportButton.vue";
 import { PhotoIcon, XMarkIcon } from "@heroicons/vue/24/outline";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { EventService } from "@/services/singleEventService/singleEventService";
 import CommentService, { extractErrorMessage } from "../../services/CommentService/CommentService";
 import { CartService } from "@/services/CartService/CartService";
 import { PlanService } from "@/services/planService/planService";
+import { PaymentService } from "@/services/PaymentService/PaymentService";
+import { getOrCreateIdempotencyKey } from "@/services/PaymentService/checkoutSession";
 import api from "@/services/ApiClient";
 import { isMobileRuntime } from "@/services/runtimeUrls";
 import { ReplyService } from "../../services/ReplyService/ReplyService";
@@ -828,6 +839,7 @@ const collectionAlert = ref({
 });
 
 const route = useRoute();
+const router = useRouter();
 const { t } = useI18n();
 const slug = route.params?.slug;
 
@@ -995,6 +1007,55 @@ const addToCart = async (mediaId) => {
         showCartAlert("error", err?.message || t("cart.errors.addFailed"));
     } finally {
         cartLoading.value = false;
+    }
+};
+
+const buyingMediaId = ref(null);
+
+const buyNow = async (mediaId) => {
+    if (!mediaId || buyingMediaId.value) return;
+
+    const token = getAuthToken();
+    if (!token) {
+        const lang = route.params.lang || localStorage.getItem("lang") || "en";
+        try {
+            sessionStorage.setItem("scemory_pending_buy_now", JSON.stringify({
+                mediaId: Number(mediaId),
+                timestamp: Date.now()
+            }));
+        } catch (e) {
+            console.error("Failed to save pending buy now state:", e);
+        }
+        showCartAlert("error", t("event.comment_login_required"));
+        router.push({ path: `/${lang}/auth`, query: { redirect: route.fullPath } });
+        return;
+    }
+
+    buyingMediaId.value = mediaId;
+    try {
+        const idempotencyKey = getOrCreateIdempotencyKey(`buy_now:${mediaId}`, `${mediaId}:${Date.now()}`);
+        const { data } = await PaymentService.pay({
+            type: "single_media",
+            media_id: Number(mediaId),
+            idempotency_key: idempotencyKey,
+        });
+        if (data?.approval_url) {
+            window.location.href = data.approval_url;
+        } else {
+            throw new Error("Missing approval URL");
+        }
+    } catch (error) {
+        const status = error?.response?.status;
+        if (status === 409) {
+            const lang = route.params.lang || localStorage.getItem("lang") || "en";
+            showCartAlert("error", t("discovery.media.alreadyOwned"));
+            router.push(`/${lang}/downloads`);
+            return;
+        }
+        const message = error?.response?.data?.message || error?.message || t("cart.errors.checkout");
+        showCartAlert("error", message);
+    } finally {
+        buyingMediaId.value = null;
     }
 };
 
@@ -1676,6 +1737,22 @@ onMounted(async () => {
     try {
         await refreshEvent();
         await fetchLikesInfo();
+
+        try {
+            const raw = sessionStorage.getItem("scemory_pending_buy_now");
+            if (raw && getAuthToken()) {
+                const pending = JSON.parse(raw);
+                if (pending?.mediaId && Date.now() - (pending.timestamp || 0) < 600000) {
+                    const exists = eventImages.value?.some(m => Number(m.id) === Number(pending.mediaId));
+                    if (exists) {
+                        sessionStorage.removeItem("scemory_pending_buy_now");
+                        buyNow(pending.mediaId);
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Failed to restore pending buy now state:", e);
+        }
     } catch (err) {
         console.error("خطأ في جلب الحدث:", err);
         event.value = null;

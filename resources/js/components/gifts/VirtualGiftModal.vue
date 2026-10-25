@@ -54,6 +54,7 @@ import { RouterLink } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { giftKey, giftMoney, giftName, giftRequest } from '@/services/virtualGiftService';
 import { toAssetUrl } from '@/services/runtimeUrls';
+import { refreshAccount } from '@/services/accountState';
 
 const props = defineProps({ eventId: { type: Number, required: true }, commentId: { type: Number, default: null }, recipient: { type: Object, required: true } });
 const emit = defineEmits(['close', 'delivered']);
@@ -81,7 +82,11 @@ function onBackdropClick(event) {
 }
 function delivered(value) {
     transaction.value = value;
-    if (value.delivery_status === 'delivered' && value.payment_status === 'paid') { sessionStorage.removeItem(intentStorageKey); emit('delivered', value); }
+    if (value.delivery_status === 'delivered' && value.payment_status === 'paid') {
+        sessionStorage.removeItem(intentStorageKey);
+        void refreshAccount({ force: true }).catch(() => {});
+        emit('delivered', value);
+    }
 }
 async function submit() {
     if (busy.value || !valid.value || !selected.value || (method.value === 'wallet' && !walletEligible.value)) return;

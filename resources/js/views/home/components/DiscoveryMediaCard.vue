@@ -101,42 +101,73 @@
             <!-- DIVIDER -->
             <div class="discovery-media-card__divider"></div>
 
-            <!-- ADD TO CART -->
-            <button
-                type="button"
-                class="discovery-media-card__cart"
-                :class="{
-                    'is-added': isAdded,
-                    'is-loading': isAdding
-                }"
-                :disabled="isAdding || isAdded"
-                @click="addToCart"
-            >
-                <!-- LOADING -->
-                <span
-                    v-if="isAdding"
-                    class="discovery-media-card__spinner"
-                    aria-hidden="true"
-                ></span>
+            <!-- ACTIONS (ADD TO CART + BUY NOW) -->
+            <div class="discovery-media-card__actions">
+                <!-- ADD TO CART -->
+                <button
+                    type="button"
+                    class="discovery-media-card__cart"
+                    :class="{
+                        'is-added': isAdded,
+                        'is-loading': isAdding
+                    }"
+                    :disabled="isAdding || isAdded || isBuying"
+                    @click="addToCart"
+                >
+                    <!-- LOADING -->
+                    <span
+                        v-if="isAdding"
+                        class="discovery-media-card__spinner"
+                        aria-hidden="true"
+                    ></span>
 
-                <!-- ADDED -->
-                <CheckIcon
-                    v-else-if="isAdded"
-                    class="discovery-media-card__cart-icon"
-                    aria-hidden="true"
-                />
+                    <!-- ADDED -->
+                    <CheckIcon
+                        v-else-if="isAdded"
+                        class="discovery-media-card__cart-icon"
+                        aria-hidden="true"
+                    />
 
-                <!-- CART -->
-                <ShoppingCartIcon
-                    v-else
-                    class="discovery-media-card__cart-icon"
-                    aria-hidden="true"
-                />
+                    <!-- CART -->
+                    <ShoppingCartIcon
+                        v-else
+                        class="discovery-media-card__cart-icon"
+                        aria-hidden="true"
+                    />
 
-                <span>
-                    {{ cartButtonLabel }}
-                </span>
-            </button>
+                    <span>
+                        {{ cartButtonLabel }}
+                    </span>
+                </button>
+
+                <!-- BUY NOW -->
+                <button
+                    type="button"
+                    class="discovery-media-card__buy-now"
+                    :class="{
+                        'is-loading': isBuying
+                    }"
+                    :disabled="isBuying || isAdding"
+                    @click="buyNow"
+                >
+                    <!-- LOADING -->
+                    <span
+                        v-if="isBuying"
+                        class="discovery-media-card__spinner discovery-media-card__spinner--secondary"
+                        aria-hidden="true"
+                    ></span>
+
+                    <BoltIcon
+                        v-else
+                        class="discovery-media-card__buy-icon"
+                        aria-hidden="true"
+                    />
+
+                    <span>
+                        {{ isBuying ? $t("discovery.media.processing") : $t("discovery.media.buyNow") }}
+                    </span>
+                </button>
+            </div>
 
             <slot name="event-action"></slot>
         </footer>
@@ -144,9 +175,11 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import {
+    BoltIcon,
     CheckIcon,
     PauseIcon,
     PlayIcon,
@@ -156,6 +189,8 @@ import {
 import { useI18n } from "vue-i18n";
 
 import { CartService } from "@/services/CartService/CartService";
+import { PaymentService } from "@/services/PaymentService/PaymentService";
+import { getOrCreateIdempotencyKey } from "@/services/PaymentService/checkoutSession";
 import { showSafeToast } from "@/services/ApiClient";
 import { discoveryImageSources, discoveryVideoSources, toMediaUrl } from "@/services/EventService/eventSearchHelpers";
 import { isMobileRuntime } from "@/services/runtimeUrls";
@@ -193,9 +228,11 @@ const emit = defineEmits(["preview"]);
 
 
 /* =====================================================
-   I18N
+   ROUTER & I18N
 ===================================================== */
 
+const route = useRoute();
+const router = useRouter();
 const { t } = useI18n();
 
 
@@ -210,6 +247,8 @@ const isPlaying = ref(false);
 const isAdding = ref(false);
 
 const isAdded = ref(false);
+
+const isBuying = ref(false);
 
 const videoSourceIndex = ref(0);
 const imageSourceIndex = ref(0);
@@ -578,6 +617,74 @@ const addToCart = async () => {
         isAdding.value = false;
     }
 };
+
+
+/* =====================================================
+   BUY NOW (DIRECT CHECKOUT)
+===================================================== */
+
+const buyNow = async () => {
+    const mediaId = props.result?.media_id || props.result?.id;
+    if (!mediaId || isBuying.value || isAdding.value) return;
+
+    if (!getAuthToken()) {
+        const lang = route.params.lang || localStorage.getItem("lang") || "en";
+        try {
+            sessionStorage.setItem("scemory_pending_buy_now", JSON.stringify({
+                mediaId: Number(mediaId),
+                timestamp: Date.now()
+            }));
+        } catch (e) {
+            console.error("Failed to save pending buy now state:", e);
+        }
+        showSafeToast("info", t("event.comment_login_required"), t("discovery.media.loginToBuy"));
+        router.push({ path: `/${lang}/auth`, query: { redirect: route.fullPath } });
+        return;
+    }
+
+    isBuying.value = true;
+    try {
+        const idempotencyKey = getOrCreateIdempotencyKey(`buy_now:${mediaId}`, `${mediaId}:${Date.now()}`);
+        const { data } = await PaymentService.pay({
+            type: "single_media",
+            media_id: Number(mediaId),
+            idempotency_key: idempotencyKey,
+        });
+        if (data?.approval_url) {
+            window.location.href = data.approval_url;
+        } else {
+            throw new Error("Missing approval URL");
+        }
+    } catch (error) {
+        const status = error?.response?.status;
+        if (status === 409) {
+            const lang = route.params.lang || localStorage.getItem("lang") || "en";
+            showSafeToast("warning", t("discovery.media.alreadyOwned"), t("discovery.media.viewPurchased"));
+            router.push(`/${lang}/downloads`);
+            return;
+        }
+        const message = error?.response?.data?.message || error?.message || t("cart.errors.checkout");
+        showSafeToast("error", message, t("discovery.media.failed"));
+    } finally {
+        isBuying.value = false;
+    }
+};
+
+onMounted(() => {
+    try {
+        const raw = sessionStorage.getItem("scemory_pending_buy_now");
+        if (raw && getAuthToken()) {
+            const pending = JSON.parse(raw);
+            const mediaId = props.result?.media_id || props.result?.id;
+            if (pending?.mediaId && Number(pending.mediaId) === Number(mediaId) && Date.now() - (pending.timestamp || 0) < 600000) {
+                sessionStorage.removeItem("scemory_pending_buy_now");
+                buyNow();
+            }
+        }
+    } catch (e) {
+        console.error("Failed to restore pending buy now state:", e);
+    }
+});
 </script>
 
 <style scoped>
@@ -974,6 +1081,18 @@ const addToCart = async () => {
 
 
 /* =====================================================
+   ACTIONS (CART + BUY NOW)
+===================================================== */
+
+.discovery-media-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+
+/* =====================================================
    ADD TO CART
 ===================================================== */
 
@@ -984,19 +1103,20 @@ const addToCart = async () => {
 
     display: flex;
 
-    width: 100%;
+    flex: 1 1 0;
+    min-width: 0;
 
-    min-height: 50px;
+    min-height: 48px;
 
     align-items: center;
     justify-content: center;
 
-    gap: 9px;
+    gap: 8px;
 
     overflow: hidden;
 
     padding:
-        12px 18px;
+        10px 14px;
 
     border: 1px solid
         rgba(
@@ -1025,13 +1145,15 @@ const addToCart = async () => {
     background-position:
         0% 50%;
 
-    font-size: 14px;
+    font-size: 13.5px;
 
     font-weight: 850;
 
     line-height: 1;
 
     cursor: pointer;
+
+    white-space: nowrap;
 
     box-shadow:
         0 9px 20px
@@ -1074,6 +1196,144 @@ const addToCart = async () => {
             0.45s ease,
         filter
             0.25s ease;
+}
+
+
+/* =====================================================
+   BUY NOW
+===================================================== */
+
+.discovery-media-card__buy-now {
+    position: relative;
+
+    isolation: isolate;
+
+    display: flex;
+
+    flex: 1 1 0;
+    min-width: 0;
+
+    min-height: 48px;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    overflow: hidden;
+
+    padding:
+        10px 14px;
+
+    border: 1.5px solid #1677ff;
+
+    border-radius: 13px;
+
+    color: #0d4d97;
+
+    background: #ffffff;
+
+    font-size: 13.5px;
+
+    font-weight: 850;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    box-shadow:
+        0 4px 14px
+            rgba(
+                22,
+                119,
+                255,
+                0.10
+            );
+
+    transition:
+        transform
+            0.25s
+            cubic-bezier(
+                0.22,
+                1,
+                0.36,
+                1
+            ),
+        box-shadow
+            0.25s ease,
+        border-color
+            0.25s ease,
+        background-color
+            0.25s ease,
+        color
+            0.25s ease;
+}
+
+.discovery-media-card__buy-now:hover:not(:disabled) {
+    background: #f0f7ff;
+    border-color: #0d4d97;
+    color: #0d4d97;
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 20px
+            rgba(
+                22,
+                119,
+                255,
+                0.18
+            );
+}
+
+.discovery-media-card__buy-now:active:not(:disabled) {
+    transform: translateY(0) scale(0.985);
+    box-shadow:
+        0 4px 10px
+            rgba(
+                22,
+                119,
+                255,
+                0.12
+            );
+}
+
+.discovery-media-card__buy-now:focus-visible {
+    outline: 3px solid
+        rgba(
+            48,
+            168,
+            255,
+            0.24
+        );
+    outline-offset: 3px;
+}
+
+.discovery-media-card__buy-now:disabled {
+    pointer-events: none;
+    opacity: 0.65;
+}
+
+.discovery-media-card__buy-now.is-loading {
+    cursor: wait;
+    opacity: 0.92;
+}
+
+.discovery-media-card__buy-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: #1677ff;
+    transition: transform 0.25s ease;
+}
+
+.discovery-media-card__buy-now:hover:not(:disabled) .discovery-media-card__buy-icon {
+    transform: scale(1.1);
+}
+
+.discovery-media-card__spinner--secondary {
+    border-color: rgba(13, 77, 151, 0.25);
+    border-top-color: #0d4d97;
 }
 
 
@@ -1367,7 +1627,8 @@ const addToCart = async () => {
         font-size: 19px;
     }
 
-    .discovery-media-card__cart {
+    .discovery-media-card__cart,
+    .discovery-media-card__buy-now {
         min-height: 47px;
 
         border-radius: 12px;
@@ -1385,6 +1646,24 @@ const addToCart = async () => {
         width: 23px;
 
         height: 23px;
+    }
+}
+
+
+/* =====================================================
+   ACTIONS STACK ON NARROW SCREENS
+===================================================== */
+
+@media (max-width: 540px) {
+    .discovery-media-card__actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .discovery-media-card__cart,
+    .discovery-media-card__buy-now {
+        width: 100%;
+        flex: 1 1 auto;
     }
 }
 
@@ -1408,7 +1687,8 @@ const addToCart = async () => {
         font-size: 18px;
     }
 
-    .discovery-media-card__cart {
+    .discovery-media-card__cart,
+    .discovery-media-card__buy-now {
         min-height: 46px;
 
         padding:
@@ -1431,7 +1711,9 @@ const addToCart = async () => {
     .discovery-media-card__play,
     .discovery-media-card__cart,
     .discovery-media-card__cart::before,
-    .discovery-media-card__cart-icon {
+    .discovery-media-card__cart-icon,
+    .discovery-media-card__buy-now,
+    .discovery-media-card__buy-icon {
         transition: none;
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api;
 
 use App\Models\User;
+use App\Models\Wallet;
 use App\Models\UserWeeklyPoint;
 use App\Services\WeeklyCompetitionPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -64,5 +65,22 @@ class WeeklyUserStatisticsTest extends TestCase
             ->assertJsonPath('data.weekly_statistics.weekly_points', 0)
             ->assertJsonPath('data.weekly_statistics.weekly_rank', null)
             ->assertJsonPath('data.weekly_statistics.week_start', '2026-09-12');
+    }
+
+    public function test_profile_balance_is_fresh_after_a_wallet_ledger_update(): void
+    {
+        $user = User::factory()->create(['role' => 'user']);
+        Sanctum::actingAs($user);
+
+        $first = $this->getJson('/api/v1/users/profile')->assertOk();
+        $this->assertStringContainsString('no-store', $first->headers->get('Cache-Control'));
+
+        Wallet::where('user_id', $user->id)->update(['amount' => '25.34', 'balance_minor' => 2534]);
+
+        $this->getJson('/api/v1/users/profile')->assertOk()
+            ->assertJsonPath('data.user.wallet.amount', '25.34')
+            ->assertJsonPath('data.user.wallet.balance_minor', 2534);
+        $this->getJson('/api/v1/users/wallet')->assertOk()
+            ->assertJsonPath('data.amount', '25.34');
     }
 }

@@ -13,7 +13,7 @@ import Contact from '../../resources/js/views/home/contact.vue';
 import siteRouter from '../../resources/js/router';
 import { FooterService } from '../../resources/js/services/FooterService/FooterService';
 import { ContactService } from '../../resources/js/services/ContactService/ContactService';
-import axios from 'axios';
+import api from '../../resources/js/services/ApiClient';
 
 vi.mock('../../resources/js/services/FooterService/FooterService', () => ({ FooterService: { links: vi.fn() } }));
 vi.mock('../../resources/js/services/ContactService/ContactService', () => ({ ContactService: { create: vi.fn() } }));
@@ -147,7 +147,7 @@ describe('navigation and external links', () => {
     });
     it('shares the verified Navbar session with the footer and preserves language on navigation', async () => {
         localStorage.setItem('auth_token', 'test-token');
-        vi.spyOn(axios, 'get').mockResolvedValue({ data: { status: 'success', data: { user: { name: 'Author', event_count: 2 } } } });
+        vi.spyOn(api, 'get').mockResolvedValue({ data: { status: 'success', data: { user: { name: 'Author', event_count: 2 } } } });
         const { target, router } = await mount({ render: () => h('div', [h(Navbar), h(Footer)]) }, {}, 'en');
         expect(navigationSession.isLoggedIn).toBe(true);
         expect(target.querySelector('footer a[href="/en/creator/events"]')).not.toBeNull();

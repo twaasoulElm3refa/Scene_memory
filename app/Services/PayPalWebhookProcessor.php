@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use JsonException;
 use Throwable;
 
@@ -55,8 +54,8 @@ class PayPalWebhookProcessor
         Log::info('SCEMORY_WEBHOOK_ENDPOINT_REACHED', [
             'path' => $request->path(),
             'method' => $request->method(),
-            'ip' => $request->ip(),
-            'content_type' => $request->header('Content-Type'),
+            'arrived_at' => now()->toIso8601String(),
+            'body_bytes' => strlen($rawBody),
             'event_id' => $eventId,
             'event_type' => $eventType,
             'has_transmission_id' => filled($request->header('PAYPAL-TRANSMISSION-ID')),
@@ -66,13 +65,12 @@ class PayPalWebhookProcessor
             'has_transmission_sig' => filled($request->header('PAYPAL-TRANSMISSION-SIG')),
             'webhook_type' => $webhookType,
             'paypal_mode' => config('paypal.mode') === 'live' ? 'live' : 'sandbox',
-            'webhook_id' => $webhookId,
         ]);
         Log::info('webhook_json_parsed', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         Log::info('webhook_received', ['event_id' => $eventId, 'event_type' => $eventType, 'webhook_type' => $webhookType]);
         if (! is_string($webhookId) || $webhookId === '') {
-            Log::error('payment_validation_failed', ['event_id' => $eventId, 'reason' => 'webhook_id_not_configured']);
-            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'webhook_id_not_configured']);
+            Log::error('payment_validation_failed', ['event_id' => $eventId, 'reason_code' => 'webhook_id_not_configured']);
+            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason_code' => 'webhook_id_not_configured']);
 
             return response()->json(['status' => 'error'], 503);
         }
@@ -84,9 +82,9 @@ class PayPalWebhookProcessor
 
                 return response()->json(['status' => 'invalid'], 400);
             }
-        } catch (Throwable $exception) {
-            $this->logException($exception, $eventId, $eventType);
-            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'signature_exception']);
+        } catch (Throwable) {
+            $this->logException($eventId, $eventType);
+            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason_code' => 'signature_exception']);
 
             return response()->json(['status' => 'error'], 500);
         }
@@ -157,14 +155,17 @@ class PayPalWebhookProcessor
 
             return response()->json(['status' => $status === 'ignored' ? 'ignored' : 'ok']);
         } catch (Throwable $exception) {
+            $reasonCode = $exception instanceof PayPalConfigurationException ? 'configuration_error'
+                : ($exception instanceof IncompletePayPalEvidenceException ? 'incomplete_evidence'
+                    : ($exception instanceof \UnexpectedValueException ? 'evidence_mismatch' : 'handler_failed'));
             PaypalWebhookEvent::whereKey($event->id)->update([
                 'status' => 'failed',
-                'error' => Str::limit($exception->getMessage(), 500, ''),
-                'error_message' => Str::limit($exception->getMessage(), 500, ''),
+                'error' => $reasonCode,
+                'error_message' => $reasonCode,
             ]);
-            Log::warning('payment_validation_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'exception' => $exception::class]);
-            $this->logException($exception, $eventId, $eventType);
-            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason' => 'handler_exception']);
+            Log::warning('payment_validation_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason_code' => $reasonCode]);
+            $this->logException($eventId, $eventType, $reasonCode);
+            Log::error('webhook_failed', ['event_id' => $eventId, 'event_type' => $eventType, 'reason_code' => $reasonCode]);
 
             return response()->json(['status' => 'error'], 500);
         }
@@ -177,12 +178,12 @@ class PayPalWebhookProcessor
             && app()->environment(['local', 'testing']);
     }
 
-    private function logException(Throwable $exception, string $eventId, string $eventType): void
+    private function logException(string $eventId, string $eventType, string $reasonCode = 'signature_exception'): void
     {
         Log::error('paypal_webhook_processing_failed', [
-            'exception' => $exception::class,
             'event_id' => $eventId,
             'event_type' => $eventType,
+            'reason_code' => $reasonCode,
         ]);
     }
 }

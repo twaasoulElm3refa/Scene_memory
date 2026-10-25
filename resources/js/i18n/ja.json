@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "北米の指定史跡に関する精査された解説やウォーキングツアーを求めている学生、大学教員、博物館学芸員、遺産観光客、郷土史愛好家。",
       "whyChooseSummary": "The Clioは、物理的な歴史ランドマークやウォーキングツアーを学ぶための素晴らしい教育用非営利リソースです。生きた出来事を捉え、高解像度の写真や動画を保管し、世界に向けて作品をライセンス販売したい場合は、Scemoryをお選びください。"
     }
+  },
+  "directPurchase": {
+    "buyNow": "今すぐ購入",
+    "processing": "支払いを処理中...",
+    "redirecting": "支払いページへリダイレクト中...",
+    "confirming": "支払いを確認中...",
+    "success": "購入が完了しました",
+    "pending": "支払い保留中",
+    "failed": "支払いに失敗しました",
+    "cancelled": "支払いがキャンセルされました",
+    "alreadyOwned": "購入済み",
+    "viewPurchased": "購入したメディアを見る",
+    "retryVerification": "確認を再試行",
+    "loginToBuy": "購入を完了するにはサインインしてください。"
   }
 }

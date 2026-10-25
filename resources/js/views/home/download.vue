@@ -65,30 +65,35 @@
             <!-- Thumbnail -->
             <div class="media-thumb">
               <img
-                v-if="isImage(item.preview_url)"
-                :src="getUrl(item.preview_url)"
+                v-if="item.type === 'image' && item.full_url"
+                :src="getUrl(item.full_url)"
                 :alt="$t('downloads.fileAlt', { id: item.id })"
                 class="thumb-img"
                 loading="lazy"
+                @error="refreshOriginalUrl(item)"
               />
               <video
-                v-else
+                v-else-if="item.type === 'video' && item.full_url"
+                :key="item.full_url"
                 class="thumb-img"
                 playsinline
                 preload="metadata"
+                controls
+                @error="refreshOriginalUrl(item)"
               >
-                <source :src="getUrl(item.preview_url)" />
+                <source :src="getUrl(item.full_url)" @error="refreshOriginalUrl(item)" />
               </video>
+              <div v-else class="thumb-img"></div>
 
               <!-- Type badge -->
-              <span class="type-badge">
-                <svg v-if="isImage(item.preview_url)" width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+              <span v-if="item.type === 'image' || item.type === 'video'" class="type-badge">
+                <svg v-if="item.type === 'image'" width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M21 19V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/>
                 </svg>
-                <svg v-else width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                <svg v-else-if="item.type === 'video'" width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M15 10l4.553-2.277A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4zM3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
                 </svg>
-                {{ isImage(item.preview_url) ? $t('downloads.imageType') : $t('downloads.videoType') }}
+                {{ item.type === 'image' ? $t('downloads.imageType') : $t('downloads.videoType') }}
               </span>
 
               <!-- Done checkmark overlay -->
@@ -105,7 +110,7 @@
 
               <!-- Hover overlay -->
               <div class="thumb-overlay">
-                <button class="preview-btn" @click="openFile(item.preview_url)">
+                <button class="preview-btn" :disabled="!item.full_url" @click="openFile(item)">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -241,18 +246,17 @@ const getUrl = (path) => {
   return `/storage/${path}`;
 };
 
-/* ── {{ $t('downloads.download') }} URL — goes through Laravel to force download ── */
-
-/* ── Type check ── */
-const isImage = (path) => {
-  if (!path) return false;
-  return /\.(jpe?g|png|webp|gif|avif|svg)(\?|$)/i.test(path);
-};
-
-/* ── Filename ── */
-const getFilename = (path) => {
-  if (!path) return "download";
-  return path.split("/").pop().split("?")[0] || "download";
+const refreshedIds = new Set();
+const refreshOriginalUrl = async (item) => {
+  if (refreshedIds.has(item.id)) return;
+  refreshedIds.add(item.id);
+  try {
+    const response = await downloadService.getDownloads();
+    const fresh = response.data?.find((entry) => entry.id === item.id);
+    if (fresh) Object.assign(item, fresh);
+  } catch (err) {
+    console.error('Original media URL refresh failed:', err);
+  }
 };
 
 /* ── Fetch ── */
@@ -271,8 +275,22 @@ const fetchDownloads = async () => {
 };
 
 /* ── {{ $t('downloads.preview') }} ── */
-const openFile = (url) => {
-  window.open(getUrl(url), "_blank");
+const openFile = async (item) => {
+  const tab = window.open('', '_blank');
+  if (!tab) return;
+  try {
+    const expires = Number(new URL(item.full_url, window.location.href).searchParams.get('expires'));
+    if (expires && expires <= Math.floor(Date.now() / 1000) + 30) {
+      const response = await downloadService.getDownloads();
+      const fresh = response.data?.find((entry) => entry.id === item.id);
+      if (fresh) Object.assign(item, fresh);
+    }
+    if (item.full_url) tab.location.href = getUrl(item.full_url);
+    else tab.close();
+  } catch (err) {
+    tab.close();
+    showToast(t('downloads.loadError'), 'error');
+  }
 };
 
 /* ── {{ $t('downloads.download') }} ── */
@@ -280,7 +298,7 @@ const downloadFile = async (item) => {
   if (downloadingId.value === item.id || doneIds.value.has(item.id)) return;
 
   downloadingId.value = item.id;
-  const filename = `scemory-media-${item.id}`;
+  const filename = item.filename || `scemory-media-${item.id}`;
 
   try {
     // Option 1: via Laravel endpoint (recommended — avoids CORS)

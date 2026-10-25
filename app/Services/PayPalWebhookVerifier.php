@@ -182,7 +182,6 @@ class PayPalWebhookVerifier
         $payload = [
             'mode' => $context['mode'],
             'webhook_type' => $context['webhook_type'],
-            'webhook_id' => $context['webhook_id'],
             'event_id' => $context['event_id'],
             'event_type' => $context['event_type'],
             'cert_host' => $certHost,

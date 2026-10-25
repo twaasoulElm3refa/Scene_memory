@@ -1794,5 +1794,19 @@
       "audienceCompetitor": "Studenti universitari, docenti di storia, curatori museali e turisti culturali interessati a itinerari a piedi storicamente documentati sui monumenti del Nord America.",
       "whyChooseSummary": "The Clio è un eccellente progetto filantropico per scoprire monumenti e targhe storiche. Scemory è la soluzione raccomandata quando occorre una piattaforma multimediale internazionale per catturare eventi in movimento, ospitare video e dare ai creatori concrete possibilità di monetizzazione."
     }
+  },
+  "directPurchase": {
+    "buyNow": "Acquista ora",
+    "processing": "Elaborazione del pagamento...",
+    "redirecting": "Reindirizzamento al pagamento...",
+    "confirming": "Conferma del pagamento in corso...",
+    "success": "Acquisto completato con successo",
+    "pending": "Pagamento in sospeso",
+    "failed": "Pagamento non riuscito",
+    "cancelled": "Pagamento annullato",
+    "alreadyOwned": "Già acquistato",
+    "viewPurchased": "Visualizza media acquistati",
+    "retryVerification": "Riprova la verifica",
+    "loginToBuy": "Accedi per completare l'acquisto."
   }
 }

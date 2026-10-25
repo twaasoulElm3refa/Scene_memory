@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Api\Payments;
 
+use App\Jobs\SendPaymentReceipt;
+use App\Mail\PaymentSuccessMail;
 use App\Models\Events;
 use App\Models\EventsImges;
 use App\Models\Payment;
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
+use RuntimeException;
 use Tests\TestCase;
 
 class PayPalWebhookTest extends TestCase
@@ -60,6 +63,10 @@ class PayPalWebhookTest extends TestCase
                     && $context['has_transmission_id'] === true
                     && $context['has_transmission_sig'] === true
                     && $context['webhook_type'] === 'checkout'
+                    && is_string($context['arrived_at'])
+                    && $context['body_bytes'] > 0
+                    && ! array_key_exists('ip', $context)
+                    && ! array_key_exists('resource', $context)
                     && ! array_key_exists('authorization', array_change_key_case($context, CASE_LOWER));
             }))
             ->once();
@@ -126,6 +133,37 @@ class PayPalWebhookTest extends TestCase
         $this->assertSame(150, WalletTransactions::where('source', 'media_sale')->sole()->metadata['platform_commission_minor']);
     }
 
+    public function test_receipt_failure_and_retry_do_not_change_completed_financial_effects(): void
+    {
+        $this->mockVerifier(true);
+        [$order, $payment, $image] = $this->purchasePayment();
+        $this->postWebhook('/api/v1/paypal/webhook', $this->capturePayload('WH-MAIL', $payment, 'CAPTURE-MAIL'))->assertOk();
+        $order->update(['mail_sent' => false]);
+
+        Mail::shouldReceive('to')->once()->andThrow(new RuntimeException('SMTP unavailable'));
+        try {
+            (new SendPaymentReceipt($payment->id))->handle();
+            $this->fail('Expected the receipt job to be retryable after SMTP failure.');
+        } catch (RuntimeException $exception) {
+            $this->assertSame('SMTP unavailable', $exception->getMessage());
+        }
+
+        $this->assertSame('completed', $payment->fresh()->status);
+        $this->assertDatabaseHas('entitlements', ['user_id' => $order->user_id, 'media_id' => $image->id]);
+        $this->assertDatabaseCount('wallet_transactions', 1);
+        $this->assertFalse((bool) $order->fresh()->mail_sent);
+
+        app()->forgetInstance('mail.manager');
+        Mail::clearResolvedInstance('mail.manager');
+        Mail::fake();
+        (new SendPaymentReceipt($payment->id))->handle();
+        (new SendPaymentReceipt($payment->id))->handle();
+        Mail::assertSent(PaymentSuccessMail::class, 1);
+        $this->assertTrue((bool) $order->fresh()->mail_sent);
+        $this->assertDatabaseCount('entitlements', 1);
+        $this->assertDatabaseCount('wallet_transactions', 1);
+    }
+
     #[DataProvider('mismatchProvider')]
     public function test_financial_mismatches_rollback_fulfillment(string $field, mixed $value): void
     {
@@ -139,6 +177,21 @@ class PayPalWebhookTest extends TestCase
         $this->assertSame('approved', $order->fresh()->status);
         $this->assertDatabaseMissing('entitlements', ['media_id' => $image->id]);
         $this->assertDatabaseHas('paypal_webhook_events', ['event_id' => 'WH-BAD-'.$field, 'status' => 'failed']);
+    }
+
+    public function test_capture_without_reference_id_is_valid_and_settled(): void
+    {
+        $this->mockVerifier(true);
+        [$order, $payment, $image] = $this->purchasePayment();
+        $payload = $this->capturePayload('WH-INCOMPLETE', $payment, 'CAPTURE-INCOMPLETE');
+        unset($payload['resource']['reference_id']);
+
+        $this->postWebhook('/api/v1/paypal/webhook', $payload)->assertOk();
+
+        $this->assertSame('completed', $payment->fresh()->status);
+        $this->assertSame('completed', $order->fresh()->status);
+        $this->assertDatabaseHas('entitlements', ['media_id' => $image->id]);
+        $this->assertDatabaseHas('paypal_webhook_events', ['event_id' => 'WH-INCOMPLETE', 'status' => 'processed']);
     }
 
     public static function mismatchProvider(): array
@@ -170,6 +223,28 @@ class PayPalWebhookTest extends TestCase
         $this->assertSame(2500, $user->wallet()->first()->balance_minor);
         $this->assertDatabaseCount('wallet_transactions', 1);
         $this->assertDatabaseHas('wallet_transactions', ['payment_id' => $payment->id, 'source' => 'paypal_wallet_topup']);
+    }
+
+    public function test_same_wallet_capture_delivered_to_both_subscriptions_credits_once(): void
+    {
+        $this->mockVerifier(true, 4, ['checkout-webhook-test', 'wallet-webhook-test']);
+        $user = User::factory()->create();
+        $order = $this->order($user, 'wallet_deposit', 1500);
+        $payment = $this->payment($order, 'wallet_deposit', 'PAYPAL-BOTH-ROUTES');
+        Wallet::create(['user_id' => $user->id, 'amount' => '10.00', 'balance_minor' => 1000, 'currency' => 'USD']);
+        $payload = $this->capturePayload('WH-BOTH-ROUTES', $payment, 'CAPTURE-BOTH-ROUTES');
+
+        $this->postWebhook('/api/v1/paypal/webhook', $payload)->assertOk();
+        $this->postWebhook('/api/v1/wallet/webhook', $payload)->assertOk();
+        $this->postWebhook('/api/v1/paypal/webhook', $payload)->assertOk();
+        $this->postWebhook('/api/v1/wallet/webhook', $payload)->assertOk();
+
+        $this->assertSame('completed', $payment->fresh()->status);
+        $this->assertSame(2500, $user->wallet()->first()->balance_minor);
+        $this->assertDatabaseCount('wallet_transactions', 1);
+        $this->assertDatabaseCount('entitlements', 0);
+        $this->assertDatabaseHas('paypal_webhook_events', ['event_id' => 'WH-BOTH-ROUTES', 'webhook_type' => 'checkout']);
+        $this->assertDatabaseHas('paypal_webhook_events', ['event_id' => 'WH-BOTH-ROUTES', 'webhook_type' => 'wallet']);
     }
 
     public function test_refund_event_is_recorded_but_does_not_apply_undefined_financial_policy(): void

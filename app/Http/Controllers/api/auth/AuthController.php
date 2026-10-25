@@ -231,11 +231,11 @@ class AuthController extends Controller
 
         $cart = $this->authRepository->findOrCreateCartByUserId($user->id);
 
-        $cacheKey = 'user_profile_'.$user->id;
-        $wallet = $user->wallet;
+        $wallet = $user->wallet()->first();
         if ($wallet == null) {
             $this->authRepository->createWalletIfMissing($user->id);
         }
+        $user->unsetRelation('wallet');
         $items = $this->authRepository->countCartItems($cart->id);
         $EventCount = Events::where('user_id', $user->id)->count();
         $profileResolver = function () use ($user, $items, $EventCount) {
@@ -266,17 +266,10 @@ class AuthController extends Controller
             ];
         };
 
-        try {
-            $cachedProfile = Cache::tags(['user_profile', 'user_'.$user->id])
-                ->remember($cacheKey, 60, $profileResolver);
-        } catch (\BadMethodCallException $e) {
-            $cachedProfile = Cache::remember($cacheKey, 60, $profileResolver);
-        }
-
         return $this->success([
-            'user' => $cachedProfile,
+            'user' => $profileResolver(),
             'weekly_statistics' => $this->weeklyLeaderboardService->currentUserStats($user->id),
-        ], 'Profile fetched successfully.');
+        ], 'Profile fetched successfully.')->header('Cache-Control', 'private, no-store');
     }
 
     public function forgotPassword(Request $request)
@@ -396,7 +389,8 @@ class AuthController extends Controller
 
     public function wallet()
     {
-        return $this->success(auth()->user()->wallet, 'Wallet fetched successfully.');
+        return $this->success(auth()->user()->wallet()->first(), 'Wallet fetched successfully.')
+            ->header('Cache-Control', 'private, no-store');
     }
 
     public function logout(Request $request)

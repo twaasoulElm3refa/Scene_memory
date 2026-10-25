@@ -292,7 +292,7 @@
                                 <div class="text-right">
                                     <span
                                         class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-2xl text-sm font-medium">
-                                        {{ profile.wallet?.currency || 'USD' }}
+                                        {{ accountState.user?.wallet?.currency || 'USD' }}
                                     </span>
                                 </div>
                             </div>
@@ -657,7 +657,7 @@
 
 <script>
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
-import { getProfile, updateProfileAPI } from "@/services/userService/userService";
+import { updateProfileAPI } from "@/services/userService/userService";
 import { updatePasswordAPI } from "@/services/userService/userService";
 import { useRouter, useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
@@ -672,6 +672,7 @@ import {
     cancelDataDeletionRequest,
 } from "@/services/userDataDeletionService";
 import { clearAuthToken, clearGoogleOAuthVerifier } from "@/services/authTokenStorage";
+import { accountState, refreshAccount } from "@/services/accountState";
 
 export default {
     name: "UserProfile",
@@ -1038,8 +1039,8 @@ export default {
 
         // Computed Wallet Amount
         const walletAmount = computed(() => {
-            if (!profile.value.wallet) return "0.00";
-            return parseFloat(profile.value.wallet.amount || 0).toFixed(2);
+            if (!accountState.user?.wallet) return "0.00";
+            return Number(accountState.user.wallet.amount || 0).toFixed(2);
         });
 
         const updatePassword = async () => {
@@ -1080,7 +1081,7 @@ export default {
 
         const fetchProfile = async () => {
             try {
-                const res = await getProfile();
+                const res = await refreshAccount();
                 let userData = res?.user || res?.data?.user || null;
 
                 if (userData) {
@@ -1295,10 +1296,27 @@ export default {
                 fetchDeletionStatus();
             }
             document.addEventListener("click", handleClickOutsideCountry);
+            window.addEventListener("focus", refreshVisibleData);
+            document.addEventListener("visibilitychange", refreshWhenVisible);
         });
 
         onUnmounted(() => {
             document.removeEventListener("click", handleClickOutsideCountry);
+            window.removeEventListener("focus", refreshVisibleData);
+            document.removeEventListener("visibilitychange", refreshWhenVisible);
+        });
+
+        const refreshWhenVisible = () => {
+            if (document.visibilityState === "visible") refreshVisibleData();
+        };
+
+        const refreshVisibleData = () => {
+            void fetchProfile();
+            if (currentTab.value === 6) void fetchCreditsData();
+        };
+
+        watch(currentTab, (tab) => {
+            if (tab === 4) void fetchProfile();
         });
 
         return {
@@ -1308,6 +1326,7 @@ export default {
             creditHistory,
             fetchCreditsData,
             profile,
+            accountState,
             weeklyStats,
             fetchProfile,
             editData,
