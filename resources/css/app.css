@@ -753,7 +753,8 @@ html[dir="rtl"] .cart-page,
 html[dir="rtl"] .wishlist-page,
 html[dir="rtl"] .single-event-page,
 html[dir="rtl"] .legal-page,
-html[dir="rtl"] .country-page {
+html[dir="rtl"] .country-page,
+html[dir="rtl"] .scemory-footer {
     direction: rtl;
     text-align: right;
 }
@@ -843,9 +844,26 @@ html[dir="rtl"] #app,
 html[dir="rtl"] main,
 html[dir="rtl"] header,
 html[dir="rtl"] footer,
+html[dir="rtl"] .scemory-footer,
 html[dir="rtl"] .scemory-page,
 html[dir="rtl"] .home-page-shell {
+    transform: none !important;
     scale: 1;
+}
+
+/* Ensure footer text, brand, logos, and icons never mirror */
+html[dir="rtl"] .scemory-footer,
+html[dir="rtl"] .scemory-footer h2,
+html[dir="rtl"] .scemory-footer p,
+html[dir="rtl"] .scemory-footer a,
+html[dir="rtl"] .scemory-footer ul,
+html[dir="rtl"] .scemory-footer li,
+html[dir="rtl"] .scemory-footer img,
+html[dir="rtl"] .scemory-footer .footer-logo,
+html[dir="rtl"] .scemory-footer .footer-social,
+html[dir="rtl"] .scemory-footer .footer-store,
+html[dir="rtl"] .scemory-footer .footer-store i {
+    transform: none !important;
 }
 
 html,
