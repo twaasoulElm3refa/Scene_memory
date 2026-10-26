@@ -18,8 +18,9 @@ const STYLE_TTL_MS = 24 * 60 * 60 * 1000;
 const GEOCODE_DEBOUNCE_MS = 600;
 
 export default class MapService {
-    constructor(markerRef) {
+    constructor(markerRef, { preserveMainMapViewport = false } = {}) {
         this.markerRef = markerRef;
+        this.preserveMainMapViewport = preserveMainMapViewport;
         this.map = null;
         this.marker = null;
         this.fullMap = null;
@@ -252,6 +253,8 @@ export default class MapService {
             }
         });
 
+        if (this.preserveMainMapViewport && targetMap === this.map) return;
+
         if (validCount > 1) {
             targetMap.fitBounds(bounds, { padding: 60, maxZoom: 15 });
         } else if (validCount === 1) {
@@ -402,7 +405,9 @@ export default class MapService {
 
         if (this.marker) {
             this.marker.setLngLat([lng, lat]);
-            this.map.flyTo({ center: [lng, lat], zoom: 12 });
+            if (!this.preserveMainMapViewport) {
+                this.map.flyTo({ center: [lng, lat], zoom: 12 });
+            }
         }
         if (this.fullMarker) {
             this.fullMarker.setLngLat([lng, lat]);

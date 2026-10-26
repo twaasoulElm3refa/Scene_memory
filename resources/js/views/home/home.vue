@@ -215,7 +215,10 @@ const lang = localStorage.getItem("language") || "en";
 
 const DEFAULT_LOCATION = { lat: 30.0444, lng: 31.2357 };
 const marker = ref({ ...DEFAULT_LOCATION });
-const hasTriedUserLocation = ref(false);
+const isMobileMapViewport = () =>
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(max-width: 640px)").matches;
 const eventsSearchSectionRef = ref(null);
 const eventsSearchRef = ref(null);
 const filtersSectionRef = ref(null);
@@ -280,6 +283,7 @@ let mapService = null;
 let toastTimer = null;
 let progressInterval = null;
 let hasMapErrorListener = false;
+let userLocationRequest = null;
 const scheduledTasks = [];
 
 const useMobileAssets =
@@ -646,14 +650,9 @@ const renderMarkersOnMaps = (events) => {
 };
 
 const setCurrentLocationFromDevice = () => {
-    return new Promise((resolve) => {
-        if (hasTriedUserLocation.value) {
-            resolve(false);
-            return;
-        }
+    if (userLocationRequest) return userLocationRequest;
 
-        hasTriedUserLocation.value = true;
-
+    userLocationRequest = new Promise((resolve) => {
         if (!navigator.geolocation) {
             console.warn("Geolocation is not supported by this browser.");
             resolve(false);
@@ -686,13 +685,14 @@ const setCurrentLocationFromDevice = () => {
 const ensureMapInitialized = async () => {
     if (isMapReady.value || isMapLoading.value) return;
 
+    const mobileMap = isMobileMapViewport();
     mapError.value = "";
     hasRequestedMapInit.value = true;
     canInitMap.value = true;
     isMapLoading.value = true;
 
     try {
-        await setCurrentLocationFromDevice();
+        const hasUserLocation = await setCurrentLocationFromDevice();
 
         await nextTick();
         await waitForNextPaint();
@@ -705,10 +705,12 @@ const ensureMapInitialized = async () => {
 
         if (!mapService) {
             const module = await import("@/services/MapService/MapService.js");
-            mapService = new module.default(marker);
+            mapService = new module.default(marker, {
+                preserveMainMapViewport: mobileMap,
+            });
         }
 
-        await mapService.initMap(mapContainer, 6);
+        await mapService.initMap(mapContainer, mobileMap && hasUserLocation ? 2.5 : 6);
         mapService.refreshMap();
 
         await waitForNextPaint();
@@ -1071,6 +1073,10 @@ onMounted(() => {
     document.addEventListener("marker-events-loaded", handleMarkerEvents);
     document.addEventListener("event-marker-clicked", handleEventMarkerClick);
     document.addEventListener("mousedown", handleClickOutsideFilters);
+
+    if (isMobileMapViewport()) {
+        void setCurrentLocationFromDevice();
+    }
 
     checkProfileWarning();
 
