@@ -185,12 +185,13 @@ describe("discovery URL and response helpers", () => {
 
     it("deduplicates parent events before rendering map markers", () => {
         const markers = discoveryResultsToMapEvents([
-            { result_type: "image", id: 1, event_id: 10, event_slug: "one", lattitude: "30", langitude: "31" },
+            { result_type: "image", id: 1, event_id: 10, event_slug: "one", city_name: "Cairo", lattitude: "30", langitude: "31" },
             { result_type: "video", id: 2, event_id: 10, event_slug: "one", lattitude: "30", langitude: "31" },
             { result_type: "event", id: 11, event_id: 11, event_slug: "two", lattitude: "32", langitude: "33" },
         ]);
 
         expect(markers).toHaveLength(2);
         expect(markers.map((event) => event.id)).toEqual([10, 11]);
+        expect(markers[0].city_name).toBe("Cairo");
     });
 });

@@ -563,7 +563,8 @@ export const normalizeDiscoveryResult = (
         result.city?.translation
             ?.name ||
         result.city?.name ||
-        result.city ||
+        result.city_name ||
+        (typeof result.city === "string" ? result.city : null) ||
         "Not specified";
 
     const subCategory =
@@ -727,6 +728,9 @@ export const discoveryResultsToMapEvents = (
 
                 city:
                     rawResult.city,
+
+                city_name:
+                    result.city_name,
 
                 sub_categorey:
                     rawResult.sub_category ||

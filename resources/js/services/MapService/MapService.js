@@ -2,6 +2,7 @@ import maplibregl from "../mapLibre";
 import api from "../ApiClient";
 import { escapeHtml, safeMediaUrl } from '../safeContent';
 import { applyScemoryMapStyle } from './scemoryMapStyle';
+import './eventMarkers.css';
 
 if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
     maplibregl.setRTLTextPlugin(
@@ -202,8 +203,8 @@ export default class MapService {
             bounds.extend([lng, lat]);
             validCount++;
 
-            const el = this._createEventMarkerEl();
             const displayTitle = event.translation?.title || event.title || (isAr ? "فعالية" : "Event");
+            const el = this._createEventMarkerEl(event, displayTitle);
 
             const popup = new maplibregl.Popup({
                 offset: 30,
@@ -214,7 +215,7 @@ export default class MapService {
 
             const marker = new maplibregl.Marker({
                 element: el,
-                anchor: "bottom"
+                anchor: "center"
             })
                 .setLngLat([lng, lat])
                 .setPopup(popup)
@@ -222,19 +223,15 @@ export default class MapService {
 
             el.addEventListener("click", (e) => {
                 e.stopPropagation();
-                if (this._activePopup && this._activePopup !== popup) {
-                    this._activePopup.remove();
-                }
-                if (marker.getPopup().isOpen()) {
-                    marker.getPopup().remove();
-                    this._activePopup = null;
-                } else {
-                    marker.togglePopup();
-                    this._activePopup = popup;
-                }
+                marker.togglePopup();
             });
 
             popup.on("open", () => {
+                if (this._activePopup && this._activePopup !== popup) {
+                    this._activePopup.remove();
+                }
+                this._activePopup = popup;
+                el.classList.add("is-active");
                 const btn = popup.getElement()?.querySelector(".popup-details-btn");
 
                 if (btn) {
@@ -246,6 +243,10 @@ export default class MapService {
                         this._activePopup = null;
                     });
                 }
+            });
+            popup.on("close", () => {
+                el.classList.remove("is-active");
+                if (this._activePopup === popup) this._activePopup = null;
             });
             if (isFullscreen) {
                 this.fullEventMarkers.push(marker);
@@ -629,19 +630,42 @@ export default class MapService {
         return html;
     }
 
-    _createEventMarkerEl() {
+    _eventCityName(event) {
+        const city = event.city;
+        const candidates = [
+            city?.translation?.name,
+            event.city_name,
+            typeof city === "string" ? city : city?.name,
+        ];
+        return candidates.find(name =>
+            typeof name === "string" && name.trim() && name.trim() !== "Not specified"
+        )?.trim() || "";
+    }
+
+    _createEventMarkerEl(event, displayTitle) {
         const el = document.createElement("div");
         el.className = "map-event-marker";
-        el.style.width = "36px";
-        el.style.height = "36px";
-        el.style.cursor = "pointer";
-        el.innerHTML = `
-      <svg viewBox="0 0 24 24" width="36" height="36">
-        <path fill="#000000" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-        <circle cx="12" cy="9" r="2.5" fill="white"/>
-      </svg>
-    `;
-        el.style.transform = "translate(-50%, -100%)";
+        el.setAttribute("role", "button");
+
+        const cityName = this._eventCityName(event);
+        el.setAttribute("aria-label", cityName ? `${displayTitle} — ${cityName}` : displayTitle);
+
+        for (const part of ["pulse", "halo", "dot"]) {
+            const span = document.createElement("span");
+            span.className = `map-event-marker__${part}`;
+            span.setAttribute("aria-hidden", "true");
+            el.appendChild(span);
+        }
+
+        if (cityName) {
+            const label = document.createElement("span");
+            label.className = "map-event-marker__city";
+            label.dir = "auto";
+            label.textContent = cityName;
+            label.setAttribute("aria-hidden", "true");
+            el.appendChild(label);
+        }
+
         return el;
     }
 

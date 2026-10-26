@@ -869,12 +869,12 @@ class EventRepository implements EventRepositoryInterface
 
     public function daily($today)
     {
-        return Events::with('translation:event_id,title,id')
+        return Events::with('translation:event_id,title,id', 'city.translation')
             ->where('is_active', 1)
             ->where(function ($query) use ($today) {
                 $query->whereDate('start_date', $today)->orWhereDate('created_at', $today);
             })
-            ->select('id', 'slug', 'title', 'start_date', 'end_date', 'langitude', 'lattitude')
+            ->select('id', 'slug', 'title', 'city_id', 'start_date', 'end_date', 'langitude', 'lattitude')
             ->orderBy('created_at', 'desc')
             ->get();
     }
