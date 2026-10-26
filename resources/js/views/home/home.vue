@@ -37,12 +37,16 @@
 
                         <div class="home-map-actions">
                             <RouterLink :to="'/' + lang + '/add_event'" class="search-events-btn">
-                                {{ $t('homeAudit.home.startSelling') }}
-                                <span aria-hidden="true">→</span>
+                                <span class="desktop-action-label">{{ $t('homeAudit.home.startSelling') }}</span>
+                                <span class="mobile-action-label">{{ $t('homeAudit.home.uploadStory') }}</span>
+                                <span class="desktop-action-icon" aria-hidden="true">→</span>
+                                <span class="mobile-action-icon" aria-hidden="true">+</span>
                             </RouterLink>
                             <RouterLink :to="'/' + lang + '/events'" class="home-map-upload">
-                                <span aria-hidden="true">+</span>
-                                {{ $t('homeAudit.home.exploreAndBuy') }}
+                                <span class="desktop-action-icon" aria-hidden="true">+</span>
+                                <span class="desktop-action-label">{{ $t('homeAudit.home.exploreAndBuy') }}</span>
+                                <span class="mobile-action-label">{{ $t('homeAudit.home.searchEvents') }}</span>
+                                <span class="mobile-action-icon" aria-hidden="true">→</span>
                             </RouterLink>
                             <button type="button" class="home-filter-toggle"
                                 :aria-expanded="mobileFiltersOpen ? 'true' : 'false'" aria-controls="filters-section"
@@ -53,6 +57,11 @@
                         </div>
 
                         <p class="home-map-caption">{{ $t('homeAudit.home.bottomText') }}</p>
+                        <div class="home-mobile-benefits">
+                            <span>{{ $t('experience.tabs.explore.visual.kicker') }}</span>
+                            <span>{{ $t('experience.tabs.explore.visual.stat') }}</span>
+                            <span>{{ $t('experience.tabs.explore.visual.note') }}</span>
+                        </div>
                     </div>
 
                     <aside class="home-discovery-trending-column">
@@ -1126,6 +1135,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.mobile-action-label,
+.mobile-action-icon,
+.home-mobile-benefits {
+    display: none;
+}
 .hero-navbar {
     position: absolute;
     z-index: 70;
@@ -1428,62 +1442,253 @@ onUnmounted(() => {
     }
 }
 @media (max-width: 640px) {
+    .home-map-experience {
+        --mobile-map-height: clamp(330px, 51svh, 470px);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: visible;
+        background: #fff;
+    }
+    .home-map-experience > .home-map-backdrop {
+        inset: 0 auto auto 0;
+        height: var(--mobile-map-height);
+        min-height: 0;
+    }
+    .home-map-wash {
+        display: none;
+    }
     .hero-navbar {
+        position: fixed;
+        z-index: 1000;
         inset-inline: 12px;
-        top: 12px;
+        top: calc(10px + env(safe-area-inset-top, 0px));
+    }
+    .hero-navbar :deep(.navbar-wrap) {
+        padding: 0;
+    }
+    .hero-navbar :deep(.navbar-shell),
+    .hero-navbar :deep(.navbar-mobile-menu) {
+        width: 100%;
+    }
+    .hero-navbar :deep(.navbar-inner) {
+        min-height: 58px;
+        border-radius: 999px;
+        padding: 7px;
+        background: rgba(248, 251, 255, .92);
+        box-shadow: 0 10px 30px rgba(11, 39, 75, .12);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+    }
+    .hero-navbar :deep(.navbar-actions) {
+        justify-content: flex-end;
+    }
+    .hero-navbar :deep(.mobile-toggle) {
+        order: 0;
+        margin-inline-end: auto;
+        border-radius: 50%;
+        background: #fff;
+    }
+    .hero-navbar :deep(.navbar-actions > .navbar-dropdown-wrap:not(.user-control)) {
+        order: 1;
+    }
+    .hero-navbar :deep(.user-control) {
+        order: 2;
+        margin: 0;
+    }
+    .hero-navbar :deep(.cart-wrapper) {
+        order: 3;
+    }
+    .hero-navbar :deep(.brand-mark) {
+        display: none;
+    }
+    .hero-navbar :deep(.login-btn) {
+        border-color: #1769dc;
+        background: linear-gradient(110deg, #164eae, #176cf0);
+        color: #fff;
+        padding-inline: 17px;
+    }
+    .hero-navbar :deep(.credits-menu-button) {
+        min-width: 0;
+        padding-inline: 5px;
+        gap: 2px !important;
+    }
+    .hero-navbar :deep(.credits-menu-button .credit-pill) {
+        gap: 2px !important;
+        font-size: 10px;
+    }
+    .hero-navbar :deep(.credits-menu-button .chevron) {
+        display: none;
+    }
+    .hero-navbar :deep(.navbar-mobile-menu) {
+        max-height: calc(100svh - 90px - env(safe-area-inset-top, 0px));
+        overflow-y: auto;
     }
     .home-map-layout {
-        min-height: max(900px, 100svh);
-        gap: 36px;
-        padding: 130px 16px 24px;
+        display: contents;
+    }
+    .home-map-copy {
+        z-index: 10;
+        order: 1;
+        width: 100%;
+        max-width: none;
+        margin-block-start: calc(var(--mobile-map-height) - 24px);
+        border-radius: 28px 28px 0 0;
+        background: #fff;
+        padding: 28px 20px 16px;
+        box-shadow: 0 -12px 28px rgba(19, 58, 101, .06);
+    }
+    .home-map-badge {
+        max-width: 100%;
+        padding: 7px 12px;
+        font-size: 12px;
     }
     .home-map-title {
-        font-size: clamp(2.7rem, 11vw, 3.6rem);
-        letter-spacing: -.05em;
+        margin-block-start: 20px;
+        font-size: clamp(2rem, 8.5vw, 2.65rem);
+        line-height: 1.08;
+        letter-spacing: -.045em;
+    }
+    .home-map-title span {
+        font-size: inherit !important;
+        line-height: inherit;
     }
     .home-map-description {
-        margin-block-start: 18px;
-        font-size: 15px;
-        line-height: 1.65;
+        margin-block-start: 20px;
+        font-size: 14px;
+        line-height: 1.7;
     }
     .home-discovery-search {
-        margin-block-start: 24px;
+        margin-block-start: 30px;
+    }
+    .home-discovery-search :deep(.unified-search-field) {
+        box-shadow: 0 8px 24px rgba(13, 77, 151, .1);
     }
     .home-map-actions {
-        gap: 8px;
-        margin-block-start: 15px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-block-start: 20px;
     }
     .search-events-btn,
-    .home-map-upload,
+    .home-map-upload {
+        width: 100%;
+        min-height: 50px;
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+    .search-events-btn {
+        order: 2;
+        border-color: #d3dfeb;
+        background: #fff;
+        color: #0b274b;
+        box-shadow: 0 4px 14px rgba(15, 46, 86, .05);
+    }
+    .home-map-upload {
+        order: 1;
+        border-color: #0b274b;
+        background: #0b274b;
+        color: #fff;
+    }
+    .desktop-action-label,
+    .desktop-action-icon,
     .home-filter-toggle {
-        min-height: 44px;
-        padding: 8px 15px;
-        font-size: 12px;
+        display: none;
+    }
+    .mobile-action-label,
+    .mobile-action-icon {
+        display: inline;
     }
     .home-map-caption {
-        margin-block-start: 16px;
-        font-size: 12px;
+        display: none;
+    }
+    .home-mobile-benefits {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 20px;
+        row-gap: 8px;
+        margin-block-start: 26px;
+        color: #536275;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+    .home-mobile-benefits span {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .home-mobile-benefits span::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        flex: 0 0 6px;
+        border-radius: 50%;
+        background: #279ce4;
+    }
+    .home-mobile-benefits span:first-child::before {
+        background: #16b86b;
     }
     .home-discovery-trending-column {
-        width: min(100%, 350px);
+        z-index: 10;
+        order: 3;
+        width: 100%;
+        padding: 18px 20px 28px;
+        background: #fff;
+    }
+    .home-filter-scrim,
+    .home-filter-heading {
+        display: none;
     }
     .home-discovery-filters-column {
+        position: relative;
+        z-index: 10;
+        order: 2;
         top: auto;
-        bottom: 0;
-        left: 0;
+        bottom: auto;
+        left: auto;
         width: 100%;
-        max-height: 86svh;
-        border-radius: 22px 22px 0 0;
-        transform: translateY(20px);
+        max-height: none;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+        transition: none;
     }
     .home-discovery-filters-column.is-open {
-        transform: translateY(0);
+        transform: none;
+    }
+    .home-discovery-filters :deep(.filter-panel-heading) {
+        display: flex;
+    }
+    .home-discovery-filters :deep(.filter-panel-inner) {
+        padding: 22px 20px 28px;
     }
     .home-discovery-filters :deep(.filter-controls-grid) {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .home-discovery-filters :deep(.filter-field) {
+        max-width: 100%;
+        min-width: 0;
+    }
+    .home-discovery-filters :deep(.filter-actions) {
+        grid-column: 1 / -1;
     }
     .home-results-container {
         padding-inline: 14px;
+    }
+}
+@media (max-width: 359px) {
+    .home-discovery-filters :deep(.filter-controls-grid) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .hero-navbar :deep(.language-btn) {
+        min-width: 38px;
+        width: 38px;
     }
 }
 @media (prefers-reduced-motion: reduce) {

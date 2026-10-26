@@ -45,11 +45,13 @@ describe("home map overlay layout", () => {
         expect(experience).not.toContain('heroVideoUrl');
     });
 
-    it("turns the floating filters into a full-width phone sheet", () => {
+    it("places the phone filters in the normal page flow below the hero", () => {
         const phoneBlock = mediaBlock(640);
 
-        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*bottom:\s*0/i);
+        expect(phoneBlock).toMatch(/\.home-map-layout\s*\{[^}]*display:\s*contents/i);
+        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*position:\s*relative/i);
         expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*width:\s*100%/i);
-        expect(phoneBlock).toMatch(/\.home-discovery-filters\s+:deep\(\.filter-controls-grid\)\s*\{[^}]*minmax\(0, 1fr\)/i);
+        expect(phoneBlock).toMatch(/\.home-discovery-filters-column\s*\{[^}]*visibility:\s*visible/i);
+        expect(phoneBlock).toMatch(/\.home-discovery-filters\s+:deep\(\.filter-controls-grid\)\s*\{[^}]*repeat\(2, minmax\(0, 1fr\)\)/i);
     });
 });
