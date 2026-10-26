@@ -213,7 +213,7 @@ const router = useRouter();
 const { t } = useI18n();
 const lang = localStorage.getItem("language") || "en";
 
-const DEFAULT_LOCATION = { lat: 30.0444, lng: 31.2357 };
+const DEFAULT_LOCATION = { lat: 24.7136, lng: 46.6753 };
 const marker = ref({ ...DEFAULT_LOCATION });
 const isMobileMapViewport = () =>
     typeof window !== "undefined" &&
