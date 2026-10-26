@@ -11,6 +11,10 @@ return [
     */
     'default' => env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
 
+    // When true, GET /up fails unless the store supports tags (Redis/Memcached).
+    // Without tags the app still works, but tagged pages are computed uncached.
+    'require_tags' => (bool) env('CACHE_REQUIRE_TAGS', false),
+
     /*
     |--------------------------------------------------------------------------
     | Cache Stores

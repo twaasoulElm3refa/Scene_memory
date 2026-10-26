@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\admin\AdminDashboardController;
 use App\Http\Controllers\api\admin\AdminPlanController;
+use App\Http\Controllers\api\admin\FinancialHoldController;
 use App\Http\Controllers\api\admin\AdminTagsController;
 use App\Http\Controllers\api\admin\auth\AdminAuthController;
 use App\Http\Controllers\api\admin\BenefitsController;
@@ -172,6 +173,8 @@ Route::prefix('v1')->group(function () {
         ->name('media.purchased-original')->middleware(['signed', 'throttle:120,1']);
     Route::get('/media/{media}/preview', [MediaDeliveryController::class, 'preview'])
         ->name('media.preview')->middleware('throttle:120,1');
+    Route::get('/media/{media}/thumbnail', [MediaDeliveryController::class, 'thumbnail'])
+        ->name('media.thumbnail')->middleware('throttle:120,1');
     Route::get('/media/{media}/review-original', [MediaDeliveryController::class, 'reviewOriginal'])
         ->name('media.review-original')->middleware(['signed', 'throttle:60,1']);
 
@@ -466,6 +469,9 @@ Route::prefix('v1')->group(function () {
         Route::put('/plan-financial-settings', [AdminPlanController::class, 'saveFinancialSettings']);
         Route::get('/plan-financial-impact', [AdminPlanController::class, 'financialImpact']);
         Route::get('/plan-credit-reports', [AdminPlanController::class, 'creditReports']);
+        Route::get('/financial-holds', [FinancialHoldController::class, 'index'])->middleware('throttle:60,1');
+        Route::post('/financial-holds/{id}/release', [FinancialHoldController::class, 'release'])
+            ->whereNumber('id')->middleware('throttle:30,1');
     });
 
     // Benefits

@@ -39,7 +39,11 @@
           :aria-labelledby="`scemory-tab-${activeTab.id}`"
         >
           <div class="experience-media">
-            <img :src="activeTab.image" :alt="$t(activeTab.imageAltKey)" />
+            <picture>
+              <source type="image/avif" :srcset="activeTab.sources.avif" :sizes="photoSizes" />
+              <source type="image/webp" :srcset="activeTab.sources.webp" :sizes="photoSizes" />
+              <img :src="activeTab.image" :alt="$t(activeTab.imageAltKey)" loading="lazy" decoding="async" />
+            </picture>
             <div class="media-sheen"></div>
 
             <div class="media-card media-card-primary">
@@ -88,6 +92,16 @@ import { toAssetUrl } from '@/services/runtimeUrls';
 
 const lang = localStorage.getItem("language") || localStorage.getItem("lang") || "en";
 
+// AVIF/WebP copies made by scripts/optimize-home-images.php; the PNG stays the fallback.
+const photoWidths = [960, 1600, 2624];
+const photoSources = (name) => Object.fromEntries(["avif", "webp"].map((format) => [
+  format,
+  photoWidths.map((width) => `${toAssetUrl(`/images/optimized/${name}-${width}.${format}`)} ${width}w`).join(", "),
+]));
+// The photo fills ~57% of the row above 900px and the full width below; with
+// object-fit: cover it can render wider than its box, hence the margin.
+const photoSizes = "(max-width: 900px) 100vw, 70vw";
+
 const tabs = [
   {
     id: "explore",
@@ -98,6 +112,7 @@ const tabs = [
     ctaKey: "experience.tabs.explore.cta",
     to: "/all_events",
     image: toAssetUrl("/images/photo1.png"),
+    sources: photoSources("photo1"),
     imageAltKey: "experience.tabs.explore.imageAlt",
     featureKeys: [
       "experience.tabs.explore.features.browse",
@@ -120,6 +135,7 @@ const tabs = [
     ctaKey: "experience.tabs.share.cta",
     to: "/add_event",
     image: toAssetUrl("/images/photo2.png"),
+    sources: photoSources("photo2"),
     imageAltKey: "experience.tabs.share.imageAlt",
     featureKeys: [
       "experience.tabs.share.features.add",
@@ -142,6 +158,7 @@ const tabs = [
     ctaKey: "experience.tabs.license.cta",
     to: "/all_events",
     image: toAssetUrl("/images/photo3.png"),
+    sources: photoSources("photo3"),
     imageAltKey: "experience.tabs.license.imageAlt",
     featureKeys: [
       "experience.tabs.license.features.preview",

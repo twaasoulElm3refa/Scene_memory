@@ -149,11 +149,10 @@ class PayPalWalletServices implements PaymentInterface
     private function pending(array $payload): string
     {
         $payment = $this->walletPayment($payload);
-        if (! $payment || in_array($payment->status, ['completed', 'failed'], true)) {
-            return $payment ? 'ok' : 'ignored';
+        if (! $payment) {
+            return 'ignored';
         }
-        $payment->update(['status' => 'approved', 'gateway_response' => $payload['resource'] ?? []]);
-        $payment->order()->update(['status' => 'approved']);
+        PayPalServices::applyProviderState($payment, 'approved', ['completed', 'failed'], $payload['resource'] ?? []);
         return 'ok';
     }
 
@@ -163,10 +162,7 @@ class PayPalWalletServices implements PaymentInterface
         if (! $payment) {
             return 'ignored';
         }
-        if ($payment->status !== 'completed') {
-            $payment->update(['status' => 'failed', 'gateway_response' => $payload['resource'] ?? []]);
-            $payment->order()->update(['status' => 'failed']);
-        }
+        PayPalServices::applyProviderState($payment, 'failed', ['completed'], $payload['resource'] ?? []);
         return 'ok';
     }
 

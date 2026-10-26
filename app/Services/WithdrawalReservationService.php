@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\FinancialHold;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Models\Withdraw;
@@ -57,17 +58,47 @@ class WithdrawalReservationService
         return $minor;
     }
 
+    /**
+     * The fee for a withdrawal. Requesters cannot choose it; only an administrator
+     * reviewing the payout may set it explicitly.
+     */
+    private function feeFor(User $actor, int $amount, mixed $requested, int $current = 0): int
+    {
+        if ($actor->role === 'admin') {
+            return $requested === null ? $current : $this->fee($requested);
+        }
+        if ($requested !== null) {
+            // Malformed input is still rejected as before; its value is not used.
+            $this->fee($requested);
+        }
+        $bps = (int) config('wallet.withdrawal_fee_bps', 0);
+
+        return (int) config('wallet.withdrawal_fee_fixed_minor', 0) + intdiv(($amount * $bps) + 9999, 10000);
+    }
+
+    /**
+     * Refunded, reversed or disputed proceeds stay in the balance but cannot be withdrawn.
+     */
+    private function assertWithdrawable(Wallet $wallet, int $additionalMinor): void
+    {
+        $balance = $wallet->balance_minor ?? $this->money->fromDecimal($wallet->amount);
+        if ($additionalMinor > 0 && $additionalMinor > $balance - FinancialHold::heldMinor((int) $wallet->id)) {
+            throw ValidationException::withMessages(['amount' => SecurityMessage::get('insufficientBalance')]);
+        }
+    }
+
     public function create(User $actor, int $walletId, array $data): Withdraw
     {
         return DB::transaction(function () use ($actor, $walletId, $data) {
             $wallet = $this->lockedWallet($actor->id);
             abort_unless($wallet->id === $walletId, 403, SecurityMessage::get('denied'));
             $amount = $this->amount($data['amount']);
-            $fee = $this->fee($data['fee'] ?? 0);
+            $fee = $this->feeFor($actor, $amount, $data['fee'] ?? 0);
             if ($fee > $amount) {
                 $this->invalid();
             }
             $this->assertCurrency($wallet, $data['currency'] ?? $wallet->currency);
+            $this->assertWithdrawable($wallet, $amount);
             $withdrawal = Withdraw::create([
                 ...$data, 'user_id' => $actor->id, 'amount' => $this->money->toDecimal($amount),
                 'fee' => $this->money->toDecimal($fee), 'net_amount' => $this->money->toDecimal($amount - $fee),
@@ -93,10 +124,11 @@ class WithdrawalReservationService
             $this->assertCurrency($wallet, $data['currency'] ?? $withdrawal->currency);
             $old = $this->amount($withdrawal->amount);
             $amount = $this->amount($data['amount'] ?? $withdrawal->amount);
-            $fee = $this->fee($data['fee'] ?? $withdrawal->fee ?? 0);
+            $fee = $this->feeFor($actor, $amount, $data['fee'] ?? null, $this->fee($withdrawal->fee ?? 0));
             if ($fee > $amount) {
                 $this->invalid();
             }
+            $this->assertWithdrawable($wallet, $amount - $old);
             if ($amount !== $old) {
                 $this->move($wallet, $withdrawal, $actor, $old - $amount, $amount - $old, 'adjust');
             }

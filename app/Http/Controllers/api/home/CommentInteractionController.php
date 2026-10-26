@@ -6,6 +6,7 @@ use App\Http\Controllers\concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Support\CommentCache;
 use App\Support\SecurityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -49,11 +50,7 @@ class CommentInteractionController extends Controller
             ['type' => $type]
         );
 
-        foreach (['ar', 'en', 'fr', 'es', 'ja', 'zh', 'fa', 'ur', 'ru', 'it', 'de', 'hi', 'tr'] as $locale) {
-            $key = 'event_'.strtolower(trim($event->slug)).'_'.$locale;
-            Cache::tags(['events'])->forget($key);
-        }
-        Cache::tags(['comments'])->flush();
+        CommentCache::forgetEvent((int) $event->id, $event->slug);
 
         return $this->success([
             'interaction' => $interaction,

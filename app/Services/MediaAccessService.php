@@ -92,6 +92,19 @@ class MediaAccessService
         return route('media.preview', ['media' => $media->id]);
     }
 
+    /** A card-size copy of the preview, under the same access rules; images only. */
+    public function thumbnailUrl(EventsImges $media, bool $review = false): ?string
+    {
+        if ($media->type === 'video' || ! $this->previewUrl($media)) {
+            return null;
+        }
+        if ($review) {
+            return URL::temporarySignedRoute('media.thumbnail', now()->addMinutes(5), ['media' => $media->id]);
+        }
+
+        return route('media.thumbnail', ['media' => $media->id]);
+    }
+
     public function reviewOriginalUrl(EventsImges $media): string
     {
         return URL::temporarySignedRoute('media.review-original', now()->addMinutes(5), ['media' => $media->id]);

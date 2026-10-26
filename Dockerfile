@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y \
         zip \
         intl \
         gd \
+        opcache \
     && pecl install redis imagick \
     && docker-php-ext-enable redis imagick \
     && rm -rf /var/lib/apt/lists/*
@@ -49,6 +50,7 @@ WORKDIR /var/www
 COPY . .
 
 COPY uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 RUN composer install --no-dev --optimize-autoloader
 

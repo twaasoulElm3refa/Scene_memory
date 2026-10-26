@@ -75,6 +75,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: queue-worker
+    restart: unless-stopped
     working_dir: /var/www
     volumes:
       - ./:/var/www
@@ -86,7 +87,8 @@ services:
       DB_DATABASE: scene_memory
       DB_USERNAME: user
       DB_PASSWORD: password
-    command: php artisan queue:work --sleep=3 --tries=3 --timeout=1200
+    # --max-time recycles the worker hourly so memory growth and stale code do not accumulate.
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=1200 --max-time=3600
     depends_on:
       - redis
       - mysql

@@ -24,10 +24,6 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     >
     <link
-        href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css"
-        rel="stylesheet"
-    >
-    <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
     >
@@ -35,11 +31,6 @@
 
 <body class="app-body">
     <div id="app"></div>
-
-    <script
-        src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"
-        defer
-    ></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -54,8 +45,7 @@
         }
     </script>
 
-    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
-    <script src="https://cdn.maptiler.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js"></script>
+    <!-- MapLibre and its RTL plugin are bundled/loaded by resources/js/services (pinned versions). -->
 
     <script type="module" src="./main.js"></script>
 </body>

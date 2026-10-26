@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\Purchases;
 use App\Models\Wallet;
 use App\Models\WalletTransactions;
+use Illuminate\Database\UniqueConstraintViolationException;
 use RuntimeException;
 
 class WalletLedgerService
@@ -27,9 +28,11 @@ class WalletLedgerService
             throw new RuntimeException('Invalid wallet ledger amount or type.');
         }
 
+        // Callers hold the wallet row lock. A plain read avoids the gap lock a locking
+        // read of a missing key takes on MySQL, which deadlocks concurrent inserts;
+        // the unique idempotency key still rejects a duplicate before any balance moves.
         $existing = WalletTransactions::withTrashed()
             ->where('idempotency_key', $idempotencyKey)
-            ->lockForUpdate()
             ->first();
         if ($existing) {
             return $existing;
@@ -49,12 +52,39 @@ class WalletLedgerService
             throw new RuntimeException('Insufficient wallet balance.');
         }
 
+        try {
+            $transaction = $this->record($wallet, $order, $payment, $type, $source, $amountMinor, $idempotencyKey, $reference, $metadata, $before, $after);
+        } catch (UniqueConstraintViolationException $exception) {
+            $duplicate = WalletTransactions::withTrashed()->where('idempotency_key', $idempotencyKey)->lockForUpdate()->first();
+            if (! $duplicate) {
+                throw $exception;
+            }
+
+            return $duplicate;
+        }
+
         $wallet->update([
             'balance_minor' => $after,
             'amount' => $this->money->toDecimal($after),
             'currency' => $order->currency,
         ]);
 
+        return $transaction;
+    }
+
+    private function record(
+        Wallet $wallet,
+        Purchases $order,
+        ?Payment $payment,
+        string $type,
+        string $source,
+        int $amountMinor,
+        string $idempotencyKey,
+        string $reference,
+        array $metadata,
+        int $before,
+        int $after,
+    ): WalletTransactions {
         return WalletTransactions::create([
             'user_id' => $wallet->user_id,
             'wallet_id' => $wallet->id,

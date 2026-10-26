@@ -179,6 +179,7 @@ class ProcessEventImageJob implements ShouldQueue
 
             $cache->invalidateEvent($this->eventId, [(int) $eventImage->id]);
             Storage::disk($this->sourceDisk)->delete($this->tempPath);
+            GenerateMediaThumbnailJob::dispatch((int) $eventImage->id);
 
         } catch (\Throwable $e) {
             \Log::error('ProcessEventImageJob: failed', [

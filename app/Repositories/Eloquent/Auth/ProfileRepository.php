@@ -184,8 +184,13 @@ class ProfileRepository implements ProfileRepositoryInterface
         $model = $query->getModel();
         $createdAt = $model->qualifyColumn($model->getCreatedAtColumn());
         $id = $model->qualifyColumn($model->getKeyName());
-        $total = (clone $query)->count();
-        $latest = (clone $query)->max($createdAt);
+        // One aggregate query for the section total and its latest date.
+        $wrapped = $query->getQuery()->getGrammar()->wrap($createdAt);
+        $aggregate = (clone $query)->toBase()
+            ->selectRaw("COUNT(*) AS timeline_total, MAX({$wrapped}) AS timeline_latest")
+            ->first();
+        $total = (int) ($aggregate->timeline_total ?? 0);
+        $latest = $aggregate->timeline_latest ?? null;
         $ordered = $query->orderByDesc($createdAt)->orderByDesc($id);
 
         if ($preview) {

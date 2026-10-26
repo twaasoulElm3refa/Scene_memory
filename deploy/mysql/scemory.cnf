@@ -1,0 +1,30 @@
+# MySQL 8 / MariaDB settings for Scemory. Template: compare with SHOW VARIABLES on the
+# server first; change one block at a time and restart MySQL in a maintenance window.
+
+[mysqld]
+# InnoDB keeps hot rows and indexes in memory. Roughly 50-70% of RAM on a dedicated
+# database host; much less when MySQL shares the host with PHP and Redis.
+innodb_buffer_pool_size = 2G
+innodb_log_file_size = 512M
+innodb_flush_log_at_trx_commit = 1     # keep 1: payments and wallets need durable commits
+innodb_flush_method = O_DIRECT
+innodb_file_per_table = 1
+
+# Locking: the payment code uses SELECT ... FOR UPDATE with ordered locks and retries
+# a transaction up to 5 times on deadlock. Keep REPEATABLE READ (the default).
+transaction_isolation = REPEATABLE-READ
+innodb_lock_wait_timeout = 15
+innodb_print_all_deadlocks = ON         # deadlocks appear in the error log
+
+# Connections: PHP-FPM max_children + queue workers + scheduler + admin, with margin.
+max_connections = 200
+wait_timeout = 600
+
+# Find slow queries.
+slow_query_log = ON
+slow_query_log_file = /var/log/mysql/scemory-slow.log
+long_query_time = 0.5
+log_queries_not_using_indexes = OFF
+
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci

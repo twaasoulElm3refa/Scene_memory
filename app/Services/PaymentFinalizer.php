@@ -50,6 +50,7 @@ class PaymentFinalizer
 
             Log::info('purchase_finalize_started', ['payment_id' => $payment->id, 'order_id' => $order->id]);
             $validated = $this->validator->assertCompletedCapture($payment, $resource);
+            $this->lockOrderWallets($order, false);
             $this->grantEntitlements($order, $payment);
             $this->creditSellers($order, $payment);
             $this->complete($order, $payment, $resource, $validated['captureId'], [
@@ -157,6 +158,7 @@ class PaymentFinalizer
                 throw new RuntimeException('Payment operation is not a wallet purchase.');
             }
 
+            $this->lockOrderWallets($order, true);
             $wallet = $this->lockedWallet($order->user_id, $order->currency, false);
             Log::info('wallet_debit_started', ['payment_id' => $payment->id, 'order_id' => $order->id]);
             $this->ledger->post(
@@ -287,6 +289,24 @@ class PaymentFinalizer
             ->delete();
         Log::info('cart_cleaned', ['order_id' => $order->id, 'items_deleted' => $deleted]);
         $this->clearCaches($order->user_id);
+    }
+
+    /**
+     * Locks every existing wallet the order will touch, in ascending id order, before
+     * any of them changes. Two buyers paying each other then queue instead of deadlocking.
+     */
+    private function lockOrderWallets(Purchases $order, bool $includeBuyer): void
+    {
+        $order->loadMissing('items.image.events');
+        $userIds = $order->items->map(fn ($item) => $item->image?->events?->user_id)
+            ->filter(fn ($sellerId) => $sellerId && (int) $sellerId !== (int) $order->user_id);
+        if ($includeBuyer) {
+            $userIds->push($order->user_id);
+        }
+        if ($userIds->isEmpty()) {
+            return;
+        }
+        Wallet::query()->whereIn('user_id', $userIds->unique()->values())->orderBy('id')->lockForUpdate()->get();
     }
 
     private function lockedWallet(int $userId, string $currency, bool $create = true): Wallet

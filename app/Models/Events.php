@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\MediaParents;
 use Database\Factories\EventsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,14 @@ class Events extends Model
     protected $table = 'events';
 
     protected $guarded = [];
+
+    public function toArray()
+    {
+        // Loaded media reads this event while serializing; avoid one query per item.
+        MediaParents::adopt($this);
+
+        return parent::toArray();
+    }
 
     protected $casts = [
         'start_date' => 'datetime',
@@ -91,7 +100,9 @@ class Events extends Model
 
     public function firstImage()
     {
-        return $this->hasOne(EventsImges::class, 'event_id');
+        // One row per event (the lowest id, as before) instead of eager-loading every
+        // image of every listed event. Selected columns must be table-qualified.
+        return $this->hasOne(EventsImges::class, 'event_id')->oldestOfMany();
     }
 
     public function coverImage()

@@ -37,6 +37,16 @@ return [
             'throw' => true,
         ],
 
+        // Legacy public copies of protected originals, moved out of the webroot by
+        // media:legacy-quarantine. Never served; kept for verification and rollback.
+        'legacy-quarantine' => [
+            'driver' => 'local',
+            'root' => storage_path('app/legacy-quarantine'),
+            'visibility' => 'private',
+            'serve' => false,
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),

@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ReplyRequest;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
+use App\Support\CommentCache;
 use App\Support\SecurityMessage;
-use Illuminate\Support\Facades\Cache;
 
 class CommentReplyController extends Controller
 {
@@ -31,18 +31,8 @@ class CommentReplyController extends Controller
 
         $reply = $this->commentRepository->createReply($data);
 
-        $this->clearCache($event->slug);
+        CommentCache::forgetEvent((int) $event->id, $event->slug);
 
         return $this->success($reply, 'Reply Created Successfully');
-    }
-
-    private function clearCache($slug = '')
-    {
-        $locales = ['ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi'];
-        foreach ($locales as $locale) {
-            Cache::tags(['events'])->forget("events_single_{$slug}_".$locale);
-        }
-
-        Cache::tags(['comments'])->flush();
     }
 }

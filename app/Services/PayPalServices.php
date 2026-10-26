@@ -684,11 +684,10 @@ class PayPalServices implements PaymentInterface
     private function pending(array $payload): string
     {
         $payment = $this->purchasePayment($payload);
-        if (! $payment || in_array($payment->status, ['completed', 'failed'], true)) {
-            return $payment ? 'ok' : 'ignored';
+        if (! $payment) {
+            return 'ignored';
         }
-        $payment->update(['status' => 'approved', 'gateway_response' => $payload['resource'] ?? []]);
-        $payment->order()->update(['status' => 'approved']);
+        $this->applyProviderState($payment, 'approved', ['completed', 'failed'], $payload['resource'] ?? []);
 
         return 'ok';
     }
@@ -699,12 +698,25 @@ class PayPalServices implements PaymentInterface
         if (! $payment) {
             return 'ignored';
         }
-        if ($payment->status !== 'completed') {
-            $payment->update(['status' => 'failed', 'gateway_response' => $payload['resource'] ?? []]);
-            $payment->order()->update(['status' => 'failed']);
-        }
+        $this->applyProviderState($payment, 'failed', ['completed'], $payload['resource'] ?? []);
 
         return 'ok';
+    }
+
+    /**
+     * Applies a late or out-of-order provider state under a row lock, so a stale
+     * event can never downgrade a payment that has already been settled.
+     */
+    public static function applyProviderState(Payment $payment, string $state, array $protected, array $resource): void
+    {
+        DB::transaction(function () use ($payment, $state, $protected, $resource) {
+            $locked = Payment::query()->lockForUpdate()->findOrFail($payment->id);
+            if (in_array($locked->status, $protected, true)) {
+                return;
+            }
+            $locked->update(['status' => $state, 'gateway_response' => $resource]);
+            $locked->order()->update(['status' => $state]);
+        }, 5);
     }
 
     private function unhandledReversal(array $payload): string

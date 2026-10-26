@@ -5,8 +5,10 @@
                 <div v-if="!full" class="weekly-leaderboard__media-column">
                     <div class="weekly-leaderboard__media-card">
                         <video
+                            ref="videoElement"
                             class="weekly-leaderboard__video"
-                            :src="videoUrl"
+                            :src="videoActive ? videoUrl : undefined"
+                            :poster="posterUrl"
                             autoplay
                             muted
                             loop
@@ -136,7 +138,44 @@ const lastPage = ref(1);
 const failedAvatars = ref({});
 let rolloverTimer;
 
-const videoUrl = typeof toAssetUrl === "function" ? toAssetUrl("/video/Final_Scemory.mp4") : "/video/Final_Scemory.mp4";
+// Web encode of Final_Scemory.mp4 (same 1080p30 picture, no audio, index first);
+// the original stays in public/video for rollback.
+const videoUrl = typeof toAssetUrl === "function" ? toAssetUrl("/video/Final_Scemory-web.mp4") : "/video/Final_Scemory-web.mp4";
+const posterUrl = typeof toAssetUrl === "function" ? toAssetUrl("/video/Final_Scemory-poster.jpg") : "/video/Final_Scemory-poster.jpg";
+const videoElement = ref(null);
+// The video downloads only once it nears the viewport, and pauses off screen or in a
+// background tab; autoplay, muted, loop and playsinline are unchanged.
+const videoActive = ref(false);
+let videoObserver;
+let videoInView = false;
+
+function syncVideoPlayback() {
+    const video = videoElement.value;
+    if (videoInView && !document.hidden) {
+        videoActive.value = true;
+        if (video?.paused && video.currentSrc) {
+            video.play()?.catch?.(() => {});
+        }
+    } else if (video && !video.paused) {
+        video.pause();
+    }
+}
+
+function watchVideoVisibility() {
+    if (!videoElement.value) {
+        return;
+    }
+    if (typeof window.IntersectionObserver !== "function") {
+        videoActive.value = true;
+        return;
+    }
+    videoObserver = new window.IntersectionObserver((entries) => {
+        videoInView = entries.some((entry) => entry.isIntersecting);
+        syncVideoPlayback();
+    }, { rootMargin: "300px 0px" });
+    videoObserver.observe(videoElement.value);
+    document.addEventListener("visibilitychange", syncVideoPlayback);
+}
 const isRtl = computed(() => ["ar", "fa", "ur"].includes(locale.value));
 
 function formatDate(date) {
@@ -188,10 +227,13 @@ const refresh = () => loadLeaderboard(page.value);
 onMounted(() => {
     loadLeaderboard();
     window.addEventListener("focus", refresh);
+    watchVideoVisibility();
 });
 onUnmounted(() => {
     clearTimeout(rolloverTimer);
     window.removeEventListener("focus", refresh);
+    videoObserver?.disconnect();
+    document.removeEventListener("visibilitychange", syncVideoPlayback);
 });
 </script>
 

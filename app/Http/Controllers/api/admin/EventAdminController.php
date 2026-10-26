@@ -140,7 +140,9 @@ class EventAdminController extends Controller
 
         $this->forgetEventsCache('events_count');
         $this->forgetEventsCache('memories');
-        $this->forgetEventsCache('daily_events_'.app()->getLocale());
+        foreach ($locales as $locale) {
+            $this->forgetEventsCache('daily_events_'.now()->toDateString().'_'.$locale);
+        }
     }
 
     private function forgetEventsCache(string $key): void

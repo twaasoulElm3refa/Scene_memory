@@ -45,7 +45,7 @@ class EventRepository implements EventRepositoryInterface
             'start_date',
             'slug',
         ])
-            ->with(['user:id,name', 'firstImage:id,event_id,full_url,preview_url,is_active,price,original_disk,preview_disk', 'translation:id,event_id,title,locale,description'])
+            ->with(['user:id,name', 'firstImage:events_images.id,events_images.event_id,full_url,preview_url,is_active,price,original_disk,preview_disk', 'translation:id,event_id,title,locale,description'])
             ->withCount(['likes', 'views'])
             ->where('is_active', 1)
             ->where('is_trending', 1)
@@ -364,8 +364,8 @@ class EventRepository implements EventRepositoryInterface
 
                 'firstImage' => function ($q) {
                     $q->select([
-                        'id',
-                        'event_id',
+                        'events_images.id',
+                        'events_images.event_id',
                         'full_url', 'preview_url', 'is_active', 'price', 'original_disk', 'preview_disk',
                     ]);
                 },
@@ -713,7 +713,10 @@ class EventRepository implements EventRepositoryInterface
         $eventDescription = $eventTranslation?->description ?: $event->description;
         $description = $mediaTranslation?->description ?: ($media?->description ?: $eventDescription);
         $mediaUrl = $media ? app(MediaAccessService::class)->previewUrl($media) : null;
-        $thumbnailUrl = $mediaUrl;
+        // Cards use the card-size copy; videos keep their own URL.
+        $thumbnailUrl = $mediaUrl && $media->type !== 'video'
+            ? app(MediaAccessService::class)->thumbnailUrl($media)
+            : $mediaUrl;
 
         $cityPayload = $city ? [
             'id' => $city->id,
@@ -782,7 +785,7 @@ class EventRepository implements EventRepositoryInterface
 
     public function randomActive(int $take = 8)
     {
-        return Events::with('translation', 'city.translation', 'sub_categorey.translation', 'firstImage:id,full_url,event_id,preview_url,is_active,price,original_disk,preview_disk')
+        return Events::with('translation', 'city.translation', 'sub_categorey.translation', 'firstImage:events_images.id,full_url,events_images.event_id,preview_url,is_active,price,original_disk,preview_disk')
             ->inRandomOrder()
             ->where('is_active', 1)
             ->take($take)
@@ -798,7 +801,7 @@ class EventRepository implements EventRepositoryInterface
                 'city.translation:id,city_id,name,locale',
                 'sub_categorey:id',
                 'sub_categorey.translation:id,category_id,name,locale',
-                'firstImage:id,full_url,event_id,preview_url,is_active,price,original_disk,preview_disk',
+                'firstImage:events_images.id,full_url,events_images.event_id,preview_url,is_active,price,original_disk,preview_disk',
             ])
             ->whereIn('city_id', $cityIds)
             ->get();
@@ -847,7 +850,7 @@ class EventRepository implements EventRepositoryInterface
             'city.translation',
             'sub_categorey.translation',
             'translation',
-            'firstImage:id,event_id,preview_url',
+            'firstImage:events_images.id,events_images.event_id,preview_url',
         ])
             ->whereIn('id', $eventIds)
             ->select([

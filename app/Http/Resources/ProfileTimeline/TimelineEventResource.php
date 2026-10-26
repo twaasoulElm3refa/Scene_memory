@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources\ProfileTimeline;
 
+use App\Models\Events;
 use App\Services\MediaAccessService;
+use App\Support\MediaParents;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +13,10 @@ class TimelineEventResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        if ($this->resource instanceof Events) {
+            // The cover image's preview URL reads this event; avoid a query per event.
+            MediaParents::adopt($this->resource);
+        }
         $image = $this->whenLoaded('coverImage');
         $translation = $this->whenLoaded('translation');
         $creationRequest = $this->whenLoaded('requests');

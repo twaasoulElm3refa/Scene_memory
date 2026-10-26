@@ -9,6 +9,7 @@ use App\Jobs\TranslateCommentJob;
 use App\Repositories\Contracts\Comments\CommentRepositoryInterface;
 use App\Repositories\Contracts\Events\EventRepositoryInterface;
 use App\Services\PointService;
+use App\Support\CommentCache;
 use App\Support\SecurityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -23,10 +24,6 @@ class CommentController extends Controller
     use ApiResponse;
 
     private $cacheTime = 600;
-
-    private const EVENT_CACHE_LOCALES = [
-        'ar', 'en', 'fr', 'es', 'zh', 'de', 'ru', 'it', 'ja', 'fa', 'ur', 'hi', 'tr',
-    ];
 
     public function __construct(
         private readonly CommentRepositoryInterface $commentRepository,
@@ -86,7 +83,7 @@ class CommentController extends Controller
             $transactionStarted = false;
 
             $event = $this->eventRepository->findById($eventId);
-            $this->clearCommentCaches($event?->slug);
+            CommentCache::forgetEvent($eventId, $event?->slug);
 
             TranslateCommentJob::dispatch($comment->id, $commentData['comment']);
 
@@ -138,7 +135,7 @@ class CommentController extends Controller
                 }
             }
 
-            $this->clearCommentCaches($eventSlug);
+            CommentCache::forgetEvent((int) $comment->event_id, $eventSlug);
 
             return $this->success([], 'Comment deleted successfully');
         } catch (Throwable $th) {
@@ -151,10 +148,10 @@ class CommentController extends Controller
         $event = $this->eventRepository->findBySlug((string) request('slug'));
         abort_unless($event && $event->is_active, 404, SecurityMessage::get('notFound'));
         try {
-            $page = request('page', 1);
+            $page = max(1, (int) request('page', 1));
             $cacheKey = "comments_page_{$page}_event_{$event->id}_".app()->getLocale();
 
-            $comments = Cache::tags(['comments'])->remember($cacheKey, $this->cacheTime, function () use ($event) {
+            $comments = Cache::tags(CommentCache::tags((int) $event->id))->remember($cacheKey, $this->cacheTime, function () use ($event) {
                 return $this->commentRepository->paginatedByEventId((int) $event->id, 5);
             });
             $comments = clone $comments;
@@ -170,17 +167,5 @@ class CommentController extends Controller
         } catch (Throwable $th) {
             return $this->error($th->getMessage());
         }
-    }
-
-    private function clearCommentCaches(?string $eventSlug): void
-    {
-        if ($eventSlug) {
-            foreach (self::EVENT_CACHE_LOCALES as $locale) {
-                $key = 'event_'.strtolower(trim($eventSlug)).'_'.$locale;
-                Cache::tags(['events'])->forget($key);
-            }
-        }
-
-        Cache::tags(['comments'])->flush();
     }
 }

@@ -41,7 +41,7 @@ class CategoryController extends Controller
 
     public function paginated(): JsonResponse
     {
-        $page = request()->input('page', 1);
+        $page = max(1, (int) request()->input('page', 1));
         $perPage = 4;
         $version = Cache::get('categories:version', 1);
         $cacheKey = "categories:paginated:v{$version}:p{$page}:pp{$perPage}";
@@ -59,7 +59,8 @@ class CategoryController extends Controller
 
     public function single($id): JsonResponse
     {
-        $cacheKey = "categories:single:{$id}";
+        // Sub-category translations are loaded for the request locale.
+        $cacheKey = "categories:single:{$id}:".app()->getLocale();
         $category = Cache::tags(['categories'])->remember($cacheKey, $this->cacheTime, function () use ($id) {
             return $this->categoryRepository->findWithSubCategories((int) $id);
         });

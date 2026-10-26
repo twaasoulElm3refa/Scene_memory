@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\auth;
 use App\Http\Controllers\Controller;
 use App\Models\EventsImges;
 use App\Services\MediaAccessService;
+use App\Support\PrivateFileResponse;
 use App\Support\SecurityMessage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -73,7 +74,7 @@ class DownloadController extends Controller
         $file = $access->file($media);
         Log::info('download_authorized', ['user_id' => $request->user()->id, 'media_id' => $media->id]);
 
-        return response()->download($file, basename($file), ['Cache-Control' => 'private, no-store', 'X-Content-Type-Options' => 'nosniff']);
+        return PrivateFileResponse::make($file, basename($file));
     }
 
     public function purchasedOriginal(Request $request, EventsImges $media, MediaAccessService $access): BinaryFileResponse
@@ -81,9 +82,6 @@ class DownloadController extends Controller
         $user = User::find($request->query('user'));
         abort_unless($access->canDownload($media, $user), 403, SecurityMessage::get('denied'));
 
-        return response()->file($access->file($media), [
-            'Cache-Control' => 'private, no-store',
-            'X-Content-Type-Options' => 'nosniff',
-        ]);
+        return PrivateFileResponse::make($access->file($media));
     }
 }

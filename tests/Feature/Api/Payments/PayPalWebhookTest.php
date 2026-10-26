@@ -6,6 +6,7 @@ use App\Jobs\SendPaymentReceipt;
 use App\Mail\PaymentSuccessMail;
 use App\Models\Events;
 use App\Models\EventsImges;
+use App\Models\FinancialHold;
 use App\Models\Payment;
 use App\Models\PaypalWebhookEvent;
 use App\Models\Purchases;
@@ -280,11 +281,13 @@ class PayPalWebhookTest extends TestCase
             'id' => 'WH-WALLET-REFUND', 'event_type' => 'PAYMENT.CAPTURE.REFUNDED',
             'resource' => ['id' => 'REFUND-WALLET',
                 'supplementary_data' => ['related_ids' => ['capture_id' => 'CAPTURE-WALLET-REFUND']]],
-        ])->assertOk()->assertJson(['status' => 'ignored']);
+        ])->assertOk()->assertJson(['status' => 'ok']);
 
         $this->assertTrue($payment->fresh()->verification_review_required);
         $this->assertSame('reversal_review', $payment->fresh()->verification_error_category);
+        // The credit is not undone; the refunded amount is held from withdrawal instead.
         $this->assertSame(1500, $user->wallet()->first()->balance_minor);
+        $this->assertSame(1500, FinancialHold::heldMinor($user->wallet()->first()->id));
         $this->assertDatabaseCount('wallet_transactions', 1);
     }
 

@@ -8,20 +8,9 @@ import { mobileAppLinkOrigin } from "./services/runtimeUrls";
 import { clearGoogleOAuthVerifier, restoreAuthToken } from "./services/authTokenStorage";
 import { createI18n } from "vue-i18n";
 
-// messages Languages
-import ar from "./i18n/ar.json";
+// messages Languages: English (the fallback) is bundled; the others load on demand,
+// before the first render and before any navigation that switches to them.
 import en from "./i18n/en.json";
-import fr from "./i18n/fr.json";
-import de from "./i18n/de.json";
-import ru from "./i18n/ru.json";
-import es from "./i18n/es.json";
-import it from "./i18n/it.json";
-import hi from "./i18n/hi.json";
-import ja from "./i18n/ja.json";
-import zh from "./i18n/zh.json";
-import fa from "./i18n/fa.json";
-import ur from "./i18n/ur.json";
-import tr from "./i18n/tr.json";
 import eventDirectoryMessages from "./i18n/eventDirectory";
 import discoverySearchMessages from "./i18n/discoverySearch";
 import profileTimelineMessages from "./i18n/profileTimeline";
@@ -46,45 +35,45 @@ import AdminHeader from "./layouts/AdminHeader.vue";
 import AdminLayout from "./layouts/AdminLayout.vue";
 import AdminSidebar from "./layouts/AdminSidebar.vue";
 
+// Every supported language stays registered (availableLocales, language menu, hreflang).
 const messages = {
-    ar,
+    ar: {},
     en,
-    fr,
-    de,
-    ru,
-    es,
-    it,
-    hi,
-    ja,
-    zh,
-    fa,
-    ur,
-    tr,
+    fr: {},
+    de: {},
+    ru: {},
+    es: {},
+    it: {},
+    hi: {},
+    ja: {},
+    zh: {},
+    fa: {},
+    ur: {},
+    tr: {},
+};
+const localeLoaders = import.meta.glob(["./i18n/*.json", "!./i18n/en.json"], { import: "default" });
+const loadedLocales = new Set();
+
+const mergeFeatureMessages = (lang) => {
+    if (eventDirectoryMessages[lang]) {
+        messages[lang].events = {
+            ...messages[lang].events,
+            directory: eventDirectoryMessages[lang],
+        };
+    }
+
+    if (discoverySearchMessages[lang]) messages[lang].discovery = discoverySearchMessages[lang];
+    if (profileTimelineMessages[lang]) messages[lang].timeline = profileTimelineMessages[lang];
+    if (weeklyCompetitionMessages[lang]) messages[lang].weeklyCompetition = weeklyCompetitionMessages[lang];
+    if (virtualGiftMessages[lang]) messages[lang].gifts = virtualGiftMessages[lang];
+    if (policyMessages[lang]) messages[lang].policies = policyMessages[lang];
+    const planOptimizer = planOptimizerMessages[lang];
+    if (planOptimizer) messages[lang].planOptimizer = planOptimizer;
+    if (planCheckoutMessages[lang]) messages[lang].planCheckout = planCheckoutMessages[lang];
 };
 
-Object.entries(eventDirectoryMessages).forEach(([lang, directory]) => {
-    messages[lang].events = {
-        ...messages[lang].events,
-        directory,
-    };
-});
-
-Object.entries(discoverySearchMessages).forEach(([lang, discovery]) => {
-    messages[lang].discovery = discovery;
-});
-
-Object.entries(profileTimelineMessages).forEach(([lang, timeline]) => {
-    messages[lang].timeline = timeline;
-});
-
-Object.entries(weeklyCompetitionMessages).forEach(([lang, competition]) => {
-    messages[lang].weeklyCompetition = competition;
-});
-
-Object.entries(virtualGiftMessages).forEach(([lang, gifts]) => { messages[lang].gifts = gifts; });
-Object.entries(policyMessages).forEach(([lang, policies]) => { messages[lang].policies = policies; });
-Object.entries(planOptimizerMessages).forEach(([lang, planOptimizer]) => { messages[lang].planOptimizer = planOptimizer; });
-Object.entries(planCheckoutMessages).forEach(([lang, planCheckout]) => { messages[lang].planCheckout = planCheckout; });
+mergeFeatureMessages("en");
+loadedLocales.add("en");
 
 const DEFAULT_LANG = "en";
 const RTL_LANGS = ["ar", "fa", "ur"];
@@ -101,6 +90,25 @@ const i18n = createI18n({
     locale: DEFAULT_LANG,
     fallbackLocale: "en",
     messages,
+});
+
+// Loads a language's messages once; on a network error English stays the fallback.
+const ensureLocale = async (lang) => {
+    if (loadedLocales.has(lang)) return;
+    const loader = localeLoaders[`./i18n/${lang}.json`];
+    if (!loader) return;
+    try {
+        messages[lang] = { ...(await loader()) };
+        mergeFeatureMessages(lang);
+        i18n.global.setLocaleMessage(lang, messages[lang]);
+        loadedLocales.add(lang);
+    } catch (error) {
+        console.error(`Unable to load the ${lang} translations:`, error);
+    }
+};
+
+router.beforeEach(async (to) => {
+    await ensureLocale(normalizeLang(to.params.lang));
 });
 
 const app = createApp(App);
@@ -219,7 +227,11 @@ const configureNativeAppLinks = async () => {
 };
 
 const bootstrap = async () => {
-    await restoreAuthToken();
+    // The URL's language (as index.blade.php reads it) is ready before the first render.
+    await Promise.all([
+        restoreAuthToken(),
+        ensureLocale(normalizeLang(window.location.pathname.split("/")[1])),
+    ]);
 
     app.use(router);
     app.use(i18n);

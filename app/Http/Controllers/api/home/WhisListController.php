@@ -49,7 +49,7 @@ class WhisListController extends Controller
                 ]);
             });
 
-            Cache::tags(['wishlist', 'wishlist_user_' . $userId])->flush();
+            Cache::tags(['wishlist_user_'.$userId])->flush();
 
             return $this->success($wishlist, 'Wishlist processed successfully');
 
@@ -68,7 +68,7 @@ class WhisListController extends Controller
                 return $this->unauthorized('??? ????? ?? ???? ??? ???????');
             }
             $wishlist->delete();
-            Cache::tags(['wishlist', 'wishlist_user_' . $userId])->flush();
+            Cache::tags(['wishlist_user_'.$userId])->flush();
             return $this->success([], '?? ??? ?????? ?? ??????? ?????');
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return $this->error('?????? ??? ?????', 404);

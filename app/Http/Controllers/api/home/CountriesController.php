@@ -59,8 +59,9 @@ class CountriesController extends Controller
 
     public function paginated()
     {
-        $page = request('page', 1);
-        $cacheKey = "countries_index_page_{$page}";
+        // The translation relation is loaded for the request locale, so the key needs it.
+        $page = max(1, (int) request('page', 1));
+        $cacheKey = "countries_index_page_{$page}_".app()->getLocale();
 
         $countries = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () {
             return $this->countryRepository->paginatedWithTranslation(15);
@@ -88,7 +89,7 @@ class CountriesController extends Controller
     public function single()
     {
         $countryId = request('id');
-        $cacheKey = "countries_single_{$countryId}";
+        $cacheKey = "countries_single_{$countryId}_".app()->getLocale();
 
         $country = Cache::tags(['countries'])->remember($cacheKey, $this->cacheTime, function () use ($countryId) {
             return $this->countryRepository->findWithCitiesTranslation((int) $countryId);

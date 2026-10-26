@@ -312,7 +312,7 @@ class EventController extends Controller
             }
 
             return $DBCITY->events()
-                ->with('city.translation', 'sub_categorey.translation', 'translation', 'firstImage:id,event_id,full_url,preview_url,is_active,price,original_disk,preview_disk')
+                ->with('city.translation', 'sub_categorey.translation', 'translation', 'firstImage:events_images.id,events_images.event_id,full_url,preview_url,is_active,price,original_disk,preview_disk')
                 ->select('id', 'slug', 'title', 'image', 'start_date', 'sub_categorey_id', 'city_id', 'langitude', 'lattitude')
                 ->where('is_active', 1)
                 ->latest()
@@ -446,8 +446,9 @@ class EventController extends Controller
 
     public function daily()
     {
-        $cacheKey = 'daily_events_'.app()->getLocale();
         $today = Carbon::today();
+        // The date is part of the key so yesterday's list is never served after midnight.
+        $cacheKey = 'daily_events_'.$today->toDateString().'_'.app()->getLocale();
 
         $daily = Cache::tags(['events'])->remember($cacheKey, $this->cacheTime, function () use ($today) {
             return $this->eventRepository->daily($today);
@@ -764,7 +765,7 @@ class EventController extends Controller
                 'city.translation',
                 'sub_categorey.translation',
                 'translation',
-                'firstImage:id,event_id,full_url,preview_url,is_active,price,original_disk,preview_disk'
+                'firstImage:events_images.id,events_images.event_id,full_url,preview_url,is_active,price,original_disk,preview_disk'
             )
             ->select(
                 'id',

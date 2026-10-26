@@ -25,8 +25,8 @@ class CartController extends Controller
 
     private function clearCartCache($userId)
     {
-        Cache::tags(['cart', "user_{$userId}"])->flush();
-        Cache::tags('user_profile')->flush();
+        // Only this user's entries; a ['cart', user] flush would drop every user's cart.
+        Cache::tags(["user_{$userId}"])->flush();
     }
 
     public function addToCart($id = null)

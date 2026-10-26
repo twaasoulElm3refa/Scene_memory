@@ -17,6 +17,10 @@ use App\Observers\ImageTagCacheObserver;
 use App\Observers\TagCacheObserver;
 use App\Observers\TagTranslationCacheObserver;
 use App\Services\PayPalServices;
+use App\Support\Cache\TagSafeCacheManager;
+use App\Support\Health\ApplicationReadiness;
+use Illuminate\Foundation\Events\DiagnosingHealth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(PaymentInterface::class, PayPalServices::class);
+        // Cache::tags() on a store without tag support bypasses the cache instead of throwing.
+        $this->app->extend('cache', fn ($manager, $app) => new TagSafeCacheManager($app));
     }
 
     /**
@@ -50,5 +56,7 @@ class AppServiceProvider extends ServiceProvider
         Event_Tags::observe(EventTagCacheObserver::class);
         ImagesTags::observe(ImageTagCacheObserver::class);
         TagsTranslations::observe(TagTranslationCacheObserver::class);
+
+        Event::listen(DiagnosingHealth::class, ApplicationReadiness::class);
     }
 }

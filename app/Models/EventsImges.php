@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Collections\MediaCollection;
 use App\Services\MediaAccessService;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,18 +16,29 @@ class EventsImges extends Model
         'is_plan_redeemable' => 'boolean',
     ];
 
+    // The parent event is only read while serializing and was always removed from
+    // the output; hiding it also skips serializing it.
+    protected $hidden = ['events'];
+
+    public function newCollection(array $models = []): MediaCollection
+    {
+        return new MediaCollection($models);
+    }
+
     public function toArray(): array
     {
         $data = parent::toArray();
         $access = app(MediaAccessService::class);
         $viewer = request()->user('sanctum');
-        $preview = $access->previewUrl($this, ! $access->isPublished($this) && $access->ownerOrAdmin($this, $viewer));
+        $review = ! $access->isPublished($this) && $access->ownerOrAdmin($this, $viewer);
+        $preview = $access->previewUrl($this, $review);
         // Preserve the API's existing display keys, never its internal original path.
         foreach (['full_url', 'preview_url', 'url', 'video'] as $key) {
             if (array_key_exists($key, $data) || in_array($key, ['full_url', 'preview_url'], true)) {
                 $data[$key] = $preview;
             }
         }
+        $data['thumbnail_url'] = $preview ? $access->thumbnailUrl($this, $review) : null;
         unset($data['original_disk'], $data['preview_disk'], $data['events']);
 
         return $data;

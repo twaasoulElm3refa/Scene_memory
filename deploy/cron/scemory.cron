@@ -1,0 +1,4 @@
+# Laravel scheduler (payments reconciliation, gift releases, leaderboards, fallback
+# queue drain). Install with `crontab -u scemory deploy/cron/scemory.cron` after
+# checking that no equivalent entry already exists (`crontab -u scemory -l`).
+* * * * * cd /home/scemory/public_html && php artisan schedule:run >> /dev/null 2>&1
