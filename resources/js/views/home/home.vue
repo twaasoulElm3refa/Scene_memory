@@ -653,32 +653,43 @@ const setCurrentLocationFromDevice = () => {
     if (userLocationRequest) return userLocationRequest;
 
     userLocationRequest = new Promise((resolve) => {
-        if (!navigator.geolocation) {
-            console.warn("Geolocation is not supported by this browser.");
-            resolve(false);
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                marker.value = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                };
-
-                resolve(true);
-            },
-            (error) => {
-                console.warn("User location error:", error.message);
-                marker.value = { ...DEFAULT_LOCATION };
+        try {
+            if (!navigator.geolocation) {
+                console.warn("Geolocation is not supported by this browser.");
                 resolve(false);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 8000,
-                maximumAge: 60000,
+                return;
             }
-        );
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position?.coords?.latitude;
+                    const lng = position?.coords?.longitude;
+
+                    if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+                        Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+                        marker.value = { ...DEFAULT_LOCATION };
+                        resolve(false);
+                        return;
+                    }
+
+                    marker.value = { lat, lng };
+                    resolve(true);
+                },
+                (error) => {
+                    console.warn("User location error:", error.message);
+                    marker.value = { ...DEFAULT_LOCATION };
+                    resolve(false);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 8000,
+                    maximumAge: 60000,
+                }
+            );
+        } catch {
+            marker.value = { ...DEFAULT_LOCATION };
+            resolve(false);
+        }
     });
 };
 
