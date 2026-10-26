@@ -1551,7 +1551,7 @@ onUnmounted(() => {
         letter-spacing: -.045em;
     }
     .home-map-title span {
-        font-size: inherit !important;
+        font-size: .83em !important;
         line-height: inherit;
     }
     .home-map-description {
