@@ -18,7 +18,8 @@ export const PlanService = {
     },
 
     subscribePayPal(planId) {
-        return api.post(`/plans/subscribe/${planId}/paypal`);
+        // The plan page shows its own translated error, so skip the raw global toast.
+        return api.post(`/plans/subscribe/${planId}/paypal`, null, { suppressGlobalErrorToast: true });
     },
 
     getSavingsEstimate(planId) {

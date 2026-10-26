@@ -13,7 +13,7 @@ use App\Models\Subscriptions;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\MinorMoney;
-use App\Services\PayPalGateway;
+use App\Services\PayPalServices;
 use App\Services\PlanFinancialEngine;
 use App\Services\PlanQuotaService;
 use App\Services\PlanSavingsService;
@@ -153,90 +153,63 @@ class PlanSubscriptionController extends Controller
     {
         $user = $request->user();
         if (! $user || ! $user->is_active) {
-            return response()->json(['message' => 'Unauthorized or account disabled.'], 403);
+            return response()->json(['message' => 'Unauthorized or account disabled.', 'code' => 'unauthorized'], 403);
         }
 
         if (! $plan->is_active) {
-            return response()->json(['message' => 'This plan is not currently available for purchase.'], 422);
+            return response()->json(['message' => 'This plan is not currently available for purchase.', 'code' => 'plan_inactive'], 422);
         }
 
+        // The same persisted policy is checked again before capture and at grant time.
         $financialAnalysis = $this->financialEngine->analyzePlan($plan);
         if (! $financialAnalysis['is_valid']) {
+            Log::warning('plan_checkout_blocked', [
+                'user_id' => $user->id,
+                'plan_id' => $plan->id,
+                'reason_code' => 'plan_financially_unavailable',
+                'financial_status' => $financialAnalysis['financial_safety_status'],
+                'settings_version' => $financialAnalysis['settings_version'],
+            ]);
+
             return response()->json([
                 'message' => 'This plan is temporarily unavailable pending financial validation.',
+                'code' => 'plan_financially_unavailable',
                 'financial_status' => $financialAnalysis['financial_safety_status'],
             ], 422);
         }
 
+        // Without the merchant ID no PayPal payment can be verified, so do not let the buyer approve one.
+        if (trim((string) config('paypal.merchant_id')) === '') {
+            Log::error('plan_paypal_configuration_missing', ['plan_id' => $plan->id, 'setting' => 'paypal.merchant_id']);
+
+            return response()->json(['message' => 'PayPal checkout is temporarily unavailable.', 'code' => 'paypal_unavailable'], 503);
+        }
+
         try {
             $this->quotaService->checkAccumulationLimits($user, $plan);
+        } catch (CommerceException $e) {
+            return response()->json(['message' => $e->getMessage(), 'code' => 'accumulation_limit'], $e->status);
+        }
 
-            $priceMinor = $this->money->fromDecimal((string) $plan->price);
-            $idempotencyKey = 'plan-paypal:'.hash('sha256', $user->id.':'.$plan->id.':'.microtime());
-
-            $order = Purchases::create([
-                'user_id' => $user->id,
-                'payment_method' => 'paypal',
-                'order_type' => 'plan_subscription',
-                'status' => 'pending',
-                'currency' => 'USD',
-                'amount' => $plan->price,
-                'amount_minor' => $priceMinor,
-                'idempotency_key' => $idempotencyKey,
-                'description' => "PayPal subscription to plan: {$plan->name}",
-            ]);
-
-            $payment = Payment::create([
-                'order_id' => $order->id,
-                'user_id' => $user->id,
-                'operation' => 'plan_subscription',
-                'method' => 'paypal',
-                'status' => 'pending',
-                'amount_minor' => $priceMinor,
-                'currency' => 'USD',
-                'idempotency_key' => $idempotencyKey,
-                'paypal_request_id' => $idempotencyKey,
-                'custom_id' => 'plan:'.$plan->id,
-                'reference_id' => (string) $order->id,
-            ]);
-
-            $gateway = app(PayPalGateway::class);
-            $paypalOrder = $gateway->createOrder([
-                'intent' => 'CAPTURE',
-                'application_context' => [
-                    'return_url' => rtrim((string) config('app.url'), '/').route('paypal.success', [], false),
-                    'cancel_url' => rtrim((string) config('app.url'), '/').route('paypal.cancel', [], false),
-                ],
-                'purchase_units' => [[
-                    'reference_id' => (string) $order->id,
-                    'custom_id' => 'plan:'.$plan->id,
-                    'amount' => [
-                        'currency_code' => 'USD',
-                        'value' => $this->money->toDecimal($priceMinor),
-                    ],
-                    'description' => $order->description,
-                ]],
-            ], $idempotencyKey);
-
-            $approvalUrl = collect($paypalOrder['links'] ?? [])->firstWhere('rel', 'approve')['href'] ?? null;
-            if (! is_string($paypalOrder['id'] ?? null) || $paypalOrder['id'] === ''
-                || ($paypalOrder['status'] ?? null) !== 'CREATED' || ! $approvalUrl) {
-                throw new CommerceException('Unable to obtain PayPal approval URL.', 502);
+        try {
+            $checkout = app(PayPalServices::class)->createPlanOrder($user, $plan);
+            if ($checkout['state'] === 'in_progress') {
+                return response()->json([
+                    'message' => 'This PayPal checkout was already approved and is being confirmed.',
+                    'code' => 'checkout_in_progress',
+                    'order_id' => $checkout['order']->id,
+                ], 409);
             }
 
-            $order->update(['paypal_order_id' => $paypalOrder['id'], 'gateway_response' => $paypalOrder]);
-            $payment->update(['paypal_order_id' => $paypalOrder['id'], 'gateway_response' => $paypalOrder]);
-
             return response()->json([
-                'order_id' => $order->id,
-                'approval_url' => $approvalUrl,
+                'order_id' => $checkout['order']->id,
+                'approval_url' => $checkout['approval_url'],
+                'status' => $checkout['state'],
             ]);
-        } catch (CommerceException $e) {
-            return response()->json(['message' => $e->getMessage()], $e->status);
         } catch (Throwable $e) {
             Log::error('plan_paypal_order_failed', ['user_id' => $user->id, 'plan_id' => $plan->id, 'exception' => $e::class, 'message' => $e->getMessage()]);
 
-            return response()->json(['message' => 'Unable to create PayPal order for this plan.'], 502);
+            return response()->json(['message' => 'Unable to create PayPal order for this plan.', 'code' => 'paypal_order_failed'], 502);
         }
     }
 

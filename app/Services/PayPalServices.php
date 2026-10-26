@@ -5,13 +5,20 @@ namespace App\Services;
 use App\Exceptions\CommerceException;
 use App\Interfaces\PaymentInterface;
 use App\Models\GiftTransaction;
+use App\Models\LicenceType;
 use App\Models\Payment;
+use App\Models\Purchases;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class PayPalServices implements PaymentInterface
 {
+    /** A pending plan checkout younger than this is reused instead of opening a second PayPal order. */
+    private const PLAN_ORDER_REUSE_MINUTES = 30;
+
     public function __construct(
         private readonly PayPalGateway $gateway,
         private readonly CheckoutCartSnapshot $orderBuilder,
@@ -63,6 +70,123 @@ class PayPalServices implements PaymentInterface
         Log::info('payment_order_created', ['payment_id' => $payment->id, 'order_id' => $order->id, 'operation' => 'purchase']);
 
         return ['order' => $order->fresh(), 'approval_url' => $approvalUrl];
+    }
+
+    /**
+     * Opens the PayPal order for a plan purchase. A pending checkout for the same
+     * user, plan and price from the last few minutes is reused, so retries and
+     * double submissions never open a second PayPal order.
+     *
+     * @return array{order: Purchases, approval_url: ?string, state: 'created'|'reused'|'in_progress'}
+     */
+    public function createPlanOrder(User $user, LicenceType $plan): array
+    {
+        $priceMinor = $this->money->fromDecimal((string) $plan->price);
+        $payment = DB::transaction(function () use ($user, $plan, $priceMinor) {
+            User::query()->lockForUpdate()->findOrFail($user->id);
+            $open = Payment::query()
+                ->where('user_id', $user->id)
+                ->where('operation', 'plan_subscription')
+                ->where('method', 'paypal')
+                ->where('custom_id', 'plan:'.$plan->id)
+                ->where('amount_minor', $priceMinor)
+                ->where('status', 'pending')
+                ->whereNull('capture_requested_at')
+                ->where('created_at', '>=', now()->subMinutes(self::PLAN_ORDER_REUSE_MINUTES))
+                ->latest('id')
+                ->first();
+            if ($open) {
+                return $open;
+            }
+
+            $idempotencyKey = 'plan-paypal:'.hash('sha256', $user->id.':'.$plan->id.':'.Str::uuid());
+            $order = Purchases::create([
+                'user_id' => $user->id,
+                'payment_method' => 'paypal',
+                'order_type' => 'plan_subscription',
+                'status' => 'pending',
+                'currency' => 'USD',
+                'amount' => $plan->price,
+                'amount_minor' => $priceMinor,
+                'idempotency_key' => $idempotencyKey,
+                'description' => "PayPal subscription to plan: {$plan->name}",
+            ]);
+
+            return Payment::create([
+                'order_id' => $order->id,
+                'user_id' => $user->id,
+                'operation' => 'plan_subscription',
+                'method' => 'paypal',
+                'status' => 'pending',
+                'amount_minor' => $priceMinor,
+                'currency' => 'USD',
+                'idempotency_key' => $idempotencyKey,
+                'paypal_request_id' => $idempotencyKey,
+                'custom_id' => 'plan:'.$plan->id,
+                'reference_id' => (string) $order->id,
+            ]);
+        }, 5);
+        $order = $payment->order;
+
+        if ($payment->paypal_order_id) {
+            $details = $this->gateway->showOrderDetails($payment->paypal_order_id);
+            $status = $details['status'] ?? null;
+            $approvalUrl = collect($details['links'] ?? [])->firstWhere('rel', 'approve')['href'] ?? null;
+            if (in_array($status, ['CREATED', 'PAYER_ACTION_REQUIRED'], true) && is_string($approvalUrl)) {
+                return ['order' => $order, 'approval_url' => $approvalUrl, 'state' => 'reused'];
+            }
+            if (in_array($status, ['APPROVED', 'COMPLETED'], true)) {
+                return ['order' => $order, 'approval_url' => null, 'state' => 'in_progress'];
+            }
+            if ($status !== 'VOIDED' && data_get($details, 'error.name') !== 'RESOURCE_NOT_FOUND') {
+                // Unknown provider state: never risk a second order for a checkout that may still be paid.
+                throw new RuntimeException('PayPal order state for the open plan checkout is unknown.');
+            }
+            $this->cancelPlanCheckout($payment, 'provider_order_expired');
+
+            return $this->createPlanOrder($user, $plan);
+        }
+
+        // Retrying with the stored PayPal-Request-Id returns the same PayPal order.
+        $paypalOrder = $this->gateway->createOrder([
+            'intent' => 'CAPTURE',
+            'application_context' => [
+                'return_url' => $this->callbackUrl('paypal.success'),
+                'cancel_url' => $this->callbackUrl('paypal.cancel'),
+            ],
+            'purchase_units' => [[
+                'reference_id' => (string) $payment->reference_id,
+                'custom_id' => (string) $payment->custom_id,
+                'amount' => [
+                    'currency_code' => $payment->currency,
+                    'value' => $this->money->toDecimal((int) $payment->amount_minor),
+                ],
+                'description' => $order->description,
+            ]],
+        ], $payment->paypal_request_id);
+
+        if (! isset($paypalOrder['id'])) {
+            // Provider error identity only; the SDK response never carries credentials here.
+            Log::warning('plan_paypal_order_rejected', [
+                'payment_id' => $payment->id,
+                'provider_error' => is_array($paypalOrder['error'] ?? null) ? ($paypalOrder['error']['name'] ?? null) : 'unreadable_response',
+                'debug_id' => data_get($paypalOrder, 'error.debug_id'),
+                'paypal_mode' => config('paypal.mode') === 'live' ? 'live' : 'sandbox',
+            ]);
+        }
+        $approvalUrl = $this->assertCreatedOrder($paypalOrder);
+        DB::transaction(function () use ($payment, $order, $paypalOrder) {
+            $locked = Payment::query()->lockForUpdate()->findOrFail($payment->id);
+            if ($locked->paypal_order_id && $locked->paypal_order_id !== $paypalOrder['id']) {
+                throw new RuntimeException('Payment already belongs to another PayPal order.');
+            }
+            $locked->update(['paypal_order_id' => $paypalOrder['id'], 'gateway_response' => $paypalOrder]);
+            $order->update(['paypal_order_id' => $paypalOrder['id'], 'gateway_response' => $paypalOrder]);
+        }, 5);
+
+        Log::info('payment_order_created', ['payment_id' => $payment->id, 'order_id' => $order->id, 'operation' => 'plan_subscription']);
+
+        return ['order' => $order->fresh(), 'approval_url' => $approvalUrl, 'state' => 'created'];
     }
 
     public function success(string $token): array
@@ -302,15 +426,21 @@ class PayPalServices implements PaymentInterface
         }
 
         if (in_array($type, ['PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED'], true)) {
-            DB::transaction(function () use ($payment) {
-                $payment->update(['status' => 'failed']);
-                $payment->order->update(['status' => 'failed']);
+            DB::transaction(function () use ($payment, $resource) {
+                $locked = Payment::query()->lockForUpdate()->findOrFail($payment->id);
+                // A late or replayed denial must never undo a verified, granted capture.
+                if ($locked->status === 'completed') {
+                    return;
+                }
+                $locked->update(['status' => 'failed', 'gateway_response' => $resource]);
+                $locked->order()->update(['status' => 'failed']);
             }, 5);
 
             return 'ok';
         }
 
         if ($type === 'PAYMENT.CAPTURE.PENDING') {
+            // Pending funds are not paid: keep the checkout pending and grant nothing.
             return 'ok';
         }
 
@@ -338,6 +468,17 @@ class PayPalServices implements PaymentInterface
         }
 
         if (($details['status'] ?? null) === 'APPROVED') {
+            if (in_array($payment->status, ['cancelled', 'failed'], true)) {
+                return $payment->status;
+            }
+            // Recheck the persisted plan policy before taking money, so a plan that can
+            // no longer be granted is never captured.
+            if ($blocker = $this->planCaptureBlocker($payment)) {
+                $this->cancelPlanCheckout($payment, $blocker);
+
+                return 'cancelled';
+            }
+
             $capture = $this->gateway->capturePaymentOrder($payment->paypal_order_id, 'capture-plan-'.$payment->id);
             if (($capture['status'] ?? null) === 'COMPLETED') {
                 $this->finalizer->finalizeCompletedPlanSubscriptionCapture($payment, $capture);
@@ -352,6 +493,52 @@ class PayPalServices implements PaymentInterface
         }
 
         return $payment->fresh()->status === 'completed' ? 'completed' : 'pending';
+    }
+
+    /**
+     * Why the plan behind a payment cannot be granted right now, or null.
+     */
+    private function planCaptureBlocker(Payment $payment): ?string
+    {
+        $plan = preg_match('/^plan:(\d+)$/', (string) $payment->custom_id, $matches)
+            ? LicenceType::find((int) $matches[1])
+            : null;
+        if (! $plan) {
+            return 'plan_missing';
+        }
+        if (! app(PlanFinancialEngine::class)->analyzePlan($plan)['is_valid']) {
+            return 'plan_financially_unavailable';
+        }
+        try {
+            app(PlanQuotaService::class)->checkAccumulationLimits($payment->user()->firstOrFail(), $plan);
+        } catch (CommerceException) {
+            return 'accumulation_limit';
+        }
+
+        return null;
+    }
+
+    private function cancelPlanCheckout(Payment $payment, string $reason): void
+    {
+        DB::transaction(function () use ($payment, $reason) {
+            $locked = Payment::query()->lockForUpdate()->findOrFail($payment->id);
+            if (! in_array($locked->status, ['pending', 'approved'], true)) {
+                return;
+            }
+            $locked->update([
+                'status' => 'cancelled',
+                'verification_error_category' => $reason,
+                'next_verification_at' => null,
+            ]);
+            $locked->order()->update(['status' => 'cancelled']);
+        }, 5);
+
+        Log::warning('plan_checkout_cancelled', [
+            'payment_id' => $payment->id,
+            'order_id' => $payment->order_id,
+            'custom_id' => $payment->custom_id,
+            'reason_code' => $reason,
+        ]);
     }
 
     private function giftWebhook(Payment $payment, array $payload): string

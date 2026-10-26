@@ -99,6 +99,12 @@ class PayPalPaymentVerification
             $result = $payment->operation === 'wallet_deposit'
                 ? $this->deposits->reconcile($payment, $details)
                 : $this->purchases->reconcile($payment, $details);
+            // A plan checkout refused before capture is final; it is not retried.
+            if ($payment->operation === 'plan_subscription' && in_array($result, ['cancelled', 'failed'], true)) {
+                $this->record($payment, 'cancelled');
+
+                return 'cancelled';
+            }
             $this->record($payment, $result === 'completed' ? 'completed' : 'pending');
             Log::info('payment_verification_result', [
                 'payment_id' => $payment->id,
@@ -279,7 +285,8 @@ class PayPalPaymentVerification
                 'verification_lease_until' => null,
                 'next_verification_at' => $completed || $review || $outcome === 'cancelled' ? null : now()->addSeconds($delay),
                 'verification_review_required' => $completed ? $reversalReview : ($locked->verification_review_required || $review),
-                'verification_error_category' => $completed ? ($reversalReview ? 'reversal_review' : null) : $errorCategory,
+                'verification_error_category' => $completed ? ($reversalReview ? 'reversal_review' : null)
+                    : ($errorCategory ?? ($outcome === 'cancelled' ? $locked->verification_error_category : null)),
             ])->save();
         }, 5);
     }

@@ -305,6 +305,7 @@ import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { PlanService } from "@/services/planService/planService";
+import { inProgressOrderId, paypalApprovalUrl, planCheckoutErrorKey, redirectToPayPal } from "@/services/planService/planCheckout";
 import { refreshAccount } from "@/services/accountState";
 
 const { t } = useI18n();
@@ -409,19 +410,24 @@ const subscribeWithPayPal = async () => {
     subscribingMethod.value = 'paypal';
     try {
         const res = await PlanService.subscribePayPal(plan.value.id);
-        if (res.data?.data?.approval_url) {
-            window.location.href = res.data.data.approval_url;
-        } else {
-            showToast(t('plans.errors.subscribeFailed'), 'error');
-            subscribing.value = false;
-            subscribingMethod.value = null;
+        // The API returns approval_url at the top level of the body.
+        const approvalUrl = paypalApprovalUrl(res);
+        if (approvalUrl) {
+            redirectToPayPal(approvalUrl);
+            return;
         }
+        showToast(t('planCheckout.paypalOrderFailed'), 'error');
     } catch (error) {
         console.error(error);
-        showToast(error.response?.data?.message || t('plans.errors.subscribeFailed'), 'error');
-        subscribing.value = false;
-        subscribingMethod.value = null;
+        const orderId = inProgressOrderId(error);
+        if (orderId) {
+            router.push({ path: `/${route.params.lang || 'en'}/waiting`, query: { order_id: orderId } });
+            return;
+        }
+        showToast(t(planCheckoutErrorKey(error)), 'error');
     }
+    subscribing.value = false;
+    subscribingMethod.value = null;
 };
 
 const subscribe = subscribeWithWallet;
