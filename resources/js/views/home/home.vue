@@ -721,7 +721,7 @@ const ensureMapInitialized = async () => {
             });
         }
 
-        await mapService.initMap(mapContainer, mobileMap && hasUserLocation ? 2.5 : 6);
+        await mapService.initMap(mapContainer, 2.5);
         mapService.refreshMap();
 
         await waitForNextPaint();
@@ -880,7 +880,7 @@ const openFullscreen = async () => {
 
     if (!fullContainer) return;
 
-    await mapService.openFullscreen(fullContainer, 6);
+    await mapService.openFullscreen(fullContainer, 2.5);
     mapService.refreshFullscreenMap();
 
     if (displayedResults.value.length > 0 && mapService.fullMap) {
