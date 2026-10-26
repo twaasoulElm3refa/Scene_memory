@@ -313,7 +313,10 @@ class EventRequestModerationTest extends TestCase
         string $decision,
         float $confidence,
         string $reason,
-        array $flags = []
+        array $flags = [],
+        ?string $reasonCode = null,
+        array $policyCategories = [],
+        bool $banRecommended = false,
     ): ModerationDecision {
         $raw = compact('decision', 'confidence', 'reason', 'flags');
 
@@ -324,6 +327,9 @@ class EventRequestModerationTest extends TestCase
             flags: $flags,
             rawResponse: $raw,
             workflowExecutionId: 'execution-123',
+            reasonCode: $reasonCode,
+            policyCategories: $policyCategories,
+            banRecommended: $banRecommended,
         );
     }
 }

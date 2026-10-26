@@ -143,6 +143,10 @@ class AuthController extends Controller
             ], 403);
         }
 
+        if ($user->is_banned) {
+            return $this->forbidden('Account is banned: '.($user->ban_reason ?: 'Violation of platform policy.'));
+        }
+
         if (! $user->is_active) {
             return $this->forbidden('Account is disabled.');
         }

@@ -44,9 +44,44 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'is_active' => 'boolean',
+            'is_banned' => 'boolean',
+            'banned_at' => 'datetime',
             'total_points' => 'integer',
             'password' => 'hashed',
         ];
+    }
+
+    public function isBanned(): bool
+    {
+        return (bool) $this->is_banned;
+    }
+
+    public function ban(string $reason): void
+    {
+        if ($this->role === 'admin') {
+            return;
+        }
+
+        $this->is_banned = true;
+        $this->banned_at = $this->banned_at ?? now();
+
+        if (trim((string) $this->ban_reason) === '') {
+            $this->ban_reason = mb_substr(trim($reason), 0, 1000);
+        }
+
+        $this->save();
+
+        if (method_exists($this, 'tokens')) {
+            $this->tokens()->delete();
+        }
+    }
+
+    public function unban(): void
+    {
+        $this->is_banned = false;
+        $this->banned_at = null;
+        $this->ban_reason = null;
+        $this->save();
     }
 
     // Rest omitted for brevity

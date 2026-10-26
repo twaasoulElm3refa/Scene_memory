@@ -3,11 +3,13 @@
 namespace App\Services\EventModeration;
 
 use App\Jobs\ReviewEventRequestWithAi;
+use App\Mail\AccountBannedMail;
 use App\Mail\ApproveMail;
 use App\Mail\EventNeedsManualReviewMail;
 use App\Mail\RejectMail;
 use App\Models\EventRequestCreate;
 use App\Models\Events;
+use App\Models\User;
 use App\Services\EventTagCacheService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Mail\Mailable;
@@ -18,6 +20,13 @@ use Throwable;
 
 class EventRequestModerationService
 {
+    public const BAN_PROHIBITED_CATEGORIES = [
+        'military_content',
+        'political_content',
+        'sexual_content',
+        'profanity_obscene_content',
+    ];
+
     public function __construct(private readonly EventTagCacheService $cache) {}
 
     public function approveManually(int $requestId): EventRequestCreate
@@ -100,6 +109,9 @@ class EventRequestModerationService
             $request->ai_review_status = 'completed';
             $request->ai_workflow_execution_id = $decision->workflowExecutionId;
 
+            $ownerBanned = false;
+            $owner = $event->user;
+
             if ($decision->decision === 'approved') {
                 $request->status = 'approved';
                 $event->is_active = true;
@@ -108,6 +120,12 @@ class EventRequestModerationService
                 $request->status = 'rejected';
                 $event->is_active = false;
                 $event->save();
+
+                if ($this->shouldBanOwner($decision, $owner)) {
+                    $wasAlreadyBanned = (bool) $owner->is_banned;
+                    $owner->ban($decision->reason);
+                    $ownerBanned = ! $wasAlreadyBanned;
+                }
             }
 
             $request->save();
@@ -116,6 +134,8 @@ class EventRequestModerationService
                 'request' => $request->fresh(),
                 'event' => $event,
                 'decision' => $decision->decision,
+                'owner' => $owner,
+                'owner_banned' => $ownerBanned,
             ];
         });
 
@@ -132,17 +152,56 @@ class EventRequestModerationService
 
         if ($result['decision'] === 'approved') {
             $this->queueOwnerMail($request, $event, new ApproveMail($event));
+
+            ReviewEventRequestWithAi::dispatch(
+                (int) $request->id,
+                translationOnly: true
+            )->afterCommit();
         } elseif ($result['decision'] === 'rejected') {
             $this->queueOwnerMail(
                 $request,
                 $event,
                 new RejectMail($event, $decision->reason)
             );
+
+            if ($result['owner_banned'] && $result['owner'] !== null) {
+                $this->queueAccountBannedMail($result['owner'], $decision->reason);
+            }
         } else {
             $this->queueManualReviewMail($request);
         }
 
         return true;
+    }
+
+    public function shouldBanOwner(ModerationDecision $decision, ?User $owner): bool
+    {
+        if ($owner === null || $owner->role === 'admin') {
+            return false;
+        }
+
+        if ($decision->decision !== 'rejected') {
+            return false;
+        }
+
+        $threshold = min(1, max(0, (float) config(
+            'event_moderation.auto_decision_threshold',
+            0.70
+        )));
+
+        if ($decision->confidence < $threshold) {
+            return false;
+        }
+
+        $reasonCode = strtolower(trim((string) $decision->reasonCode));
+        $matchesReasonCode = in_array($reasonCode, self::BAN_PROHIBITED_CATEGORIES, true);
+
+        $matchesPolicyCategories = count(array_intersect(
+            $decision->policyCategories,
+            self::BAN_PROHIBITED_CATEGORIES
+        )) > 0;
+
+        return $matchesReasonCode || $matchesPolicyCategories;
     }
 
     private function applyManualDecision(
@@ -219,6 +278,26 @@ class EventRequestModerationService
                 'request_id' => $request->id,
                 'event_id' => $event->id,
                 'mail' => $mail::class,
+                'exception' => $exception::class,
+                'message' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function queueAccountBannedMail(User $user, string $reason): void
+    {
+        $email = trim((string) $user->email);
+
+        if ($email === '') {
+            return;
+        }
+
+        try {
+            Mail::to($email)->queue(new AccountBannedMail($user, $reason));
+        } catch (Throwable $exception) {
+            Log::error('event_request_moderation_account_banned_mail_failed', [
+                'user_id' => $user->id,
+                'email' => $email,
                 'exception' => $exception::class,
                 'message' => $exception->getMessage(),
             ]);

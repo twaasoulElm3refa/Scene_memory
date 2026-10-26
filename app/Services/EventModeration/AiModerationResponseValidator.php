@@ -59,6 +59,24 @@ class AiModerationResponseValidator
             ->values()
             ->all();
 
+        $reasonCode = strtolower(trim((string) ($payload['reason_code'] ?? '')));
+        if ($reasonCode === '') {
+            $reasonCode = null;
+        }
+
+        $rawPolicyCategories = $payload['policy_categories'] ?? [];
+        $policyCategories = is_array($rawPolicyCategories)
+            ? collect($rawPolicyCategories)
+                ->filter(fn (mixed $c): bool => is_string($c))
+                ->map(fn (string $c): string => strtolower(trim($c)))
+                ->filter()
+                ->unique()
+                ->values()
+                ->all()
+            : [];
+
+        $banRecommended = (bool) ($payload['ban_recommended'] ?? false);
+
         $threshold = min(1, max(0, (float) $this->config->get(
             'event_moderation.auto_decision_threshold',
             0.70
@@ -73,6 +91,11 @@ class AiModerationResponseValidator
                 $reason
             );
             $decision = 'manual_review';
+            $banRecommended = false;
+        }
+
+        if ($decision !== 'rejected') {
+            $banRecommended = false;
         }
 
         return new ModerationDecision(
@@ -82,6 +105,9 @@ class AiModerationResponseValidator
             flags: $flags,
             rawResponse: $response,
             workflowExecutionId: $this->workflowExecutionId($response, $payload),
+            reasonCode: $reasonCode,
+            policyCategories: $policyCategories,
+            banRecommended: $banRecommended,
         );
     }
 

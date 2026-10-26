@@ -81,10 +81,20 @@ class SetupScemoryN8n extends Command
                 headerName: 'Authorization',
                 headerValue: 'Bearer '.config('event_moderation.openrouter.api_key'),
             );
+            $openRouterTranslationCredential = $this->ensureCredential(
+                n8n: $n8n,
+                availableCredentials: $credentials,
+                existingWorkflow: $existingWorkflow,
+                nodeName: 'OpenRouter Translation',
+                name: EventModerationWorkflowBuilder::OPENROUTER_TRANSLATION_CREDENTIAL_NAME,
+                headerName: 'Authorization',
+                headerValue: 'Bearer '.config('event_moderation.openrouter.api_key'),
+            );
 
             $workflowPayload = $builder->build(
                 $webhookCredential,
-                $openRouterCredential
+                $openRouterCredential,
+                $openRouterTranslationCredential
             );
             $this->line('Building workflow.................. OK');
 

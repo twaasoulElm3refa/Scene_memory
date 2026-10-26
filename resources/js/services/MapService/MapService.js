@@ -1,6 +1,7 @@
 import maplibregl from "../mapLibre";
 import api from "../ApiClient";
 import { escapeHtml, safeMediaUrl } from '../safeContent';
+import { applyScemoryMapStyle } from './scemoryMapStyle';
 
 if (maplibregl.getRTLTextPluginStatus() === "unavailable") {
     maplibregl.setRTLTextPlugin(
@@ -354,7 +355,7 @@ export default class MapService {
 
     async _buildMap(containerIdOrElement, zoom) {
         const container = this._resolveContainer(containerIdOrElement);
-        const style = await this._getOrFetchStyle(this._currentLang);
+        const style = applyScemoryMapStyle(await this._getOrFetchStyle(this._currentLang));
         const map = new maplibregl.Map({
             container,
             style,

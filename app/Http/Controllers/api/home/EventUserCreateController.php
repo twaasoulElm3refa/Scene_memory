@@ -50,6 +50,10 @@ class EventUserCreateController extends Controller
         bool $requiresModeration = true,
         bool $isTrending = false
     ) {
+        if (auth()->user()?->is_banned) {
+            return $this->forbidden('Account is banned: '.(auth()->user()->ban_reason ?: 'Violation of platform policy.'));
+        }
+
         $data = $request->validated();
         $data['is_real'] = $request->has('is_real')
             ? $request->boolean('is_real')

@@ -19,13 +19,10 @@ return [
     ],
 
     'openrouter' => [
-        'api_key' => env('OPENROUTER_N8N_API_KEY'),
+        'api_key' => env('OPENROUTER_N8N_API_KEY', env('OPENROUTER_API_KEY')),
         'api_url' => env('OPENROUTER_API_URL', 'https://openrouter.ai/api/v1'),
         'model' => env('OPENROUTER_MODERATION_MODEL', env('OPENROUTER_MODEL', 'openai/gpt-4.1-mini')),
-        'translation_model' => env(
-            'OPENROUTER_TRANSLATION_MODEL',
-            env('OPENROUTER_MODERATION_MODEL', env('OPENROUTER_MODEL', 'openai/gpt-4.1-mini'))
-        ),
+        'translation_model' => env('OPENROUTER_TRANSLATION_MODEL', 'openrouter/free'),
         'translation_max_tokens' => (int) env('OPENROUTER_TRANSLATION_MAX_TOKENS', 12000),
     ],
 

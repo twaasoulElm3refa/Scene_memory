@@ -16,6 +16,11 @@ class EventsRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $user = $this->user();
+        if ($user && ($user->is_banned || ! $user->is_active)) {
+            return false;
+        }
+
         return true;
     }
 

@@ -162,6 +162,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/{id}/approve', [AdminSpecialCoverageRequestController::class, 'approve']);
             Route::post('/{id}/reject', [AdminSpecialCoverageRequestController::class, 'reject']);
         });
+
+        Route::post('/users/{id}/unban', [UserController::class, 'unban']);
     });
 
     Route::get('/download/{media}', [DownloadController::class, 'download'])->name('media.download')
@@ -299,6 +301,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{id}', [UserController::class, 'show']);
         Route::post('/create', [UserController::class, 'create']);
         Route::post('/{id}', [UserController::class, 'update']);
+        Route::post('/{id}/unban', [UserController::class, 'unban']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
         // 76
 

@@ -75,6 +75,21 @@ class UserController extends Controller
         return $this->success($user, 'user Updated Successfully');
     }
 
+    public function unban(int|string|null $id = null)
+    {
+        $userId = (int) ($id ?? request('id'));
+        $user = $this->userRepository->findById($userId);
+        if (! $user) {
+            return $this->error('User not found.', 404);
+        }
+
+        $user->unban();
+        Cache::forget('users_all_page_'.request('page', 1));
+        Cache::forget('users_latest_10');
+
+        return $this->success($user->fresh(), 'User unbanned successfully.');
+    }
+
     public function destroy()
     {
         $user = $this->userRepository->findById((int) request('id'));

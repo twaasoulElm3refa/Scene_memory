@@ -12,8 +12,8 @@ class EventModerationWorkflowBuilderTest extends TestCase
         config()->set('event_moderation.n8n.workflow_name', 'Scemory - Event Moderation');
         config()->set('event_moderation.n8n.webhook_path', 'scemory-event-moderation');
         config()->set('event_moderation.openrouter.api_url', 'https://openrouter.ai/api/v1');
-        config()->set('event_moderation.openrouter.model', 'test/model');
-        config()->set('event_moderation.openrouter.translation_model', 'test/translation-model');
+        config()->set('event_moderation.openrouter.model', 'test/moderation-model');
+        config()->set('event_moderation.openrouter.translation_model', 'openrouter/free');
         config()->set('event_moderation.auto_decision_threshold', 0.70);
         config()->set('event_moderation.laravel.base_url', 'https://laravel.test');
         config()->set('event_moderation.n8n.webhook_secret', 'must-not-be-embedded');
@@ -22,6 +22,7 @@ class EventModerationWorkflowBuilderTest extends TestCase
         $workflow = app(EventModerationWorkflowBuilder::class)->build(
             ['id' => 'webhook-credential', 'name' => 'Webhook Auth'],
             ['id' => 'openrouter-credential', 'name' => 'OpenRouter Auth'],
+            ['id' => 'openrouter-translation-credential', 'name' => 'OpenRouter Translation Auth'],
         );
         $encoded = json_encode($workflow, JSON_THROW_ON_ERROR);
         $nodes = collect($workflow['nodes'])->keyBy('name');
@@ -32,9 +33,10 @@ class EventModerationWorkflowBuilderTest extends TestCase
         $this->assertStringContainsString('reasoning', $encoded);
         $this->assertStringContainsString('manual_review', $encoded);
         $this->assertStringContainsString('OpenRouter Translation', $encoded);
+        $this->assertStringNotContainsString('Google Cloud Translation', $encoded);
         $this->assertStringContainsString('Store Translations in Laravel', $encoded);
         $this->assertStringContainsString(
-            'test/translation-model',
+            'openrouter/free',
             $nodes['Build Translation Request']['parameters']['jsCode']
         );
         $this->assertStringContainsString(
@@ -47,6 +49,7 @@ class EventModerationWorkflowBuilderTest extends TestCase
         );
         $this->assertStringContainsString('webhook-credential', $encoded);
         $this->assertStringContainsString('openrouter-credential', $encoded);
+        $this->assertStringContainsString('openrouter-translation-credential', $encoded);
         $this->assertStringNotContainsString('must-not-be-embedded', $encoded);
         $this->assertStringNotContainsString('also-must-not-be-embedded', $encoded);
         $this->assertStringContainsString(
@@ -57,9 +60,20 @@ class EventModerationWorkflowBuilderTest extends TestCase
         $approvedOutputs = $workflow['connections']['Is Approved for Publication']['main'];
         $this->assertSame('Return Approval to Laravel', $approvedOutputs[0][0]['node']);
         $this->assertSame('Return Decision to Laravel', $approvedOutputs[1][0]['node']);
+        // Approval returns to Laravel immediately and does not connect to translation directly:
+        $this->assertArrayNotHasKey('Return Approval to Laravel', $workflow['connections']);
+        // Translation only triggers after accepted translation request:
         $this->assertSame(
             'Build Translation Request',
-            $workflow['connections']['Return Approval to Laravel']['main'][0][0]['node']
+            $workflow['connections']['Return Translation Request Accepted']['main'][0][0]['node']
+        );
+        $this->assertSame(
+            'OpenRouter Translation',
+            $workflow['connections']['Build Translation Request']['main'][0][0]['node']
+        );
+        $this->assertSame(
+            'Parse and Validate Translations',
+            $workflow['connections']['OpenRouter Translation']['main'][0][0]['node']
         );
     }
 }
