@@ -226,15 +226,151 @@ class EventSearchFiltersTest extends TestCase
             ->assertJsonValidationErrors('to');
     }
 
+    public function test_empty_discovery_search_returns_only_public_content_in_every_locale(): void
+    {
+        $this->withMiddleware();
+        $city = $this->insertCity(1, 'Cairo');
+        $approved = $this->insertEvent($city, 'original-title', '2026-01-01');
+        $legacy = $this->insertEvent($city, 'fallback-title', '2026-01-02');
+        $inactiveMedia = $this->insertMedia($approved, 'image', 'images/inactive.jpg');
+        DB::table('events_images')->where('id', $inactiveMedia)->update(['is_active' => '0']);
+        $rejectedMedia = $this->insertMedia($approved, 'video', 'videos/rejected.mp4');
+        DB::table('media_requests')->insert(['image_id' => $rejectedMedia, 'status' => 'rejected']);
+        $pendingMedia = $this->insertMedia($approved, 'image', 'images/pending.jpg');
+        DB::table('media_requests')->insert(['image_id' => $pendingMedia, 'status' => 'pending']);
+        $image = $this->insertMedia($approved, 'image', 'images/public.jpg');
+        DB::table('media_requests')->insert(['image_id' => $image, 'status' => 'approved']);
+        $video = $this->insertMedia($approved, 'video', 'videos/public.mp4');
+        DB::table('events_images')->where('id', $image)->update(['description' => 'original media description']);
+
+        DB::table('event_request_creates')->insert(['event_id' => $approved, 'status' => 'approved']);
+        $inactive = $this->insertEvent($city, 'inactive', '2026-01-03');
+        DB::table('events')->where('id', $inactive)->update(['is_active' => '0']);
+        $rejected = $this->insertEvent($city, 'rejected', '2026-01-04');
+        DB::table('event_request_creates')->insert(['event_id' => $rejected, 'status' => 'rejected']);
+        $pending = $this->insertEvent($city, 'pending', '2026-01-05');
+        DB::table('event_request_creates')->insert(['event_id' => $pending, 'status' => 'pending']);
+        $deleted = $this->insertEvent($city, 'deleted', '2026-01-06');
+        DB::table('events')->where('id', $deleted)->update(['deleted_at' => now()]);
+
+        DB::table('event_translations')->insert([
+            'event_id' => $approved, 'locale' => 'ar', 'title' => 'عنوان عربي',
+            'description' => 'وصف عربي', 'created_at' => now(), 'updated_at' => now(),
+        ]);
+        DB::table('image_translations')->insert([
+            'image_id' => $image, 'locale' => 'ar', 'description' => 'صورة عربية',
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $expected = ['event:'.$approved, 'event:'.$legacy, 'image:'.$image, 'video:'.$video];
+        $expectedPages = null;
+        foreach (['ar', 'en', 'fr', 'de', 'ru', 'es', 'it', 'hi', 'ja', 'fa', 'zh', 'ur', 'tr'] as $locale) {
+            $pages = collect();
+            $pageIdentities = [];
+            foreach ([1, 2] as $page) {
+                $response = $this->getJson("/api/v1/events/discovery/search?seed=42&per_page=2&page={$page}", [
+                    'Accept-Language' => $locale,
+                ])->assertOk()->assertJsonPath('data.total', 4);
+                $pages = $pages->concat($response->json('data.data'));
+                $pageIdentities[] = collect($response->json('data.data'))
+                    ->map(fn ($item) => $item['result_type'].':'.$item['id'])->all();
+            }
+            $this->assertEqualsCanonicalizing($expected, $pages->map(fn ($item) => $item['result_type'].':'.$item['id'])->all());
+            if ($expectedPages === null) {
+                $expectedPages = $pageIdentities;
+            } else {
+                $this->assertSame($expectedPages, $pageIdentities);
+            }
+        }
+
+        $arabic = collect($this->getJson('/api/v1/events/discovery/search?seed=42', ['Accept-Language' => 'ar'])->json('data.data'));
+        $arabicEvent = $arabic->first(fn ($item) => $item['result_type'] === 'event' && $item['id'] === $approved);
+        $arabicImage = $arabic->first(fn ($item) => $item['result_type'] === 'image' && $item['id'] === $image);
+        $this->assertSame('عنوان عربي', $arabicEvent['title']);
+        $this->assertSame('وصف عربي', $arabicEvent['description']);
+        $this->assertSame('fallback-title', $arabic->first(fn ($item) => $item['result_type'] === 'event' && $item['id'] === $legacy)['title']);
+        $this->assertSame('صورة عربية', $arabicImage['description']);
+        $this->assertSame($image, $arabicEvent['first_image']['id']);
+        $english = collect($this->getJson('/api/v1/events/discovery/search?seed=42', ['Accept-Language' => 'en'])->json('data.data'));
+        $this->assertSame('original-title', $english->first(fn ($item) => $item['result_type'] === 'event' && $item['id'] === $approved)['title']);
+    }
+
+    public function test_discovery_keyword_search_uses_original_and_all_translations_in_both_locales(): void
+    {
+        $city = $this->insertCity(1, 'Cairo');
+        $original = $this->insertEvent($city, 'museum-original', '2026-01-01');
+        $translated = $this->insertEvent($city, 'other-original', '2026-01-02');
+        $mediaEvent = $this->insertEvent($city, 'media-parent', '2026-01-03');
+        $media = $this->insertMedia($mediaEvent, 'image', 'images/museum.jpg');
+        DB::table('event_translations')->insert([
+            'event_id' => $translated, 'locale' => 'fr', 'title' => 'museum traduit',
+            'description' => null, 'created_at' => now(), 'updated_at' => now(),
+        ]);
+        DB::table('image_translations')->insert([
+            'image_id' => $media, 'locale' => 'ar', 'description' => 'museum translated media',
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        foreach (['ar', 'en'] as $locale) {
+            app()->setLocale($locale);
+            $response = $this->getJson('/api/v1/events/discovery/search?seed=7&q=museum', [
+                'Accept-Language' => $locale,
+            ])->assertOk()->assertJsonPath('data.total', 3);
+            $this->assertEqualsCanonicalizing(
+                ['event:'.$original, 'event:'.$translated, 'image:'.$media],
+                collect($response->json('data.data'))->map(fn ($item) => $item['result_type'].':'.$item['id'])->all()
+            );
+        }
+    }
+
+    public function test_discovery_individual_and_combined_filters_do_not_change_with_locale(): void
+    {
+        DB::table('sub_categoreys')->insert(['id' => 1, 'category_id' => 1, 'name' => 'History']);
+        $cairo = $this->insertCity(1, 'Cairo');
+        $paris = $this->insertCity(2, 'Paris');
+        $matching = $this->insertEvent($cairo, 'matching', '2026-08-15');
+        $other = $this->insertEvent($paris, 'other', '2026-09-15');
+        $image = $this->insertMedia($matching, 'image', 'images/matching.jpg');
+        $video = $this->insertMedia($other, 'video', 'videos/other.mp4');
+        DB::table('event__tags')->insert(['event_id' => $matching, 'tag_id' => 7]);
+
+        $cases = [
+            ['country_id=1', ['event:'.$matching, 'image:'.$image]],
+            ["city_id={$cairo}", ['event:'.$matching, 'image:'.$image]],
+            ['category_id=1', ['event:'.$matching, 'event:'.$other, 'image:'.$image, 'video:'.$video]],
+            ['sub_category_id=1', ['event:'.$matching, 'event:'.$other, 'image:'.$image, 'video:'.$video]],
+            ['tags=7', ['event:'.$matching, 'image:'.$image]],
+            ['from=2026-08-01&to=2026-08-31', ['event:'.$matching, 'image:'.$image]],
+            ["country_id=1&city_id={$cairo}&category_id=1&sub_category_id=1&tags=7&from=2026-08-01&to=2026-08-31&type=image", ['image:'.$image]],
+        ];
+
+        foreach ($cases as [$filter, $expected]) {
+            foreach (['ar', 'en'] as $locale) {
+                app()->setLocale($locale);
+                $response = $this->getJson("/api/v1/events/discovery/search?seed=19&{$filter}", [
+                    'Accept-Language' => $locale,
+                ])->assertOk()->assertJsonPath('data.total', count($expected));
+                $this->assertEqualsCanonicalizing(
+                    $expected,
+                    collect($response->json('data.data'))->map(fn ($item) => $item['result_type'].':'.$item['id'])->all()
+                );
+            }
+        }
+    }
+
     private function createSchema(): void
     {
         Schema::dropIfExists('images_tags');
         Schema::dropIfExists('event__tags');
         Schema::dropIfExists('events_images');
+        Schema::dropIfExists('media_requests');
+        Schema::dropIfExists('event_request_creates');
         Schema::dropIfExists('image_translations');
         Schema::dropIfExists('event_translations');
         Schema::dropIfExists('sub_categorey_translations');
         Schema::dropIfExists('sub_categoreys');
+        Schema::dropIfExists('categorey_translations');
+        Schema::dropIfExists('categories');
         Schema::dropIfExists('city_translations');
         Schema::dropIfExists('events');
         Schema::dropIfExists('cities');
@@ -252,6 +388,18 @@ class EventSearchFiltersTest extends TestCase
             $table->string('locale')->index();
             $table->string('name')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+        });
+
+        Schema::create('categorey_translations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('category_id');
+            $table->string('locale');
+            $table->string('name')->nullable();
         });
 
         Schema::create('sub_categoreys', function (Blueprint $table) {
@@ -285,7 +433,20 @@ class EventSearchFiltersTest extends TestCase
             $table->string('slug')->nullable();
             $table->string('photography_type')->nullable();
             $table->string('is_active')->default('1');
+            $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::create('event_request_creates', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('event_id');
+            $table->string('status');
+        });
+
+        Schema::create('media_requests', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('image_id');
+            $table->string('status');
         });
 
         Schema::create('event_translations', function (Blueprint $table) {

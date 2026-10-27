@@ -177,7 +177,7 @@ import {
     shallowRef,
     watch,
 } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import debounce from "lodash/debounce";
 import { Capacitor } from "@capacitor/core";
@@ -186,11 +186,12 @@ import { TagService } from "@/services/TagService/TagService";
 import { LocationService } from "@/services/LocationService/LocationService";
 import { EventService } from "@/services/EventService/EventService";
 import {
-    createDiscoverySeed,
+    homeDiscoverySeed,
     discoveryResultsToMapEvents,
     eventFiltersToQuery,
     normalizeDiscoveryResult,
     normalizePaginatedResponse,
+    queryToEventFilters,
     toMediaUrl,
 } from "@/services/EventService/eventSearchHelpers";
 import { PlanService } from "@/services/planService/planService";
@@ -210,6 +211,7 @@ const ScemoryExperienceTabs = defineAsyncComponent(() => import("./components/Sc
 const NewsletterSection = defineAsyncComponent(() => import("./components/NewsletterSection.vue"));
 
 const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
 const lang = localStorage.getItem("language") || "en";
 
@@ -255,13 +257,14 @@ const toDate = ref("");
 const selectedSubCategory = ref("");
 const selectedTags = ref([]);
 const selectedType = ref("all");
-const discoverySeed = ref(createDiscoverySeed());
+const discoverySeed = ref(homeDiscoverySeed());
 
 const loadingSubCategories = ref(false);
 const loadingTags = ref(false);
 const loadingTagSuggestions = ref(false);
 const loading = ref(false);
 const searched = ref(false);
+const restoringSearch = ref(false);
 const currentPage = ref(1);
 const perPage = ref(8);
 const totalPages = ref(1);
@@ -565,7 +568,7 @@ const scrollToEventsSearch = async () => {
     }, 550);
 };
 
-const buildHomeEventSearchQuery = () => eventFiltersToQuery({
+const buildHomeEventSearchQuery = (includePagination = false) => eventFiltersToQuery({
     type: selectedType.value,
     seed: discoverySeed.value,
     searchQuery: searchQuery.value,
@@ -576,7 +579,9 @@ const buildHomeEventSearchQuery = () => eventFiltersToQuery({
     tagsIds: selectedTags.value,
     fromDate: fromDate.value,
     toDate: toDate.value,
-});
+    page: currentPage.value,
+    perPage: perPage.value,
+}, { includePagination });
 
 const goToMoreSearchResults = () => {
     router.push({
@@ -635,6 +640,35 @@ const onMainCategoryChange = async () => {
     } finally {
         loadingSubCategories.value = false;
     }
+};
+
+const restoreHomeSearch = async () => {
+    if (!route.query.seed || searched.value || loading.value) return;
+
+    const filters = queryToEventFilters(route.query, { defaultPerPage: perPage.value });
+    restoringSearch.value = true;
+    searchQuery.value = filters.searchQuery;
+    selectedType.value = filters.type;
+    discoverySeed.value = filters.seed || discoverySeed.value;
+    selectedCategory.value = filters.categoryId || "";
+    selectedCountry.value = filters.countryId || "";
+    selectedTags.value = [...filters.tagsIds];
+    fromDate.value = filters.fromDate || "";
+    toDate.value = filters.toDate || "";
+    perPage.value = filters.perPage;
+    currentPage.value = filters.page;
+
+    await Promise.all([loadCities(), onMainCategoryChange()]);
+    selectedCity.value = filters.cityId || "";
+    selectedSubCategory.value = filters.subCategoryId || "";
+    const selectedCountryRecord = countries.value.find(
+        (country) => String(country.id) === String(selectedCountry.value)
+    );
+    countrySearch.value = selectedCountryRecord?.translation?.name || selectedCountryRecord?.name || "";
+    await nextTick();
+    restoringSearch.value = false;
+    debouncedSearch.cancel();
+    await search(true, filters.page);
 };
 
 const renderMarkersOnMaps = (events) => {
@@ -807,6 +841,11 @@ const search = async (isInitial = false, page = currentPage.value) => {
         totalResults.value = paginator.total;
         resultFrom.value = paginator.from;
         resultTo.value = paginator.to;
+
+        void router.replace({
+            path: route.path,
+            query: buildHomeEventSearchQuery(true),
+        }).catch((error) => console.error("Search URL update error:", error));
 
         await nextTick();
 
@@ -1062,6 +1101,8 @@ const debouncedSearch = debounce(() => {
 watch(countrySearch, (value) => {
     filterCountries();
 
+    if (restoringSearch.value) return;
+
     if (!String(value || "").trim()) {
         selectedCountry.value = "";
         selectedCity.value = "";
@@ -1070,7 +1111,7 @@ watch(countrySearch, (value) => {
 });
 
 watch(selectedCountry, () => {
-    void loadCities();
+    if (!restoringSearch.value) void loadCities();
 });
 
 watch(
@@ -1109,6 +1150,7 @@ onMounted(() => {
         } catch (error) {
             console.error("Error loading initial data:", error);
         }
+        await restoreHomeSearch();
     }, 120);
 
     scheduleNonCritical(() => {

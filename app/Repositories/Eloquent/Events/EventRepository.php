@@ -516,6 +516,8 @@ class EventRepository implements EventRepositoryInterface
             )
             ->where('events.is_active', 1);
 
+        $this->applyDiscoveryPublicEventFilter($query);
+
         $this->applyDiscoveryStructuralFilters($query, $filters);
         $this->applyDiscoverySearchFilter($query, $filters);
         $this->applyDiscoveryTagFilter($query, $filters);
@@ -535,11 +537,35 @@ class EventRepository implements EventRepositoryInterface
             ->where('events_images.is_active', 1)
             ->where('events_images.type', $type);
 
+        $this->applyDiscoveryPublicEventFilter($query);
+        $this->applyDiscoveryApprovedMediaFilter($query);
+
         $this->applyDiscoveryStructuralFilters($query, $filters);
         $this->applyDiscoverySearchFilter($query, $filters, 'events_images');
         $this->applyDiscoveryTagFilter($query, $filters, 'events_images');
 
         return $query;
+    }
+
+    private function applyDiscoveryPublicEventFilter(QueryBuilder $query): void
+    {
+        $query->whereNull('events.deleted_at')
+            ->whereNotExists(function ($requestQuery) {
+                $requestQuery->selectRaw('1')
+                    ->from('event_request_creates')
+                    ->whereColumn('event_request_creates.event_id', 'events.id')
+                    ->where('event_request_creates.status', '!=', 'approved');
+            });
+    }
+
+    private function applyDiscoveryApprovedMediaFilter(QueryBuilder $query): void
+    {
+        $query->whereNotExists(function ($requestQuery) {
+            $requestQuery->selectRaw('1')
+                ->from('media_requests')
+                ->whereColumn('media_requests.image_id', 'events_images.id')
+                ->where('media_requests.status', '!=', 'approved');
+        });
     }
 
     private function applyDiscoveryStructuralFilters(QueryBuilder $query, array $filters): void
@@ -677,15 +703,24 @@ class EventRepository implements EventRepositoryInterface
             'city.translation',
             'sub_categorey.translation',
             'sub_categorey.category.translation',
-            'firstImage',
         ])->whereIn('id', $eventIds)->get()->keyBy('id');
+
+        $coverIds = DB::table('events_images')
+            ->selectRaw('MIN(events_images.id) AS id')
+            ->whereIn('events_images.event_id', $eventIds)
+            ->where('events_images.is_active', 1)
+            ->whereIn('events_images.type', ['image', 'video'])
+            ->groupBy('events_images.event_id');
+        $this->applyDiscoveryApprovedMediaFilter($coverIds);
+        $coverIds = $coverIds->pluck('id');
+        $covers = EventsImges::whereIn('id', $coverIds)->get()->keyBy('event_id');
 
         $media = EventsImges::with('translation')
             ->whereIn('id', $mediaIds)
             ->get()
             ->keyBy('id');
 
-        $paginator->setCollection($rows->map(function ($row) use ($events, $media) {
+        $paginator->setCollection($rows->map(function ($row) use ($events, $media, $covers) {
             $event = $events->get((int) $row->event_id);
 
             if (! $event) {
@@ -693,16 +728,16 @@ class EventRepository implements EventRepositoryInterface
             }
 
             $mediaItem = $row->result_type === 'event'
-                ? $event->firstImage
+                ? $covers->get((int) $row->event_id)
                 : $media->get((int) $row->result_id);
 
-            return $this->formatDiscoveryResult($row->result_type, $event, $mediaItem);
+            return $this->formatDiscoveryResult($row->result_type, $event, $mediaItem, $covers->get((int) $row->event_id));
         })->filter()->values());
 
         return $paginator;
     }
 
-    private function formatDiscoveryResult(string $resultType, Events $event, ?EventsImges $media): array
+    private function formatDiscoveryResult(string $resultType, Events $event, ?EventsImges $media, ?EventsImges $cover): array
     {
         $eventTranslation = $event->translation;
         $mediaTranslation = $resultType === 'event' ? null : $media?->translation;
@@ -711,7 +746,9 @@ class EventRepository implements EventRepositoryInterface
         $category = $subCategory?->category;
         $title = $eventTranslation?->title ?: $event->title;
         $eventDescription = $eventTranslation?->description ?: $event->description;
-        $description = $mediaTranslation?->description ?: ($media?->description ?: $eventDescription);
+        $description = $resultType === 'event'
+            ? $eventDescription
+            : ($mediaTranslation?->description ?: ($media?->description ?: $eventDescription));
         $mediaUrl = $media ? app(MediaAccessService::class)->previewUrl($media) : null;
         // Cards use the card-size copy; videos keep their own URL.
         $thumbnailUrl = $mediaUrl && $media->type !== 'video'
@@ -774,11 +811,11 @@ class EventRepository implements EventRepositoryInterface
                 'title' => $title,
                 'description' => $eventDescription,
             ],
-            'first_image' => $event->firstImage ? [
-                'id' => $event->firstImage->id,
-                'full_url' => app(MediaAccessService::class)->previewUrl($event->firstImage),
-                'preview_url' => app(MediaAccessService::class)->previewUrl($event->firstImage),
-                'type' => $event->firstImage->type,
+            'first_image' => $cover ? [
+                'id' => $cover->id,
+                'full_url' => app(MediaAccessService::class)->previewUrl($cover),
+                'preview_url' => app(MediaAccessService::class)->previewUrl($cover),
+                'type' => $cover->type,
             ] : null,
         ];
     }

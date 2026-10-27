@@ -15,6 +15,7 @@ import {
     discoveryImageSources,
     discoveryVideoSources,
     eventFiltersToQuery,
+    homeDiscoverySeed,
     normalizeDiscoveryResult,
     normalizePaginatedResponse,
     queryToEventFilters,
@@ -24,6 +25,35 @@ describe("discovery search requests", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         api.get.mockResolvedValue({ data: { data: { data: [] } } });
+    });
+
+    it("keeps the home sort seed across language remounts", () => {
+        window.sessionStorage.removeItem("home-discovery-seed");
+        const first = homeDiscoverySeed();
+        expect(first).toBeGreaterThan(0);
+        expect(homeDiscoverySeed()).toBe(first);
+        window.sessionStorage.removeItem("home-discovery-seed");
+    });
+
+    it("sends an empty search without adding filters", async () => {
+        await EventService.searchEvents({ type: "all", seed: 42, searchQuery: "  " });
+
+        expect(api.get).toHaveBeenCalledWith("/events/discovery/search", {
+            params: {
+                type: "all",
+                seed: 42,
+                country_id: "all",
+                city_id: "all",
+                category_id: "all",
+                sub_category_id: "all",
+                from: null,
+                to: null,
+                q: null,
+                page: 1,
+                per_page: 8,
+            },
+            paramsSerializer: { indexes: false },
+        });
     });
 
     it("sends type, seed and all filters to the discovery endpoint", async () => {

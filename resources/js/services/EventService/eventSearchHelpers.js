@@ -8,6 +8,21 @@ export const DISCOVERY_RESULT_TYPES = ["all", "event", "image", "video"];
 export const createDiscoverySeed = () =>
     Math.floor(Math.random() * 2147483645) + 1;
 
+export const homeDiscoverySeed = () => {
+    const key = "home-discovery-seed";
+    try {
+        const stored = Number(window.sessionStorage.getItem(key));
+        if (Number.isInteger(stored) && stored > 0 && stored <= 2147483646) {
+            return stored;
+        }
+        const seed = createDiscoverySeed();
+        window.sessionStorage.setItem(key, String(seed));
+        return seed;
+    } catch {
+        return createDiscoverySeed();
+    }
+};
+
 const isFilled = (value) =>
     value !== undefined &&
     value !== null &&
