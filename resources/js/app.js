@@ -19,6 +19,7 @@ import virtualGiftMessages from "./i18n/virtualGifts";
 import policyMessages from "./i18n/policies";
 import planOptimizerMessages from "./i18n/planOptimizer";
 import planCheckoutMessages from "./i18n/planCheckout";
+import supportConversationMessages from "./i18n/supportConversation";
 
 // styles
 import "../css/app.css";
@@ -70,6 +71,7 @@ const mergeFeatureMessages = (lang) => {
     const planOptimizer = planOptimizerMessages[lang];
     if (planOptimizer) messages[lang].planOptimizer = planOptimizer;
     if (planCheckoutMessages[lang]) messages[lang].planCheckout = planCheckoutMessages[lang];
+    if (supportConversationMessages[lang]) messages[lang].supportConversation = supportConversationMessages[lang];
 };
 
 mergeFeatureMessages("en");

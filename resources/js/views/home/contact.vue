@@ -21,9 +21,14 @@
           </p>
         </div>
 
+        <div class="support-tabs" role="tablist" :aria-label="supportText('tabsLabel')">
+          <button type="button" role="tab" :aria-selected="activeTab === 'new'" :class="{ active: activeTab === 'new' }" @click="activeTab = 'new'">{{ supportText('newMessage') }}</button>
+          <button type="button" role="tab" :aria-selected="activeTab === 'conversations'" :class="{ active: activeTab === 'conversations' }" @click="showConversations">{{ supportText('myConversations') }}</button>
+        </div>
+
         <div class="contact-layout">
           <!-- Contact Form -->
-          <div class="form-column">
+          <div v-show="activeTab === 'new'" class="form-column">
             <div class="contact-form-card">
               <div class="card-header">
                 <div>
@@ -138,6 +143,8 @@
                       </option>
                     </select>
 
+                    <input v-if="form.subject === 'other'" v-model.trim="customSubject" class="form-control" type="text" maxlength="100" :placeholder="supportText('subjectTitle')" :aria-label="supportText('subjectTitle')" required />
+
                     <i
                       class="bi bi-chevron-down select-arrow"
                       aria-hidden="true"
@@ -223,6 +230,41 @@
                   <span>{{ errorMessage }}</span>
                 </div>
               </form>
+            </div>
+          </div>
+
+          <div v-if="activeTab === 'conversations'" class="form-column">
+            <div class="contact-form-card conversation-card">
+              <div v-if="conversationNotice" class="form-alert alert-success" role="status">{{ conversationNotice }}</div>
+              <div v-if="listError" class="form-alert alert-danger" role="alert">{{ listError }} <button type="button" @click="loadTickets">{{ supportText('retry') }}</button></div>
+              <div v-if="ticketLoading" role="status">{{ supportText('loading') }}</div>
+              <template v-if="selectedTicket">
+                <button type="button" class="conversation-back" @click="selectedTicket = null">← {{ supportText('myConversations') }}</button>
+                <h2 ref="conversationHeading" class="card-title" tabindex="-1">{{ supportSubject(selectedTicket.subject) }}</h2>
+                <div class="conversation-meta">#{{ selectedTicket.id }} · {{ supportText(selectedTicket.status) }}</div>
+                <button v-if="messagePage < messageLastPage" type="button" class="conversation-back" @click="loadOlder">{{ supportText('olderMessages') }}</button>
+                <div ref="messageList" class="message-list" aria-live="polite">
+                  <div v-for="item in messages" :key="item.id" class="message-bubble" :class="item.sender_type === 'admin' ? 'from-admin' : 'from-user'" :dir="messageDirection(item.message)">
+                    <strong>{{ supportText(item.sender_type === 'admin' ? 'supportTeam' : 'you') }}</strong>
+                    <p>{{ item.message }}</p>
+                    <small>{{ formatSupportDate(item.created_at) }}</small>
+                  </div>
+                </div>
+                <form class="conversation-reply" @submit.prevent="sendReply">
+                  <label for="support-reply">{{ supportText('reply') }}</label>
+                  <textarea id="support-reply" v-model="replyText" maxlength="2000" rows="4" required :disabled="replySending"></textarea>
+                  <div v-if="replyError" role="alert" class="form-alert alert-danger">{{ replyError }}</div>
+                  <button class="btn-submit" type="submit" :disabled="replySending || !replyText.trim()">{{ supportText(replySending ? 'sending' : 'sendReply') }}</button>
+                </form>
+              </template>
+              <template v-else>
+                <h2 class="card-title">{{ supportText('myConversations') }}</h2>
+                <p v-if="!ticketLoading && !tickets.length">{{ supportText('empty') }}</p>
+                <button v-for="ticket in tickets" :key="ticket.id" type="button" class="ticket-row" @click="openTicket(ticket.id)">
+                  <span><strong>{{ supportSubject(ticket.subject) }}</strong><small>#{{ ticket.id }} · {{ supportText(ticket.status) }} · {{ formatSupportDate(ticket.last_message_at) }}</small><small>{{ ticket.latest_message?.message?.slice(0, 100) }}</small></span>
+                  <span v-if="ticket.unread_count" class="unread-count">{{ ticket.unread_count }}</span>
+                </button>
+              </template>
             </div>
           </div>
 
@@ -446,6 +488,7 @@
 
 <script>
 import { ContactService } from "../../services/ContactService/ContactService";
+import { getAuthToken } from "../../services/authTokenStorage";
 
 export default {
   name: "ContactUs",
@@ -483,6 +526,23 @@ export default {
       isSubmitting: false,
       successMessage: "",
       errorMessage: "",
+      customSubject: "",
+      submissionKey: null,
+      activeTab: 'new',
+      tickets: [],
+      selectedTicket: null,
+      messages: [],
+      messagePage: 1,
+      messageLastPage: 1,
+      ticketLoading: false,
+      listError: '',
+      conversationNotice: '',
+      replyText: '',
+      replyKey: null,
+      replySending: false,
+      replyError: '',
+      polling: null,
+      pollingBusy: false,
     };
   },
 
@@ -491,14 +551,117 @@ export default {
       return (
         this.form.fullName.trim().length >= 2 &&
         this.isValidEmail(this.form.email) &&
-        this.form.subject &&
+        this.form.subject && (this.form.subject !== 'other' || this.customSubject.trim().length > 0) &&
         this.form.message.trim().length >= 5 &&
         this.form.message.length <= 2000
       );
     },
   },
 
+  watch: {
+    form: { deep: true, handler() { this.submissionKey = null; } },
+    replyText() { this.replyKey = null; },
+  },
+
   methods: {
+    supportSubject(subject) {
+      const names = { copyright: 'policies.ui.copyrightReport', privacy: 'policies.ui.privacyRequest', legal: 'policies.ui.legalInquiry' };
+      return names[subject] ? this.$t(names[subject]) : subject;
+    },
+    subjectTitle() {
+      if (this.form.subject === 'other') return this.customSubject.trim();
+      if (['copyright', 'privacy', 'legal'].includes(this.form.subject)) return this.form.subject;
+      const names = { copyright: 'policies.ui.copyrightReport', privacy: 'policies.ui.privacyRequest', legal: 'policies.ui.legalInquiry', general: 'contacts.form.generalInquiry', 'custom-plan': 'contacts.form.customPlan', support: 'contacts.form.support', feedback: 'contacts.form.feedback' };
+      return this.$t(names[this.form.subject] || 'contacts.form.generalInquiry');
+    },
+    supportText(key) {
+      return this.$t(`supportConversation.${key}`);
+    },
+    formatSupportDate(value) {
+      return value ? new Intl.DateTimeFormat(this.$i18n.locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : '';
+    },
+    messageDirection(value) {
+      return /[\u0600-\u06ff]/.test(value || '') ? 'rtl' : 'ltr';
+    },
+    guestTickets() {
+      try { return JSON.parse(localStorage.getItem('scemory-support-guests') || '{}'); } catch { return {}; }
+    },
+    saveGuestTicket(id, token) {
+      if (!token) return;
+      const stored = this.guestTickets();
+      stored[id] = token;
+      localStorage.setItem('scemory-support-guests', JSON.stringify(stored));
+    },
+    async showConversations() {
+      this.activeTab = 'conversations';
+      await this.loadTickets();
+    },
+    async loadTickets() {
+      this.ticketLoading = true;
+      this.listError = '';
+      try {
+        const records = [];
+        if (getAuthToken()) {
+          let page = 1;
+          let result;
+          do {
+            result = (await ContactService.list(page)).data.data;
+            records.push(...result.data);
+            page++;
+          } while (page <= result.last_page);
+        }
+        for (const [id, token] of Object.entries(this.guestTickets())) {
+          try {
+            const result = (await ContactService.show(id, token, 1, true)).data.data;
+            records.push({ ...result.ticket, latest_message: result.messages.data.at(-1) });
+          } catch { /* An expired or revoked guest link stays inaccessible. */ }
+        }
+        this.tickets = records.sort((a, b) => new Date(b.last_message_at) - new Date(a.last_message_at));
+      } catch (error) {
+        this.listError = error?.response?.data?.message || this.supportText('loadError');
+      } finally { this.ticketLoading = false; }
+    },
+    async openTicket(id, page = 1, quiet = false, focusHeading = true) {
+      if (this.pollingBusy) return;
+      this.pollingBusy = true;
+      if (!quiet) this.ticketLoading = true;
+      try {
+        const token = this.guestTickets()[id];
+        const result = (await ContactService.show(id, token, page)).data.data;
+        this.selectedTicket = result.ticket;
+        this.messagePage = result.messages.current_page;
+        this.messageLastPage = result.messages.last_page;
+        this.messages = page === 1 ? result.messages.data : [...result.messages.data, ...this.messages];
+        this.replyError = '';
+        if (!quiet && page === 1) this.$nextTick(() => {
+          if (focusHeading) this.$refs.conversationHeading?.focus();
+          if (this.$refs.messageList) this.$refs.messageList.scrollTop = this.$refs.messageList.scrollHeight;
+        });
+      } catch (error) {
+        if (!quiet) this.listError = error?.response?.data?.message || this.supportText('loadError');
+      } finally { this.pollingBusy = false; this.ticketLoading = false; }
+    },
+    loadOlder() { if (this.selectedTicket) this.openTicket(this.selectedTicket.id, this.messagePage + 1); },
+    async sendReply() {
+      if (!this.replyText.trim() || this.replySending || !this.selectedTicket) return;
+      this.replySending = true;
+      this.replyError = '';
+      this.replyKey ||= crypto.randomUUID();
+      try {
+        await ContactService.reply(this.selectedTicket.id, this.replyText.trim(), this.replyKey, this.guestTickets()[this.selectedTicket.id]);
+        this.replyText = '';
+        this.replyKey = null;
+        await this.openTicket(this.selectedTicket.id, 1, false, false);
+        await this.loadTickets();
+      } catch (error) {
+        this.replyError = error?.response?.data?.errors?.message?.[0] || error?.response?.data?.message || this.supportText('sendError');
+      } finally { this.replySending = false; }
+    },
+    pollConversation() {
+      if (this.activeTab === 'conversations' && this.selectedTicket && !document.hidden && !this.pollingBusy && !this.replySending) {
+        this.openTicket(this.selectedTicket.id, 1, true);
+      }
+    },
     isValidEmail(email) {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailPattern.test(email);
@@ -516,8 +679,9 @@ export default {
       const payload = {
         name: this.form.fullName.trim(),
         email: this.form.email.trim(),
-        subject: this.form.subject,
+        subject: this.subjectTitle(),
         message: this.form.message.trim(),
+        submission_key: this.submissionKey ||= crypto.randomUUID(),
       };
 
       try {
@@ -528,17 +692,22 @@ export default {
             this.$t("contacts.form.successMessage") ||
             "Your message has been sent successfully.";
 
+          const created = response.data.data;
+          this.saveGuestTicket(created.ticket.id, created.access_token);
           this.resetForm();
+          this.submissionKey = null;
+          this.conversationNotice = this.successMessage;
+          this.activeTab = 'conversations';
+          await this.loadTickets();
+          await this.openTicket(created.ticket.id);
           return;
         }
 
         throw new Error("Unexpected response from the server.");
       } catch (error) {
-        console.error("Error submitting contact form:", error);
-
-        this.errorMessage =
-          this.$t("contacts.form.errorMessage") ||
-          "Something went wrong while sending your message. Please try again.";
+        this.errorMessage = error?.response?.data?.errors?.message?.[0]
+          || error?.response?.data?.message
+          || this.$t("contacts.form.errorMessage");
       } finally {
         this.isSubmitting = false;
       }
@@ -551,8 +720,21 @@ export default {
         subject: "general",
         message: "",
       };
+      this.customSubject = '';
     },
   },
+  async mounted() {
+    const { ticket, access } = this.$route.query;
+    if (ticket && access) this.saveGuestTicket(ticket, access);
+    if (ticket) {
+      this.activeTab = 'conversations';
+      await this.loadTickets();
+      await this.openTicket(ticket);
+      if (access) this.$router.replace({ query: { ...this.$route.query, access: undefined } });
+    }
+    this.polling = setInterval(this.pollConversation, 15000);
+  },
+  beforeUnmount() { clearInterval(this.polling); },
 };
 </script>
 
@@ -1345,4 +1527,29 @@ export default {
   border-color: #1677FF;
   box-shadow: 0 0 0 4px rgba(22, 119, 255, 0.10);
 }
+</style>
+
+<style scoped>
+.support-tabs { display: flex; gap: 8px; margin: 0 0 20px; flex-wrap: wrap; }
+.support-tabs button { border: 1px solid #bfdbfe; border-radius: 10px; background: #fff; color: #1d4ed8; padding: 10px 18px; font-weight: 700; cursor: pointer; }
+.support-tabs button.active { background: #2563eb; color: #fff; }
+.conversation-card { min-height: 300px; }
+.conversation-meta { color: #64748b; margin: 8px 0 16px; }
+.conversation-back { color: #2563eb; background: transparent; border: 0; padding: 8px 0; cursor: pointer; }
+.ticket-row { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; text-align: start; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; margin-top: 10px; padding: 14px; cursor: pointer; }
+.ticket-row:hover { border-color: #60a5fa; background: #eff6ff; }
+.ticket-row span:first-child { min-width: 0; }
+.ticket-row strong, .ticket-row small { display: block; overflow-wrap: anywhere; }
+.ticket-row small { color: #64748b; margin-top: 3px; }
+.unread-count { background: #2563eb; color: #fff; border-radius: 50%; min-width: 24px; text-align: center; }
+.message-list { display: flex; flex-direction: column; gap: 12px; max-height: 460px; overflow-y: auto; padding: 12px 4px; }
+.message-bubble { width: fit-content; max-width: 86%; padding: 12px 15px; border-radius: 14px; background: #eff6ff; color: #1e3a8a; overflow-wrap: anywhere; }
+.message-bubble.from-admin { align-self: flex-end; background: #e0f2fe; }
+.message-bubble.from-user { align-self: flex-start; background: #f1f5f9; color: #334155; }
+.message-bubble p { white-space: pre-wrap; margin: 5px 0; }
+.message-bubble small { opacity: .7; }
+.conversation-reply { display: grid; gap: 8px; margin-top: 16px; }
+.conversation-reply textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; resize: vertical; }
+.conversation-reply .btn-submit { width: fit-content; }
+@media (max-width: 600px) { .support-tabs button { flex: 1; } .message-bubble { max-width: 95%; } }
 </style>

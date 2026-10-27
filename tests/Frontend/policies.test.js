@@ -4,6 +4,7 @@ import { createApp, h, nextTick } from 'vue';
 import { createI18n } from 'vue-i18n';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
 import translations from '../../resources/js/i18n/policies';
+import supportConversationMessages from '../../resources/js/i18n/supportConversation';
 import { policies, approvedPolicyDate, verifiedFooterUrl } from '../../resources/js/policies';
 import { footerNavigation, navigationSession, specialCoverageDestination } from '../../resources/js/navigation';
 import Footer from '../../resources/js/components/layouts/footer.vue';
@@ -20,7 +21,7 @@ vi.mock('../../resources/js/services/ContactService/ContactService', () => ({ Co
 const existing = import.meta.glob('../../resources/js/i18n/*.json', { eager: true, import: 'default' });
 const messages = Object.fromEntries(Object.entries(existing).map(([file, value]) => {
     const lang = file.split('/').pop().replace('.json', '');
-    return [lang, { ...value, policies: translations[lang] }];
+    return [lang, { ...value, policies: translations[lang], supportConversation: supportConversationMessages[lang] }];
 }));
 const locales = Object.keys(messages);
 let app;
@@ -175,7 +176,7 @@ describe('navigation and external links', () => {
 
 describe('working legal contact channel', () => {
     it.each(['copyright', 'privacy', 'legal'])('preselects and sends %s through the existing API', async topic => {
-        ContactService.create.mockResolvedValue({ status: 200, data: { status: 'success' } });
+        ContactService.create.mockResolvedValue({ status: 200, data: { status: 'success', data: { ticket: { id: 42, subject: topic, status: 'open' }, access_token: 'test-guest-access' } } });
         const { target } = await mount(Contact, {}, 'ar', `/ar/contact?topic=${topic}`);
         expect(target.querySelector('#subject').value).toBe(topic);
         for (const [selector, value] of [['#full-name', 'Rights Owner'], ['#email', 'owner@example.test'], ['#message', 'Please review https://scemory.com/ar/single_event/example']]) {

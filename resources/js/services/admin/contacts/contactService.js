@@ -6,13 +6,11 @@ export const ContactService = {
    * @param {number} page - Current page number
    * @returns {Promise<Object>} Paginated contacts response
    */
-  async getAll(page = 1) {
+  async getAll(page = 1, status = 'all', search = '') {
     const response = await api.get(`/contacts`, {
-      params: { page },
+      params: { page, status, search },
+      suppressGlobalErrorToast: true,
     });
     return response.data;
-  },
-    async delete(id) {
-    return await api.delete(`/contacts/delete/${id}`);
   },
 };

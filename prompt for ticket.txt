@@ -1,0 +1,775 @@
+# SCEMORY — UPGRADE EXISTING SUPPORT SYSTEM INTO A COMPLETE TWO-WAY SUPPORT CONVERSATION SYSTEM
+
+## ROLE
+
+You are a senior Laravel 10, MySQL, React/JavaScript frontend, and full-stack engineer working on the existing Scemory platform.
+
+Your task is to upgrade the EXISTING customer support/contact system into a professional, persistent, two-way messaging system between platform users and administrators.
+
+The project already has:
+
+- An existing Support / Contact Us page.
+- An existing support contact form.
+- An existing administrative support management section inside the Admin Dashboard sidebar under Settings.
+- Existing Laravel authentication and user management.
+- Existing database and email infrastructure.
+- Existing frontend design and 13-language internationalization.
+
+**CRITICAL: Do not create a disconnected support system. Inspect and extend the existing support functionality.**
+
+Do not redesign unrelated pages or break existing administrative tools.
+
+---
+
+# PHASE 1 — INSPECT THE EXISTING SUPPORT SYSTEM FIRST
+
+Before modifying any code, inspect the entire support implementation.
+
+Find and understand:
+
+1. Existing frontend Contact Us / Support page.
+2. Existing support form fields.
+3. Existing frontend submission endpoint.
+4. Laravel support-related routes.
+5. Existing support controllers.
+6. Support models and database tables.
+7. Existing support email notifications.
+8. Existing admin support management pages.
+9. Admin sidebar Settings section.
+10. Existing authentication, permissions, and middleware.
+11. Current JavaScript request and validation handling.
+12. Existing frontend localization and RTL implementation.
+13. Existing queue and notification infrastructure.
+
+Determine exactly how a support request is currently submitted, stored, processed, and answered.
+
+### Existing submission error
+
+The provided screenshot shows this frontend error:
+
+"حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى."
+
+Investigate the REAL root cause.
+
+Check:
+
+- Browser request payload and endpoint.
+- Backend route.
+- HTTP status code.
+- Laravel logs.
+- Validation errors.
+- Database persistence.
+- Authentication and CSRF behavior.
+- Mail exceptions.
+- Frontend response handling.
+
+Correct the underlying issue.
+
+Do not merely hide the error message.
+
+Ensure an email delivery failure does not incorrectly report that a successfully persisted support message was never saved.
+
+Avoid duplicate support messages when users retry.
+
+After completing inspection, continue to implementation.
+
+---
+
+# PHASE 2 — CONVERT SUPPORT REQUESTS INTO CONVERSATIONS
+
+The support system must support persistent conversations.
+
+Each support request should become a support conversation, also called a support ticket.
+
+Each ticket contains:
+
+- Unique ticket ID.
+- Ticket subject/title.
+- User identity.
+- Original support message.
+- Conversation messages.
+- Current ticket status.
+- Creation timestamp.
+- Last activity timestamp.
+- Read/unread state.
+- Assigned administrator when applicable.
+
+The ticket must persist in the database.
+
+Users must be able to return to the support page and continue existing conversations.
+
+Administrators must be able to view and respond to the same conversations.
+
+**Both parties must exchange messages inside the same ticket.**
+
+Do not create a new ticket every time a user sends a reply.
+
+---
+
+# PHASE 3 — ADD CONVERSATION TABS TO THE USER SUPPORT PAGE
+
+The current support page contains a contact form.
+
+Keep its existing design identity, colors, spacing, typography, and responsive layout.
+
+Enhance the page by adding a support conversation navigation area at the TOP of the support section.
+
+### Required tabs
+
+Add an in-page tab interface such as:
+
+**New Message | My Conversations**
+
+These must be actual functional tabs within the page, not browser tabs.
+
+### New Message tab
+
+Preserve the existing form:
+
+- Full name.
+- Email address.
+- Subject.
+- Message.
+- Submit button.
+
+When a user successfully submits the form:
+
+1. Validate the message.
+2. Persist a new support ticket and its initial message.
+3. Show a success confirmation.
+4. Automatically switch to the conversation view.
+5. Automatically open the newly created ticket.
+6. Display the original submitted message inside the conversation.
+7. Make the ticket accessible later from My Conversations.
+
+The ticket's subject must appear as its conversation name.
+
+Example:
+
+"مشكلة في الدفع باستخدام PayPal"
+
+### My Conversations tab
+
+Show all tickets belonging to the authenticated user.
+
+Each ticket should display:
+
+- Ticket subject.
+- Ticket number.
+- Last message preview.
+- Last activity time.
+- Status.
+- Unread-message indicator.
+
+Example:
+
+```text
+My Conversations
+
+[مشكلة في الدفع باستخدام PayPal]    ● New Reply
+[استفسار عن الاشتراك]                Open
+[مشكلة في رفع الصور]                 Resolved
+```
+
+Clicking a ticket opens its conversation.
+
+Allow multiple tickets.
+
+Do not merge unrelated support conversations.
+
+### Open conversation interface
+
+The user should see:
+
+- Conversation title.
+- Ticket status.
+- Message history.
+- Message timestamps.
+- Sender identification.
+- Text input / textarea.
+- Send button.
+
+The UI should resemble a modern, clean support messaging interface.
+
+Use Scemory's existing blue-and-white design identity.
+
+---
+
+# PHASE 4 — IMPLEMENT REAL TWO-WAY MESSAGING
+
+The system must support:
+
+USER → ADMIN
+
+ADMIN → USER
+
+### User behavior
+
+The user can:
+
+- Create a support ticket.
+- View all authorized conversations.
+- Open a conversation.
+- Read administrator replies.
+- Send additional messages.
+- See message timestamps.
+- See whether a ticket is open, pending, or resolved.
+- Identify unread administrator replies.
+
+### Administrator behavior
+
+The administrator can:
+
+- View incoming support tickets.
+- Open any ticket they are authorized to manage.
+- Read the complete conversation.
+- Reply directly to the user.
+- View the user's response.
+- Manage ticket statuses.
+- See unread user messages.
+- Track latest ticket activity.
+
+### Example conversation
+
+```text
+Ticket: مشكلة في شراء خطة
+
+USER:
+السلام عليكم، عندي مشكلة في الدفع باستخدام PayPal.
+
+ADMIN:
+وعليكم السلام، ممكن توضح الخطأ اللي بيظهر؟
+
+USER:
+بيظهر إشعار إن العملية فشلت.
+
+ADMIN:
+تمام، هنراجع المشكلة ونتابع معاك.
+```
+
+Every message must be saved in the database.
+
+Messages must remain available after refreshing the page or logging in again.
+
+Use the same conversation identifier throughout the entire conversation.
+
+---
+
+# PHASE 5 — UPDATE EXISTING ADMIN SUPPORT SECTION
+
+The Admin Dashboard already contains support functionality inside the sidebar under Settings.
+
+**REUSE THAT EXISTING ADMIN AREA.**
+
+Do not create a separate administration dashboard.
+
+Do not create a duplicate support sidebar menu.
+
+Inspect the actual admin structure, then upgrade its support management interface.
+
+### Admin ticket list
+
+Display:
+
+- Ticket ID.
+- Subject.
+- User name.
+- Email.
+- Status.
+- Last message.
+- Last activity.
+- Unread count.
+- Assigned administrator when supported.
+
+Add practical filters:
+
+- All.
+- Open.
+- Pending.
+- Resolved.
+- Unread.
+
+Search by subject, ticket number, username, or email.
+
+### Admin conversation screen
+
+When an administrator opens a support ticket:
+
+- Display the full message history.
+- Differentiate user and administrator messages visually.
+- Provide a reply input.
+- Allow sending a response.
+- Save the reply to the same conversation.
+- Update last activity.
+- Notify the user when appropriate.
+- Update unread counters.
+
+Use right/left message bubbles or another clear chat layout that works in both RTL and LTR.
+
+### Ticket statuses
+
+Support at least:
+
+- `open`
+- `pending`
+- `resolved`
+
+You may include `closed` if it fits the existing architecture.
+
+Define transitions clearly.
+
+For example:
+
+- New user ticket → open.
+- Admin replies → pending user response, where applicable.
+- User replies → open / awaiting admin.
+- Admin resolves → resolved.
+
+If a user replies to a resolved ticket, define and implement a consistent reopening behavior.
+
+Ensure no incoming user reply is silently ignored.
+
+### Admin notifications
+
+Show an unread ticket/message indicator within the existing support menu if compatible with the current sidebar.
+
+Do not interfere with unrelated admin sidebar counters.
+
+---
+
+# PHASE 6 — DATABASE DESIGN
+
+Inspect the existing database first.
+
+Reuse existing support tables whenever possible.
+
+If the current database structure cannot support multiple persistent messages per conversation, introduce the smallest necessary migrations.
+
+Recommended logical design:
+
+## Support Tickets
+
+Use the existing support table if suitable, or create a compatible `support_tickets` table.
+
+Suggested fields:
+
+```text
+id
+user_id (nullable only where guest support is permitted)
+name
+email
+subject
+status
+assigned_admin_id (nullable)
+last_message_at
+last_user_message_at (nullable)
+last_admin_message_at (nullable)
+created_at
+updated_at
+```
+
+## Support Messages
+
+Use the existing messages table if suitable, or create `support_messages`.
+
+Suggested fields:
+
+```text
+id
+support_ticket_id
+sender_id (nullable for guests/system messages)
+sender_type
+message
+read_at (nullable, if compatible with read model)
+created_at
+updated_at
+```
+
+Sender types must be validated and assigned server-side, not trusted from client input.
+
+If needed, implement separate participant-specific read tracking to correctly support unread counts for multiple administrators.
+
+### Important database requirements
+
+- Use foreign keys.
+- Use appropriate indexes.
+- Preserve historical support requests.
+- Never delete existing support data.
+- Never create duplicate tickets on submission retries.
+- Preserve sender identity.
+- Support multiple messages per ticket.
+- Store timestamps consistently.
+- Keep messages ordered by reliable timestamp and ID.
+- Use appropriate MySQL constraints.
+- Design for pagination.
+- Avoid unnecessary migrations.
+
+If existing support records represent only single messages, plan a safe backward-compatible conversion or migration.
+
+Do not silently destroy or orphan historical messages.
+
+**Database structure is flexible, but persistence and conversation integrity are mandatory.**
+
+---
+
+# PHASE 7 — AUTHENTICATION AND SECURITY
+
+Use Laravel's existing authentication, Sanctum, permissions, and role system.
+
+### Authenticated users
+
+Authenticated users may access only their own support tickets.
+
+Never allow a user to retrieve another person's conversation by changing a numeric ticket ID.
+
+Enforce ticket ownership server-side for:
+
+- Listing.
+- Reading.
+- Sending replies.
+- Updating relevant user-controlled fields.
+
+### Guest users
+
+Inspect whether the current contact form supports guests.
+
+If guest submissions are currently supported, preserve that capability.
+
+For guest conversations, implement a secure access mechanism using a time-limited or revocable signed access link and appropriate verification.
+
+Do not allow guest access simply because someone knows an email address or ticket ID.
+
+Do not silently force login if existing support functionality allows anonymous contact.
+
+### Admin authorization
+
+Only administrators with the appropriate existing permissions can:
+
+- List all tickets.
+- View other users' conversations.
+- Reply as support staff.
+- Update ticket status.
+- Assign tickets.
+
+Do not allow users to impersonate administrators.
+
+### Input safety
+
+- Validate message lengths.
+- Escape user-generated content.
+- Prevent XSS.
+- Prevent mass assignment.
+- Respect CSRF/Sanctum requirements.
+- Rate-limit ticket creation and message sending.
+- Protect sensitive contact information.
+- Avoid leaking ticket contents in errors or logs.
+
+---
+
+# PHASE 8 — MESSAGE UPDATES AND NOTIFICATIONS
+
+The conversation must feel interactive.
+
+If the project already uses Laravel broadcasting, WebSockets, or a compatible real-time mechanism, reuse it.
+
+Otherwise, implement lightweight and efficient polling for active conversations.
+
+Suggested behavior:
+
+- Check for new messages approximately every 10–15 seconds while the conversation is open.
+- Stop polling when the relevant component is unmounted.
+- Avoid polling hidden or inactive conversations unnecessarily.
+- Prevent overlapping requests.
+- Use pagination or incremental message fetching.
+- Update unread counts appropriately.
+- Refresh the conversation after sending a message.
+
+Do not introduce an unnecessary Redis/WebSocket infrastructure dependency solely for support chat.
+
+### Notifications
+
+Use the existing notification/email system where suitable.
+
+When a user creates a ticket:
+
+- Notify the appropriate support team.
+
+When a user sends another message:
+
+- Notify support staff as appropriate.
+
+When an admin replies:
+
+- Notify the user.
+- Mark the conversation as having an unread admin message.
+
+Notifications must not create duplicate tickets.
+
+A mail transport failure must not destroy or roll back a successfully stored message unless existing explicit business rules require it.
+
+Prefer after-commit queued notifications with proper failure handling.
+
+---
+
+# PHASE 9 — UI / UX REQUIREMENTS
+
+Use the existing Scemory visual identity.
+
+Colors should match the current platform.
+
+Preferred style:
+
+- White conversation containers.
+- Blue message accents.
+- Rounded message bubbles.
+- Subtle borders and shadows.
+- Compact ticket navigation.
+- Clear unread indicators.
+- Clean responsive layout.
+
+Avoid redesigning the entire Support page.
+
+Preserve the existing informational cards and contact details.
+
+### Arabic and RTL
+
+The user screenshot shows Arabic RTL support.
+
+The new interface MUST work correctly in Arabic.
+
+Ensure:
+
+- Correct tab direction.
+- Correct message alignment.
+- Correct sender presentation.
+- Correct button placement.
+- Correct date/time rendering.
+- Correct unread indicators.
+- Proper handling of mixed Arabic and English messages.
+
+### Localization
+
+Use the existing Scemory translation and localization architecture.
+
+Support the current 13 site locales:
+
+```text
+ar, en, fr, de, ru, es, it, hi, ja, fa, zh, ur, tr
+```
+
+Translate interface labels through existing language files and translation mechanisms.
+
+Do not automatically translate the contents of user/admin messages unless that feature already exists.
+
+### Loading and error states
+
+Implement:
+
+- Loading indicators.
+- Empty conversations state.
+- Sending state.
+- Message-send success behavior.
+- Retryable network errors.
+- Clear validation errors.
+- Accessible buttons.
+- Proper focus management.
+- Auto-scroll to recent messages when appropriate.
+
+Do not clear a user's typed message when sending fails.
+
+Prevent duplicate messages from rapid repeated clicks.
+
+---
+
+# PHASE 10 — BACKEND API INTEGRATION
+
+Inspect current routes first.
+
+Reuse existing support endpoints where practical.
+
+Introduce additional endpoints only when necessary for conversation functionality.
+
+The application needs equivalent capabilities to:
+
+```text
+POST   /support/tickets
+GET    /support/tickets
+GET    /support/tickets/{ticket}
+GET    /support/tickets/{ticket}/messages
+POST   /support/tickets/{ticket}/messages
+```
+
+And authorized admin equivalents for:
+
+```text
+GET    /admin/support/tickets
+GET    /admin/support/tickets/{ticket}
+POST   /admin/support/tickets/{ticket}/messages
+PATCH  /admin/support/tickets/{ticket}/status
+```
+
+These are logical examples, not instructions to overwrite existing routes.
+
+Follow the project's actual Laravel route prefixes and naming conventions.
+
+Use proper request validation, services, policies, and database transactions.
+
+Avoid duplicating business logic between user and admin controllers.
+
+Return consistent API response formats.
+
+Ensure all frontend requests use the actual backend contracts.
+
+---
+
+# PHASE 11 — FIX THE EXISTING CONTACT FORM SUBMISSION ERROR
+
+This is a mandatory part of the task.
+
+The current support page displays:
+
+"حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى."
+
+Inspect and fix this problem.
+
+Determine whether it originates from:
+
+- Invalid request payload.
+- Incorrect endpoint.
+- Authentication failure.
+- Missing database fields.
+- Backend exception.
+- Email transport exception.
+- CSRF mismatch.
+- Incorrect frontend response parsing.
+- Validation mismatch.
+- Duplicate request handling.
+
+The new flow must reliably create a ticket and display its conversation after successful persistence.
+
+Do not report success if the database transaction failed.
+
+Do not report failure if the ticket was actually saved successfully and only a separate notification failed.
+
+Implement idempotency protection to avoid duplicate tickets from ambiguous network responses and retries.
+
+---
+
+# PHASE 12 — PRESERVE EXISTING APPLICATION FEATURES
+
+Do not break:
+
+- Existing Support page.
+- Existing Contact Us details.
+- Admin Settings sidebar.
+- Existing admin authentication.
+- Existing user roles.
+- Existing notification infrastructure.
+- Other admin tools.
+- Marketplace.
+- Plans and subscriptions.
+- Payment systems.
+- Event management.
+- MapLibre integration.
+- OAuth.
+- Existing multilingual UI.
+
+Keep unrelated parts of the application untouched.
+
+Do not introduce an additional frontend framework.
+
+Do not replace Laravel's authentication system.
+
+Do not create a separate standalone chat service.
+
+---
+
+# PHASE 13 — MANDATORY TESTING
+
+Implement and run relevant tests.
+
+Test at least:
+
+1. Authenticated user creates a support ticket.
+2. Ticket is persisted in database.
+3. Initial message is saved.
+4. Ticket appears in My Conversations.
+5. New ticket opens automatically after submission.
+6. User sends a second message.
+7. Second message belongs to the same ticket.
+8. Admin sees the new ticket inside existing Settings support section.
+9. Admin replies successfully.
+10. User sees the admin reply.
+11. User replies again.
+12. Admin sees the user's new reply.
+13. Message history survives page refresh.
+14. Ticket status updates correctly.
+15. Unread counts update correctly.
+16. User cannot access another user's ticket.
+17. Non-admin cannot access admin support endpoints.
+18. Guest access remains secure where supported.
+19. Duplicate submissions do not create duplicate tickets.
+20. Email failure does not cause a false submission error after successful database persistence.
+21. Sending failure preserves unsent message text.
+22. Arabic RTL conversation rendering works.
+23. English LTR conversation rendering works.
+24. Mobile support interface remains usable.
+25. Existing unrelated features are unaffected.
+
+Run backend tests, frontend tests, linting, and the production build where available.
+
+If browser automation is available, visually test both the Support page and Admin support conversation screen.
+
+Do not claim that tests passed unless they actually passed.
+
+---
+
+# PHASE 14 — DELIVERABLES
+
+After implementation, provide:
+
+1. Summary of the existing support system discovered.
+2. Root cause of the current contact form error.
+3. Database migrations added or modified.
+4. Updated models and relationships.
+5. Updated backend routes and controllers.
+6. Updated frontend Support page.
+7. Updated existing Admin Settings support interface.
+8. Conversation-tab implementation.
+9. Message persistence and unread logic.
+10. Real-time or polling strategy.
+11. Authentication and security protections.
+12. Email notification behavior.
+13. List of changed files.
+14. Actual test and build results.
+15. Any remaining configuration or deployment requirements.
+
+Do not claim live production deployment unless it was actually performed.
+
+Do not modify unrelated production configurations.
+
+---
+
+# FINAL NON-NEGOTIABLE REQUIREMENTS
+
+- INSPECT THE CURRENT SUPPORT SYSTEM FIRST.
+- REUSE THE EXISTING CONTACT PAGE.
+- REUSE THE EXISTING ADMIN SUPPORT AREA INSIDE SETTINGS.
+- ADD NEW MESSAGE AND MY CONVERSATIONS TABS.
+- AFTER SUCCESSFUL SUBMISSION, AUTOMATICALLY OPEN THE NEW CONVERSATION.
+- USE THE SUBJECT AS THE CONVERSATION TITLE.
+- SUPPORT MULTIPLE CONVERSATIONS PER USER.
+- IMPLEMENT TWO-WAY USER/ADMIN MESSAGING.
+- PERSIST EVERY MESSAGE IN MYSQL.
+- ALLOW USERS TO RETURN AND CONTINUE CONVERSATIONS.
+- ALLOW ADMINS TO REPLY FROM THEIR EXISTING SIDEBAR SUPPORT SECTION.
+- IMPLEMENT UNREAD INDICATORS.
+- IMPLEMENT TICKET STATUS MANAGEMENT.
+- FIX THE CURRENT MESSAGE-SUBMISSION ERROR.
+- PRESERVE GUEST SUPPORT IF IT CURRENTLY EXISTS.
+- MAINTAIN ALL 13 UI LANGUAGES AND RTL/LTR.
+- PRESERVE THE SCEMORY BLUE-AND-WHITE DESIGN.
+- DO NOT BREAK EXISTING APPLICATION FEATURES.
+- RUN AUTOMATED TESTS AND VERIFY THE END-TO-END CONVERSATION FLOW.
+
+**START BY INSPECTING THE CURRENT SUPPORT FRONTEND, BACKEND, DATABASE, AND ADMIN SETTINGS SUPPORT SECTION. THEN IMPLEMENT THE COMPLETE TWO-WAY CONVERSATION SYSTEM DIRECTLY INSIDE THE EXISTING SCEMORY PROJECT.**

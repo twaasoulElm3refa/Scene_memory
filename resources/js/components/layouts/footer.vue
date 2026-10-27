@@ -81,7 +81,7 @@ import { policies, verifiedFooterUrl } from '../../policies';
 const { t, tm, rt, locale } = useI18n();
 const route = useRoute();
 const currentYear = new Date().getFullYear();
-const direction = computed(() => ['ar', 'fa', 'ur'].includes(locale.value) ? '' : 'ltr');
+const direction = computed(() => ['ar', 'fa', 'ur'].includes(locale.value) ? 'rtl' : 'ltr');
 const path = suffix => '/' + locale.value + suffix;
 const comparisonPaths = ['/compare/historypin', '/compare/pastvu', '/compare/the-clio'];
 const supportPaths = new Set(['/who', '/contact', '/data-deletion', ...policies.map(policy => policy.path), ...comparisonPaths]);

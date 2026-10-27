@@ -64,4 +64,8 @@ return [
         ],
     ],
 
+    'support' => [
+        'email' => env('SUPPORT_EMAIL', 'scemorygmail@gmail.com'),
+    ],
+
 ];

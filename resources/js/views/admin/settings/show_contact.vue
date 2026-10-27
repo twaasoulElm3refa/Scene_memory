@@ -26,6 +26,12 @@
           </div>
           <div class="header-badges">
             <span class="badge badge-id">#{{ contact.id }}</span>
+            <select :value="contact.status" aria-label="Ticket status" @change="changeStatus($event.target.value)">
+              <option value="open">{{ $t('supportConversation.open') }}</option>
+              <option value="pending">{{ $t('supportConversation.pending') }}</option>
+              <option value="resolved">{{ $t('supportConversation.resolved') }}</option>
+            </select>
+            <button type="button" class="btn btn-outline" @click="claimTicket">{{ $t('supportConversation.assignToMe') }}</button>
             <span v-if="contact.user_id" class="badge badge-user">مستخدم مسجل</span>
             <span v-else class="badge badge-guest">زائر</span>
           </div>
@@ -56,30 +62,29 @@
             <p class="subject-text">{{ contact.subject }}</p>
           </div>
 
-          <div class="message-box">
-            <span class="label">الرسالة</span>
-            <p class="message-text">{{ contact.message }}</p>
-          </div>
         </div>
 
         <!-- Previous Responds -->
         <div
-          v-if="contact.contact_responds && contact.contact_responds.length"
+          v-if="messages.length"
           class="card responds-card"
         >
           <h4 class="section-title">
             <span class="icon-sm">💬</span>
-            الردود السابقة
-            <span class="badge badge-count">{{ contact.contact_responds.length }}</span>
+            {{ $t('supportConversation.myConversations') }}
+            <span class="badge badge-count">{{ messages.length }}</span>
           </h4>
+          <button v-if="messagePage < messageLastPage" type="button" class="btn btn-outline" @click="loadOlder">{{ $t('supportConversation.olderMessages') }}</button>
           <div class="responds-list">
             <div
-              v-for="respond in contact.contact_responds"
+              v-for="respond in messages"
               :key="respond.id"
               class="respond-item"
+              :class="respond.sender_type === 'admin' ? 'admin-message' : 'user-message'"
+              :dir="/[\u0600-\u06ff]/.test(respond.message) ? 'rtl' : 'ltr'"
             >
               <div class="respond-header">
-                <span class="respond-label">رد الإدارة</span>
+                <span class="respond-label">{{ $t(respond.sender_type === 'admin' ? 'supportConversation.supportTeam' : 'supportConversation.customer') }}</span>
                 <span class="respond-date">{{ formatDate(respond.created_at) }}</span>
               </div>
               <p class="respond-message">{{ respond.message }}</p>
@@ -139,13 +144,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
+import { useI18n } from 'vue-i18n';
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { ContactService } from "../../../services/admin/contacts/contctsService";
 
 // ─── Route ───────────────────────────────────────────────
 const route = useRoute();
+const { locale } = useI18n();
 const contactId = route.params.id;
 
 // ─── State ───────────────────────────────────────────────
@@ -157,23 +164,56 @@ const form = ref({ message: "" });
 const formError = ref(null);
 const submitting = ref(false);
 const successMsg = ref(null);
+const messages = ref([]);
+const messagePage = ref(1);
+const messageLastPage = ref(1);
+let replyKey = null;
+let pollTimer = null;
+let fetching = false;
 
 // ─── Fetch Contact ────────────────────────────────────────
-async function fetchContact() {
-  loading.value = true;
+async function fetchContact(silent = false, page = 1) {
+  if (fetching) return;
+  fetching = true;
+  if (!silent) loading.value = true;
   error.value = null;
   try {
-    const res = await ContactService.getContact(contactId);
-    contact.value = res.data;
+    const res = await ContactService.getContact(contactId, page);
+    contact.value = res.data.ticket;
+    messagePage.value = res.data.messages.current_page;
+    messageLastPage.value = res.data.messages.last_page;
+    messages.value = page === 1 ? res.data.messages.data : [...res.data.messages.data, ...messages.value];
   } catch (err) {
     error.value = err?.response?.data?.message || "حدث خطأ أثناء تحميل البيانات";
   } finally {
     loading.value = false;
+    fetching = false;
+  }
+}
+
+function loadOlder() { fetchContact(false, messagePage.value + 1); }
+
+async function changeStatus(status) {
+  try {
+    const res = await ContactService.updateStatus(contactId, status);
+    contact.value.status = res.data.status;
+  } catch (err) {
+    formError.value = err?.response?.data?.message || 'Unable to update status';
+  }
+}
+
+async function claimTicket() {
+  try {
+    const res = await ContactService.updateStatus(contactId, contact.value.status, true);
+    contact.value.assigned_admin_id = res.data.assigned_admin_id;
+  } catch (err) {
+    formError.value = err?.response?.data?.message || 'Unable to assign ticket';
   }
 }
 
 // ─── Submit Respond ───────────────────────────────────────
 async function handleSubmit() {
+  if (submitting.value) return;
   formError.value = null;
   successMsg.value = null;
 
@@ -184,7 +224,9 @@ async function handleSubmit() {
 
   submitting.value = true;
   try {
-    await ContactService.respondToContact(contactId, form.value.message);
+    replyKey ||= crypto.randomUUID();
+    await ContactService.respondToContact(contactId, form.value.message, replyKey);
+    replyKey = null;
     successMsg.value = "تم إرسال الرد بنجاح ✅";
     form.value.message = "";
     // Refresh to show new respond in list
@@ -199,7 +241,7 @@ async function handleSubmit() {
 // ─── Helpers ──────────────────────────────────────────────
 function formatDate(dateStr) {
   if (!dateStr) return "";
-  return new Date(dateStr).toLocaleString("ar-EG", {
+  return new Date(dateStr).toLocaleString(locale.value, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -219,13 +261,17 @@ function getInitials(name) {
 }
 
 // ─── Lifecycle ────────────────────────────────────────────
-onMounted(fetchContact);
+onMounted(() => {
+  fetchContact();
+  pollTimer = setInterval(() => { if (!document.hidden) fetchContact(true); }, 15000);
+});
+onBeforeUnmount(() => clearInterval(pollTimer));
 </script>
 
 <style scoped>
 /* ── Reset & Base ── */
 .contact-wrapper {
-  direction: rtl;
+  direction: inherit;
   max-width: 780px;
   margin: 0 auto;
   padding: 24px 16px;
@@ -368,6 +414,9 @@ onMounted(fetchContact);
   border-radius: 10px;
   padding: 14px 16px;
 }
+.respond-item.user-message { background: #eff6ff; border-color: #bfdbfe; align-self: flex-start; }
+.respond-item.admin-message { align-self: flex-end; }
+.responds-list { max-height: 560px; overflow-y: auto; }
 .respond-header {
   display: flex;
   justify-content: space-between;
@@ -421,7 +470,7 @@ onMounted(fetchContact);
   transition: border-color 0.2s, box-shadow 0.2s;
   background: #f8fafc;
   box-sizing: border-box;
-  direction: rtl;
+  direction: inherit;
 }
 .form-textarea:focus {
   outline: none;

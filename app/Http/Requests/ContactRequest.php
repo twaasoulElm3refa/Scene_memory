@@ -27,6 +27,7 @@ class ContactRequest extends FormRequest
             'email' => 'required|email|max:255',
             'subject' => 'required|string|max:100',
             'message' => 'required|string|max:2000',
+            'submission_key' => 'nullable|uuid',
         ];
     }
 }

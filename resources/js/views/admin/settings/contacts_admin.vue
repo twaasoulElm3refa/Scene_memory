@@ -40,7 +40,7 @@
               <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
               <polyline points="17 6 23 6 23 12" />
             </svg>
-            +12.5% this month
+            All support tickets
           </div>
         </div>
 
@@ -77,13 +77,13 @@
               <line x1="12" y1="8" x2="12" y2="12" />
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
-            Requires attention
+            Customer replies awaiting review
           </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-label">Avg. Response Time</span>
+            <span class="stat-label">Resolved tickets</span>
             <div class="stat-icon stat-icon--teal">
               <svg
                 width="20"
@@ -98,7 +98,7 @@
               </svg>
             </div>
           </div>
-          <div class="stat-value">{{ stats.avgResponseTime }} hr</div>
+          <div class="stat-value">{{ stats.resolved }}</div>
           <div class="stat-trend stat-trend--down">
             <svg
               width="14"
@@ -111,7 +111,7 @@
               <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
               <polyline points="17 18 23 18 23 12" />
             </svg>
-            15% faster than avg
+            Completed conversations
           </div>
         </div>
       </div>
@@ -126,25 +126,13 @@
               :class="{ active: activeFilter === 'all' }"
               @click="setFilter('all')"
             >
-              All Inquiries
+              {{ $t('supportConversation.all') }}
             </button>
-            <button
-              class="filter-tab"
-              :class="{ active: activeFilter === 'new' }"
-              @click="setFilter('new')"
-            >
-              New
-              <span class="badge" v-if="stats.new > 0">{{ stats.new }}</span>
-            </button>
-            <button
-              class="filter-tab"
-              :class="{ active: activeFilter === 'replied' }"
-              @click="setFilter('replied')"
-            >
-              Replied
-            </button>
+            <button v-for="status in ['open', 'pending', 'resolved', 'unread']" :key="status" class="filter-tab" :class="{ active: activeFilter === status }" @click="setFilter(status)">{{ $t(`supportConversation.${status}`) }}</button>
           </div>
           <div class="filter-right">
+            <input v-model.trim="search" type="search" :aria-label="$t('supportConversation.search')" :placeholder="$t('supportConversation.search')" @keyup.enter="fetchContacts(1)" />
+            <button type="button" class="filter-tab" @click="fetchContacts(1)">{{ $t('supportConversation.search') }}</button>
             <div class="sort-by">
               <span class="sort-label">Sort by:</span>
               <select class="sort-select" v-model="sortOrder">
@@ -171,6 +159,7 @@
                 </th>
                 <th>CONTACT</th>
                 <th>SUBJECT</th>
+                <th>LAST MESSAGE</th>
                 <th>STATUS</th>
                 <th>DATE</th>
                 <th></th>
@@ -199,20 +188,23 @@
                   </div>
                 </td>
                 <td class="td-subject">
+                  <small>#{{ contact.id }}</small>
                   <span class="subject-text">{{ contact.subject }}</span>
                 </td>
+                <td>{{ contact.latest_message?.message?.slice(0, 90) }}<br /><small>{{ contact.assigned_admin?.name || '' }}</small></td>
                 <td class="td-status">
                   <span
                     class="status-badge"
                     :class="
-                      getStatus(contact) === 'Replied' ? 'status-replied' : 'status-new'
+                      getStatus(contact) === 'pending' ? 'status-replied' : 'status-new'
                     "
                   >
                     <span class="status-dot"></span>
-                    {{ getStatus(contact) }}
+                    {{ $t(`supportConversation.${getStatus(contact)}`) }}
+                    <span v-if="contact.unread_count" class="badge">{{ contact.unread_count }}</span>
                   </span>
                 </td>
-                <td class="td-date">{{ formatDate(contact.created_at) }}</td>
+                <td class="td-date">{{ formatDate(contact.last_message_at || contact.created_at) }}</td>
                 <td class="td-actions">
                   <div class="action-menu-wrapper">
                     <button class="action-btn" @click.stop="toggleMenu(contact.id)">
@@ -241,25 +233,6 @@
                         View
                       </router-link>
 
-                      <button
-                        class="dropdown-item dropdown-item--danger"
-                        @click="deleteContact(contact.id)"
-                      >
-                        <svg
-                          width="14"
-                          height="14"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6l-1 14H6L5 6" />
-                          <path d="M10 11v6M14 11v6" />
-                          <path d="M9 6V4h6v2" />
-                        </svg>
-                        Delete
-                      </button>
                     </div>
                   </div>
                 </td>
@@ -267,7 +240,7 @@
 
               <!-- Empty State -->
               <tr v-if="filteredContacts.length === 0">
-                <td colspan="6" class="empty-state">
+                <td colspan="7" class="empty-state">
                   <svg
                     width="40"
                     height="40"
@@ -343,11 +316,13 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useI18n } from 'vue-i18n';
 import AdminLayout from "../../../layouts/AdminLayout.vue";
 import { ContactService } from "../../../services/admin/contacts/contactService";
 
 /* ─── State ─────────────────────────────────────────────────────────── */
 const contacts = ref([]);
+const { locale } = useI18n();
 const apiStats = ref({});
 const loading = ref(false);
 const currentPage = ref(1);
@@ -358,29 +333,24 @@ const activeFilter = ref("all");
 const sortOrder = ref("newest");
 const selectedIds = ref([]);
 const openMenuId = ref(null);
+const search = ref('');
 
 /* ─── Computed ───────────────────────────────────────────────────────── */
 const stats = computed(() => ({
   total: apiStats.value.total ?? 0,
   unread: apiStats.value.unread ?? 0,
   new: apiStats.value.new ?? 0,
-  avgResponseTime: apiStats.value.avg_response_time_hours ?? "—",
+  resolved: apiStats.value.resolved ?? 0,
 }));
 
 const filteredContacts = computed(() => {
   let list = [...contacts.value];
 
-  if (activeFilter.value === "new") {
-    list = list.filter((c) => (c.contact_responds ?? []).length === 0);
-  } else if (activeFilter.value === "replied") {
-    list = list.filter((c) => (c.contact_responds ?? []).length > 0);
-  }
-
   // ترتيب
   if (sortOrder.value === "oldest") {
-    list.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    list.sort((a, b) => new Date(a.last_message_at) - new Date(b.last_message_at));
   } else {
-    list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    list.sort((a, b) => new Date(b.last_message_at) - new Date(a.last_message_at));
   }
 
   return list;
@@ -402,7 +372,7 @@ const paginationInfo = computed(() => {
 async function fetchContacts(page = 1) {
   loading.value = true;
   try {
-    const res = await ContactService.getAll(page);
+    const res = await ContactService.getAll(page, activeFilter.value, search.value);
 
     // ─── تصحيح المسارات حسب الـ JSON الفعلي ───────────────────────
     const payload = res.data ?? {};
@@ -413,7 +383,7 @@ async function fetchContacts(page = 1) {
     perPage.value = payload.per_page ?? 5;
     totalItems.value = payload.total ?? 0;
 
-    apiStats.value = payload.stats ?? {};
+    apiStats.value = payload.stats ?? { total: payload.total, unread: contacts.value.filter(c => c.unread_count).length };
   } catch (err) {
     console.error("Failed to load contacts:", err);
   } finally {
@@ -430,6 +400,7 @@ function changePage(page) {
 function setFilter(filter) {
   activeFilter.value = filter;
   selectedIds.value = [];
+  fetchContacts(1);
 }
 
 function toggleAll(e) {
@@ -448,27 +419,9 @@ function closeMenu() {
   openMenuId.value = null;
 }
 
-async function deleteContact(id) {
-  closeMenu();
-
-  if (!confirm("Are you sure you want to delete this contact?")) return;
-
-  try {
-    await ContactService.delete(id);
-
-    contacts.value = contacts.value.filter((c) => c.id !== id);
-    totalItems.value = Math.max(0, totalItems.value - 1);
-    // refresh page
-    fetchContacts(currentPage.value);
-  } catch (err) {
-    console.error("Delete failed:", err);
-    alert("Failed to delete contact");
-  }
-}
-
 /* ─── Helpers ────────────────────────────────────────────────────────── */
 function getStatus(contact) {
-  return (contact.contact_responds ?? []).length > 0 ? "Replied" : "New";
+  return contact.status;
 }
 
 function getInitials(name = "") {
@@ -503,7 +456,7 @@ function getAvatarColor(name = "") {
 function formatDate(dateStr) {
   if (!dateStr) return "—";
   try {
-    return new Date(dateStr).toLocaleDateString("en-US", {
+    return new Date(dateStr).toLocaleDateString(locale.value, {
       month: "short",
       day: "numeric",
       year: "numeric",

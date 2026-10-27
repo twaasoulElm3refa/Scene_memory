@@ -2,17 +2,17 @@
 
 use App\Http\Controllers\api\admin\AdminDashboardController;
 use App\Http\Controllers\api\admin\AdminPlanController;
-use App\Http\Controllers\api\admin\FinancialHoldController;
 use App\Http\Controllers\api\admin\AdminTagsController;
+use App\Http\Controllers\api\admin\AdminUserDataDeletionController;
 use App\Http\Controllers\api\admin\auth\AdminAuthController;
 use App\Http\Controllers\api\admin\BenefitsController;
 use App\Http\Controllers\api\admin\CategoriesCreateController;
 use App\Http\Controllers\api\admin\CitiesCreateController;
-use App\Http\Controllers\api\admin\ContactController;
 use App\Http\Controllers\api\admin\CountriesCreateController;
 use App\Http\Controllers\api\admin\EventAdminController;
 use App\Http\Controllers\api\admin\EventAdminCreateController;
 use App\Http\Controllers\api\admin\EventImageController;
+use App\Http\Controllers\api\admin\FinancialHoldController;
 use App\Http\Controllers\api\admin\FooterController;
 use App\Http\Controllers\api\admin\NewsletterController;
 use App\Http\Controllers\api\admin\NotificationController;
@@ -21,7 +21,6 @@ use App\Http\Controllers\api\admin\ReportController;
 use App\Http\Controllers\api\admin\RequestController;
 use App\Http\Controllers\api\admin\SpecialCoverageRequestController as AdminSpecialCoverageRequestController;
 use App\Http\Controllers\api\admin\SubCategoriesCreateController;
-use App\Http\Controllers\api\admin\AdminUserDataDeletionController;
 use App\Http\Controllers\api\admin\UserController;
 use App\Http\Controllers\api\admin\UserCountsController;
 use App\Http\Controllers\api\admin\WithdrawlController;
@@ -59,9 +58,10 @@ use App\Http\Controllers\api\owner\UserWithdrawlController;
 use App\Http\Controllers\api\payment\CollectionController;
 use App\Http\Controllers\api\payment\DepositController;
 use App\Http\Controllers\api\payment\PaymentController;
+use App\Http\Controllers\api\SupportConversationController;
 use App\Http\Controllers\api\userDshboard\MediaRequestController;
-use App\Http\Controllers\api\userDshboard\UserDataDeletionController;
 use App\Http\Controllers\api\userDshboard\UserDashboardController;
+use App\Http\Controllers\api\userDshboard\UserDataDeletionController;
 use App\Http\Controllers\api\webhook\WalletWebhookController;
 use App\Http\Controllers\api\webhook\WebhookController;
 use App\Http\Controllers\home\HomeController;
@@ -87,7 +87,10 @@ Route::get('/leaderboard/weekly-history', [LeaderboardController::class, 'weekly
 Route::prefix('v1')->group(function () {
 
     // Visitors can contact support and report rights/privacy issues. Inbox access stays private.
-    Route::post('/contacts/create', [ContactController::class, 'create'])->middleware('throttle:5,1');
+    Route::post('/contacts/create', [SupportConversationController::class, 'create'])->middleware('throttle:5,1');
+    Route::get('/support/tickets', [SupportConversationController::class, 'myTickets'])->middleware('auth:sanctum');
+    Route::get('/support/tickets/{id}', [SupportConversationController::class, 'show'])->middleware('throttle:60,1');
+    Route::post('/support/tickets/{id}/messages', [SupportConversationController::class, 'reply'])->middleware('throttle:20,1');
     Route::get('/footer/links', [FooterController::class, 'publicLinks'])->middleware('throttle:60,1');
 
     Route::post('/moderation/events/{event}/translations', [N8nEventTranslationController::class, 'store'])
@@ -317,10 +320,10 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         // CONTACTS
-        Route::get('/contacts', [ContactController::class, 'all']);
-        Route::get('/contacts/{id}', [ContactController::class, 'single']);
-        Route::post('/contacts/respond/{id}', [ContactController::class, 'respond']);
-        Route::delete('/contacts/delete/{id}', [ContactController::class, 'delete']);
+        Route::get('/contacts', [SupportConversationController::class, 'adminTickets']);
+        Route::get('/contacts/{id}', [SupportConversationController::class, 'adminShow']);
+        Route::post('/contacts/respond/{id}', [SupportConversationController::class, 'adminReply'])->middleware('throttle:20,1');
+        Route::patch('/contacts/{id}/status', [SupportConversationController::class, 'adminStatus']);
         // 84
 
         // Newsletters

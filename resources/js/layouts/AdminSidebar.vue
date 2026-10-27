@@ -290,6 +290,7 @@
                         :class="{ active: route.path === '/admin/contacts' }">
                         <PhoneIcon class="w-5 h-5" />
                         Contacts
+                        <span v-if="supportUnread" class="support-unread">{{ supportUnread }}</span>
                     </RouterLink>
                     <RouterLink to="/admin/footer" class="sidebar-btn dropdown-item"
                         :class="{ active: route.path === '/admin/footer' }">
@@ -314,8 +315,9 @@
 </template>
 
 <script setup>
-import { reactive, computed } from "vue";
+import { reactive, computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
+import { ContactService } from "../services/admin/contacts/contactService";
 import {
     HomeIcon,
     PresentationChartBarIcon,
@@ -340,6 +342,14 @@ import {
 } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
+const supportUnread = ref(0);
+let supportPoll = null;
+async function loadSupportUnread() {
+    if (document.hidden) return;
+    try { supportUnread.value = (await ContactService.getAll(1, 'unread')).data?.total || 0; } catch { /* Sidebar remains usable when support is unavailable. */ }
+}
+onMounted(() => { loadSupportUnread(); supportPoll = setInterval(loadSupportUnread, 30000); });
+onBeforeUnmount(() => clearInterval(supportPoll));
 
 const open = reactive({
     users: route.path.startsWith("/admin/users"),
@@ -374,6 +384,7 @@ const tagsActive = computed(() => route.path.startsWith("/admin/tags"));
 </script>
 
 <style scoped>
+.support-unread { margin-inline-start: auto; background: #2563eb; color: #fff; border-radius: 999px; min-width: 22px; padding: 2px 6px; font-size: .75rem; text-align: center; }
 .admin-sidebar {
     width: 260px;
     min-height: 100vh;
