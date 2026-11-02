@@ -27,15 +27,23 @@ Artisan::command('media:cloudinary-usage', function (\App\Services\UnifiedMediaS
 
 Schedule::command('media:cloudinary-usage')->daily()->withoutOverlapping();
 
+Schedule::command('media:backup-originals --limit=25')->daily()
+    ->when(fn () => app(\App\Services\IndependentMediaBackup::class)->configured())
+    ->withoutOverlapping(60);
+
+Schedule::command('media:cleanup-originals --limit=25')->daily()
+    ->when(fn () => config('cloudinary_media.temp_original_cleanup_enabled'))
+    ->withoutOverlapping(60);
+
 Schedule::command('payments:reconcile --limit=100 --age=10')
     ->everyFiveMinutes()
     ->withoutOverlapping(10);
 
 Schedule::command('gifts:release-earnings --limit=500')->hourly()->withoutOverlapping();
 
-Schedule::command('queue:work --stop-when-empty --tries=3 --timeout=1200')
+Schedule::command('queue:work --stop-when-empty --tries=3 --timeout=1200 --max-time=1500')
     ->everyThirtySeconds()
-    ->withoutOverlapping()
+    ->withoutOverlapping(30)
     ->runInBackground();
 
 Schedule::command('leaderboard:archive-weekly')

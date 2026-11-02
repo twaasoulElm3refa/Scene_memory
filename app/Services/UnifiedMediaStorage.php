@@ -4,12 +4,15 @@ namespace App\Services;
 
 use App\Models\CloudinaryMediaAsset;
 use Cloudinary\Cloudinary;
+use Cloudinary\Api\Exception\NotFound as CloudinaryNotFound;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Ramsey\Uuid\Uuid;
 use Throwable;
 
 /** Public derivatives only. Marketplace originals always remain on the private media disk. */
@@ -80,6 +83,95 @@ class UnifiedMediaStorage
         return $path;
     }
 
+    /** A clean event original. Its public ID is stable across queue retries. */
+    public function authenticatedOriginal(string $file, int $eventId, string $fingerprint, int $mediaId): string
+    {
+        if (! $this->enabled('image') || ! is_file($file) || ! preg_match('/^[a-f0-9]{64}$/', $fingerprint)) {
+            throw new RuntimeException('Authenticated image upload is unavailable.');
+        }
+        $bytes = filesize($file);
+        if ($bytes === false || $bytes < 1 || $bytes > (int) config('cloudinary_media.max_image_mb') * 1048576) {
+            throw new RuntimeException('Image exceeds the configured upload limit.');
+        }
+        $publicId = 'scemory/events-original/'.Uuid::uuid5(Uuid::NAMESPACE_URL, $eventId.'|'.$fingerprint)->toString();
+        return Cache::lock('cloudinary:upload-budget', 1200)->block(30, function () use ($file, $bytes, $publicId, $mediaId) {
+            $known = CloudinaryMediaAsset::where('public_id', $publicId)->where('delivery_type', 'authenticated')->where('status', 'ready')->first();
+            if ($known) return $known->path;
+            try {
+                $result = $this->fetchAuthenticatedAsset($publicId);
+            } catch (CloudinaryNotFound) {
+                $this->assertBudget($bytes);
+                Log::info('media_original_cloudinary_started', ['media_id' => $mediaId, 'resource_type' => 'image']);
+                try {
+                    $result = $this->sendAuthenticatedUpload($file, $publicId);
+                } catch (Throwable $e) {
+                    Log::warning('media_original_cloudinary_failed', ['media_id' => $mediaId, 'exception_category' => get_class($e)]);
+                    throw $e;
+                }
+            }
+            if (($result['public_id'] ?? null) !== $publicId || ($result['type'] ?? null) !== 'authenticated'
+                || ($result['resource_type'] ?? null) !== 'image' || (int) ($result['bytes'] ?? -1) !== $bytes
+                || ! preg_match('/^[a-z0-9]{2,10}$/', (string) ($result['format'] ?? ''))) {
+                throw new RuntimeException('Authenticated image metadata is inconsistent.');
+            }
+            $path = 'cloudinary/image/'.$publicId.'.'.$result['format'];
+            CloudinaryMediaAsset::updateOrCreate(['path' => $path], [
+                'event_media_id' => $mediaId, 'asset_id' => $result['asset_id'] ?? null,
+                'public_id' => $publicId, 'resource_type' => 'image', 'delivery_type' => 'authenticated',
+                'format' => $result['format'], 'version' => $result['version'] ?? null, 'bytes' => $bytes,
+                'width' => $result['width'] ?? null, 'height' => $result['height'] ?? null,
+                'sha256' => hash_file('sha256', $file), 'uploaded_at' => now(), 'status' => 'ready',
+                'backup_status' => 'pending', 'cleanup_status' => 'retained',
+            ]);
+            Log::info('media_original_cloudinary_succeeded', ['media_id' => $mediaId, 'resource_type' => 'image']);
+            return $path;
+        });
+    }
+
+    public function authenticatedDownloadUrl(CloudinaryMediaAsset $asset, int $seconds = 180): string
+    {
+        if ($asset->delivery_type !== 'authenticated' || $asset->resource_type !== 'image' || $asset->status !== 'ready') {
+            throw new RuntimeException('Authenticated original is unavailable.');
+        }
+        return $this->client()->uploadApi()->privateDownloadUrl($asset->public_id, $asset->format, [
+            'type' => 'authenticated', 'resource_type' => 'image', 'expires_at' => time() + min(300, max(1, $seconds)),
+        ]);
+    }
+
+    public function verifyAuthenticatedOriginal(CloudinaryMediaAsset $asset): bool
+    {
+        if ($asset->delivery_type !== 'authenticated' || ! $asset->sha256 || $asset->status !== 'ready') return false;
+        $remote = $this->fetchAuthenticatedAsset($asset->public_id);
+        if (($remote['asset_id'] ?? null) !== $asset->asset_id || ($remote['type'] ?? null) !== 'authenticated'
+            || (int) ($remote['bytes'] ?? -1) !== (int) $asset->bytes) return false;
+        try {
+            return hash('sha256', $this->authenticatedBytes($asset)) === $asset->sha256;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
+    public function authenticatedBytes(CloudinaryMediaAsset $asset): string
+    {
+        $response = Http::timeout(45)->get($this->authenticatedDownloadUrl($asset, 180));
+        if (! $response->successful() || strlen($response->body()) !== (int) $asset->bytes) {
+            throw new RuntimeException('Authenticated original download failed.');
+        }
+        return $response->body();
+    }
+
+    protected function sendAuthenticatedUpload(string $file, string $publicId): array
+    {
+        return $this->client()->uploadApi()->upload($file, [
+            'resource_type' => 'image', 'type' => 'authenticated', 'public_id' => $publicId, 'overwrite' => false,
+        ])->getArrayCopy();
+    }
+
+    protected function fetchAuthenticatedAsset(string $publicId): array
+    {
+        return $this->client()->adminApi()->asset($publicId, ['resource_type' => 'image', 'type' => 'authenticated'])->getArrayCopy();
+    }
+
     public function publicImage(UploadedFile $file, string $folder): string
     {
         $local = $file->store($folder, 'public');
@@ -110,6 +202,7 @@ class UnifiedMediaStorage
         }
         $asset = Cache::remember('cloudinary:asset:'.sha1($path), now()->addMinutes(10), fn () => CloudinaryMediaAsset::where('path', $path)->first());
         if (! $asset || $asset->status !== 'ready') return null;
+        if ($asset->delivery_type === 'authenticated') return null;
         if (! $this->enabled($asset->resource_type) && $asset->local_path && Storage::disk('public')->exists($asset->local_path)) {
             return Storage::disk('public')->url($asset->local_path);
         }
@@ -137,7 +230,11 @@ class UnifiedMediaStorage
         }
         $asset = CloudinaryMediaAsset::where('path', $path)->first();
         if (! $asset || $asset->status === 'deleted') return;
-        $this->sendDestroy($asset->public_id, $asset->resource_type);
+        if ($asset->delivery_type === 'authenticated') {
+            $this->client()->uploadApi()->destroy($asset->public_id, ['resource_type' => 'image', 'type' => 'authenticated', 'invalidate' => true]);
+        } else {
+            $this->sendDestroy($asset->public_id, $asset->resource_type);
+        }
         if ($asset->local_path) Storage::disk('public')->delete($asset->local_path);
         $asset->update(['status' => 'deleted']);
         Cache::forget('cloudinary:asset:'.sha1($path));

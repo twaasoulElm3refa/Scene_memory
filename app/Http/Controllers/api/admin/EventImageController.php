@@ -59,6 +59,7 @@ class EventImageController extends Controller
     {
         $target = $this->eventImageRepository->findOrFail((int) request('id'));
         EventAccess::authorize($target->events, request()->user());
+        abort_if(\App\Models\Entitlement::where('media_id', $target->id)->exists(), 409, SecurityMessage::get('denied'));
         try {
             $eventImage = $this->eventImageRepository->findOrFail((int) request('id'));
             $event = $this->eventRepository->findByIdOrFail((int) $eventImage->event_id);

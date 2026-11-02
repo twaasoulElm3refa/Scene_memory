@@ -1,9 +1,20 @@
-# Cloudinary media rollback
+# Cloudinary authenticated-image rollback
 
-1. Set `CLOUDINARY_IMAGES_ENABLED=false` and `CLOUDINARY_VIDEOS_ENABLED=false`; clear Laravel config cache and restart queue workers. New uploads use local storage. Cloudinary-backed public images use `cloudinary_media_assets.local_path`, and event previews use `events_images.fallback_preview_url`, so existing new-media delivery immediately uses retained local copies. Keep `CLOUDINARY_URL` configured while any Cloudinary references remain.
-2. Keep the additive `cloudinary_media_assets` table and `events_images` metadata columns. Do not roll back the schema while referenced Cloudinary assets exist. Legacy local media is unaffected by either flag.
-3. If an older Cloudinary-backed event preview lacks `fallback_preview_url`, use a reviewed operator script to verify the retained local derivative before updating `preview_url` and `preview_disk='media'`; do not expose `full_url` as a replacement for a paid preview.
-4. Public catalog images uploaded before this dual-copy implementation and lacking `local_path` need a reviewed per-record copy back to local storage. Do not rewrite pointers blindly. Gift images referenced by historical transactions must stay available.
-5. After traffic is back on local delivery, reconcile Cloudinary assets against `cloudinary_media_assets`, delete confirmed orphans one by one, and only then consider dropping the additive schema. Keep private originals and purchase entitlement records intact throughout.
+Development backups made before the 2026-11-02 deployment:
 
-No historical bulk migration or production data operation is part of this branch.
+- `/home/scemory/tmp/scemory-code-before-auth-20261102.tar.gz` — affected existing application files.
+- `/home/scemory/tmp/scemory-bootstrap-before-auth-20261102.php` — Laravel bootstrap.
+- `/home/scemory/tmp/scemory-vendor-before-auth-20261102.tar.gz` — Composer vendor tree.
+- `/home/scemory/tmp/scemory-schema-before-auth-20261102.sql` — prior definitions of the two altered tables.
+
+These files are private to the Scemory account. They are development rollback aids, not independent off-server media backups.
+
+1. Keep `MEDIA_TEMP_ORIGINAL_CLEANUP_ENABLED=false`. Do not delete Cloudinary assets, S3 backups, retained local originals, previews, entitlements, or queued source files during rollback.
+2. Set `CLOUDINARY_IMAGES_ENABLED=false` for new image uploads if Cloudinary is failing. Existing authenticated Cloudinary originals still require the current `DownloadController` and `CLOUDINARY_URL`; do **not** blindly restore the old download controller or remove the Cloudinary SDK. The feature flag does not change existing purchased-file references.
+3. If a new code release itself is defective, restore selected application files from the code archive only after checking for authenticated-original records created since deployment. Keep the new download/asset interpretation in place for any such records. Re-deploy a corrected compatible version rather than dropping the new columns.
+4. Keep the additive migration applied while any `events_images.original_disk=cloudinary` row or `cloudinary_media_assets.delivery_type=authenticated` row exists. The schema snapshot helps review an eventual reverse migration; it is not a data restore.
+5. Recheck queue ownership and pending jobs before changing `ProcessEventImageJob` payload handling. Let a compatible worker finish or preserve queued jobs for a compatible code version. Clear only this application's config/route cache and restart only its worker if needed.
+6. Verify a creator or entitled buyer can still download an existing authenticated original via Laravel, a legacy buyer can download a local original, a published local preview remains viewable, and unauthorized access remains denied. Use the retained private original as the outage fallback only while it still exists.
+7. Reconcile any authenticated Cloudinary records whose media row was explicitly deleted. Do this per record after reviewing purchase, backup, retention, and legal requirements; automatic 72-hour cleanup never acts on orphaned rows.
+
+No global service restart, unrelated site change, historical bulk migration, or production operation is part of this rollback.

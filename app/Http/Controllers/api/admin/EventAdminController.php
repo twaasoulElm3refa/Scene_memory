@@ -99,6 +99,7 @@ class EventAdminController extends Controller
     {
         $event = $this->findEventByRouteKey($id);
         $slug = $event->slug;
+        abort_if(\App\Models\Entitlement::whereIn('media_id', $event->images()->select('id'))->exists(), 409);
 
         $cloudPreviews = $event->images()->where('preview_disk', 'cloudinary')->pluck('preview_url')->all();
         $cloudCover = $event->getRawOriginal('image');

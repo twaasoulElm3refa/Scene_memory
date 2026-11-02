@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\auth;
 use App\Http\Controllers\Controller;
 use App\Models\EventsImges;
 use App\Services\MediaAccessService;
+use App\Services\UnifiedMediaStorage;
 use App\Support\PrivateFileResponse;
 use App\Support\SecurityMessage;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class DownloadController extends Controller
 {
@@ -70,21 +73,48 @@ class DownloadController extends Controller
         return response()->json(['data' => $media])->header('Cache-Control', 'private, no-store');
     }
 
-    public function download(Request $request, EventsImges $media): BinaryFileResponse|JsonResponse
+    public function download(Request $request, EventsImges $media): BinaryFileResponse|JsonResponse|Response
     {
         $access = app(MediaAccessService::class);
         abort_unless($access->canDownload($media, $request->user()), 403, SecurityMessage::get('denied'));
+        Log::info('media_download_authorized', ['user_id' => $request->user()->id, 'media_id' => $media->id]);
+        if ($access->disk($media) === 'cloudinary') return $this->cloudinaryOriginal($media, $access, true);
         $file = $access->file($media);
-        Log::info('download_authorized', ['user_id' => $request->user()->id, 'media_id' => $media->id]);
 
         return PrivateFileResponse::make($file, basename($file));
     }
 
-    public function purchasedOriginal(Request $request, EventsImges $media, MediaAccessService $access): BinaryFileResponse
+    public function purchasedOriginal(Request $request, EventsImges $media, MediaAccessService $access): BinaryFileResponse|Response
     {
         $user = User::find($request->query('user'));
         abort_unless($access->canDownload($media, $user), 403, SecurityMessage::get('denied'));
 
+        if ($access->disk($media) === 'cloudinary') return $this->cloudinaryOriginal($media, $access, false);
         return PrivateFileResponse::make($access->file($media));
+    }
+
+    private function cloudinaryOriginal(EventsImges $media, MediaAccessService $access, bool $attachment): BinaryFileResponse|Response
+    {
+        $asset = $media->cloudinaryOriginalAsset()->where('path', $media->getRawOriginal('full_url'))->first();
+        abort_unless($asset && $asset->status === 'ready', 404, SecurityMessage::get('unavailable'));
+        try {
+            $bytes = app(UnifiedMediaStorage::class)->authenticatedBytes($asset);
+            $mime = match ($asset->format) {
+                'jpg', 'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp',
+                'gif' => 'image/gif', 'avif' => 'image/avif', 'tif', 'tiff' => 'image/tiff',
+                default => 'application/octet-stream',
+            };
+            $filename = 'scemory-image-'.$media->id.'.'.$asset->format;
+            return response($bytes, 200, [
+                'Content-Type' => $mime,
+                'Content-Disposition' => ($attachment ? 'attachment' : 'inline').'; filename="'.$filename.'"',
+                'Cache-Control' => 'private, no-store', 'X-Content-Type-Options' => 'nosniff',
+            ]);
+        } catch (Throwable $e) {
+            Log::warning('media_cloudinary_download_failed', ['media_id' => $media->id, 'exception_category' => get_class($e)]);
+            $retained = $access->retainedOriginalFile($media);
+            if ($retained) return PrivateFileResponse::make($retained, $attachment ? basename($retained) : null);
+            abort(503, SecurityMessage::get('unavailable'));
+        }
     }
 }

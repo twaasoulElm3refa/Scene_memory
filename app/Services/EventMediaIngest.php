@@ -7,7 +7,6 @@ use App\Jobs\ProcessEventVideoJob;
 use App\Models\Events;
 use App\Models\EventsImges;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use Intervention\Image\ImageManager;
@@ -20,34 +19,39 @@ class EventMediaIngest
         foreach ($files as $file) {
             if (str_starts_with((string) $file->getMimeType(), 'image/')) {
                 $analysis = app(ImageAnalysisService::class)->process($file, new ImageManager(extension_loaded('imagick') ? new ImagickDriver : new GdDriver, decodeAnimation: false, strip: true));
-                $name = (string) Str::uuid();
+                $fingerprint = hash('sha256', $event->id.'|'.hash_file('sha256', $file->getRealPath()));
+                $prior = EventsImges::where('event_id', $event->id)->where('source_fingerprint', $fingerprint)->first();
+                if ($prior && $prior->media_status === 'ready' && Storage::disk('media')->exists($prior->preview_url)) {
+                    $created[] = $prior;
+                    continue;
+                }
+                $name = $fingerprint;
                 $full = 'events/full/'.$name.'.'.($file->guessExtension() ?: 'jpg');
                 $preview = 'events/preview/'.$name.'.jpg';
-                Storage::disk('media')->put($full, fopen($file->getRealPath(), 'rb'));
-                Storage::disk('media')->put($preview, (string) ($analysisPrice ? $analysis['preview_encoded'] : $analysis['image']->toJpeg(85)));
-                $localPreview = $preview;
-                $cloud = app(UnifiedMediaStorage::class);
-                if ($cloud->enabled('image') && $event->is_active) {
-                    try {
-                        $preview = $cloud->upload(Storage::disk('media')->path($preview), 'image', 'events-preview');
-                    } catch (\Throwable $e) {
-                        $fallback = (bool) config('cloudinary_media.allow_local_fallback');
-                        \Log::warning($fallback ? 'media_local_fallback_used' : 'cloudinary_preview_upload_failed', ['event_id' => $event->id, 'resource_type' => 'image', 'disk' => 'media', 'exception_category' => get_class($e)]);
-                        if (! $fallback) throw $e;
-                    }
+                if (! Storage::disk('media')->exists($full)) {
+                    Storage::disk('media')->put($full, fopen($file->getRealPath(), 'rb'));
+                    @chmod(Storage::disk('media')->path($full), 0600);
                 }
-                try {
-                    $mediaRecord = EventsImges::create([
+                Storage::disk('media')->put($preview, (string) $analysis['preview_encoded']);
+                $cloud = app(UnifiedMediaStorage::class);
+                $mediaRecord = EventsImges::updateOrCreate(['event_id' => $event->id, 'source_fingerprint' => $fingerprint], [
                         'event_id' => $event->id, 'type' => 'image', 'full_url' => $full, 'preview_url' => $preview,
-                        'fallback_preview_url' => $cloud->isCloudinary($preview) ? $localPreview : null,
-                        'original_disk' => 'media', 'preview_disk' => $cloud->isCloudinary($preview) ? 'cloudinary' : 'media', 'is_active' => 1,
+                        'fallback_preview_url' => null, 'local_original_path' => $full,
+                        'original_disk' => 'media', 'preview_disk' => 'media', 'is_active' => 1,
                         'width' => $analysis['width'], 'height' => $analysis['height'],
-                        'media_bytes' => $file->getSize(), 'media_format' => $file->guessExtension(), 'media_status' => 'ready',
+                        'media_bytes' => $file->getSize(), 'media_format' => $file->guessExtension(),
+                        'media_status' => $cloud->enabled('image') ? 'cloudinary_pending' : 'ready',
                         'price' => $analysisPrice ? $analysis['price'] : 0, 'licence_type' => $analysis['plan'],
                     ]);
-                } catch (\Throwable $e) {
-                    $cloud->deleteUnreferencedEventPreview($preview);
-                    throw $e;
+                if ($cloud->enabled('image')) {
+                    try {
+                        $original = $cloud->authenticatedOriginal(Storage::disk('media')->path($full), (int) $event->id, $fingerprint, (int) $mediaRecord->id);
+                        $mediaRecord->update(['full_url' => $original, 'original_disk' => 'cloudinary', 'media_status' => 'ready']);
+                        app(IndependentMediaBackup::class)->backUp($mediaRecord, $mediaRecord->cloudinaryOriginalAsset()->firstOrFail());
+                    } catch (\Throwable $e) {
+                        $mediaRecord->update(['media_status' => 'cloudinary_failed']);
+                        throw $e;
+                    }
                 }
                 app(MediaTierService::class)->assignTierToMedia($mediaRecord);
                 $created[] = $mediaRecord;

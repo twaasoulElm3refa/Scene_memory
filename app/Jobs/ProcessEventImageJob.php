@@ -60,11 +60,16 @@ class ProcessEventImageJob implements ShouldQueue
         EventTagCacheService $cache
     ): void {
         $imageIdentifier = substr(hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath), 0, 16);
+        $fingerprint = hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath);
         $existing = EventsImges::where('event_id', $this->eventId)
-            ->where('full_url', 'like', 'events/full/'.hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath).'.%')
+            ->where(fn ($query) => $query->where('source_fingerprint', $fingerprint)
+                ->orWhere('full_url', 'like', 'events/full/'.$fingerprint.'.%'))
             ->first();
-        if ($existing && $existing->preview_url && Storage::disk('media')->exists($existing->full_url)
-            && ($existing->preview_disk === 'cloudinary' || Storage::disk('media')->exists($existing->preview_url))) {
+        if ($existing && $existing->media_status === 'ready' && $existing->preview_url
+            && ($existing->preview_disk === 'cloudinary' || Storage::disk('media')->exists($existing->preview_url))
+            && ($existing->original_disk === 'cloudinary'
+                ? $existing->cloudinaryOriginalAsset()->where('status', 'ready')->exists()
+                : Storage::disk('media')->exists($existing->full_url))) {
             Storage::disk($this->sourceDisk)->delete($this->tempPath);
             \Log::info('image_processing_completed', ['event_id' => $this->eventId, 'media_id' => $existing->id, 'image_identifier' => $imageIdentifier, 'preview_disk' => $existing->preview_disk, 'duplicate' => true]);
             return;
@@ -109,41 +114,30 @@ class ProcessEventImageJob implements ShouldQueue
             $plan = $analysis['plan'];
             $price = $this->manualPrice;
 
-            $filename = hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath);
+            $filename = $fingerprint;
             $extension = $uploadedFile->guessExtension() ?: 'jpg';
             $fullPath = 'events/full/'.$filename.'.'.$extension;
             $previewPath = 'events/preview/'.$filename.'.jpg';
             $cloud = app(UnifiedMediaStorage::class);
-            $existing = EventsImges::where('event_id', $this->eventId)->where('full_url', $fullPath)->first();
-            $localPreviewPath = $previewPath;
-            if ($existing && $existing->preview_url && ($cloud->isCloudinary($existing->preview_url) || Storage::disk('media')->exists($existing->preview_url))) {
-                $previewPath = $existing->preview_url;
-                $localPreviewPath = $existing->fallback_preview_url ?: $localPreviewPath;
-            } else {
+            if (! Storage::disk('media')->exists($fullPath)) {
                 Storage::disk('media')->put($fullPath, fopen($absolutePath, 'rb'));
-                Storage::disk('media')->put($previewPath, (string) $preview);
-                if ($cloud->enabled('image') && \App\Models\Events::whereKey($this->eventId)->where('is_active', true)->exists()) {
-                    try {
-                        $previewPath = $cloud->upload(Storage::disk('media')->path($previewPath), 'image', 'events-preview');
-                    } catch (\Throwable $e) {
-                        $fallback = (bool) config('cloudinary_media.allow_local_fallback');
-                        \Log::warning($fallback ? 'media_local_fallback_used' : 'cloudinary_preview_upload_failed', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'resource_type' => 'image', 'disk' => 'media', 'exception_category' => get_class($e)]);
-                        if (! $fallback) throw $e;
-                    }
-                }
+                @chmod(Storage::disk('media')->path($fullPath), 0600);
             }
-            $eventImage = EventsImges::updateOrCreate(['event_id' => $this->eventId, 'full_url' => $fullPath], [
-                'original_disk' => 'media', 'preview_disk' => $cloud->isCloudinary($previewPath) ? 'cloudinary' : 'media',
+            if (! Storage::disk('media')->exists($previewPath)) Storage::disk('media')->put($previewPath, (string) $preview);
+            \Log::info('media_preview_generated', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'disk' => 'media']);
+            $eventImage = EventsImges::updateOrCreate(['event_id' => $this->eventId, 'source_fingerprint' => $filename], [
+                'original_disk' => 'media', 'preview_disk' => 'media',
                 'event_id' => $this->eventId,
                 'type' => 'image',
                 'preview_url' => $previewPath,
-                'fallback_preview_url' => $cloud->isCloudinary($previewPath) ? $localPreviewPath : null,
+                'fallback_preview_url' => null,
                 'full_url' => $fullPath,
+                'local_original_path' => $fullPath,
                 'width' => $width,
                 'height' => $height,
                 'media_bytes' => filesize($absolutePath) ?: null,
                 'media_format' => $extension,
-                'media_status' => 'ready',
+                'media_status' => $cloud->enabled('image') ? 'cloudinary_pending' : 'ready',
                 'size' => $width * $height,
                 'price' => $price,
                 'licence_type' => $plan,
@@ -158,6 +152,16 @@ class ProcessEventImageJob implements ShouldQueue
                 'validation_status' => $this->metadata['validation_status'] ?? null,
                 'validation_message' => $this->metadata['validation_message'] ?? null,
             ]);
+            if ($cloud->enabled('image')) {
+                try {
+                    $original = $cloud->authenticatedOriginal(Storage::disk('media')->path($fullPath), $this->eventId, $fingerprint, (int) $eventImage->id);
+                    $eventImage->update(['full_url' => $original, 'original_disk' => 'cloudinary', 'media_status' => 'processing']);
+                    app(\App\Services\IndependentMediaBackup::class)->backUp($eventImage, $eventImage->cloudinaryOriginalAsset()->firstOrFail());
+                } catch (\Throwable $e) {
+                    $eventImage->update(['media_status' => 'cloudinary_failed']);
+                    throw $e;
+                }
+            }
             app(\App\Services\MediaTierService::class)->assignTierToMedia($eventImage);
 
             $photoTagsJson = $this->metadata['tags_json'] ?? null;
@@ -193,6 +197,7 @@ class ProcessEventImageJob implements ShouldQueue
             }
 
             $cache->invalidateEvent($this->eventId, [(int) $eventImage->id]);
+            $eventImage->update(['media_status' => 'ready']);
             Storage::disk($this->sourceDisk)->delete($this->tempPath);
             GenerateMediaThumbnailJob::dispatch((int) $eventImage->id);
             \Log::info('image_processing_completed', ['event_id' => $this->eventId, 'media_id' => $eventImage->id, 'image_identifier' => $imageIdentifier, 'preview_disk' => $eventImage->preview_disk, 'duplicate' => false]);
