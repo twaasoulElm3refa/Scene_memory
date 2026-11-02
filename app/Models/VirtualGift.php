@@ -20,6 +20,6 @@ class VirtualGift extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        return ! $this->image_path ? null : (str_starts_with($this->image_path, '/') ? $this->image_path : Storage::disk('public')->url($this->image_path));
+        return ! $this->image_path ? null : app(\App\Services\UnifiedMediaStorage::class)->url($this->image_path);
     }
 }

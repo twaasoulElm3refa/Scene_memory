@@ -7,6 +7,7 @@ use App\Jobs\GenerateMediaThumbnailJob;
 use App\Models\EventsImges;
 use App\Services\MediaAccessService;
 use App\Services\MediaThumbnailService;
+use App\Services\UnifiedMediaStorage;
 use App\Support\MediaFileResponse;
 use App\Support\PrivateFileResponse;
 use App\Support\SecurityMessage;
@@ -16,6 +17,18 @@ class MediaDeliveryController extends Controller
 {
     public function preview(Request $request, EventsImges $media, MediaAccessService $access)
     {
+        if ($access->disk($media, true) === 'cloudinary') {
+            abort_unless($access->isPublished($media) || $request->hasValidSignature() || $access->ownerOrAdmin($media, $request->user('sanctum')), 404);
+            abort_unless($access->isPublished($media), 404);
+            $storage = app(UnifiedMediaStorage::class);
+            if (! $storage->enabled($media->type) && ($fallback = $access->fallbackPreviewFile($media))) {
+                return MediaFileResponse::make($request, $fallback, true);
+            }
+            $url = $storage->url($media->getRawOriginal('preview_url'));
+            if (! $url && ($fallback = $access->fallbackPreviewFile($media))) return MediaFileResponse::make($request, $fallback, true);
+            abort_unless($url, 404);
+            return redirect()->away($url)->header('Cache-Control', 'public, max-age=300');
+        }
         return MediaFileResponse::make($request, $this->previewFile($request, $media, $access), $access->isPublished($media));
     }
 
@@ -23,6 +36,17 @@ class MediaDeliveryController extends Controller
     // preview itself is served, so the URL always works.
     public function thumbnail(Request $request, EventsImges $media, MediaAccessService $access, MediaThumbnailService $thumbnails)
     {
+        if ($access->disk($media, true) === 'cloudinary' && $media->type === 'image') {
+            abort_unless($access->isPublished($media), 404);
+            $storage = app(UnifiedMediaStorage::class);
+            if (! $storage->enabled('image') && ($fallback = $access->fallbackPreviewFile($media))) {
+                return MediaFileResponse::make($request, $fallback, true);
+            }
+            $url = $storage->url($media->getRawOriginal('preview_url'), 'thumb');
+            if (! $url && ($fallback = $access->fallbackPreviewFile($media))) return MediaFileResponse::make($request, $fallback, true);
+            abort_unless($url, 404);
+            return redirect()->away($url)->header('Cache-Control', 'public, max-age=300');
+        }
         $preview = $this->previewFile($request, $media, $access);
         $file = $thumbnails->existing($media);
         if (! $file) {

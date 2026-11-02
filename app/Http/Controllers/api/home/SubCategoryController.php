@@ -70,7 +70,7 @@ class SubCategoryController extends Controller
     {
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories', 'public');
+            $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'categories');
         }
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
         $categorey = $this->subCategoryRepository->create($data);
@@ -82,11 +82,13 @@ class SubCategoryController extends Controller
     {
         $data = $request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories', 'public');
+            $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'categories');
         }
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
         $categorey = $this->subCategoryRepository->findOrFail((int) $id);
+        $oldImage = $categorey->getRawOriginal('image');
         $categorey->update($data);
+        app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($oldImage, $categorey->getRawOriginal('image'));
         Cache::increment('categories_cache_version');
         return $this->success($categorey, 'category Updated Successfully');
     }
@@ -94,7 +96,11 @@ class SubCategoryController extends Controller
     public function delete($id)
     {
         $categorey = $this->subCategoryRepository->findOrFail((int) $id);
+        $oldImage = $categorey->getRawOriginal('image');
         $categorey->delete();
+        if (app(\App\Services\UnifiedMediaStorage::class)->isCloudinary($oldImage)) {
+            try { app(\App\Services\UnifiedMediaStorage::class)->delete($oldImage); } catch (\Throwable $e) { \Log::warning('subcategory_cloudinary_delete_failed', ['category_id' => $id, 'reason' => $e->getMessage()]); }
+        }
         Cache::increment('categories_cache_version');
         return $this->success($categorey, 'category Deleted Successfully');
     }

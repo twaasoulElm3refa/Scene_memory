@@ -25,7 +25,7 @@ class CategoriesCreateController extends Controller
         try {
             $category = DB::transaction(function () use ($data, $request) {
                 if ($request->hasFile('image')) {
-                    $data['image'] = $request->file('image')->store('categories', 'public');
+                    $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'categories');
                 }
 
                 return $this->categoryRepository->create([

@@ -64,7 +64,13 @@ class UserDashboardController extends Controller
         try {
             $this->clearCache($event->user_id, $event->slug);
             $this->clearEventsCache();
+            $cloudPreviews = $event->images()->where('preview_disk', 'cloudinary')->pluck('preview_url')->all();
+            $cloudCover = $event->getRawOriginal('image');
             $event->delete();
+            app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($cloudCover, null);
+            foreach ($cloudPreviews as $preview) {
+                try { app(\App\Services\UnifiedMediaStorage::class)->delete($preview); } catch (\Throwable $e) { \Log::warning('event_cloudinary_delete_failed', ['event_id' => $event->id, 'reason' => $e->getMessage()]); }
+            }
 
             return $this->success($event, 'Event Deleted Successfully');
         } catch (\Throwable $th) {
@@ -92,11 +98,13 @@ class UserDashboardController extends Controller
 
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $data['image'] = $image->store('events', 'public');
+                $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($image, 'events');
             }
             Cache::forget("events_single_{$oldSlug}");
             $this->clearCache($event->user_id, $event->slug);
+            $oldCover = $event->getRawOriginal('image');
             $event->update($data);
+            app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($oldCover, $event->getRawOriginal('image'));
 
             return $this->success($event, 'Event Updated Successfully');
 

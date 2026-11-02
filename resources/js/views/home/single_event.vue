@@ -213,9 +213,9 @@
                                 @click="openLightbox(index)">
 
                                 <!-- VIDEO -->
-                                <video v-if="isMediaVideo(media) && getMediaUrl(media)" :src="getMediaUrl(media)"
+                                <video v-if="isMediaVideo(media) && getMediaUrl(media) && !videoFailed[media.id]" :src="getMediaUrl(media)" :poster="media.poster_url || undefined"
                                     class="w-full h-full object-cover" autoplay muted loop playsinline
-                                    preload="metadata">
+                                    preload="metadata" @loadeddata="videoReady[media.id] = true" @error="videoFailed[media.id] = true">
                                 </video>
 
                                 <!-- IMAGE -->
@@ -228,6 +228,7 @@
                                     class="flex h-full w-full items-center justify-center bg-gray-100 px-4 text-center text-sm font-semibold text-gray-500">
                                     {{ $t('event.no_media') }}
                                 </div>
+                                <span v-if="isMediaVideo(media) && !videoReady[media.id] && !videoFailed[media.id]" class="absolute inset-0 flex items-center justify-center bg-black/30 text-white text-sm">{{ $t('event.loading') }}</span>
 
                                 <!-- DARK OVERLAY -->
                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition z-10"></div>
@@ -695,10 +696,11 @@
                 </button>
 
                 <div class="flex h-full w-full items-center justify-center">
-                    <video v-if="isMediaVideo(currentMedia) && currentMediaUrl" :src="currentMediaUrl"
+                    <video v-if="isMediaVideo(currentMedia) && currentMediaUrl && !videoFailed[currentMedia.id]" :src="currentMediaUrl" :poster="currentMedia?.poster_url || undefined"
                         class="max-h-full max-w-full object-contain" controls autoplay muted playsinline
-                        preload="metadata">
+                        preload="metadata" @loadeddata="videoReady[currentMedia.id] = true" @error="videoFailed[currentMedia.id] = true">
                     </video>
+                    <div v-else-if="isMediaVideo(currentMedia) && videoFailed[currentMedia.id]" class="rounded-lg bg-white px-6 py-4 text-center text-sm font-semibold text-gray-600 shadow">{{ $t('event.no_media') }}</div>
 
                     <img v-else-if="!isMediaVideo(currentMedia)" :src="currentMediaUrl || placeholderImage"
                         :alt="currentMedia?.title || currentMedia?.name || $t('event.media_alt')"
@@ -873,6 +875,8 @@ const selectedFiles = ref([]);
 const uploading = ref(false);
 const uploadError = ref("");
 const uploadSuccess = ref("");
+const videoReady = ref({});
+const videoFailed = ref({});
 const replyingTo = ref(null);
 const replyTexts = ref({});
 const replyLoading = ref({});

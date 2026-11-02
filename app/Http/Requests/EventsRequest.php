@@ -152,7 +152,8 @@ class EventsRequest extends FormRequest
         return [
             'file',
             'mimes:jpeg,jpg,png,webp,gif,bmp,avif,heic,heif,tiff,tif,mp4,webm,ogg,mov',
-            'max:20460',
+            'max:'.max(config('cloudinary_media.max_image_mb'), config('cloudinary_media.max_video_mb')) * 1024,
+            new \App\Rules\MediaUploadLimit,
             new SafeMedia,
         ];
     }

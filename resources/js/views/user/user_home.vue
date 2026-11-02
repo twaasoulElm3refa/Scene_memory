@@ -101,7 +101,7 @@
             <img
               :src="
                 event.first_image
-                  ? (isMobileRuntime() ? toMediaUrl(event.first_image.url) : `/storage/${event.first_image.url}`)
+                  ? (isMobileRuntime() ? toMediaUrl(event.first_image.url) : /^https?:\/\//.test(event.first_image.url) || event.first_image.url.startsWith('/') ? event.first_image.url : `/storage/${event.first_image.url}`)
                   : (isMobileRuntime() ? EVENT_FALLBACK_IMAGE : '/images/default-event.jpg')
               "
               alt="صورة الرحلة"

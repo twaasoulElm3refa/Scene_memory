@@ -25,7 +25,7 @@ class SubCategoriesCreateController extends Controller
         try {
             $subCategory = DB::transaction(function () use ($data, $request) {
                 if ($request->hasFile('image')) {
-                    $data['image'] = $request->file('image')->store('sub_categories', 'public');
+                    $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'sub_categories');
                 }
 
                 return $this->subCategoryRepository->create([

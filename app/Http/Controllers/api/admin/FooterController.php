@@ -41,12 +41,15 @@ class FooterController extends Controller
         $footer = $this->footerRepository->findOrFail(1);
         $data = $request->except(['_token']);
         if ($request->hasFile('logo')) {
-            if ($footer->logo && Storage::disk('public')->exists($footer->logo)) {
-                Storage::disk('public')->delete($footer->logo);
-            }
-            $data['logo'] = $request->file('logo')->store('eventImages', 'public');
+            $oldLogo = $footer->getRawOriginal('logo');
+            $data['logo'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('logo'), 'eventImages');
         }
         $footer->update($data);
+        if (isset($oldLogo)) {
+            $storage = app(\App\Services\UnifiedMediaStorage::class);
+            if ($storage->isCloudinary($oldLogo)) $storage->deleteReplaced($oldLogo, $footer->getRawOriginal('logo'));
+            else Storage::disk('public')->delete($oldLogo);
+        }
 
         $this->clearCache();
 

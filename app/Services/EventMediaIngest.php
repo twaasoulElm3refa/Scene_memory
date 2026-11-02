@@ -25,12 +25,28 @@ class EventMediaIngest
                 $preview = 'events/preview/'.$name.'.jpg';
                 Storage::disk('media')->put($full, fopen($file->getRealPath(), 'rb'));
                 Storage::disk('media')->put($preview, (string) ($analysisPrice ? $analysis['preview_encoded'] : $analysis['image']->toJpeg(85)));
-                $mediaRecord = EventsImges::create([
-                    'event_id' => $event->id, 'type' => 'image', 'full_url' => $full, 'preview_url' => $preview,
-                    'original_disk' => 'media', 'preview_disk' => 'media', 'is_active' => 1,
-                    'width' => $analysis['width'], 'height' => $analysis['height'],
-                    'price' => $analysisPrice ? $analysis['price'] : 0, 'licence_type' => $analysis['plan'],
-                ]);
+                $localPreview = $preview;
+                $cloud = app(UnifiedMediaStorage::class);
+                if ($cloud->enabled('image') && $event->is_active) {
+                    try {
+                        $preview = $cloud->upload(Storage::disk('media')->path($preview), 'image', 'events-preview');
+                    } catch (\Throwable $e) {
+                        \Log::warning('cloudinary_event_preview_fallback', ['event_id' => $event->id, 'reason' => $e->getMessage()]);
+                    }
+                }
+                try {
+                    $mediaRecord = EventsImges::create([
+                        'event_id' => $event->id, 'type' => 'image', 'full_url' => $full, 'preview_url' => $preview,
+                        'fallback_preview_url' => $cloud->isCloudinary($preview) ? $localPreview : null,
+                        'original_disk' => 'media', 'preview_disk' => $cloud->isCloudinary($preview) ? 'cloudinary' : 'media', 'is_active' => 1,
+                        'width' => $analysis['width'], 'height' => $analysis['height'],
+                        'media_bytes' => $file->getSize(), 'media_format' => $file->guessExtension(), 'media_status' => 'ready',
+                        'price' => $analysisPrice ? $analysis['price'] : 0, 'licence_type' => $analysis['plan'],
+                    ]);
+                } catch (\Throwable $e) {
+                    $cloud->deleteUnreferencedEventPreview($preview);
+                    throw $e;
+                }
                 app(MediaTierService::class)->assignTierToMedia($mediaRecord);
                 $created[] = $mediaRecord;
             } else {

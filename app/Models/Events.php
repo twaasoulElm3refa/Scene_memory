@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Concerns\ResolvesCloudinaryImage;
 
 use App\Support\MediaParents;
 use Database\Factories\EventsFactory;
@@ -11,7 +12,7 @@ use Laravel\Scout\Searchable;
 class Events extends Model
 {
     /** @use HasFactory<EventsFactory> */
-    use HasFactory , Searchable;
+    use HasFactory , Searchable, ResolvesCloudinaryImage;
 
     public function toSearchableArray(): array
     {

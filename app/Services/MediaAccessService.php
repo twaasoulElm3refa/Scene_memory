@@ -38,7 +38,7 @@ class MediaAccessService
     public function disk(EventsImges $media, bool $preview = false): string
     {
         $disk = $media->getAttribute($preview ? 'preview_disk' : 'original_disk') ?: 'public';
-        abort_unless(in_array($disk, ['public', 'media'], true), 404, SecurityMessage::get('unavailable'));
+        abort_unless(in_array($disk, $preview ? ['public', 'media', 'cloudinary'] : ['public', 'media'], true), 404, SecurityMessage::get('unavailable'));
 
         return $disk;
     }
@@ -62,6 +62,7 @@ class MediaAccessService
 
     public function file(EventsImges $media, bool $preview = false): string
     {
+        abort_if($this->disk($media, $preview) === 'cloudinary', 404, SecurityMessage::get('unavailable'));
         $disk = Storage::disk($this->disk($media, $preview));
         $raw = $media->getRawOriginal($preview ? 'preview_url' : 'full_url');
         $path = $this->relativePath($raw);
@@ -71,6 +72,16 @@ class MediaAccessService
         abort_unless($root && $file && is_file($file) && str_starts_with($file, $root.DIRECTORY_SEPARATOR), 404, SecurityMessage::get('unavailable'));
 
         return $file;
+    }
+
+    public function fallbackPreviewFile(EventsImges $media): ?string
+    {
+        $path = $this->relativePath($media->getRawOriginal('fallback_preview_url'));
+        if (! $path || ! Storage::disk('media')->exists($path)) return null;
+        $disk = Storage::disk('media');
+        $root = realpath($disk->path(''));
+        $file = realpath($disk->path($path));
+        return $root && $file && is_file($file) && str_starts_with($file, $root.DIRECTORY_SEPARATOR) ? $file : null;
     }
 
     public function previewUrl(EventsImges $media, bool $review = false): ?string

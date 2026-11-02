@@ -47,14 +47,16 @@ class EventAdminController extends Controller
             $data['slug'] = Str::slug($data['title']).'-'.Str::random(5).'-'.time();
 
             if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('events', 'public');
+                $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'events');
             }
 
             if ($request->has('is_trending')) {
                 $data['is_trending'] = $request->boolean('is_trending');
             }
 
+            $oldCover = $event->getRawOriginal('image');
             $event->update($data);
+            app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($oldCover, $event->getRawOriginal('image'));
 
             $this->clearEventsCache($oldSlug);
             $this->clearEventsCache($event->slug);
@@ -98,7 +100,13 @@ class EventAdminController extends Controller
         $event = $this->findEventByRouteKey($id);
         $slug = $event->slug;
 
+        $cloudPreviews = $event->images()->where('preview_disk', 'cloudinary')->pluck('preview_url')->all();
+        $cloudCover = $event->getRawOriginal('image');
         $event->delete();
+        app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($cloudCover, null);
+        foreach ($cloudPreviews as $preview) {
+            try { app(\App\Services\UnifiedMediaStorage::class)->delete($preview); } catch (\Throwable $e) { Log::warning('event_cloudinary_delete_failed', ['event_id' => $event->id, 'reason' => $e->getMessage()]); }
+        }
         $this->clearEventsCache($slug);
 
         return $this->success($event, 'Event Deleted Successfully');

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Concerns\ResolvesCloudinaryImage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Categories extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoriesFactory> */
-    use HasFactory;
+    use HasFactory, ResolvesCloudinaryImage;
 
     protected $table = 'categories';
 
