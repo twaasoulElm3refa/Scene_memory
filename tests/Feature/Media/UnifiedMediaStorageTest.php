@@ -36,6 +36,7 @@ class UnifiedMediaStorageTest extends TestCase
         $storage = new FakeUnifiedMediaStorage;
         $path = $storage->publicImage(UploadedFile::fake()->image('card.jpg'), 'events');
         $this->assertTrue($storage->isCloudinary($path));
+        $this->assertStringContainsString('res.cloudinary.com/example-cloud/', $storage->url($path));
         $this->assertStringContainsString('/image/upload/c_limit,w_1280,q_auto,f_auto/', $storage->url($path));
         $this->assertStringContainsString('/image/upload/c_limit,w_480,q_auto,f_auto/', $storage->url($path, 'thumb'));
         $this->assertDatabaseHas('cloudinary_media_assets', ['path' => $path, 'resource_type' => 'image']);
@@ -89,6 +90,23 @@ class UnifiedMediaStorageTest extends TestCase
         Cache::forget('cloudinary:usage');
         $this->expectException(RuntimeException::class);
         $storage->publicImage(UploadedFile::fake()->image('blocked.jpg'), 'events');
+    }
+
+    public function test_api_upload_failure_obeys_the_local_fallback_flag(): void
+    {
+        $storage = new FakeUnifiedMediaStorage;
+        $storage->failUpload = true;
+        $local = $storage->publicImage(UploadedFile::fake()->image('fallback.jpg'), 'events');
+        $this->assertFalse($storage->isCloudinary($local));
+        Storage::disk('public')->assertExists($local);
+
+        config()->set('cloudinary_media.allow_local_fallback', false);
+        try {
+            $storage->publicImage(UploadedFile::fake()->image('blocked.jpg'), 'events');
+            $this->fail('Expected Cloudinary API failure to propagate.');
+        } catch (RuntimeException $e) {
+            $this->assertSame('Synthetic Cloudinary failure.', $e->getMessage());
+        }
     }
 
     public function test_deleting_assets_does_not_reset_the_monthly_upload_budget(): void
@@ -154,6 +172,27 @@ class UnifiedMediaStorageTest extends TestCase
         $this->assertDatabaseHas('cloudinary_media_assets', ['path' => $media->preview_url, 'resource_type' => 'image']);
         Storage::disk('media')->assertExists('events/full/original.jpg');
     }
+
+    public function test_event_scoped_command_retries_a_published_local_preview(): void
+    {
+        Storage::fake('media');
+        $owner = User::factory()->create(['is_active' => true]);
+        $event = Events::create(['user_id' => $owner->id, 'title' => 'Retry', 'slug' => 'retry', 'is_active' => true]);
+        $media = EventsImges::create(['event_id' => $event->id, 'type' => 'image', 'price' => 10, 'is_active' => true,
+            'full_url' => 'events/full/private.jpg', 'original_disk' => 'media',
+            'preview_url' => 'events/preview/public.jpg', 'preview_disk' => 'media']);
+        Storage::disk('media')->put('events/full/private.jpg', 'private');
+        Storage::disk('media')->put('events/preview/public.jpg', 'preview');
+        app()->instance(UnifiedMediaStorage::class, new FakeUnifiedMediaStorage);
+
+        $this->artisan('media:cloudinary-event', ['eventId' => $event->id, '--promote' => true])->assertExitCode(0);
+
+        $media->refresh();
+        $this->assertSame('cloudinary', $media->preview_disk);
+        $this->assertSame('media', $media->original_disk);
+        $this->assertSame('events/preview/public.jpg', $media->fallback_preview_url);
+        Storage::disk('media')->assertExists('events/full/private.jpg');
+    }
 }
 
 class FakeUnifiedMediaStorage extends UnifiedMediaStorage
@@ -161,9 +200,11 @@ class FakeUnifiedMediaStorage extends UnifiedMediaStorage
     public array $lastOptions = [];
     public array $deletions = [];
     public int $creditPercent = 0;
+    public bool $failUpload = false;
 
     protected function sendUpload(string $file, array $options): array
     {
+        if ($this->failUpload) throw new RuntimeException('Synthetic Cloudinary failure.');
         $this->lastOptions = $options;
         return [
             'public_id' => $options['public_id'], 'asset_id' => 'asset-1',

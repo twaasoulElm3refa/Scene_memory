@@ -37,7 +37,16 @@ class UnifiedMediaStorage
         if ($bytes === false || $bytes < 1 || $bytes > $limit) {
             throw new RuntimeException('Media exceeds the configured upload limit.');
         }
-        return Cache::lock('cloudinary:upload-budget', 1200)->block(30, fn () => $this->uploadLocked($file, $bytes, $type, $folder));
+        $operationId = (string) Str::uuid();
+        Log::info('cloudinary_upload_started', ['operation_id' => $operationId, 'resource_type' => $type, 'bytes' => $bytes]);
+        try {
+            $path = Cache::lock('cloudinary:upload-budget', 1200)->block(30, fn () => $this->uploadLocked($file, $bytes, $type, $folder));
+            Log::info('cloudinary_upload_succeeded', ['operation_id' => $operationId, 'resource_type' => $type]);
+            return $path;
+        } catch (Throwable $e) {
+            Log::warning('cloudinary_upload_failed', ['operation_id' => $operationId, 'resource_type' => $type, 'exception_category' => get_class($e)]);
+            throw $e;
+        }
     }
 
     private function uploadLocked(string $file, int $bytes, string $type, string $folder): string
@@ -88,7 +97,7 @@ class UnifiedMediaStorage
                 Storage::disk('public')->delete($local);
                 throw $e;
             }
-            Log::warning('cloudinary_image_fallback', ['reason' => $e->getMessage()]);
+            Log::warning('media_local_fallback_used', ['resource_type' => 'image', 'disk' => 'public', 'exception_category' => get_class($e)]);
             return $local;
         }
     }
@@ -104,7 +113,12 @@ class UnifiedMediaStorage
         if (! $this->enabled($asset->resource_type) && $asset->local_path && Storage::disk('public')->exists($asset->local_path)) {
             return Storage::disk('public')->url($asset->local_path);
         }
-        $cloud = parse_url((string) config('cloudinary_media.url'), PHP_URL_HOST);
+        try {
+            $cloud = $this->client()->configuration->cloud->cloudName;
+        } catch (Throwable $e) {
+            Log::warning('cloudinary_delivery_configuration_invalid', ['exception_category' => get_class($e)]);
+            return null;
+        }
         if (! $cloud || ! preg_match('/^[a-zA-Z0-9_-]+$/', $cloud)) return null;
         $transforms = $asset->resource_type === 'image'
             ? ($preset === 'thumb' ? 'c_limit,w_480,q_auto,f_auto' : 'c_limit,w_1280,q_auto,f_auto')
