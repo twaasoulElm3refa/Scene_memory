@@ -568,7 +568,7 @@ class GoogleWebAuthTest extends TestCase
         $this->get('/api/v1/users/google-callback?'.http_build_query(['state' => $query['state'], 'code' => 'fixture']));
         config()->set('mail.default', 'log');
         $this->postJson('/api/v1/users/google-recovery-start', [])
-            ->assertStatus(503)->assertJsonPath('error_code', 'recovery_unavailable');
+            ->assertStatus(503)->assertJsonPath('error_code', 'unavailable');
         Mail::assertNotSent(GoogleRecoveryCodeMail::class);
         $this->assertNull(User::sole()->google_id);
     }

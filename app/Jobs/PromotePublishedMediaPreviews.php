@@ -26,6 +26,8 @@ class PromotePublishedMediaPreviews implements ShouldQueue
         if (! Events::whereKey($this->eventId)->where('is_active', true)->exists()) return;
         EventsImges::where('event_id', $this->eventId)->where('is_active', true)
             ->where('preview_disk', 'media')->whereNotNull('preview_url')->each(function (EventsImges $media) use ($storage) {
+                // Image previews stay local. Existing Cloudinary image previews remain valid legacy records.
+                if ($media->type === 'image') return;
                 $type = $media->type === 'video' ? 'video' : 'image';
                 if (! $storage->enabled($type)) return;
                 $old = $media->getRawOriginal('preview_url');

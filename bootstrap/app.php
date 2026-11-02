@@ -15,12 +15,21 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withCommands([
+        \App\Services\Commands\BackupPendingOriginals::class,
+        \App\Services\Commands\CleanupTemporaryOriginals::class,
+    ])
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo(fn (\Illuminate\Http\Request $request) =>
+            $request->is('api/*') ? null : '/login'
+        );
         $middleware->append(SecurityResponseHeaders::class);
         $middleware->api(SetLocale::class);
         $middleware->api(BlockBadBots::class);
         $middleware->api(EnsureActiveAccount::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->shouldRenderJsonWhen(fn (\Illuminate\Http\Request $request, \Throwable $e) =>
+            $request->is('api/*') || $request->expectsJson()
+        );
     })->create();

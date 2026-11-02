@@ -153,7 +153,7 @@ class UnifiedMediaStorageTest extends TestCase
         $this->get(route('media.preview', $media))->assertNotFound();
     }
 
-    public function test_approval_promotes_only_a_preview_and_keeps_the_paid_original_private(): void
+    public function test_approval_leaves_existing_local_image_preview_and_original_in_place(): void
     {
         Storage::fake('media');
         $owner = User::factory()->create(['is_active' => true]);
@@ -167,13 +167,12 @@ class UnifiedMediaStorageTest extends TestCase
         $media->refresh();
         $this->assertSame('media', $media->original_disk);
         $this->assertSame('events/full/original.jpg', $media->full_url);
-        $this->assertSame('cloudinary', $media->preview_disk);
-        $this->assertSame('events/preview/watermarked.jpg', $media->fallback_preview_url);
-        $this->assertDatabaseHas('cloudinary_media_assets', ['path' => $media->preview_url, 'resource_type' => 'image']);
+        $this->assertSame('media', $media->preview_disk);
+        $this->assertSame('events/preview/watermarked.jpg', $media->preview_url);
         Storage::disk('media')->assertExists('events/full/original.jpg');
     }
 
-    public function test_event_scoped_command_retries_a_published_local_preview(): void
+    public function test_event_scoped_command_does_not_promote_a_local_image_preview(): void
     {
         Storage::fake('media');
         $owner = User::factory()->create(['is_active' => true]);
@@ -185,12 +184,12 @@ class UnifiedMediaStorageTest extends TestCase
         Storage::disk('media')->put('events/preview/public.jpg', 'preview');
         app()->instance(UnifiedMediaStorage::class, new FakeUnifiedMediaStorage);
 
-        $this->artisan('media:cloudinary-event', ['eventId' => $event->id, '--promote' => true])->assertExitCode(0);
+        $this->artisan('media:cloudinary-event', ['eventId' => $event->id, '--promote' => true])->assertExitCode(1);
 
         $media->refresh();
-        $this->assertSame('cloudinary', $media->preview_disk);
+        $this->assertSame('media', $media->preview_disk);
         $this->assertSame('media', $media->original_disk);
-        $this->assertSame('events/preview/public.jpg', $media->fallback_preview_url);
+        $this->assertSame('events/preview/public.jpg', $media->preview_url);
         Storage::disk('media')->assertExists('events/full/private.jpg');
     }
 }

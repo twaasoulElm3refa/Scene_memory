@@ -41,7 +41,7 @@ class EventsImges extends Model
         $data['thumbnail_url'] = $preview ? $access->thumbnailUrl($this, $review) : null;
         $data['poster_url'] = $this->type === 'video' && $access->isPublished($this) && $access->disk($this, true) === 'cloudinary' && app(\App\Services\UnifiedMediaStorage::class)->enabled('video')
             ? app(\App\Services\UnifiedMediaStorage::class)->url($this->getOriginal('preview_url'), 'poster') : null;
-        unset($data['original_disk'], $data['preview_disk'], $data['fallback_preview_url'], $data['events']);
+        unset($data['original_disk'], $data['preview_disk'], $data['fallback_preview_url'], $data['local_original_path'], $data['source_fingerprint'], $data['events']);
 
         return $data;
     }
@@ -54,6 +54,11 @@ class EventsImges extends Model
     public function cloudinaryPreviewAsset()
     {
         return $this->hasOne(CloudinaryMediaAsset::class, 'path', 'preview_url');
+    }
+
+    public function cloudinaryOriginalAsset()
+    {
+        return $this->hasOne(CloudinaryMediaAsset::class, 'event_media_id')->where('delivery_type', 'authenticated');
     }
 
     public function MediaRequest()

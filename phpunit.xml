@@ -19,6 +19,10 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="false" force="true"/>
+        <env name="CLOUDINARY_IMAGES_ENABLED" value="false" force="true"/>
+        <env name="CLOUDINARY_VIDEOS_ENABLED" value="false" force="true"/>
+        <env name="MEDIA_TEMP_ORIGINAL_CLEANUP_ENABLED" value="false" force="true"/>
         <!-- Test-only encryption key: production must provide its own APP_KEY. -->
         <env name="APP_KEY" value="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>

@@ -15,6 +15,7 @@ use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Throwable;
 
 class GenerateEventAiTagsJob implements ShouldQueue
@@ -68,12 +69,32 @@ class GenerateEventAiTagsJob implements ShouldQueue
         $visualInputLimit = max(0, (int) config('ai_tags.images_limit', 5));
         $analysisBatches = [];
         $temporaryFramePaths = [];
+        $temporaryImagePaths = [];
         $media = $event->images()->orderBy('id')->get();
         $imagePaths = [];
         $imageMediaByIndex = [];
 
         foreach ($media->filter(fn (EventsImges $item) => $this->isStoredImage($item))->take($visualInputLimit) as $image) {
-            $imagePaths[] = ($image->original_disk ?: 'public') === 'media' ? ['disk' => 'media', 'path' => $image->full_url] : (string) $image->full_url;
+            $inputPath = $image->original_disk === 'cloudinary'
+                ? $image->local_original_path : $image->getRawOriginal('full_url');
+            if ($image->original_disk === 'cloudinary' && ! Storage::disk('media')->exists($inputPath)) {
+                try {
+                    $asset = $image->cloudinaryOriginalAsset()->where('path', $image->getRawOriginal('full_url'))->firstOrFail();
+                    $inputPath = 'ai-tags-temp/'.Str::uuid().'.'.$asset->format;
+                    Storage::disk('media')->put($inputPath, app(\App\Services\UnifiedMediaStorage::class)->authenticatedBytes($asset));
+                    @chmod(Storage::disk('media')->path($inputPath), 0600);
+                    $temporaryImagePaths[] = $inputPath;
+                } catch (Throwable $e) {
+                    Log::warning('event_ai_tags_image_missing', ['event_id' => $this->eventId,
+                        'events_imges_id' => $image->getKey(), 'exception_category' => get_class($e)]);
+                    continue;
+                }
+            }
+            $imagePaths[] = $image->original_disk === 'cloudinary'
+                ? ['disk' => 'media', 'path' => $inputPath]
+                : (($image->original_disk ?: 'public') === 'media'
+                    ? ['disk' => 'media', 'path' => $image->getRawOriginal('full_url')]
+                    : (string) $image->getRawOriginal('full_url'));
             $imageMediaByIndex[count($imagePaths)] = $image;
         }
 
@@ -197,6 +218,7 @@ class GenerateEventAiTagsJob implements ShouldQueue
             ]);
         } finally {
             $videoFrameExtractor->cleanup($temporaryFramePaths);
+            Storage::disk('media')->delete($temporaryImagePaths);
         }
     }
 
@@ -212,7 +234,8 @@ class GenerateEventAiTagsJob implements ShouldQueue
 
     private function isStoredImage(EventsImges $image): bool
     {
-        $path = ltrim((string) $image->full_url, '/');
+        $path = ltrim((string) ($image->original_disk === 'cloudinary'
+            ? $image->local_original_path : $image->getRawOriginal('full_url')), '/');
 
         if (
             $path === ''
@@ -229,7 +252,11 @@ class GenerateEventAiTagsJob implements ShouldQueue
             return false;
         }
 
-        $disk = Storage::disk($image->original_disk ?: 'public');
+        if ($image->original_disk === 'cloudinary' && ! Storage::disk('media')->exists($path)) {
+            return $image->cloudinaryOriginalAsset()->where('path', $image->getRawOriginal('full_url'))
+                ->where('status', 'ready')->exists();
+        }
+        $disk = Storage::disk($image->original_disk === 'cloudinary' ? 'media' : ($image->original_disk ?: 'public'));
 
         if (! $disk->exists($path)) {
             Log::warning('event_ai_tags_image_missing', [

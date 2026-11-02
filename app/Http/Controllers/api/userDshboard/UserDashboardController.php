@@ -61,6 +61,7 @@ class UserDashboardController extends Controller
     {
         $event = $this->eventRepository->findById((int) request()->route('id'));
         EventAccess::authorize($event, request()->user());
+        abort_if(\App\Models\Entitlement::whereIn('media_id', $event->images()->select('id'))->exists(), 409);
         try {
             $this->clearCache($event->user_id, $event->slug);
             $this->clearEventsCache();

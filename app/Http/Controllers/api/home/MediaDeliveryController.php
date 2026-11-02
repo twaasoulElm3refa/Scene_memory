@@ -60,6 +60,18 @@ class MediaDeliveryController extends Controller
     // Only a server-issued, expiring grant sent to the configured moderation service.
     public function reviewOriginal(EventsImges $media, MediaAccessService $access)
     {
+        if ($access->disk($media) === 'cloudinary') {
+            $asset = $media->cloudinaryOriginalAsset()->where('path', $media->getRawOriginal('full_url'))->firstOrFail();
+            try {
+                $bytes = app(UnifiedMediaStorage::class)->authenticatedBytes($asset);
+                return response($bytes, 200, ['Content-Type' => 'image/'.$asset->format, 'Cache-Control' => 'private, no-store', 'X-Content-Type-Options' => 'nosniff']);
+            } catch (\Throwable $e) {
+                \Log::warning('media_cloudinary_review_failed', ['media_id' => $media->id, 'exception_category' => get_class($e)]);
+                $retained = $access->retainedOriginalFile($media);
+                abort_unless($retained, 503, SecurityMessage::get('unavailable'));
+                return PrivateFileResponse::make($retained);
+            }
+        }
         return PrivateFileResponse::make($access->file($media));
     }
 
@@ -71,7 +83,7 @@ class MediaDeliveryController extends Controller
             return $access->file($media);
         }
         $file = $access->file($media, true);
-        if ($access->restrictedOriginal($media)) {
+        if ($access->restrictedOriginal($media) && $access->disk($media) !== 'cloudinary') {
             abort_if($file === $access->file($media), 404, SecurityMessage::get('unavailable'));
         }
 
