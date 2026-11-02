@@ -31,7 +31,9 @@ class EventMediaIngest
                     try {
                         $preview = $cloud->upload(Storage::disk('media')->path($preview), 'image', 'events-preview');
                     } catch (\Throwable $e) {
-                        \Log::warning('cloudinary_event_preview_fallback', ['event_id' => $event->id, 'reason' => $e->getMessage()]);
+                        $fallback = (bool) config('cloudinary_media.allow_local_fallback');
+                        \Log::warning($fallback ? 'media_local_fallback_used' : 'cloudinary_preview_upload_failed', ['event_id' => $event->id, 'resource_type' => 'image', 'disk' => 'media', 'exception_category' => get_class($e)]);
+                        if (! $fallback) throw $e;
                     }
                 }
                 try {

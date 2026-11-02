@@ -33,6 +33,8 @@ class EventAiTagsDispatchTest extends TestCase
     {
         parent::setUp();
 
+        config()->set('cloudinary_media.images_enabled', false);
+
         $this->storageRoot = sys_get_temp_dir().'/scene-memory-dispatch-'.bin2hex(random_bytes(6));
         File::ensureDirectoryExists($this->storageRoot);
         config()->set('filesystems.disks.public.root', $this->storageRoot);
@@ -82,6 +84,25 @@ class EventAiTagsDispatchTest extends TestCase
         Sanctum::actingAs(User::factory()->create(['role' => 'user']));
 
         $this->post('/api/v1/events/create', [])->assertUnauthorized();
+    }
+
+    public function test_regular_user_queues_each_of_two_images_without_publishing_them(): void
+    {
+        Bus::fake();
+        Storage::fake('media');
+        Sanctum::actingAs(User::factory()->create(['role' => 'user']));
+
+        $response = $this->post('/api/v1/events/create/user', [
+            'title' => 'Two images', 'description' => 'Two protected originals',
+            'urls' => [UploadedFile::fake()->image('one.jpg'), UploadedFile::fake()->image('two.png')],
+            'media_prices' => [10, 0],
+        ])->assertOk();
+
+        $eventId = (int) $response->json('data.id');
+        $this->assertDatabaseHas('events', ['id' => $eventId, 'is_active' => 0]);
+        Bus::assertBatched(fn (PendingBatch $batch) => $batch->name === "event-media:{$eventId}"
+            && $batch->jobs->count() === 2
+            && $batch->jobs->every(fn ($job) => $job instanceof ProcessEventImageJob));
     }
 
     private function assertEndpointDispatchesBatch(
@@ -294,6 +315,12 @@ class EventAiTagsDispatchTest extends TestCase
             $this->assertSame(25.5, (float) $storedImage->price);
             $this->assertTrue(Storage::disk('media')->exists($storedImage->full_url));
             $this->assertTrue(Storage::disk('media')->exists($storedImage->preview_url));
+            $capturedImageJob->handle(
+                app(ImageAnalysisService::class),
+                app(TagResolverService::class),
+                app(EventTagCacheService::class)
+            );
+            $this->assertSame(1, EventsImges::where('event_id', $eventId)->count());
             $this->assertDatabaseHas('images_tags', [
                 'events_imges_id' => $storedImage->id,
                 'tags_id' => $existingPhotoTag->id,

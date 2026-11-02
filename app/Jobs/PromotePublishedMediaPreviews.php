@@ -34,9 +34,15 @@ class PromotePublishedMediaPreviews implements ShouldQueue
                     $path = $storage->upload(Storage::disk('media')->path($old), $type, 'events-preview');
                     $changed = EventsImges::whereKey($media->id)->where('preview_url', $old)
                         ->where('preview_disk', 'media')->update(['preview_url' => $path, 'preview_disk' => 'cloudinary', 'fallback_preview_url' => $old]);
-                    if (! $changed) $storage->delete($path);
+                    if (! $changed) {
+                        $storage->delete($path);
+                    } else {
+                        Log::info('media_preview_promoted', ['event_id' => $this->eventId, 'media_id' => $media->id, 'resource_type' => $type]);
+                    }
                 } catch (\Throwable $e) {
-                    Log::warning('cloudinary_promotion_failed', ['media_id' => $media->id, 'reason' => $e->getMessage()]);
+                    $fallback = (bool) config('cloudinary_media.allow_local_fallback');
+                    Log::warning($fallback ? 'media_local_fallback_used' : 'cloudinary_preview_upload_failed', ['event_id' => $this->eventId, 'media_id' => $media->id, 'resource_type' => $type, 'disk' => 'media', 'exception_category' => get_class($e)]);
+                    if (! $fallback) throw $e;
                 }
             });
     }

@@ -20,7 +20,7 @@ Artisan::command('media:cloudinary-usage', function (\App\Services\UnifiedMediaS
             \Log::warning('cloudinary_credit_warning', $usage);
         }
     } catch (\Throwable $e) {
-        \Log::warning('cloudinary_usage_unavailable', ['reason' => $e->getMessage()]);
+        \Log::warning('cloudinary_usage_unavailable', ['exception_category' => get_class($e)]);
         $this->error('Cloudinary usage is unavailable.');
     }
 })->purpose('Check cached Cloudinary credit usage');

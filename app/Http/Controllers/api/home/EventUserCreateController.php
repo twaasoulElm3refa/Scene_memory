@@ -127,11 +127,11 @@ class EventUserCreateController extends Controller
                                 $request,
                                 $index
                             );
-                            \Log::info('Preparing ProcessEventImageJob', [
+                            \Log::info('image_processing_queued', [
                                 'event_id' => $event->id,
-                                'temp_path' => $tempPath,
-                                'manual_price' => $manualPrice,
-                                'file_name' => $file->getClientOriginalName(),
+                                'image_identifier' => substr(hash('sha256', $event->id.'|media|'.$tempPath), 0, 16),
+                                'source_disk' => 'media',
+                                'paid' => $manualPrice > 0,
                             ]);
                             $imageJobs[] = new ProcessEventImageJob(
                                 $event->id,
@@ -463,8 +463,10 @@ class EventUserCreateController extends Controller
                     ->finally(function (Batch $batch) use ($eventId, $eventRequestId): void {
                         GenerateEventAiTagsJob::dispatch($eventId);
 
-                        if ($eventRequestId !== null) {
+                        if ($eventRequestId !== null && (int) $batch->failedJobs === 0) {
                             ReviewEventRequestWithAi::dispatch($eventRequestId);
+                        } elseif ($batch->failedJobs > 0) {
+                            Log::warning('event_media_batch_incomplete', ['event_id' => $eventId, 'failed_jobs' => $batch->failedJobs]);
                         }
                     })
                     ->dispatch();
@@ -476,9 +478,9 @@ class EventUserCreateController extends Controller
                 }
             }
         } catch (\Throwable $exception) {
-            Log::error('Event media batch dispatch failed', [
+            Log::error('event_media_batch_dispatch_failed', [
                 'event_id' => $eventId,
-                'message' => $exception->getMessage(),
+                'exception_category' => get_class($exception),
             ]);
         }
     }

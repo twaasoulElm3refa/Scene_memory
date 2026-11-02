@@ -59,40 +59,33 @@ class ProcessEventImageJob implements ShouldQueue
         TagResolverService $tagResolver,
         EventTagCacheService $cache
     ): void {
-        \Log::info('ProcessEventImageJob started', [
-            'event_id' => $this->eventId,
-            'temp_path' => $this->tempPath,
-            'manual_price' => $this->manualPrice,
-        ]);
+        $imageIdentifier = substr(hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath), 0, 16);
+        $existing = EventsImges::where('event_id', $this->eventId)
+            ->where('full_url', 'like', 'events/full/'.hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath).'.%')
+            ->first();
+        if ($existing && $existing->preview_url && Storage::disk('media')->exists($existing->full_url)
+            && ($existing->preview_disk === 'cloudinary' || Storage::disk('media')->exists($existing->preview_url))) {
+            Storage::disk($this->sourceDisk)->delete($this->tempPath);
+            \Log::info('image_processing_completed', ['event_id' => $this->eventId, 'media_id' => $existing->id, 'image_identifier' => $imageIdentifier, 'preview_disk' => $existing->preview_disk, 'duplicate' => true]);
+            return;
+        }
+        \Log::info('image_processing_started', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'source_disk' => $this->sourceDisk]);
 
         if (trim($this->tempPath) === '') {
-            \Log::error('ProcessEventImageJob: empty temp path', [
-                'event_id' => $this->eventId,
-                'temp_path' => $this->tempPath,
-            ]);
-
-            return;
+            \Log::error('image_processing_failed', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'reason' => 'empty_source_path']);
+            throw new \RuntimeException('Image source path is empty.');
         }
 
         if (! Storage::disk($this->sourceDisk)->exists($this->tempPath)) {
-            \Log::error('ProcessEventImageJob: temp file not found', [
-                'event_id' => $this->eventId,
-                'temp_path' => $this->tempPath,
-            ]);
-
-            return;
+            \Log::error('image_processing_failed', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'reason' => 'source_missing']);
+            throw new \RuntimeException('Image source is unavailable.');
         }
 
         $absolutePath = Storage::disk($this->sourceDisk)->path($this->tempPath);
 
         if (! is_file($absolutePath)) {
-            \Log::error('ProcessEventImageJob: temp path is not a file', [
-                'event_id' => $this->eventId,
-                'temp_path' => $this->tempPath,
-                'absolute_path' => $absolutePath,
-            ]);
-
-            return;
+            \Log::error('image_processing_failed', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'reason' => 'source_not_file']);
+            throw new \RuntimeException('Image source is not a file.');
         }
 
         try {
@@ -133,7 +126,9 @@ class ProcessEventImageJob implements ShouldQueue
                     try {
                         $previewPath = $cloud->upload(Storage::disk('media')->path($previewPath), 'image', 'events-preview');
                     } catch (\Throwable $e) {
-                        \Log::warning('cloudinary_event_preview_fallback', ['event_id' => $this->eventId, 'reason' => $e->getMessage()]);
+                        $fallback = (bool) config('cloudinary_media.allow_local_fallback');
+                        \Log::warning($fallback ? 'media_local_fallback_used' : 'cloudinary_preview_upload_failed', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'resource_type' => 'image', 'disk' => 'media', 'exception_category' => get_class($e)]);
+                        if (! $fallback) throw $e;
                     }
                 }
             }
@@ -200,17 +195,11 @@ class ProcessEventImageJob implements ShouldQueue
             $cache->invalidateEvent($this->eventId, [(int) $eventImage->id]);
             Storage::disk($this->sourceDisk)->delete($this->tempPath);
             GenerateMediaThumbnailJob::dispatch((int) $eventImage->id);
+            \Log::info('image_processing_completed', ['event_id' => $this->eventId, 'media_id' => $eventImage->id, 'image_identifier' => $imageIdentifier, 'preview_disk' => $eventImage->preview_disk, 'duplicate' => false]);
 
         } catch (\Throwable $e) {
             if (isset($previewPath)) app(UnifiedMediaStorage::class)->deleteUnreferencedEventPreview($previewPath);
-            \Log::error('ProcessEventImageJob: failed', [
-                'event_id' => $this->eventId,
-                'temp_path' => $this->tempPath,
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+            \Log::error('image_processing_failed', ['event_id' => $this->eventId, 'image_identifier' => $imageIdentifier, 'exception_category' => get_class($e)]);
 
             throw $e;
         }
@@ -222,11 +211,7 @@ class ProcessEventImageJob implements ShouldQueue
             Storage::disk($this->sourceDisk)->delete($this->tempPath);
         }
 
-        \Log::error('ProcessEventImageJob: permanently failed', [
-            'event_id' => $this->eventId,
-            'temp_path' => $this->tempPath,
-            'message' => $exception->getMessage(),
-        ]);
+        \Log::error('image_processing_permanently_failed', ['event_id' => $this->eventId, 'image_identifier' => substr(hash('sha256', $this->eventId.'|'.$this->sourceDisk.'|'.$this->tempPath), 0, 16), 'exception_category' => get_class($exception)]);
     }
 
     private function makeImageManager(): ImageManager

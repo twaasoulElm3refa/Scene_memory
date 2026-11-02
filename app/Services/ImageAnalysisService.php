@@ -39,20 +39,11 @@ class ImageAnalysisService
             }
         } catch (\Throwable $e) {
             \Log::error('ImageAnalysisService: unsupported or corrupted image', [
-                'name' => method_exists($file, 'getClientOriginalName') ? $file->getClientOriginalName() : $file->getFilename(),
                 'mime' => method_exists($file, 'getMimeType') ? $file->getMimeType() : null,
-                'extension' => method_exists($file, 'getClientOriginalExtension') ? $file->getClientOriginalExtension() : null,
-                'path' => $file->getRealPath(),
-                'message' => $e->getMessage(),
+                'exception_category' => get_class($e),
             ]);
 
-            throw new \RuntimeException(
-                'Unsupported or corrupted image: '.(
-                    method_exists($file, 'getClientOriginalName')
-                        ? $file->getClientOriginalName()
-                        : $file->getFilename()
-                )
-            );
+            throw new \RuntimeException('Unsupported or corrupted image.');
         }
 
         $width = $image->width();
@@ -309,6 +300,7 @@ class ImageAnalysisService
 
     private function makePreview($image, ImageManager $manager): EncodedImage
     {
+        $image->scaleDown(width: 1280, height: 1280);
         $image->blur(2);
 
         $watermark = $manager->read(public_path('images/watermark.png'));
