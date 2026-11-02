@@ -882,7 +882,7 @@ function toAssetUrl(path) {
     .replace(/^storage\//, "")
     .replace(/^\/?storage\//, "");
 
-  return isMobileRuntime() ? toMediaUrl(cleaned) : `/storage/${cleaned}`;
+  return isMobileRuntime() ? toMediaUrl(cleaned) : /^https?:\/\//.test(cleaned) || cleaned.startsWith('/') ? cleaned : `/storage/${cleaned}`;
 }
 
 function isMediaVideo(media) {

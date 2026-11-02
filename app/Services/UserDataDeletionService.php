@@ -280,9 +280,8 @@ class UserDataDeletionService
             // 1. Remove profile photo
             if ($user->image) {
                 try {
-                    if (Storage::disk('public')->exists($user->image)) {
-                        Storage::disk('public')->delete($user->image);
-                    }
+                    $path = $user->getRawOriginal('image');
+                    if ($path) app(UnifiedMediaStorage::class)->delete($path);
                 } catch (Throwable $e) {
                     Log::warning('Failed deleting user avatar during data deletion', [
                         'user_id' => $user->id,

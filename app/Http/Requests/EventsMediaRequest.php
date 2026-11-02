@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\SafeMedia;
+use App\Rules\MediaUploadLimit;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +26,7 @@ class EventsMediaRequest extends FormRequest
     {
         return [
             'url' => 'required|array|min:1|max:8',
-            'url.*' => ['required', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4', 'max:5120', new SafeMedia],
+            'url.*' => ['required', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4,webm,mov', 'max:'.max(config('cloudinary_media.max_image_mb'), config('cloudinary_media.max_video_mb')) * 1024, new MediaUploadLimit, new SafeMedia],
         ];
     }
 }

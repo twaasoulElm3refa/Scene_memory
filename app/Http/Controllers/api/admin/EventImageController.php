@@ -43,8 +43,8 @@ class EventImageController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'url' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4,webm,mov', 'max:51200', new SafeMedia],
-            'video' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:51200', new SafeMedia],
+            'url' => ['nullable', 'file', 'mimes:jpeg,jpg,png,webp,gif,mp4,webm,mov', 'max:'.max(config('cloudinary_media.max_image_mb'), config('cloudinary_media.max_video_mb')) * 1024, new \App\Rules\MediaUploadLimit, new SafeMedia],
+            'video' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:'.config('cloudinary_media.max_video_mb') * 1024, new SafeMedia],
         ]);
         $file = $request->file('url') ?: $request->file('video');
         abort_unless($file, 422, SecurityMessage::get('invalidMedia'));
@@ -64,6 +64,11 @@ class EventImageController extends Controller
             $event = $this->eventRepository->findByIdOrFail((int) $eventImage->event_id);
 
             $eventImage->delete();
+            $cloud = app(\App\Services\UnifiedMediaStorage::class);
+            $preview = $eventImage->getRawOriginal('preview_url');
+            if ($cloud->isCloudinary($preview)) {
+                try { $cloud->delete($preview); } catch (\Throwable $e) { \Log::warning('event_cloudinary_delete_failed', ['media_id' => $eventImage->id, 'reason' => $e->getMessage()]); }
+            }
             $this->clearCache($event->id, $event->slug);
 
             return $this->success($eventImage, 'Event media deleted successfully');

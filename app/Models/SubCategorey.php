@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Models;
+use App\Models\Concerns\ResolvesCloudinaryImage;
 
 use Illuminate\Database\Eloquent\Model;
 
 class SubCategorey extends Model
 {
+    use ResolvesCloudinaryImage;
     protected $table = "sub_categoreys";
     protected $guarded = [];
     public function events()

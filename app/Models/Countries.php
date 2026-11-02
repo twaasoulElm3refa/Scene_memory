@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Concerns\ResolvesCloudinaryImage;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ class Countries extends Model
     /** @use HasFactory<\Database\Factories\CountriesFactory> */
     use HasFactory;
 
-    use SoftDeletes;
+    use SoftDeletes, ResolvesCloudinaryImage;
 
     protected $guarded = [];
 

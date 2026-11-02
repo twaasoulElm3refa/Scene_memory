@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Events;
 use App\Models\EventsImges;
+use App\Services\UnifiedMediaStorage;
 use App\Services\EventTagCacheService;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -70,13 +71,15 @@ class ProcessEventVideoJob implements ShouldQueue
         if (
             $existingMedia &&
             $existingMedia->preview_url &&
-            $disk->exists($existingMedia->preview_url)
+            ($disk->exists($existingMedia->preview_url) || app(UnifiedMediaStorage::class)->isCloudinary($existingMedia->preview_url))
         ) {
             $cache->invalidateEvent((int) $event->id, [(int) $existingMedia->id]);
 
             if ($this->dispatchAiAfterProcessing) {
                 GenerateEventAiTagsJob::dispatch((int) $event->id);
             }
+
+            Storage::disk($this->sourceDisk)->delete($this->filePath);
 
             return;
         }
@@ -99,16 +102,42 @@ class ProcessEventVideoJob implements ShouldQueue
             if (! $previewWatermarkedPath) {
                 throw new \RuntimeException('Watermarked preview video generation failed.');
             }
+            $localPreviewPath = $previewWatermarkedPath;
+            $cloud = app(UnifiedMediaStorage::class);
+            if ($cloud->enabled('video') && $event->is_active) {
+                try {
+                    $previewWatermarkedPath = $cloud->upload($disk->path($previewWatermarkedPath), 'video', 'events-preview');
+                } catch (\Throwable $e) {
+                    Log::warning('cloudinary_video_preview_fallback', ['event_id' => $this->eventId, 'reason' => $e->getMessage()]);
+                }
+            }
 
+            $metadata = [];
+            try {
+                $probe = new Process([env('FFPROBE_BIN', 'ffprobe'), '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height:format=duration', '-of', 'json', $finalAbsPath]);
+                $probe->setTimeout(15);
+                $probe->run();
+                $metadata = $probe->isSuccessful() ? (json_decode($probe->getOutput(), true) ?: []) : [];
+            } catch (\Throwable $e) {
+                Log::warning('video_metadata_probe_failed', ['event_id' => $this->eventId, 'reason' => $e->getMessage()]);
+            }
+            $videoStream = $metadata['streams'][0] ?? [];
             $media = EventsImges::updateOrCreate([
                 'event_id' => $this->eventId,
                 'type' => 'video',
                 'full_url' => $finalFilename,
             ], [
                 'preview_url' => $previewWatermarkedPath,
+                'fallback_preview_url' => $cloud->isCloudinary($previewWatermarkedPath) ? $localPreviewPath : null,
                 'price' => $this->manualPrice ?? 15,
-                'original_disk' => 'media', 'preview_disk' => 'media',
+                'original_disk' => 'media', 'preview_disk' => $cloud->isCloudinary($previewWatermarkedPath) ? 'cloudinary' : 'media',
                 'is_active' => 1,
+                'media_bytes' => filesize($finalAbsPath) ?: null,
+                'media_format' => strtolower(pathinfo($finalFilename, PATHINFO_EXTENSION)),
+                'media_status' => 'ready',
+                'width' => $videoStream['width'] ?? null,
+                'height' => $videoStream['height'] ?? null,
+                'duration_seconds' => $metadata['format']['duration'] ?? null,
             ]);
             app(\App\Services\MediaTierService::class)->assignTierToMedia($media);
 
@@ -120,6 +149,7 @@ class ProcessEventVideoJob implements ShouldQueue
             }
 
         } catch (\Throwable $exception) {
+            if (isset($previewWatermarkedPath)) app(UnifiedMediaStorage::class)->deleteUnreferencedEventPreview($previewWatermarkedPath);
             Log::error('ProcessEventVideoJob: failed', [
                 'event_id' => $this->eventId,
                 'source_path' => $this->filePath,

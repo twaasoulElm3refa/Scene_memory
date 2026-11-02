@@ -298,6 +298,7 @@ const totalPages = computed(() => paginationData.value.last_page || 1);
 const getImageUrl = (path) => {
   if (!path) return null;
   if (isMobileRuntime()) return toMediaUrl(path);
+  if (/^https?:\/\//.test(path)) return path;
   const base = import.meta.env.VITE_APP_BASE_URL || "http://127.0.0.1:8000";
   return `${base}/storage/${path}`;
 };

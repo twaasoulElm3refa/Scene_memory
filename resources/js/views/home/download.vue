@@ -79,6 +79,7 @@
                 playsinline
                 preload="metadata"
                 controls
+                :poster="item.poster_url || undefined"
                 @error="refreshOriginalUrl(item)"
               >
                 <source :src="getUrl(item.full_url)" @error="refreshOriginalUrl(item)" />

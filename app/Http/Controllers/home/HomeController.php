@@ -35,14 +35,7 @@ class HomeController extends Controller
             $data['user_id'] = auth()->user()->id;
             $event = $this->eventRepository->create($data);
             if ($request->hasFile('urls')) {
-                foreach ($request->file('urls') as $file) {
-                    $path = $file->store('Photos', 'public');
-                    $media = $this->eventImageRepository->create([
-                        'event_id' => $event->id,
-                        'url' => $path,
-
-                    ]);
-                }
+                app(\App\Services\EventMediaIngest::class)->upload($event, $request->file('urls'));
             }
             $this->requestRepository->createEventRequest([
                 'event_id' => $event->id,

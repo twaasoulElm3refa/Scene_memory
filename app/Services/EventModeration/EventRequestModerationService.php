@@ -151,6 +151,7 @@ class EventRequestModerationService
         $this->cache->invalidateModerationState((int) $event->id);
 
         if ($result['decision'] === 'approved') {
+            \App\Jobs\PromotePublishedMediaPreviews::dispatch((int) $event->id)->afterCommit();
             $this->queueOwnerMail($request, $event, new ApproveMail($event));
 
             ReviewEventRequestWithAi::dispatch(
@@ -238,6 +239,7 @@ class EventRequestModerationService
         $this->cache->invalidateModerationState((int) $event->id);
 
         if ($result['changed']) {
+            if ($decision === 'approved') \App\Jobs\PromotePublishedMediaPreviews::dispatch((int) $event->id)->afterCommit();
             $mail = $decision === 'approved'
                 ? new ApproveMail($event)
                 : new RejectMail($event, $reason);

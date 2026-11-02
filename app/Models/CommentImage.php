@@ -28,6 +28,9 @@ class CommentImage extends Model
 
     public function getUrlAttribute(): string
     {
-        return Storage::disk($this->disk ?: 'public')->url($this->path);
+        $storage = app(\App\Services\UnifiedMediaStorage::class);
+        return $storage->isCloudinary($this->path)
+            ? ($storage->url($this->path) ?: '')
+            : Storage::disk($this->disk ?: 'public')->url($this->path);
     }
 }

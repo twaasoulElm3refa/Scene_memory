@@ -48,7 +48,7 @@ class VirtualGiftAdminController extends Controller
         $newImage = null;
         try {
             if ($request->hasFile('image')) {
-                $newImage = $request->file('image')->store('virtual-gifts', 'public');
+                $newImage = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'virtual-gifts');
                 if (! $newImage) throw new \RuntimeException('Gift image could not be stored.');
             }
             $gift->name = $data['name'];
@@ -64,7 +64,7 @@ class VirtualGiftAdminController extends Controller
             }
             $gift->save();
         } catch (\Throwable $exception) {
-            if ($newImage) Storage::disk('public')->delete($newImage);
+            if ($newImage) app(\App\Services\UnifiedMediaStorage::class)->delete($newImage);
             Log::error('gift_catalog_save_failed', ['exception' => $exception::class]);
 
             return $this->error('Gift could not be saved. Please try again or contact support.', 500);

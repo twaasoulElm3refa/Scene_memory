@@ -133,11 +133,13 @@ class CountriesController extends Controller
             $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
 
             if ($request->hasFile('image')) {
-                $data['image'] = $request->file('image')->store('countries', 'public');
+                $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'countries');
             }
 
             $country = $this->countryRepository->findOrFail((int) $id);
+            $oldImage = $country->getRawOriginal('image');
             $country->update($data);
+            app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($oldImage, $country->getRawOriginal('image'));
 
             $this->clearCache($id);
 
@@ -150,7 +152,11 @@ class CountriesController extends Controller
     public function delete()
     {
         $country = $this->countryRepository->findOrFail((int) request('id'));
+        $oldImage = $country->getRawOriginal('image');
         $country->delete();
+        if (app(\App\Services\UnifiedMediaStorage::class)->isCloudinary($oldImage)) {
+            try { app(\App\Services\UnifiedMediaStorage::class)->delete($oldImage); } catch (\Throwable $e) { \Log::warning('country_cloudinary_delete_failed', ['country_id' => $country->id, 'reason' => $e->getMessage()]); }
+        }
 
         $this->clearCache($country->id);
 

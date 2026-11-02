@@ -54,7 +54,8 @@ class CommentController extends Controller
 
             foreach ($request->file('images', []) as $sortOrder => $image) {
                 $disk = 'public';
-                $path = $image->store("comments/{$comment->id}", $disk);
+                $path = app(\App\Services\UnifiedMediaStorage::class)->publicImage($image, "comments/{$comment->id}");
+                if (app(\App\Services\UnifiedMediaStorage::class)->isCloudinary($path)) $disk = 'cloudinary';
 
                 if (! $path) {
                     throw new RuntimeException('Unable to store the comment image.');
@@ -103,7 +104,8 @@ class CommentController extends Controller
                 DB::rollBack();
 
                 foreach ($storedPaths as $storedPath) {
-                    Storage::disk($storedPath['disk'])->delete($storedPath['path']);
+                    if ($storedPath['disk'] === 'cloudinary') app(\App\Services\UnifiedMediaStorage::class)->delete($storedPath['path']);
+                    else Storage::disk($storedPath['disk'])->delete($storedPath['path']);
                 }
             }
 
@@ -126,7 +128,10 @@ class CommentController extends Controller
             $comment->delete();
 
             foreach ($images as $image) {
-                if (! Storage::disk($image->disk)->delete($image->path)) {
+                try {
+                    if ($image->disk === 'cloudinary') app(\App\Services\UnifiedMediaStorage::class)->delete($image->path);
+                    else Storage::disk($image->disk ?: 'public')->delete($image->path);
+                } catch (\Throwable $exception) {
                     Log::warning('Unable to delete a comment image from storage.', [
                         'comment_id' => $comment->id,
                         'disk' => $image->disk,

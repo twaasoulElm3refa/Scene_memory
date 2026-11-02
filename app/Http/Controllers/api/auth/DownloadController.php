@@ -50,7 +50,7 @@ class DownloadController extends Controller
                     'user' => request()->user()->id,
                 ]) : null;
 
-                return [
+                $itemData = [
                     'id' => $item->id,
                     'preview_url' => app(MediaAccessService::class)->previewUrl($item, true),
                     // This authenticated endpoint serves the original; the private storage path is never serialized.
@@ -62,6 +62,9 @@ class DownloadController extends Controller
                     'height' => $item->height,
                     'price' => $item->price,
                 ];
+                $poster = $type === 'video' ? ($item->toArray()['poster_url'] ?? null) : null;
+                if ($poster) $itemData['poster_url'] = $poster;
+                return $itemData;
             });
 
         return response()->json(['data' => $media])->header('Cache-Control', 'private, no-store');

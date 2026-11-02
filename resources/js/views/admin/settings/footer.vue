@@ -129,7 +129,7 @@ function closeModal() {
               <div class="mt-1">
                 <img
                   v-if="footer.logo"
-                  :src="isMobileRuntime() ? toMediaUrl(footer.logo) : `/storage/${footer.logo}`"
+                  :src="isMobileRuntime() ? toMediaUrl(footer.logo) : /^https?:\/\//.test(footer.logo) ? footer.logo : `/storage/${footer.logo}`"
                   alt="Footer Logo"
                   class="h-16 w-auto object-contain rounded border bg-gray-50"
                 />

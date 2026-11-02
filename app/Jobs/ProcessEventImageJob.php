@@ -6,6 +6,7 @@ use App\Models\EventsImges;
 use App\Services\EventTagCacheService;
 use App\Services\ImageAnalysisService;
 use App\Services\TagResolverService;
+use App\Services\UnifiedMediaStorage;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -119,16 +120,35 @@ class ProcessEventImageJob implements ShouldQueue
             $extension = $uploadedFile->guessExtension() ?: 'jpg';
             $fullPath = 'events/full/'.$filename.'.'.$extension;
             $previewPath = 'events/preview/'.$filename.'.jpg';
-            Storage::disk('media')->put($fullPath, fopen($absolutePath, 'rb'));
-            Storage::disk('media')->put($previewPath, (string) $preview);
+            $cloud = app(UnifiedMediaStorage::class);
+            $existing = EventsImges::where('event_id', $this->eventId)->where('full_url', $fullPath)->first();
+            $localPreviewPath = $previewPath;
+            if ($existing && $existing->preview_url && ($cloud->isCloudinary($existing->preview_url) || Storage::disk('media')->exists($existing->preview_url))) {
+                $previewPath = $existing->preview_url;
+                $localPreviewPath = $existing->fallback_preview_url ?: $localPreviewPath;
+            } else {
+                Storage::disk('media')->put($fullPath, fopen($absolutePath, 'rb'));
+                Storage::disk('media')->put($previewPath, (string) $preview);
+                if ($cloud->enabled('image') && \App\Models\Events::whereKey($this->eventId)->where('is_active', true)->exists()) {
+                    try {
+                        $previewPath = $cloud->upload(Storage::disk('media')->path($previewPath), 'image', 'events-preview');
+                    } catch (\Throwable $e) {
+                        \Log::warning('cloudinary_event_preview_fallback', ['event_id' => $this->eventId, 'reason' => $e->getMessage()]);
+                    }
+                }
+            }
             $eventImage = EventsImges::updateOrCreate(['event_id' => $this->eventId, 'full_url' => $fullPath], [
-                'original_disk' => 'media', 'preview_disk' => 'media',
+                'original_disk' => 'media', 'preview_disk' => $cloud->isCloudinary($previewPath) ? 'cloudinary' : 'media',
                 'event_id' => $this->eventId,
                 'type' => 'image',
                 'preview_url' => $previewPath,
+                'fallback_preview_url' => $cloud->isCloudinary($previewPath) ? $localPreviewPath : null,
                 'full_url' => $fullPath,
                 'width' => $width,
                 'height' => $height,
+                'media_bytes' => filesize($absolutePath) ?: null,
+                'media_format' => $extension,
+                'media_status' => 'ready',
                 'size' => $width * $height,
                 'price' => $price,
                 'licence_type' => $plan,
@@ -182,6 +202,7 @@ class ProcessEventImageJob implements ShouldQueue
             GenerateMediaThumbnailJob::dispatch((int) $eventImage->id);
 
         } catch (\Throwable $e) {
+            if (isset($previewPath)) app(UnifiedMediaStorage::class)->deleteUnreferencedEventPreview($previewPath);
             \Log::error('ProcessEventImageJob: failed', [
                 'event_id' => $this->eventId,
                 'temp_path' => $this->tempPath,

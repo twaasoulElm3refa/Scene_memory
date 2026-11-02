@@ -35,7 +35,7 @@ class CountriesCreateController extends Controller
                 ]);
                 if ($request->hasFile('image')) {
                     $country->update([
-                        'image' => $request->file('image')->store('countries', 'public'),
+                        'image' => app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'countries'),
                     ]);
                 }
 

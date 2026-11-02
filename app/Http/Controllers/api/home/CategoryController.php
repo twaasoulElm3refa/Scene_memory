@@ -93,7 +93,7 @@ class CategoryController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories', 'public');
+            $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'categories');
         }
 
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
@@ -115,12 +115,14 @@ class CategoryController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('categories', 'public');
+            $data['image'] = app(\App\Services\UnifiedMediaStorage::class)->publicImage($request->file('image'), 'categories');
         }
 
         $data['slug'] = str_replace(' ', '-', strtolower($data['name'])).'-'.time();
 
+        $oldImage = $category->getRawOriginal('image');
         $category->update($data);
+        app(\App\Services\UnifiedMediaStorage::class)->deleteReplaced($oldImage, $category->getRawOriginal('image'));
 
         $this->clearAllCategoriesCache();
 
@@ -133,8 +135,12 @@ class CategoryController extends Controller
         if (! $category) {
             return $this->error('Category not found', 404);
         }
+        $oldImage = $category->getRawOriginal('image');
 
         $category->delete();
+        if (app(\App\Services\UnifiedMediaStorage::class)->isCloudinary($oldImage)) {
+            try { app(\App\Services\UnifiedMediaStorage::class)->delete($oldImage); } catch (\Throwable $e) { \Log::warning('category_cloudinary_delete_failed', ['category_id' => $id, 'reason' => $e->getMessage()]); }
+        }
         $this->clearAllCategoriesCache();
 
         return $this->success(null, 'Category deleted successfully');
