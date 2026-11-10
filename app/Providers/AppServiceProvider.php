@@ -42,6 +42,20 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $appUrl = (string) config('app.url');
+        if (! $this->app->runningInConsole()) {
+            $host = request()->getHost();
+
+            if (in_array($host, ['scemory.com', 'dev.scemory.com'], true)) {
+                $appUrl = 'https://' . $host;
+
+                config([
+                    'app.frontend_url' => $appUrl,
+                    'services.google.redirect' => $appUrl.'/api/v1/users/google-callback',
+                    'services.facebook.redirect' => $appUrl.'/api/v1/users/facebook-callback',
+                ]);
+            }
+        }
+
         URL::forceRootUrl($appUrl);
 
         if ($scheme = parse_url($appUrl, PHP_URL_SCHEME)) {
