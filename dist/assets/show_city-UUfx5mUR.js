@@ -1,0 +1,1 @@
+import{ai as t,L as s,e as o,a8 as n,l as r,b as a}from"./index-B5InahlW.js";const i=t({__name:"show_city",setup(l){return(u,e)=>(r(),s(n,null,{default:o(()=>[...e[0]||(e[0]=[a("h3",null,[a("s")],-1)])]),_:1}))}});export{i as default};

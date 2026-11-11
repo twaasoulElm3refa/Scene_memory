@@ -1495,7 +1495,7 @@ const goToCart = () => {
 
         min-height: 64px;
 
-        padding: 9px;
+        padding: 8px 10px;
 
         border-radius: 26px;
 
@@ -1521,37 +1521,10 @@ const goToCart = () => {
 
     }
 
-    .user-control {
-
-        order: 1;
-
-        min-width: 0;
-
-        flex: 0 0 auto;
-
-        margin-right: auto;
-
-    }
-
-    .navbar-actions>.navbar-dropdown-wrap:not(.user-control) {
-
-        order: 2;
-
-        flex: 0 0 auto;
-
-    }
-
-    .cart-wrapper {
-
-        order: 3;
-
-        flex: 0 0 auto;
-
-    }
-
+    /* Brand mark anchors the start of the navbar on mobile and remains always visible */
     .brand-mark {
 
-        order: 4;
+        order: 1;
 
         flex: 0 0 auto;
 
@@ -1559,11 +1532,90 @@ const goToCart = () => {
 
         padding: 4px;
 
+        margin-inline-end: auto;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
     }
 
-    .mobile-toggle {
+    /* Language dropdown */
+    .navbar-actions>.navbar-dropdown-wrap:not(.user-control):not(.credits-control) {
+
+        order: 2;
+
+        flex: 0 0 auto;
+
+    }
+
+    /* Media credits control */
+    .credits-control {
+
+        order: 3;
+
+        flex: 0 1 auto;
+
+        min-width: 0;
+
+    }
+
+    .credits-menu-button {
+
+        height: 40px;
+
+        min-height: 40px;
+
+        min-width: 0;
+
+        padding: 0 6px;
+
+        gap: 3px;
+
+        font-size: 11px;
+
+    }
+
+    .credits-menu-button .chevron {
+
+        display: none;
+
+    }
+
+    .credits-menu-button .credit-pill {
+
+        gap: 2px;
+
+    }
+
+    /* User account / Login */
+    .user-control {
+
+        order: 4;
+
+        min-width: 0;
+
+        flex: 0 0 auto;
+
+        margin: 0;
+
+    }
+
+    /* Cart */
+    .cart-wrapper {
 
         order: 5;
+
+        flex: 0 0 auto;
+
+    }
+
+    /* Hamburger toggle button at the far end */
+    .mobile-toggle {
+
+        order: 6;
 
         flex: 0 0 auto;
 
@@ -1633,25 +1685,36 @@ const goToCart = () => {
 
         height: 27px;
 
+        object-fit: contain;
+
     }
 
-    .user-control .navbar-dropdown {
+    /* Mobile dropdowns anchor to the inline-end to expand inward safely */
+    .navbar-actions .navbar-dropdown {
 
-        left: 0;
+        inset-inline-end: 0;
 
-        right: auto;
+        inset-inline-start: auto;
 
-        min-width: 180px;
+        max-width: calc(100vw - 32px);
+
+    }
+
+    .credits-dropdown {
+
+        width: min(280px, calc(100vw - 32px));
 
     }
 
     .language-dropdown {
 
-        left: auto;
-
-        right: 0;
-
         min-width: 150px;
+
+    }
+
+    .user-control .navbar-dropdown {
+
+        min-width: 180px;
 
     }
 
@@ -1681,7 +1744,7 @@ const goToCart = () => {
 
     .navbar-inner {
 
-        padding: 7px;
+        padding: 6px 8px;
 
         border-radius: 23px;
 
@@ -1699,19 +1762,39 @@ const goToCart = () => {
 
         min-height: 38px;
 
-        padding: 0 8px;
+        padding: 0 6px;
 
         font-size: 11px;
 
     }
 
+    .credits-menu-button {
+
+        height: 38px;
+
+        min-height: 38px;
+
+        padding: 0 4px;
+
+        gap: 2px;
+
+        font-size: 10px;
+
+    }
+
+    .credit-pill-divider {
+
+        margin: 0;
+
+    }
+
     .language-btn {
 
-        min-width: 46px;
+        min-width: 44px;
 
-        width: 46px;
+        width: 44px;
 
-        padding: 0 6px;
+        padding: 0 4px;
 
     }
 
@@ -1727,11 +1810,13 @@ const goToCart = () => {
 
     .user-menu-button {
 
-        width: 40px;
+        width: 38px;
 
-        max-width: 40px;
+        height: 38px;
 
-        min-width: 40px;
+        max-width: 38px;
+
+        min-width: 38px;
 
         padding: 0;
 
@@ -1745,11 +1830,13 @@ const goToCart = () => {
 
     .login-btn {
 
-        min-width: 64px;
+        min-width: 58px;
 
-        max-width: 88px;
+        max-width: 74px;
 
-        padding: 0 9px;
+        padding: 0 7px;
+
+        font-size: 11px;
 
         overflow: hidden;
 
@@ -1795,11 +1882,127 @@ const goToCart = () => {
 
         height: 25px;
 
+        object-fit: contain;
+
     }
 
     .navbar-mobile-menu {
 
         width: calc(100% - 16px);
+
+    }
+
+}
+
+@media (max-width: 340px) {
+
+    .navbar-shell {
+
+        width: calc(100% - 10px);
+
+    }
+
+    .navbar-inner {
+
+        padding: 5px 6px;
+
+        gap: 3px;
+
+    }
+
+    .navbar-actions {
+
+        gap: 3px;
+
+    }
+
+    .control-btn,
+
+    .cart-btn,
+
+    .mobile-toggle,
+
+    .brand-mark {
+
+        height: 36px;
+
+        min-height: 36px;
+
+    }
+
+    .brand-mark {
+
+        width: 36px;
+
+        height: 36px;
+
+        padding: 2px;
+
+    }
+
+    .brand-logo {
+
+        width: 30px;
+
+        height: 30px;
+
+    }
+
+    .brand-logo img {
+
+        width: 23px;
+
+        height: 23px;
+
+    }
+
+    .cart-btn,
+
+    .mobile-toggle,
+
+    .user-menu-button {
+
+        width: 36px;
+
+        max-width: 36px;
+
+        min-width: 36px;
+
+    }
+
+    .language-btn {
+
+        min-width: 38px;
+
+        width: 38px;
+
+        padding: 0 3px;
+
+        font-size: 10px;
+
+    }
+
+    .credits-menu-button {
+
+        height: 36px;
+
+        min-height: 36px;
+
+        padding: 0 3px;
+
+        font-size: 9px;
+
+    }
+
+    .login-btn {
+
+        min-width: 54px;
+
+        max-width: 66px;
+
+        padding: 0 5px;
+
+        font-size: 10px;
 
     }
 

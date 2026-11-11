@@ -1,0 +1,1 @@
+import{L as o,l as t}from"./index-B5InahlW.js";import a from"./PolicyPage-DJKjKBzs.js";const _={__name:"data-protction",setup(r){return(c,e)=>(t(),o(a,{policy:"dataProtection"}))}};export{_ as default};

@@ -1,0 +1,1 @@
+import{L as t,e as s,a8 as r,l,b as a}from"./index-B5InahlW.js";const p={__name:"edit_purchase",setup(u){return(n,e)=>(l(),t(r,null,{default:s(()=>[...e[0]||(e[0]=[a("div",null,[a("h1",null,"edit purchase")],-1)])]),_:1}))}};export{p as default};

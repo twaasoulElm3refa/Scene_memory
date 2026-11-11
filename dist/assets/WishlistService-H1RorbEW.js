@@ -1,0 +1,1 @@
+import{O as t}from"./index-B5InahlW.js";const i={getMyWishlist(e=1){return t.get(`/Wishlist/me?page=${e}`)},addToWishlist(e){return t.post(`/Wishlist/${e}`)},deleteFromWishlist(e){return t.delete(`/Wishlist/${e}/delete`)}};export{i as W};

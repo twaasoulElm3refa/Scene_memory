@@ -1,0 +1,1 @@
+import{L as e,l as r}from"./index-B5InahlW.js";import a from"./WeeklyLeaderboardPreview-BIU-j859.js";const p={__name:"WeeklyLeaderboard",setup(o){return(t,c)=>(r(),e(a,{full:""}))}};export{p as default};
