@@ -52,7 +52,7 @@
 
     <!-- Random Events -->
     <div class="max-w-7xl mx-auto">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 p-2">
         {{ $t('gate.featuredEvents') }}
       </h2>
 

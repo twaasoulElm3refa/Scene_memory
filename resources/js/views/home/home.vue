@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <div class="home-page-shell min-h-screen font-sans">
         <main class="relative">
             <!-- MAP EXPERIENCE -->
@@ -1541,32 +1541,37 @@ onUnmounted(() => {
         backdrop-filter: blur(18px);
     }
     .hero-navbar :deep(.navbar-actions) {
-        justify-content: flex-end;
-    }
-    .hero-navbar :deep(.mobile-toggle) {
-        order: 0;
-        margin-inline-end: auto;
-        border-radius: 50%;
-        background: #fff;
-    }
-    .hero-navbar :deep(.navbar-actions > .navbar-dropdown-wrap:not(.user-control)) {
-        order: 1;
-    }
-    .hero-navbar :deep(.user-control) {
-        order: 2;
-        margin: 0;
-    }
-    .hero-navbar :deep(.cart-wrapper) {
-        order: 3;
+        justify-content: flex-start;
     }
     .hero-navbar :deep(.brand-mark) {
-        display: none;
+        display: inline-flex !important;
+        order: 1 !important;
+        margin-inline-end: auto !important;
+    }
+    .hero-navbar :deep(.navbar-actions > .navbar-dropdown-wrap:not(.user-control):not(.credits-control)) {
+        order: 2 !important;
+    }
+    .hero-navbar :deep(.credits-control) {
+        order: 3 !important;
+    }
+    .hero-navbar :deep(.user-control) {
+        order: 4 !important;
+        margin: 0 !important;
+    }
+    .hero-navbar :deep(.cart-wrapper) {
+        order: 5 !important;
+    }
+    .hero-navbar :deep(.mobile-toggle) {
+        order: 6 !important;
+        margin-inline-end: 0 !important;
+        border-radius: 50%;
+        background: #fff;
     }
     .hero-navbar :deep(.login-btn) {
         border-color: #1769dc;
         background: linear-gradient(110deg, #164eae, #176cf0);
         color: #fff;
-        padding-inline: 17px;
+        padding-inline: clamp(6px, 1.8vw, 12px);
     }
     .hero-navbar :deep(.credits-menu-button) {
         min-width: 0;

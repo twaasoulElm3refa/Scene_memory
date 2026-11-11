@@ -1,1 +1,0 @@
-import{P as e,J as s}from"./index-DLoqZaOM.js";const g={async getTags(){return e.get("/tags")},async searchTags({q:a="",limit:t=8}={}){return e.get("/tags/search",{params:{q:a,limit:t}})},async generateImageTags(a){return e.post("/tools/image-tags",a,s()?{}:{headers:{"Content-Type":"multipart/form-data"}})}};export{g as T};

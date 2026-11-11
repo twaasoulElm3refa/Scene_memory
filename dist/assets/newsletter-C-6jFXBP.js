@@ -1,0 +1,1 @@
+import{ai as t,L as a,e as s,a8 as n,l as o,b as r}from"./index-B5InahlW.js";const _=t({__name:"newsletter",setup(l){return(u,e)=>(o(),a(n,null,{default:s(()=>[...e[0]||(e[0]=[r("h3",null,"newsletters",-1)])]),_:1}))}});export{_ as default};
